@@ -1,0 +1,74 @@
+* {
+	.flex {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 20px;
+	}
+	.flex-center {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 20px;
+	}
+
+	@include themeify {
+		.line_home {
+			height: 1px;
+			background-color: themed("Line");
+			margin: 24px 0;
+		}
+	}
+}
+
+@for $i from 1 through 250 {
+	.height_#{$i} {
+		height: $i + 0px !important;
+	}
+}
+
+@for $i from 0 through 200 {
+	.m_#{$i} {
+		margin: $i + 0px;
+	}
+	.mt_#{$i} {
+		margin-top: $i + 0px;
+	}
+	.ml_#{$i} {
+		margin-left: $i + 0px;
+	}
+	.mb_#{$i} {
+		margin-bottom: $i + 0px;
+	}
+	.mr_#{$i} {
+		margin-right: $i + 0px;
+	}
+	.pt_#{$i} {
+		padding-top: $i + 0px;
+	}
+	.pl_#{$i} {
+		padding-left: $i + 0px;
+	}
+	.pb_#{$i} {
+		padding-bottom: $i + 0px;
+	}
+	.pr_#{$i} {
+		padding-right: $i + 0px;
+	}
+	.p_#{$i} {
+		padding: $i + 0px;
+	}
+	.fs_#{$i} {
+		font-size: $i + 0px;
+	}
+	.size_#{$i} {
+		width: $i + 0px;
+		height: $i + 0px;
+	}
+	.gap_#{$i} {
+		gap: $i + 0px;
+	}
+	.br_#{$i} {
+		border-radius: $i + 0px;
+	}
+}

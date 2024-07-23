@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width, user-scalable=0, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover" />
+		<!-- 开启顶部安全区适配 -->
+		<van-nav-bar safe-area-inset-top />
+
+		<!-- 开启底部安全区适配 -->
+		<van-number-keyboard safe-area-inset-bottom />
+		<title>bc</title>
+	</head>
+	<body>
+		<div id="app"></div>
+		<script src="./config.js"></script>
+		<script type="module" src="/src/main.ts"></script>
+		<script>
+			var lastTouchEnd = 0;
+			window.onload = function () {
+				document.addEventListener(
+					"touchstart",
+					function (event) {
+						if (event.touches.length > 1) {
+							event.preventDefault();
+						}
+					},
+					{
+						passive: false,
+					}
+				);
+
+				document.addEventListener(
+					"touchend",
+					function (event) {
+						var now = new Date().getTime();
+						if (now - lastTouchEnd <= 300) {
+							event.preventDefault();
+						}
+
+						lastTouchEnd = now;
+					},
+					{
+						passive: false,
+					}
+				);
+
+				document.addEventListener(
+					"gesturestart",
+					function (event) {
+						event.preventDefault();
+					},
+					{
+						passive: false,
+					}
+				);
+			};
+		</script>
+	</body>
+</html>
