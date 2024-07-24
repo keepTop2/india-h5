@@ -1,66 +1,14 @@
 // 颜色（N：黑夜版使用，D：白天版使用，P：黑白共用）
 
 $themes: (
-	// ## 暗黑主题
+	// 默认
 	default:
 		(
-			Theme: #3bc116,
-			Theme-P: #3bc116,
-			Warn-P: #ff0000,
-			Hint-P: #ff7a00,
-			Fav-P: #ff007a,
-			Tag2-P: #798d9f,
-			T2-P: #4d565e,
-			T3-P: #687083,
-			TB-P: #fdfdfd,
-			BG5-P: #5a626d,
-			BG6-P: #495867,
-			Tag1: #31333a,
-			T1: #98a7b5,
-			TB: #fbfbfb,
-			BG1: #24262b,
-			BG2: #1a1c20,
-			Bg2: #1a1c20,
-			BG3: #2e3035,
-			BG4: #1c1e22,
-			BG7: #1b1e24,
-			BG8: #10131c,
-			BG9: #3a4250,
-			Line: #373a40,
-			FFF: #ffffff,
-			Shadow: #18191d,
-			//折叠面板header渐变背景色
-			--JBS-CARD: linear-gradient(180deg, #555657 0%, #444547 100%),
+			Theme: #000000,
 		),
-	// ## 白色主题
+	// 白色主题
 	dark:
 		(
-			Theme: #3bc116,
-			Theme-P: #3bc116,
-			Warn-P: #ff0000,
-			Hint-P: #ff7a00,
-			Fav-P: #ff007a,
-			Tag2-P: #798d9f,
-			T2-P: #4d565e,
-			T3-P: #687083,
-			TB-P: #fdfdfd,
-			BG5-P: #5a626d,
-			BG6-P: #495867,
-			Tag1: #eaecf2,
-			T1: #404040,
-			TB: #1b1b1b,
-			BG1: #f6f7fa,
-			BG2: #fcfcfc,
-			Bg2: #fcfcfc,
-			BG3: #fdfdfd,
-			BG4: #fafafa,
-			BG7: #eeeeee,
-			BG8: #eaf0f8,
-			BG9: #e4e9f3,
-			Line: #e2e2e2,
-			FFF: #ffffff,
-			Shadow: #dedfe2,
-			//折叠面板header渐变背景色
-			--JBS-CARD: linear-gradient(180deg, #e1e3e6 0%, #abaeb4 100%),
+			Theme: #fbfbfb,
 		)
 );
