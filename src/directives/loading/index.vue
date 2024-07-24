@@ -37,12 +37,12 @@ import {} from "vue";
 		height: 16px;
 		position: absolute;
 		border-radius: 50%;
-		@include themeify {
-			background-color: themed("Theme-P");
-		}
 		left: 15%;
 		transform-origin: 50%;
 		animation: typing-circle7124 0.5s alternate infinite ease;
+		@include themeify {
+			background-color: themed("Theme-P");
+		}
 	}
 
 	@keyframes typing-circle7124 {

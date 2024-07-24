@@ -159,15 +159,13 @@ const tabData = [
 
 	.label {
 		margin-top: 6px;
-		@include themeify {
-			color: themed("Tag2-N");
-		}
 		text-align: center;
 		font-family: "PingFang SC";
 		font-size: 22px;
-		font-style: normal;
 		font-weight: 400;
-		line-height: normal;
+		@include themeify {
+			color: themed("Tag2");
+		}
 	}
 
 	.label_active {
