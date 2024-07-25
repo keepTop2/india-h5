@@ -1,4 +1,6 @@
 <template>
+	<NavBar />
+	<MenuPopup />
 	<div class="container">
 		<RouterView class="content" />
 	</div>
@@ -6,6 +8,8 @@
 </template>
 
 <script setup lang="ts">
+import NavBar from "/@/layout/components/navBar.vue";
+import MenuPopup from "/@/layout/components/menuPopup.vue";
 import TabBar from "/@/layout/components/tabBar.vue";
 </script>
 

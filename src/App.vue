@@ -16,4 +16,4 @@ const initTheme = () => {
 };
 </script>
 
-<style></style>
+<style lang="scss"></style>

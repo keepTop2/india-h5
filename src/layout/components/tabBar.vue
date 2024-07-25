@@ -32,9 +32,11 @@ import my_active from "/@/assets/zh-CN/default/layout/my_active.png";
 import tab_border from "/@/assets/zh-CN/default/layout/tab_border.png";
 import line from "/@/assets/zh-CN/default/layout/line.png";
 import { useRoute, useRouter } from "vue-router";
+import { i18n } from "/@/i18n/index";
 
 const route = useRoute();
 const router = useRouter();
+const $: any = i18n.global;
 
 console.log("route", route);
 
@@ -46,31 +48,31 @@ const tabData = [
 	{
 		icon: discount,
 		active_icon: discount_active,
-		label: "优惠",
+		label: $.t('layout["优惠"]'),
 		path: "/discount",
 	},
 	{
 		icon: records,
 		active_icon: records_active,
-		label: "记录",
+		label: $.t('layout["记录"]'),
 		path: "/records",
 	},
 	{
 		icon: home,
 		active_icon: home_active,
-		label: "首页",
+		label: $.t('layout["首页"]'),
 		path: "/home",
 	},
 	{
 		icon: wallet,
 		active_icon: wallet_active,
-		label: "钱包",
+		label: $.t('layout["钱包"]'),
 		path: "/wallet",
 	},
 	{
 		icon: my,
 		active_icon: my_active,
-		label: "我的",
+		label: $.t('layout["我的"]'),
 		path: "/my",
 	},
 ];
