@@ -1,0 +1,37 @@
+.content {
+	padding: 0 24px;
+	.m32 {
+		margin: 32px 0;
+	}
+
+	@include themeify {
+		.line {
+			height: 1px;
+			background-color: themed("Line");
+		}
+		.title {
+			font-size: 28px;
+			font-weight: 400;
+			color: themed("TB");
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			margin-bottom: 32px;
+			span {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+			}
+
+			a,
+			.router_link {
+				color: themed("Theme");
+			}
+			img {
+				width: 30px;
+				height: 30px;
+				margin-right: 12px;
+			}
+		}
+	}
+}

@@ -1,0 +1,44 @@
+.Carousel {
+	position: relative;
+	.Carousel__swiper {
+		.swiper-slide {
+			border-radius: 10px;
+			overflow: hidden;
+		}
+	}
+	@include themeify {
+		// margin-bottom: 56px;
+		img {
+			width: 100%;
+		}
+		.swiper-pagination {
+			// position: relative;
+			// margin-top: 10px;
+			.swiper-pagination-bullet {
+				width: 24px;
+				height: 24px;
+				background: none;
+				text-align: center;
+				// display: flex;
+				// justify-content: center;
+				// align-items: center;
+				display: inline-block;
+				line-height: 14px;
+				border-radius: 24px;
+				opacity: 1;
+
+				span {
+					background-color: themed("TB");
+					width: 12px;
+					height: 12px;
+					border-radius: 12px;
+					display: inline-block;
+				}
+			}
+			.swiper-pagination-bullet-active {
+				// width: 40px;
+				border: 1px solid themed("TB");
+			}
+		}
+	}
+}

@@ -72,7 +72,7 @@ declare module '@vue/runtime-core' {
     VantDialog: typeof import('./../src/components/vant/VantDialog.vue')['default']
     VanTextEllipsis: typeof import('vant/es')['TextEllipsis']
     VantImage: typeof import('./../src/components/vant/VantImage.vue')['default']
-    VantLazyImg: typeof import('./../src/components/vant/VantLazyImg.vue')['default']
+    VantLazyImg: typeof import('vant/es')['tLazyImg']
     VantLazyLoad: typeof import('./../src/components/vant/VantLazyLoad.vue')['default']
     VantList: typeof import('./../src/components/vant/VantList.vue')['default']
     VantListW: typeof import('./../src/components/vant/VantListW.vue')['default']
