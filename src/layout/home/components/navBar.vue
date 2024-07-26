@@ -3,8 +3,8 @@
 		<CollapseIcon class="collapseIcon van-haptics-feedback" @click="onCollapse" />
 
 		<div class="noLogin">
-			<div class="register van-haptics-feedback">{{ $t(`navBar["注册"]`) }}</div>
-			<div class="login van-haptics-feedback">{{ $t(`navBar["登录"]`) }}</div>
+			<div class="register van-haptics-feedback" @click="router.push('/register')">{{ $t(`navBar["注册"]`) }}</div>
+			<div class="login van-haptics-feedback" @click="router.push('/login')">{{ $t(`navBar["登录"]`) }}</div>
 		</div>
 
 		<!--<div class="account_info">
@@ -26,6 +26,8 @@ import CollapseIcon from "/@/assets/zh-CN/default/common/collapse_icon.svg";
 import Notify from "/@/assets/zh-CN/default/common/notify.svg";
 import common from "/@/utils/common";
 import pubsub from "/@/pubSub/pubSub";
+import { useRouter } from "vue-router";
+const router = useRouter();
 
 const onCollapse = () => {
 	// 发布事件

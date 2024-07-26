@@ -55,7 +55,7 @@ import Contest from "/@/assets/zh-CN/default/menuPopup/contest.svg";
 import helpIcon from "/@/assets/zh-CN/default/menuPopup/helpIcon.svg";
 import pubsub from "/@/pubSub/pubSub";
 import { ref } from "vue";
-const show = ref(true);
+const show = ref(false);
 
 const onCollapseMenu = () => {
 	show.value = true;

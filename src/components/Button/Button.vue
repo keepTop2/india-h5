@@ -28,7 +28,7 @@ const props = withDefaults(
 	justify-content: center;
 	padding: 10px;
 	border: 0;
-	border-radius: 80px;
+	border-radius: 12px;
 	@include themeify {
 		background: themed("Theme-P");
 		color: themed("TB-P");
@@ -49,10 +49,10 @@ const props = withDefaults(
 	justify-content: center;
 	padding: 10px;
 	border: 0;
-	border-radius: 80px;
+	border-radius: 12px;
 	@include themeify {
 		background: themed("BG3");
-		color: themed("T3-P");
+		color: themed("T3");
 	}
 	text-align: center;
 	font-family: "PingFang SC";
