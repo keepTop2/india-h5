@@ -32,7 +32,7 @@
 					</template>
 				</FromInput>
 				<div class="error_text">
-					<span class="text">{{ $t('register["密码为8-16位，必须包含数字和字母，可包含@_$"]') }}</span>
+					<span class="text">{{ $t('register["密码为8-16位"]') }}</span>
 				</div>
 
 				<FromInput v-model="state.password" :type="eyeShow ? 'password' : 'text'" :maxlength="16" :placeholder="$t(`register['确认登录密码']`)" @input="onInput">
@@ -158,22 +158,21 @@ const onInput = () => {
 			left: 50%;
 			bottom: 44px;
 			transform: translate(-50%, 0);
-		}
-
-		.text,
-		.app-name {
-			@include themeify {
-				color: themed("TB");
+			.text,
+			.app-name {
+				@include themeify {
+					color: themed("TB");
+				}
+				font-family: "PingFang SC";
+				font-size: 36px;
+				font-weight: 600;
+				line-height: 46px;
+				text-align: center;
 			}
-			font-family: "PingFang SC";
-			font-size: 36px;
-			font-weight: 600;
-			line-height: 46px;
-			text-align: center;
-		}
-		.app-name {
-			@include themeify {
-				color: themed("Theme-P");
+			.app-name {
+				@include themeify {
+					color: themed("Theme-P");
+				}
 			}
 		}
 	}
