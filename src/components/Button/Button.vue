@@ -31,7 +31,7 @@ const props = withDefaults(
 	border-radius: 12px;
 	@include themeify {
 		background: themed("Theme-P");
-		color: themed("TB-P");
+		color: themed("TB");
 	}
 	text-align: center;
 	font-family: "PingFang SC";

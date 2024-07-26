@@ -12,39 +12,38 @@
 
 		<div class="register-from">
 			<div class="title">{{ $t('register["注册"]') }}</div>
-
 			<div class="from">
-				<FromInput v-model="state.inviteCode" type="text" :placeholder="$t(`register['输入账号']`)">
+				<FromInput v-model="state.account" type="text" :placeholder="$t(`register['输入账号']`)">
 					<template v-slot:right>
-						<SvgIcon class="clearIcon" iconName="/loginOrRegister/clear" />
+						<SvgIcon v-if="state.account" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.account = ''" />
 					</template>
 				</FromInput>
 				<div class="error_text">
-					<span class="text">{{ $t('register["请输入4-11位字母+数字组成，首位必须是字母"]') }}</span>
+					<span v-if="!isAccountValid && state.account !== ''" class="text">{{ $t('register["请输入4-11位字母+数字组成，首位必须是字母"]') }}</span>
 				</div>
 
-				<FromInput v-model="state.password" :type="eyeShow ? 'password' : 'text'" :maxlength="16" :placeholder="$t(`register['登录密码']`)" @input="onInput">
+				<FromInput v-model="state.password" :type="eyeShow ? 'password' : 'text'" :maxlength="16" :placeholder="$t(`register['登录密码']`)">
 					<template v-slot:right>
 						<div class="right">
-							<SvgIcon class="clearIcon" iconName="/loginOrRegister/clear" />
+							<SvgIcon v-if="state.password" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.password = ''" />
 							<SvgIcon class="icon" :iconName="eyeShow ? '/loginOrRegister/eye-off' : '/loginOrRegister/eye'" @click="eyeShow = !eyeShow" />
 						</div>
 					</template>
 				</FromInput>
 				<div class="error_text">
-					<span class="text">{{ $t('register["密码为8-16位"]') }}</span>
+					<span v-if="!isPasswordValid && state.password !== ''" class="text">{{ $t('register["密码为8-16位"]') }}</span>
 				</div>
 
-				<FromInput v-model="state.password" :type="eyeShow ? 'password' : 'text'" :maxlength="16" :placeholder="$t(`register['确认登录密码']`)" @input="onInput">
+				<FromInput v-model="state.confirmPassword" :type="eyeShow ? 'password' : 'text'" :maxlength="16" :placeholder="$t(`register['确认登录密码']`)">
 					<template v-slot:right>
 						<div class="right">
-							<SvgIcon class="clearIcon" iconName="/loginOrRegister/clear" />
+							<SvgIcon v-if="state.confirmPassword" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.confirmPassword = ''" />
 							<SvgIcon class="icon" :iconName="eyeShow ? '/loginOrRegister/eye-off' : '/loginOrRegister/eye'" @click="eyeShow = !eyeShow" />
 						</div>
 					</template>
 				</FromInput>
 				<div class="error_text">
-					<span class="text">{{ $t('register["两次输入密码不一致"]') }}</span>
+					<span v-if="!isConfirmPasswordValid" class="text">{{ $t('register["两次输入密码不一致"]') }}</span>
 				</div>
 
 				<FromInput v-model="state.mainCurrency" :placeholder="$t(`register['选择主货币']`)" readonly>
@@ -53,18 +52,19 @@
 					</template>
 				</FromInput>
 				<div class="error_text">
-					<span class="text">{{ $t('register["请选择"]') }}</span>
+					<span v-if="mainCurrencyRG" class="text">{{ $t('register["请选择"]') }}</span>
 				</div>
 
 				<FromInput v-model="state.inviteCode" type="text" :placeholder="$t(`register['推荐码(非必填)']`)">
 					<template v-slot:right>
-						<SvgIcon class="clearIcon" iconName="/loginOrRegister/clear" />
+						<SvgIcon v-if="state.inviteCode" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.inviteCode = ''" />
 					</template>
 				</FromInput>
 
-				<div class="checkbox">
-					<SvgIcon class="check" :iconName="userAgreement ? '/loginOrRegister/checkbox_active' : '/loginOrRegister/checkbox'" @click="userAgreement = !userAgreement" />
-					<p class="text3">
+				<div class="checkbox" @click="userAgreement = !userAgreement">
+					<SvgIcon v-show="!userAgreement" class="check" iconName="/loginOrRegister/checkbox" />
+					<SvgIcon v-show="userAgreement" class="check" iconName="/loginOrRegister/checkbox_active" />
+					<p :class="userAgreement ? 'text' : 'text3'">
 						<i18n-t keypath="register['我同意用户协议并确认我已年满18岁']" :tag="'span'">
 							<template v-slot:text
 								><span class="text2">{{ $t('register["用户协议"]') }}</span></template
@@ -82,11 +82,11 @@
 					</span>
 				</div>
 
-				<Button class="mt_40" :type="btnDisabled ? 'disabled' : 'default'">{{ $t('register["注册"]') }}</Button>
+				<Button class="mt_40" :type="btnDisabled ? 'disabled' : 'default'" @click="onRegister">{{ $t('register["注册"]') }}</Button>
 
 				<div class="footer">
 					<span class="text">{{ $t('register["已有账户？"]') }}</span>
-					<span class="create van-haptics-feedback">{{ $t('register["登录"]') }}</span>
+					<span class="create van-haptics-feedback" @click="router.push('/login')">{{ $t('register["登录"]') }}</span>
 				</div>
 			</div>
 		</div>
@@ -94,47 +94,84 @@
 </template>
 
 <script setup lang="ts">
+import { showToast } from "vant";
 import { useRouter } from "vue-router";
 import { i18n } from "/@/i18n/index";
-import Common from "/@/utils/common";
+import common from "/@/utils/common";
 const $: any = i18n.global;
 const router = useRouter();
 
 const eyeShow = ref(true);
 const btnDisabled = ref(true);
+const mainCurrencyRG = ref(false);
 const userAgreement = ref(false); // 用户协议认证
+
 const state = reactive({
-	account: "", // 邮箱或者手机号
-	password: "", // 密码
+	account: "a123", // 邮箱或者手机号
+	password: "abcd1234", // 密码
+	confirmPassword: "abcd1234", // 密码
 	mainCurrency: "", // 货币
 	inviteCode: "", // 推荐码
-	deviceNo: Common.getInstance().getDevice(), // 设备
+	deviceNo: common.getInstance().getDevice(), // 设备
 });
 
-watch([() => state.phone, () => state.email, () => state.password, () => state.mainCurrency, () => state.type], ([phone, email, password, mainCurrency, type]) => {
-	if (type == "1") {
-		if (email && password && mainCurrency) {
+// 账号正则
+const isAccountValid = computed(() => {
+	return common.accountRG.test(state.account);
+});
+
+// 密码正则
+const isPasswordValid = computed(() => {
+	return common.passwordRG.test(state.password);
+});
+
+// 密码正则
+const isConfirmPasswordValid = computed(() => {
+	return state.confirmPassword == state.password;
+});
+
+// 监听用户状态
+watch(
+	[() => isAccountValid.value, () => isPasswordValid.value, () => isConfirmPasswordValid.value],
+	([isAccountValid, isPasswordValid, isConfirmPasswordValid]) => {
+		console.log(isAccountValid, isPasswordValid, isConfirmPasswordValid);
+		if (isAccountValid && isPasswordValid && isConfirmPasswordValid) {
 			btnDisabled.value = false;
 		} else {
 			btnDisabled.value = true;
 		}
-	} else {
-		if (phone && password && mainCurrency) {
-			btnDisabled.value = false;
-		} else {
-			btnDisabled.value = true;
+	},
+	{
+		immediate: true,
+	}
+);
+
+watch(
+	() => state.mainCurrency,
+	(newValue) => {
+		if (newValue) {
+			mainCurrencyRG.value = false;
 		}
 	}
-});
+);
 
-// 手机号输入监听正则校验
-const onInputPhone = () => {
-	state.phone = state.phone.replace(/[^0-9]/g, "");
-};
-
-// 密码输入监听正则校验
-const onInput = () => {
-	state.password = state.password.replace(/[^\w]/g, "");
+const onRegister = async () => {
+	// 校验用户协议
+	if (!userAgreement.value && !state.mainCurrency) {
+		mainCurrencyRG.value = true;
+		showToast($.t('register["请确定已阅读用户协议"]'));
+		return;
+	}
+	// 校验用户协议
+	if (!userAgreement.value) {
+		showToast($.t('register["请确定已阅读用户协议"]'));
+		return;
+	}
+	// 校验用户协议
+	if (!state.mainCurrency) {
+		mainCurrencyRG.value = true;
+		return;
+	}
 };
 </script>
 
@@ -156,7 +193,7 @@ const onInput = () => {
 		.content {
 			position: absolute;
 			left: 50%;
-			bottom: 44px;
+			bottom: 50px;
 			transform: translate(-50%, 0);
 			.text,
 			.app-name {
