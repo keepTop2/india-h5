@@ -20,7 +20,7 @@
 		<div class="line_home"></div>
 		<!-- 最近投注比赛 -->
 		<h3 class="title">
-			<SvgIcon iconName="clock" alt="" />
+			<SvgIcon iconName="home/clock" alt="" />
 			{{ $t('home["最近投注比赛"]') }}
 		</h3>
 		<BettingMatches class="m32" />
@@ -28,7 +28,7 @@
 		<div class="onlineCasino">
 			<VantLazyImg :src="encryption" width="100%" alt="" />
 			<p v-text="$t(`home['赌场描述']`)"></p>
-			<router-link :to="casinoDescriptionRoute" class="more">{{ $t('home["查看更多"]') }} <SvgIcon iconName="arrowRight" /></router-link>
+			<router-link :to="casinoDescriptionRoute" class="more">{{ $t('home["查看更多"]') }} <SvgIcon iconName="common/arrowRight" /></router-link>
 		</div>
 		<div class="line_home"></div>
 		<Footer />

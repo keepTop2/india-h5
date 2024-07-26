@@ -1,5 +1,6 @@
 <template>
 	<div class="home">
+		<!-- <SvgIcon class="xxxx" iconName="common/notify" /> -->
 		<HomePage />
 	</div>
 </template>

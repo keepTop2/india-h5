@@ -22,7 +22,7 @@
 					<div class="message">
 						<span class="gameName">
 							{{ userName }}
-							<SvgIcon iconName="tips" />
+							<SvgIcon iconName="home/tips" />
 						</span>
 						<span class="money">{{ unit }}{{ money }}</span>
 					</div>

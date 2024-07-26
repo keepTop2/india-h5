@@ -1,6 +1,6 @@
 <template>
 	<div class="bettingMatches">
-		<span class="more" @click="handleCHangeHistory">{{ $t('home["查看更多"]') }} <SvgIcon iconName="arrowRight" /></span>
+		<span class="more" @click="handleCHangeHistory">{{ $t('home["查看更多"]') }} <SvgIcon iconName="common/arrowRight" /></span>
 		<Tabs class="" bg="bg_BG2" v-model="tabsActiveKey" @change="handleTabChange" :list="tabList" />
 		<div class="bg_BG2 p_20">
 			<!-- Betting content based on tabsActiveKey -->
