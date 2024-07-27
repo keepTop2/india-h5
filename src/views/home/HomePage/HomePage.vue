@@ -27,7 +27,7 @@
 				<router-link :to="casinoDescriptionRoute" class="more">{{ $t('home["查看更多"]') }} <SvgIcon iconName="common/arrowRight" /></router-link>
 			</div>
 			<div class="line_home"></div>
-			<Footer />
+			<!-- <Footer /> -->
 		</div>
 	</div>
 </template>
@@ -37,7 +37,7 @@ import Banner from "../components/Banner/banner.vue";
 import HotGame from "./components/HotGame/HotGame.vue";
 import CollectGames from "./components/CollectGames/CollectGames.vue";
 import BettingMatches from "./components/BettingMatches/BettingMatches.vue";
-import Footer from "/@/components/Footer/footer.vue";
+// import Footer from "/@/components/Footer/footer.vue";
 import encryption from "../static/images/encryption.png";
 const casinoDescriptionRoute = { path: "/casino/description" };
 </script>
