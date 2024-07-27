@@ -4,6 +4,10 @@ $themes: (
 	// 默认
 	default:
 		(
+			BG1-N: #222324,
+			T1-N: #999ba0,
+			Line2-P: linear-gradient(90deg, rgba(255, 40, 75, 0) 0%, #ff284b 51.5%, rgba(255, 40, 75, 0) 100%),
+			Line-N: #343434,
 			Theme: #000000,
 			Theme-P: #ff284b,
 			Tag2: #67707b,
@@ -12,9 +16,13 @@ $themes: (
 			TB: #fff,
 			T3: #6d727a,
 		),
-	// 白色主题
+	// 深色主题
 	dark:
 		(
+			BG1-N: #222324,
+			T1-N: #999ba0,
+			Line2-P: linear-gradient(90deg, rgba(255, 40, 75, 0) 0%, #ff284b 51.5%, rgba(255, 40, 75, 0) 100%),
+			Line-N: #343434,
 			Theme: #fbfbfb,
 			Theme-P: #ff284b,
 			Tag2: #f3f3f3,

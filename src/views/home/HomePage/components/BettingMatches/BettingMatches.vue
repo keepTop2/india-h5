@@ -19,7 +19,7 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import Table from "/@/components/Table/Table.vue";
+// import Table from "/@/components/Table/Table.vue";
 import Tabs from "../../../components/Tabs/Tabs.vue";
 import { useRouter } from "vue-router";
 const router = useRouter();

@@ -26,7 +26,7 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import { Banner, GameList, GameSupplierGroupCard } from "../components";
-import Footer from "/@/components/Footer/footer.vue";
+// import Footer from "/@/components/Footer/footer.vue";
 import Common from "/@/utils/common";
 import { CasionApi } from "/@/api/casion/casion";
 import { useRouter, useRoute } from "vue-router";
