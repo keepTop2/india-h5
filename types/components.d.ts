@@ -78,7 +78,7 @@ declare module '@vue/runtime-core' {
     VantList: typeof import('./../src/components/vant/VantList.vue')['default']
     VantListW: typeof import('./../src/components/vant/VantListW.vue')['default']
     VantNavBar: typeof import('./../src/components/vant/VantNavBar.vue')['default']
-    VantPicker: typeof import('./../src/components/vant/VantPicker.vue')['default']
+    VantPicker: typeof import('vant/es')['tPicker']
     VantPickerMultiple: typeof import('./../src/components/vant/VantPickerMultiple.vue')['default']
     VantPickerMultipleW: typeof import('./../src/components/vant/VantPickerMultipleW.vue')['default']
     VantPopup: typeof import('./../src/components/vant/VantPopup.vue')['default']

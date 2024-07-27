@@ -1,28 +1,15 @@
 <!--查询条件 单项选择器 -->
 <template>
 	<div>
-		<slot name="select_conatiner">
-			<div class="vant_picker_select_conatiner" @click="isShow = true">
-				<div class="vant_picker_select">
-					<div class="vant_picker_select_left">
-						<img class="vant_picker_left_icon" :src="filter" alt="" />
-						<div class="ml_4 mr_4 vant_picker_select_left_text">{{ state.acitveName }}</div>
-					</div>
+		<div @click="isShow = true">
+			<slot name="select_conatiner">
+				<div class="ml_4 mr_4 vant_picker_select_left_text">{{ state.acitveName }}</div>
+			</slot>
+		</div>
 
-					<img class="vant_picker_right_icon" :src="arrow" alt="" />
-				</div>
-			</div>
-		</slot>
-
-		<van-popup
-			v-model:show="isShow"
-			position="bottom"
-			@closed="onClosed"
-			@opened="onOpened"
-			:close-on-popstate="true"
-			:close-on-click-overlay="closeOnClickOverlay"
-		>
+		<van-popup teleport="body" v-model:show="isShow" position="bottom" @closed="onClosed" @opened="onOpened" :close-on-popstate="true" :close-on-click-overlay="closeOnClickOverlay">
 			<van-picker
+				class="van_picker_custom"
 				v-model="state.activeList"
 				:title="title"
 				:columns="state.columnsMap"
@@ -41,7 +28,15 @@
 				@cancel="onCancel"
 				@change="onChange"
 				@click-option="onClickOption"
-			/>
+			>
+				<template #option="item">
+					<slot name="option" :item="item">
+						<div class="vant_picker_options_item">
+							<div>{{ item.text }}</div>
+						</div>
+					</slot>
+				</template>
+			</van-picker>
 		</van-popup>
 
 		<input type="text" v-model="activeValue" class="input_none" />
@@ -50,9 +45,7 @@
 
 <script setup lang="ts">
 import type { PickerOption, PickerToolbarPosition } from "vant";
-//图标引入
-import arrow from "/@/assets/zh/default/common/arrow.svg";
-import filter from "/@/assets/zh/default/common/filter.svg";
+
 import { ModelRef } from "vue";
 
 const emit = defineEmits(["update:show", "update:select", "confirm", "cancel", "change", "onClickOption", "opened", "closed"]);
@@ -101,7 +94,7 @@ const props = withDefaults(
 		show: false,
 		title: "标题",
 		confirmButtonText: "确认",
-		cancelButtonText: "取消",
+		cancelButtonText: "X",
 		toolbarPosition: "top",
 		loading: false,
 		readonly: false,
@@ -237,39 +230,81 @@ const onClosed = () => {
 </script>
 
 <style lang="scss" scoped>
-.vant_picker_select_conatiner {
-	display: flex;
+.input_none {
+	display: none;
 }
-.vant_picker_select {
-	@include flex_align_center;
-	justify-content: space-between;
-	border-radius: 4px;
-	border: 1px solid;
+
+.van_picker_custom {
 	@include themeify {
-		border-color: themed("font4");
+		background: themed("BG1");
+		border-color: themed("Line-N");
 	}
-	padding: 0 12px;
-	min-width: 128px;
-	box-sizing: border-box;
-	height: 32px;
-	.vant_picker_select_left {
-		@include flex_align_center;
-		.vant_picker_left_icon {
-			width: 14px;
-		}
-		.vant_picker_right_icon {
-			width: 18px;
-		}
-		.vant_picker_select_left_text {
-			font-size: 12px;
+
+	:deep(.van-picker__toolbar) {
+		height: 82px;
+		border-bottom: 2px solid;
+
+		.van-haptics-feedback {
 			@include themeify {
-				color: themed("font1");
+				color: themed("T1-N");
 			}
 		}
 	}
-}
 
-.input_none {
-	display: none;
+	:deep(.van-picker-column) {
+	}
+
+	:deep(.van-picker__columns) {
+		//height: auto !important;
+	}
+
+	:deep(.van-picker-column__item) {
+		@include themeify {
+			color: themed("T1-N");
+		}
+	}
+
+	//选中的颜色
+	:deep(.van-picker-column__item.van-picker-column__item--selected) {
+		@include themeify {
+			color: themed("Theme-P") !important;
+		}
+	}
+
+	//遮罩隐藏
+	:deep(.van-picker__mask) {
+		display: none;
+	}
+
+	//选中的线
+	:deep(.van-hairline-unset--top-bottom.van-picker__frame)::after {
+		border: none;
+		content: "";
+		position: absolute;
+		z-index: 100;
+		top: 0;
+		left: 50%;
+		transform: translateX(-50%);
+		width: 100%;
+		height: 2px;
+		@include themeify {
+			background: themed("Line2-P");
+		}
+	}
+
+	:deep(.van-hairline-unset--top-bottom.van-picker__frame)::before {
+		border: none;
+		content: "";
+		position: absolute;
+		z-index: 100;
+		bottom: 0;
+		left: 50%;
+		transform: translateX(-50%);
+		width: 100%;
+		height: 2px;
+		@include themeify {
+			background: themed("Line2-P");
+		}
+	}
 }
 </style>

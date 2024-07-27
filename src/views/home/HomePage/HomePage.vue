@@ -40,7 +40,7 @@ import Banner from "../components/Banner/banner.vue";
 import GameSwiper from "./components/GameSwiper/GameSwiper.vue";
 import BettingMatches from "./components/BettingMatches/BettingMatches.vue";
 import bigwinsIcon from "../static/images/bigWins.png";
-import Footer from "/@/components/Footer/footer.vue";
+// import Footer from "/@/components/Footer/footer.vue";
 import encryption from "../static/images/encryption.png";
 import gamblingHouse from "../static/images/gamblingHouse.png";
 import lottery from "../static/images/lottery.png";
