@@ -1,80 +1,66 @@
-.content {
-	padding: 0 24px;
-	.m32 {
-		margin: 32px 0;
-	}
-
-	@include themeify {
-		.title {
-			font-size: 28px;
-			font-weight: 400;
-			color: themed("TB");
-			display: flex;
-			align-items: center;
-			svg,
-			img {
-				width: 30px;
-				height: 30px;
-				margin-right: 12px;
-			}
+.Home_Page {
+	.Home_Content {
+		padding: 0 24px;
+		overflow: hidden;
+		.m24 {
+			margin: 24px 0;
 		}
-		.onlineCasino {
-			margin: 32px 0;
-			color: themed("T1");
-			font-size: 24px;
-			font-style: normal;
-			font-weight: 400;
-			line-height: 44px; /* 183.333% */
-			p {
-				white-space: pre-line;
-				margin: 16px 0;
+
+		@include themeify {
+			.title {
+				margin-top: 36px;
+				font-size: 32px;
+				font-weight: 600;
+				color: themed("TB");
+				display: flex;
+				align-items: center;
+				svg,
+				img {
+					width: 42px;
+					height: 42px;
+					margin-right: 12px;
+				}
 			}
-			.more {
+			.onlineCasino {
+				margin: 32px 0;
 				color: themed("T1");
-				font-family: "PingFang SC";
 				font-size: 24px;
 				font-style: normal;
 				font-weight: 400;
-				line-height: 34px;
-				display: flex;
-				align-items: center;
-				justify-content: flex-end;
-				svg {
-					height: 20px;
-					width: 20px;
+				line-height: 44px; /* 183.333% */
+				p {
+					white-space: pre-line;
+					margin: 16px 0;
+				}
+				.more {
+					color: themed("T1");
+					font-family: "PingFang SC";
+					font-size: 24px;
+					font-style: normal;
+					font-weight: 400;
+					line-height: 34px;
+					display: flex;
+					align-items: center;
+					justify-content: flex-end;
+					svg {
+						height: 20px;
+						width: 20px;
+					}
 				}
 			}
 		}
-	}
-	.Options {
-		@include themeify {
-			margin-bottom: 56px;
-			overflow: hidden;
-			li {
-				// display: flex;
-				// gap: 24px;
-				border-radius: 16px;
+		.Options {
+			@include themeify {
+				margin-bottom: 56px;
 				overflow: hidden;
-				position: relative;
-				width: 100%;
-				height: 304px;
-				// background-size: 100%;
-				margin-bottom: 24px;
-				// background-repeat: no-repeat;
-				// .info {
-				// 	display: inline-flex;
-				// 	padding: 94px 50px 48px 50px;
-				// 	flex-direction: column;
-				// 	align-items: flex-start;
-				// 	gap: 12px;
-				// 	color: #fff;
-				// 	.name {
-				// 		font-size: 68px;
-				// 	}
-				// 	.message {
-				// 		font-size: 40px;
-				// 	}
-				// }
+				li {
+					border-radius: 16px;
+					overflow: hidden;
+					position: relative;
+					width: 100%;
+					height: 304px;
+					margin-bottom: 24px;
+				}
 			}
 		}
 	}

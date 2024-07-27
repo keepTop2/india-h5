@@ -1,5 +1,5 @@
 <template>
-	<div class="navBar">
+	<div class="navBar bg_BG1">
 		<CollapseIcon class="collapseIcon van-haptics-feedback" @click="onCollapse" />
 
 		<div class="noLogin">
@@ -37,15 +37,14 @@ const onCollapse = () => {
 
 <style scoped lang="scss">
 .navBar {
-	position: fixed;
+	position: sticky;
 	top: 0px;
 	width: 100%;
 	height: 88px;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	background: rgba(49, 49, 49, 0.5);
-
+	z-index: 2;
 	.collapseIcon {
 		width: 64px;
 		height: 64px;

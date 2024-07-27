@@ -9,7 +9,8 @@
  */
 
 import { shallowRef } from "vue";
-const props = defineProps(["iconName"]);
+
+const props = defineProps(["iconName", "width", "height"]);
 
 // 使用 shallowRef 浅层响应 存储异步加载的 SVG 图标路径
 const DynamicSvgComponent = shallowRef(null);

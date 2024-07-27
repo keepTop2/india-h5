@@ -13,7 +13,7 @@ import Carousel from "../Carousel/Carousel.vue";
 <style lang="scss" scoped>
 /* Your styles here */
 .banner {
-	margin: 32px 0;
-	height: 300px;
+	// margin: 32px 0;
+	height: 514px;
 }
 </style>

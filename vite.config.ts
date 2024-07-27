@@ -6,7 +6,7 @@ import { wrapperEnv } from "./build/utils";
 // import vue from "@vitejs/plugin-vue";
 import path from "path";
 import { viteVConsole } from "vite-plugin-vconsole";
-import { createSvgIconsPlugin } from "./plugins/svg-icons-plugin";
+// import { createSvgIconsPlugin } from "./plugins/svg-icons-plugin";
 import svgLoader from "vite-svg-loader";
 
 const pathResolve = (dir: string) => {
@@ -80,9 +80,12 @@ export default function ({ command, mode }: ConfigEnv): UserConfig {
 			},
 		},
 		plugins: [
-			svgLoader(),
-			createSvgIconsPlugin({
-				iconDirs: [path.resolve(process.cwd(), "src/assets/zh/default/svgIcon/web"), path.resolve(process.cwd(), "src/assets/zh/default/svgIcon/server")],
+			svgLoader({
+				svgoConfig: {
+					plugins: [
+						'prefixIds',
+					]
+				}
 			}),
 			createVitePlugins(viteEnv, isProduction),
 			// VConsole 调试工具配置，若没有此配置，则调试工具控制台不会打印日志

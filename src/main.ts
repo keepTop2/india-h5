@@ -16,7 +16,7 @@ import "vant/es/notify/style";
 import "vant/es/image-preview/style";
 import { Lazyload } from "vant";
 // svg图标插件
-import "virtual:svg-icons-plugin-register";
+// import "virtual:svg-icons-plugin-register";
 
 const app = createApp(App);
 
