@@ -1,8 +1,5 @@
-<!-- 多选组件使用示例 -->
 <template>
-	<div>
-		<MultipleSelect />
-	</div>
+	<div>1111</div>
 </template>
 
 <script setup lang="ts"></script>

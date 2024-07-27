@@ -13,7 +13,7 @@
 			</template>
 			<!--自定义内容插槽-->
 			<template #option="item">
-				<div>{{ item.item.value }}</div>
+				<div>aaa{{ item.item.value }}</div>
 			</template>
 		</SingleSelect>
 	</div>

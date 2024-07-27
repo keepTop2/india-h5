@@ -100,7 +100,7 @@ const props = withDefaults(
 		readonly: false,
 		showToolbar: true,
 		allowHtml: false,
-		visibleOptionNum: 5,
+		visibleOptionNum: 6,
 		closeOnClickOverlay: true,
 		toText: "name",
 		toValue: "code",

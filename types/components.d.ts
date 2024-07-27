@@ -24,6 +24,7 @@ declare module '@vue/runtime-core' {
     Image: typeof import('./../src/components/Image/image.vue')['default']
     IndexOrigin: typeof import('./../src/components/svgIcon/index-origin.vue')['default']
     LazyImage: typeof import('./../src/components/vant/LazyImage.vue')['default']
+    MultipleSelect: typeof import('./../src/components/MultipleSelect/MultipleSelect.vue')['default']
     NoData: typeof import('./../src/components/NoData/NoData.vue')['default']
     RiseOrFall: typeof import('./../src/components/Sport/RiseOrFall.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
