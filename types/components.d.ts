@@ -28,6 +28,7 @@ declare module '@vue/runtime-core' {
     RiseOrFall: typeof import('./../src/components/Sport/RiseOrFall.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SingleSelect: typeof import('./../src/components/SingleSelect/SingleSelect.vue')['default']
     Spin: typeof import('./../src/components/Spin/Spin.vue')['default']
     SvgIcon: typeof import('./../src/components/svgIcon/index.vue')['default']
     Table: typeof import('./../src/components/Table/Table.vue')['default']
