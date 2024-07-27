@@ -2,14 +2,13 @@
 	<DynamicSvgComponent v-if="DynamicSvgComponent" />
 </template>
 
-<script setup>
+<script setup lang="ts">
 /**
  * 引入动态 SVG 组件
  * @param {string} iconName - SVG 图标路径/名称
  */
 
 import { shallowRef } from "vue";
-import MyIcon from "/@/assets/zh-CN/default/common/notify.svg";
 const props = defineProps(["iconName"]);
 
 // 使用 shallowRef 浅层响应 存储异步加载的 SVG 图标路径
