@@ -4,6 +4,8 @@
 
 		<input
 			@input="emit('update:modelValue', $event.target.value)"
+			@blur="emit('blur')"
+			@focus="emit('focus')"
 			:value="props.modelValue"
 			:type="props.type"
 			:readonly="props.readonly"
@@ -31,7 +33,7 @@ const props = withDefaults(
 	}
 );
 
-const emit = defineEmits(["update:modelValue"]);
+const emit = defineEmits(["update:modelValue", "blur", "focus"]);
 </script>
 
 <style scoped lang="scss">
@@ -49,7 +51,6 @@ const emit = defineEmits(["update:modelValue"]);
 	input {
 		flex: 1;
 		font-family: "PingFang SC";
-		margin-right: 10px;
 		padding: 0;
 		@include themeify {
 			color: themed("TB");
@@ -57,7 +58,6 @@ const emit = defineEmits(["update:modelValue"]);
 		}
 		font-size: 28px;
 		font-weight: 400;
-		line-height: 38px;
 		border: 0;
 	}
 	::-webkit-input-placeholder {

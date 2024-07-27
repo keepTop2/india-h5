@@ -8,9 +8,9 @@
 </template>
 
 <script setup lang="ts">
-import NavBar from "/@/layout/components/navBar.vue";
-import MenuPopup from "/@/layout/components/menuPopup.vue";
-import TabBar from "/@/layout/components/tabBar.vue";
+import NavBar from "/@/layout/home/components/navBar.vue";
+import MenuPopup from "/@/layout/home/components/menuPopup.vue";
+import TabBar from "/@/layout/home/components/tabBar.vue";
 </script>
 
 <style scoped lang="scss">

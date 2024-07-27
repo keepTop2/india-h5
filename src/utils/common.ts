@@ -36,20 +36,11 @@ class Common {
 		donate: "4",
 	};
 
-	// 手机号正则
-	public phoneReg(phone) {
-		return /^1[0-9]\d{9}$/.test(phone);
-	}
+	// 4-11位字母+数字组成，首位必须是字母
+	public static accountRG = /^[a-zA-Z][a-zA-Z0-9]{3,10}$/;
 
-	// 邮箱正则
-	public emailReg(email) {
-		return /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/.test(email);
-	}
-
-	// 新增会员登录密码正则 6-16位，字母+数字组合
-	public accountPassword(password) {
-		return /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$/.test(password);
-	}
+	// 8-16位，必须包含 数字和字母， 可包含@ _ $
+	public static passwordRG = /^(?=.*[a-zA-Z])(?=.*\d)[A-Za-z\d@_$]{8,16}$/;
 
 	// 后端code
 	public ResCode = ResCode;
