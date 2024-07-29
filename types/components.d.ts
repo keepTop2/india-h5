@@ -25,6 +25,7 @@ declare module '@vue/runtime-core' {
     IndexOrigin: typeof import('./../src/components/svgIcon/index-origin.vue')['default']
     LazyImage: typeof import('./../src/components/vant/LazyImage.vue')['default']
     NoData: typeof import('./../src/components/NoData/NoData.vue')['default']
+    Notify: typeof import('./../src/components/Notify/Notify.vue')['default']
     RiseOrFall: typeof import('./../src/components/Sport/RiseOrFall.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

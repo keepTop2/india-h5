@@ -87,6 +87,7 @@ const tabData = [
 	display: flex;
 	background-color: #2f3032;
 	border-radius: 28px 28px 0px 0px;
+	z-index: 99;
 
 	.border {
 		position: absolute;
