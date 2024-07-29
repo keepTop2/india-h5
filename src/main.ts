@@ -6,7 +6,6 @@ import "/@/permission";
 import store from "/@/store";
 import "./styles/app.css";
 import "/@/styles/index.scss";
-import "animate.css";
 // 引入css
 import "vue3-country-intl/lib/vue3-country-intl.css";
 import "vant/lib/index.css";
