@@ -2,7 +2,13 @@
 	<div class="content">
 		<div class="title">{{ $t('forgetPassword["设置新密码"]') }}</div>
 		<div class="from">
-			<FromInput v-model="state.password" :type="eyeShow ? 'password' : 'text'" :maxlength="16" :placeholder="$t(`forgetPassword['新密码']`)">
+			<FromInput
+				v-model="state.password"
+				:type="eyeShow ? 'password' : 'text'"
+				:maxlength="16"
+				:placeholder="$t(`forgetPassword['新密码']`)"
+				:errorBorder="!isPasswordValid && state.password !== '' ? true : false"
+			>
 				<template v-slot:right>
 					<div class="right">
 						<SvgIcon v-if="state.password" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.password = ''" />
@@ -14,7 +20,13 @@
 				<span v-if="!isPasswordValid && state.password !== ''" class="text">{{ $t('register["密码为8-16位"]') }}</span>
 			</div>
 
-			<FromInput v-model="state.confirmPassword" :type="eyeShow ? 'password' : 'text'" :maxlength="16" :placeholder="$t(`forgetPassword['确认密码']`)">
+			<FromInput
+				v-model="state.confirmPassword"
+				:type="eyeShow ? 'password' : 'text'"
+				:maxlength="16"
+				:placeholder="$t(`forgetPassword['确认密码']`)"
+				:errorBorder="!isConfirmPasswordValid ? true : false"
+			>
 				<template v-slot:right>
 					<div class="right">
 						<SvgIcon v-if="state.confirmPassword" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.confirmPassword = ''" />
@@ -26,7 +38,7 @@
 				<span v-if="!isConfirmPasswordValid" class="text">{{ $t('register["两次输入密码不一致"]') }}</span>
 			</div>
 
-			<Button @click="onStep">{{ $t('forgetPassword["确定"]') }}</Button>
+			<Button :type="btnDisabled ? 'disabled' : 'default'" @click="onStep">{{ $t('forgetPassword["确定"]') }}</Button>
 		</div>
 	</div>
 </template>
@@ -36,6 +48,7 @@ import common from "/@/utils/common";
 
 const emit = defineEmits(["onStep"]);
 const eyeShow = ref(true);
+const btnDisabled = ref(true);
 const state = reactive({
 	password: "", // 密码
 	confirmPassword: "", // 密码
@@ -50,6 +63,21 @@ const isPasswordValid = computed(() => {
 const isConfirmPasswordValid = computed(() => {
 	return state.confirmPassword == state.password;
 });
+
+// 监听用户状态
+watch(
+	[() => isPasswordValid.value, () => isConfirmPasswordValid.value],
+	([isPasswordValid, isConfirmPasswordValid]) => {
+		if (isPasswordValid && isConfirmPasswordValid) {
+			btnDisabled.value = false;
+		} else {
+			btnDisabled.value = true;
+		}
+	},
+	{
+		immediate: true,
+	}
+);
 
 const onStep = async () => {
 	// if (state.type == "2") {
@@ -104,7 +132,7 @@ const onStep = async () => {
 			min-height: 40px;
 			.text {
 				display: block;
-				padding-top: 1px;
+				margin-top: 4px;
 				font-family: "PingFang SC";
 				font-size: 20px;
 				font-weight: 400;

@@ -5,13 +5,13 @@
 		<div class="from">
 			<!-- 邮箱 -->
 			<div v-show="type == 'email'">
-				<FromInput v-model="state.account" type="text" :placeholder="$t(`forgetPassword['请输入电子邮箱']`)">
+				<FromInput v-model="state.email" type="text" :placeholder="$t(`forgetPassword['请输入电子邮箱']`)" :errorBorder="!isEmailValid && state.email !== '' ? true : false">
 					<template v-slot:right>
-						<SvgIcon v-if="state.account" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.account = ''" />
+						<SvgIcon v-if="state.email" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.email = ''" />
 					</template>
 				</FromInput>
 				<div class="error_text">
-					<span class="text">{{ $t('forgetPassword["邮箱格式不正确"]') }}</span>
+					<span v-if="!isEmailValid && state.email !== ''" class="text">{{ $t('forgetPassword["邮箱格式不正确"]') }}</span>
 				</div>
 			</div>
 
@@ -19,20 +19,20 @@
 			<div v-show="type == 'phone'">
 				<div class="phone">
 					<div class="area_code">+888 <SvgIcon class="down" iconName="/loginOrRegister/navBar/down" /></div>
-					<FromInput v-model="state.account" type="text" :placeholder="$t(`forgetPassword['请输入手机号']`)">
+					<FromInput v-model="state.phone" type="text" :placeholder="$t(`forgetPassword['请输入手机号']`)" :errorBorder="!isPhoneValid && state.phone !== '' ? true : false">
 						<template v-slot:right>
-							<SvgIcon v-if="state.account" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.account = ''" />
+							<SvgIcon v-if="state.phone" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.phone = ''" />
 						</template>
 					</FromInput>
 				</div>
 				<div class="error_text">
-					<span class="text">{{ $t('forgetPassword["请输入正确的手机号码"]') }}</span>
+					<span v-if="!isPhoneValid && state.phone !== ''" class="text">{{ $t('forgetPassword["请输入8-12位数字"]') }}</span>
 				</div>
 			</div>
 
-			<FromInput v-model="state.account" type="text" :placeholder="$t(`common['验证码']`)">
+			<FromInput v-model="state.email" type="text" :placeholder="$t(`common['验证码']`)">
 				<template v-slot:right>
-					<CaptchaButton :disabled="state.account ? false : true" />
+					<CaptchaButton :disabled="captchaDisabled" />
 				</template>
 			</FromInput>
 
@@ -40,20 +40,35 @@
 				{{ $t('forgetPassword["重新发送"]') }}<span class="help">{{ $t('common["联系客服"]') }}</span>
 			</div>
 
-			<Button class="mt_40" :type="!state.account ? 'disabled' : 'default'" @click="onStep">{{ $t('forgetPassword["下一步"]') }}</Button>
+			<Button class="mt_40" :type="!state.email ? 'disabled' : 'default'" @click="onStep">{{ $t('forgetPassword["下一步"]') }}</Button>
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
 import CaptchaButton from "/@/views/loginRegister/forgetPassword/components/captchaButton/captchaButton.vue";
+import common from "/@/utils/common";
 
 const emit = defineEmits(["onStep"]);
 
 const type = ref<"email" | "phone">("email");
 
 const state = reactive({
-	account: "",
+	email: "",
+	phone: "",
+});
+
+// 邮箱正则
+const isEmailValid = computed(() => common.emailRG.test(state.email));
+
+// 手机号正则
+const isPhoneValid = computed(() => common.phoneRG.test(state.phone));
+
+// 验证码按钮禁用状态
+const captchaDisabled = computed(() => {
+	if (type.value === "email") return !isEmailValid.value || state.email === "";
+	if (type.value === "phone") return !isPhoneValid.value || state.phone === "";
+	return true;
 });
 
 const onChange = () => {
@@ -145,7 +160,7 @@ const onStep = async () => {
 			min-height: 40px;
 			.text {
 				display: block;
-				padding-top: 1px;
+				margin-top: 4px;
 				font-family: "PingFang SC";
 				font-size: 20px;
 				font-weight: 400;

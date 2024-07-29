@@ -2,13 +2,16 @@
 	<div class="content">
 		<div class="title">{{ $t('forgetPassword["找回密码"]') }}</div>
 		<div class="from">
-			<FromInput v-model="state.account" type="text" :placeholder="$t(`forgetPassword['账户名']`)">
+			<FromInput v-model="state.account" type="text" :placeholder="$t(`forgetPassword['账户名']`)" :errorBorder="!isAccountValid && state.account !== '' ? true : false">
 				<template v-slot:right>
 					<SvgIcon v-if="state.account" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.account = ''" />
 				</template>
 			</FromInput>
+			<div class="error_text">
+				<span v-if="!isAccountValid && state.account !== ''" class="text">{{ $t('register["请输入4-11位字母+数字组成，首位必须是字母"]') }}</span>
+			</div>
 
-			<Button class="mt_40" :type="!state.account ? 'disabled' : 'default'" @click="onStep">{{ $t('forgetPassword["下一步"]') }}</Button>
+			<Button :type="!isAccountValid ? 'disabled' : 'default'" @click="onStep">{{ $t('forgetPassword["下一步"]') }}</Button>
 
 			<div class="footer">
 				<div>
@@ -20,10 +23,17 @@
 </template>
 
 <script setup lang="ts">
+import common from "/@/utils/common";
+
 const emit = defineEmits(["onStep"]);
 
 const state = reactive({
 	account: "",
+});
+
+// 账号正则
+const isAccountValid = computed(() => {
+	return common.accountRG.test(state.account);
 });
 
 const onStep = async () => {
@@ -79,7 +89,7 @@ const onStep = async () => {
 			min-height: 40px;
 			.text {
 				display: block;
-				padding-top: 1px;
+				margin-top: 4px;
 				font-family: "PingFang SC";
 				font-size: 20px;
 				font-weight: 400;

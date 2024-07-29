@@ -4,7 +4,7 @@
 		<div class="login-from">
 			<div class="title">{{ $t('login["登录"]') }}</div>
 			<div class="from">
-				<FromInput v-model="state.account" type="text" :placeholder="$t(`login['账户名']`)">
+				<FromInput v-model="state.account" type="text" :placeholder="$t(`login['账户名']`)" :errorBorder="!isAccountValid && state.account !== '' ? true : false">
 					<template v-slot:right>
 						<SvgIcon v-if="state.account" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.account = ''" />
 					</template>
@@ -13,7 +13,13 @@
 					<span v-if="!isAccountValid && state.account !== ''" class="text">{{ $t('register["请输入4-11位字母+数字组成，首位必须是字母"]') }}</span>
 				</div>
 
-				<FromInput v-model="state.password" :type="eyeShow ? 'password' : 'text'" :maxlength="16" :placeholder="$t(`login['登录密码']`)">
+				<FromInput
+					v-model="state.password"
+					:type="eyeShow ? 'password' : 'text'"
+					:maxlength="16"
+					:placeholder="$t(`login['登录密码']`)"
+					:errorBorder="!isPasswordValid && state.password !== '' ? true : false"
+				>
 					<template v-slot:right>
 						<div class="right">
 							<SvgIcon v-if="state.password" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.password = ''" />
@@ -137,7 +143,7 @@ watch(
 				min-height: 40px;
 				.text {
 					display: block;
-					padding-top: 1px;
+					padding-top: 4px;
 					font-family: "PingFang SC";
 					font-size: 20px;
 					font-weight: 400;
