@@ -66,7 +66,7 @@ import avatar from "/@/assets/zh-CN/default/my/avatar.png";
 					font-weight: 500;
 				}
 				span {
-					color: var(--Theme-P, #ff284b);
+					color: var(--Theme, #ff284b);
 				}
 				.text2 {
 					margin-top: 10px;
@@ -94,11 +94,11 @@ import avatar from "/@/assets/zh-CN/default/my/avatar.png";
 				font-weight: 400;
 			}
 			.login {
-				border: 1px solid var(--Theme-P, #ff284b);
-				color: var(--Theme-P, #ff284b);
+				border: 1px solid var(--Theme, #ff284b);
+				color: var(--Theme, #ff284b);
 			}
 			.register {
-				background: var(--Theme-P, #ff284b);
+				background: var(--Theme, #ff284b);
 				color: var(--TB1-P, #fdfdfd);
 			}
 		}

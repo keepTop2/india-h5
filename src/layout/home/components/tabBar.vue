@@ -173,7 +173,7 @@ const tabData = [
 
 	.label_active {
 		@include themeify {
-			color: themed("Theme-P");
+			color: themed("Theme");
 		}
 	}
 }

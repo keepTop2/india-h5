@@ -1,5 +1,5 @@
 <template>
-	<div class="login-from">
+	<div class="content">
 		<div class="title">{{ $t('forgetPassword["找回密码"]') }}</div>
 		<div class="from">
 			<FromInput v-model="state.account" type="text" :placeholder="$t(`forgetPassword['账户名']`)">
@@ -7,20 +7,6 @@
 					<SvgIcon v-if="state.account" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.account = ''" />
 				</template>
 			</FromInput>
-
-			<div class="password-operation">
-				<div class="remember-password" @click="state.selectMark = 1">
-					<SvgIcon v-show="state.selectMark != 1" class="check" iconName="/loginOrRegister/checkbox" />
-					<SvgIcon v-show="state.selectMark == 1" class="check" iconName="/loginOrRegister/checkbox_active" />
-					<span class="label">{{ $t('forgetPassword["手机号码"]') }}</span>
-				</div>
-
-				<div class="remember-password" @click="state.selectMark = 2">
-					<SvgIcon v-show="state.selectMark != 2" class="check" iconName="/loginOrRegister/checkbox" />
-					<SvgIcon v-show="state.selectMark == 2" class="check" iconName="/loginOrRegister/checkbox_active" />
-					<span class="label">{{ $t('forgetPassword["邮箱"]') }}</span>
-				</div>
-			</div>
 
 			<Button class="mt_40" :type="!state.account ? 'disabled' : 'default'" @click="onStep">{{ $t('forgetPassword["下一步"]') }}</Button>
 
@@ -38,7 +24,6 @@ const emit = defineEmits(["onStep"]);
 
 const state = reactive({
 	account: "",
-	selectMark: 1,
 });
 
 const onStep = async () => {
@@ -66,7 +51,7 @@ const onStep = async () => {
 </script>
 
 <style scoped lang="scss">
-.login-from {
+.content {
 	padding: 0px 55px;
 	.title {
 		font-size: 36px;
@@ -99,40 +84,15 @@ const onStep = async () => {
 				font-size: 20px;
 				font-weight: 400;
 				@include themeify {
-					color: themed("Theme-P");
+					color: themed("Theme");
 				}
-			}
-		}
-
-		.password-operation {
-			display: flex;
-			align-items: center;
-			justify-content: space-between;
-			margin-top: 32px;
-
-			.remember-password {
-				display: flex;
-				align-items: center;
-				justify-content: space-between;
-				.check {
-					width: 32px;
-					height: 32px;
-					margin-right: 16px;
-				}
-			}
-
-			.label {
-				color: var(--T1-N, #999ba0);
-				font-family: "PingFang SC";
-				font-size: 28px;
-				font-weight: 400;
 			}
 		}
 
 		.footer {
 			display: flex;
 			align-items: center;
-			justify-content: end;
+			justify-content: left;
 			margin-top: 40px;
 			text-align: center;
 			font-family: "PingFang SC";
@@ -141,7 +101,7 @@ const onStep = async () => {
 			line-height: 34px;
 			.help {
 				@include themeify {
-					color: themed("Theme-P");
+					color: themed("Theme");
 				}
 			}
 		}

@@ -157,7 +157,7 @@ const sportAContainer = (data) => {
 		}
 		.tab-active {
 			@include themeify {
-				background-color: themed("Theme-P");
+				background-color: themed("Theme");
 				color: themed("TB-P");
 			}
 		}
@@ -214,7 +214,7 @@ const sportAContainer = (data) => {
 				}
 				.value {
 					@include themeify {
-						color: themed("Theme-P");
+						color: themed("Theme");
 					}
 				}
 			}
@@ -231,7 +231,7 @@ const sportAContainer = (data) => {
 
 			.label-active {
 				@include themeify {
-					color: themed("Theme-P");
+					color: themed("Theme");
 				}
 			}
 		}
@@ -257,7 +257,7 @@ const sportAContainer = (data) => {
 	.active {
 		@include themeify {
 			color: themed("TB-P");
-			background-color: themed("Theme-P");
+			background-color: themed("Theme");
 			border-radius: 25px;
 		}
 	}

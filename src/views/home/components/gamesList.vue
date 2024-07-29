@@ -94,7 +94,7 @@ onMounted(() => {
 				border-radius: 12px;
 				@include themeify {
 					background: themed("BG2");
-					border: 1px solid themed("Theme-P");
+					border: 1px solid themed("Theme");
 				}
 			}
 			:deep(.van-field__control) {

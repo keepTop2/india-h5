@@ -66,7 +66,7 @@ const onCollapse = () => {
 			padding: 8px 28px;
 			border-radius: 12px;
 			border: 2px solid #ff4588;
-			background: var(--Theme-P, #ff284b);
+			background: var(--Theme, #ff284b);
 		}
 		.register,
 		.login {
