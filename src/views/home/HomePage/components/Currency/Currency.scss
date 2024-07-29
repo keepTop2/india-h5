@@ -1,0 +1,77 @@
+* {
+	box-sizing: border-box;
+}
+
+@include themeify {
+	background-color: themed("Bg3");
+	.Line {
+		height: 1px;
+		background: themed("Line");
+		margin-bottom: 20px;
+		margin-top: 20px;
+	}
+	.bold {
+		font-weight: bold;
+	}
+	.noBold {
+		font-weight: normal;
+	}
+	.logo {
+		text-align: center;
+		font-size: 32px;
+		color: themed("Theme");
+		font-family: "PingFang SC";
+	}
+	.tips {
+		color: themed("T1");
+		font-family: "PingFang SC";
+		font-size: 24px;
+		font-style: normal;
+		font-weight: 400;
+		line-height: 40px; /* 166.667% */
+	}
+	.zanzhu {
+		margin-bottom: 20px;
+		font-size: 36px;
+		color: themed("TB");
+		font-weight: 600;
+		position: relative;
+		text-align: center;
+	}
+	button {
+		outline: none;
+		border: 0;
+		border-radius: 4px;
+	}
+
+	ul {
+		margin: 0;
+		padding: 0;
+		li {
+			list-style: none;
+		}
+	}
+	.sponsor_list {
+		display: flex;
+		width: 100%;
+		-webkit-box-align: center;
+		align-items: center;
+		-webkit-box-pack: justify;
+		justify-content: space-between;
+		margin-bottom: 2.5rem;
+		gap: 22px;
+		margin-bottom: 22px;
+	}
+	.guanyuwomen {
+		display: flex;
+		justify-content: space-between;
+		ul {
+			li {
+				float: left;
+				margin-right: 52px;
+				color: themed("Text1");
+				cursor: pointer;
+			}
+		}
+	}
+}
