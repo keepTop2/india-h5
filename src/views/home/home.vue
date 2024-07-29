@@ -1,6 +1,5 @@
 <template>
 	<div class="home">
-		<!-- <SvgIcon class="xxxx" iconName="common/notify" /> -->
 		<HomePage />
 	</div>
 </template>
@@ -10,8 +9,8 @@ import { ref } from "vue";
 import { i18n } from "/@/i18n/index";
 import { useRouter } from "vue-router";
 import HomePage from "./HomePage/HomePage.vue";
-// import useSportARouterChangeHooks from "/@/hooks/sportAHooks/useSportARouterChangeHooks";
-// const { sportARouterChange } = useSportARouterChangeHooks();
+import Star from "/@/assets/zh-CN/default/home/star.svg";
+import Fire from "/@/assets/zh-CN/default/home/fire.svg";
 const router = useRouter();
 const route = useRoute();
 // const MenuStore = useMenuStore();
