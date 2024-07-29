@@ -99,6 +99,9 @@
 			<div class="login_out_btn" @click="loginOut">登出</div>
 		</div>
 
+		<!-- 邀请好友 -->
+		<InviteFriends />
+
 		<!-- 退出弹窗 -->
 		<van-popup v-model:show="loginOutShow" position="bottom">
 			<header>
@@ -117,6 +120,7 @@
 <script setup lang="ts">
 import NavBar from "/@/views/my/components/navBar.vue";
 import NoLogin from "/@/views/my/components/noLogin.vue";
+import InviteFriends from "/@/views/my/components/inviteFriends.vue";
 
 import avatar from "/@/assets/zh-CN/default/my/avatar.png";
 import vip_big from "/@/assets/zh-CN/default/vip/vip_big.png";
@@ -228,7 +232,9 @@ const loginOut = () => {
 	}
 	.user_name {
 		align-self: center;
-		color: var(--TB-N, #fff);
+		@include themeify {
+			color: themed("TB");
+		}
 		font-family: Inter;
 		font-size: 32px;
 		font-weight: 500;
@@ -242,9 +248,11 @@ const loginOut = () => {
 		align-self: center;
 		border-radius: 20px;
 		border: 1px solid;
-		border-color: var(--TB-D, #333);
+		@include themeify {
+			color: themed("T1");
+			border-color: themed("BG3");
+		}
 		background-color: rgba(57, 59, 62, 0.2);
-		color: var(--T1-N, #999ba0);
 		font-family: "PingFang SC";
 		font-size: 24px;
 		font-weight: 400;
@@ -284,7 +292,9 @@ const loginOut = () => {
 			-webkit-text-fill-color: transparent;
 		}
 		.vip_experience {
-			color: var(--TB1-P, #fdfdfd);
+			@include themeify {
+				color: themed("TB1");
+			}
 			font-family: "PingFang SC";
 			font-size: 24px;
 			font-weight: 400;
@@ -316,7 +326,9 @@ const loginOut = () => {
 				display: flex;
 				align-items: center;
 				justify-content: center;
-				color: #fff;
+				@include themeify {
+					color: themed("TB");
+				}
 				font-family: "112-SS Yi Fang Ti";
 				font-size: 16px;
 				font-weight: 400;
@@ -337,7 +349,9 @@ const loginOut = () => {
 				height: calc(100% - 4px);
 				margin: 2px;
 				border-radius: 8px;
-				background-color: var(--Theme, #ff284b);
+				@include themeify {
+					background-color: themed("Theme");
+				}
 
 				.vip_jdt {
 					position: absolute;
@@ -392,14 +406,18 @@ const loginOut = () => {
 			}
 
 			.label {
-				color: var(--TB1-P, #fdfdfd);
+				@include themeify {
+					color: themed("TB1");
+				}
 				font-family: "PingFang SC";
 				font-size: 28px;
 				font-weight: 600;
 			}
 
 			.value {
-				color: var(--T1-N, #999ba0);
+				@include themeify {
+					color: themed("T1");
+				}
 				font-family: "PingFang SC";
 				font-size: 24px;
 				font-weight: 400;
@@ -430,7 +448,9 @@ const loginOut = () => {
 
 				.label {
 					margin-top: 8px;
-					color: var(--T1-N, #999ba0);
+					@include themeify {
+						color: themed("T1");
+					}
 					font-family: "PingFang SC";
 					font-size: 28px;
 					font-weight: 400;
@@ -445,7 +465,9 @@ const loginOut = () => {
 	.group {
 		margin: 24px;
 		border-radius: 16px;
-		background: var(--BG3-N, #2c2d2e);
+		@include themeify {
+			background-color: themed("BG3");
+		}
 		.cell {
 			position: relative;
 			width: 100%;
@@ -464,7 +486,9 @@ const loginOut = () => {
 				right: 24px;
 				width: 606px;
 				height: 1px;
-				background-color: var(--Line-N, #343434);
+				@include themeify {
+					background-color: themed("Line");
+				}
 			}
 			&:last-child::after {
 				display: none;
@@ -476,13 +500,17 @@ const loginOut = () => {
 			}
 			.label {
 				flex: 1;
-				color: var(--TB-N, #fff);
+				@include themeify {
+					color: themed("TB");
+				}
 				font-family: "PingFang SC";
 				font-size: 28px;
 				font-weight: 400;
 			}
 			.value {
-				color: var(--T1-N, #999ba0);
+				@include themeify {
+					color: themed("T1");
+				}
 				font-family: "PingFang SC";
 				font-size: 24px;
 				font-weight: 400;
@@ -504,8 +532,10 @@ const loginOut = () => {
 		justify-content: center;
 		margin: 35px 24px 58px;
 		border-radius: 20px;
-		background: var(--BG3-N, #2c2d2e);
-		color: var(--TB-N, #fff);
+		@include themeify {
+			background-color: themed("BG3");
+			color: themed("TB");
+		}
 		font-family: "PingFang SC";
 		font-size: 32px;
 		font-weight: 400;
@@ -518,14 +548,18 @@ const loginOut = () => {
 .van-popup {
 	padding: 24px 48px 40px;
 	border-radius: 16px 16px 0px 0px;
-	background: var(--BG1-N, #222324);
+	@include themeify {
+		background-color: themed("BG1");
+	}
 
 	header {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 		.label {
-			color: var(--TB-N, #fff);
+			@include themeify {
+				color: themed("TB");
+			}
 			font-family: "PingFang SC";
 			font-size: 32px;
 			font-weight: 600;
@@ -537,7 +571,9 @@ const loginOut = () => {
 	}
 	.content {
 		margin-top: 15px;
-		color: var(--T1-N, #999ba0);
+		@include themeify {
+			color: themed("T1");
+		}
 		text-align: center;
 		font-family: "PingFang SC";
 		font-size: 28px;
@@ -555,12 +591,15 @@ const loginOut = () => {
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			color: var(--Theme-P, #ff284b);
+			@include themeify {
+				border-color: themed("Theme");
+				color: themed("Theme");
+			}
 			font-family: "PingFang SC";
 			font-size: 30px;
 			font-weight: 400;
 			border-radius: 16px;
-			border: 1px solid var(--Theme-P, #ff284b);
+			border: 1px solid;
 		}
 		.btn2 {
 			flex: 1;
@@ -569,8 +608,10 @@ const loginOut = () => {
 			align-items: center;
 			justify-content: center;
 			border-radius: 16px;
-			background: var(--Theme-P, #ff284b);
-			color: var(--TB1-P, #fdfdfd);
+			@include themeify {
+				background-color: themed("Theme");
+				color: themed("TB1");
+			}
 			font-family: "PingFang SC";
 			font-size: 30px;
 			font-weight: 400;
