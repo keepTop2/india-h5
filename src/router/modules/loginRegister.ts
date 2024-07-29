@@ -20,6 +20,14 @@ const LoginRegisterRouter = {
 				title: "注册",
 			},
 		},
+		{
+			path: "/forgetPassword",
+			name: "forgetPassword",
+			component: () => import("/@/views/loginRegister/forgetPassword/forgetPassword.vue"),
+			meta: {
+				title: "忘记密码",
+			},
+		},
 	],
 };
 

@@ -1,14 +1,6 @@
 <template>
 	<div class="login-container">
-		<div class="header-bg">
-			<div class="content">
-				<p class="text">{{ $t('common["你好"]') }}</p>
-				<p class="mt_15">
-					<span class="text">{{ $t('common["欢迎来到"]') }}</span>
-					<span class="ml_12 app-name">OKsport</span>
-				</p>
-			</div>
-		</div>
+		<HeaderBG />
 		<div class="login-from">
 			<div class="title">{{ $t('login["登录"]') }}</div>
 			<div class="from">
@@ -40,7 +32,7 @@
 						<span class="label">{{ $t('login["记住密码"]') }}</span>
 					</div>
 
-					<div class="forgot-password">{{ $t('login["忘记密码"]') }}</div>
+					<div class="forgot-password" @click="router.push('/forgetPassword')">{{ $t('login["忘记密码"]') }}</div>
 				</div>
 
 				<Button class="mt_40" :type="btnDisabled ? 'disabled' : 'default'">{{ $t('login["登录"]') }}</Button>
@@ -51,7 +43,7 @@
 						<span class="create van-haptics-feedback" @click="router.push('/register')">{{ $t('login["创建账户"]') }}</span>
 					</div>
 					<div>
-						<span class="help">{{ $t('login["联系客服"]') }}</span>
+						<span class="help">{{ $t('common["联系客服"]') }}</span>
 					</div>
 				</div>
 			</div>
@@ -61,6 +53,7 @@
 </template>
 
 <script setup lang="ts">
+import HeaderBG from "/@/views/loginRegister/components/headerBG.vue";
 // import { showToast } from "vant";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
@@ -114,36 +107,6 @@ watch(
 	font-family: "PingFang SC";
 	@include themeify {
 		background-color: themed("BG1");
-	}
-
-	.header-bg {
-		position: relative;
-		width: 100%;
-		height: 568px;
-		background: url("/@/assets/zh-CN/default/loginOrRegister/header-bg.png") center center / 100% 100% no-repeat;
-
-		.content {
-			position: absolute;
-			left: 50%;
-			bottom: 50px;
-			transform: translate(-50%, 0);
-			.text,
-			.app-name {
-				@include themeify {
-					color: themed("TB");
-				}
-				font-family: "PingFang SC";
-				font-size: 36px;
-				font-weight: 600;
-				line-height: 46px;
-				text-align: center;
-			}
-			.app-name {
-				@include themeify {
-					color: themed("Theme-P");
-				}
-			}
-		}
 	}
 
 	.login-from {

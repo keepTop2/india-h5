@@ -13,17 +13,14 @@
 				<div class="userName">苏秦</div>
 				<div class="balance">${{ common.getInstance().formatFloat(6000) }}</div>
 			</div>
-			<div class="notify">
-				<div class="badge"></div>
-				<Notify class="notifyIcon van-haptics-feedback" />
-			</div>
+		<Notify />
 		</div>-->
 	</div>
 </template>
 
 <script setup lang="ts">
 import CollapseIcon from "/@/assets/zh-CN/default/common/collapse_icon.svg";
-import Notify from "/@/assets/zh-CN/default/common/notify.svg";
+import Notify from "/@/components/Notify/Notify.vue";
 import common from "/@/utils/common";
 import pubsub from "/@/pubSub/pubSub";
 import { useRouter } from "vue-router";
@@ -44,7 +41,8 @@ const onCollapse = () => {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	z-index: 2;
+	background: rgba(49, 49, 49, 0.5);
+	z-index: 99;
 	.collapseIcon {
 		width: 64px;
 		height: 64px;
@@ -100,28 +98,6 @@ const onCollapse = () => {
 				font-family: Inter;
 				font-size: 28px;
 				font-weight: 700;
-			}
-		}
-
-		.notify {
-			position: relative;
-			width: 64px;
-			height: 64px;
-			margin-right: 24px;
-
-			.badge {
-				position: absolute;
-				top: 6px;
-				right: 6px;
-				width: 20px;
-				height: 20px;
-				border-radius: 50%;
-				background-color: var(--Theme-P, #ff284b);
-			}
-
-			.notifyIcon {
-				width: 100%;
-				height: 100%;
 			}
 		}
 	}
