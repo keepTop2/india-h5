@@ -2,7 +2,55 @@
 
 $themes: (
 	// 默认
-	default: (),
+	default:
+		(
+			Theme: #ff284b,
+			Warn: #ff284b,
+			Warn-P1: #3bc116,
+			Hint: #ff7a00,
+			Fav: #ff007a,
+			Tag1: #343434,
+			BG1-N: #222324,
+			T1: #999ba0,
+			T2: #62666a,
+			T3: #6d727a,
+			T4: #15222e,
+			TB: #ffffff,
+			TB1: #fdfdfd,
+			ZZ: #000000,
+			F2: #21a8f7,
+			BG1: #222324,
+			BG3: #2c2d2e,
+			BG4: #343434,
+			BG6: #495867,
+			BG8: #10131c,
+			Line: #343434,
+			Line2-P: linear-gradient(90deg, rgba(255, 40, 75, 0) 0%, #ff284b 51.5%, rgba(255, 40, 75, 0) 100%),
+		),
 	// 深色主题
-	dark: ()
+	dark:
+		(
+			Theme: #ff284b,
+			Warn: #ff284b,
+			Warn-P1: #3bc116,
+			Hint: #ff7a00,
+			Fav: #ff007a,
+			Tag1: #eaecf2,
+			BG1-N: #222324,
+			T1: #999ba0,
+			T2: #62666a,
+			T3: #6d727a,
+			T4: #15222e,
+			TB: #333333,
+			TB1: #fdfdfd,
+			ZZ: #000000,
+			F2: #21a8f7,
+			BG1: #f3f3f3,
+			BG3: #ffffff,
+			BG4: #eeeeee,
+			BG6: #495867,
+			BG8: #eaf0f8,
+			Line: #f2f2f2,
+			Line2-P: linear-gradient(90deg, rgba(255, 40, 75, 0) 0%, #ff284b 51.5%, rgba(255, 40, 75, 0) 100%),
+		)
 );

@@ -96,14 +96,31 @@
 			</div>
 
 			<!-- 退出按钮 -->
-			<div class="login_out_btn">登出</div>
+			<div class="login_out_btn" @click="loginOut">登出</div>
 		</div>
+
+		<!-- 邀请好友 -->
+		<InviteFriends />
+
+		<!-- 退出弹窗 -->
+		<van-popup v-model:show="loginOutShow" position="bottom">
+			<header>
+				<span class="label">登出</span>
+				<SvgIcon class="close_icon" iconName="/common/close" @click="loginOutShow = false" />
+			</header>
+			<div class="content">您确定要退出登录吗?</div>
+			<div class="btns">
+				<div class="btn1" @click="loginOutShow = false">取消</div>
+				<div class="btn2">登出</div>
+			</div>
+		</van-popup>
 	</div>
 </template>
 
 <script setup lang="ts">
 import NavBar from "/@/views/my/components/navBar.vue";
 import NoLogin from "/@/views/my/components/noLogin.vue";
+import InviteFriends from "/@/views/my/components/inviteFriends.vue";
 
 import avatar from "/@/assets/zh-CN/default/my/avatar.png";
 import vip_big from "/@/assets/zh-CN/default/vip/vip_big.png";
@@ -187,6 +204,12 @@ const menuData = {
 		},
 	],
 };
+
+const loginOutShow = ref(false);
+
+const loginOut = () => {
+	loginOutShow.value = true;
+};
 </script>
 
 <style scoped lang="scss">
@@ -209,7 +232,9 @@ const menuData = {
 	}
 	.user_name {
 		align-self: center;
-		color: var(--TB-N, #fff);
+		@include themeify {
+			color: themed("TB");
+		}
 		font-family: Inter;
 		font-size: 32px;
 		font-weight: 500;
@@ -223,9 +248,11 @@ const menuData = {
 		align-self: center;
 		border-radius: 20px;
 		border: 1px solid;
-		border-color: var(--TB-D, #333);
+		@include themeify {
+			color: themed("T1");
+			border-color: themed("BG3");
+		}
 		background-color: rgba(57, 59, 62, 0.2);
-		color: var(--T1-N, #999ba0);
 		font-family: "PingFang SC";
 		font-size: 24px;
 		font-weight: 400;
@@ -265,7 +292,9 @@ const menuData = {
 			-webkit-text-fill-color: transparent;
 		}
 		.vip_experience {
-			color: var(--TB1-P, #fdfdfd);
+			@include themeify {
+				color: themed("TB1");
+			}
 			font-family: "PingFang SC";
 			font-size: 24px;
 			font-weight: 400;
@@ -297,7 +326,9 @@ const menuData = {
 				display: flex;
 				align-items: center;
 				justify-content: center;
-				color: #fff;
+				@include themeify {
+					color: themed("TB");
+				}
 				font-family: "112-SS Yi Fang Ti";
 				font-size: 16px;
 				font-weight: 400;
@@ -318,7 +349,9 @@ const menuData = {
 				height: calc(100% - 4px);
 				margin: 2px;
 				border-radius: 8px;
-				background-color: var(--Theme, #ff284b);
+				@include themeify {
+					background-color: themed("Theme");
+				}
 
 				.vip_jdt {
 					position: absolute;
@@ -373,14 +406,18 @@ const menuData = {
 			}
 
 			.label {
-				color: var(--TB1-P, #fdfdfd);
+				@include themeify {
+					color: themed("TB1");
+				}
 				font-family: "PingFang SC";
 				font-size: 28px;
 				font-weight: 600;
 			}
 
 			.value {
-				color: var(--T1-N, #999ba0);
+				@include themeify {
+					color: themed("T1");
+				}
 				font-family: "PingFang SC";
 				font-size: 24px;
 				font-weight: 400;
@@ -411,7 +448,9 @@ const menuData = {
 
 				.label {
 					margin-top: 8px;
-					color: var(--T1-N, #999ba0);
+					@include themeify {
+						color: themed("T1");
+					}
 					font-family: "PingFang SC";
 					font-size: 28px;
 					font-weight: 400;
@@ -426,7 +465,9 @@ const menuData = {
 	.group {
 		margin: 24px;
 		border-radius: 16px;
-		background: var(--BG3-N, #2c2d2e);
+		@include themeify {
+			background-color: themed("BG3");
+		}
 		.cell {
 			position: relative;
 			width: 100%;
@@ -445,7 +486,9 @@ const menuData = {
 				right: 24px;
 				width: 606px;
 				height: 1px;
-				background-color: var(--Line-N, #343434);
+				@include themeify {
+					background-color: themed("Line");
+				}
 			}
 			&:last-child::after {
 				display: none;
@@ -457,13 +500,17 @@ const menuData = {
 			}
 			.label {
 				flex: 1;
-				color: var(--TB-N, #fff);
+				@include themeify {
+					color: themed("TB");
+				}
 				font-family: "PingFang SC";
 				font-size: 28px;
 				font-weight: 400;
 			}
 			.value {
-				color: var(--T1-N, #999ba0);
+				@include themeify {
+					color: themed("T1");
+				}
 				font-family: "PingFang SC";
 				font-size: 24px;
 				font-weight: 400;
@@ -485,11 +532,90 @@ const menuData = {
 		justify-content: center;
 		margin: 35px 24px 58px;
 		border-radius: 20px;
-		background: var(--BG3-N, #2c2d2e);
-		color: var(--TB-N, #fff);
+		@include themeify {
+			background-color: themed("BG3");
+			color: themed("TB");
+		}
 		font-family: "PingFang SC";
 		font-size: 32px;
 		font-weight: 400;
+	}
+}
+
+:deep(.van-overlay) {
+	background: rgba(24, 24, 24, 0.73);
+}
+.van-popup {
+	padding: 24px 48px 40px;
+	border-radius: 16px 16px 0px 0px;
+	@include themeify {
+		background-color: themed("BG1");
+	}
+
+	header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		.label {
+			@include themeify {
+				color: themed("TB");
+			}
+			font-family: "PingFang SC";
+			font-size: 32px;
+			font-weight: 600;
+		}
+		.close_icon {
+			width: 32px;
+			height: 32px;
+		}
+	}
+	.content {
+		margin-top: 15px;
+		@include themeify {
+			color: themed("T1");
+		}
+		text-align: center;
+		font-family: "PingFang SC";
+		font-size: 28px;
+		font-weight: 400;
+	}
+	.btns {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 54px;
+		margin-top: 30px;
+		.btn1 {
+			flex: 1;
+			height: 86px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			@include themeify {
+				border-color: themed("Theme");
+				color: themed("Theme");
+			}
+			font-family: "PingFang SC";
+			font-size: 30px;
+			font-weight: 400;
+			border-radius: 16px;
+			border: 1px solid;
+		}
+		.btn2 {
+			flex: 1;
+			height: 86px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			border-radius: 16px;
+			@include themeify {
+				background-color: themed("Theme");
+				color: themed("TB1");
+			}
+			font-family: "PingFang SC";
+			font-size: 30px;
+			font-weight: 400;
+		}
 	}
 }
 </style>
