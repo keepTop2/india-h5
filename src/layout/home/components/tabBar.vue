@@ -83,9 +83,8 @@ const tabData = [
 	position: fixed;
 	bottom: 0;
 	width: 100%;
-	height: 103px;
+	height: 97px;
 	display: flex;
-	background-color: #2f3032;
 	border-radius: 28px 28px 0px 0px;
 	z-index: 99;
 
@@ -111,7 +110,7 @@ const tabData = [
 		}
 
 		.active {
-			background: url("../../assets/zh-CN/default/layout/item_bg.png") center center no-repeat;
+			background: url("/@/assets/zh-CN/default/layout/item_bg.png") center center no-repeat;
 			background-size: 100% 100%;
 		}
 
@@ -144,7 +143,7 @@ const tabData = [
 		}
 
 		.active {
-			background: url("../../assets/zh-CN/default/layout/home_item_bg.png") center center no-repeat;
+			background: url("/@/assets/zh-CN/default/layout/home_item_bg.png") center center no-repeat;
 			background-size: 100% 100%;
 		}
 		.home-icon {
@@ -156,7 +155,7 @@ const tabData = [
 
 		.label {
 			position: absolute;
-			bottom: 5px;
+			bottom: 1px;
 		}
 	}
 
@@ -167,7 +166,7 @@ const tabData = [
 		font-size: 22px;
 		font-weight: 400;
 		@include themeify {
-			color: themed("Tag2");
+			color: themed("T3");
 		}
 	}
 
