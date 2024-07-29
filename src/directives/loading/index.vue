@@ -41,7 +41,7 @@ import {} from "vue";
 		transform-origin: 50%;
 		animation: typing-circle7124 0.5s alternate infinite ease;
 		@include themeify {
-			background-color: themed("Theme-P");
+			background-color: themed("Theme");
 		}
 	}
 

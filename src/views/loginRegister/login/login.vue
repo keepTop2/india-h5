@@ -142,7 +142,7 @@ watch(
 					font-size: 20px;
 					font-weight: 400;
 					@include themeify {
-						color: themed("Theme-P");
+						color: themed("Theme");
 					}
 				}
 			}
@@ -165,7 +165,9 @@ watch(
 
 				.label,
 				.forgot-password {
-					color: var(--T1-N, #999ba0);
+					@include themeify {
+						color: themed("T1");
+					}
 					font-family: "PingFang SC";
 					font-size: 28px;
 					font-weight: 400;
@@ -190,7 +192,7 @@ watch(
 				.create,
 				.help {
 					@include themeify {
-						color: themed("Theme-P");
+						color: themed("Theme");
 					}
 				}
 			}

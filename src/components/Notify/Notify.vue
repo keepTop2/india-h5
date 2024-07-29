@@ -22,7 +22,7 @@ import Notify from "/@/assets/zh-CN/default/common/notify.svg";
 		width: 20px;
 		height: 20px;
 		border-radius: 50%;
-		background-color: var(--Theme-P, #ff284b);
+		background-color: var(--Theme, #ff284b);
 	}
 
 	.notifyIcon {

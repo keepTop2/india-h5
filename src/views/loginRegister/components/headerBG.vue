@@ -37,7 +37,7 @@
 		}
 		.app-name {
 			@include themeify {
-				color: themed("Theme-P");
+				color: themed("Theme");
 			}
 		}
 	}
