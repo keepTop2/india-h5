@@ -96,8 +96,21 @@
 			</div>
 
 			<!-- 退出按钮 -->
-			<div class="login_out_btn">登出</div>
+			<div class="login_out_btn" @click="loginOut">登出</div>
 		</div>
+
+		<!-- 退出弹窗 -->
+		<van-popup v-model:show="loginOutShow" position="bottom">
+			<header>
+				<span class="label">登出</span>
+				<SvgIcon class="close_icon" iconName="/common/close" @click="loginOutShow = false" />
+			</header>
+			<div class="content">您确定要退出登录吗?</div>
+			<div class="btns">
+				<div class="btn1" @click="loginOutShow = false">取消</div>
+				<div class="btn2">登出</div>
+			</div>
+		</van-popup>
 	</div>
 </template>
 
@@ -186,6 +199,12 @@ const menuData = {
 			path: "",
 		},
 	],
+};
+
+const loginOutShow = ref(false);
+
+const loginOut = () => {
+	loginOutShow.value = true;
 };
 </script>
 
@@ -490,6 +509,72 @@ const menuData = {
 		font-family: "PingFang SC";
 		font-size: 32px;
 		font-weight: 400;
+	}
+}
+
+:deep(.van-overlay) {
+	background: rgba(24, 24, 24, 0.73);
+}
+.van-popup {
+	padding: 24px 48px 40px;
+	border-radius: 16px 16px 0px 0px;
+	background: var(--BG1-N, #222324);
+
+	header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		.label {
+			color: var(--TB-N, #fff);
+			font-family: "PingFang SC";
+			font-size: 32px;
+			font-weight: 600;
+		}
+		.close_icon {
+			width: 32px;
+			height: 32px;
+		}
+	}
+	.content {
+		margin-top: 15px;
+		color: var(--T1-N, #999ba0);
+		text-align: center;
+		font-family: "PingFang SC";
+		font-size: 28px;
+		font-weight: 400;
+	}
+	.btns {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 54px;
+		margin-top: 30px;
+		.btn1 {
+			flex: 1;
+			height: 86px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			color: var(--Theme-P, #ff284b);
+			font-family: "PingFang SC";
+			font-size: 30px;
+			font-weight: 400;
+			border-radius: 16px;
+			border: 1px solid var(--Theme-P, #ff284b);
+		}
+		.btn2 {
+			flex: 1;
+			height: 86px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			border-radius: 16px;
+			background: var(--Theme-P, #ff284b);
+			color: var(--TB1-P, #fdfdfd);
+			font-family: "PingFang SC";
+			font-size: 30px;
+			font-weight: 400;
+		}
 	}
 }
 </style>
