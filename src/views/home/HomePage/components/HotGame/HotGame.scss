@@ -1,0 +1,37 @@
+.GameSwiper {
+	@import "../public.scss";
+	@include themeify {
+		margin-bottom: 56px;
+		overflow: hidden;
+		.mySwiper {
+			width: 120% !important;
+			// padding-right: 30px;
+		}
+		.swiper-slide {
+			width: 210px;
+			background-color: themed("BG3");
+			overflow: hidden;
+			border-radius: 20px;
+			border: 2px solid themed("T3");
+			box-sizing: border-box;
+			overflow: hidden;
+			position: relative;
+			margin-right: 16px;
+			.collect {
+				position: absolute;
+				right: 10px;
+				top: 10px;
+				width: 32px;
+				height: 32px;
+			}
+			svg {
+				width: 100%;
+				height: auto;
+			}
+		}
+		h3 {
+			font-weight: normal;
+			line-height: 40px;
+		}
+	}
+}
