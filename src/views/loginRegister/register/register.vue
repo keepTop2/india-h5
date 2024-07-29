@@ -213,7 +213,7 @@ const onRegister = async () => {
 					font-size: 20px;
 					font-weight: 400;
 					@include themeify {
-						color: themed("Theme-P");
+						color: themed("Theme");
 					}
 				}
 			}
@@ -243,7 +243,7 @@ const onRegister = async () => {
 
 				.text2 {
 					@include themeify {
-						color: themed("Theme-P");
+						color: themed("Theme");
 					}
 				}
 
@@ -268,7 +268,7 @@ const onRegister = async () => {
 				}
 				.create {
 					@include themeify {
-						color: themed("Theme-P");
+						color: themed("Theme");
 					}
 				}
 			}

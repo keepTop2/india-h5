@@ -267,7 +267,7 @@ const onClosed = () => {
 	//选中的颜色
 	:deep(.van-picker-column__item.van-picker-column__item--selected) {
 		@include themeify {
-			color: themed("Theme-P") !important;
+			color: themed("Theme") !important;
 		}
 	}
 
