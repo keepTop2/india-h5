@@ -5,19 +5,25 @@
 // Read more: https://github.com/vuejs/core/pull/3399
 import '@vue/runtime-core'
 
-export {};
-declare module "@vue/runtime-core" {
-	export interface GlobalComponents {
-		Image: typeof import("./../src/components/Image/image.vue")["default"];
-		MultipleSelect: typeof import("./../src/components/MultipleSelect/MultipleSelect.vue")["default"];
-		RouterLink: typeof import("vue-router")["RouterLink"];
-		RouterView: typeof import("vue-router")["RouterView"];
-		SingleSelect: typeof import("./../src/components/SingleSelect/SingleSelect.vue")["default"];
-		VanPicker: typeof import("vant/es")["Picker"];
-		VanPopup: typeof import("vant/es")["Popup"];
-		VantImage: typeof import("./../src/components/vant/VantImage.vue")["default"];
-		VantLazyImg: typeof import("./../src/components/vant/VantLazyImg.vue")["default"];
-		VantList: typeof import("./../src/components/vant/VantList.vue")["default"];
-		VantListW: typeof import("./../src/components/vant/VantListW.vue")["default"];
-	}
+export {}
+
+declare module '@vue/runtime-core' {
+  export interface GlobalComponents {
+    Button: typeof import('./../src/components/Button/Button.vue')['default']
+    FromInput: typeof import('./../src/components/Input/fromInput.vue')['default']
+    Hcaptcha: typeof import('./../src/components/Hcaptcha/hcaptcha.vue')['default']
+    Image: typeof import("./../src/components/Image/image.vue")["default"]
+    MultipleSelect: typeof import('./../src/components/MultipleSelect/MultipleSelect.vue')['default']
+    Notify: typeof import('./../src/components/Notify/Notify.vue')['default']
+    RouterLink: typeof import('vue-router')['RouterLink']
+    RouterView: typeof import('vue-router')['RouterView']
+    SingleSelect: typeof import('./../src/components/SingleSelect/SingleSelect.vue')['default']
+    SvgIcon: typeof import('./../src/components/svgIcon/index.vue')['default']
+    VanPicker: typeof import("vant/es")["Picker"]
+    VanPopup: typeof import('vant/es')['Popup']
+    VantImage: typeof import("./../src/components/vant/VantImage.vue")["default"]
+    VantLazyImg: typeof import('./../src/components/vant/VantLazyImg.vue')['default']
+    VantList: typeof import('./../src/components/vant/VantList.vue')['default']
+    VantListW: typeof import('./../src/components/vant/VantListW.vue')['default']
+  }
 }
