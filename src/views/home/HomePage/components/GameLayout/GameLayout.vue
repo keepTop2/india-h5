@@ -3,7 +3,8 @@
 		<div class="left-section">
 			<div class="item big" id="item-1">
 				<SvgIcon class="star" iconName="home/event_collect" />
-				<VantLazyImg :src="img" />
+				<!-- <VantLazyImg :src="img" /> -->
+				<NoGameImg />
 			</div>
 			<div class="small-items">
 				<div class="item" id="item-5">
@@ -20,7 +21,8 @@
 			<div class="small-items">
 				<div class="item" id="item-3">
 					<SvgIcon class="star" iconName="home/event_collect" />
-					<VantLazyImg :src="img" />
+					<!-- <VantLazyImg :src="img" /> -->
+					<NoGameImg />
 				</div>
 				<div class="item" id="item-4">
 					<SvgIcon class="star" iconName="home/event_collect" />

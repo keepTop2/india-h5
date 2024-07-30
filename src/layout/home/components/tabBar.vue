@@ -167,7 +167,7 @@ const tabData = [
 		font-size: 22px;
 		font-weight: 400;
 		@include themeify {
-			color: themed("Tag2");
+			color: themed("T3");
 		}
 	}
 

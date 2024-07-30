@@ -14,6 +14,14 @@ const LayoutRouter = {
 			},
 		},
 		{
+			path: "/discount/activityParticulars",
+			name: "activityParticulars",
+			component: () => import("/@/views/discount/components/activityParticulars.vue"),
+			meta: {
+				title: "活动详情",
+			},
+		},
+		{
 			path: "/records",
 			name: "records",
 			component: () => import("/@/views/records/records.vue"),
