@@ -22,7 +22,7 @@ const componentMaps = {
 
 const state = reactive({
 	params: {},
-	computedIndex: 0,
+	computedIndex: 1,
 });
 
 onMounted(() => {});

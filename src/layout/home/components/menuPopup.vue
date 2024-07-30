@@ -1,9 +1,10 @@
 <template>
 	<div>
 		<van-popup v-model:show="show" position="left">
+			<VantLazyImg class="close" :src="close" />
 			<div class="menu_header">
 				<div class="logo">
-					<img :src="home_active" alt="" />
+					<img :src="logo" alt="" />
 				</div>
 				<MenuClose class="menuClose van-haptics-feedback" @click="show = false" />
 			</div>
@@ -47,12 +48,12 @@
 </template>
 
 <script setup lang="ts">
-import home_active from "/@/assets/zh-CN/default/layout/home_active.png";
-import MenuClose from "/@/assets/zh-CN/default/common/menu_close.svg";
+import logo from "/@/assets/zh-CN/default/menuPopup/logo.png";
 import task_icon from "/@/assets/zh-CN/default/menuPopup/task_icon.png";
 import wheel_icon from "/@/assets/zh-CN/default/menuPopup/wheel_icon.png";
 import Contest from "/@/assets/zh-CN/default/menuPopup/contest.svg";
 import helpIcon from "/@/assets/zh-CN/default/menuPopup/helpIcon.svg";
+import close from "/@/assets/zh-CN/default/menuPopup/close.png";
 import pubsub from "/@/pubSub/pubSub";
 import { ref } from "vue";
 const show = ref(false);
@@ -69,16 +70,24 @@ pubsub.subscribe("onCollapseMenu", onCollapseMenu);
 	width: 530px;
 	height: 100%;
 	background: var(--BG1-N, #222324);
+	overflow-y: unset;
+
+	.close {
+		position: absolute;
+		top: 50%;
+		right: -40px;
+		transform: translate(0, -50%);
+		width: 40px;
+		height: 124px;
+	}
 	.menu_header {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		padding: 40px;
-		border-bottom: 1px solid;
-		border-color: var(--TB-D, #333);
+		padding: 60px 40px;
 		.logo {
-			width: 120px;
-			height: 120px;
+			width: 240px;
+			height: 29px;
 			img {
 				width: 100%;
 				height: 100%;
@@ -97,7 +106,7 @@ pubsub.subscribe("onCollapseMenu", onCollapseMenu);
 			display: flex;
 			gap: 20px;
 			justify-content: space-between;
-			padding: 40px;
+			padding: 0px 40px;
 			.task,
 			.wheel {
 				width: 218px;
@@ -107,7 +116,7 @@ pubsub.subscribe("onCollapseMenu", onCollapseMenu);
 				padding: 14px 16px;
 				border-radius: 8px;
 				box-sizing: border-box;
-				// background-size: 100% 100%;
+				background-size: 100% 100%;
 				.icon {
 					width: 52px;
 					height: 52px;
@@ -125,25 +134,23 @@ pubsub.subscribe("onCollapseMenu", onCollapseMenu);
 				}
 			}
 			.task {
-				// background: url("/@/assets/zh-CN/default/menuPopup/task_bg.png") center center no-repeat;
-				background: linear-gradient(261deg, rgba(0, 133, 255, 0.2) 0%, #00e0e0 100%);
+				background: url("/@/assets/zh-CN/default/menuPopup/task_bg.png") center center no-repeat;
 			}
 			.wheel {
-				// background: url("/@/assets/zh-CN/default/menuPopup/wheel_bg.png") center center no-repeat;
-				background: linear-gradient(261deg, rgba(153, 35, 182, 0.2) 0%, #9923b6 100%);
+				background: url("/@/assets/zh-CN/default/menuPopup/wheel_bg.png") center center no-repeat;
 			}
 		}
 
 		.menu_list {
 			display: grid;
 			gap: 20px;
-			padding: 0px 40px 40px;
+			padding: 40px 0px;
 			.menu {
 				width: 100%;
 				height: 80px;
 				display: flex;
 				align-items: center;
-				padding: 20px 0px;
+				padding: 20px 40px;
 				box-sizing: border-box;
 				.icon {
 					width: 32px;
