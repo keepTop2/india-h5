@@ -1,0 +1,493 @@
+.eventDetail {
+	height: calc(100vh);
+	overflow-y: scroll;
+	box-sizing: border-box;
+	font-family: "PingFang SC";
+	position: relative;
+	.live {
+		height: 420px;
+	}
+	.eventVideo {
+		width: 100vw;
+		height: 420px;
+	}
+	.video-js {
+		height: 420px;
+		width: 100vw;
+	}
+	.video-js .vjs-tech {
+		width: 100vw;
+	}
+	.oddsUp {
+		@include themeify {
+			color: themed("Warn-P") !important;
+		}
+	}
+
+	.oddsDown {
+		@include themeify {
+			color: themed("Theme-P") !important;
+		}
+	}
+
+	.omit {
+		max-width: 204px;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		overflow: hidden;
+	}
+
+	.noOmit {
+		max-width: 204px;
+		// text-overflow: ellipsis;
+		// white-space: nowrap;
+		overflow: hidden;
+	}
+
+	.sport_arrow {
+		transform: rotate(-180deg);
+	}
+	.smallHeader {
+		height: 100px;
+		line-height: 100px;
+		display: none;
+		width: 100%;
+		background-image: url("./images/bg.png");
+		background-size: 100%;
+		transition: all 0.3s ease;
+		padding: 0 32px;
+		/* float: left; */
+		gap: 50px;
+		.teamName {
+			display: flex;
+		}
+		.fl_right {
+			text-align: right;
+		}
+	}
+	.fixed {
+		position: fixed;
+		display: flex;
+
+		top: 0;
+		z-index: 2;
+	}
+	.teams > div {
+		display: flex;
+		align-items: center;
+		justify-content: space-around;
+		overflow: hidden;
+	}
+	.teams {
+		height: 120px;
+		margin-bottom: 40px;
+
+		.teamLogo {
+			img {
+				height: 65px;
+				width: 65px;
+			}
+			margin-bottom: 20px;
+		}
+		.time {
+			text-align: center;
+			font-family: "DIN Alternate";
+		}
+		.team1,
+		.team2 {
+			display: flex;
+			align-items: center;
+			flex-direction: column;
+			width: 200px;
+			.teamName {
+				width: 200px;
+				text-align: center;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+				overflow: hidden;
+			}
+		}
+	}
+	.smallTeams {
+		.teams {
+			height: 123px;
+			padding: 17px 24px;
+			box-sizing: border-box;
+			margin: 0;
+			.team1,
+			.team2 {
+				flex-direction: row;
+				.teamName {
+					text-align: left;
+					width: 160px;
+				}
+				.teamLogo {
+					margin: 0;
+					margin-right: 16px;
+				}
+				ul {
+					li {
+						float: left;
+						display: flex;
+						align-items: center;
+						margin-right: 10px;
+						svg {
+							width: 22px;
+							height: 26px;
+							margin-right: 2px;
+						}
+					}
+				}
+			}
+		}
+	}
+	.header {
+		// padding-top: 100px;
+		box-sizing: border-box;
+		height: 300px;
+
+		.showDropDown {
+			@include themeify {
+				background-color: themed("BG1");
+			}
+			// background: linear-gradient(rgb(23 24 27) 0%, rgb(36 38 43) 100%);
+		}
+	}
+	.headerBox {
+		// height: 410px;
+		overflow: hidden;
+		background-image: url("./images/bg.png");
+		background-size: contain;
+		position: relative;
+		.navBar {
+			width: 100vw;
+			height: 100px;
+			padding: 0 32px;
+			display: flex;
+			align-items: center;
+			box-sizing: border-box;
+			justify-content: space-between;
+			margin-bottom: 15px;
+			.teamList {
+				display: flex;
+				flex-direction: row;
+				align-items: center;
+				justify-content: space-between;
+				svg {
+					width: 26px;
+					height: 16px;
+				}
+			}
+			.goback {
+				svg {
+					width: 32px;
+					height: 32px;
+				}
+			}
+		}
+	}
+	// .headerFixed {
+	// 	position: fixed;
+	// 	display: block;
+	// 	top: -300px;
+	// 	z-index: 1;
+	// 	width: 100%;
+	// }
+	.card {
+		display: flex;
+		align-items: center;
+		justify-content: space-around;
+		margin-bottom: 20px;
+		ul {
+			overflow: hidden;
+			padding: 12px 24px;
+			height: 40px;
+			background: rgba(0, 0, 0, 0.5);
+			display: inline-block;
+			border-radius: 8px;
+			width: auto;
+			display: flex;
+			gap: 25px;
+			align-items: center;
+			li {
+				display: flex;
+				gap: 10px;
+				align-items: center;
+				cursor: pointer;
+				svg {
+					width: 40px;
+					// height: 40px;
+				}
+			}
+			.line {
+				width: 2px;
+				height: 25px;
+			}
+		}
+	}
+	.content {
+		border-radius: 16px 16px 0 0;
+		.tabBox {
+			// height: 80px;
+			// width: 100%;
+		}
+		.isBright {
+			position: relative;
+			// width: 100%;
+			// height: 100%;
+			// display: flex;
+			// flex-direction: column;
+			// align-items: center;
+			// justify-content: center;
+			&::after {
+				content: "";
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				border-radius: 8px;
+				border: 2px solid;
+				@include themeify {
+					border-color: themed("Theme-P");
+				}
+				box-sizing: border-box;
+			}
+		}
+		.tabBox {
+			width: 100vw;
+			overflow: hidden;
+			display: flex;
+			align-items: center;
+			svg {
+				width: 26px;
+				height: 26px;
+			}
+			@include themeify {
+				border-bottom: 1px solid themed("Line");
+			}
+		}
+		.tabs {
+			padding: 0 24px;
+			width: calc(100% - 48px);
+			box-sizing: border-box;
+		}
+		.tab {
+			height: 80px;
+			border-radius: 16px 16px 0 0;
+			// padding: 0 24px;
+			width: 100%;
+			line-height: 80px;
+			overflow-x: auto;
+			overflow-y: hidden;
+			-ms-overflow-style: none; /* IE 和 Edge */
+			&::-webkit-scrollbar {
+				/* WebKit 浏览器，如 Chrome、Safari */
+				width: 0; /* 隐藏垂直滚动条 */
+				height: 0; /* 隐藏水平滚动条 */
+			}
+			-webkit-overflow-scrolling: touch;
+			white-space: nowrap;
+			list-style-type: none;
+			width: 100%;
+			box-sizing: border-box;
+			@include themeify {
+				li {
+					color: themed("TB");
+					position: relative; /* 为li元素设置相对定位，以便::after伪元素可以相对于它定位 */
+					// padding-bottom: 10px; /* 根据需要调整，确保有足够的空间显示下横线 */
+					font-size: 24px;
+					font-weight: 400;
+					margin-right: 47px;
+					display: inline-block;
+					height: 100%;
+				}
+				li::after {
+					content: ""; /* 伪元素需要内容，即使它是空的 */
+					position: absolute; /* 使用绝对定位 */
+					left: 50%; /* 将伪元素置于li元素的水平中心 */
+					bottom: 14px; /* 下横线位于li元素的底部 */
+					width: 40px; /* 宽度为li元素宽度的一半 */
+					height: 4px; /* 下横线的高度 */
+					border-radius: 6px;
+					background-color: themed("Theme-P"); /* 或指定颜色，如 #333 */
+					transform: translateX(-50%); /* 向左移动自身宽度的50%，以确保居中 */
+					opacity: 0; /* 默认不显示下横线 */
+					transition: opacity 0.3s ease; /* 可选：平滑过渡效果 */
+				}
+				li.selected::after {
+					opacity: 1; /* 当li被选中时，显示下横线 */
+				}
+			}
+		}
+		.tab::-webkit-scrollbar {
+			width: 0; /* 对于横向滚动条 */
+			height: 0; /* 对于纵向滚动条 */
+			display: none;
+		}
+
+		.fixed-tab {
+			position: sticky;
+			top: 100px; /* 与smallHeader对齐 */
+			width: 100%;
+			z-index: 1; /* 确保tab位于内容之上 */
+		}
+		.tournament-content {
+			border-radius: 0px 0px 16px 16px;
+			.selectionTitle {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+		}
+		.tournament-header {
+			height: 56px;
+			display: flex;
+			align-items: center;
+			padding: 8px 12px;
+			border-radius: 16px 16px 0px 0px;
+			@include themeify {
+				background: themed("--JBS-CARD");
+			}
+			box-sizing: border-box;
+
+			.tournament-info {
+				flex: 1;
+				display: flex;
+				align-items: center;
+				margin-right: 18px;
+
+				.tournament-icon {
+					width: 30px;
+					height: 30px;
+					margin: 0 12px;
+					img {
+						width: 100%;
+						height: 100%;
+					}
+				}
+
+				.tournament-name {
+					width: 526px;
+					@include themeify {
+						color: themed("TB");
+					}
+					font-family: "PingFang SC";
+					font-size: 24px;
+					font-weight: 400;
+					line-height: 34px;
+					white-space: nowrap; /* 禁止换行 */
+					overflow: hidden; /* 隐藏超出部分 */
+					text-overflow: ellipsis; /* 显示省略号 */
+				}
+			}
+		}
+		.noData {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex-direction: column;
+			height: calc(100vh - 480px);
+		}
+		.selections_list {
+			padding: 20px 24px;
+			.selection_item {
+				margin-bottom: 20px;
+			}
+			ul {
+				padding: 8px 12px;
+
+				li {
+					display: flex;
+					flex-wrap: wrap; /* 允许元素换行 */
+					// justify-content: space-between; /* 项目之间的间隔 */
+					gap: 7px;
+				}
+				.li_tag {
+					height: 120px;
+					flex-basis: calc(50% - 4px); /* 每个元素占据50%，减去10px的间隔 */
+					margin-bottom: 8px; /* 换行时的垂直间隔 */
+					box-sizing: border-box; /* 包括边框和内边距在内占据50% */
+					border-radius: 8px;
+					text-align: center;
+					display: flex;
+					justify-content: center;
+					flex-direction: column;
+					.price {
+						position: relative;
+						width: 50%;
+						display: inline-block;
+						@include themeify {
+							color: themed("TB");
+						}
+					}
+				}
+
+				.threeCol {
+					flex-basis: calc(33% - 4px); /* 每个元素占据50%，减去10px的间隔 */
+				}
+			}
+		}
+	}
+	:deep(.van-dropdown-menu__bar) {
+		background: unset;
+		box-shadow: none;
+		.van-dropdown-menu__title {
+			@include themeify {
+				color: themed("TB-P");
+				max-width: 370px;
+				text-align: center;
+				white-space: nowrap; /* 禁止换行 */
+				overflow: hidden;
+				text-overflow: ellipsis; /* 显示省略号 */
+			}
+		}
+		.van-dropdown-menu__title:after {
+			right: 5px;
+			border: 10px solid;
+			// border-color: transparent transparent var(--van-gray-4) var(--van-gray-4);
+			display: none;
+		}
+	}
+	:deep(.van-dropdown-item) {
+		@include themeify {
+			.van-popup {
+				background-color: themed("BG1");
+				padding: 19px 39px;
+				border-radius: 0px 0px 16px 16px;
+				li {
+					background-color: themed("BG3");
+					margin-bottom: 9px;
+					height: 156px;
+					border-radius: 16px;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					.teams {
+						margin: 0;
+						width: 100%;
+					}
+				}
+			}
+		}
+	}
+}
+.w_123 {
+	width: 123px;
+	white-space: nowrap; /* 禁止换行 */
+	overflow: hidden;
+	text-overflow: ellipsis; /* 显示省略号 */
+	display: inline-block;
+	text-align: center;
+}
+.w_20 {
+	width: 20px;
+	text-align: center;
+	display: inline-block;
+}
+.w_140 {
+	width: 140px;
+	white-space: nowrap; /* 禁止换行 */
+	overflow: hidden;
+	text-overflow: ellipsis; /* 显示省略号 */
+	display: inline-block;
+	text-align: center;
+}

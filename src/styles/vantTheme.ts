@@ -34,7 +34,7 @@ class VantThemes {
 		BG5: "#364139",
 	};
 
-	private dark = {
+	private light = {
 		//主色/盈利
 		Theme: "#ff0cae",
 		//警告/提示/取消/失败/亏损

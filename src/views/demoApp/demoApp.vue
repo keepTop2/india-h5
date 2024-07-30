@@ -29,22 +29,22 @@
 <script setup lang="ts">
 import { useThemesStore } from "/@/store/modules/themes";
 import { useUserStore } from "/@/store/modules/user";
-import imgs , { bgImgs } from "./imgs";
-import { LangEnum ,ThemeEnum} from "/@/enum/appConfigEnum";
+import imgs, { bgImgs } from "./imgs";
+import { LangEnum, ThemeEnum } from "/@/enum/appConfigEnum";
 const themesStore = useThemesStore();
 const userStore = useUserStore();
 
 //切换主题
 const changeTheme = () => {
 	if (themesStore.themeName == ThemeEnum.default) {
-		themesStore.setTheme(ThemeEnum.dark);
+		themesStore.setTheme(ThemeEnum.light);
 	} else {
 		themesStore.setTheme(ThemeEnum.default);
 	}
 };
 
 //切换语言
-const changeLang = (lang:LangEnum) => {
+const changeLang = (lang: LangEnum) => {
 	userStore.setLang(lang);
 };
 </script>
@@ -60,9 +60,9 @@ const changeLang = (lang:LangEnum) => {
 }
 
 .bg_img {
-		width: 100%;
-		height: 300px;
-		background-size: 100% 100%;
-		background-repeat: no-repeat;
-	}
+	width: 100%;
+	height: 300px;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+}
 </style>

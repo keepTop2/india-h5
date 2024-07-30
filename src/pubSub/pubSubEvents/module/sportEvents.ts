@@ -1,5 +1,5 @@
 import PubSubEventType from "/@/pubSub/pubSubEvents/pubSubEventType";
-import { SportViewModels } from "/@/models/sportViewModels";
+import { SportViewModels } from "/@/views/venueHome/sports/models/sportViewModels";
 
 const SportEvents = {
 	/**
