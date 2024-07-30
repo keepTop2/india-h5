@@ -1,6 +1,6 @@
 <template>
 	<div class="mainCurrency-container">
-		<VantNavBar :title="$t(`VantNavBar['选择主货币']`)" :leftArrow="false" :rightText="$t(`common['取消']`)" @onClickRight="onClickRight" />
+		<VantNavBar :title="$t(`VantNavBar['选择主货币']`)" @onClickLeft="onClickLeft" />
 		<div class="selector">
 			<FromInput v-model="state.value1" type="text" :placeholder="$t(`mainCurrency['请输入货币名称或简称']`)" />
 
@@ -19,7 +19,7 @@ const state = reactive({
 	value1: "",
 });
 
-const onClickRight = () => {
+const onClickLeft = () => {
 	window.history.back();
 };
 </script>
@@ -45,10 +45,12 @@ const onClickRight = () => {
 				@include themeify {
 					color: themed("TB");
 				}
-				font-size: 28px;
+				font-size: 26px;
 				font-weight: 400;
-				line-height: 38px;
-				border-bottom: 1px solid #373a40;
+				border-bottom: 1px solid;
+				@include themeify {
+					border-color: themed("Line");
+				}
 				box-sizing: border-box;
 
 				.value {

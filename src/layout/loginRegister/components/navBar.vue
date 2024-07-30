@@ -34,7 +34,7 @@ const goBack = () => {
 	position: absolute;
 	top: 0px;
 	width: 100%;
-	height: 88px;
+	height: 100px;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;

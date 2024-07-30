@@ -1,6 +1,6 @@
 <template>
 	<div class="protocol-container">
-		<VantNavBar :title="$t(`VantNavBar['用户协议']`)" :leftArrow="false" closeIcon @onClickRight="onClickRight" />
+		<VantNavBar :title="$t(`VantNavBar['用户协议']`)" @onClickLeft="onClickLeft" />
 		<div class="container">
 			<div class="text">为了让您每一天都能尽情享受[平台名称]娱乐提供的最佳服务与体验。</div>
 		</div>
@@ -8,7 +8,7 @@
 </template>
 
 <script setup lang="ts">
-const onClickRight = () => {
+const onClickLeft = () => {
 	window.history.back();
 };
 </script>

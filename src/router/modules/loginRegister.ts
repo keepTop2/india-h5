@@ -43,7 +43,7 @@ export const RegisterSubPage = {
 			path: "/userAgreement",
 			name: "userAgreement",
 			component: () => import("/@/views/loginRegister/userAgreement/userAgreement.vue"),
-			meta: { title: "选择主货币" },
+			meta: { title: "用户协议" },
 		},
 	],
 };
