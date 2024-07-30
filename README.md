@@ -2,6 +2,8 @@
 
 基于 vue3 + vite + （nutui or varlet or vant） + sass + viewport 适配方案 + axios 封装，构建手机端模板脚手架
 
+### 原作者地址 github https://github.com/sunniejs/vue-h5-template
+
 node v17.6.0
 
 ```
