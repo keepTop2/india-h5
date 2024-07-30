@@ -3,16 +3,26 @@
 		<div class="left">
 			<SvgIcon class="arrow" iconName="/loginOrRegister/navBar/arrow" @click="goBack()" />
 		</div>
-		<div class="right">
+		<div class="right" @click="languageShow = true">
 			<div class="lang">
 				<div class="lang_icon"></div>
 				<SvgIcon class="down" iconName="/loginOrRegister/navBar/down" />
 			</div>
 		</div>
 	</div>
+
+	<VantPicker v-model:select="checked" :multiple="true" v-model:show="languageShow" :columns="langList" title="" toText="label" @confirm="handleConfirm" />
 </template>
 
 <script setup lang="ts">
+import { langList } from "/@/i18n/record";
+import { useUserStore } from "/@/store/modules/user";
+
+const UserStore = useUserStore();
+
+const checked = ref(UserStore.getLang);
+const languageShow = ref(false);
+
 // 回退
 const goBack = () => {
 	window.history.back();
@@ -24,7 +34,7 @@ const goBack = () => {
 	position: absolute;
 	top: 0px;
 	width: 100%;
-	height: 88px;
+	height: 100px;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;

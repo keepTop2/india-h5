@@ -25,8 +25,10 @@ $themes: (
 			BG6: #495867,
 			BG8: #10131c,
 			Line: #343434,
+			Line2: linear-gradient(90deg, rgba(255, 40, 75, 0) 0%, #ff284b 51.5%, rgba(255, 40, 75, 0) 100%),
 			Shadow: #18191d,
-			Line2-P: linear-gradient(90deg, rgba(255, 40, 75, 0) 0%, #ff284b 51.5%, rgba(255, 40, 75, 0) 100%),
+			// 导航阴影
+			shadow2: rgba(0, 0, 0, 0.4),
 		),
 	// 深色主题
 	dark:
@@ -52,7 +54,9 @@ $themes: (
 			BG6: #495867,
 			BG8: #eaf0f8,
 			Line: #f2f2f2,
+			Line2: linear-gradient(90deg, rgba(255, 40, 75, 0) 0%, #ff284b 51.5%, rgba(255, 40, 75, 0) 100%),
 			Shadow: #dedfe2,
-			Line2-P: linear-gradient(90deg, rgba(255, 40, 75, 0) 0%, #ff284b 51.5%, rgba(255, 40, 75, 0) 100%),
+			// 导航阴影
+			shadow2: rgba(0, 0, 0, 0.4),
 		)
 );
