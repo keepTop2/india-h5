@@ -43,9 +43,9 @@
 				</div>
 			</div>
 			<div>
-				<SvgIcon class="sport_filter color_Tag2-P" v-if="isShowFilter" @click="filterLeague" iconName="sport_filter" />
-				<SvgIcon class="sport_fold color_Tag2-P" v-if="isFold" iconName="sport_fold2" @click="onExpandAngCollapse" />
-				<SvgIcon class="sport_fold color_Tag2-P" v-else iconName="sport_fold" @click="onExpandAngCollapse" />
+				<SvgIcon class="sport_filter color_Tag2-P" v-if="isShowFilter" @click="filterLeague" iconName="/venueHome/sports/svg/sport_filter" />
+				<SvgIcon class="sport_fold color_Tag2-P" v-if="isFold" iconName="/venueHome/sports/svg/sport_fold2" @click="onExpandAngCollapse" />
+				<SvgIcon class="sport_fold color_Tag2-P" v-else iconName="/venueHome/sports/svg/sport_fold" @click="onExpandAngCollapse" />
 			</div>
 		</div>
 		<!-- 赛事列表出口 -->
@@ -221,6 +221,8 @@ const openSportPush = async () => {
 	};
 	// console.warn("第二步 准备发送指令到线程管理器");
 	//如果当前激活的tab是 滚球
+	console.log("tabActive.value", tabActive.value);
+
 	if (tabActive.value == "rollingBall") {
 		console.log("触发几次？");
 

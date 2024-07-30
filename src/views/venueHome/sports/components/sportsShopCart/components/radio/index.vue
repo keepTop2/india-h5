@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-import { useSportsInfoStore } from "/@/store/modules/sports/sportsInfo.ts";
+import { useSportsInfoStore } from "/@/store/modules/sports/sportsInfo";
 import sportsApi from "/@/api/venueHome/sports";
 import Common from "/@/utils/common";
 import { useSportsBetEventStore } from "/@/store/modules/sports/sportsBetData";

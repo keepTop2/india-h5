@@ -19,7 +19,7 @@
 			</div>
 
 			<div class="btn2 van-haptics-feedback" @click="closePopup">
-				<SvgIcon iconName="sports_plus" size="3.466667" />
+				<SvgIcon iconName="/venueHome/sports/svg/sports_plus" size="3.466667" />
 				<span class="label">串</span>
 			</div>
 		</div>

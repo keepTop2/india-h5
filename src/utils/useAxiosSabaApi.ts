@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useLoading } from "/@/directives/loading/hooks";
 import { showToast } from "vant";
+import { useSportsInfoStore } from "/@/store/modules/sports/sportsInfo";
 const { startLoading, stopLoading } = useLoading();
 
 // 获取 config 配置请求 api
@@ -29,6 +30,7 @@ instance.interceptors.request.use(
 		if (config.headers.showLoading !== false) {
 			startLoading();
 		}
+		const sportsInfoStore = useSportsInfoStore();
 		if (sportsInfoStore.getSportsToken) {
 			config["headers"]["Authorization"] = `Bearer ${sportsInfoStore.getSportsToken}`;
 		}

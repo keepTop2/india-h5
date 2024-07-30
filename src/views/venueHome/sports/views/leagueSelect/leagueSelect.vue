@@ -3,7 +3,7 @@
 		<VantNavBar title="联赛筛选" @onClickLeft="onClickLeft" />
 		<div class="leagueSelect bg_BG1">
 			<div class="search bg_BG2 mb_24">
-				<SvgIcon iconName="magnifier" class="size_32 color_Tag1" />
+				<SvgIcon iconName="/venueHome/sports/svg/magnifier" class="size_32 color_Tag1" />
 				<input class="color_T3-P fs_26 fw_400" autocomplete="off" v-model="searchValue" placeholder="请输入联赛名" type="text" name="search" />
 			</div>
 			<ul>

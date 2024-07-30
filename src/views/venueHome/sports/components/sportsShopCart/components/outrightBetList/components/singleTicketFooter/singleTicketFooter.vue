@@ -6,7 +6,7 @@
 		</div>
 		<div class="btns">
 			<div v-if="sportsBetChampion.championBetData.length > 1" class="delete_btn" @click="onDelete">
-				<SvgIcon iconName="sports_delete" size="3.8" />
+				<SvgIcon iconName="/venueHome/sports/svg/sports_delete" size="3.8" />
 			</div>
 			<div class="btn1">
 				<div :class="![0].includes(sportsBetChampion.bettingStatus) ? 'disabled_container' : 'container van-haptics-feedback'" @click="onBet">

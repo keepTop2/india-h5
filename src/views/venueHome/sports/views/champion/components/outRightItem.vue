@@ -1,15 +1,15 @@
 <template>
 	<div class="card-item">
 		<div class="tournament-header" @click="toggleDisplay">
-			<SvgIcon v-if="isAttention" iconName="collection2" size="5.333333" @click.stop="attentionEvent(true)" />
-			<SvgIcon v-else iconName="collection" size="5.333333" @click.stop="attentionEvent(false)" />
+			<SvgIcon v-if="isAttention" iconName="/venueHome/sports/svg/collection2" size="5.333333" @click.stop="attentionEvent(true)" />
+			<SvgIcon v-else iconName="/venueHome/sports/svg/collection" size="5.333333" @click.stop="attentionEvent(false)" />
 			<div class="tournament-info">
 				<div class="tournament-name">{{ data.leagueName }}</div>
 			</div>
 			<span class="count">
 				{{ data?.teams.length }}
 			</span>
-			<!-- <SvgIcon :class="{ sport_arrow: !displayContent }" iconName="sport_arrow" size="5.333333" /> -->
+			<!-- <SvgIcon :class="{ sport_arrow: !displayContent }" iconName="/venueHome/sports/svg/sport_arrow" size="5.333333" /> -->
 		</div>
 		<template v-if="displayContent">
 			<ul class="bg_Bg3 leagueList content">

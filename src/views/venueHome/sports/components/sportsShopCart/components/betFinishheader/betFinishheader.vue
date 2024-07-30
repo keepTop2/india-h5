@@ -7,7 +7,7 @@
 			<span v-if="props.betStatus == 1">投注失败</span>
 		</div>
 		<div class="header-right">
-			<SvgIcon iconName="close" size="3.466667" @click="clearCart" />
+			<SvgIcon iconName="/venueHome/sports/svg/close" size="3.466667" @click="clearCart" />
 		</div>
 	</div>
 </template>

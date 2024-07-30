@@ -5,7 +5,7 @@
 				<span class="color_TB fw_500 fs_22 mr_24">
 					{{ convertUtcToUtc5AndFormat(data.eventTime) }}
 				</span>
-				<!-- <SvgIcon iconName="sport_score" />
+				<!-- <SvgIcon iconName="/venueHome/sports/svg/sport_score" />
 				&nbsp;
 				<span class="color_T1 fs_22 fw_700">{{ Score }}</span> -->
 			</div>
@@ -33,7 +33,7 @@
 					<span class="fs_32 fw_700 color_TB">{{ data.awayScore }}</span>
 				</div>
 			</div>
-			<SvgIcon class="arrow_right" iconName="sport_arrow_right" />
+			<SvgIcon class="arrow_right" iconName="/venueHome/sports/svg/sport_arrow_right" />
 		</div>
 	</div>
 </template>

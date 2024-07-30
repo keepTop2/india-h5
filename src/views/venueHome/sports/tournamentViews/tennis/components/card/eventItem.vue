@@ -6,9 +6,9 @@
 			<!-- 上下半场及时间 -->
 			<div class="left">
 				<!-- 关注 -->
-				<SvgIcon v-if="isAttention" iconName="collection2" size="5.333333" @click="attentionEvent(true)" />
+				<SvgIcon v-if="isAttention" iconName="/venueHome/sports/svg/collection2" size="5.333333" @click="attentionEvent(true)" />
 				<!-- 取消关注 -->
-				<SvgIcon v-else iconName="collection" size="5.333333" @click="attentionEvent(false)" />
+				<SvgIcon v-else iconName="/venueHome/sports/svg/collection" size="5.333333" @click="attentionEvent(false)" />
 				<div class="label" :class="{ 'color_Theme-P': event.isLive, color_TB: !event.isLive }">
 					<span class="mr_6">{{ SportsCommonFn.getEventsTitle(event) }}</span>
 					<!-- <span v-if="[1, 2, 3, 4, 99].includes(event.gameInfo.livePeriod) ">{{ formattedGameTime }}</span> -->
@@ -60,10 +60,10 @@
 				<!-- 角球等信息 -->
 				<div class="others">
 					<div v-if="event.streamingOption != 0 && event.channelCode" class="other3">
-						<SvgIcon iconName="sport_live" size="4.266667" />
+						<SvgIcon iconName="/venueHome/sports/svg/sport_live" size="4.266667" />
 					</div>
 					<!-- <div class="other4">
-						<SvgIcon iconName="sport_match_status" size="4.266667" />
+						<SvgIcon iconName="/venueHome/sports/svg/sport_match_status" size="4.266667" />
 					</div> -->
 					<div class="other5">{{ event.marketCount }}</div>
 				</div>
