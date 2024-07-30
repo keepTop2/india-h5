@@ -42,6 +42,12 @@ class Common {
 	// 8-16位，必须包含 数字和字母， 可包含@ _ $
 	public static passwordRG = /^(?=.*[a-zA-Z])(?=.*\d)[A-Za-z\d@_$]{8,16}$/;
 
+	// 邮箱正则
+	public static emailRG = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+	// 手机号正则 8-12数字
+	public static phoneRG = /^\d{8,12}$/;
+
 	// 后端code
 	public ResCode = ResCode;
 

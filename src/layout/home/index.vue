@@ -23,13 +23,13 @@ const route = useRoute();
 
 <style scoped lang="scss">
 .container {
-	min-height: 100vh;
+	min-height: calc(100vh - 97px);
 	@include themeify {
 		background-color: themed("BG1");
 	}
 	.content {
-		min-height: calc(100% - 103px);
-		padding-bottom: 103px;
+		min-height: calc(100% - 97px);
+		padding-bottom: 97px;
 	}
 }
 </style>

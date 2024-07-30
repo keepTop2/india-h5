@@ -1,5 +1,5 @@
 <template>
-	<div class="from-input">
+	<div class="from-input" :class="{ 'from-input-error': errorBorder }">
 		<slot name="left"></slot>
 
 		<input
@@ -24,12 +24,14 @@ const props = withDefaults(
 		placeholder?: string;
 		readonly?: boolean;
 		maxlength?: any;
+		errorBorder?: boolean;
 	}>(),
 	{
 		modelValue: "",
 		type: "text",
 		placeholder: "",
 		readonly: false,
+		errorBorder: false,
 	}
 );
 
@@ -64,6 +66,24 @@ const emit = defineEmits(["update:modelValue", "blur", "focus"]);
 		@include themeify {
 			color: themed("T3-P");
 		}
+	}
+}
+
+.from-input-error {
+	&::after {
+		content: "";
+		position: absolute;
+		top: 0px;
+		left: 0px;
+		width: 100%;
+		height: 100%;
+		border-radius: 12px;
+		border: 1px solid;
+		@include themeify {
+			border-color: themed("Theme");
+		}
+		box-sizing: border-box;
+		pointer-events: none; /* 确保伪元素不会阻止用户与实际内容交互 */
 	}
 }
 </style>
