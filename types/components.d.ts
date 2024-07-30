@@ -9,6 +9,7 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    DateRangeSelect: typeof import('./../src/components/DateRangeSelect/DateRangeSelect.vue')['default']
     Image: typeof import('./../src/components/Image/image.vue')['default']
     MultipleSelect: typeof import('./../src/components/MultipleSelect/MultipleSelect.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
