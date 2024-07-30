@@ -1,9 +1,9 @@
 <template>
-	<div class="Home_Page bg_BG1">
+	<div class="GameArena bg_BG1">
 		<!-- 轮播图 -->
-		<Banner class="Home_Banner" />
-		<Tabs class="plr" v-model="tabsActiveKey" :list="tabList" />
-		<div class="Home_Content">
+		<Banner class="Home_Banner mb_35" />
+		<div class="Game_Content">
+			<Tabs class="plr" v-model="tabsActiveKey" :list="tabList" />
 			<!-- 热门游戏 -->
 			<h3 class="title">
 				<SvgIcon iconName="home/fire" alt="" />
@@ -76,6 +76,7 @@
 
 <script setup lang="ts">
 import { useRoute } from "vue-router";
+import Tabs from "./components/Tabs/Tabs.vue";
 import Banner from "./Banner/banner.vue";
 //热门游戏
 import HotGame from "./HotGame/HotGame.vue";
@@ -96,7 +97,7 @@ import { i18n } from "/@/i18n";
 const $: any = i18n.global;
 const route = useRoute();
 //初始化当前选中tab
-const tabsActiveKey = ref(route.path);
+const tabsActiveKey = ref("all");
 
 //tabs 切换
 const tabList = [
@@ -109,12 +110,16 @@ const tabList = [
 		value: "1",
 	},
 	{
-		name: $.t("home['百家乐']"),
+		name: $.t("game['百家乐']"),
 		value: "2",
 	},
 	{
-		name: $.t("home['其他']"),
+		name: "牛牛",
 		value: "3",
+	},
+	{
+		name: $.t("game['其他']"),
+		value: "4",
 	},
 ];
 </script>
