@@ -2,7 +2,8 @@
 	<div class="CollectGames">
 		<ul>
 			<li v-for="i in new Array(8)" class="gameCard">
-				<VantLazyImg :src="GameImg" />
+				<VantLazyImg v-show="i != 5" :src="GameImg" />
+				<!-- <NoGameImg /> -->
 			</li>
 		</ul>
 	</div>
@@ -29,6 +30,7 @@ onMounted(() => {
 	width: 100%;
 	height: 100%;
 	border-radius: 20px;
+	box-sizing: border-box;
 	@include themeify {
 		border: 2px solid themed("T3");
 		img {
