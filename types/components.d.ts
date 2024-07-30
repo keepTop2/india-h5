@@ -54,5 +54,6 @@ declare module '@vue/runtime-core' {
     VantLazyImg: typeof import('./../src/components/vant/VantLazyImg.vue')['default']
     VantList: typeof import('./../src/components/vant/VantList.vue')['default']
     VantListW: typeof import('./../src/components/vant/VantListW.vue')['default']
+    VantPicker: typeof import('./../src/components/vant/VantPicker.vue')['default']
   }
 }
