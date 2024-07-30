@@ -1,5 +1,5 @@
 <template>
-	<DynamicSvgComponent v-if="DynamicSvgComponent" :iconName="iconName" :width="`${size || width}vw`" :height="`${height || size}vw`" />
+	<DynamicSvgComponent v-if="DynamicSvgComponent" :iconName="iconName" :width="size || width ? `${size || width}vw` : undefined" :height="size || height ? `${height || size}vw` : undefined" />
 </template>
 
 <script setup lang="ts">
