@@ -11,7 +11,7 @@ import TabBar from "/@/layout/home/components/tabBar.vue";
 
 <style scoped lang="scss">
 .container {
-	min-height: calc(100vh - 97px);
+	min-height: 100vh;
 	@include themeify {
 		background-color: themed("BG1");
 	}

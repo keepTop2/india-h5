@@ -2,9 +2,10 @@
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 // import locale from "dayjs/locale/zh-cn"; // 引入中文语言包
-import sportsMap from "/@/views/frontPage/home/Sports/sportsMap/sportsMap";
+import sportsMap from "/@/views/venueHome/sports/sportsMap/sportsMap";
 import { i18n } from "/@/i18n/index";
 import { convertUtcToUtc5AndFormatMD } from "/@/webWorker/module/utils/formattingChildrenViewData";
+import common from "/@/utils/common";
 const $: any = i18n.global;
 
 dayjs.extend(relativeTime);
@@ -20,6 +21,40 @@ interface DateData {
  * @description 体育公用方法类 -- 根据体育球类字典筛选sportType
  */
 class SportsCommonFn {
+	public static comboTypeNameMaps = {
+		Doubles: "2串1",
+		Trebles: "3串1",
+		Trixie: "3串4",
+		Lucky7: "幸运7",
+		Fold4: "4串1",
+		Yankee: "4串11",
+		Lucky15: "幸运15",
+		Fold5: "5串1",
+		Canadian: "5串26",
+		Lucky31: "幸运31",
+		Fold6: "6串1",
+		Heinz: "6串57",
+		Lucky63: "幸运63",
+		Fold7: "7串1",
+		SuperHeinz: "7串120",
+		Lucky127: "幸运127",
+		Fold8: "8串1",
+		Goliath: "8串247",
+		Lucky255: "幸运255",
+		Fold9: "9串1",
+		Fold10: "10串1",
+		Fold11: "11串1",
+		Fold12: "12串1",
+		Fold13: "13串1",
+		Fold14: "14串1",
+		Fold15: "15串1",
+		Fold16: "16串1",
+		Fold17: "17串1",
+		Fold18: "18串1",
+		Fold19: "19串1",
+		Fold20: "20串1",
+	};
+
 	/**
 	 * 体育投注类型
 	 * 1:全场让球
@@ -45,6 +80,7 @@ class SportsCommonFn {
 		HALF_TIME_WIN: 15, // 半场独赢
 		OVERALL_WIN: 20, // 全场胜负
 		NUMBER_ROUNDS_WON: 153, // 局数获胜
+		FULL_HANDICAP: 1303, // 局数获胜
 		BADMINTON_FULL_TIME_HANDICAP: 704, // 羽毛球比赛让分
 		BADMINTON_FULL_TIME_OVER_UNDER: 705, // 羽毛球比赛大小
 	};
@@ -80,8 +116,8 @@ class SportsCommonFn {
 		// 网球
 		5: {
 			20: $.t("sports['全场独赢']"),
-			153: $.t("sports['全场让盘']"),
-			3: $.t("sports['全场让局']"),
+			1303: $.t("sports['全场让盘']"),
+			153: $.t("sports['全场让局']"),
 		},
 		// 排球
 		6: {
@@ -115,170 +151,11 @@ class SportsCommonFn {
 		},
 	};
 
-	// 使用safeAccess函数来安全地访问深层属性 防止多级访问出现undefined报错
-	public static safeAccess = (obj, key) => {
-		return key.reduce((xs, x) => (xs && xs[x] != null ? xs[x] : null), obj);
-	};
-
-	// 动态匹配球类头部信息
-	public static getEventsTitle = (event: any): string => {
-		const titleMap = {
-			1: {
-				key: "gameInfo",
-				0: {
-					0: $.t("sports['中场休息']"),
-					1: $.t("sports['延迟开赛']"),
-					2: $.t("sports['点球']"),
-				},
-				1: $.t("sports['上半场']"),
-				2: $.t("sports['下半场']"),
-			},
-			2: {
-				key: "gameInfo",
-				0: {
-					0: $.t("sports['中场休息']"),
-					1: $.t("sports['延迟开赛']"),
-				},
-				1: $.t("sports['第一节']"),
-				2: $.t("sports['第二节']"),
-				3: $.t("sports['第三节']"),
-				4: $.t("sports['第四节']"),
-				99: $.t("sports['加时赛']"),
-			},
-			3: {
-				key: "gameInfo",
-				0: {
-					0: $.t("sports['中场休息']"),
-					1: $.t("sports['延迟开赛']"),
-				},
-				1: $.t("sports['上半场']"),
-				2: $.t("sports['下半场']"),
-			},
-			4: {
-				key: "gameInfo",
-				0: {
-					0: $.t("sports['中场休息']"),
-					1: $.t("sports['延迟开赛']"),
-				},
-				1: $.t("sports['第一节']"),
-				2: $.t("sports['第二节']"),
-				3: $.t("sports['第三节']"),
-				4: $.t("sports['第四节']"),
-				99: $.t("sports['加时赛']"),
-			},
-			5: {
-				key: "tennisInfo",
-				1: $.t("sports['第一盘']"),
-				2: $.t("sports['第二盘']"),
-				3: $.t("sports['第三盘']"),
-				4: $.t("sports['第四盘']"),
-				5: $.t("sports['第五盘']"),
-			},
-			6: {
-				key: "volleyballInfo",
-				1: $.t("sports['第一局']"),
-				2: $.t("sports['第二局']"),
-				3: $.t("sports['第三局']"),
-				4: $.t("sports['第四局']"),
-				5: $.t("sports['第五局']"),
-			},
-			7: {
-				key: "gameInfo",
-				0: {
-					0: $.t("sports['中场休息']"),
-					1: $.t("sports['延迟开赛']"),
-				},
-				1: $.t("sports['第一节']"),
-				2: $.t("sports['第二节']"),
-				3: $.t("sports['第三节']"),
-				4: $.t("sports['第四节']"),
-				99: $.t("sports['加时赛']"),
-			},
-			8: {
-				key: "baseballInfo",
-				1: $.t("sports['第一局']"),
-				2: $.t("sports['第二局']"),
-				3: $.t("sports['第三局']"),
-				4: $.t("sports['第四局']"),
-				5: $.t("sports['第五局']"),
-				6: $.t("sports['第六局']"),
-				7: $.t("sports['第七局']"),
-				8: $.t("sports['第八局']"),
-				9: $.t("sports['第九局']"),
-				延长赛: $.t("sports['延长赛']"),
-			},
-			9: {
-				key: "badmintonInfo",
-				1: $.t("sports['第一局']"),
-				2: $.t("sports['第二局']"),
-				3: $.t("sports['第三局']"),
-				4: $.t("sports['第四局']"),
-				5: $.t("sports['第五局']"),
-			},
-			43: {
-				key: "gameInfo",
-				0: {
-					0: $.t("sports['中场休息']"),
-					1: $.t("sports['延迟开赛']"),
-				},
-				1: $.t("sports['第一局']"),
-				2: $.t("sports['第二局']"),
-				3: $.t("sports['第三局']"),
-				4: $.t("sports['第四局']"),
-				5: $.t("sports['第五局']"),
-				6: $.t("sports['第六局']"),
-				7: $.t("sports['第七局']"),
-				8: $.t("sports['第八局']"),
-				9: $.t("sports['第九局']"),
-			},
-		};
-		// 获取球类标记
-		const sportType = event.sportType;
-		// 获取信息对象
-		const infoKey = titleMap[sportType]?.key;
-		console.log(infoKey, "===infoKey", sportType);
-		let title = "";
-		if (infoKey && event.isLive) {
-			// 如果是gameInfo则归集判断 如果不是 直接赋值
-			if ([1, 2, 3, 4, 7, 43].includes(sportType)) {
-				const { livePeriod, delayLive, isHt } = event[infoKey];
-				// 中场休息判断
-				if (livePeriod == 0 && !delayLive && isHt) {
-					title = titleMap[sportType][0][0];
-				}
-				// 延迟开赛判断
-				if (livePeriod == 0 && delayLive && !isHt) {
-					title = titleMap[sportType][0][1];
-				}
-				if (livePeriod != 0 && !delayLive && !isHt) {
-					title = titleMap[sportType][livePeriod];
-				}
-				if (livePeriod == 0 && !delayLive && !isHt) {
-					title = "";
-				}
-			} else if (sportType == 8) {
-				const livePeriod = event[infoKey]?.currentInning;
-				if (livePeriod > 9) {
-					title = titleMap[sportType]["延长赛"];
-				} else {
-					title = titleMap[sportType][livePeriod];
-				}
-			} else {
-				const livePeriod = event[infoKey]?.currentSet || event[infoKey]?.latestLivePeriod || event[infoKey]?.currentSet;
-				console.log(livePeriod, "==titleMap[sportType][livePeriod]");
-				title = titleMap[sportType][livePeriod];
-			}
-			return title;
-		}
-		const globalShowTime = this.safeAccess(event, ["globalShowTime"]);
-		return convertUtcToUtc5AndFormatMD(globalShowTime);
-	};
-
 	/**
 	 * @description 判断是否显示比分
 	 * @date 比赛开始时间
 	 */
-	public static isShowScore = (date): boolean => {
+	public static isStartMatch = (date): boolean => {
 		const timestampStr = dayjs(date).format("YYYY-MM-DD HH:mm:ss");
 		const easternTimestamp = dayjs.utc(timestampStr).valueOf(); // 开赛时间戳（UTC+0）
 		const currentEasternTimestamp = dayjs.utc().valueOf(); // 当前时间戳（UTC+0）
@@ -400,6 +277,20 @@ class SportsCommonFn {
 	}
 
 	/**
+	 * @description 格式化让球Point
+	 */
+	public static formatPoint = (data) => {
+		// console.log("data", data);
+		const { betType, point, key } = data;
+		const primaryBetTypes = [1, 7, 17, 219, 609, 637, 701, 704, 708, 153, 155, 1303, 1308, 1316, 3904, 9002, 9008, 9012, 9018, 9024, 9028, 9034, 9040, 9046, 9052, 9059, 9076, 9077, 9091, 9093, 9116];
+		const secondaryBetTypes = [28, 124, 125, 453, 477, 478, 646];
+		if (primaryBetTypes.includes(betType)) return this.formatPositiveNum(point);
+		if (secondaryBetTypes.includes(betType) && key !== "x") return this.formatPositiveNum(point);
+		if (secondaryBetTypes.includes(betType) && key === "x") return null;
+		return point;
+	};
+
+	/**
 	 * @description 正数拼接+号
 	 */
 	public static formatPositiveNum = (value: number) => {
@@ -427,6 +318,322 @@ class SportsCommonFn {
 	public static getSportLanguage(): string {
 		return "zhcn";
 	}
+
+	// 使用safeAccess函数来安全地访问深层属性 防止多级访问出现undefined报错
+	// public static safeAccess = (obj, key) => {
+	// 	return key.reduce((xs, x) => (xs && xs[x] != null ? xs[x] : null), obj);
+	// };
+	public static safeAccessMultiple = (obj, keysArray) => {
+		return keysArray.reduce((result, keys) => {
+			const value = keys.reduce((xs, x) => (xs && xs[x] != null ? xs[x] : null), obj);
+			const lastKey = keys[keys.length - 1];
+			result[lastKey] = value;
+			return result;
+		}, {});
+	};
+
+	// 动态匹配球类头部信息
+	public static getEventsTitle = (event: any) => {
+		// console.log("event", event);
+		if (!event) return;
+		if (event.sportType === 1) {
+			const { gameInfo, eventStatus, globalShowTime } = this.safeAccessMultiple(event, [["gameInfo"], ["eventStatus"], ["globalShowTime"]]);
+			const { livePeriod, delayLive, isHt } = gameInfo;
+			if (eventStatus == "closed") {
+				return $.t("sports['比赛已关闭']");
+			}
+			if (eventStatus == "postponed") {
+				return $.t("sports['比赛已推迟']");
+			}
+			if (this.isStartMatch(globalShowTime)) {
+				if (livePeriod == 0 && !delayLive && isHt) {
+					return $.t("sports['中场休息']");
+				}
+				if (livePeriod == 0 && delayLive && !isHt) {
+					return $.t("sports['延迟开赛']");
+				}
+				if (livePeriod == 1 && !delayLive && !isHt) {
+					return $.t("sports['上半场']");
+				}
+				if (livePeriod == 2 && !delayLive && !isHt) {
+					return $.t("sports['下半场']");
+				}
+			}
+			return convertUtcToUtc5AndFormatMD(globalShowTime);
+		} else if (event.sportType === 2) {
+			const { gameInfo, eventStatus, globalShowTime } = this.safeAccessMultiple(event, [["gameInfo"], ["eventStatus"], ["globalShowTime"]]);
+			const { livePeriod, delayLive, isHt } = gameInfo;
+			if (eventStatus == "closed") {
+				return $.t("sports['比赛已关闭']");
+			}
+			if (eventStatus == "postponed") {
+				return $.t("sports['比赛已推迟']");
+			}
+			if (this.isStartMatch(globalShowTime)) {
+				if (livePeriod == 0 && !delayLive && isHt) {
+					return $.t("sports['中场休息']");
+				}
+				if (livePeriod == 0 && delayLive && !isHt) {
+					return $.t("sports['延迟开赛']");
+				}
+				if (livePeriod == 1 && !delayLive && !isHt) {
+					return $.t("sports['第一节']");
+				}
+				if (livePeriod == 2 && !delayLive && !isHt) {
+					return $.t("sports['第二节']");
+				}
+				if (livePeriod == 3 && !delayLive && !isHt) {
+					return $.t("sports['第三节']");
+				}
+				if (livePeriod == 4 && !delayLive && !isHt) {
+					return $.t("sports['第四节']");
+				}
+				if (livePeriod == 99 && !delayLive && !isHt) {
+					return $.t("sports['加时赛']");
+				}
+			}
+			return convertUtcToUtc5AndFormatMD(globalShowTime);
+		} else if (event.sportType === 3) {
+			const { gameInfo, eventStatus, globalShowTime } = this.safeAccessMultiple(event, [["gameInfo"], ["eventStatus"], ["globalShowTime"]]);
+			const { livePeriod, delayLive, isHt } = gameInfo;
+			if (eventStatus == "closed") {
+				return $.t("sports['比赛已关闭']");
+			}
+			if (eventStatus == "postponed") {
+				return $.t("sports['比赛已推迟']");
+			}
+			if (this.isStartMatch(globalShowTime)) {
+				if (livePeriod == 0 && !delayLive && isHt) {
+					return $.t("sports['中场休息']");
+				}
+				if (livePeriod == 1 && !delayLive && !isHt) {
+					return $.t("sports['第一节']");
+				}
+				if (livePeriod == 2 && !delayLive && !isHt) {
+					return $.t("sports['第二节']");
+				}
+				if (livePeriod == 3 && !delayLive && !isHt) {
+					return $.t("sports['第三节']");
+				}
+				if (livePeriod == 4 && !delayLive && !isHt) {
+					return $.t("sports['第四节']");
+				}
+			}
+			return convertUtcToUtc5AndFormatMD(globalShowTime);
+		} else if (event.sportType === 4) {
+			const { gameInfo, eventStatus, globalShowTime } = this.safeAccessMultiple(event, [["gameInfo"], ["eventStatus"], ["globalShowTime"]]);
+			const { livePeriod, delayLive, isHt } = gameInfo;
+			if (eventStatus == "closed") {
+				return $.t("sports['比赛已关闭']");
+			}
+			if (eventStatus == "postponed") {
+				return $.t("sports['比赛已推迟']");
+			}
+			if (this.isStartMatch(globalShowTime)) {
+				if (livePeriod == 0 && delayLive && !isHt) {
+					return $.t("sports['延迟开赛']");
+				}
+				if (livePeriod == 1 && !delayLive && !isHt) {
+					return $.t("sports['第一节']");
+				}
+				if (livePeriod == 2 && !delayLive && !isHt) {
+					return $.t("sports['第二节']");
+				}
+				if (livePeriod == 3 && !delayLive && !isHt) {
+					return $.t("sports['第三节']");
+				}
+			}
+			return convertUtcToUtc5AndFormatMD(globalShowTime);
+		} else if (event.sportType === 5) {
+			const { tennisInfo, eventStatus, globalShowTime } = this.safeAccessMultiple(event, [["tennisInfo"], ["eventStatus"], ["globalShowTime"]]);
+			const { currentSet } = tennisInfo;
+			if (eventStatus == "closed") {
+				return $.t("sports['比赛已关闭']");
+			}
+			if (eventStatus == "postponed") {
+				return $.t("sports['比赛已推迟']");
+			}
+			if (this.isStartMatch(globalShowTime)) {
+				if (currentSet == 1) {
+					return "第一盘";
+				}
+				if (currentSet == 2) {
+					return "第二盘";
+				}
+				if (currentSet == 3) {
+					return "第三盘";
+				}
+				if (currentSet == 4) {
+					return "第四盘";
+				}
+				if (currentSet == 5) {
+					return "第五盘";
+				}
+			}
+			return convertUtcToUtc5AndFormatMD(globalShowTime);
+		} else if (event.sportType === 6) {
+			const { volleyballInfo, eventStatus, globalShowTime } = this.safeAccessMultiple(event, [["volleyballInfo"], ["eventStatus"], ["globalShowTime"]]);
+			if (!volleyballInfo) {
+				return convertUtcToUtc5AndFormatMD(globalShowTime);
+			}
+			const { latestLivePeriod } = volleyballInfo;
+			if (eventStatus == "closed") {
+				return $.t("sports['比赛已关闭']");
+			}
+			if (eventStatus == "postponed") {
+				return $.t("sports['比赛已推迟']");
+			}
+			if (this.isStartMatch(globalShowTime)) {
+				if (latestLivePeriod == 1) {
+					return "第一局";
+				}
+				if (latestLivePeriod == 2) {
+					return "第二局";
+				}
+				if (latestLivePeriod == 3) {
+					return "第三局";
+				}
+				if (latestLivePeriod == 4) {
+					return "第四局";
+				}
+				if (latestLivePeriod == 5) {
+					return "第五局";
+				}
+			}
+			return convertUtcToUtc5AndFormatMD(globalShowTime);
+		} else if (event.sportType === 7) {
+			const { gameInfo, eventStatus, globalShowTime, parentId } = this.safeAccessMultiple(event, [["gameInfo"], ["eventStatus"], ["globalShowTime"], ["parentId"]]);
+			const { liveHomeScore, liveAwayScore } = gameInfo;
+			if (eventStatus == "closed") {
+				return $.t("sports['比赛已关闭']");
+			}
+			if (eventStatus == "postponed") {
+				return $.t("sports['比赛已推迟']");
+			}
+			if (this.isStartMatch(globalShowTime)) {
+				if (parentId > 0) {
+					return convertUtcToUtc5AndFormatMD(globalShowTime);
+				} else {
+					return `第${common.getInstance().add(liveHomeScore, liveAwayScore) + 1}局`;
+				}
+			}
+			return convertUtcToUtc5AndFormatMD(globalShowTime);
+		} else if (event.sportType === 8) {
+			const { baseballInfo, eventStatus, globalShowTime } = this.safeAccessMultiple(event, [["baseballInfo"], ["eventStatus"], ["globalShowTime"]]);
+			if (!baseballInfo) {
+				return convertUtcToUtc5AndFormatMD(globalShowTime);
+			}
+			const { currentInning } = baseballInfo;
+			if (eventStatus == "closed") {
+				return $.t("sports['比赛已关闭']");
+			}
+			if (eventStatus == "postponed") {
+				return $.t("sports['比赛已推迟']");
+			}
+			if (this.isStartMatch(globalShowTime)) {
+				if (currentInning == 1) {
+					return "第一局";
+				}
+				if (currentInning == 2) {
+					return "第二局";
+				}
+				if (currentInning == 3) {
+					return "第三局";
+				}
+				if (currentInning == 4) {
+					return "第四局";
+				}
+				if (currentInning == 5) {
+					return "第五局";
+				}
+				if (currentInning == 6) {
+					return "第六局";
+				}
+				if (currentInning == 7) {
+					return "第七局";
+				}
+				if (currentInning == 8) {
+					return "第八局";
+				}
+				if (currentInning == 9) {
+					return "第九局";
+				}
+				if (currentInning > 9) {
+					return "延长赛";
+				}
+			}
+			return convertUtcToUtc5AndFormatMD(globalShowTime);
+		} else if (event.sportType === 9) {
+			const { badmintonInfo, eventStatus, globalShowTime } = this.safeAccessMultiple(event, [["badmintonInfo"], ["eventStatus"], ["globalShowTime"]]);
+			if (!badmintonInfo) {
+				return convertUtcToUtc5AndFormatMD(globalShowTime);
+			}
+			const { currentSet } = badmintonInfo;
+			if (eventStatus == "closed") {
+				return $.t("sports['比赛已关闭']");
+			}
+			if (eventStatus == "postponed") {
+				return $.t("sports['比赛已推迟']");
+			}
+			if (this.isStartMatch(globalShowTime)) {
+				if (currentSet == 1) {
+					return "第一局";
+				}
+				if (currentSet == 2) {
+					return "第二局";
+				}
+				if (currentSet == 3) {
+					return "第三局";
+				}
+				if (currentSet == 4) {
+					return "第四局";
+				}
+				if (currentSet == 5) {
+					return "第五局";
+				}
+			}
+			return convertUtcToUtc5AndFormatMD(globalShowTime);
+		} else if (event.sportType === 43) {
+			const { gameInfo, eventStatus, globalShowTime, isLive } = this.safeAccessMultiple(event, [["gameInfo"], ["eventStatus"], ["globalShowTime"], ["isLive"]]);
+			const { livePeriod } = gameInfo;
+			if (eventStatus == "closed") {
+				return $.t("sports['比赛已关闭']");
+			}
+			if (eventStatus == "postponed") {
+				return $.t("sports['比赛已推迟']");
+			}
+			if (isLive) {
+				if (livePeriod == 1) {
+					return $.t("sports['第一局']");
+				}
+				if (livePeriod == 2) {
+					return $.t("sports['第二局']");
+				}
+				if (livePeriod == 3) {
+					return $.t("sports['第三局']");
+				}
+				if (livePeriod == 4) {
+					return $.t("sports['第四局']");
+				}
+				if (livePeriod == 5) {
+					return $.t("sports['第五局']");
+				}
+				if (livePeriod == 6) {
+					return $.t("sports['第六局']");
+				}
+				if (livePeriod == 7) {
+					return $.t("sports['第七局']");
+				}
+				if (livePeriod == 8) {
+					return $.t("sports['第八局']");
+				}
+				if (livePeriod == 9) {
+					return $.t("sports['第九局']");
+				}
+			}
+			return convertUtcToUtc5AndFormatMD(globalShowTime);
+		}
+	};
 }
 
 export default SportsCommonFn;

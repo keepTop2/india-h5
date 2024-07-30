@@ -6,6 +6,6 @@
 
 .oddsDown {
 	@include themeify {
-		color: themed("Theme") !important;
+		color: themed("Theme-P") !important;
 	}
 }

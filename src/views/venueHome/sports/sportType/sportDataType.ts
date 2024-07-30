@@ -1,5 +1,5 @@
 import { ServerData } from "/@/models/commonInterface";
-import { Sports } from "/@/views/frontPage/home/Sports/utils/interface";
+import { Sports } from "/@/views/venueHome/sports/utils/interface";
 
 /**
  * @description 线程管理器处理好的数据

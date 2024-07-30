@@ -7,7 +7,7 @@
  *
  */
 // 体育静态文件
-import sportsMap from "/@/views/frontPage/home/Sports/sportsMap/sportsMap";
+import sportsMap from "/@/views/venueHome/sports/sportsMap/sportsMap";
 
 /**
  * @description 格式化赛果体育项目数据

@@ -1,8 +1,8 @@
 // import sportEventSource from "/@/eventSource/sportEventSource/sportEventSource";
-import SportsCommonFn from "/@/views/frontPage/home/Sports/utils/common";
+import SportsCommonFn from "/@/views/venueHome/sports/utils/common";
 import dayjs from "dayjs";
-import { WebToPushApi, SportPushApi } from "/@/enum/sportEnum/sportEventSourceEnum";
-import { OpenSportEventSourceParams } from "/@/models/sportEventSourceModel";
+import { WebToPushApi, SportPushApi } from "/@/views/venueHome/sports/enum/sportEventSourceEnum";
+import { OpenSportEventSourceParams } from "/@/views/venueHome/sports/models/sportEventSourceModel";
 
 interface SportPushAction {
 	name?: string;
@@ -103,8 +103,8 @@ const sportTabPushActions = {
 			webToPushApi: WebToPushApi.morningTrading,
 			params: {
 				query: `$filter=sportType in (${SportsCommonFn.getRequestSportsType()})`,
-				from: dayjs.utc().subtract(5, "hour").endOf("day").add(5, "hour").format("YYYY-MM-DDTHH:mm:ss"),
-				until: dayjs.utc().add(14, "day").subtract(5, "hour").endOf("day").add(5, "hour").format("YYYY-MM-DDTHH:mm:ss"),
+				from: dayjs.utc().subtract(5, "hour").endOf("day").add(5, "hour").add(1, "second").format("YYYY-MM-DDTHH:mm:ss"),
+				until: dayjs.utc().add(15, "day").subtract(5, "hour").endOf("day").add(5, "hour").format("YYYY-MM-DDTHH:mm:ss"),
 			},
 		},
 

@@ -1,6 +1,6 @@
 import Layout from "/@/layout/venueHome/index.vue";
 
-const VenueHome = {
+export const VenueHome = {
 	component: Layout,
 	children: [
 		{
@@ -17,5 +17,3 @@ const VenueHome = {
 		},
 	],
 };
-
-export default VenueHome;

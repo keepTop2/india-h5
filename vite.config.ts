@@ -82,10 +82,8 @@ export default function ({ command, mode }: ConfigEnv): UserConfig {
 		plugins: [
 			svgLoader({
 				svgoConfig: {
-					plugins: [
-						'prefixIds',
-					]
-				}
+					plugins: ["prefixIds"],
+				},
 			}),
 			createVitePlugins(viteEnv, isProduction),
 			// VConsole 调试工具配置，若没有此配置，则调试工具控制台不会打印日志
@@ -94,7 +92,7 @@ export default function ({ command, mode }: ConfigEnv): UserConfig {
 				localEnabled: false, // 本地是否启用
 				enabled: mode === "test", // 是否启用
 				config: {
-					maxLogNumber: 1000, // theme: 'dark' // 主题颜色
+					maxLogNumber: 1000, // theme: 'light' // 主题颜色
 				},
 			}),
 		],
