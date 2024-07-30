@@ -53,11 +53,11 @@ const handleClick = (item) => {
 			font-size: 26px;
 			border-radius: 6px;
 			cursor: pointer;
-			color: themed("TB");
+			color: themed("T1");
 			&.active,
 			&:hover {
-				color: themed("TB");
-				background-color: themed("Tag1");
+				color: themed("Theme");
+				background-color: themed("BG3");
 			}
 		}
 	}

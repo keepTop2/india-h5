@@ -1,5 +1,5 @@
 <template>
-	<DynamicSvgComponent v-if="DynamicSvgComponent" />
+	<DynamicSvgComponent v-if="DynamicSvgComponent" :iconName="iconName" :width="size || width ? `${size || width}vw` : undefined" :height="size || height ? `${height || size}vw` : undefined" />
 </template>
 
 <script setup lang="ts">
@@ -10,7 +10,7 @@
 
 import { shallowRef } from "vue";
 
-const props = defineProps(["iconName", "width", "height"]);
+const props = defineProps(["iconName", "width", "height", "size"]);
 
 // 使用 shallowRef 浅层响应 存储异步加载的 SVG 图标路径
 const DynamicSvgComponent = shallowRef(null);

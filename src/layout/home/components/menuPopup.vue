@@ -6,7 +6,6 @@
 				<div class="logo">
 					<img :src="logo" alt="" />
 				</div>
-				<MenuClose class="menuClose van-haptics-feedback" @click="show = false" />
 			</div>
 			<div class="menu_content">
 				<div class="menu_content_header">

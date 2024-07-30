@@ -374,7 +374,7 @@ const loginOut = () => {
 		background-color: themed("BG1");
 	}
 	border-radius: 20px 0px;
-	z-index: 2;
+	z-index: 1;
 
 	.medal,
 	.balance_operation {
