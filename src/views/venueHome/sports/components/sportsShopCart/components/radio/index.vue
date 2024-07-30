@@ -52,7 +52,7 @@ const onRadio = () => {
 	display: flex;
 	align-items: center;
 	@include themeify {
-		color: themed("Theme-P");
+		color: themed("Theme");
 	}
 }
 span {
@@ -108,7 +108,7 @@ span {
 	justify-content: center;
 	border-top: 1px solid;
 	@include themeify {
-		color: themed("Theme-P");
+		color: themed("Theme");
 		border-color: themed("Line");
 	}
 	font-family: "PingFang SC";

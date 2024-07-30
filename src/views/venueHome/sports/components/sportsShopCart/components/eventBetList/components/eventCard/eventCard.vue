@@ -49,6 +49,7 @@
 </template>
 
 <script setup lang="ts">
+import RiseOrFall from "/@/views/venueHome/sports/components/riseOrFall/riseOrFall.vue";
 import shopCartPubSub from "/@/views/venueHome/sports/hooks/shopCartPubSub";
 import { SportsRootObject } from "/@/views/venueHome/sports/utils/interface";
 import { useSportsBetEventStore } from "/@/store/modules/sports/sportsBetData";
@@ -237,7 +238,7 @@ const animationEnd = (item) => {
 
 			.theme {
 				@include themeify {
-					color: themed("Theme-P");
+					color: themed("Theme");
 				}
 			}
 		}

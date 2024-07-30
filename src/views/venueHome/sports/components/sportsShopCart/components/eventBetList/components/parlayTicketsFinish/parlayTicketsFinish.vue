@@ -186,7 +186,7 @@ const onSecondBet = () => {
 					}
 					.theme {
 						@include themeify {
-							color: themed("Theme-P");
+							color: themed("Theme");
 						}
 					}
 				}
@@ -235,7 +235,7 @@ const onSecondBet = () => {
 
 				.value {
 					@include themeify {
-						color: themed("Theme-P");
+						color: themed("Theme");
 					}
 
 					font-size: 22px;
@@ -272,7 +272,7 @@ const onSecondBet = () => {
 				border-radius: 8px;
 
 				@include themeify {
-					background-color: themed("Theme-P");
+					background-color: themed("Theme");
 					color: themed("TB-P");
 				}
 
@@ -295,8 +295,8 @@ const onSecondBet = () => {
 				border: 1px solid;
 
 				@include themeify {
-					color: themed("Theme-P");
-					border-color: themed("Theme-P");
+					color: themed("Theme");
+					border-color: themed("Theme");
 				}
 
 				font-family: "PingFang SC";

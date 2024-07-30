@@ -51,7 +51,7 @@ const showPopup = () => {
 	border-radius: 50px;
 	z-index: 10;
 	@include themeify {
-		background-color: themed("Theme-P");
+		background-color: themed("Theme");
 	}
 
 	.badge {
@@ -66,7 +66,7 @@ const showPopup = () => {
 		border-radius: 16px;
 		@include themeify {
 			background-color: themed("TB-P");
-			color: themed("Theme-P");
+			color: themed("Theme");
 		}
 		font-family: "DIN Alternate";
 		font-size: 24px;

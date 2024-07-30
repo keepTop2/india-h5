@@ -29,6 +29,7 @@
 </template>
 
 <script setup lang="ts">
+import RiseOrFall from "/@/views/venueHome/sports/components/riseOrFall/riseOrFall.vue";
 import sportsApi from "/@/api/venueHome/sports";
 import pubsub from "/@/pubSub/pubSub";
 import Common from "/@/utils/common";
@@ -223,7 +224,7 @@ watch(
 		border-radius: 8px;
 		border: 2px solid;
 		@include themeify {
-			border-color: themed("Theme-P");
+			border-color: themed("Theme");
 		}
 		box-sizing: border-box;
 	}
@@ -246,7 +247,7 @@ watch(
 			color: themed("Warn-P");
 		}
 		.down {
-			color: themed("Theme-P");
+			color: themed("Theme");
 		}
 	}
 }

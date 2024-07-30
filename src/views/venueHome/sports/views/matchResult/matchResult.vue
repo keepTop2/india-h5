@@ -116,12 +116,12 @@ const toggleDisplay = (val?: number) => {
 			color: themed("Warn-P");
 		}
 		.descend {
-			color: themed("Theme-P");
+			color: themed("Theme");
 		}
 	}
 }
 
 .list-content {
-	height: calc(100vh - 595px);
+	height: calc(100vh - 97px);
 }
 </style>

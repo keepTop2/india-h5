@@ -205,7 +205,7 @@ const closePopup = () => {
 			justify-content: center;
 			border-radius: 8px;
 			@include themeify {
-				background-color: themed("Theme-P");
+				background-color: themed("Theme");
 			}
 			overflow: hidden;
 
@@ -249,7 +249,7 @@ const closePopup = () => {
 			justify-content: center;
 			border-radius: 8px;
 			@include themeify {
-				background-color: themed("Theme-P");
+				background-color: themed("Theme");
 			}
 			.label {
 				margin-left: 6px;
