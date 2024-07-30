@@ -36,6 +36,7 @@
 </template>
 
 <script setup lang="ts">
+import RiseOrFall from "/@/views/venueHome/sports/components/riseOrFall/riseOrFall.vue";
 import { i18n } from "/@/i18n/index";
 import { useSportsBetEventStore } from "/@/store/modules/sports/sportsBetData";
 import { WebToPushApi } from "/@/views/venueHome/sports/enum/sportEventSourceEnum";
@@ -150,7 +151,7 @@ const animationEnd = (item) => {
 					border-radius: 8px;
 					border: 2px solid;
 					@include themeify {
-						border-color: themed("Theme-P");
+						border-color: themed("Theme");
 					}
 					box-sizing: border-box;
 				}

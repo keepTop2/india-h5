@@ -165,7 +165,7 @@ const clearCart = () => {
 					}
 					.theme {
 						@include themeify {
-							color: themed("Theme-P");
+							color: themed("Theme");
 						}
 					}
 				}
@@ -210,7 +210,7 @@ const clearCart = () => {
 
 				.value {
 					@include themeify {
-						color: themed("Theme-P");
+						color: themed("Theme");
 					}
 
 					font-size: 24px;
@@ -237,7 +237,7 @@ const clearCart = () => {
 				border-radius: 8px;
 
 				@include themeify {
-					background-color: themed("Theme-P");
+					background-color: themed("Theme");
 					color: themed("TB-P");
 				}
 
