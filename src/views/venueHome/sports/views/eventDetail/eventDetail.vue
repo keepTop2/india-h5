@@ -254,9 +254,6 @@ import viewSportPubSubEventData from "/@/views/venueHome/sports/hooks/viewSportP
 import sportsApi from "/@/api/venueHome/sports";
 
 import { useLoading } from "/@/directives/loading/hooks";
-import { ChildrenToMainCommon } from "/@/ChildrenAppportAManage/childrenAppDTOs/childrenToMain/childrenToMainCommon";
-import { ControllersEnum } from "/@/ChildrenAppportAManage/childrenAppEnums/controllersEnum";
-import childrenAppportAManage from "/@/ChildrenAppportAManage/ChildrenAppportAManage";
 import { defineAsyncComponent } from "vue";
 const SportsShopCart = defineAsyncComponent(() => import("/@/views/venueHome/sports/components/sportsShopCart/sportsShopCart.vue"));
 const { startLoading, stopLoading } = useLoading();
@@ -570,14 +567,7 @@ const animationEnd = (marketId, selection) => {
 };
 
 //回退至上一个路由
-const onClickLeft = () => {
-	const childrenToMainCommonData: ChildrenToMainCommon = {
-		transactionName: ControllersEnum.SportAContainerChangeController,
-		apiName: "sportAContainerToSportProcess",
-		data: {},
-	};
-	childrenAppportAManage.forceDispatch(childrenToMainCommonData);
-};
+const onClickLeft = () => {};
 
 // 注册一个钩子，在组件被挂载之前被调用。
 onBeforeMount(async () => {

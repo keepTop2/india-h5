@@ -116,9 +116,6 @@ const sportsBetData = useSportsBetEventStore();
 // import { convertUtcToUtc5AndFormatMD } from "/@/webWorker/module/utils/formattingChildrenViewData";
 import SportsCommonFn from "/@/views/venueHome/sports/utils/common";
 import { i18n } from "/@/i18n/index";
-import { ChildrenToMainCommon } from "/@/ChildrenAppportAManage/childrenAppDTOs/childrenToMain/childrenToMainCommon";
-import { ControllersEnum } from "/@/ChildrenAppportAManage/childrenAppEnums/controllersEnum";
-import childrenAppportAManage from "/@/ChildrenAppportAManage/ChildrenAppportAManage";
 
 const props = defineProps<{
 	event: SportsRootObject;
@@ -225,19 +222,7 @@ const formattedGameTime = computed(() => {
 
 // 跳转详情
 const showDetail = (eventId, leagueId) => {
-	const childrenToMainCommonData: ChildrenToMainCommon = {
-		transactionName: ControllersEnum.SportAContainerChangeController,
-		apiName: "toSportAcontainerProcess",
-		data: {
-			path: "/sports/event/detail",
-			eventId,
-			leagueId,
-			sportType: props.event.sportType,
-		},
-	};
-
-	childrenAppportAManage.forceDispatch(childrenToMainCommonData);
-	// router.push(`/sports/event/detail/${eventId}/${leagueId}/${props.event.sportType}`);
+	router.push(`/sports/event/detail/${eventId}/${leagueId}/${props.event.sportType}`);
 };
 </script>
 

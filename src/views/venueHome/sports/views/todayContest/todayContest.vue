@@ -15,27 +15,27 @@
 
 <script setup lang="ts">
 // 足球列表
-const Football = defineAsyncComponent(() => import("/@/views/Sports/tournamentViews/football/football.vue"));
+const Football = defineAsyncComponent(() => import("/@/views/venueHome/sports/tournamentViews/football/football.vue"));
 // 篮球列表
-const Basketball = defineAsyncComponent(() => import("/@/views/Sports/tournamentViews/basketball/basketball.vue"));
+const Basketball = defineAsyncComponent(() => import("/@/views/venueHome/sports/tournamentViews/basketball/basketball.vue"));
 // 美式足球列表
-const AmericanSoccer = defineAsyncComponent(() => import("/@/views/Sports/tournamentViews/americanSoccer/americanSoccer.vue"));
+const AmericanSoccer = defineAsyncComponent(() => import("/@/views/venueHome/sports/tournamentViews/americanSoccer/americanSoccer.vue"));
 // 冰上曲棍球列表
-const IceHockey = defineAsyncComponent(() => import("/@/views/Sports/tournamentViews/iceHockey/iceHockey.vue"));
+const IceHockey = defineAsyncComponent(() => import("/@/views/venueHome/sports/tournamentViews/iceHockey/iceHockey.vue"));
 // 网球列表
-const Tennis = defineAsyncComponent(() => import("/@/views/Sports/tournamentViews/tennis/tennis.vue"));
+const Tennis = defineAsyncComponent(() => import("/@/views/venueHome/sports/tournamentViews/tennis/tennis.vue"));
 // 排球列表
-const Volleyball = defineAsyncComponent(() => import("/@/views/Sports/tournamentViews/volleyball/volleyball.vue"));
+const Volleyball = defineAsyncComponent(() => import("/@/views/venueHome/sports/tournamentViews/volleyball/volleyball.vue"));
 // 斯诺克
-const Billiards = defineAsyncComponent(() => import("/@/views/Sports/tournamentViews/billiards/billiards.vue"));
+const Billiards = defineAsyncComponent(() => import("/@/views/venueHome/sports/tournamentViews/billiards/billiards.vue"));
 // 棒球列表
-const Baseball = defineAsyncComponent(() => import("/@/views/Sports/tournamentViews/baseball/baseball.vue"));
+const Baseball = defineAsyncComponent(() => import("/@/views/venueHome/sports/tournamentViews/baseball/baseball.vue"));
 // 羽毛球列表
-const Badminton = defineAsyncComponent(() => import("/@/views/Sports/tournamentViews/badminton/badminton.vue"));
+const Badminton = defineAsyncComponent(() => import("/@/views/venueHome/sports/tournamentViews/badminton/badminton.vue"));
 // 电子竞技列表
-const ESports = defineAsyncComponent(() => import("/@/views/Sports/tournamentViews/eSports/eSports.vue"));
+const ESports = defineAsyncComponent(() => import("/@/views/venueHome/sports/tournamentViews/eSports/eSports.vue"));
 
-import NoData from "/@/views/Sports/components/noData/noData.vue";
+import NoData from "/@/views/venueHome/sports/components/noData/noData.vue";
 
 import { useRoute } from "vue-router";
 import viewSportPubSubEventData from "/@/views/venueHome/sports/hooks/viewSportPubSubEventData";

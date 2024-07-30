@@ -12,7 +12,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { VirtualScrollVirtualList, Card } from "./components/index";
-import NoData from "/@/views/Sports/components/noData/noData.vue";
+import NoData from "/@/views/venueHome/sports/components/noData/noData.vue";
 
 const props = defineProps({
 	listData: {

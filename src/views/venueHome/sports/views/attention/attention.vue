@@ -34,7 +34,7 @@ import { computed, ref } from "vue";
 import viewSportPubSubEventData from "/@/views/venueHome/sports/hooks/viewSportPubSubEventData";
 import { VirtualScrollVirtualList } from "../../../components/index";
 import { useSportsBetEventStore } from "/@/store/modules/sports/sportsBetData";
-import NoData from "/@/views/Sports/components/noData/noData.vue";
+import NoData from "/@/views/venueHome/sports/components/noData/noData.vue";
 import sportApi from "/@/api/venueHome/sports";
 
 import { defineAsyncComponent } from "vue";

@@ -32,9 +32,6 @@ import sportsApi from "/@/api/venueHome/sports";
 import { useSportsBetEventStore } from "/@/store/modules/sports/sportsBetData";
 import { useRouter, useRoute } from "vue-router";
 import _ from "lodash";
-import { ChildrenToMainCommon } from "/@/ChildrenAppportAManage/childrenAppDTOs/childrenToMain/childrenToMainCommon";
-import { ControllersEnum } from "/@/ChildrenAppportAManage/childrenAppEnums/controllersEnum";
-import childrenAppportAManage from "/@/ChildrenAppportAManage/ChildrenAppportAManage";
 const sportsBetEvent = useSportsBetEventStore();
 const myDiv = ref(null);
 const router = useRouter();
@@ -75,12 +72,6 @@ watch(
 //回退至上一个路由
 const onClickLeft = () => {
 	router.go(-1);
-	// const childrenToMainCommonData: ChildrenToMainCommon = {
-	// 	transactionName: ControllersEnum.SportAContainerChangeController,
-	// 	apiName: "sportAContainerToSportProcess",
-	// 	data: {},
-	// };
-	// childrenAppportAManage.forceDispatch(childrenToMainCommonData);
 };
 /**
  * @description 判断是否选中了

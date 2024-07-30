@@ -38,7 +38,7 @@
 			<div v-if="isShowFilter">
 				<div v-if="isShowHot">
 					<span :class="['fs_24', (activeSwitchingSort == 'hot' && 'color_TB') || 'color_Tag2-P']" @click="switchingSort('hot')">热门</span>&nbsp;
-					<SvgIcon class="sport_switch" :iconName="(activeSwitchingSort == 'time' && 'sport_switch2') || 'sport_switch'" />
+					<SvgIcon class="sport_switch" :iconName="(activeSwitchingSort == 'time' && '/venueHome/sports/svg/sport_switch2') || '/venueHome/sports/svg/sport_switch'" />
 					&nbsp;<span :class="['fs_24', (activeSwitchingSort == 'time' && 'color_TB') || 'color_Tag2-P']" @click="switchingSort('time')">时间</span>
 				</div>
 			</div>
@@ -222,10 +222,7 @@ const openSportPush = async () => {
 	// console.warn("第二步 准备发送指令到线程管理器");
 	//如果当前激活的tab是 滚球
 	console.log("tabActive.value", tabActive.value);
-
 	if (tabActive.value == "rollingBall") {
-		console.log("触发几次？");
-
 		startLoading();
 		//清空参数
 		pubsub.PubSubEvents.WorkerEvents.viewToWorker.params!.data = {} as OpenSportEventSourceParams;
