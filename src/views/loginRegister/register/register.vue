@@ -50,7 +50,7 @@
 					<span v-if="!isConfirmPasswordValid" class="text">{{ $t('register["两次输入密码不一致"]') }}</span>
 				</div>
 
-				<FromInput v-model="state.mainCurrency" :placeholder="$t(`register['选择主货币']`)" readonly :errorBorder="mainCurrencyRG ? true : false">
+				<FromInput v-model="state.mainCurrency" :placeholder="$t(`register['选择主货币']`)" readonly :errorBorder="mainCurrencyRG ? true : false" @click="router.push('/mainCurrency')">
 					<template v-slot:right>
 						<SvgIcon class="icon" iconName="/loginOrRegister/arrow" />
 					</template>
@@ -71,7 +71,7 @@
 					<p :class="userAgreement ? 'text' : 'text3'">
 						<i18n-t keypath="register['我同意用户协议并确认我已年满18岁']" :tag="'span'">
 							<template v-slot:text
-								><span class="text2">{{ $t('register["用户协议"]') }}</span></template
+								><span class="text2" @click="router.push('/userAgreement')"> {{ $t('register["用户协议"]') }} </span></template
 							>
 						</i18n-t>
 					</p>

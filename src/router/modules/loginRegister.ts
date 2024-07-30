@@ -1,6 +1,6 @@
 import Layout from "/@/layout/loginRegister/index.vue";
 
-const LoginRegisterRouter = {
+export const LoginRegisterRouter = {
 	path: "/login",
 	component: Layout,
 	children: [
@@ -31,4 +31,19 @@ const LoginRegisterRouter = {
 	],
 };
 
-export default LoginRegisterRouter;
+export const RegisterSubPage = {
+	children: [
+		{
+			path: "/mainCurrency",
+			name: "mainCurrency",
+			component: () => import("/@/views/loginRegister/mainCurrency/mainCurrency.vue"),
+			meta: { title: "选择主货币" },
+		},
+		{
+			path: "/userAgreement",
+			name: "userAgreement",
+			component: () => import("/@/views/loginRegister/userAgreement/userAgreement.vue"),
+			meta: { title: "用户协议" },
+		},
+	],
+};

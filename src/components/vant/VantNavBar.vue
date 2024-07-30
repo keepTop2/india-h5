@@ -15,7 +15,7 @@
 			<template #left>
 				<span v-if="leftText">{{ leftText }}</span>
 				<slot v-else name="left">
-					<img v-if="leftArrow" class="back_img" :src="back" alt="" />
+					<SvgIcon class="back" iconName="/vantNavBar/back" />
 				</slot>
 			</template>
 			<template #title>
@@ -33,7 +33,6 @@
 </template>
 
 <script setup lang="ts">
-import back from "./images/back.png";
 const emit = defineEmits(["onClickRight", "onClickLeft"]);
 
 defineProps({
@@ -87,8 +86,9 @@ const onClickRight = () => {
 	align-items: center;
 }
 
-.back_img {
-	width: 38px;
+.back {
+	width: 36px;
+	height: 36px;
 }
 
 .service_icon {
@@ -114,7 +114,7 @@ const onClickRight = () => {
 	width: 100%;
 	height: 100px;
 	@include themeify {
-		box-shadow: 0px 4px 8px 0px themed("Shadow");
+		box-shadow: 0px 4px 8px 0px themed("shadow2");
 		background-color: themed("BG1");
 		color: themed("TB");
 		position: fixed !important;
@@ -131,6 +131,10 @@ const onClickRight = () => {
 :deep(.van-nav-bar__title) {
 	color: unset;
 	font-size: 32px;
+}
+
+:deep(.van-nav-bar__left) {
+	padding-left: 50px;
 }
 
 :deep(.van-nav-bar--fixed) {

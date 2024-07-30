@@ -10,6 +10,7 @@ export {}
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     Button: typeof import('./../src/components/Button/Button.vue')['default']
+    DateRangeSelect: typeof import('./../src/components/DateRangeSelect/DateRangeSelect.vue')['default']
     FromInput: typeof import('./../src/components/Input/fromInput.vue')['default']
     Hcaptcha: typeof import('./../src/components/Hcaptcha/hcaptcha.vue')['default']
     Image: typeof import("./../src/components/Image/image.vue")["default"]
