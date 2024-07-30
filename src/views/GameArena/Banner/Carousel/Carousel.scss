@@ -1,6 +1,8 @@
 .Carousel {
 	position: relative;
+	height: 100%;
 	.Carousel__swiper {
+		height: 100%;
 		.swiper-slide {
 			border-radius: 10px;
 			overflow: hidden;

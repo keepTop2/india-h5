@@ -2,6 +2,7 @@
 	<div class="Home_Page bg_BG1">
 		<!-- 轮播图 -->
 		<Banner class="Home_Banner" />
+		<Tabs class="plr" v-model="tabsActiveKey" :list="tabList" />
 		<div class="Home_Content">
 			<!-- 热门游戏 -->
 			<h3 class="title">
@@ -74,6 +75,7 @@
 </template>
 
 <script setup lang="ts">
+import { useRoute } from "vue-router";
 import Banner from "./Banner/banner.vue";
 //热门游戏
 import HotGame from "./HotGame/HotGame.vue";
@@ -90,8 +92,33 @@ import Sponsor from "./Sponsor/sponsor.vue";
 // 转账方式
 import Currency from "./Currency/Currency.vue";
 import duty from "/@/views/home/static/images/duty.png";
+import { i18n } from "/@/i18n";
+const $: any = i18n.global;
+const route = useRoute();
+//初始化当前选中tab
+const tabsActiveKey = ref(route.path);
+
+//tabs 切换
+const tabList = [
+	{
+		name: $.t("game['全部']"),
+		value: "all",
+	},
+	{
+		name: $.t("game['新游戏']"),
+		value: "1",
+	},
+	{
+		name: $.t("home['百家乐']"),
+		value: "2",
+	},
+	{
+		name: $.t("home['其他']"),
+		value: "3",
+	},
+];
 </script>
 
 <style lang="scss" scoped>
-@import "./HomePage.scss";
+@import "./GameArena.scss";
 </style>
