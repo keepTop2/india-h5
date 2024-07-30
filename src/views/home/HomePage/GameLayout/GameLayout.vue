@@ -41,9 +41,6 @@ import img from "./image.png";
 import VantLazyImg from "/@/components/vant/VantLazyImg.vue";
 </script>
 <style scoped lang="scss">
-$border-color: #555;
-$star-size: 30px;
-
 .container {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
@@ -72,17 +69,16 @@ $star-size: 30px;
 
 	.item {
 		position: relative;
-		@include themeify {
-			border: 1px solid themed("T3");
-		}
 		border-radius: 8px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		color: white;
 		font-size: 24px;
 		width: 152px;
 		height: 152px;
+		@include themeify {
+			border: 1px solid themed("T3");
+		}
 		&.big {
 			width: 320px;
 			height: 320px; // Adjust the height as needed
@@ -92,9 +88,8 @@ $star-size: 30px;
 			position: absolute;
 			top: 10px;
 			right: 10px;
-			width: $star-size;
-			height: $star-size;
-			background: url("path/to/star.png") no-repeat center center;
+			width: 30px;
+			height: 30px;
 			background-size: contain;
 		}
 	}

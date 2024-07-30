@@ -4,12 +4,12 @@
 			<h3 class="zanzhu">{{ $t('home["赞助与博彩责任"]') }}</h3>
 			<div class="image-container sponsor_list">
 				<div v-for="item in imgList" :key="item.id" class="card bg_BG3">
-					<VantLazyImg :src="item.src" alt="平台赞助图片" />
+					<VantLazyImg :src="String(item.src)" alt="平台赞助图片" />
 				</div>
 			</div>
 			<div class="image-container sponsor_list">
 				<div v-for="item in imgList2" :key="item.id" class="card bg_BG3">
-					<VantLazyImg :src="item.src" alt="平台赞助图片" />
+					<VantLazyImg :src="String(item.src)" alt="平台赞助图片" />
 				</div>
 			</div>
 		</div>

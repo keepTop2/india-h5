@@ -30,7 +30,7 @@ import { Swiper, SwiperSlide } from "swiper/vue";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import game from "../../static/banner.png";
+import game from "./banner.png";
 import { Pagination, Navigation, Autoplay } from "swiper/modules";
 
 const modules = ref([Autoplay, Pagination, Navigation]); //swiper配置项

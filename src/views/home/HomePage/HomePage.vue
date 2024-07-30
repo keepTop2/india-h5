@@ -74,24 +74,22 @@
 </template>
 
 <script setup lang="ts">
-import Banner from "../components/Banner/banner.vue";
+import Banner from "./Banner/banner.vue";
 //热门游戏
-import HotGame from "./components/HotGame/HotGame.vue";
+import HotGame from "./HotGame/HotGame.vue";
 //体育赛事盘口列表
-import EventList from "./components/EventList/EventList.vue";
+import EventList from "./EventList/EventList.vue";
 //关注的游戏列表
-import CollectGames from "./components/CollectGames/CollectGames.vue";
+import CollectGames from "./CollectGames/CollectGames.vue";
 //游戏6格布局
-import GameLayout from "./components/GameLayout/GameLayout.vue";
+import GameLayout from "./GameLayout/GameLayout.vue";
 //游戏大图
-import GameBigPic from "./components/GameBigPic/GameBigPic.vue";
-import BettingMatches from "./components/BettingMatches/BettingMatches.vue";
-import Sponsor from "./components/Sponsor/sponsor.vue";
-import Currency from "./components/Currency/Currency.vue";
-import encryption from "../static/images/encryption.png";
+import GameBigPic from "./GameBigPic/GameBigPic.vue";
+// 赞助
+import Sponsor from "./Sponsor/sponsor.vue";
+// 转账方式
+import Currency from "./Currency/Currency.vue";
 import duty from "/@/views/home/static/images/duty.png";
-
-const casinoDescriptionRoute = { path: "/casino/description" };
 </script>
 
 <style lang="scss" scoped>
