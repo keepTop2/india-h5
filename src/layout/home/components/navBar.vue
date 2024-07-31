@@ -46,7 +46,7 @@ const onCollapse = () => {
 	.collapseIcon {
 		width: 64px;
 		height: 64px;
-		margin-left: 24px;
+		margin-left: 28px;
 	}
 
 	.noLogin {
