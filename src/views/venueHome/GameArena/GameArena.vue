@@ -1,9 +1,9 @@
 <template>
 	<div class="GameArena bg_BG1">
 		<div class="navBar">
-			<SvgIcon class="collapse_icon" iconName="common/collapse_icon" />
+			<SvgIcon class="collapse_icon" iconName="common/collapse_icon" @click="onClickLeft" />
 			<div class="nav_bar_input bg_BG3">
-				<SvgIcon class="collapse_icon" iconName="venueHome/gameArena/search" />
+				<SvgIcon iconName="venueHome/gameArena/search" />
 				<input placeholder="输入游戏名称" type="text" class="color_T2" />
 			</div>
 		</div>
@@ -100,7 +100,7 @@ const onClickLeft = () => {
 	box-sizing: border-box;
 	.nav_bar_input {
 		display: flex;
-		width: 624px;
+		width: 600px;
 		height: 64px;
 		padding: 10px 24px;
 		margin-left: 30px;
