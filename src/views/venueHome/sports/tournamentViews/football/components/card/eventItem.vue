@@ -251,7 +251,7 @@ const showDetail = (eventId, leagueId) => {
 			.label {
 				margin-left: 12px;
 				@include themeify {
-					// color: themed("Theme");
+					color: themed("Theme");
 				}
 				font-family: "PingFang SC";
 				font-size: 22px;
@@ -306,6 +306,9 @@ const showDetail = (eventId, leagueId) => {
 				}
 				.name {
 					width: 178px;
+					height: 100%;
+					display: flex;
+					align-items: center;
 					@include themeify {
 						color: themed("TB");
 					}
@@ -379,7 +382,7 @@ const showDetail = (eventId, leagueId) => {
 					justify-content: center;
 					border-radius: 8px;
 					@include themeify {
-						background-color: themed("BG9");
+						background-color: themed("Line");
 						color: themed("TB");
 					}
 					font-family: "DIN Alternate";
@@ -417,6 +420,9 @@ const showDetail = (eventId, leagueId) => {
 				.other3 {
 					margin-left: 14px;
 					color: #798d9f;
+					display: flex;
+					align-items: center;
+					justify-content: center;
 					svg {
 						fill: none;
 					}
@@ -433,8 +439,8 @@ const showDetail = (eventId, leagueId) => {
 					margin-left: 18px;
 					border-radius: 4px;
 					@include themeify {
-						background-color: themed("Tag2-P");
-						color: themed("TB-P");
+						background-color: themed("T3");
+						color: themed("TB1");
 					}
 					font-family: "PingFang SC";
 					font-size: 20px;
