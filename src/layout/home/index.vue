@@ -2,7 +2,6 @@
 	<template v-if="!blacklist.includes(route.path)">
 		<NavBar />
 	</template>
-	<MenuPopup />
 	<BackToTop />
 	<div class="HomeContainer">
 		<RouterView class="content" />
@@ -12,7 +11,6 @@
 
 <script setup lang="ts">
 import NavBar from "/@/layout/home/components/navBar.vue";
-import MenuPopup from "/@/layout/home/components/menuPopup.vue";
 import TabBar from "/@/layout/home/components/tabBar.vue";
 import BackToTop from "/@/layout/home/components/BackToTop.vue";
 import { useRoute } from "vue-router";
@@ -28,7 +26,7 @@ const route = useRoute();
 		background-color: themed("BG1");
 	}
 	.content {
-		padding-bottom: 98px;
+		padding-bottom: 160px;
 	}
 }
 </style>

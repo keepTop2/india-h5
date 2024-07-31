@@ -24,6 +24,7 @@ declare module '@vue/runtime-core' {
     SingleSelect: typeof import('./../src/components/SingleSelect/SingleSelect.vue')['default']
     Spin: typeof import("./../src/components/Spin/Spin.vue")["default"]
     SvgIcon: typeof import('./../src/components/SvgIcon/index.vue')['default']
+    TabBar: typeof import('./../src/components/TabBar/tabBar.vue')['default']
     Table: typeof import("./../src/components/Table/Table.vue")["default"]
     Tabs: typeof import('./../src/components/Tabs/Tabs.vue')['default']
     Van: typeof import("vant/es")["default"]
