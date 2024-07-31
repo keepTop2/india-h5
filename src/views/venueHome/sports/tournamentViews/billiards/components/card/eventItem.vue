@@ -83,10 +83,6 @@ const sportsBetData = useSportsBetEventStore();
 // import common from "/@/utils/common";
 import SportsCommonFn from "/@/views/venueHome/sports/utils/common";
 import { i18n } from "/@/i18n/index";
-import childrenAppportAManage from "/@/ChildrenAppportAManage/ChildrenAppportAManage";
-import { ChildrenToMainCommon, ChildrenToMainRouterPush } from "/@/ChildrenAppportAManage/childrenAppDTOs/childrenToMain/childrenToMainCommon";
-import { TransactionNameCommonEnum } from "/@/ChildrenAppportAManage/childrenAppEnums/transactionNameCommonEnum";
-import { ControllersEnum } from "/@/ChildrenAppportAManage/childrenAppEnums/controllersEnum";
 const props = defineProps<{
 	event: SportsRootObject;
 	sportType: String;
@@ -173,19 +169,7 @@ const formattedGameTime = computed(() => {
 
 // 跳转详情
 // 跳转详情
-const showDetail = (eventId, leagueId) => {
-	const childrenToMainCommonData: ChildrenToMainCommon = {
-		transactionName: ControllersEnum.SportAContainerChangeController,
-		apiName: "toSportAcontainerProcess",
-		data: {
-			path: "/sports/event/detail",
-			eventId,
-			leagueId,
-			sportType: props.event.sportType,
-		},
-	};
-	childrenAppportAManage.forceDispatch(childrenToMainCommonData);
-};
+const showDetail = (eventId, leagueId) => {};
 </script>
 
 <style scoped lang="scss">
@@ -213,7 +197,7 @@ const showDetail = (eventId, leagueId) => {
 			.label {
 				margin-left: 12px;
 				@include themeify {
-					// color: themed("Theme");
+					color: themed("Theme");
 				}
 				font-family: "PingFang SC";
 				font-size: 22px;
@@ -268,6 +252,9 @@ const showDetail = (eventId, leagueId) => {
 				}
 				.name {
 					width: 178px;
+					height: 100%;
+					display: flex;
+					align-items: center;
 					@include themeify {
 						color: themed("TB");
 					}
@@ -304,7 +291,7 @@ const showDetail = (eventId, leagueId) => {
 					justify-content: center;
 					border-radius: 8px;
 					@include themeify {
-						background-color: themed("BG9");
+						background-color: themed("Line");
 						color: themed("TB");
 					}
 					font-family: "DIN Alternate";
@@ -342,6 +329,9 @@ const showDetail = (eventId, leagueId) => {
 				.other3 {
 					margin-left: 14px;
 					color: #798d9f;
+					display: flex;
+					align-items: center;
+					justify-content: center;
 					svg {
 						fill: none;
 					}
@@ -359,7 +349,7 @@ const showDetail = (eventId, leagueId) => {
 					border-radius: 4px;
 					@include themeify {
 						background-color: themed("T3");
-						color: themed("TB-P");
+						color: themed("TB1");
 					}
 					font-family: "PingFang SC";
 					font-size: 20px;

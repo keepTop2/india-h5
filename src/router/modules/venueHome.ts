@@ -6,6 +6,7 @@ export const VenueHome = {
 		{
 			path: "/sports",
 			name: "sports",
+			redirect: "/sports/rollingBall",
 			component: () => import("/@/views/venueHome/sports/sports.vue"),
 			meta: { title: "体育" },
 			children: [

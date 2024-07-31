@@ -1,5 +1,3 @@
-import { ServerData } from "/@/models/commonInterface";
-
 export interface Sports {
 	count?: number;
 	sportType: number;
@@ -32,7 +30,7 @@ export interface SportViewData {
 /**
  * @description 线程管理器处理好的数据
  */
-export interface SportData extends ServerData {
+export interface SportData {
 	sportViewData: SportViewData;
 	sportServerData: any;
 }

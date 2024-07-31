@@ -21,7 +21,7 @@
 					<SvgIcon iconName="home/event_game" alt="" />
 					{{ $t('home["我们的游戏"]') }}
 				</span>
-				<span class="more fw_400 fs_28 color_T1">更多</span>
+				<span class="more fw_400 fs_28 color_T1" @click="router.push('/sports')">更多</span>
 			</h3>
 			<EventList class="m24" />
 			<h3 class="title_more">
@@ -90,6 +90,8 @@ import Sponsor from "./Sponsor/sponsor.vue";
 // 转账方式
 import Currency from "./Currency/Currency.vue";
 import duty from "/@/views/home/static/images/duty.png";
+import { useRouter } from "vue-router";
+const router = useRouter();
 </script>
 
 <style lang="scss" scoped>

@@ -149,6 +149,7 @@ watch(
 	border-radius: 16px 16px 0px 0px;
 	@include themeify {
 		background: themed("--JBS-CARD");
+		box-shadow: 0px 1px 4px 0px themed("--JBS-CARD--shadow");
 	}
 	box-sizing: border-box;
 	.count {
@@ -273,6 +274,7 @@ watch(
 		border-radius: 16px 16px 0px 0px;
 		@include themeify {
 			background: themed("--JBS-CARD");
+			box-shadow: 0px 1px 4px 0px themed("--JBS-CARD--shadow");
 		}
 		box-sizing: border-box;
 		p {

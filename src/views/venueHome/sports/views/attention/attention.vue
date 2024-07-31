@@ -32,7 +32,7 @@ import { computed, ref } from "vue";
 // import EventCard from "./components/event/eventCard.vue";
 // import OutRightCard from "./components/outRight/outRightItem.vue";
 import viewSportPubSubEventData from "/@/views/venueHome/sports/hooks/viewSportPubSubEventData";
-import { VirtualScrollVirtualList } from "../../../components/index";
+import { VirtualScrollVirtualList } from "/@/views/venueHome/sports/components/virtualScrollVirtualList/index";
 import { useSportsBetEventStore } from "/@/store/modules/sports/sportsBetData";
 import NoData from "/@/views/venueHome/sports/components/noData/noData.vue";
 import sportApi from "/@/api/venueHome/sports";
