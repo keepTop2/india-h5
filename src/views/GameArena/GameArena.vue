@@ -15,13 +15,13 @@
 				<SvgIcon iconName="home/event_game" alt="" />
 				{{ $t('game["新游戏"]') }}
 			</h3>
-			<GameLayout class="m24" />
+			<GameGrid class="m24" :games="games" />
 			<!-- 全部游戏 -->
 			<h3 class="title">
 				<SvgIcon iconName="home/star" alt="" />
 				{{ $t('game["全部游戏"]') }}
 			</h3>
-			<GameLayout class="m24" />
+			<GameGrid class="m24" :games="games" :showMore="true" />
 		</div>
 	</div>
 </template>
@@ -33,7 +33,7 @@ import Banner from "./Banner/banner.vue";
 //热门游戏
 import HotGame from "./HotGame/HotGame.vue";
 //游戏6格布局
-import GameLayout from "./GameLayout/GameLayout.vue";
+import GameGrid from "./GameGrid/GameGrid.vue";
 import { i18n } from "/@/i18n";
 const $: any = i18n.global;
 const route = useRoute();
@@ -62,6 +62,14 @@ const tabList = [
 		name: $.t("game['其他']"),
 		value: "4",
 	},
+];
+
+const games = [
+	{ image: "path/to/image1.jpg", isNew: true },
+	{ image: "path/to/image2.jpg", isNew: true },
+	{ image: "path/to/image3.jpg", isNew: false },
+	{ image: "path/to/image4.jpg", isNew: false },
+	{ image: "path/to/image5.jpg", isNew: true },
 ];
 </script>
 
