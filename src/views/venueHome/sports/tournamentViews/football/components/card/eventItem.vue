@@ -327,13 +327,13 @@ const showDetail = (eventId, leagueId) => {
 					.red {
 						margin-left: 6px;
 						@include themeify {
-							background-color: themed("Warn-P");
+							background-color: themed("Warn");
 						}
 					}
 					.yellow {
 						margin-left: 6px;
 						@include themeify {
-							background-color: themed("Hint-P");
+							background-color: themed("Hint");
 						}
 					}
 					.yellow,
@@ -345,7 +345,7 @@ const showDetail = (eventId, leagueId) => {
 						padding: 0px 4px;
 						border-radius: 4px;
 						@include themeify {
-							color: themed("TB-P");
+							color: themed("TB");
 						}
 						font-family: "PingFang SC";
 						font-size: 18px;
