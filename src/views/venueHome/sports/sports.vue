@@ -636,12 +636,13 @@ const unSport = () => {
 
 		.tab {
 			min-width: 108px;
+			flex: 1;
 			height: 52px;
 			margin-left: 11px;
 			padding: 8px 15px;
-			border-radius: 26px;
+			border-radius: 12px;
 			@include themeify {
-				background-color: themed("Tag1");
+				background-color: themed("BG3");
 				color: themed("T1");
 			}
 			text-align: center;
@@ -649,8 +650,8 @@ const unSport = () => {
 			font-size: 24px;
 			font-weight: 400;
 			line-height: 36px;
+			display: inline-table;
 			box-sizing: border-box;
-
 			&:first-child {
 				margin-left: 0px;
 			}
@@ -658,7 +659,7 @@ const unSport = () => {
 		.tab-active {
 			@include themeify {
 				background-color: themed("Theme");
-				color: themed("TB-P");
+				color: themed("TB1");
 			}
 		}
 	}
@@ -672,7 +673,7 @@ const unSport = () => {
 			height: 118px;
 			padding: 0px 24px;
 			@include themeify {
-				background-color: themed("BG3");
+				// background-color: themed("BG3");
 			}
 			overflow-x: auto; /* 允许横向滚动 */
 			white-space: nowrap; /* 禁止内容换行折行 */
