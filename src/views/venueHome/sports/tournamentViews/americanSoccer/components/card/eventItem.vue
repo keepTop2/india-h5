@@ -392,11 +392,7 @@ const showDetail = (eventId, leagueId) => {};
 					border-radius: 4px;
 					@include themeify {
 						background-color: themed("T3");
-<<<<<<< HEAD
-						color: themed("TB-P");
-=======
 						color: themed("TB1");
->>>>>>> 656d5a9d73809c45147585c5535a37cbe311b76d
 					}
 					font-family: "PingFang SC";
 					font-size: 20px;
