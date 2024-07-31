@@ -23,12 +23,12 @@
 import { useRoute } from "vue-router";
 import { computed, ref } from "vue";
 import viewSportPubSubEventData from "/@/views/venueHome/sports/hooks/viewSportPubSubEventData";
-import { VirtualScrollVirtualList } from "../../../components/index";
+import { VirtualScrollVirtualList } from "/@/views/venueHome/sports/components/virtualScrollVirtualList/index";
 // import OutRightItem from "./components/outRightItem.vue";
 import NoData from "/@/views/venueHome/sports/components/noData/noData.vue";
 // import { defineAsyncComponent } from "vue";
 // const NoData = defineAsyncComponent(() => import("/@/views/venueHome/sports/components/noData/noData.vue"));
-const OutRightItem = defineAsyncComponent(() => import("/@/views/Sports/views/champion/components/outRightItem.vue"));
+const OutRightItem = defineAsyncComponent(() => import("/@/views/venueHome/sports/views/champion/components/outRightItem.vue"));
 const route = useRoute();
 const VirtualScrollVirtualListRef = ref();
 
@@ -59,7 +59,7 @@ watch(
 	line-height: 60px;
 }
 .list-content {
-	height: calc(100vh - 595px);
+	height: calc(100vh - 97px);
 	.container {
 		padding: 0px 24px;
 	}
@@ -79,6 +79,7 @@ watch(
 		border-radius: 16px 16px 0px 0px;
 		@include themeify {
 			background: themed("--JBS-CARD");
+			box-shadow: 0px 1px 4px 0px themed("--JBS-CARD--shadow");
 		}
 		box-sizing: border-box;
 		p {
