@@ -7,13 +7,18 @@
 </template>
 
 <script setup lang="ts">
+type ListItem = {
+	name: string;
+	value: string | number;
+};
+
 const props = defineProps({
 	modelValue: {
 		type: [String, Number],
 		required: true,
 	},
 	list: {
-		type: Array,
+		type: Array<ListItem>,
 		default: () => [],
 	},
 	bg: {

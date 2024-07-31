@@ -35,5 +35,5 @@ export enum ThemeEnum {
 	/**
 	 * @description 暗黑主题
 	 */
-	"dark" = "dark",
+	"light" = "light",
 }

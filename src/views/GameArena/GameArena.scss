@@ -1,0 +1,104 @@
+.GameArena {
+	padding-bottom: 200px;
+	.duty {
+		display: flex;
+		justify-content: center;
+		margin: 24px 0;
+		.dutyImg {
+			width: 370px;
+			height: 140px;
+		}
+	}
+	.dutyMsg {
+		text-align: center;
+		font-family: "PingFang SC";
+		font-size: 28px;
+		font-style: normal;
+		font-weight: 400;
+		line-height: normal;
+	}
+	.dutyTitle {
+		text-align: center;
+		font-family: "PingFang SC";
+		font-size: 36px;
+		font-style: normal;
+		font-weight: 600;
+		line-height: normal;
+		text-decoration-line: underline;
+		text-transform: uppercase;
+	}
+
+	.Game_Content {
+		padding: 0 24px;
+		overflow: hidden;
+
+		.m24 {
+			margin: 24px 0;
+		}
+
+		@include themeify {
+			.title_more,
+			.title {
+				margin-top: 36px;
+				font-size: 32px;
+				font-weight: 600;
+				color: themed("TB");
+				display: flex;
+				align-items: center;
+				svg,
+				img {
+					width: 42px;
+					height: 42px;
+					margin-right: 12px;
+				}
+			}
+			.title_more {
+				justify-content: space-between;
+				.flex_align_center {
+					display: flex;
+				}
+			}
+			.onlineCasino {
+				margin: 32px 0;
+				color: themed("T1");
+				font-size: 24px;
+				font-style: normal;
+				font-weight: 400;
+				line-height: 44px; /* 183.333% */
+				p {
+					white-space: pre-line;
+					margin: 16px 0;
+				}
+				.more {
+					color: themed("T1");
+					font-family: "PingFang SC";
+					font-size: 24px;
+					font-style: normal;
+					font-weight: 400;
+					line-height: 34px;
+					display: flex;
+					align-items: center;
+					justify-content: flex-end;
+					svg {
+						height: 20px;
+						width: 20px;
+					}
+				}
+			}
+		}
+		.Options {
+			@include themeify {
+				margin-bottom: 56px;
+				overflow: hidden;
+				li {
+					border-radius: 16px;
+					overflow: hidden;
+					position: relative;
+					width: 100%;
+					height: 304px;
+					margin-bottom: 24px;
+				}
+			}
+		}
+	}
+}

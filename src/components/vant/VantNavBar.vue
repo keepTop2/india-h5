@@ -97,13 +97,13 @@ const onClickRight = () => {
 }
 
 .rightText {
-	@include themeify {
-		color: themed("Tag2-P");
-	}
 	font-family: "PingFang SC";
 	font-size: 28px;
 	font-weight: 400;
 	line-height: 38px;
+	@include themeify {
+		color: themed("Tag2-P");
+	}
 }
 
 .vantNavBar_box {

@@ -10,7 +10,6 @@ $themes: (
 			Hint: #ff7a00,
 			Fav: #ff007a,
 			Tag1: #343434,
-			BG1-N: #222324,
 			T1: #999ba0,
 			T2: #62666a,
 			T3: #6d727a,
@@ -29,9 +28,12 @@ $themes: (
 			Shadow: #18191d,
 			// 导航阴影
 			shadow2: rgba(0, 0, 0, 0.4),
+			// 体育卡片头部渐变背景于阴影效果
+			--JBS-CARD: linear-gradient(180deg, #555657 0%, #444547 100%),
+			--JBS-CARD--shadow: rgba(255, 255, 255, 0.25),
 		),
-	// 深色主题
-	dark:
+	// 浅色主题
+	light:
 		(
 			Theme: #ff284b,
 			Warn: #ff284b,
@@ -39,7 +41,6 @@ $themes: (
 			Hint: #ff7a00,
 			Fav: #ff007a,
 			Tag1: #eaecf2,
-			BG1-N: #222324,
 			T1: #999ba0,
 			T2: #62666a,
 			T3: #6d727a,
@@ -58,5 +59,8 @@ $themes: (
 			Shadow: #dedfe2,
 			// 导航阴影
 			shadow2: rgba(0, 0, 0, 0.4),
+			// 体育卡片头部渐变背景于阴影效果
+			--JBS-CARD: linear-gradient(180deg, #555657 0%, #444547 100%),
+			--JBS-CARD--shadow: rgba(255, 255, 255, 0.25),
 		)
 );

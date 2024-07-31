@@ -46,31 +46,31 @@ export default function ({ command, mode }: ConfigEnv): UserConfig {
 			],
 		},
 		server: {
-			headers: {
-				"access-control-allow-origin": "*",
-				"Access-Control-Allow-Origin": "http://192.168.30.69:3004",
-			},
+			// headers: {
+			// 	"access-control-allow-origin": "*",
+			// 	"Access-Control-Allow-Origin": "http://192.168.30.69:3004",
+			// },
 			port: 3001,
 			host: true,
 			hmr: true,
-			proxy: {
-				"/sportA": {
-					target: "http://localhost:3004", // app1 的实际开发地址
-					changeOrigin: true,
-					rewrite: (path) => path.replace(/^\/sportA/, ""),
-				},
-				"/S128": {
-					// target: env.VITE_API_URL,
-					target: "https://digmaantest.cm3645.com",
-					changeOrigin: true,
-					ws: true,
-					secure: true,
-					//重写代理tag（S128）
-					rewrite: (path) => path.replace(/^\/S128/, ""),
-					// bypass(req, res, options) {
-					// },
-				},
-			},
+			// proxy: {
+			// 	"/sportA": {
+			// 		target: "http://localhost:3004", // app1 的实际开发地址
+			// 		changeOrigin: true,
+			// 		rewrite: (path) => path.replace(/^\/sportA/, ""),
+			// 	},
+			// 	"/S128": {
+			// 		// target: env.VITE_API_URL,
+			// 		target: "https://digmaantest.cm3645.com",
+			// 		changeOrigin: true,
+			// 		ws: true,
+			// 		secure: true,
+			// 		//重写代理tag（S128）
+			// 		rewrite: (path) => path.replace(/^\/S128/, ""),
+			// 		// bypass(req, res, options) {
+			// 		// },
+			// 	},
+			// },
 		},
 		preview: {
 			cors: true,
@@ -82,10 +82,8 @@ export default function ({ command, mode }: ConfigEnv): UserConfig {
 		plugins: [
 			svgLoader({
 				svgoConfig: {
-					plugins: [
-						'prefixIds',
-					]
-				}
+					plugins: ["prefixIds"],
+				},
 			}),
 			createVitePlugins(viteEnv, isProduction),
 			// VConsole 调试工具配置，若没有此配置，则调试工具控制台不会打印日志
@@ -94,7 +92,7 @@ export default function ({ command, mode }: ConfigEnv): UserConfig {
 				localEnabled: false, // 本地是否启用
 				enabled: mode === "test", // 是否启用
 				config: {
-					maxLogNumber: 1000, // theme: 'dark' // 主题颜色
+					maxLogNumber: 1000, // theme: 'light' // 主题颜色
 				},
 			}),
 		],
