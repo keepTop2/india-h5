@@ -107,12 +107,12 @@ const onClickRight = () => {
 }
 
 .vantNavBar_box {
-	height: 100px;
+	height: 88px;
 	overflow: hidden;
 }
 .vantNavBar {
 	width: 100%;
-	height: 100px;
+	height: 88px !important;
 	@include themeify {
 		box-shadow: 0px 4px 8px 0px themed("shadow2");
 		background-color: themed("BG1");
@@ -128,13 +128,17 @@ const onClickRight = () => {
 	background: none;
 }
 
+:deep(.van-nav-bar__content) {
+	height: 88px !important;
+}
+
 :deep(.van-nav-bar__title) {
 	color: unset;
 	font-size: 32px;
 }
 
 :deep(.van-nav-bar__left) {
-	padding-left: 50px;
+	padding-left: 28px;
 }
 
 :deep(.van-nav-bar--fixed) {
