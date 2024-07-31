@@ -1,12 +1,14 @@
 <template>
 	<!-- 活动 -->
-	<VantNavBar :leftArrow="false" title="优惠中心" />
-
 	<div v-loading="state.pageLoading" class="discount_container">
-		<NavBar class="mb_24" v-model:active="active" :tab-list="state.tabList" @on-change-nav-bar="onChangeNavBar" />
+		<Banner class="home_banner mb_35" />
+		<NavBar class="mb_24 discount_navbar" v-model:active="active" :tab-list="state.tabList" @on-change-nav-bar="onChangeNavBar" />
+		<!-- 轮播图 -->
 		<div class="activityList_item bg_Tag1" @click="onToDeatils('12')">
 			<div class="img_container">
-				<VantLazyImg class="discount_img" :src="discount1" />
+				<div class="activityGraph">
+					<VantLazyImg class="discount_img" :src="discount1" />
+				</div>
 				<div class="text_container">
 					<div class="date">
 						<div class="deadline">截止时间：2024.1.5 24:00:00</div>
@@ -36,6 +38,7 @@
 import discount1 from "./image/discount1.png";
 import { reactive } from "vue";
 import { onBeforeMount } from "vue";
+import Banner from "./Banner/banner.vue";
 import NavBar from "./components/Navbar.vue";
 import { useRouter } from "vue-router";
 const router = useRouter();
@@ -131,15 +134,24 @@ const getActivity = async (): Promise<void> => {
 
 <style lang="scss" scoped>
 .discount_container {
-	padding: 24px;
+	.discount_navbar {
+		padding: 0 24px;
+	}
+
 	.activityList_item {
 		border-radius: 16px;
+		margin: 0 24px;
 		margin-bottom: 24px;
+
 		@include themeify {
 			background: themed("BG2");
 		}
 		// margin-top: 24px;
 		.img_container {
+			.activityGraph {
+				padding: 20px 20px 0 20px;
+				box-sizing: border-box;
+			}
 			.discount_img {
 				border-radius: 16px;
 				width: 100%;

@@ -7,6 +7,10 @@
 </template>
 
 <script setup lang="ts">
+/**
+ * @description 最基础的tabs  根据list 循环渲染tab
+ *
+ */
 type ListItem = {
 	name: string;
 	value: string | number;
@@ -53,11 +57,11 @@ const handleClick = (item) => {
 			font-size: 26px;
 			border-radius: 6px;
 			cursor: pointer;
-			color: themed("T1");
+			color: themed("TB");
 			&.active,
 			&:hover {
 				color: themed("Theme");
-				background-color: themed("BG3");
+				background-color: themed("Tag1");
 			}
 		}
 	}

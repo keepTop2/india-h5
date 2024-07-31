@@ -37,15 +37,15 @@
 			<!-- 赛事列表显示 -->
 			<div v-if="isShowFilter">
 				<div v-if="isShowHot">
-					<span :class="['fs_24', (activeSwitchingSort == 'hot' && 'color_TB') || 'color_Tag2-P']" @click="switchingSort('hot')">热门</span>&nbsp;
+					<span :class="['fs_24', (activeSwitchingSort == 'hot' && 'color_TB') || 'color_T3']" @click="switchingSort('hot')">热门</span>&nbsp;
 					<SvgIcon class="sport_switch" :iconName="(activeSwitchingSort == 'time' && '/venueHome/sports/svg/sport_switch2') || '/venueHome/sports/svg/sport_switch'" />
-					&nbsp;<span :class="['fs_24', (activeSwitchingSort == 'time' && 'color_TB') || 'color_Tag2-P']" @click="switchingSort('time')">时间</span>
+					&nbsp;<span :class="['fs_24', (activeSwitchingSort == 'time' && 'color_TB') || 'color_T3']" @click="switchingSort('time')">时间</span>
 				</div>
 			</div>
 			<div>
-				<SvgIcon class="sport_filter color_Tag2-P" v-if="isShowFilter" @click="filterLeague" iconName="/venueHome/sports/svg/sport_filter" />
-				<SvgIcon class="sport_fold color_Tag2-P" v-if="isFold" iconName="/venueHome/sports/svg/sport_fold2" @click="onExpandAngCollapse" />
-				<SvgIcon class="sport_fold color_Tag2-P" v-else iconName="/venueHome/sports/svg/sport_fold" @click="onExpandAngCollapse" />
+				<SvgIcon class="sport_filter color_T3" v-if="isShowFilter" @click="filterLeague" iconName="/venueHome/sports/svg/sport_filter" />
+				<SvgIcon class="sport_fold color_T3" v-if="isFold" iconName="/venueHome/sports/svg/sport_fold2" @click="onExpandAngCollapse" />
+				<SvgIcon class="sport_fold color_T3" v-else iconName="/venueHome/sports/svg/sport_fold" @click="onExpandAngCollapse" />
 			</div>
 		</div>
 		<!-- 赛事列表出口 -->
@@ -697,7 +697,7 @@ const unSport = () => {
 					margin: 0 auto;
 					margin-top: 20px;
 					@include themeify {
-						color: themed("Tag2-P");
+						color: themed("T3");
 					}
 					.value {
 						position: absolute;
@@ -713,7 +713,7 @@ const unSport = () => {
 				}
 				.icon-active {
 					@include themeify {
-						color: themed("Tag2-P");
+						color: themed("T3");
 					}
 					.value {
 						@include themeify {

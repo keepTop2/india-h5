@@ -358,7 +358,7 @@ const showDetail = (eventId, leagueId) => {
 					margin-left: 18px;
 					border-radius: 4px;
 					@include themeify {
-						background-color: themed("Tag2-P");
+						background-color: themed("T3");
 						color: themed("TB-P");
 					}
 					font-family: "PingFang SC";
@@ -397,7 +397,7 @@ const showDetail = (eventId, leagueId) => {
 					height: 4px;
 					border-radius: 2px;
 					@include themeify {
-						background-color: themed("Tag2-P");
+						background-color: themed("T3");
 					}
 				}
 				.swiper-pagination-bullet-active {

@@ -6,14 +6,6 @@ const LayoutRouter = {
 	component: Layout,
 	children: [
 		{
-			path: "/game/arena",
-			name: "GameArena",
-			component: () => import("/@/views/GameArena/GameArena.vue"),
-			meta: {
-				title: "游戏大厅",
-			},
-		},
-		{
 			path: "/discount",
 			name: "discount",
 			component: () => import("/@/views/discount/discount.vue"),

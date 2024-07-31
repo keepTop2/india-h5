@@ -28,7 +28,7 @@
 
 <script setup lang="ts">
 import { useRoute } from "vue-router";
-import Tabs from "./components/Tabs/Tabs.vue";
+import Tabs from "/@/components/Tabs/Tabs.vue";
 import Banner from "./Banner/banner.vue";
 //热门游戏
 import HotGame from "./HotGame/HotGame.vue";

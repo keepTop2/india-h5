@@ -183,7 +183,7 @@ const animationEnd = (item) => {
 		border-radius: 16px 0px;
 
 		@include themeify {
-			background-color: themed("Tag2-P");
+			background-color: themed("T3");
 		}
 
 		opacity: 0.2;
@@ -231,7 +231,7 @@ const animationEnd = (item) => {
 				border-radius: 5px;
 
 				@include themeify {
-					background-color: themed("Tag2-P");
+					background-color: themed("T3");
 					color: themed("TB");
 				}
 			}

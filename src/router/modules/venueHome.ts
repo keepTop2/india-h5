@@ -83,5 +83,13 @@ export const VenueHome = {
 			component: () => import("/@/views/venueHome/lottery/lottery.vue"),
 			meta: { title: "彩票" },
 		},
+		{
+			path: "/game/arena",
+			name: "GameArena",
+			component: () => import("/@/views/venueHome/GameArena/GameArena.vue"),
+			meta: {
+				title: "游戏大厅",
+			},
+		},
 	],
 };

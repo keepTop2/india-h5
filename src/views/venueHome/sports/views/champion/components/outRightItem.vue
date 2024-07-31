@@ -166,7 +166,7 @@ watch(
 		line-height: 34px;
 		border-radius: 8px;
 		@include themeify {
-			background: themed("Tag2-P");
+			background: themed("T3");
 			color: themed("TB-P");
 		}
 	}

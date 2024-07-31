@@ -17,7 +17,7 @@ import MenuPopup from "/@/layout/home/components/menuPopup.vue";
 import TabBar from "/@/layout/home/components/tabBar.vue";
 import BackToTop from "./BackToTop.vue";
 import { useRoute } from "vue-router";
-const blacklist = ["/my", "/discount", "/discount/activityParticulars"];
+const blacklist = ["/my", "/discount/activityParticulars"];
 const route = useRoute();
 </script>
 
