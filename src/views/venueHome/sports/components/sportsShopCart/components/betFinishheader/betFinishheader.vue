@@ -57,7 +57,7 @@ const clearCart = () => {
 		span {
 			margin-left: 20px;
 			@include themeify {
-				color: themed("Theme-P");
+				color: themed("Theme");
 			}
 			font-family: "PingFang SC";
 			font-size: 32px;

@@ -76,7 +76,7 @@ const focusInput = (item) => {
 	.input_active {
 		border: 1px solid;
 		@include themeify {
-			border-color: themed("Theme-P");
+			border-color: themed("Theme");
 		}
 	}
 	.subtotal {
@@ -96,7 +96,7 @@ const focusInput = (item) => {
 
 	@include themeify {
 		background-color: themed("BG2");
-		color: themed("Theme-P");
+		color: themed("Theme");
 	}
 	font-family: "PingFang SC";
 	font-size: 28px;

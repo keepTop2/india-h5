@@ -226,9 +226,9 @@
 </template>
 
 <script setup lang="ts">
+import RiseOrFall from "/@/views/venueHome/sports/components/riseOrFall/riseOrFall.vue";
 import { onMounted, onUnmounted, ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
-
 import DropDownEvent from "./components/dropDownEvent.vue";
 import SelectionName from "./components/selectionName.vue";
 import { useUserStore } from "/@/store/modules/user";

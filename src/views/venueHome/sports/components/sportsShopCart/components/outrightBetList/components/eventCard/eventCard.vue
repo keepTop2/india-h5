@@ -139,7 +139,7 @@ const onDeleteBetEvent = (item) => {
 
 			.theme {
 				@include themeify {
-					color: themed("Theme-P");
+					color: themed("Theme");
 				}
 			}
 		}

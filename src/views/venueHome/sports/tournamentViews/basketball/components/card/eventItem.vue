@@ -246,7 +246,7 @@ const showDetail = (eventId, leagueId) => {
 			.label {
 				margin-left: 12px;
 				@include themeify {
-					// color: themed("Theme-P");
+					// color: themed("Theme");
 				}
 				font-family: "PingFang SC";
 				font-size: 22px;
@@ -367,7 +367,7 @@ const showDetail = (eventId, leagueId) => {
 						&:nth-child(2) {
 							margin-left: 4px;
 							@include themeify {
-								color: themed("Theme-P");
+								color: themed("Theme");
 							}
 						}
 					}
@@ -426,7 +426,7 @@ const showDetail = (eventId, leagueId) => {
 			}
 			.theme {
 				@include themeify {
-					color: themed("Theme-P");
+					color: themed("Theme");
 				}
 			}
 		}
@@ -459,7 +459,7 @@ const showDetail = (eventId, leagueId) => {
 					height: 4px;
 					border-radius: 2px;
 					@include themeify {
-						background-color: themed("Theme-P");
+						background-color: themed("Theme");
 					}
 				}
 			}

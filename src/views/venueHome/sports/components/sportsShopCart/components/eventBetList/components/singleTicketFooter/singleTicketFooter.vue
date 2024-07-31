@@ -142,7 +142,7 @@ const onkeyPress = (value) => {
 			border-radius: 8px;
 			overflow: hidden;
 			@include themeify {
-				background-color: themed("Theme-P");
+				background-color: themed("Theme");
 			}
 			.container,
 			.disabled_container {
@@ -183,7 +183,7 @@ const onkeyPress = (value) => {
 			justify-content: center;
 			border-radius: 8px;
 			@include themeify {
-				background-color: themed("Theme-P");
+				background-color: themed("Theme");
 			}
 			.label {
 				margin-left: 6px;

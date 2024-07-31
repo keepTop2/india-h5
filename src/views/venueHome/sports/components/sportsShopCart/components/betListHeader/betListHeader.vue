@@ -84,7 +84,7 @@ const closePopup = () => {
 			justify-content: center;
 			border-radius: 50%;
 			@include themeify {
-				background-color: themed("Theme-P");
+				background-color: themed("Theme");
 				color: themed("TB-P");
 			}
 			font-family: "PingFang SC";

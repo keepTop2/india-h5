@@ -26,7 +26,7 @@
 
 	.oddsDown {
 		@include themeify {
-			color: themed("Theme-P") !important;
+			color: themed("Theme") !important;
 		}
 	}
 
@@ -247,7 +247,7 @@
 				border-radius: 8px;
 				border: 2px solid;
 				@include themeify {
-					border-color: themed("Theme-P");
+					border-color: themed("Theme");
 				}
 				box-sizing: border-box;
 			}
@@ -308,7 +308,7 @@
 					width: 40px; /* 宽度为li元素宽度的一半 */
 					height: 4px; /* 下横线的高度 */
 					border-radius: 6px;
-					background-color: themed("Theme-P"); /* 或指定颜色，如 #333 */
+					background-color: themed("Theme"); /* 或指定颜色，如 #333 */
 					transform: translateX(-50%); /* 向左移动自身宽度的50%，以确保居中 */
 					opacity: 0; /* 默认不显示下横线 */
 					transition: opacity 0.3s ease; /* 可选：平滑过渡效果 */

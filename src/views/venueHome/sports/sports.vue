@@ -657,7 +657,7 @@ const unSport = () => {
 		}
 		.tab-active {
 			@include themeify {
-				background-color: themed("Theme-P");
+				background-color: themed("Theme");
 				color: themed("TB-P");
 			}
 		}
@@ -717,7 +717,7 @@ const unSport = () => {
 					}
 					.value {
 						@include themeify {
-							color: themed("Theme-P");
+							color: themed("Theme");
 						}
 					}
 				}
@@ -734,7 +734,7 @@ const unSport = () => {
 
 				.label-active {
 					@include themeify {
-						color: themed("Theme-P");
+						color: themed("Theme");
 					}
 				}
 			}
@@ -783,7 +783,7 @@ const unSport = () => {
 	.active {
 		@include themeify {
 			color: themed("TB-P");
-			background-color: themed("Theme-P");
+			background-color: themed("Theme");
 			border-radius: 25px;
 		}
 	}
