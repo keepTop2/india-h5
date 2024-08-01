@@ -1,8 +1,12 @@
 <template>
-	<router-view />
+	<div>
+		<MenuPopup />
+		<router-view />
+	</div>
 </template>
 
 <script setup lang="ts">
+import MenuPopup from "/@/layout/home/components/menuPopup.vue";
 import { useThemesStore } from "/@/store/modules/themes";
 const ThemesStore = useThemesStore();
 

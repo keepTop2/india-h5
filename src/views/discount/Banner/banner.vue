@@ -7,7 +7,7 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import Carousel from "./Carousel/Carousel.vue";
+import Carousel from "/@/components/Carousel/Carousel.vue";
 </script>
 
 <style lang="scss" scoped>

@@ -1,0 +1,73 @@
+.GameSwiper {
+	@include themeify {
+		margin-bottom: 56px;
+		overflow: hidden;
+		.mySwiper {
+			width: 120% !important;
+			// padding-right: 30px;
+			.card {
+				position: relative;
+			}
+		}
+		.swiper-slide {
+			width: 420px;
+			background-color: themed("BG3");
+			overflow: hidden;
+			border-radius: 20px;
+			border: 2px solid themed("T3");
+			box-sizing: border-box;
+			overflow: hidden;
+			position: relative;
+			margin-right: 16px;
+			.collect {
+				position: absolute;
+				right: 10px;
+				top: 10px;
+				width: 32px;
+				height: 32px;
+			}
+			svg {
+				width: 100%;
+				height: auto;
+			}
+			.message {
+				height: 95px;
+				padding: 11px 24px;
+				box-sizing: border-box;
+				text-align: left;
+				position: absolute;
+				bottom: 0;
+				width: 100%;
+				background-color: rgba(35, 35, 35, 0.6);
+				span {
+					display: block;
+					font-size: 24px;
+				}
+				.gameName {
+					color: themed("FFF");
+					// font-weight: 400;
+					// font-size: 24px;
+					display: flex;
+					justify-content: space-between;
+					align-items: center;
+					svg {
+						width: 22px;
+						height: 22px;
+					}
+				}
+				.money {
+					display: inline-block;
+					// color: themed("Theme-P");
+					// background-color: #3bc11629;
+					height: 20px;
+					line-height: 20px;
+					padding: 0 5px;
+				}
+			}
+		}
+		h3 {
+			font-weight: normal;
+			line-height: 40px;
+		}
+	}
+}

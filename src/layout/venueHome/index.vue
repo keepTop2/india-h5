@@ -16,8 +16,7 @@ import TabBar from "/@/layout/home/components/tabBar.vue";
 		background-color: themed("BG1");
 	}
 	.content {
-		min-height: calc(100% - 97px);
-		padding-bottom: 97px;
+		padding-bottom: 160px;
 	}
 }
 </style>

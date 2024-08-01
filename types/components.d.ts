@@ -10,6 +10,7 @@ export {}
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     Button: typeof import('./../src/components/Button/Button.vue')['default']
+    Carousel: typeof import('./../src/components/Carousel/Carousel.vue')['default']
     DateRangeSelect: typeof import('./../src/components/DateRangeSelect/DateRangeSelect.vue')['default']
     FromInput: typeof import('./../src/components/Input/fromInput.vue')['default']
     Hcaptcha: typeof import('./../src/components/Hcaptcha/hcaptcha.vue')['default']
@@ -22,9 +23,10 @@ declare module '@vue/runtime-core' {
     RouterView: typeof import('vue-router')['RouterView']
     SingleSelect: typeof import('./../src/components/SingleSelect/SingleSelect.vue')['default']
     Spin: typeof import("./../src/components/Spin/Spin.vue")["default"]
-    SvgIcon: typeof import('./../src/components/svgIcon/index.vue')['default']
+    SvgIcon: typeof import('./../src/components/SvgIcon/index.vue')['default']
+    TabBar: typeof import('./../src/components/TabBar/tabBar.vue')['default']
     Table: typeof import("./../src/components/Table/Table.vue")["default"]
-    Tabs: typeof import("./../src/components/Tabs/tabs.vue")["default"]
+    Tabs: typeof import('./../src/components/Tabs/Tabs.vue')['default']
     Van: typeof import("vant/es")["default"]
     VanActionSheet: typeof import("vant/es")["ActionSheet"]
     VanBadge: typeof import("vant/es")["Badge"]

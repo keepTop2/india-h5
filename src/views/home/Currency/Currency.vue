@@ -22,7 +22,6 @@ import { ref } from "vue";
 
 <style lang="scss" scoped>
 .Currency {
-	@import "./Currency.scss";
 	width: 100%;
 	margin-top: 32px;
 
@@ -34,5 +33,6 @@ import { ref } from "vue";
 			height: 80px;
 		}
 	}
+	@import "./Currency.scss";
 }
 </style>
