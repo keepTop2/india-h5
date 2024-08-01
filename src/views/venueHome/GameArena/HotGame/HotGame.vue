@@ -12,12 +12,19 @@
 			class="mySwiper"
 		>
 			<swiper-slide v-for="({ userName, unit, money, collect }, index) in gameList" :key="index">
-				<div @click="handleClickCard({ userName, unit, money, collect })">
+				<div class="card" @click="handleClickCard({ userName, unit, money, collect })">
 					<div class="collect">
 						<VantLazyImg v-if="collect" :src="collectImg" alt="" width="100%" />
 						<VantLazyImg v-else :src="noCollectImg" alt="" width="100%" />
 					</div>
 					<VantLazyImg :src="gameImg" alt="" width="100%" />
+					<div class="message">
+						<span class="gameName color_TB fs_28 fw_600">
+							{{ userName }}
+							<!-- <SvgIcon iconName="tips" /> -->
+						</span>
+						<span class="money color_T1">{{ unit }}{{ money }}</span>
+					</div>
 				</div>
 			</swiper-slide>
 		</Swiper>

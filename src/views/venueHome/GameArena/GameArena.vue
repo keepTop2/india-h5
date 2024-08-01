@@ -1,5 +1,12 @@
 <template>
 	<div class="GameArena bg_BG1">
+		<div class="navBar">
+			<SvgIcon class="collapse_icon" iconName="common/collapse_icon" @click="onClickLeft" />
+			<div class="nav_bar_input bg_BG3">
+				<SvgIcon iconName="venueHome/gameArena/search" />
+				<input placeholder="输入游戏名称" type="text" class="color_T2" />
+			</div>
+		</div>
 		<!-- 轮播图 -->
 		<Banner class="Home_Banner mb_35" />
 		<div class="Game_Content">
@@ -15,25 +22,26 @@
 				<SvgIcon iconName="home/event_game" alt="" />
 				{{ $t('game["新游戏"]') }}
 			</h3>
-			<GameLayout class="m24" />
+			<GameGrid class="m24" :games="games" />
 			<!-- 全部游戏 -->
 			<h3 class="title">
 				<SvgIcon iconName="home/star" alt="" />
 				{{ $t('game["全部游戏"]') }}
 			</h3>
-			<GameLayout class="m24" />
+			<GameGrid class="m24" :games="games" :showMore="true" />
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
 import { useRoute } from "vue-router";
-import Tabs from "./components/Tabs/Tabs.vue";
+import Tabs from "/@/components/Tabs/Tabs.vue";
 import Banner from "./Banner/banner.vue";
 //热门游戏
 import HotGame from "./HotGame/HotGame.vue";
 //游戏6格布局
-import GameLayout from "./GameLayout/GameLayout.vue";
+import GameGrid from "./GameGrid/GameGrid.vue";
+import pubsub from "/@/pubSub/pubSub";
 import { i18n } from "/@/i18n";
 const $: any = i18n.global;
 const route = useRoute();
@@ -63,8 +71,53 @@ const tabList = [
 		value: "4",
 	},
 ];
+
+const games = [
+	{ image: "path/to/image1.jpg", isNew: true },
+	{ image: "path/to/image2.jpg", isNew: true },
+	{ image: "path/to/image3.jpg", isNew: false },
+	{ image: "path/to/image4.jpg", isNew: false },
+	{ image: "path/to/image5.jpg", isNew: true },
+];
+
+const onClickLeft = () => {
+	// 发布事件
+	pubsub.publish("onCollapseMenu");
+};
 </script>
 
 <style lang="scss" scoped>
 @import "./GameArena.scss";
+.collapse_icon {
+	width: 64px;
+	height: 64px;
+}
+
+.navBar {
+	height: 88px;
+	padding: 12px 28px;
+	display: flex;
+	box-sizing: border-box;
+	.nav_bar_input {
+		display: flex;
+		width: 600px;
+		height: 64px;
+		padding: 10px 24px;
+		margin-left: 30px;
+		display: flex;
+		gap: 16px;
+		border-radius: 12px;
+		box-sizing: border-box;
+		input {
+			width: 500px;
+			background: none;
+			border: none;
+			outline: none;
+		}
+		svg {
+			width: 44px;
+			height: 44px;
+		}
+	}
+}
 </style>

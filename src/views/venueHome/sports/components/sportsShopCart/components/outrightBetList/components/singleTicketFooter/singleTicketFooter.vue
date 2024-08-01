@@ -154,7 +154,7 @@ const onkeyPress = (value) => {
 
 			.disabled_container {
 				@include themeify {
-					background-color: themed("Tag2-P");
+					background-color: themed("T3");
 				}
 			}
 		}

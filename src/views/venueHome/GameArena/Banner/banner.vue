@@ -14,6 +14,6 @@ import Carousel from "/@/components/Carousel/Carousel.vue";
 /* Your styles here */
 .banner {
 	// margin: 32px 0;
-	height: 514px;
+	height: 428px;
 }
 </style>

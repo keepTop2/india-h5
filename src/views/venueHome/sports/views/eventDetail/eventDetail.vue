@@ -5,14 +5,14 @@
 				<!-- 导航栏 -->
 				<div class="navBar" :class="{ showDropDown }">
 					<div class="goback" @click="onClickLeft">
-						<SvgIcon class="color_Tag2-P" iconName="/venueHome/sports/svg/arrowLeft" alt="" />
+						<SvgIcon class="color_T3" iconName="/venueHome/sports/svg/arrowLeft" alt="" />
 					</div>
 					<div class="teamList" v-show="eventsList">
 						<DropDownEvent @changeEvent="handleChangeEvent" :eventsList="eventsList" @handleClose="handleClose" @handleOpen="handleOpen" />
 						<SvgIcon iconName="/venueHome/sports/svg/sport_down" alt="" />
 					</div>
 					<div class="refresh">
-						<!-- <SvgIcon class="color_Tag2-P" iconName="/venueHome/sports/svg/sports_refresh" alt="" /> -->
+						<!-- <SvgIcon class="color_T3" iconName="/venueHome/sports/svg/sports_refresh" alt="" /> -->
 					</div>
 				</div>
 				<!-- 头部内容 队伍信息 比分 -->
@@ -55,16 +55,16 @@
 									<SvgIcon iconName="/venueHome/sports/svg/sport_live_2" />
 									视频
 								</li>
-								<li class="line bg_Tag2-P" v-if="eventDetail?.channelCode"></li>
-								<li @click="attentionEvent()" :class="[(isAttention && 'color_TB-P') || 'color_Tag2-P', 'fs_26']">
-									<!-- <SvgIcon class="color_Tag2-P" iconName="/venueHome/sports/svg/sport_start" size="6" /> -->
+								<li class="line bg_T3" v-if="eventDetail?.channelCode"></li>
+								<li @click="attentionEvent()" :class="[(isAttention && 'color_TB-P') || 'color_T3', 'fs_26']">
+									<!-- <SvgIcon class="color_T3" iconName="/venueHome/sports/svg/sport_start" size="6" /> -->
 									<SvgIcon v-if="isAttention" iconName="/venueHome/sports/svg/collection2" size="6" />
 									<SvgIcon v-else iconName="/venueHome/sports/svg/collection" size="6" />
 									{{ (isAttention && "已关注") || "关注" }}
 								</li>
 							</ul>
 							<ul v-if="!isEventRunning && eventsList">
-								<li class="color_Tag2-P">{{ eventsList ? (eventDetail ? gameStatus(eventDetail?.eventStatus) : "比赛已结束") : "-" }}</li>
+								<li class="color_T3">{{ eventsList ? (eventDetail ? gameStatus(eventDetail?.eventStatus) : "比赛已结束") : "-" }}</li>
 							</ul>
 						</div>
 						<div class="pl_40 pr_40 fs_20 color_TB-P fw_700" v-if="Number(routeData.sportType) == 1 && eventDetail?.isLive && eventDetail?.gameInfo?.inPlayTime">
@@ -141,7 +141,7 @@
 			<!-- 滑动到指定位置队伍信息及比分固定在顶部 -->
 			<div class="smallHeader color_TB-P" :class="{ fixed: isFixed }">
 				<div class="goback" @click="onClickLeft">
-					<SvgIcon class="color_Tag2-P" iconName="/venueHome/sports/svg/arrowLeft" alt="" />
+					<SvgIcon class="color_T3" iconName="/venueHome/sports/svg/arrowLeft" alt="" />
 				</div>
 				<div class="teamName fs_26 color_TB-P fw_400">
 					<span class="w_123">{{ eventDetail?.teamInfo?.homeName }}</span
@@ -168,8 +168,8 @@
 							<li v-for="(i, index) in markets" :key="i.betTypeName" @click="changeTab(i.betTypeName)" :class="{ selected: activeTab == i.betTypeName }">{{ i.betTypeName }}</li>
 						</ul>
 					</div>
-					<SvgIcon class="sport_fold color_Tag2-P" v-if="!isFold" iconName="/venueHome/sports/svg/sport_fold" @click="onExpandAngCollapse(true)" />
-					<SvgIcon class="sport_fold color_Tag2-P" v-else iconName="/venueHome/sports/svg/sport_fold2" @click="onExpandAngCollapse(false)" />
+					<SvgIcon class="sport_fold color_T3" v-if="!isFold" iconName="/venueHome/sports/svg/sport_fold" @click="onExpandAngCollapse(true)" />
+					<SvgIcon class="sport_fold color_T3" v-else iconName="/venueHome/sports/svg/sport_fold2" @click="onExpandAngCollapse(false)" />
 				</div>
 				<div class="selections_list" v-if="markets.length">
 					<Collapse v-model="activeSelection" :accordion="false">
@@ -214,7 +214,7 @@
 						</CollapseItem>
 					</Collapse>
 				</div>
-				<div v-if="!markets.length" class="noData color_T3-P">
+				<div v-if="!markets.length" class="noData color_T3">
 					<div class="fs_24">盘口已关闭</div>
 					<div class="fs_24">当前无法进行投注</div>
 				</div>

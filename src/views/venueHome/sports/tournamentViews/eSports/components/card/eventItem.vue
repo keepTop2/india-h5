@@ -407,7 +407,7 @@ const showDetail = (eventId, leagueId) => {};
 					height: 4px;
 					border-radius: 2px;
 					@include themeify {
-						background-color: themed("Tag2-P");
+						background-color: themed("T3");
 					}
 				}
 				.swiper-pagination-bullet-active {

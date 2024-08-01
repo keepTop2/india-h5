@@ -159,7 +159,7 @@ const clearCart = () => {
 						border-radius: 5px;
 
 						@include themeify {
-							background-color: themed("Tag2-P");
+							background-color: themed("T3");
 							color: themed("TB");
 						}
 					}
