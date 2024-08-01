@@ -73,7 +73,7 @@
 			</div>
 
 			<div class="group">
-				<div class="cell" v-for="(item, index) in menuData.group1" :key="index">
+				<div class="cell van-haptics-feedback" v-for="(item, index) in menuData.group1" :key="index" @click="onClickCell(item)">
 					<SvgIcon class="icon" :iconName="item.icon" />
 					<div class="label">{{ item.name }}</div>
 					<div class="value">{{ item.value }}</div>
@@ -82,7 +82,7 @@
 			</div>
 
 			<div class="group">
-				<div class="cell" v-for="(item, index) in menuData.group2" :key="index">
+				<div class="cell van-haptics-feedback" v-for="(item, index) in menuData.group2" :key="index" @click="onClickCell(item)">
 					<SvgIcon class="icon" :iconName="item.icon" />
 					<div class="label">{{ item.name }}</div>
 					<div class="value">{{ item.value }}</div>
@@ -121,6 +121,7 @@
 import NavBar from "/@/views/my/components/navBar.vue";
 import NoLogin from "/@/views/my/components/noLogin.vue";
 import InviteFriends from "/@/views/my/components/inviteFriends.vue";
+import pubsub from "/@/pubSub/pubSub";
 
 import avatar from "/@/assets/zh-CN/default/my/avatar.png";
 import vip_big from "/@/assets/zh-CN/default/vip/vip_big.png";
@@ -168,7 +169,7 @@ const menuData = {
 			name: "邀请好友",
 			icon: "/my/yqhy",
 			value: "",
-			path: "",
+			path: "/inviteFriends",
 		},
 		{
 			name: "代理联盟",
@@ -206,6 +207,12 @@ const menuData = {
 };
 
 const loginOutShow = ref(false);
+
+const onClickCell = (item) => {
+	if (item.path == "/inviteFriends") {
+		pubsub.publish("onOpenInviteFriend");
+	}
+};
 
 const loginOut = () => {
 	loginOutShow.value = true;
