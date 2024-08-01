@@ -1,8 +1,8 @@
 <template>
 	<div class="game-card">
-		<div class="new-badge" v-if="isNew">
+		<!-- <div class="new-badge" v-if="isNew">
 			<img src="./gameImg.png" alt="New" />
-		</div>
+		</div> -->
 		<img :src="gameImg" class="game-image" alt="Game" />
 		<div class="favorite-icon">
 			<SvgIcon iconName="home/event_collect" />

@@ -22,6 +22,42 @@ const LayoutRouter = {
 			},
 		},
 		{
+			//最近投注
+			path: "/betLatest",
+			name: "BetLatest",
+			component: () => import("/@/views/BettingPage/BetLatest/BetLatest.vue"),
+			meta: {
+				title: "最近投注",
+			},
+		},
+		{
+			//规则
+			path: "/betRule",
+			name: "BetRule",
+			component: () => import("/@/views/BettingPage/BetRule/BetRule.vue"),
+			meta: {
+				title: "规则",
+			},
+		},
+		{
+			//大额投注
+			path: "/betBig",
+			name: "BetBig",
+			component: () => import("/@/views/BettingPage/BetBig/BetBig.vue"),
+			meta: {
+				title: "大额投注",
+			},
+		},
+		{
+			//投注比赛
+			path: "/bettingMatch",
+			name: "BettingMatch",
+			component: () => import("/@/views/BettingPage/BettingMatch/BettingMatch.vue"),
+			meta: {
+				title: "投注比赛",
+			},
+		},
+		{
 			path: "/records",
 			name: "records",
 			component: () => import("/@/views/records/records.vue"),
