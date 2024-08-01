@@ -1,4 +1,5 @@
 import Layout from "/@/layout/home/index.vue";
+import { WalletRouter } from "./wallet";
 
 const LayoutRouter = {
 	path: "/",
@@ -37,14 +38,8 @@ const LayoutRouter = {
 				title: "首页",
 			},
 		},
-		{
-			path: "/wallet",
-			name: "wallet",
-			component: () => import("/@/views/wallet/wallet.vue"),
-			meta: {
-				title: "钱包",
-			},
-		},
+		//  钱包路由
+		WalletRouter,
 		{
 			path: "/my",
 			name: "my",

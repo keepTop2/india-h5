@@ -1,0 +1,160 @@
+// 卡片
+.card {
+	position: relative;
+	padding: 24px;
+	border-radius: 16px;
+	@include themeify {
+		background: themed("BG3");
+	}
+
+	.card-tag {
+		position: absolute;
+		left: 0;
+	}
+
+	.herder {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+
+		.title {
+			@include themeify {
+				color: themed("TB");
+			}
+			font-size: 30px;
+			font-weight: 500;
+		}
+
+		.limit {
+			@include themeify {
+				color: themed("T1");
+			}
+			font-size: 24px;
+			font-weight: 400;
+			line-height: 34px;
+		}
+	}
+}
+
+.cell {
+	margin-top: 16px;
+	h5 {
+		@include themeify {
+			color: themed("TB");
+		}
+		font-family: "PingFang SC";
+		font-size: 30px;
+		font-weight: 400;
+		line-height: 40px;
+	}
+	.cell-field {
+		height: 82px;
+		display: flex;
+		align-items: center;
+		padding: 10px 24px;
+	}
+}
+
+// 输入框
+.van-field {
+	height: 94px;
+	display: flex;
+	align-items: center;
+	padding: 28px 24px;
+	border-radius: 12px;
+	// border: 1px solid;
+	@include themeify {
+		// border-color: themed("Theme");
+		background: themed("BG1");
+	}
+}
+.van-cell::after {
+	border-bottom: 0px;
+}
+
+.field {
+	:deep(.van-field__control) {
+		@include themeify {
+			color: themed("TB");
+		}
+		font-family: "DIN Alternate";
+		font-size: 28px;
+		font-weight: 700;
+		line-height: 38px;
+	}
+
+	:deep(.van-field__control::-webkit-input-placeholder) {
+		@include themeify {
+			color: themed("T3");
+		}
+		font-family: "PingFang SC";
+		font-size: 28px;
+		font-weight: 400;
+	}
+
+	:deep(.currency-symbol) {
+		width: unset;
+		@include themeify {
+			color: themed("TB");
+		}
+		font-family: "DIN Alternate";
+		font-size: 28px;
+		font-weight: 700;
+		line-height: 38px;
+	}
+
+	.extra-tip {
+		margin-left: 10px;
+		@include themeify {
+			color: themed("Theme");
+		}
+		font-family: "PingFang SC";
+		font-size: 24px;
+		font-weight: 400;
+		line-height: 38px;
+	}
+}
+// 提示
+.tips {
+	@include themeify {
+		color: themed("Hint-P");
+	}
+	font-size: 24px;
+	font-weight: 400;
+	line-height: 34px;
+}
+// 快捷金额
+.amount-list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 24px 27px;
+
+	.amount-item {
+		width: 200px;
+		height: 74px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 8px;
+		border: 1px solid;
+		@include themeify {
+			border-color: themed("Theme");
+			color: themed("Theme");
+		}
+		font-family: "DIN Alternate";
+		font-size: 28px;
+		font-weight: 700;
+		line-height: 38px;
+		box-sizing: border-box;
+	}
+}
+
+.arrow {
+	width: 24px;
+	height: 24px;
+}
+
+// 按钮底部
+.footer {
+	padding: 40px 20px 40px;
+}
