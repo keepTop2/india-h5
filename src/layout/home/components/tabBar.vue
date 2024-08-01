@@ -1,18 +1,37 @@
 <template>
 	<div class="tabList">
+		<!-- 边框区域 -->
 		<div class="border">
-			<img :src="tab_border" alt="" />
+			<img :src="tab_border" />
 		</div>
-		<div v-for="(item, index) in tabData" :key="index" :class="{ item: item.path != '/home', 'home-item': item.path == '/home' }" @click="toPath(item)">
-			<div v-if="item.path != '/home'" class="content" :class="{ active: item.path == route.path }">
-				<div v-if="item.path == route.path" class="line"><img :src="line" alt="" /></div>
-				<div class="icon"><img :src="item.path == route.path ? item.active_icon : item.icon" alt="" /></div>
-				<span class="label" :class="{ label_active: item.path == route.path }">{{ item.label }}</span>
+		<!-- 遍历 tabData 渲染每个 tab 项 -->
+		<div v-for="(item, index) in tabData" :key="index" :class="{ item: item.path !== '/home', 'home-item': item.path === '/home' }" @click="toPath(item)">
+			<!-- 非首页的 tab 项 -->
+			<div v-if="item.path !== '/home'" class="content" :class="getHighlightBG(item)">
+				<!-- 显示高亮的分隔线 -->
+				<div v-if="getHighlightLine(item)" class="line">
+					<img :src="line" />
+				</div>
+				<!-- 显示图标 -->
+				<div class="icon">
+					<img :src="getHighlightStatus(item)" />
+				</div>
+				<!-- 显示标签 -->
+				<span class="label" :class="getHighlightClass(item)">
+					{{ item.label }}
+				</span>
 			</div>
 
-			<div v-else class="content" :class="{ active: item.path == route.path }">
-				<div class="home-icon"><img :src="item.path != route.path ? item.icon : item.active_icon" alt="" /></div>
-				<span class="label" :class="{ label_active: item.path == route.path }">{{ item.label }}</span>
+			<!-- 首页的 tab 项 -->
+			<div v-else class="content" :class="{ active: item.path === route.path }">
+				<!-- 显示首页的图标 -->
+				<div class="home-icon">
+					<img :src="item.path !== route.path ? item.icon : item.active_icon" />
+				</div>
+				<!-- 显示首页的标签 -->
+				<span class="label" :class="{ label_active: item.path === route.path }">
+					{{ item.label }}
+				</span>
 			</div>
 		</div>
 	</div>
@@ -37,8 +56,43 @@ import { i18n } from "/@/i18n/index";
 const route = useRoute();
 const router = useRouter();
 const $: any = i18n.global;
+const walletPaths = ["/wallet/recharge", "/wallet/withdraw", "/wallet/records"];
 
-console.log("route", route);
+// 检查 tab 项是否活跃
+const isActivePath = (itemPath) => {
+	// 钱包相关路径
+	// 判断当前路径是否为 itemPath 或者 itemPath 是否为钱包相关路径且当前路径在钱包路径中
+	return itemPath === route.path || (itemPath === "/wallet" && walletPaths.includes(route.path));
+};
+
+// 获取 tab 项的图标
+const getHighlightStatus = (item) => {
+	if (item.path === "/wallet" && walletPaths.includes(route.path)) {
+		return item.active_icon;
+	}
+	return item.path === route.path ? item.active_icon : item.icon;
+};
+
+// 获取 tab 项的背景色
+const getHighlightBG = (item) => {
+	// 如果 tab 项活跃，则返回 "active" 类，否则返回空字符串
+	if (isActivePath(item.path)) return "active";
+};
+
+// 获取 tab 项的标签样式
+const getHighlightClass = (item) => {
+	// 如果 tab 项活跃，则返回 "label_active" 类，否则返回空字符串
+	if (isActivePath(item.path)) return "label_active";
+};
+
+// 判断是否显示高亮分隔线
+const getHighlightLine = (item) => {
+	// 如果 item.path 是 "/wallet" 且当前路径在钱包路径中，则返回 true，否则返回 false
+	if (item.path === "/wallet" && walletPaths.includes(route.path)) {
+		return true;
+	}
+	if (item.path === route.path) return true;
+};
 
 const toPath = (item) => {
 	router.push(item.path);
