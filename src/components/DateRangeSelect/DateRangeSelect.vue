@@ -103,8 +103,8 @@ const props = withDefaults(
 const state = reactive({
 	acitveName: "",
 	//是否点击确认
-	isConfirm: false,
-	oldctiveValue: "",
+	isOneConfirm: false,
+	oneOldctiveValue: "",
 	//快捷选项
 	columnsMap: [] as CustomFieldName[],
 	//快捷选项选中的数组 组件自带
@@ -237,7 +237,7 @@ watch(
 
 // 点击完成按钮时触发
 const onConfirm = ({ selectedValues, selectedOptions, selectedIndexes }) => {
-	state.isConfirm = true;
+	state.isOneConfirm = true;
 	state.acitveName = selectedOptions[0].text;
 	console.log(startTime.value, endTime.value, "看下点击确认的时间戳");
 	state.oneShow = false;
@@ -262,18 +262,18 @@ const onClickOption = ({ currentOption, selectedValues, selectedOptions, selecte
 
 //打开弹出层且动画结束后触发
 const onOpened = () => {
-	state.oldctiveValue = activeValue.value as string;
+	state.oneOldctiveValue = activeValue.value as string;
 
-	state.isConfirm = false;
+	state.isOneConfirm = false;
 	emit("opened");
 };
 
 // 关闭弹出层且动画结束后触发;
 const onClosed = () => {
-	if (!state.isConfirm) {
+	if (!state.isOneConfirm) {
 		//还原数据
-		activeValue.value = state.oldctiveValue;
-		state.isConfirm = false;
+		activeValue.value = state.oneOldctiveValue;
+		state.isOneConfirm = false;
 	}
 	emit("closed");
 };
