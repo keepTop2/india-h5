@@ -22,7 +22,7 @@
 				<SvgIcon class="icon" iconName="/my/lang" />
 				<div class="label">{{ $t('my["语言"]') }}</div>
 				<div class="value">中文</div>
-				<SvgIcon class="arrow" iconName="/my/arrow2" />
+				<SvgIcon class="arrow" iconName="/common/arrow" />
 			</div>
 			<div class="cell">
 				<SvgIcon class="icon" iconName="/my/theme" />

@@ -4,6 +4,7 @@ import LayoutRouter from "/@/router/modules/layout";
 import componentsDemo from "/@/router/modules/componentsDemo";
 import { LoginRegisterRouter, RegisterSubPage } from "/@/router/modules/loginRegister";
 import { VenueHome } from "/@/router/modules/venueHome";
+import { WalletSubRouter } from "/@/router/modules/wallet";
 
 /**
  * @description idx大小判断路由左切动画还是右切动画
@@ -25,6 +26,8 @@ const routes = [
 	LoginRegisterRouter,
 	// 注册子页面
 	RegisterSubPage,
+	// 钱包子页面
+	WalletSubRouter,
 	// 公共组件使用demo
 	componentsDemo,
 ];

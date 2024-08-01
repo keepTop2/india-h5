@@ -45,7 +45,7 @@
 				<div class="medal_header">
 					<VantLazyImg class="line" :src="line" />
 					<div class="label">勋章</div>
-					<SvgIcon class="arrow2" iconName="/my/arrow2" />
+					<SvgIcon class="arrow" iconName="/common/arrow" />
 				</div>
 				<div class="medal_content">
 					<template v-for="item in 6">
@@ -77,7 +77,7 @@
 					<SvgIcon class="icon" :iconName="item.icon" />
 					<div class="label">{{ item.name }}</div>
 					<div class="value">{{ item.value }}</div>
-					<SvgIcon class="arrow" iconName="/my/arrow2" />
+					<SvgIcon class="arrow" iconName="/common/arrow" />
 				</div>
 			</div>
 
@@ -86,7 +86,7 @@
 					<SvgIcon class="icon" :iconName="item.icon" />
 					<div class="label">{{ item.name }}</div>
 					<div class="value">{{ item.value }}</div>
-					<SvgIcon class="arrow" iconName="/my/arrow2" />
+					<SvgIcon class="arrow" iconName="/common/arrow" />
 				</div>
 				<div class="cell">
 					<SvgIcon class="icon" iconName="/my/theme" />
@@ -423,7 +423,7 @@ const loginOut = () => {
 				font-weight: 400;
 			}
 
-			.arrow2 {
+			.arrow {
 				width: 24px;
 				height: 24px;
 			}
