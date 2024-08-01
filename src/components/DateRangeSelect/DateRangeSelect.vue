@@ -7,7 +7,7 @@
 			</slot>
 		</div>
 
-		<van-popup v-model:show="state.oneShow" position="bottom" @closed="onClosed" @opened="onOpened" :close-on-popstate="true" :close-on-click-overlay="closeOnClickOverlay">
+		<van-popup v-model:show="state.oneShow" position="bottom" @closed="onOneClosed" @opened="onOneOpened" :close-on-popstate="true" :close-on-click-overlay="closeOnClickOverlay">
 			<van-picker
 				class="van_picker_custom"
 				v-model="state.activeList"
@@ -22,10 +22,10 @@
 				:option-height="optionHeight"
 				:visible-option-num="visibleOptionNum"
 				v-bind="$attrs"
-				@confirm="onConfirm"
-				@cancel="onCancel"
-				@change="onChange"
-				@click-option="onClickOption"
+				@confirm="onOneConfirm"
+				@cancel="onOneCancel"
+				@change="onOneChange"
+				@click-option="onClickOneOption"
 			>
 				<template #option="item">
 					<slot name="option" :item="item">
@@ -35,6 +35,10 @@
 					</slot>
 				</template>
 			</van-picker>
+		</van-popup>
+
+		<van-popup v-model:show="state.twoShow" position="bottom">
+			<div>23213213</div>
 		</van-popup>
 
 		<input type="text" v-model="activeValue" class="input_none" />
@@ -52,7 +56,7 @@ import { ModelRef } from "vue";
 import { timeShortcutOptionsMap } from "/@/maps/componentsMaps";
 import { TimeShortcutOptionsEnum } from "/@/enum/componentsEnum";
 const { t } = useI18n();
-const emit = defineEmits(["update:select", "update:startTimeU", "update:endTimeU", "confirm", "cancel", "change", "onClickOption", "opened", "closed"]);
+const emit = defineEmits(["update:select", "update:startTimeU", "update:endTimeU", "onOneConfirm", "onOneCancel", "onOneChange", "onClickOneOption", "onOneOpened", "onOneClosed"]);
 
 interface CustomFieldName {
 	text: string;
@@ -101,6 +105,8 @@ const props = withDefaults(
 );
 
 const state = reactive({
+	//快捷选项弹出层是否展示
+	oneShow: false,
 	acitveName: "",
 	//是否点击确认
 	isOneConfirm: false,
@@ -109,8 +115,8 @@ const state = reactive({
 	columnsMap: [] as CustomFieldName[],
 	//快捷选项选中的数组 组件自带
 	activeList: [] as Array<string>,
-	//快捷选项弹出层
-	oneShow: false,
+	//自定义时间弹出层是否展示
+	twoShow: false,
 });
 
 /**
@@ -142,7 +148,7 @@ onMounted(() => {
 });
 
 /**
- * @description 开始时间双向绑定语法糖
+ * @description 开始时间 双向绑定语法糖
  */
 const startTime: ModelRef<number, number> = defineModel("startTimeU", {
 	get(value) {
@@ -156,7 +162,9 @@ const startTime: ModelRef<number, number> = defineModel("startTimeU", {
 	},
 	default: 0,
 });
-
+/**
+ * @description 结束时间 双向绑定语法糖
+ */
 const endTime: ModelRef<number, number> = defineModel("endTimeU", {
 	get(value) {
 		if (activeValue.value != 999) {
@@ -170,7 +178,7 @@ const endTime: ModelRef<number, number> = defineModel("endTimeU", {
 	default: 0,
 });
 
-//数据映射
+//快捷选项数据映射
 const dataMap = () => {
 	if (props.columns) {
 		state.columnsMap = props.columns?.map((item) => {
@@ -235,47 +243,50 @@ watch(
 	}
 );
 
-// 点击完成按钮时触发
-const onConfirm = ({ selectedValues, selectedOptions, selectedIndexes }) => {
+// 点击快捷选项完成按钮时触发
+const onOneConfirm = ({ selectedValues, selectedOptions, selectedIndexes }) => {
 	state.isOneConfirm = true;
 	state.acitveName = selectedOptions[0].text;
 	console.log(startTime.value, endTime.value, "看下点击确认的时间戳");
 	state.oneShow = false;
-	emit("confirm", { selectedValues, selectedOptions, selectedIndexes });
+	emit("onOneConfirm", { selectedValues, selectedOptions, selectedIndexes });
 };
 
-// 点击取消按钮时触发
-const onCancel = ({ selectedValues, selectedOptions, selectedIndexes }) => {
+// 点击快捷选项取消按钮时触发
+const onOneCancel = ({ selectedValues, selectedOptions, selectedIndexes }) => {
 	state.oneShow = false;
-	emit("cancel", { selectedValues, selectedOptions, selectedIndexes });
+	emit("onOneCancel", { selectedValues, selectedOptions, selectedIndexes });
 };
 
-//选中的选项改变时触发
-const onChange = ({ selectedValues, selectedOptions, selectedIndexes, columnIndex }) => {
-	emit("change", { selectedValues, selectedOptions, selectedIndexes, columnIndex });
+//选中快捷选项的选项改变时触发
+const onOneChange = ({ selectedValues, selectedOptions, selectedIndexes, columnIndex }) => {
+	emit("onOneChange", { selectedValues, selectedOptions, selectedIndexes, columnIndex });
 };
 
-//点击选项时触发
-const onClickOption = ({ currentOption, selectedValues, selectedOptions, selectedIndexes, columnIndex }) => {
-	emit("onClickOption", { currentOption, selectedValues, selectedOptions, selectedIndexes, columnIndex });
+//点击快捷选项选项时触发
+const onClickOneOption = ({ currentOption, selectedValues, selectedOptions, selectedIndexes, columnIndex }) => {
+	emit("onClickOneOption", { currentOption, selectedValues, selectedOptions, selectedIndexes, columnIndex });
 };
 
-//打开弹出层且动画结束后触发
-const onOpened = () => {
+//打开快捷选项弹出层且动画结束后触发
+const onOneOpened = () => {
 	state.oneOldctiveValue = activeValue.value as string;
 
 	state.isOneConfirm = false;
-	emit("opened");
+	emit("onOneOpened");
 };
 
-// 关闭弹出层且动画结束后触发;
-const onClosed = () => {
+// 关闭快捷选项弹出层且动画结束后触发;
+const onOneClosed = () => {
 	if (!state.isOneConfirm) {
 		//还原数据
 		activeValue.value = state.oneOldctiveValue;
 		state.isOneConfirm = false;
 	}
-	emit("closed");
+	emit("onOneClosed");
+	if (activeValue.value == 999) {
+		state.twoShow = true;
+	}
 };
 
 /**
