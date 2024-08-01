@@ -25,7 +25,7 @@ export const WalletRouter = {
 		},
 		{
 			path: "/wallet/records",
-			name: "records",
+			name: "walletRecord",
 			component: () => import("/@/views/wallet/records/records.vue"),
 			meta: {
 				title: "记录",
