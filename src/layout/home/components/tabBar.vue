@@ -6,7 +6,7 @@
 		<div v-for="(item, index) in tabData" :key="index" :class="{ item: item.path != '/home', 'home-item': item.path == '/home' }" @click="toPath(item)">
 			<div v-if="item.path != '/home'" class="content" :class="{ active: item.path == route.path }">
 				<div v-if="item.path == route.path" class="line"><img :src="line" alt="" /></div>
-				<div class="icon"><img :src="item.path != route.path ? item.icon : item.active_icon" alt="" /></div>
+				<div class="icon"><img :src="item.path == route.path ? item.active_icon : item.icon" alt="" /></div>
 				<span class="label" :class="{ label_active: item.path == route.path }">{{ item.label }}</span>
 			</div>
 

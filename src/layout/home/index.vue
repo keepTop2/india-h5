@@ -1,5 +1,5 @@
 <template>
-	<template v-if="!blacklist.includes(route.path)">
+	<template v-if="blacklist.includes(route.path)">
 		<NavBar />
 	</template>
 	<MenuPopup />
@@ -16,7 +16,7 @@ import MenuPopup from "/@/layout/home/components/menuPopup.vue";
 import TabBar from "/@/layout/home/components/tabBar.vue";
 import BackToTop from "/@/layout/home/components/BackToTop.vue";
 import { useRoute } from "vue-router";
-const blacklist = ["/my", "/discount", "/discount/activityParticulars", "/wallet"];
+const blacklist = ["/home"];
 
 const route = useRoute();
 </script>
