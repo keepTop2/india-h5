@@ -29,7 +29,7 @@
 					<SvgIcon iconName="home/event_777" alt="" />
 					{{ $t('home["热门电子"]') }}
 				</span>
-				<span class="more fw_400 fs_28 color_T1">更多</span>
+				<span class="more fw_400 fs_28 color_T1" @click="router.push('/game/arena/1')">更多</span>
 			</h3>
 			<GameLayout class="m24" />
 
@@ -38,7 +38,7 @@
 					<SvgIcon iconName="home/event_people" alt="" />
 					{{ $t('home["热门真人"]') }}
 				</span>
-				<span class="more fw_400 fs_28 color_T1">更多</span>
+				<span class="more fw_400 fs_28 color_T1" @click="router.push('/game/arena/2')">更多</span>
 			</h3>
 			<GameLayout class="m24" />
 

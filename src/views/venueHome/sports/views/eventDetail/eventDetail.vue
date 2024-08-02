@@ -168,8 +168,8 @@
 							<li v-for="(i, index) in markets" :key="i.betTypeName" @click="changeTab(i.betTypeName)" :class="{ selected: activeTab == i.betTypeName }">{{ i.betTypeName }}</li>
 						</ul>
 					</div>
-					<SvgIcon class="sport_fold color_T3" v-if="!isFold" iconName="/venueHome/sports/svg/sport_fold" @click="onExpandAngCollapse(true)" />
-					<SvgIcon class="sport_fold color_T3" v-else iconName="/venueHome/sports/svg/sport_fold2" @click="onExpandAngCollapse(false)" />
+					<SvgIcon class="sport_fold color_T3" v-show="!isFold" iconName="/venueHome/sports/svg/sport_fold" @click="onExpandAngCollapse(true)" />
+					<SvgIcon class="sport_fold color_T3" v-show="isFold" iconName="/venueHome/sports/svg/sport_fold2" @click="onExpandAngCollapse(false)" />
 				</div>
 				<div class="selections_list" v-if="markets.length">
 					<Collapse v-model="activeSelection" :accordion="false">
@@ -269,7 +269,7 @@ const sportsInfoStore = useSportsInfoStore();
 const sportsBetEvent = useSportsBetEventStore();
 const isFold = ref(false);
 const marketsSelect = computed(() => sportsBetEvent.getEventInfo);
-const { initSportPubsub, unSubSport, clearState, sportsLogin, clearSportsOddsChange } = useSportPubSubEvents();
+const { startPolling, stopPolling, initSportPubsub, unSubSport, clearState, sportsLogin, clearSportsOddsChange } = useSportPubSubEvents();
 
 const iframeLoaded = ref(false);
 const scrollRef = ref();
@@ -574,7 +574,7 @@ onBeforeMount(async () => {
 	if (route.query.data) {
 		routeData.value = JSON.parse(route.query.data as string);
 		// //获取关注列表
-		getAttention();
+		// getAttention();
 		// //初始化体育
 		initSport();
 	}
@@ -588,6 +588,10 @@ const initSport = () => {
 		if (res) {
 			initSportPubsub();
 			openEventDetailPush();
+			if (UserStore.token) {
+				// 开始轮询登录接口
+				startPolling();
+			}
 		}
 	});
 };
@@ -595,6 +599,7 @@ const initSport = () => {
 // 注册一个钩子，在组件实例被卸载之前调用。
 onBeforeUnmount(() => {
 	closeSportsSSE();
+	stopPolling();
 });
 
 const closeSportsSSE = () => {
