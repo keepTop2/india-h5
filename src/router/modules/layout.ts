@@ -40,15 +40,7 @@ const LayoutRouter = {
 				title: "规则",
 			},
 		},
-		{
-			//大额投注
-			path: "/betBig",
-			name: "BetBig",
-			component: () => import("/@/views/BettingPage/BetBig/BetBig.vue"),
-			meta: {
-				title: "大额投注",
-			},
-		},
+
 		{
 			//投注比赛
 			path: "/bettingMatch",

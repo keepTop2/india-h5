@@ -78,12 +78,12 @@ export const VenueHome = {
 				},
 			],
 		},
-		{
-			path: "/lottery",
-			name: "lottery",
-			component: () => import("/@/views/venueHome/lottery/lottery.vue"),
-			meta: { title: "彩票" },
-		},
+		// {
+		// 	path: "/lottery",
+		// 	name: "lottery",
+		// 	component: () => import("/@/views/venueHome/lottery/lottery.vue"),
+		// 	meta: { title: "彩票" },
+		// },
 		{
 			path: "/game/arena",
 			name: "GameArena",

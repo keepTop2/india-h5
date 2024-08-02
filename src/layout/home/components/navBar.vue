@@ -41,7 +41,7 @@ const onCollapse = () => {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	background: rgba(49, 49, 49, 0.5);
+	// background: rgba(49, 49, 49, 0.5);
 	z-index: 99;
 	.collapseIcon {
 		width: 64px;
