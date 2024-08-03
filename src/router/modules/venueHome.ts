@@ -78,6 +78,19 @@ export const VenueHome = {
 				},
 			],
 		},
+		{
+			path: "/sports/league/select/:sportType",
+			name: "sportsLeagueSelect",
+			meta: { title: "联赛筛选" },
+			component: () => import("/@/views/venueHome/sports/views/leagueSelect/leagueSelect.vue"),
+		},
+		// 联赛详情
+		{
+			path: "/sports/event/detail/:eventId/:leagueId/:sportType",
+			name: "sportsEventDetail",
+			meta: { title: "联赛详情" },
+			component: () => import("/@/views/venueHome/sports/views/eventDetail/eventDetail.vue"),
+		},
 		// {
 		// 	path: "/lottery",
 		// 	name: "lottery",

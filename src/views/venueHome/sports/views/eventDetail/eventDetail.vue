@@ -5,7 +5,7 @@
 				<!-- 导航栏 -->
 				<div class="navBar" :class="{ showDropDown }">
 					<div class="goback" @click="onClickLeft">
-						<SvgIcon class="color_T3" iconName="/venueHome/sports/svg/arrowLeft" alt="" />
+						<SvgIcon class="color_T3" iconName="/common/arrowLeft" alt="" />
 					</div>
 					<div class="teamList" v-show="eventsList">
 						<DropDownEvent @changeEvent="handleChangeEvent" :eventsList="eventsList" @handleClose="handleClose" @handleOpen="handleOpen" />
@@ -141,7 +141,7 @@
 			<!-- 滑动到指定位置队伍信息及比分固定在顶部 -->
 			<div class="smallHeader color_TB-P" :class="{ fixed: isFixed }">
 				<div class="goback" @click="onClickLeft">
-					<SvgIcon class="color_T3" iconName="/venueHome/sports/svg/arrowLeft" alt="" />
+					<SvgIcon class="color_T3" iconName="/common/arrowLeft" alt="" />
 				</div>
 				<div class="teamName fs_26 color_TB-P fw_400">
 					<span class="w_123">{{ eventDetail?.teamInfo?.homeName }}</span
@@ -571,13 +571,13 @@ const onClickLeft = () => {};
 
 // 注册一个钩子，在组件被挂载之前被调用。
 onBeforeMount(async () => {
-	if (route.query.data) {
-		routeData.value = JSON.parse(route.query.data as string);
+	// if (route.query.data) {
+	routeData.value = route.params;
 		// //获取关注列表
 		// getAttention();
 		// //初始化体育
 		initSport();
-	}
+	// }
 });
 
 const initSport = () => {
