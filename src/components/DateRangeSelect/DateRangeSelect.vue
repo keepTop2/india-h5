@@ -3,7 +3,15 @@
 	<div>
 		<div @click="onContainer">
 			<slot name="select_conatiner">
-				<div class="ml_4 mr_4 vant_picker_select_left_text">{{ state.acitveName }}</div>
+				<div :class="{ widthSize1: widthSize == 1, widthSize2: widthSize == 2, widthSize3: widthSize == 3 }">
+					<div v-if="activeValue != 999">
+						{{ state.acitveName }}
+					</div>
+					<div v-else>
+						<div>{{ state.startTimeSlotText }}</div>
+						<div>{{ state.endTimeSlotText }}</div>
+					</div>
+				</div>
 			</slot>
 		</div>
 
@@ -76,7 +84,7 @@ import utc from "dayjs/plugin/utc";
 dayjs.extend(utc);
 dayjs.extend(tz);
 const { t } = useI18n();
-const emit = defineEmits(["update:select", "update:startTimeU", "update:endTimeU", "onOneConfirm", "onOneCancel", "onOneChange", "onClickOneOption", "onOneOpened", "onOneClosed"]);
+const emit = defineEmits(["update:select", "update:startTimeU", "update:endTimeU", "onConfirmDate"]);
 
 interface CustomFieldName {
 	text: string;
@@ -110,7 +118,10 @@ const props = withDefaults(
 		visibleOptionNum?: number | string;
 		//是否点击遮罩时关闭
 		closeOnClickOverlay?: boolean;
-		//需要映射到组件text的后端字段key 默认为name
+		/**
+		 * @description 布局
+		 */
+		widthSize?: number;
 	}>(),
 	{
 		// columns: [{}, {}, {}] as Array<any>,
@@ -124,6 +135,7 @@ const props = withDefaults(
 		visibleOptionNum: 6,
 		closeOnClickOverlay: true,
 		columnsType: () => ["year", "month", "day"],
+		widthSize: 3,
 	}
 );
 
@@ -150,6 +162,8 @@ const state = reactive({
 	activeType: 1,
 	startTimeText: "",
 	endTimeText: "",
+	startTimeSlotText: "",
+	endTimeSlotText: "",
 });
 
 /**
@@ -294,11 +308,9 @@ watch(
 // 点击快捷选项完成按钮时触发
 const onOneConfirm = ({ selectedValues, selectedOptions, selectedIndexes }) => {
 	if (activeValue.value != 999) {
-		state.isOneConfirm = true;
 		state.acitveName = selectedOptions[0].text;
-
 		initStartTimeAndEndTimer();
-		emit("onOneConfirm", { selectedValues, selectedOptions, selectedIndexes });
+		emit("onConfirmDate");
 	} else {
 		state.minDate = dayjs().tz("America/New_York").subtract(90, "day").toDate();
 		state.maxDate = dayjs().tz("America/New_York").toDate();
@@ -306,33 +318,32 @@ const onOneConfirm = ({ selectedValues, selectedOptions, selectedIndexes }) => {
 		state.dateTimeList = timestampToList(startTime.value);
 		state.startTimeText = state.dateTimeList.join("/");
 		state.endTimeText = dayjs(endTime.value).tz("America/New_York").format("YYYY/MM/DD");
+		//外部插槽展示日期
+		state.startTimeSlotText = state.dateTimeList.join("/");
+		state.endTimeSlotText = dayjs(endTime.value).tz("America/New_York").format("YYYY/MM/DD");
+		state.activeType = 1;
 		state.twoShow = true;
 	}
+	state.isOneConfirm = true;
 	state.oneShow = false;
 };
 
 // 点击快捷选项取消按钮时触发
 const onOneCancel = ({ selectedValues, selectedOptions, selectedIndexes }) => {
 	state.oneShow = false;
-	emit("onOneCancel", { selectedValues, selectedOptions, selectedIndexes });
 };
 
 //选中快捷选项的选项改变时触发
-const onOneChange = ({ selectedValues, selectedOptions, selectedIndexes, columnIndex }) => {
-	emit("onOneChange", { selectedValues, selectedOptions, selectedIndexes, columnIndex });
-};
+const onOneChange = ({ selectedValues, selectedOptions, selectedIndexes, columnIndex }) => {};
 
 //点击快捷选项选项时触发
-const onClickOneOption = ({ currentOption, selectedValues, selectedOptions, selectedIndexes, columnIndex }) => {
-	emit("onClickOneOption", { currentOption, selectedValues, selectedOptions, selectedIndexes, columnIndex });
-};
+const onClickOneOption = ({ currentOption, selectedValues, selectedOptions, selectedIndexes, columnIndex }) => {};
 
 //打开快捷选项弹出层且动画结束后触发
 const onOneOpened = () => {
 	state.oneOldctiveValue = activeValue.value as string;
 
 	state.isOneConfirm = false;
-	emit("onOneOpened");
 };
 
 // 关闭快捷选项弹出层且动画结束后触发;
@@ -342,7 +353,6 @@ const onOneClosed = () => {
 		activeValue.value = state.oneOldctiveValue;
 		state.isOneConfirm = false;
 	}
-	emit("onOneClosed");
 };
 
 //日期时间选择器点击确认
@@ -357,6 +367,10 @@ const onTwoConfirm = ({ selectedValues, selectedOptions, selectedIndexes }) => {
 		console.error("开始时间不可大于结束时间");
 		return;
 	}
+	state.startTimeSlotText = dayjs(startTime.value).tz("America/New_York").format("YYYY/MM/DD");
+	state.endTimeSlotText = dayjs(endTime.value).tz("America/New_York").format("YYYY/MM/DD");
+	emit("onConfirmDate");
+	state.twoShow = false;
 };
 
 //日期时间选择器点击取消
@@ -540,5 +554,47 @@ const listToTimestamp = (list: Array<string>, type) => {
 			background: themed("Line2");
 		}
 	}
+}
+
+.widthSize1 {
+	box-sizing: border-box;
+	width: 100%;
+	height: 60px;
+	padding: 20px;
+	border-radius: 12px;
+	border: 1px solid;
+	@include themeify {
+		border-color: themed("Line");
+		color: themed("T1");
+	}
+}
+
+.widthSize2 {
+	box-sizing: border-box;
+	width: 300px;
+	height: 60px;
+	padding: 20px;
+	border-radius: 12px;
+	border: 1px solid;
+	@include themeify {
+		border-color: themed("Line");
+		color: themed("T1");
+	}
+}
+
+.widthSize3 {
+	box-sizing: border-box;
+	width: 188px;
+	//height: 60px;
+	padding: 20px;
+	border-radius: 12px;
+	border: 1px solid;
+	font-size: 28px;
+	@include themeify {
+		border-color: themed("Line");
+		color: themed("T1");
+	}
+	@include flex_align_center;
+	@include flex_space_between;
 }
 </style>
