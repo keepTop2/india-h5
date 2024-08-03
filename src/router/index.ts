@@ -5,6 +5,8 @@ import componentsDemo from "/@/router/modules/componentsDemo";
 import { LoginRegisterRouter, RegisterSubPage } from "/@/router/modules/loginRegister";
 import { VenueHome } from "/@/router/modules/venueHome";
 import { WalletSubRouter } from "/@/router/modules/wallet";
+import { MySubRouter } from "/@/router/modules/my";
+import { VipRouter } from "/@/router/modules/vip";
 
 /**
  * @description idx大小判断路由左切动画还是右切动画
@@ -28,6 +30,10 @@ const routes = [
 	RegisterSubPage,
 	// 钱包子页面
 	WalletSubRouter,
+	// 我的页面子页面
+	MySubRouter,
+	// Vip相关路由
+	VipRouter,
 	// 公共组件使用demo
 	componentsDemo,
 ];

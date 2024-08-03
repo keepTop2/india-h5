@@ -17,26 +17,13 @@
 		<!-- vip -->
 		<div class="vip_container">
 			<VantLazyImg class="vip_big" :src="vip_big" />
+			<span class="vip_level">VIP0</span>
 			<div class="vip_info">
-				<span class="vip_level">VIP0</span>
 				<span class="vip_experience">升级所需经验: <span class="warn">200</span> / <span>500</span></span>
-				<SvgIcon class="arrow" iconName="/my/arrow" />
+				<SvgIcon class="arrow" iconName="/my/arrow" @click="toPath('/vip')" />
 			</div>
-			<div class="vip_progress">
-				<div class="vip_icon">
-					<VantLazyImg class="vip_bg" :src="vip_icon_1" />
-					<span class="vip_level">LV0</span>
-				</div>
-				<div class="progress_bar">
-					<div class="progress">
-						<VantLazyImg class="vip_jdt" :src="vip_jdt" />
-					</div>
-				</div>
-				<div class="vip_icon">
-					<VantLazyImg class="vip_bg" :src="vip_icon_1" />
-					<span class="vip_level">LV99</span>
-				</div>
-			</div>
+			<!-- VIP进度条 -->
+			<Progress class="vip_progress" />
 		</div>
 
 		<div class="my-content">
@@ -65,7 +52,7 @@
 					<div class="value">100.00</div>
 				</div>
 				<div class="balance_content">
-					<div class="balance_item" v-for="item in balanceOperationList">
+					<div class="balance_item" v-for="item in balanceOperationList" @click="toPath(item.path)">
 						<VantLazyImg class="balance_icon" :src="item.icon" />
 						<div class="label">{{ item.name }}</div>
 					</div>
@@ -120,13 +107,15 @@
 <script setup lang="ts">
 import NavBar from "/@/views/my/components/navBar.vue";
 import NoLogin from "/@/views/my/components/noLogin.vue";
+import Progress from "/@/views/vip/components/vipProgress.vue";
+
 import InviteFriends from "/@/views/my/components/inviteFriends.vue";
 import pubsub from "/@/pubSub/pubSub";
+import { useRouter } from "vue-router";
 
 import avatar from "/@/assets/zh-CN/default/my/avatar.png";
 import vip_big from "/@/assets/zh-CN/default/vip/vip_big.png";
-import vip_icon_1 from "/@/assets/zh-CN/default/vip/vip_icon_1.png";
-import vip_jdt from "/@/assets/zh-CN/default/my/vip_jdt.png";
+
 import line from "/@/assets/zh-CN/default/common/line.png";
 import medal from "/@/assets/zh-CN/default/my/medal.png";
 import balance_operation_ck from "/@/assets/zh-CN/default/my/balance_operation_ck.png";
@@ -134,16 +123,18 @@ import balance_operation_tx from "/@/assets/zh-CN/default/my/balance_operation_t
 import balance_operation_jy from "/@/assets/zh-CN/default/my/balance_operation_jy.png";
 import balance_operation_tz from "/@/assets/zh-CN/default/my/balance_operation_tz.png";
 
+const router = useRouter();
+
 const balanceOperationList = [
 	{
 		name: "存款",
 		icon: balance_operation_ck,
-		path: "",
+		path: "/wallet/recharge",
 	},
 	{
 		name: "提现",
 		icon: balance_operation_tx,
-		path: "",
+		path: "/wallet/withdraw",
 	},
 	{
 		name: "交易",
@@ -183,7 +174,7 @@ const menuData = {
 			name: "意见反馈",
 			icon: "/my/yjfk",
 			value: "",
-			path: "",
+			path: "/feedback",
 		},
 		{
 			name: "主货币",
@@ -211,7 +202,13 @@ const loginOutShow = ref(false);
 const onClickCell = (item) => {
 	if (item.path == "/inviteFriends") {
 		pubsub.publish("onOpenInviteFriend");
+	} else if (item.path == "/feedback") {
+		toPath(item.path);
 	}
+};
+
+const toPath = (path) => {
+	router.push(path);
 };
 
 const loginOut = () => {
@@ -281,23 +278,27 @@ const loginOut = () => {
 		height: 132px;
 	}
 
+	.vip_level {
+		padding: 22px 58px 0px;
+		text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+		font-family: "112-SS Yi Fang Ti";
+		font-size: 46px;
+		font-style: normal;
+		font-weight: 400;
+		line-height: 40px;
+		background: linear-gradient(90deg, #fdfdfd 6.39%, #bebebe 35.7%, #fdfdfd 66.76%, #979797 93.89%);
+		background-clip: text;
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		display: inline-block;
+	}
+
 	.vip_info {
 		display: flex;
 		align-items: center;
 		gap: 12px;
-		padding: 40px 58px 0px;
-		.vip_level {
-			text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-			font-family: "112-SS Yi Fang Ti";
-			font-size: 46px;
-			font-style: normal;
-			font-weight: 400;
-			line-height: 40px;
-			background: linear-gradient(250deg, #fdfdfd 6.39%, #bebebe 35.7%, #fdfdfd 66.76%, #979797 93.89%);
-			background-clip: text;
-			-webkit-background-clip: text;
-			-webkit-text-fill-color: transparent;
-		}
+		padding: 11px 58px 0px;
+
 		.vip_experience {
 			@include themeify {
 				color: themed("TB1");
@@ -311,65 +312,9 @@ const loginOut = () => {
 			height: 20px;
 		}
 	}
+
 	.vip_progress {
-		display: flex;
-		justify-content: space-between;
-		gap: 12px;
-		padding: 26px 58px 0px;
-		.vip_icon {
-			position: relative;
-			width: 92px;
-			height: 40px;
-			.vip_bg {
-				width: 92px;
-				height: 40px;
-			}
-			.vip_level {
-				position: absolute;
-				bottom: 2px;
-				right: 0px;
-				width: 50px;
-				height: 24px;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				@include themeify {
-					color: themed("TB");
-				}
-				font-family: "112-SS Yi Fang Ti";
-				font-size: 16px;
-				font-weight: 400;
-			}
-		}
-		.progress_bar {
-			position: relative;
-			flex: 1;
-			height: 16px;
-			margin-top: 16px;
-			background: url("../../assets/zh-CN/default/my/progressBar_bg.png") center center / 100% 100% no-repeat;
-
-			.progress {
-				position: absolute;
-				width: 0%;
-				min-width: calc(40px);
-				max-width: calc(100% - 4px);
-				height: calc(100% - 4px);
-				margin: 2px;
-				border-radius: 8px;
-				@include themeify {
-					background-color: themed("Theme");
-				}
-
-				.vip_jdt {
-					position: absolute;
-					top: 56%;
-					right: 0px;
-					transform: translate(0, -50%);
-					width: 40px;
-					height: 22px;
-				}
-			}
-		}
+		padding: 12px 58px 0px;
 	}
 }
 

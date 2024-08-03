@@ -5,8 +5,8 @@ import router from "/@/router";
 import "/@/permission";
 import store from "/@/store";
 import "./styles/app.css";
-import "/@/styles/index.scss";
-// 引入css
+import "/@/styles/index.scss"; // 引入css
+import "/@//styles/fonts.css"; // 引入字体 CSS 文件
 import "vue3-country-intl/lib/vue3-country-intl.css";
 import "vant/lib/index.css";
 import "vant/es/toast/style";
