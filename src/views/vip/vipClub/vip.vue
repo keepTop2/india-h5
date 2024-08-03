@@ -79,7 +79,7 @@
 				</div>
 			</div>
 
-			<div class="vip_rewards_btn">
+			<div class="vip_rewards_btn" @click="toPath('./vipRewards')">
 				{{ $t(`vip["详细了解"]`) }}
 			</div>
 		</div>
@@ -138,6 +138,10 @@ const levelData = [
 		icon: icon_diamond,
 	},
 ];
+
+const toPath = (path) => {
+	router.push(path);
+};
 
 const onClickLeft = () => {
 	router.go(-1);

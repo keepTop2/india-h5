@@ -59,16 +59,10 @@
 			<GameBigPic class="m24" />
 			<!-- 赞助 -->
 			<Sponsor />
-
 			<!-- 转账方式 -->
 			<Currency />
-
 			<!-- 负责任游戏 -->
-			<div class="dutyTitle color_Theme">{{ $t('home["负责任游戏"]') }}</div>
-			<div class="duty">
-				<VantLazyImg :src="duty" class="dutyImg" />
-			</div>
-			<p class="dutyMsg color_T1">{{ $t('home["负责任游戏描述"]') }}</p>
+			<Footer />
 		</div>
 	</div>
 </template>
@@ -89,7 +83,8 @@ import GameBigPic from "./GameBigPic/GameBigPic.vue";
 import Sponsor from "./Sponsor/sponsor.vue";
 // 转账方式
 import Currency from "./Currency/Currency.vue";
-import duty from "/@/views/home/static/images/duty.png";
+// 负责任游戏
+import Footer from "./Footer/Footer.vue";
 import { useRouter } from "vue-router";
 const router = useRouter();
 </script>
