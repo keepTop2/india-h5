@@ -10,19 +10,10 @@
 </template>
 
 <script setup lang="ts">
-import dayjs from "dayjs";
 import { TimeShortcutOptionsEnum } from "/@/enum/componentsEnum";
 
-onMounted(() => {
-	// 获取当前时间戳（毫秒）
-	const currentTimestamp = dayjs().valueOf();
-
-	// 获取24小时前的时间戳（毫秒）
-	const timestamp24HoursAgo = dayjs().subtract(24, "hour").valueOf();
-});
-
 const dateRangeSelectDemoState = reactive({
-	timeShortcutOptionsValue: TimeShortcutOptionsEnum.d2,
+	timeShortcutOptionsValue: TimeShortcutOptionsEnum.d1,
 	startTime: 0,
 	endTime: 0,
 });

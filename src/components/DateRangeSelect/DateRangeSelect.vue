@@ -220,6 +220,7 @@ const startTime: ModelRef<number, number> = defineModel("startTimeU", {
 		return value as number;
 	},
 	set(value) {
+		state.startTimeSlotText = dayjs(value).tz("America/New_York").format("YYYY/MM/DD");
 		return value as number;
 	},
 	default: 0,
@@ -235,6 +236,7 @@ const endTime: ModelRef<number, number> = defineModel("endTimeU", {
 		return value as number;
 	},
 	set(value) {
+		state.endTimeSlotText = dayjs(value).tz("America/New_York").format("YYYY/MM/DD");
 		return value as number;
 	},
 	default: 0,
@@ -356,21 +358,23 @@ const onOneClosed = () => {
 };
 
 //日期时间选择器点击确认
-const onTwoConfirm = ({ selectedValues, selectedOptions, selectedIndexes }) => {
+const onTwoConfirm = async ({ selectedValues, selectedOptions, selectedIndexes }) => {
 	const dateStr = state.dateTimeList.join("-");
 	if (state.activeType == 1) {
 		startTime.value = dayjs.tz(dateStr, "America/New_York").startOf("day").valueOf();
 	} else {
 		endTime.value = dayjs.tz(dateStr, "America/New_York").endOf("day").valueOf();
 	}
-	if (startTime.value > endTime.value) {
-		console.error("开始时间不可大于结束时间");
-		return;
-	}
-	state.startTimeSlotText = dayjs(startTime.value).tz("America/New_York").format("YYYY/MM/DD");
-	state.endTimeSlotText = dayjs(endTime.value).tz("America/New_York").format("YYYY/MM/DD");
-	emit("onConfirmDate");
-	state.twoShow = false;
+	await console.log("1");
+
+	setTimeout(() => {
+		if (startTime.value > endTime.value) {
+			console.error("开始时间不可大于结束时间");
+			return;
+		}
+		emit("onConfirmDate");
+		state.twoShow = false;
+	}, 10);
 };
 
 //日期时间选择器点击取消
@@ -385,7 +389,6 @@ const onTwoChange = ({ selectedValues, selectedOptions, selectedIndexes, columnI
 	} else {
 		state.endTimeText = selectedValues.join("/");
 	}
-	console.log(startTime.value, endTime.value, "每次变化后");
 };
 
 /**
