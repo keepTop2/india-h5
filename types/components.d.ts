@@ -36,7 +36,7 @@ declare module '@vue/runtime-core' {
     VanCol: typeof import("vant/es")["Col"]
     VanCollapse: typeof import("vant/es")["Collapse"]
     VanCollapseItem: typeof import("vant/es")["CollapseItem"]
-    VanDatePicker: typeof import("vant/es")["DatePicker"]
+    VanDatePicker: typeof import('vant/es')['DatePicker']
     VanDialog: typeof import("vant/es")["Dialog"]
     VanDivider: typeof import("vant/es")["Divider"]
     VanDropdownItem: typeof import("vant/es")["DropdownItem"]

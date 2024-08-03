@@ -7,54 +7,74 @@
 			</slot>
 		</div>
 
-		<van-popup v-model:show="state.oneShow" position="bottom" @closed="onOneClosed" @opened="onOneOpened" :close-on-popstate="true" :close-on-click-overlay="closeOnClickOverlay">
+		<van-popup v-model:show="state.oneShow" :close-on-click-overlay="closeOnClickOverlay" :close-on-popstate="true" position="bottom" @closed="onOneClosed" @opened="onOneOpened">
 			<van-picker
-				class="van_picker_custom"
 				v-model="state.activeList"
-				:title="title"
-				:columns="state.columnsMap"
-				:confirm-button-text="confirmButtonText"
-				:columns-field-names="customFieldName"
-				:cancel-button-text="cancelButtonText"
-				:toolbar-position="toolbarPosition"
-				:show-toolbar="showToolbar"
 				:allow-html="allowHtml"
+				:cancel-button-text="cancelButtonText"
+				:columns="state.columnsMap"
+				:columns-field-names="customFieldName"
+				:confirm-button-text="$t(`components['DateRangeSelect']['确认']`)"
 				:option-height="optionHeight"
+				:show-toolbar="showToolbar"
+				:title="title"
+				:toolbar-position="toolbarPosition"
 				:visible-option-num="visibleOptionNum"
+				class="van_picker_custom"
 				v-bind="$attrs"
-				@confirm="onOneConfirm"
 				@cancel="onOneCancel"
 				@change="onOneChange"
+				@confirm="onOneConfirm"
 				@click-option="onClickOneOption"
 			>
-				<template #option="item">
-					<slot name="option" :item="item">
-						<div class="vant_picker_options_item">
-							<div>{{ item.text }}</div>
-						</div>
-					</slot>
-				</template>
 			</van-picker>
 		</van-popup>
 
-		<van-popup v-model:show="state.twoShow" position="bottom">
-			<div>23213213</div>
+		<van-popup v-model:show="state.twoShow" :close-on-click-overlay="closeOnClickOverlay" position="bottom">
+			<van-date-picker
+				v-model="state.dateTimeList"
+				:cancel-button-text="cancelButtonText"
+				:columns-type="(columnsType as  any)"
+				:confirm-button-text="$t(`components['DateRangeSelect']['确认']`)"
+				:max-date="state.maxDate"
+				:min-date="state.minDate"
+				:show-toolbar="showToolbar"
+				:title="$t(`components['DateRangeSelect']['自定义时间']`)"
+				class="van_picker_custom"
+				@cancel="onTwoCancel"
+				@change="onTwoChange"
+				@confirm="onTwoConfirm"
+			>
+				<template #columns-top>
+					<div class="dateRangeSelect_columnstop">
+						<div :class="{ dateRangeSelect_active: state.activeType == 1 }" class="dateRangeSelect_timebox" @click="onStartOrEnd(1)">{{ state.startTimeText }}</div>
+						<div class="dateRangeSelect_text1">{{ $t(`components['DateRangeSelect']['至']`) }}</div>
+						<div :class="{ dateRangeSelect_active: state.activeType == 2 }" class="dateRangeSelect_timebox" @click="onStartOrEnd(2)">{{ state.endTimeText }}</div>
+					</div>
+				</template>
+			</van-date-picker>
 		</van-popup>
 
-		<input type="text" v-model="activeValue" class="input_none" />
+		<input v-model="activeValue" class="input_none" type="text" />
 		<!-- 开始时间时间戳 -->
-		<input type="text" v-model="startTime" class="input_none" />
+		<input v-model="startTime" class="input_none" type="text" />
 		<!-- 结束时间时间戳 -->
-		<input type="text" v-model="endTime" class="input_none" />
+		<input v-model="endTime" class="input_none" type="text" />
 	</div>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import type { PickerOption, PickerToolbarPosition } from "vant";
 import { useI18n } from "vue-i18n";
 import { ModelRef } from "vue";
 import { timeShortcutOptionsMap } from "/@/maps/componentsMaps";
 import { TimeShortcutOptionsEnum } from "/@/enum/componentsEnum";
+import dayjs, { Dayjs } from "dayjs";
+import tz from "dayjs/plugin/timezone";
+import utc from "dayjs/plugin/utc";
+
+dayjs.extend(utc);
+dayjs.extend(tz);
 const { t } = useI18n();
 const emit = defineEmits(["update:select", "update:startTimeU", "update:endTimeU", "onOneConfirm", "onOneCancel", "onOneChange", "onClickOneOption", "onOneOpened", "onOneClosed"]);
 
@@ -70,6 +90,8 @@ const props = withDefaults(
 		columns?: any[];
 		// 自定义 columns 结构中的字段 默认值 { text: 'text', value: 'value', children: 'children' }
 		customFieldName?: object;
+		//日期格式
+		columnsType?: string[];
 		// 顶部栏标题
 		title?: string;
 		//确认按钮文字，设置为空字符串可以隐藏按钮
@@ -101,6 +123,7 @@ const props = withDefaults(
 		allowHtml: false,
 		visibleOptionNum: 6,
 		closeOnClickOverlay: true,
+		columnsType: () => ["year", "month", "day"],
 	}
 );
 
@@ -117,16 +140,38 @@ const state = reactive({
 	activeList: [] as Array<string>,
 	//自定义时间弹出层是否展示
 	twoShow: false,
+	//日期时间选择器的值
+	dateTimeList: [] as Array<string>,
+	// 最小时间范围
+	minDate: new Date(),
+	// 最大时间范围
+	maxDate: new Date(),
+	//顶部激活的选项 1开始时间 2结束时间
+	activeType: 1,
+	startTimeText: "",
+	endTimeText: "",
 });
 
 /**
  * @description 默认时间快捷选项
  */
 const defaultColumns = computed(() => [
-	{ code: timeShortcutOptionsMap.get(TimeShortcutOptionsEnum.d1)?.code, name: t(`components['DateRangeSelect']['近24小时']`) },
-	{ code: timeShortcutOptionsMap.get(TimeShortcutOptionsEnum.d2)?.code, name: t(`components['DateRangeSelect']['近7天']`) },
-	{ code: timeShortcutOptionsMap.get(TimeShortcutOptionsEnum.d3)?.code, name: t(`components['DateRangeSelect']['近60天']`) },
-	{ code: timeShortcutOptionsMap.get(TimeShortcutOptionsEnum.d4)?.code, name: t(`components['DateRangeSelect']['近90天']`) },
+	{
+		code: timeShortcutOptionsMap.get(TimeShortcutOptionsEnum.d1)?.code,
+		name: t(`components['DateRangeSelect']['近24小时']`),
+	},
+	{
+		code: timeShortcutOptionsMap.get(TimeShortcutOptionsEnum.d2)?.code,
+		name: t(`components['DateRangeSelect']['近7天']`),
+	},
+	{
+		code: timeShortcutOptionsMap.get(TimeShortcutOptionsEnum.d3)?.code,
+		name: t(`components['DateRangeSelect']['近60天']`),
+	},
+	{
+		code: timeShortcutOptionsMap.get(TimeShortcutOptionsEnum.d4)?.code,
+		name: t(`components['DateRangeSelect']['近90天']`),
+	},
 	{ code: "999", name: t(`components['DateRangeSelect']['自定义']`) },
 ]);
 
@@ -134,6 +179,8 @@ const defaultColumns = computed(() => [
 const activeValue: ModelRef<string | number, string | number> = defineModel("select", {
 	get(value) {
 		state.activeList = String(value).split(",");
+		if (value != "999") {
+		}
 		// console.log(state.activeList, "子组件看看呢");
 		return value;
 	},
@@ -144,7 +191,8 @@ const activeValue: ModelRef<string | number, string | number> = defineModel("sel
 });
 
 onMounted(() => {
-	// console.log(startTime.value, endTime.value, "aaaabbbb");
+	initStartTimeAndEndTimer();
+	// console.log(startTime.value, endTime.value, "日期范围选择器");
 });
 
 /**
@@ -152,9 +200,9 @@ onMounted(() => {
  */
 const startTime: ModelRef<number, number> = defineModel("startTimeU", {
 	get(value) {
-		if (activeValue.value != 999) {
-			return timeShortcutOptionsMap.get(String(activeValue.value) as TimeShortcutOptionsEnum)?.startTime();
-		}
+		// if (activeValue.value != 999) {
+		// 	return timeShortcutOptionsMap.get(String(activeValue.value) as TimeShortcutOptionsEnum)?.startTime();
+		// }
 		return value as number;
 	},
 	set(value) {
@@ -167,9 +215,9 @@ const startTime: ModelRef<number, number> = defineModel("startTimeU", {
  */
 const endTime: ModelRef<number, number> = defineModel("endTimeU", {
 	get(value) {
-		if (activeValue.value != 999) {
-			return timeShortcutOptionsMap.get(String(activeValue.value) as TimeShortcutOptionsEnum)?.endTime();
-		}
+		// if (activeValue.value != 999) {
+		// 	return timeShortcutOptionsMap.get(String(activeValue.value) as TimeShortcutOptionsEnum)?.endTime();
+		// }
 		return value as number;
 	},
 	set(value) {
@@ -204,7 +252,7 @@ const dataMap = () => {
 //点击外面的容器
 const onContainer = () => {
 	state.oneShow = true;
-	console.log(state.activeList);
+	console.log(state.activeList, "弹出层", startTime.value, "=========");
 };
 
 //初始化选中的name
@@ -236,7 +284,7 @@ watch(
 watch(
 	[() => state.activeList],
 	([newList]) => {
-		activeValue.value = state.activeList.join(",");
+		activeValue.value = newList.join(",");
 	},
 	{
 		deep: true,
@@ -245,11 +293,22 @@ watch(
 
 // 点击快捷选项完成按钮时触发
 const onOneConfirm = ({ selectedValues, selectedOptions, selectedIndexes }) => {
-	state.isOneConfirm = true;
-	state.acitveName = selectedOptions[0].text;
-	console.log(startTime.value, endTime.value, "看下点击确认的时间戳");
+	if (activeValue.value != 999) {
+		state.isOneConfirm = true;
+		state.acitveName = selectedOptions[0].text;
+
+		initStartTimeAndEndTimer();
+		emit("onOneConfirm", { selectedValues, selectedOptions, selectedIndexes });
+	} else {
+		state.minDate = dayjs().tz("America/New_York").subtract(90, "day").toDate();
+		state.maxDate = dayjs().tz("America/New_York").toDate();
+		//赋值开始时间给日期时间选择器组件
+		state.dateTimeList = timestampToList(startTime.value);
+		state.startTimeText = state.dateTimeList.join("/");
+		state.endTimeText = dayjs(endTime.value).tz("America/New_York").format("YYYY/MM/DD");
+		state.twoShow = true;
+	}
 	state.oneShow = false;
-	emit("onOneConfirm", { selectedValues, selectedOptions, selectedIndexes });
 };
 
 // 点击快捷选项取消按钮时触发
@@ -284,31 +343,123 @@ const onOneClosed = () => {
 		state.isOneConfirm = false;
 	}
 	emit("onOneClosed");
-	if (activeValue.value == 999) {
-		state.twoShow = true;
+};
+
+//日期时间选择器点击确认
+const onTwoConfirm = ({ selectedValues, selectedOptions, selectedIndexes }) => {
+	const dateStr = state.dateTimeList.join("-");
+	if (state.activeType == 1) {
+		startTime.value = dayjs.tz(dateStr, "America/New_York").startOf("day").valueOf();
+	} else {
+		endTime.value = dayjs.tz(dateStr, "America/New_York").endOf("day").valueOf();
+	}
+	if (startTime.value > endTime.value) {
+		console.error("开始时间不可大于结束时间");
+		return;
+	}
+};
+
+//日期时间选择器点击取消
+const onTwoCancel = () => {
+	state.twoShow = false;
+};
+
+//日期时间选择器选项变化回调
+const onTwoChange = ({ selectedValues, selectedOptions, selectedIndexes, columnIndex }) => {
+	if (state.activeType == 1) {
+		state.startTimeText = selectedValues.join("/");
+	} else {
+		state.endTimeText = selectedValues.join("/");
+	}
+	console.log(startTime.value, endTime.value, "每次变化后");
+};
+
+/**
+ * @description 开始时间 结束时间 来回切换
+ * @param type
+ */
+const onStartOrEnd = (type: number) => {
+	if (state.activeType == type) return;
+	state.activeType = type;
+	listToTimestamp(state.dateTimeList, type);
+};
+
+/**
+ * @description 初始化开始时间和结束时间
+ */
+const initStartTimeAndEndTimer = () => {
+	if (activeValue.value != 999) {
+		startTime.value = timeShortcutOptionsMap.get(<TimeShortcutOptionsEnum>activeValue.value)?.startTime() as number;
+		endTime.value = timeShortcutOptionsMap.get(<TimeShortcutOptionsEnum>activeValue.value)?.endTime() as number;
 	}
 };
 
 /**
- * @description 设置快捷选项开始时间
- * @param code
+ * @description 时间戳转美东时区时间组件
+ * @param timestamp
  */
-const setStartTime = (code: string) => {
-	// startTime.value = timeShortcutOptionsMap.get(code)?.startTime as number;
+const timestampToList = (timestamp: number) => {
+	const dateStr = dayjs(timestamp).tz("America/New_York").format("YYYY/MM/DD");
+	const list = dateStr.split("/");
+	return list;
 };
 
 /**
- * @description 设置快捷选项结束时间
- * @param code
+ * @description 美东时区时间组件转时间戳 且 将对应的时间戳赋值给时区组件
  */
-const setEndTime = (code: string) => {
-	// endTime.value = timeShortcutOptionsMap.get(code)?.endTime as number;
+const listToTimestamp = (list: Array<string>, type) => {
+	const dateStr = list.join("-");
+	//从结束时间点到开始时间则给 结束时间赋值时间戳 开始时间时间戳赋值给时间组件 否则相反
+	if (type == 1) {
+		endTime.value = dayjs.tz(dateStr, "America/New_York").endOf("day").valueOf();
+		state.dateTimeList = timestampToList(startTime.value);
+	} else {
+		startTime.value = dayjs.tz(dateStr, "America/New_York").startOf("day").valueOf();
+		state.dateTimeList = timestampToList(endTime.value);
+	}
 };
 </script>
 
 <style lang="scss" scoped>
 .input_none {
 	display: none;
+}
+
+.dateRangeSelect_columnstop {
+	margin-top: 40px;
+	//margin-bottom: 40px;
+	padding: 0 40px;
+	@include flex_align_center;
+	@include flex_space_between;
+
+	.dateRangeSelect_text1 {
+		font-size: 28px;
+		font-weight: 600;
+		@include themeify {
+			color: themed("TB");
+		}
+	}
+
+	.dateRangeSelect_timebox {
+		font-size: 28px;
+		width: 280px;
+		height: 90px;
+		border-radius: 12px;
+		box-sizing: border-box;
+		@include flex_center;
+		@include themeify {
+			background: themed("BG3");
+			color: themed("T1");
+		}
+	}
+
+	.dateRangeSelect_active {
+		border: 2px solid;
+		@include themeify {
+			border-color: themed("Theme");
+			color: themed("Theme");
+		}
+	}
 }
 
 .van_picker_custom {
@@ -325,6 +476,12 @@ const setEndTime = (code: string) => {
 			@include themeify {
 				color: themed("T1");
 			}
+		}
+	}
+
+	:deep(.van-picker__title) {
+		@include themeify {
+			color: themed("TB");
 		}
 	}
 
