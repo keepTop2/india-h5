@@ -16,8 +16,6 @@
 </template>
 
 <script setup>
-import { defineProps } from "vue";
-
 /**
  * @param {String} src 图片地址
  * @param {String} alt 图片描述
