@@ -19,25 +19,25 @@
 // import eventItem from "./eventItem.vue";
 
 // 足球列表
-import Football from "/@/venueHome/sports/tournamentViews/football/components/card/eventItem.vue";
+import Football from "/@/views/venueHome/sports/tournamentViews/football/components/card/eventItem.vue";
 // 篮球列表
-import Basketball from "/@/venueHome/sports/tournamentViews/basketball/components/card/eventItem.vue";
+import Basketball from "/@/views/venueHome/sports/tournamentViews/basketball/components/card/eventItem.vue";
 // 美式足球列表
-import AmericanSoccer from "/@/venueHome/sports/tournamentViews/americanSoccer/components/card/eventItem.vue";
+import AmericanSoccer from "/@/views/venueHome/sports/tournamentViews/americanSoccer/components/card/eventItem.vue";
 // 冰上曲棍球列表
-import IceHockey from "/@/venueHome/sports/tournamentViews/iceHockey/components/card/eventItem.vue";
+import IceHockey from "/@/views/venueHome/sports/tournamentViews/iceHockey/components/card/eventItem.vue";
 // 网球列表
-import Tennis from "/@/venueHome/sports/tournamentViews/tennis/components/card/eventItem.vue";
+import Tennis from "/@/views/venueHome/sports/tournamentViews/tennis/components/card/eventItem.vue";
 // 排球列表
-import Volleyball from "/@/venueHome/sports/tournamentViews/volleyball/components/card/eventItem.vue";
+import Volleyball from "/@/views/venueHome/sports/tournamentViews/volleyball/components/card/eventItem.vue";
 // 斯诺克/台球列表
-import Billiards from "/@/venueHome/sports/tournamentViews/billiards/components/card/eventItem.vue";
+import Billiards from "/@/views/venueHome/sports/tournamentViews/billiards/components/card/eventItem.vue";
 // 棒球列表
-import Baseball from "/@/venueHome/sports/tournamentViews/baseball/components/card/eventItem.vue";
+import Baseball from "/@/views/venueHome/sports/tournamentViews/baseball/components/card/eventItem.vue";
 // 羽毛球列表
-import Badminton from "/@/venueHome/sports/tournamentViews/badminton/components/card/eventItem.vue";
+import Badminton from "/@/views/venueHome/sports/tournamentViews/badminton/components/card/eventItem.vue";
 // 电子竞技列表
-import ESports from "/@/venueHome/sports/tournamentViews/eSports/components/card/eventItem.vue";
+import ESports from "/@/views/venueHome/sports/tournamentViews/eSports/components/card/eventItem.vue";
 
 interface teamDataType {
 	/** 数据索引 */
