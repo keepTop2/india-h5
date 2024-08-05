@@ -6,7 +6,7 @@ export const MySubRouter = {
 			name: "feedback",
 			component: () => import("/@/views/subViews/my/feedback/feedback.vue"),
 			meta: {
-				title: "充值详情",
+				title: "意见反馈",
 			},
 		},
 	],
