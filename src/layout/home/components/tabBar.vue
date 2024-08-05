@@ -56,6 +56,8 @@ import { i18n } from "/@/i18n/index";
 const route = useRoute();
 const router = useRouter();
 const $: any = i18n.global;
+
+// 钱包二级页
 const walletPaths = ["/wallet/recharge", "/wallet/withdraw", "/wallet/records"];
 
 // 检查 tab 项是否活跃

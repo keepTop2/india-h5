@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="container">
 		<MenuPopup />
 		<router-view />
 	</div>
@@ -20,4 +20,11 @@ const initTheme = () => {
 };
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.container {
+	min-height: 100vh;
+	@include themeify {
+		background-color: themed("BG1");
+	}
+}
+</style>
