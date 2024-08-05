@@ -237,7 +237,7 @@ const onClosed = () => {
 .van_picker_custom {
 	@include themeify {
 		background: themed("BG1");
-		border-color: themed("Line-N");
+		border-color: themed("Line");
 	}
 
 	:deep(.van-picker__toolbar) {
@@ -246,7 +246,7 @@ const onClosed = () => {
 
 		.van-haptics-feedback {
 			@include themeify {
-				color: themed("T1-N");
+				color: themed("T1");
 			}
 		}
 	}
@@ -260,7 +260,7 @@ const onClosed = () => {
 
 	:deep(.van-picker-column__item) {
 		@include themeify {
-			color: themed("T1-N");
+			color: themed("T1");
 		}
 	}
 
@@ -288,7 +288,7 @@ const onClosed = () => {
 		width: 100%;
 		height: 2px;
 		@include themeify {
-			background: themed("Line2-P");
+			background: themed("Line2");
 		}
 	}
 
@@ -303,7 +303,7 @@ const onClosed = () => {
 		width: 100%;
 		height: 2px;
 		@include themeify {
-			background: themed("Line2-P");
+			background: themed("Line2");
 		}
 	}
 }

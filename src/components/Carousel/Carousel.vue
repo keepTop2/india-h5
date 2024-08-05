@@ -18,7 +18,7 @@
 			class="Carousel__swiper"
 		>
 			<swiper-slide v-for="(item, index) in gameList" :key="index">
-				<VantLazyImg :src="item[imageKey] || game" alt="" />
+				<VantLazyImg :src="item.icon || game" alt="" />
 			</swiper-slide>
 		</Swiper>
 	</div>
@@ -41,6 +41,11 @@ const paginationDom = {
 		return `<span class="${className}"><span></span></span>`; // 自定义分页小点的渲染
 	},
 };
+
+type Game = {
+	icon: string;
+};
+
 const props = defineProps({
 	imageKey: {
 		// image对应后端字段中的key
@@ -48,7 +53,7 @@ const props = defineProps({
 		default: "icon", // 默认图标key
 	},
 	gameList: {
-		type: Array<object>,
+		type: Array<Game>,
 		default: [
 			// 默认值
 			{

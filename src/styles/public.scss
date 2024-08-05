@@ -11,13 +11,7 @@
 		justify-content: center;
 		gap: 20px;
 	}
-
 	@include themeify {
-		.line_home {
-			height: 1px;
-			background-color: themed("Line");
-			margin: 24px 0;
-		}
 	}
 	ul {
 		padding: 0;

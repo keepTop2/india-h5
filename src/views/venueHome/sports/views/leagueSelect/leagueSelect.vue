@@ -32,8 +32,13 @@ import sportsApi from "/@/api/venueHome/sports";
 import { useSportsBetEventStore } from "/@/store/modules/sports/sportsBetData";
 import { useRouter, useRoute } from "vue-router";
 import _ from "lodash";
+import useSportPubSubEvents from "/@/views/venueHome/sports/hooks/useSportPubSubEvents";
+import { useUserStore } from "/@/store/modules/user";
+
+const { startPolling, stopPolling, sportsLogin } = useSportPubSubEvents();
 const sportsBetEvent = useSportsBetEventStore();
 const myDiv = ref(null);
+const UserStore = useUserStore();
 const router = useRouter();
 const route = useRoute();
 const searchValue = ref("");
@@ -46,15 +51,26 @@ interface League {
 const leaguesList = ref<League[]>([]);
 
 onMounted(() => {
-	console.log("Component mounted");
-	console.log(sportsBetEvent.getLeagueSelect, "======sportsBetEvent.getLeagueSelect");
+	// console.log("Component mounted");
+	// console.log(sportsBetEvent.getLeagueSelect, "======sportsBetEvent.getLeagueSelect");
 	activeLeagues.value = JSON.parse(JSON.stringify(sportsBetEvent.getLeagueSelect));
-	//获取联赛数据
-	getLeagues();
+
+	//体育登录
+	sportsLogin().then((res) => {
+		if (res) {
+			//获取联赛数据
+			getLeagues();
+			if (UserStore.token) {
+				// 开始轮询登录接口
+				startPolling();
+			}
+		}
+	});
 });
 
 onUnmounted(() => {
 	activeLeagues.value = [];
+	stopPolling();
 });
 
 const isAll = computed(() => {
@@ -72,6 +88,12 @@ watch(
 //回退至上一个路由
 const onClickLeft = () => {
 	router.go(-1);
+	// const childrenToMainCommonData: ChildrenToMainCommon = {
+	// 	transactionName: ControllersEnum.SportAContainerChangeController,
+	// 	apiName: "sportAContainerToSportProcess",
+	// 	data: {},
+	// };
+	// childrenAppportAManage.forceDispatch(childrenToMainCommonData);
 };
 /**
  * @description 判断是否选中了
@@ -100,7 +122,7 @@ const handleInvert = () => {
 			arr.push(item.leagueId);
 		}
 	});
-	console.log(arr.length, "=====length");
+	// console.log(arr.length, "=====length");
 	activeLeagues.value = arr;
 };
 /**

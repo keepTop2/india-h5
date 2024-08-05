@@ -1,24 +1,25 @@
 <template>
 	<div class="container bg_BG3">
 		<div class="header">
-			<SvgIcon class="icon" iconName="home/event_football" />
-			<span class="title color_T1">2024年欧洲杯欧洲杯欧洲杯欧洲杯...</span>
-			<SvgIcon class="star" iconName="home/event_collect" />
+			<SvgIcon class="icon" v-if="event.sportType == 1" iconName="home/event_football" />
+			<SvgIcon class="icon" v-if="event.sportType == 2" iconName="home/event_basketBall" />
+			<span class="title color_T1">{{ event.leagueName }}</span>
+			<SvgIcon class="star" onName="home/event_collect" />
 		</div>
 		<div class="time color_T1">明天 02:00</div>
 		<div class="match-info mb_24">
 			<div class="team">
-				<img :src="XIcon" alt="" />
-				<span class="color_TB">葡萄牙葡萄牙葡萄牙葡萄...</span>
+				<img :src="event.teamInfo.homeIconUrl" alt="France" />
+				<span class="color_TB">{{ event.teamInfo.homeName }}</span>
 			</div>
-			<div class="score color_TB bg_BG4">0</div>
+			<div class="score color_TB bg_BG4">{{ event.gameInfo?.liveHomeScore }}</div>
 		</div>
 		<div class="match-info">
 			<div class="team">
-				<img :src="XIcon" alt="France" />
-				<span class="color_TB">法国</span>
+				<img :src="event.teamInfo.awayIconUrl" alt="" />
+				<span class="color_TB">{{ event.teamInfo.awayName }}</span>
 			</div>
-			<div class="score color_TB bg_BG4">2</div>
+			<div class="score color_TB bg_BG4">{{ event.gameInfo?.liveAwayScore }}</div>
 		</div>
 		<div class="line bg_Line"></div>
 
@@ -36,31 +37,51 @@
 				<span>客胜</span>
 				<span class="value">2.40</span>
 			</div>
+			<!-- <span v-if="market.betType == 20"><template v-if="item?.key == 'h'">主胜</template> <template v-if="item?.key == 'a'">客胜</template></span>
+						<span v-if="market.betType == 1">{{ SportsCommon.formatPoint({ betType: market.betType, point: item?.point, key: item?.key }) }}</span>
+						<span v-if="market.betType == 3">
+							{{ item?.keyName }}
+							{{ item?.point }}
+						</span> -->
 		</div>
 		<div class="price_title">全场让球</div>
 		<div class="handicap">
 			<div class="handicap-item">
-				<span>-0.5</span>
-				<span class="value green">1.75</span>
+				<span
+					>{{ SportsCommon.formatPoint({ betType: event.markets[1].betType, point: event.markets[1].selections[0].point, key: event.markets[1].selections[0].point?.key }) }}</span
+				>
+				<span class="value green">{{ event.markets[1].selections[0].oddsPrice.decimalPrice }}</span>
 			</div>
 			<div class="handicap-item">
-				<span>+0.5</span>
-				<span class="value red">1.75</span>
+				<span>{{ SportsCommon.formatPoint({ betType: event.markets[1].betType, point: event.markets[1].selections[1].point, key: event.markets[1].selections[1].point?.key }) }}</span>
+				<span class="value red">{{ event.markets[1].selections[1].oddsPrice.decimalPrice }}</span>
 			</div>
 		</div>
 		<div class="price_title">全场大小</div>
 		<div class="handicap">
 			<div class="handicap-item">
-				<span>大 0.5</span>
-				<span class="value green">1.75</span>
+				<span>{{ event.markets[3].selections[0].keyName }}{{ SportsCommon.formatPoint({ betType: event.markets[3].betType, point: event.markets[3].selections[0].point, key: event.markets[3].selections[0].point?.key }) }}</span>
+				<span class="value green">{{ event.markets[3].selections[0].oddsPrice.decimalPrice }}</span>
+				<RiseOrFall
+					v-if="event.markets[3].selections[0].oddsChange"
+					:time="3000"
+					:status="event.markets[3].selections[0].oddsChange == 'oddsUp' ? 1 : 2"
+					@animationEnd="animationEnd(event.markets[3].marketId, event.markets[3].selections[0])"
+				/>
 			</div>
-			<!-- <div class="handicap-item">
-				<span>小 0.5</span>
-				<span class="value red">1.75</span>
-			</div> -->
-			<div class="handicap-item lock-container">
+			<div class="handicap-item">
+				<span>{{ event.markets[3].selections[1].keyName }}{{ SportsCommon.formatPoint({ betType: event.markets[3].betType, point: event.markets[3].selections[1].point, key: event.markets[3].selections[1].point?.key }) }}</span>
+				<span class="value red">{{ event.markets[3].selections[1].oddsPrice.decimalPrice }}</span>
+				<RiseOrFall
+					v-if="event.markets[3].selections[1].oddsChange"
+					:time="3000"
+					:status="event.markets[3].selections[1].oddsChange == 'oddsUp' ? 1 : 2"
+					@animationEnd="animationEnd(event.markets[3].marketId,  event.markets[3].selections[1])"
+				/>
+			</div>
+			<!-- <div class="handicap-item lock-container">
 				<SvgIcon class="lock" iconName="home/event_lock" />
-			</div>
+			</div> -->
 		</div>
 		<div class="more-bets">
 			<span class="fs_28 color_T1">更多投注</span>
@@ -69,7 +90,30 @@
 	</div>
 </template>
 <script lang="ts" setup>
-import XIcon from "./icon.png";
+import SportsCommon from "/@/views/venueHome/sports/utils/common";
+import useSportPubSubEvents from "/@/views/venueHome/sports/hooks/useSportPubSubEvents";
+import RiseOrFall from "/@/views/venueHome/sports/components/riseOrFall/riseOrFall.vue";
+import { WebToPushApi } from "/@/views/venueHome/sports/enum/sportEventSourceEnum";
+
+const { startPolling, stopPolling, initSportPubsub, unSubSport, clearState, sportsLogin, clearSportsOddsChange } = useSportPubSubEvents();
+
+const props = defineProps({
+	event: {
+		type: Object,
+		required: true,
+	},
+});
+/**
+ * @description 动画结束删除oddsChange字段状态
+ */
+const animationEnd = (marketId, selection) => {
+	if (selection.oddsChange) {
+		//删除 markets中的 oddsChange字段状态
+		clearSportsOddsChange({ webToPushApi: WebToPushApi.sportsEventDetail, marketId, selection });
+		//删除 childrenViewData中的状态
+		selection.oddsChange = "";
+	}
+};
 </script>
 <style scoped lang="scss">
 $background-color: #333;

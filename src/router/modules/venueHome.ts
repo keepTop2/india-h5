@@ -79,13 +79,26 @@ export const VenueHome = {
 			],
 		},
 		{
-			path: "/lottery",
-			name: "lottery",
-			component: () => import("/@/views/venueHome/lottery/lottery.vue"),
-			meta: { title: "彩票" },
+			path: "/sports/league/select/:sportType",
+			name: "sportsLeagueSelect",
+			meta: { title: "联赛筛选" },
+			component: () => import("/@/views/venueHome/sports/views/leagueSelect/leagueSelect.vue"),
 		},
+		// 联赛详情
 		{
-			path: "/game/arena",
+			path: "/sports/event/detail/:eventId/:leagueId/:sportType",
+			name: "sportsEventDetail",
+			meta: { title: "联赛详情" },
+			component: () => import("/@/views/venueHome/sports/views/eventDetail/eventDetail.vue"),
+		},
+		// {
+		// 	path: "/lottery",
+		// 	name: "lottery",
+		// 	component: () => import("/@/views/venueHome/lottery/lottery.vue"),
+		// 	meta: { title: "彩票" },
+		// },
+		{
+			path: "/game/arena/:gameType",
 			name: "GameArena",
 			component: () => import("/@/views/venueHome/GameArena/GameArena.vue"),
 			meta: {

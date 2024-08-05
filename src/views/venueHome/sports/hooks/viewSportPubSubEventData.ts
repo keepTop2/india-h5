@@ -77,9 +77,12 @@ export default (function () {
 		/**
 		 * 处理数据
 		 */
-		public getSportData(sportType) {
+		public getSportData(sportType?:string) {
 			const sportsBetEvent = useSportsBetEventStore();
 			const leagueSelect = sportsBetEvent.getLeagueSelect;
+			if (!sportType) {
+				return this.viewSportData.childrenViewData;
+			}
 			const leagues = this.viewSportData.childrenViewData[sportType];
 			// 如果有筛选 则处理数据，只给出筛选的联赛列表。
 			if (leagues && leagueSelect.length > 0) {

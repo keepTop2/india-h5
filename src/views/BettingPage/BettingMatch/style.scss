@@ -1,0 +1,244 @@
+.BettingMatch {
+	@include themeify {
+		height: 100vh;
+		font-family: "PingFang SC";
+		background: themed("BG1");
+		.frame {
+			position: absolute;
+			right: 0px;
+			top: 0px;
+			width: 36px;
+			height: 36px;
+		}
+		.dialog {
+			.title {
+				display: flex;
+				align-items: center;
+				gap: 5px;
+			}
+		}
+		.fade-enter-active,
+		.fade-leave-active {
+			transition: opacity 0.5s;
+		}
+		.fade-enter,
+		.fade-leave-to {
+			opacity: 0;
+		}
+		.content {
+			padding: 24px;
+			background: themed("BG1");
+			padding-bottom: 200px;
+
+			.top {
+				display: flex;
+				position: relative;
+				justify-content: flex-start;
+				gap: 10px;
+				background: url(./images/bg.png) no-repeat;
+				background-size: 100% 100%;
+				height: 266px;
+				margin-bottom: 24px;
+				padding: 50px 40px;
+				box-sizing: border-box;
+				.hint {
+					width: 32px;
+					height: 32px;
+					position: absolute;
+					right: 16px;
+					top: 16px;
+				}
+				h3 {
+					line-height: 60px;
+				}
+				.money {
+					line-height: 110px;
+					font-family: "DIN Alternate";
+					gap: 16px;
+					img {
+						width: 40px;
+						height: 40px;
+					}
+				}
+				.topimg {
+					width: 250px;
+					height: 260px;
+					position: absolute;
+					bottom: 40px;
+					right: 56px;
+				}
+			}
+			.top2 {
+				> div {
+					width: 320px;
+					height: 170px;
+				}
+				.countDown {
+					padding: 23px 30px;
+					box-sizing: border-box;
+					border-radius: 20px;
+					background: themed("--JBS-competition-countDown");
+					// background: linear-gradient(261deg, #9823b4 0%, #00e0e0 100%);
+					h3 {
+						text-align: center;
+						line-height: 30px;
+					}
+				}
+				.championInfo {
+					position: relative;
+					border-radius: 20px;
+					background: linear-gradient(90deg, #9923b6 0%, rgba(153, 35, 182, 0.2) 100%);
+					.flex {
+						justify-content: center;
+					}
+					.line_home {
+						margin: 0;
+						margin-bottom: 4px;
+						height: 1px;
+						width: 221px;
+						float: right;
+						background-color: themed("TB");
+					}
+					.jiao {
+						position: absolute;
+						left: -5px;
+						top: -5px;
+						width: 93px;
+					}
+				}
+				.title {
+					gap: 12px;
+					// height: 66px;
+					line-height: 62px;
+					color: #ffe500;
+				}
+				.line {
+					margin: 0;
+					height: 1px;
+					width: 70%;
+					float: right;
+				}
+
+				.winnerInfo {
+					clear: both;
+					padding: 0 28px;
+					> img {
+						width: 64px;
+						height: 64px;
+					}
+					div {
+						line-height: 32px;
+						.userName {
+							line-height: 32px;
+						}
+					}
+					.flex {
+						gap: 4px;
+					}
+					.color_TB {
+						font-family: "DIN Alternate";
+					}
+				}
+			}
+			.participation {
+				text-align: center;
+
+				p {
+					line-height: 34px;
+				}
+				a {
+					width: 100%;
+					margin: 24px 10px;
+					box-sizing: border-box;
+					height: 86px;
+					line-height: 86px;
+					display: block;
+					border-radius: 80px;
+				}
+			}
+			.userInfo {
+				padding: 20px;
+				// border-bottom: 1px solid themed("Line");
+				background: url(./images/bg2.png) no-repeat;
+				background-size: 100% 100%;
+				height: 278px;
+				box-sizing: border-box;
+				margin-top: 24px;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				.userIcon {
+					width: 64px;
+					height: 64px;
+				}
+
+				.flex:first-child {
+					align-items: flex-start;
+				}
+				justify-content: space-around;
+
+				.color_TB {
+					font-family: "DIN Alternate";
+				}
+				.userInfo_Top {
+					display: flex;
+					align-items: center;
+					gap: 12px;
+				}
+				.userInfo_Bottom {
+					width: 402px;
+					height: 74px;
+					box-sizing: content-box;
+					padding: 12px;
+					display: flex;
+					justify-content: space-around;
+					text-align: center;
+					align-items: center;
+					border-bottom: 1px solid themed("Line");
+					.rightLine {
+						height: 80%;
+						width: 1px;
+						background-color: themed("Line");
+					}
+					.userInfo_Bottom_left {
+						width: 200px;
+					}
+					.userInfo_Bottom_right {
+						width: 200px;
+					}
+				}
+			}
+			.BettingTable {
+				background-color: themed("BG3");
+				padding: 24px;
+				border-radius: 20px;
+				.home_paihang {
+					width: 36px;
+					height: 36px;
+					svg {
+						width: 36px;
+						height: 36px;
+					}
+				}
+				.date {
+					margin-bottom: 24px;
+				}
+				.size_32 {
+					width: 32px;
+					height: 32px;
+				}
+				button {
+					outline: none;
+					border: 0;
+					border-radius: 4px;
+					width: 108px;
+					height: 44px;
+					margin-right: 10px;
+				}
+			}
+			.mtb24 {
+				margin: 24px 0;
+			}
+		}
+	}
+}

@@ -13,7 +13,7 @@
 	</div>
 </template>
 <script setup lang="ts">
-import common from ".././@/views/venueHome/sports/utils/common";
+import common from "/@/views/venueHome/sports/utils/common";
 import sportsApi from "/@/api/venueHome/sports";
 // import DateSelector from "../../components/DateSelector/DateSelector.vue";
 import { onMounted } from "vue";
@@ -24,7 +24,7 @@ import { formatDateToTimeStamp } from "/@/webWorker/module/utils/formattingChild
 import NoData from "/@/views/venueHome/sports/components/noData/noData.vue";
 import { defineAsyncComponent } from "vue";
 // const NoData = defineAsyncComponent(() => import("/@/views/venueHome/sports/components/noData/noData.vue"));
-const DateSelector = defineAsyncComponent(() => import("/@/views/Sports/components/DateSelector/DateSelector.vue"));
+const DateSelector = defineAsyncComponent(() => import("/@/views/venueHome/sports/components/DateSelector/DateSelector.vue"));
 const route = useRoute();
 const eventResultData = ref([]);
 const activeDate = ref(common.todayDate());

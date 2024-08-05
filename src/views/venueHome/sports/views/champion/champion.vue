@@ -28,7 +28,7 @@ import { VirtualScrollVirtualList } from "/@/views/venueHome/sports/components/v
 import NoData from "/@/views/venueHome/sports/components/noData/noData.vue";
 // import { defineAsyncComponent } from "vue";
 // const NoData = defineAsyncComponent(() => import("/@/views/venueHome/sports/components/noData/noData.vue"));
-const OutRightItem = defineAsyncComponent(() => import("/@/views/venueHome/sports/views/champion/components/outRightItem.vue"));
+const OutRightItem = defineAsyncComponent(() => import("/@/views/venueHome/sports/champion/components/outRightItem.vue"));
 const route = useRoute();
 const VirtualScrollVirtualListRef = ref();
 

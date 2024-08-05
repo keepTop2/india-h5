@@ -14,6 +14,14 @@ const componentsDemo = {
 			},
 		},
 		{
+			path: "/dateRangeSelectDemo",
+			name: "dateRangeSelectDemo",
+			component: () => import("/@/views/componentsDemo/dateRangeSelectDemo/dateRangeSelectDemo.vue"),
+			meta: {
+				title: "日期范围时间选择器使用示例",
+			},
+		},
+		{
 			path: "/multipleSelectDemo",
 			name: "multipleSelectDemo",
 			component: () => import("/@/views/componentsDemo/multipleSelectDemo/multipleSelectDemo.vue"),
