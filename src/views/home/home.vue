@@ -112,7 +112,7 @@ const eventList = ref();
 watch(
 	() => viewSportPubSubEventData.getSportData(),
 	(newData) => {
-		console.log(newData);
+		console.log(JSON.stringify(newData));
 		/**
 		 * @description 根据 sportType 获取对应的数据
 		 * @param {Sports} sportType
@@ -205,7 +205,7 @@ const openSportPush = async () => {
 			sportPushApi: SportPushApi.GetEvents_push,
 			webToPushApi: WebToPushApi.eventsRollingBall,
 			params: {
-				query: `$filter=eventId in (89389076)`,
+				query: `$filter=eventId in (89881335)`,
 			},
 			isMultiple: true,
 		},

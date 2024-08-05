@@ -15,7 +15,7 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import Table from "/@/components/Table/Table.vue";
+import Table from "../components/Table/Table.vue";
 import { RouteRecordRaw, useRouter } from "vue-router";
 const router = useRouter();
 /**
