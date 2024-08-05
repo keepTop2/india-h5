@@ -39,8 +39,8 @@ import sportApi from "/@/api/venueHome/sports";
 
 import { defineAsyncComponent } from "vue";
 import sportsApi from "/@/api/venueHome/sports";
-const EventCard = defineAsyncComponent(() => import("/@/views/venueHome/sports/attention/components/event/eventCard.vue"));
-const OutRightCard = defineAsyncComponent(() => import("/@/views/venueHome/sports/attention/components/outRight/outRightItem.vue"));
+const EventCard = defineAsyncComponent(() => import("/@/views/venueHome/sports/views/attention/components/event/eventCard.vue"));
+const OutRightCard = defineAsyncComponent(() => import("/@/views/venueHome/sports/views/attention/components/outRight/outRightItem.vue"));
 
 const attentionSwitch = computed(() => sportsBetEvent.attentionType);
 const sportsBetEvent = useSportsBetEventStore();
