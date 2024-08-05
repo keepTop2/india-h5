@@ -154,7 +154,7 @@ const menuData = {
 			name: "安全中心",
 			icon: "/my/aqzx",
 			value: "",
-			path: "",
+			path: "/securityCenter",
 		},
 		{
 			name: "邀请好友",
@@ -202,12 +202,17 @@ const loginOutShow = ref(false);
 const onClickCell = (item) => {
 	if (item.path == "/inviteFriends") {
 		pubsub.publish("onOpenInviteFriend");
-	} else if (item.path == "/feedback") {
+		return;
+	} else {
+		if (!item.path) {
+			return;
+		}
 		toPath(item.path);
 	}
 };
 
 const toPath = (path) => {
+	console.log("path", path);
 	router.push(path);
 };
 

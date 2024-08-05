@@ -28,7 +28,7 @@ import vip_jdt from "/@/assets/zh-CN/default/my/vip_jdt.png";
 
 const props = withDefaults(
 	defineProps<{
-		percentageShow: boolean;
+		percentageShow?: boolean;
 		percentage?: number;
 	}>(),
 	{

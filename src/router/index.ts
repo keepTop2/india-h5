@@ -8,6 +8,7 @@ import { VenueHome } from "/@/router/modules/venueHome";
 import { WalletSubRouter } from "/@/router/modules/wallet";
 import { MySubRouter } from "/@/router/modules/my";
 import { VipRouter } from "/@/router/modules/vip";
+import { SecurityCenterRouter } from "/@/router/modules/securityCenter";
 
 /**
  * @description idx大小判断路由左切动画还是右切动画
@@ -35,6 +36,8 @@ const routes = [
 	MySubRouter,
 	// Vip相关路由
 	VipRouter,
+	// 安全中心相关路由
+	SecurityCenterRouter,
 	// 公共组件使用demo
 	componentsDemo,
 ];
@@ -43,12 +46,12 @@ const router: Router = createRouter({
 	history: createWebHashHistory("/"),
 	routes: routes,
 	scrollBehavior(to, from, savedPosition) {
-    if (savedPosition) {
-      return savedPosition;
-    } else {
-      return { left: 0, top: 0 };
-    }
-  },
+		if (savedPosition) {
+			return savedPosition;
+		} else {
+			return { left: 0, top: 0 };
+		}
+	},
 } as any);
 
 export default router;
