@@ -9,16 +9,6 @@
 		//& sass嵌套里的父容器标识   @content是混合器插槽，像vue的slot
 		[data-theme="#{$theme-name}"] & {
 			@content;
-			// 遍历当前主题下的颜色变量
-			@each $color-name, $color in $theme-map {
-				// 生成对应的类名和样式
-				.bg_#{$color-name} {
-					background: $color;
-				}
-				.color_#{$color-name} {
-					color: $color;
-				}
-			}
 		}
 	}
 }
