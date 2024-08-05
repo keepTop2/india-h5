@@ -16,5 +16,13 @@ export const VipRouter = {
 				title: "VIP专属福利",
 			},
 		},
+		{
+			path: "/vipHierarchy",
+			name: "vipHierarchy",
+			component: () => import("/@/views/vip/vipHierarchy/vipHierarchy.vue"),
+			meta: {
+				title: "VIP等级制度",
+			},
+		},
 	],
 };

@@ -58,6 +58,7 @@ export const lang = {
 		钱包: "钱包",
 		意见反馈: "意见反馈",
 		VIP俱乐部: "VIP俱乐部",
+		VIP等级制度: "VIP等级制度",
 	},
 	menuPopup: {
 		中文: "中文",
@@ -224,6 +225,13 @@ export const lang = {
 		"专属 VIP 接待员": "专属 VIP 接待员",
 		"解锁 VIP 38 的免费提款特权，享受 VIP 主机的个性化关注和专属福利。": "解锁 VIP 38 的免费提款特权，享受 VIP 主机的个性化关注和专属福利。",
 		VIP奖励明细: "VIP奖励明细",
+	},
+
+	vipHierarchy: {
+		等级: "等级",
+		所需经验: "所需经验",
+		升级奖金: "升级奖金",
+		第几节: "第{value1}-{vale2}节",
 	},
 
 	inviteFriends: {

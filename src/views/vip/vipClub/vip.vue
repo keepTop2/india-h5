@@ -6,7 +6,7 @@
 			<p>{{ $t(`vip["加入我们精英俱乐部，享受OKsport提供的最佳游戏体验。"]`) }}</p>
 		</div>
 
-		<div class="welfare_btn">{{ $t(`vip["查看VIP福利"]`) }}</div>
+		<div class="welfare_btn" @click="toPath('./vipHierarchy')">{{ $t(`vip["查看VIP福利"]`) }}</div>
 
 		<div class="vip_card">
 			<VantLazyImg class="vip_big" :src="vip_big" />
