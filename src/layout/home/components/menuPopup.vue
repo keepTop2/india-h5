@@ -1,49 +1,47 @@
 <template>
-	<div>
-		<van-popup v-model:show="show" position="left">
-			<VantLazyImg class="close" :src="close" />
-			<div class="menu_header">
-				<div class="logo">
-					<img :src="logo" alt="" />
+	<van-popup v-model:show="show" position="left">
+		<VantLazyImg class="close" :src="close" />
+		<div class="menu_header">
+			<div class="logo">
+				<img :src="logo" alt="" />
+			</div>
+		</div>
+		<div class="menu_content">
+			<div class="menu_content_header">
+				<div class="task van-haptics-feedback">
+					<div class="icon"><img :src="task_icon" alt="" /></div>
+					<div class="label">{{ $t(`menuPopup["任务"]`) }}</div>
+				</div>
+				<div class="wheel van-haptics-feedback">
+					<div class="icon"><img :src="wheel_icon" alt="" /></div>
+					<div class="label">{{ $t(`menuPopup["转盘"]`) }}</div>
 				</div>
 			</div>
-			<div class="menu_content">
-				<div class="menu_content_header">
-					<div class="task van-haptics-feedback">
-						<div class="icon"><img :src="task_icon" alt="" /></div>
-						<div class="label">{{ $t(`menuPopup["任务"]`) }}</div>
-					</div>
-					<div class="wheel van-haptics-feedback">
-						<div class="icon"><img :src="wheel_icon" alt="" /></div>
-						<div class="label">{{ $t(`menuPopup["转盘"]`) }}</div>
-					</div>
-				</div>
 
-				<div class="menu_list">
-					<div class="menu van-haptics-feedback" v-for="(item, index) in 10" :key="index">
-						<div class="icon">
-							<Contest />
-						</div>
-						<div class="label">目录{{ item }}</div>
-					</div>
-				</div>
-			</div>
-			<div class="menu_footer">
-				<div class="menu van-haptics-feedback">
+			<div class="menu_list">
+				<div class="menu van-haptics-feedback" v-for="(item, index) in 10" :key="index">
 					<div class="icon">
 						<Contest />
 					</div>
-					<div class="label">{{ $t(`menuPopup["中文"]`) }}</div>
-				</div>
-				<div class="menu van-haptics-feedback">
-					<div class="icon">
-						<helpIcon />
-					</div>
-					<div class="label">{{ $t(`menuPopup["客服"]`) }}</div>
+					<div class="label">目录{{ item }}</div>
 				</div>
 			</div>
-		</van-popup>
-	</div>
+		</div>
+		<div class="menu_footer">
+			<div class="menu van-haptics-feedback">
+				<div class="icon">
+					<Contest />
+				</div>
+				<div class="label">{{ $t(`menuPopup["中文"]`) }}</div>
+			</div>
+			<div class="menu van-haptics-feedback">
+				<div class="icon">
+					<helpIcon />
+				</div>
+				<div class="label">{{ $t(`menuPopup["客服"]`) }}</div>
+			</div>
+		</div>
+	</van-popup>
 </template>
 
 <script setup lang="ts">

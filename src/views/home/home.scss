@@ -1,32 +1,4 @@
 .Home_Page {
-	.duty {
-		display: flex;
-		justify-content: center;
-		margin: 24px 0;
-		.dutyImg {
-			width: 370px;
-			height: 140px;
-		}
-	}
-	.dutyMsg {
-		text-align: center;
-		font-family: "PingFang SC";
-		font-size: 28px;
-		font-style: normal;
-		font-weight: 400;
-		line-height: normal;
-	}
-	.dutyTitle {
-		text-align: center;
-		font-family: "PingFang SC";
-		font-size: 36px;
-		font-style: normal;
-		font-weight: 600;
-		line-height: normal;
-		text-decoration-line: underline;
-		text-transform: uppercase;
-	}
-
 	.Home_Content {
 		padding: 0 24px;
 		overflow: hidden;
