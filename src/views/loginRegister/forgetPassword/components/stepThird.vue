@@ -2,7 +2,7 @@
 	<div class="content">
 		<div class="title">{{ $t('forgetPassword["设置新密码"]') }}</div>
 		<div class="from">
-			<FromInput
+			<FormInput
 				v-model="state.password"
 				:type="eyeShow ? 'password' : 'text'"
 				:maxlength="16"
@@ -15,12 +15,12 @@
 						<SvgIcon class="icon" :iconName="eyeShow ? '/loginOrRegister/eye-off' : '/loginOrRegister/eye'" @click="eyeShow = !eyeShow" />
 					</div>
 				</template>
-			</FromInput>
+			</FormInput>
 			<div class="error_text">
 				<span v-if="!isPasswordValid && state.password !== ''" class="text">{{ $t('register["密码为8-16位"]') }}</span>
 			</div>
 
-			<FromInput
+			<FormInput
 				v-model="state.confirmPassword"
 				:type="eyeShow ? 'password' : 'text'"
 				:maxlength="16"
@@ -33,7 +33,7 @@
 						<SvgIcon class="icon" :iconName="eyeShow ? '/loginOrRegister/eye-off' : '/loginOrRegister/eye'" @click="eyeShow = !eyeShow" />
 					</div>
 				</template>
-			</FromInput>
+			</FormInput>
 			<div class="error_text">
 				<span v-if="!isConfirmPasswordValid" class="text">{{ $t('register["两次输入密码不一致"]') }}</span>
 			</div>

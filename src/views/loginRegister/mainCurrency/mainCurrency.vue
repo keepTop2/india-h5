@@ -2,7 +2,7 @@
 	<div class="mainCurrency-container">
 		<VantNavBar :title="$t(`VantNavBar['选择主货币']`)" @onClickLeft="onClickLeft" />
 		<div class="selector">
-			<FromInput v-model="state.value1" type="text" :placeholder="$t(`mainCurrency['请输入货币名称或简称']`)" />
+			<FormInput v-model="state.value1" type="text" :placeholder="$t(`mainCurrency['请输入货币名称或简称']`)" />
 
 			<div class="option mt_18">
 				<div class="item" v-for="(item, index) in 11" :key="index">

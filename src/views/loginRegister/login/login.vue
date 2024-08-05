@@ -4,16 +4,16 @@
 		<div class="login-from">
 			<div class="title">{{ $t('login["登录"]') }}</div>
 			<div class="from">
-				<FromInput v-model="state.account" type="text" :placeholder="$t(`login['账户名']`)" :errorBorder="!isAccountValid && state.account !== '' ? true : false">
+				<FormInput v-model="state.account" type="text" :placeholder="$t(`login['账户名']`)" :errorBorder="!isAccountValid && state.account !== '' ? true : false">
 					<template v-slot:right>
 						<SvgIcon v-if="state.account" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.account = ''" />
 					</template>
-				</FromInput>
+				</FormInput>
 				<div class="error_text">
 					<span v-if="!isAccountValid && state.account !== ''" class="text">{{ $t('register["请输入4-11位字母+数字组成，首位必须是字母"]') }}</span>
 				</div>
 
-				<FromInput
+				<FormInput
 					v-model="state.password"
 					:type="eyeShow ? 'password' : 'text'"
 					:maxlength="16"
@@ -26,7 +26,7 @@
 							<SvgIcon class="icon" :iconName="eyeShow ? '/loginOrRegister/eye-off' : '/loginOrRegister/eye'" @click="eyeShow = !eyeShow" />
 						</div>
 					</template>
-				</FromInput>
+				</FormInput>
 				<div class="error_text">
 					<span v-if="!isPasswordValid && state.password !== ''" class="text">{{ $t('register["密码为8-16位"]') }}</span>
 				</div>
