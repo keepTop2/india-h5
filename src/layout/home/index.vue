@@ -14,7 +14,7 @@ import NavBar from "/@/layout/home/components/navBar.vue";
 import TabBar from "/@/layout/home/components/tabBar.vue";
 import BackToTop from "/@/layout/home/components/BackToTop.vue";
 import { useRoute } from "vue-router";
-const blacklist = ["/home"];
+const blacklist = ["/home", "/discount"];
 
 const route = useRoute();
 </script>
@@ -22,11 +22,11 @@ const route = useRoute();
 <style scoped lang="scss">
 .HomeContainer {
 	min-height: 100vh;
-	@include themeify {
-		background-color: themed("BG1");
-	}
 	.content {
 		padding-bottom: 160px;
+	}
+	@include themeify {
+		background-color: themed("BG1");
 	}
 }
 </style>

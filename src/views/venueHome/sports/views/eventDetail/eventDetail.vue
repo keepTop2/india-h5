@@ -5,7 +5,7 @@
 				<!-- 导航栏 -->
 				<div class="navBar" :class="{ showDropDown }">
 					<div class="goback" @click="onClickLeft">
-						<SvgIcon class="color_T3" iconName="/venueHome/sports/svg/arrowLeft" alt="" />
+						<SvgIcon class="color_T3" iconName="/common/arrowLeft" alt="" />
 					</div>
 					<div class="teamList" v-show="eventsList">
 						<DropDownEvent @changeEvent="handleChangeEvent" :eventsList="eventsList" @handleClose="handleClose" @handleOpen="handleOpen" />
@@ -141,7 +141,7 @@
 			<!-- 滑动到指定位置队伍信息及比分固定在顶部 -->
 			<div class="smallHeader color_TB-P" :class="{ fixed: isFixed }">
 				<div class="goback" @click="onClickLeft">
-					<SvgIcon class="color_T3" iconName="/venueHome/sports/svg/arrowLeft" alt="" />
+					<SvgIcon class="color_T3" iconName="/common/arrowLeft" alt="" />
 				</div>
 				<div class="teamName fs_26 color_TB-P fw_400">
 					<span class="w_123">{{ eventDetail?.teamInfo?.homeName }}</span
@@ -168,8 +168,8 @@
 							<li v-for="(i, index) in markets" :key="i.betTypeName" @click="changeTab(i.betTypeName)" :class="{ selected: activeTab == i.betTypeName }">{{ i.betTypeName }}</li>
 						</ul>
 					</div>
-					<SvgIcon class="sport_fold color_T3" v-if="!isFold" iconName="/venueHome/sports/svg/sport_fold" @click="onExpandAngCollapse(true)" />
-					<SvgIcon class="sport_fold color_T3" v-else iconName="/venueHome/sports/svg/sport_fold2" @click="onExpandAngCollapse(false)" />
+					<SvgIcon class="sport_fold color_T3" v-show="!isFold" iconName="/venueHome/sports/svg/sport_fold" @click="onExpandAngCollapse(true)" />
+					<SvgIcon class="sport_fold color_T3" v-show="isFold" iconName="/venueHome/sports/svg/sport_fold2" @click="onExpandAngCollapse(false)" />
 				</div>
 				<div class="selections_list" v-if="markets.length">
 					<Collapse v-model="activeSelection" :accordion="false">
@@ -269,7 +269,7 @@ const sportsInfoStore = useSportsInfoStore();
 const sportsBetEvent = useSportsBetEventStore();
 const isFold = ref(false);
 const marketsSelect = computed(() => sportsBetEvent.getEventInfo);
-const { initSportPubsub, unSubSport, clearState, sportsLogin, clearSportsOddsChange } = useSportPubSubEvents();
+const { startPolling, stopPolling, initSportPubsub, unSubSport, clearState, sportsLogin, clearSportsOddsChange } = useSportPubSubEvents();
 
 const iframeLoaded = ref(false);
 const scrollRef = ref();
@@ -571,13 +571,13 @@ const onClickLeft = () => {};
 
 // 注册一个钩子，在组件被挂载之前被调用。
 onBeforeMount(async () => {
-	if (route.query.data) {
-		routeData.value = JSON.parse(route.query.data as string);
+	// if (route.query.data) {
+	routeData.value = route.params;
 		// //获取关注列表
-		getAttention();
+		// getAttention();
 		// //初始化体育
 		initSport();
-	}
+	// }
 });
 
 const initSport = () => {
@@ -588,6 +588,10 @@ const initSport = () => {
 		if (res) {
 			initSportPubsub();
 			openEventDetailPush();
+			if (UserStore.token) {
+				// 开始轮询登录接口
+				startPolling();
+			}
 		}
 	});
 };
@@ -595,6 +599,7 @@ const initSport = () => {
 // 注册一个钩子，在组件实例被卸载之前调用。
 onBeforeUnmount(() => {
 	closeSportsSSE();
+	stopPolling();
 });
 
 const closeSportsSSE = () => {

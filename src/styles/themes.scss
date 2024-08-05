@@ -28,9 +28,14 @@ $themes: (
 			Shadow: #18191d,
 			// 导航阴影
 			shadow2: rgba(0, 0, 0, 0.4),
+			yellow-ffe-500: #ffe500,
+			green-00-ff-47: #00ff47,
+
 			// 体育卡片头部渐变背景于阴影效果
 			--JBS-CARD: linear-gradient(180deg, #555657 0%, #444547 100%),
 			--JBS-CARD--shadow: rgba(255, 255, 255, 0.25),
+			// 每日竞赛倒计时背景渐变
+			--JBS-competition-countDown: linear-gradient(261deg, #9823b4 0%, #00e0e0 100%),
 		),
 	// 浅色主题
 	light:
@@ -42,7 +47,7 @@ $themes: (
 			Fav: #ff007a,
 			Tag1: #eaecf2,
 			T1: #999ba0,
-			T2: #62666a,
+			T2: #4d565e,
 			T3: #6d727a,
 			T4: #15222e,
 			TB: #333333,
@@ -59,8 +64,13 @@ $themes: (
 			Shadow: #dedfe2,
 			// 导航阴影
 			shadow2: rgba(0, 0, 0, 0.4),
+			yellow-ffe-500: #ffe500,
+			green-00-ff-47: #00ff47,
+
 			// 体育卡片头部渐变背景于阴影效果
 			--JBS-CARD: linear-gradient(180deg, #555657 0%, #444547 100%),
 			--JBS-CARD--shadow: rgba(255, 255, 255, 0.25),
+			// 每日竞赛倒计时背景渐变
+			--JBS-competition-countDown: linear-gradient(261deg, #9823b4 0%, #00e0e0 100%),
 		)
 );

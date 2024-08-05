@@ -44,8 +44,8 @@
 			</div>
 			<div>
 				<SvgIcon class="sport_filter color_T3" v-if="isShowFilter" @click="filterLeague" iconName="/venueHome/sports/svg/sport_filter" />
-				<SvgIcon class="sport_fold color_T3" v-if="isFold" iconName="/venueHome/sports/svg/sport_fold2" @click="onExpandAngCollapse" />
-				<SvgIcon class="sport_fold color_T3" v-else iconName="/venueHome/sports/svg/sport_fold" @click="onExpandAngCollapse" />
+				<SvgIcon class="sport_fold color_T3" v-show="isFold" iconName="/venueHome/sports/svg/sport_fold2" @click="onExpandAngCollapse" />
+				<SvgIcon class="sport_fold color_T3" v-show="!isFold"  iconName="/venueHome/sports/svg/sport_fold" @click="onExpandAngCollapse" />
 			</div>
 		</div>
 		<!-- 赛事列表出口 -->
@@ -132,8 +132,8 @@ const sportState = reactive({ sportTypeActive: null as number | null });
 
 // /sports/league/select/:sportType
 const filterLeague = () => {
-	const leagueList = formatEvent2League(viewSportPubSubEventData.viewSportData.childrenViewData[Number(route.params.sportType)]);
-	sportsBetEvent.setSelectLeaguesList(leagueList);
+	// const leagueList = formatEvent2League(viewSportPubSubEventData.viewSportData.childrenViewData[Number(route.params.sportType)]);
+	// sportsBetEvent.setSelectLeaguesList(leagueList);
 	router.push(`/sports/league/select/${sportState.sportTypeActive}`);
 };
 

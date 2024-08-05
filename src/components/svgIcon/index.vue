@@ -17,7 +17,7 @@ const DynamicSvgComponent = shallowRef(null);
 
 const getIconUrl = () => {
 	// 在 setup 函数中动态加载 SVG 文件，并将加载完成后的 URL 赋值给 DynamicSvgComponent
-	import(`/@/assets/zh-CN/default/${props.iconName}.svg`)
+	import(/* @vite-ignore */ `/@/assets/zh-CN/default/${props.iconName}.svg`)
 		.then((module) => {
 			DynamicSvgComponent.value = module.default;
 		})
