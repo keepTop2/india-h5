@@ -22,12 +22,12 @@ const menuList = [
 	{
 		name: $.t("securityCenter['登录密码']"),
 		value: "",
-		path: "/securityCenter",
+		path: "/loginPassword",
 	},
 	{
 		name: $.t("securityCenter['手机号']"),
 		value: "修改",
-		path: "/inviteFriends",
+		path: "",
 	},
 	{
 		name: $.t("securityCenter['邮箱']"),

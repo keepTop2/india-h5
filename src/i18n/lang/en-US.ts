@@ -88,6 +88,7 @@ export const lang = {
 		VIP俱乐部: "VIP俱乐部",
 		VIP等级制度: "VIP等级制度",
 		安全中心: "安全中心",
+		修改密码: "修改密码",
 	},
 	menuPopup: {
 		中文: "中文",
