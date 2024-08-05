@@ -27,15 +27,39 @@
 		<div class="odds">
 			<div class="odds-item">
 				<span>主胜</span>
-				<span class="value">3.45</span>
+				<span class="value" :class="[changeClass(event.markets[5].selections[0])]">
+					{{ event.markets[5].selections[0].oddsPrice.decimalPrice }}
+					<RiseOrFall
+						v-if="event.markets[5].selections[0].oddsChange"
+						:time="3000"
+						:status="event.markets[5].selections[0].oddsChange == 'oddsUp' ? 1 : 2"
+						@animationEnd="animationEnd(event.markets[5].marketId, event.markets[5].selections[0])"
+					/>
+				</span>
 			</div>
 			<div class="odds-item">
 				<span>平局</span>
-				<span class="value">2.95</span>
+				<span class="value" :class="[changeClass(event.markets[5].selections[1])]"
+					>{{ event.markets[5].selections[1].oddsPrice.decimalPrice }}
+					<RiseOrFall
+						v-if="event.markets[5].selections[1].oddsChange"
+						:time="3000"
+						:status="event.markets[5].selections[1].oddsChange == 'oddsUp' ? 1 : 2"
+						@animationEnd="animationEnd(event.markets[5].marketId, event.markets[5].selections[1])"
+					/>
+				</span>
 			</div>
 			<div class="odds-item">
 				<span>客胜</span>
-				<span class="value">2.40</span>
+				<span class="value" :class="[changeClass(event.markets[5].selections[2])]"
+					>{{ event.markets[5].selections[2].oddsPrice.decimalPrice }}
+					<RiseOrFall
+						v-if="event.markets[5].selections[2].oddsChange"
+						:time="3000"
+						:status="event.markets[5].selections[2].oddsChange == 'oddsUp' ? 1 : 2"
+						@animationEnd="animationEnd(event.markets[5].marketId, event.markets[5].selections[2])"
+					/>
+				</span>
 			</div>
 			<!-- <span v-if="market.betType == 20"><template v-if="item?.key == 'h'">主胜</template> <template v-if="item?.key == 'a'">客胜</template></span>
 						<span v-if="market.betType == 1">{{ SportsCommon.formatPoint({ betType: market.betType, point: item?.point, key: item?.key }) }}</span>
@@ -47,21 +71,38 @@
 		<div class="price_title">全场让球</div>
 		<div class="handicap">
 			<div class="handicap-item">
-				<span
-					>{{ SportsCommon.formatPoint({ betType: event.markets[1].betType, point: event.markets[1].selections[0].point, key: event.markets[1].selections[0].point?.key }) }}</span
-				>
-				<span class="value green">{{ event.markets[1].selections[0].oddsPrice.decimalPrice }}</span>
+				<span>{{ SportsCommon.formatPoint({ betType: event.markets[1].betType, point: event.markets[1].selections[0].point, key: event.markets[1].selections[0].point?.key }) }}</span>
+				<span class="value" :class="[changeClass(event.markets[1].selections[0])]"
+					>{{ event.markets[1].selections[0].oddsPrice.decimalPrice }}
+					<RiseOrFall
+						v-if="event.markets[1].selections[0].oddsChange"
+						:time="3000"
+						:status="event.markets[1].selections[0].oddsChange == 'oddsUp' ? 1 : 2"
+						@animationEnd="animationEnd(event.markets[1].marketId, event.markets[1].selections[0])"
+					/>
+				</span>
 			</div>
 			<div class="handicap-item">
 				<span>{{ SportsCommon.formatPoint({ betType: event.markets[1].betType, point: event.markets[1].selections[1].point, key: event.markets[1].selections[1].point?.key }) }}</span>
-				<span class="value red">{{ event.markets[1].selections[1].oddsPrice.decimalPrice }}</span>
+				<span class="value" :class="[changeClass(event.markets[1].selections[1])]"
+					>{{ event.markets[1].selections[1].oddsPrice.decimalPrice }}
+					<RiseOrFall
+						v-if="event.markets[1].selections[1].oddsChange"
+						:time="3000"
+						:status="event.markets[1].selections[1].oddsChange == 'oddsUp' ? 1 : 2"
+						@animationEnd="animationEnd(event.markets[1].marketId, event.markets[1].selections[1])"
+					/>
+				</span>
 			</div>
 		</div>
 		<div class="price_title">全场大小</div>
 		<div class="handicap">
 			<div class="handicap-item">
-				<span>{{ event.markets[3].selections[0].keyName }}{{ SportsCommon.formatPoint({ betType: event.markets[3].betType, point: event.markets[3].selections[0].point, key: event.markets[3].selections[0].point?.key }) }}</span>
-				<span class="value green">{{ event.markets[3].selections[0].oddsPrice.decimalPrice }}</span>
+				<span
+					>{{ event.markets[3].selections[0].keyName
+					}}{{ SportsCommon.formatPoint({ betType: event.markets[3].betType, point: event.markets[3].selections[0].point, key: event.markets[3].selections[0].point?.key }) }}</span
+				>
+				<span class="value" :class="[changeClass(event.markets[3].selections[0])]">{{ event.markets[3].selections[0].oddsPrice.decimalPrice }}</span>
 				<RiseOrFall
 					v-if="event.markets[3].selections[0].oddsChange"
 					:time="3000"
@@ -70,13 +111,16 @@
 				/>
 			</div>
 			<div class="handicap-item">
-				<span>{{ event.markets[3].selections[1].keyName }}{{ SportsCommon.formatPoint({ betType: event.markets[3].betType, point: event.markets[3].selections[1].point, key: event.markets[3].selections[1].point?.key }) }}</span>
-				<span class="value red">{{ event.markets[3].selections[1].oddsPrice.decimalPrice }}</span>
+				<span
+					>{{ event.markets[3].selections[1].keyName
+					}}{{ SportsCommon.formatPoint({ betType: event.markets[3].betType, point: event.markets[3].selections[1].point, key: event.markets[3].selections[1].point?.key }) }}</span
+				>
+				<span class="value" :class="[changeClass(event.markets[3].selections[1])]">{{ event.markets[3].selections[1].oddsPrice.decimalPrice }}</span>
 				<RiseOrFall
 					v-if="event.markets[3].selections[1].oddsChange"
 					:time="3000"
 					:status="event.markets[3].selections[1].oddsChange == 'oddsUp' ? 1 : 2"
-					@animationEnd="animationEnd(event.markets[3].marketId,  event.markets[3].selections[1])"
+					@animationEnd="animationEnd(event.markets[3].marketId, event.markets[3].selections[1])"
 				/>
 			</div>
 			<!-- <div class="handicap-item lock-container">
@@ -114,6 +158,19 @@ const animationEnd = (marketId, selection) => {
 		selection.oddsChange = "";
 	}
 };
+
+/**
+ * @description 切换类名
+ */
+const changeClass = (item) => {
+	if (!item.oddsChange) {
+		return "";
+	} else if (item.oddsChange == "oddsUp") {
+		return "oddsUp";
+	} else if (item.oddsChange == "oddsDown") {
+		return "oddsDown";
+	}
+};
 </script>
 <style scoped lang="scss">
 $background-color: #333;
@@ -125,6 +182,17 @@ $red-color: #f00;
 .container {
 	padding: 24px;
 	border-radius: 20px;
+	.oddsUp {
+		@include themeify {
+			color: themed("Theme") !important;
+		}
+	}
+
+	.oddsDown {
+		@include themeify {
+			color: themed("Wam-P1") !important;
+		}
+	}
 	.lock {
 		width: 32px;
 		height: 32px;

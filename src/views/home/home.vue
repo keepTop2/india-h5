@@ -116,7 +116,7 @@ const eventList = ref();
 watch(
 	() => viewSportPubSubEventData.getSportData(),
 	(newData) => {
-		console.log(newData);
+		console.log(JSON.stringify(newData));
 		/**
 		 * @description 根据 sportType 获取对应的数据
 		 * @param {Sports} sportType
@@ -129,7 +129,7 @@ watch(
 			newEvents.push(...item.events);
 		});
 		eventList.value = newEvents;
-		console.log(newEvents,'===newEvents')
+		console.log(newEvents, "===newEvents");
 	}
 );
 // 注册一个钩子，在组件被挂载之前被调用。
@@ -209,7 +209,7 @@ const openSportPush = async () => {
 			sportPushApi: SportPushApi.GetEvents_push,
 			webToPushApi: WebToPushApi.eventsRollingBall,
 			params: {
-				query: `$filter=eventId in (89389076)`,
+				query: `$filter=eventId in (89881335)`,
 			},
 			isMultiple: true,
 		},
