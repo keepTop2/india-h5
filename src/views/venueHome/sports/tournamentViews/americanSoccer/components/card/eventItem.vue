@@ -60,7 +60,7 @@
 				<div class="others">
 					<!-- 上半场比分 下半场不显示 -->
 					<div v-if="event.streamingOption != 0 && event.channelCode" class="other3">
-						<VantLazyImg :src="sportLive" />
+						<SvgIcon iconName="/venueHome/sports/svg/sport_live" size="4.266667" />
 					</div>
 					<!-- <div class="other4">
 						<SvgIcon iconName="/venueHome/sports/svg/sport_match_status" size="4.266667" />
@@ -86,7 +86,6 @@ import marketItem from "./marketItem.vue";
 import { useRouter } from "vue-router";
 import { Market, SportsRootObject } from "/@/views/venueHome/sports/utils/interface";
 import { useSportsBetEventStore } from "/@/store/modules/sports/sportsBetData";
-import sportLive from "/@/assets/zh/default/svgIcon/home/sports/sport_live.svg";
 import sportsApi from "/@/api/venueHome/sports";
 import pubsub from "/@/pubSub/pubSub";
 const sportsBetData = useSportsBetEventStore();

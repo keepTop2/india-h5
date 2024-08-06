@@ -61,12 +61,6 @@
 					/>
 				</span>
 			</div>
-			<!-- <span v-if="market.betType == 20"><template v-if="item?.key == 'h'">主胜</template> <template v-if="item?.key == 'a'">客胜</template></span>
-						<span v-if="market.betType == 1">{{ SportsCommon.formatPoint({ betType: market.betType, point: item?.point, key: item?.key }) }}</span>
-						<span v-if="market.betType == 3">
-							{{ item?.keyName }}
-							{{ item?.point }}
-						</span> -->
 		</div>
 		<div class="price_title">全场让球</div>
 		<div class="handicap">
