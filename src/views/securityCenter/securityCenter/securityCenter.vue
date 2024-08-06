@@ -2,9 +2,9 @@
 	<VantNavBar :title="$t(`VantNavBar['安全中心']`)" @onClickLeft="onClickLeft" />
 
 	<div class="group">
-		<div class="cell van-haptics-feedback" v-for="(item, index) in menuList" :key="index" @click="onClickCell(item)">
+		<div class="cell van-haptics-feedback" v-for="(item, index) in menuList" :key="index" @click.stop="onClickCell(item)">
 			<div class="label">{{ item.name }}</div>
-			<!-- <div v-if="item.value" class="value">{{ item.value }}</div> -->
+			<div v-if="item.value" class="value" @click.stop="toPath(item.editPath)">{{ item.value }}</div>
 			<div class="arrow">
 				<SvgIcon iconName="/common/arrow" />
 			</div>
@@ -27,17 +27,20 @@ const menuList = [
 	{
 		name: $.t("securityCenter['手机号']"),
 		value: "修改",
-		path: "",
+		path: "/bind/phone",
+		editPath: "/editContactDetails/phone",
 	},
 	{
 		name: $.t("securityCenter['邮箱']"),
 		value: "修改",
-		path: "",
+		path: "/bind/email",
+		editPath: "/editContactDetails/email",
 	},
 	{
 		name: $.t("securityCenter['交易密码']"),
 		value: "修改",
-		path: "",
+		path: "/setTradingPassword",
+		editPath: "/editTradingPassword",
 	},
 ];
 
