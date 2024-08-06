@@ -1,14 +1,14 @@
 <template>
 	<div>
-		<VantNavBar :title="$t(`VantNavBar['修改密码']`)" @onClickLeft="onClickLeft" />
+		<VantNavBar :title="$t(`VantNavBar['修改交易密码']`)" @onClickLeft="onClickLeft" />
 
 		<form class="form">
-			<span class="title">{{ $t('loginPassword["旧密码"]') }}</span>
+			<span class="title">{{ $t('editTradingPassword["原交易密码"]') }}</span>
 			<FormInput
 				v-model="state.oldPassword"
 				:type="eyeShow ? 'oldPassword' : 'text'"
 				:maxlength="16"
-				:placeholder="$t(`loginPassword['旧密码']`)"
+				:placeholder="$t(`editTradingPassword['原交易密码']`)"
 				:errorBorder="!isOldPasswordValid && state.oldPassword !== '' ? true : false"
 			>
 				<template v-slot:right>
@@ -19,15 +19,15 @@
 				</template>
 			</FormInput>
 			<div class="error_text">
-				<span v-if="!isOldPasswordValid && state.oldPassword !== ''" class="text">{{ $t('register["密码为8-16位"]') }}</span>
+				<span v-if="!isOldPasswordValid && state.oldPassword !== ''" class="text">{{ $t('editTradingPassword["密码为8-16位"]') }}</span>
 			</div>
 
-			<span class="title">{{ $t('loginPassword["登录密码"]') }}</span>
+			<span class="title">{{ $t('editTradingPassword["新交易密码"]') }}</span>
 			<FormInput
 				v-model="state.password"
 				:type="eyeShow ? 'password' : 'text'"
 				:maxlength="16"
-				:placeholder="$t(`loginPassword['登录密码']`)"
+				:placeholder="$t(`editTradingPassword['新交易密码']`)"
 				:errorBorder="!isPasswordValid && state.password !== '' ? true : false"
 			>
 				<template v-slot:right>
@@ -38,15 +38,15 @@
 				</template>
 			</FormInput>
 			<div class="error_text">
-				<span v-if="!isPasswordValid && state.password !== ''" class="text">{{ $t('register["密码为8-16位"]') }}</span>
+				<span v-if="!isPasswordValid && state.password !== ''" class="text">{{ $t('editTradingPassword["新交易密码不能与旧交易密码相同"]') }}</span>
 			</div>
 
-			<span class="title">{{ $t('loginPassword["确认密码"]') }}</span>
+			<span class="title">{{ $t('editTradingPassword["确认交易密码"]') }}</span>
 			<FormInput
 				v-model="state.confirmPassword"
 				:type="eyeShow ? 'password' : 'text'"
 				:maxlength="16"
-				:placeholder="$t(`loginPassword['确认密码']`)"
+				:placeholder="$t(`editTradingPassword['确认交易密码']`)"
 				:errorBorder="!isConfirmPasswordValid ? true : false"
 			>
 				<template v-slot:right>
@@ -57,10 +57,15 @@
 				</template>
 			</FormInput>
 			<div class="error_text">
-				<span v-if="!isConfirmPasswordValid" class="text">{{ $t('register["两次输入密码不一致"]') }}</span>
+				<span v-if="!isConfirmPasswordValid" class="text">{{ $t('register["两次交易密码不一致"]') }}</span>
 			</div>
 
-			<Button class="mt_40" :type="btnDisabled ? 'disabled' : 'default'" @click="onRegister">{{ $t('loginPassword["确定"]') }}</Button>
+			<Button class="mt_40" :type="btnDisabled ? 'disabled' : 'default'" @click="onRegister">{{ $t('editTradingPassword["确定"]') }}</Button>
+
+			<div class="tips">
+				{{ $t('editTradingPassword["忘记了旧交易密码？"]') }}
+				<span @click="$router.push('/retrieveTradingPassword/email')"> {{ $t('editTradingPassword["找回交易密码"]') }}</span>
+			</div>
 		</form>
 	</div>
 </template>
@@ -146,7 +151,7 @@ const onClickLeft = () => {
 	}
 
 	.error_text {
-		min-height: 20px;
+		min-height: 40px;
 		.text {
 			display: block;
 			margin-top: 4px;
@@ -160,55 +165,18 @@ const onClickLeft = () => {
 		}
 	}
 
-	.checkbox {
-		display: flex;
-		align-items: center;
-		margin-top: 32px;
+	.tips {
+		margin-top: 16px;
+		text-align: end;
 
-		.check {
-			width: 32px;
-			height: 32px;
+		@include themeify {
+			color: themed("T1");
 		}
-		.text,
-		.text3 {
-			padding-left: 16px;
-			font-family: "PingFang SC";
-			font-size: 22px;
-			font-weight: 400;
-			line-height: 32px;
-		}
-		.text {
-			@include themeify {
-				color: themed("TB");
-			}
-		}
-
-		.text2 {
-			@include themeify {
-				color: themed("Theme");
-			}
-		}
-
-		.text3 {
-			@include themeify {
-				color: themed("T3");
-			}
-		}
-	}
-
-	.footer {
-		margin-top: 40px;
-		text-align: center;
 		font-family: "PingFang SC";
 		font-size: 24px;
 		font-weight: 400;
-		line-height: 34px;
-		.text {
-			@include themeify {
-				color: themed("TB");
-			}
-		}
-		.create {
+
+		span {
 			@include themeify {
 				color: themed("Theme");
 			}

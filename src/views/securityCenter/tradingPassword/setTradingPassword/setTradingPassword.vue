@@ -1,33 +1,14 @@
 <template>
 	<div>
-		<VantNavBar :title="$t(`VantNavBar['修改密码']`)" @onClickLeft="onClickLeft" />
+		<VantNavBar :title="$t(`VantNavBar['设置交易密码']`)" @onClickLeft="onClickLeft" />
 
 		<form class="form">
-			<span class="title">{{ $t('loginPassword["旧密码"]') }}</span>
-			<FormInput
-				v-model="state.oldPassword"
-				:type="eyeShow ? 'oldPassword' : 'text'"
-				:maxlength="16"
-				:placeholder="$t(`loginPassword['旧密码']`)"
-				:errorBorder="!isOldPasswordValid && state.oldPassword !== '' ? true : false"
-			>
-				<template v-slot:right>
-					<div class="right">
-						<SvgIcon v-if="state.oldPassword" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.oldPassword = ''" />
-						<SvgIcon class="icon" :iconName="eyeShow ? '/loginOrRegister/eye-off' : '/loginOrRegister/eye'" @click="eyeShow = !eyeShow" />
-					</div>
-				</template>
-			</FormInput>
-			<div class="error_text">
-				<span v-if="!isOldPasswordValid && state.oldPassword !== ''" class="text">{{ $t('register["密码为8-16位"]') }}</span>
-			</div>
-
-			<span class="title">{{ $t('loginPassword["登录密码"]') }}</span>
+			<span class="title">{{ $t('setTradingPassword["交易密码"]') }}</span>
 			<FormInput
 				v-model="state.password"
 				:type="eyeShow ? 'password' : 'text'"
 				:maxlength="16"
-				:placeholder="$t(`loginPassword['登录密码']`)"
+				:placeholder="$t(`setTradingPassword['交易密码']`)"
 				:errorBorder="!isPasswordValid && state.password !== '' ? true : false"
 			>
 				<template v-slot:right>
@@ -38,15 +19,15 @@
 				</template>
 			</FormInput>
 			<div class="error_text">
-				<span v-if="!isPasswordValid && state.password !== ''" class="text">{{ $t('register["密码为8-16位"]') }}</span>
+				<span v-if="!isPasswordValid && state.password !== ''" class="text">{{ $t('setTradingPassword["请输入6位数字"]') }}</span>
 			</div>
 
-			<span class="title">{{ $t('loginPassword["确认密码"]') }}</span>
+			<span class="title">{{ $t('setTradingPassword["确认交易密码"]') }}</span>
 			<FormInput
 				v-model="state.confirmPassword"
 				:type="eyeShow ? 'password' : 'text'"
 				:maxlength="16"
-				:placeholder="$t(`loginPassword['确认密码']`)"
+				:placeholder="$t(`setTradingPassword['确认交易密码']`)"
 				:errorBorder="!isConfirmPasswordValid ? true : false"
 			>
 				<template v-slot:right>
@@ -57,10 +38,10 @@
 				</template>
 			</FormInput>
 			<div class="error_text">
-				<span v-if="!isConfirmPasswordValid" class="text">{{ $t('register["两次输入密码不一致"]') }}</span>
+				<span v-if="!isConfirmPasswordValid" class="text">{{ $t('setTradingPassword["两次输入密码不一致"]') }}</span>
 			</div>
 
-			<Button class="mt_40" :type="btnDisabled ? 'disabled' : 'default'" @click="onRegister">{{ $t('loginPassword["确定"]') }}</Button>
+			<Button class="mt_40" :type="btnDisabled ? 'disabled' : 'default'" @click="onRegister">{{ $t('setTradingPassword["确定"]') }}</Button>
 		</form>
 	</div>
 </template>
