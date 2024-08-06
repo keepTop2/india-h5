@@ -1,90 +1,92 @@
 <template>
 	<div class="my_container">
 		<NavBar />
-		<!-- <NoLogin /> -->
+		<NoLogin v-if="!store.token" />
 
 		<!-- 用户信息 -->
-		<div class="user">
-			<div class="avatar">
-				<VantLazyImg :src="avatar" />
-			</div>
-			<span class="user_name">Athena LEE</span>
-			<div class="user_id">
-				<span>ID: 455454</span>
-			</div>
-		</div>
-
-		<!-- vip -->
-		<div class="vip_container">
-			<VantLazyImg class="vip_big" :src="vip_big" />
-			<span class="vip_level">VIP0</span>
-			<div class="vip_info">
-				<span class="vip_experience">升级所需经验: <span class="warn">200</span> / <span>500</span></span>
-				<SvgIcon class="arrow" iconName="/my/arrow" @click="toPath('/vip')" />
-			</div>
-			<!-- VIP进度条 -->
-			<Progress class="vip_progress" />
-		</div>
-
-		<div class="my-content">
-			<!-- 勋章 -->
-			<div class="medal">
-				<div class="medal_header">
-					<VantLazyImg class="line" :src="line" />
-					<div class="label">勋章</div>
-					<SvgIcon class="arrow" iconName="/common/arrow" />
+		<template v-else>
+			<div class="user">
+				<div class="avatar">
+					<VantLazyImg :src="avatar" />
 				</div>
-				<div class="medal_content">
-					<template v-for="item in 6">
-						<VantLazyImg class="medal" :src="medal" />
+				<span class="user_name">Athena LEE</span>
+				<div class="user_id">
+					<span>ID: 455454</span>
+				</div>
+			</div>
 
-						<div class="btn"></div>
-						<!-- <div class="btn"></div>
+			<!-- vip -->
+			<div class="vip_container">
+				<VantLazyImg class="vip_big" :src="vip_big" />
+				<span class="vip_level">VIP0</span>
+				<div class="vip_info">
+					<span class="vip_experience">升级所需经验: <span class="warn">200</span> / <span>500</span></span>
+					<SvgIcon class="arrow" iconName="/my/arrow" @click="toPath('/vip')" />
+				</div>
+				<!-- VIP进度条 -->
+				<Progress class="vip_progress" />
+			</div>
+
+			<div class="my-content">
+				<!-- 勋章 -->
+				<div class="medal">
+					<div class="medal_header">
+						<VantLazyImg class="line" :src="line" />
+						<div class="label">勋章</div>
+						<SvgIcon class="arrow" iconName="/common/arrow" />
+					</div>
+					<div class="medal_content">
+						<template v-for="item in 6">
+							<VantLazyImg class="medal" :src="medal" />
+
+							<div class="btn"></div>
+							<!-- <div class="btn"></div>
 						<div class="btn"></div> -->
-					</template>
-				</div>
-			</div>
-			<!-- 总余额 -->
-			<div class="balance_operation">
-				<div class="balance_header">
-					<VantLazyImg class="line" :src="line" />
-					<div class="label">总余额</div>
-					<div class="value">100.00</div>
-				</div>
-				<div class="balance_content">
-					<div class="balance_item" v-for="item in balanceOperationList" @click="toPath(item.path)">
-						<VantLazyImg class="balance_icon" :src="item.icon" />
-						<div class="label">{{ item.name }}</div>
+						</template>
 					</div>
 				</div>
-			</div>
-
-			<div class="group">
-				<div class="cell van-haptics-feedback" v-for="(item, index) in menuData.group1" :key="index" @click="onClickCell(item)">
-					<SvgIcon class="icon" :iconName="item.icon" />
-					<div class="label">{{ item.name }}</div>
-					<div class="value">{{ item.value }}</div>
-					<SvgIcon class="arrow" iconName="/common/arrow" />
+				<!-- 总余额 -->
+				<div class="balance_operation">
+					<div class="balance_header">
+						<VantLazyImg class="line" :src="line" />
+						<div class="label">总余额</div>
+						<div class="value">100.00</div>
+					</div>
+					<div class="balance_content">
+						<div class="balance_item" v-for="item in balanceOperationList" @click="toPath(item.path)">
+							<VantLazyImg class="balance_icon" :src="item.icon" />
+							<div class="label">{{ item.name }}</div>
+						</div>
+					</div>
 				</div>
-			</div>
 
-			<div class="group">
-				<div class="cell van-haptics-feedback" v-for="(item, index) in menuData.group2" :key="index" @click="onClickCell(item)">
-					<SvgIcon class="icon" :iconName="item.icon" />
-					<div class="label">{{ item.name }}</div>
-					<div class="value">{{ item.value }}</div>
-					<SvgIcon class="arrow" iconName="/common/arrow" />
+				<div class="group">
+					<div class="cell van-haptics-feedback" v-for="(item, index) in menuData.group1" :key="index" @click="onClickCell(item)">
+						<SvgIcon class="icon" :iconName="item.icon" />
+						<div class="label">{{ item.name }}</div>
+						<div class="value">{{ item.value }}</div>
+						<SvgIcon class="arrow" iconName="/common/arrow" />
+					</div>
 				</div>
-				<div class="cell">
-					<SvgIcon class="icon" iconName="/my/theme" />
-					<div class="label">{{ $t('my["主题"]') }}</div>
-					<SvgIcon class="themeChange_icon" iconName="/my/themeChange" />
-				</div>
-			</div>
 
-			<!-- 退出按钮 -->
-			<div class="login_out_btn" @click="loginOut">登出</div>
-		</div>
+				<div class="group">
+					<div class="cell van-haptics-feedback" v-for="(item, index) in menuData.group2" :key="index" @click="onClickCell(item)">
+						<SvgIcon class="icon" :iconName="item.icon" />
+						<div class="label">{{ item.name }}</div>
+						<div class="value">{{ item.value }}</div>
+						<SvgIcon class="arrow" iconName="/common/arrow" />
+					</div>
+					<div class="cell">
+						<SvgIcon class="icon" iconName="/my/theme" />
+						<div class="label">{{ $t('my["主题"]') }}</div>
+						<SvgIcon class="themeChange_icon" iconName="/my/themeChange" />
+					</div>
+				</div>
+
+				<!-- 退出按钮 -->
+				<div class="login_out_btn" @click="loginOut">登出</div>
+			</div>
+		</template>
 
 		<!-- 邀请好友 -->
 		<InviteFriends />
@@ -98,7 +100,7 @@
 			<div class="content">您确定要退出登录吗?</div>
 			<div class="btns">
 				<div class="btn1" @click="loginOutShow = false">取消</div>
-				<div class="btn2">登出</div>
+				<div class="btn2" @click="onLoginOut">登出</div>
 			</div>
 		</van-popup>
 	</div>
@@ -112,6 +114,7 @@ import Progress from "/@/views/vip/components/vipProgress.vue";
 import InviteFriends from "/@/views/my/components/inviteFriends.vue";
 import pubsub from "/@/pubSub/pubSub";
 import { useRouter } from "vue-router";
+import { useUserStore } from "/@/store/modules/user";
 
 import avatar from "/@/assets/zh-CN/default/my/avatar.png";
 import vip_big from "/@/assets/zh-CN/default/vip/vip_big.png";
@@ -124,6 +127,7 @@ import balance_operation_jy from "/@/assets/zh-CN/default/my/balance_operation_j
 import balance_operation_tz from "/@/assets/zh-CN/default/my/balance_operation_tz.png";
 
 const router = useRouter();
+const store = useUserStore();
 
 const balanceOperationList = [
 	{
@@ -214,6 +218,11 @@ const onClickCell = (item) => {
 const toPath = (path) => {
 	console.log("path", path);
 	router.push(path);
+};
+
+const onLoginOut = () => {
+	store.clearInfo();
+	router.push("/login");
 };
 
 const loginOut = () => {

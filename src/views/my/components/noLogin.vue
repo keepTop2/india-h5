@@ -12,8 +12,8 @@
 			</div>
 
 			<div class="btns">
-				<div class="login">{{ $t('navBar["登录"]') }}</div>
-				<div class="register">{{ $t('navBar["注册"]') }}</div>
+				<div class="login" @click="toPath('/login')">{{ $t('navBar["登录"]') }}</div>
+				<div class="register" @click="toPath('/register')">{{ $t('navBar["注册"]') }}</div>
 			</div>
 		</div>
 
@@ -35,6 +35,13 @@
 
 <script setup lang="ts">
 import avatar from "/@/assets/zh-CN/default/my/avatar.png";
+import { useRouter } from "vue-router";
+const router = useRouter();
+
+const toPath = (path) => {
+	console.log("path", path);
+	router.push(path);
+};
 </script>
 
 <style scoped lang="scss">
