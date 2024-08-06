@@ -15,6 +15,7 @@ declare module '@vue/runtime-core' {
     CollapseItem: typeof import('./../src/components/Collapse/CollapseItem.vue')['default']
     CollapseTransition: typeof import('./../src/components/Collapse/CollapseTransition.vue')['default']
     DateRangeSelect: typeof import('./../src/components/DateRangeSelect/DateRangeSelect.vue')['default']
+    FormInput: typeof import('./../src/components/Input/formInput.vue')['default']
     FromInput: typeof import('./../src/components/Input/fromInput.vue')['default']
     Hcaptcha: typeof import('./../src/components/Hcaptcha/hcaptcha.vue')['default']
     MultipleSelect: typeof import('./../src/components/MultipleSelect/MultipleSelect.vue')['default']

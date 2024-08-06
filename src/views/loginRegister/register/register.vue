@@ -5,16 +5,16 @@
 		<div class="register-from">
 			<div class="title">{{ $t('register["注册"]') }}</div>
 			<div class="from">
-				<FromInput v-model="state.account" type="text" :placeholder="$t(`register['输入账号']`)" :errorBorder="!isAccountValid && state.account !== '' ? true : false">
+				<FormInput v-model="state.account" type="text" :placeholder="$t(`register['输入账号']`)" :errorBorder="!isAccountValid && state.account !== '' ? true : false">
 					<template v-slot:right>
 						<SvgIcon v-if="state.account" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.account = ''" />
 					</template>
-				</FromInput>
+				</FormInput>
 				<div class="error_text">
 					<span v-if="!isAccountValid && state.account !== ''" class="text">{{ $t('register["请输入4-11位字母+数字组成，首位必须是字母"]') }}</span>
 				</div>
 
-				<FromInput
+				<FormInput
 					v-model="state.password"
 					:type="eyeShow ? 'password' : 'text'"
 					:maxlength="16"
@@ -27,12 +27,12 @@
 							<SvgIcon class="icon" :iconName="eyeShow ? '/loginOrRegister/eye-off' : '/loginOrRegister/eye'" @click="eyeShow = !eyeShow" />
 						</div>
 					</template>
-				</FromInput>
+				</FormInput>
 				<div class="error_text">
 					<span v-if="!isPasswordValid && state.password !== ''" class="text">{{ $t('register["密码为8-16位"]') }}</span>
 				</div>
 
-				<FromInput
+				<FormInput
 					v-model="state.confirmPassword"
 					:type="eyeShow ? 'password' : 'text'"
 					:maxlength="16"
@@ -45,25 +45,25 @@
 							<SvgIcon class="icon" :iconName="eyeShow ? '/loginOrRegister/eye-off' : '/loginOrRegister/eye'" @click="eyeShow = !eyeShow" />
 						</div>
 					</template>
-				</FromInput>
+				</FormInput>
 				<div class="error_text">
 					<span v-if="!isConfirmPasswordValid" class="text">{{ $t('register["两次输入密码不一致"]') }}</span>
 				</div>
 
-				<FromInput v-model="state.mainCurrency" :placeholder="$t(`register['选择主货币']`)" readonly :errorBorder="mainCurrencyRG ? true : false" @click="router.push('/mainCurrency')">
+				<FormInput v-model="state.mainCurrency" :placeholder="$t(`register['选择主货币']`)" readonly :errorBorder="mainCurrencyRG ? true : false" @click="router.push('/mainCurrency')">
 					<template v-slot:right>
 						<SvgIcon class="icon" iconName="/loginOrRegister/arrow" />
 					</template>
-				</FromInput>
+				</FormInput>
 				<div class="error_text">
 					<span v-if="mainCurrencyRG" class="text">{{ $t('register["请选择"]') }}</span>
 				</div>
 
-				<FromInput v-model="state.inviteCode" type="text" :placeholder="$t(`register['推荐码(非必填)']`)">
+				<FormInput v-model="state.inviteCode" type="text" :placeholder="$t(`register['推荐码(非必填)']`)">
 					<template v-slot:right>
 						<SvgIcon v-if="state.inviteCode" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.inviteCode = ''" />
 					</template>
-				</FromInput>
+				</FormInput>
 
 				<div class="checkbox" @click="userAgreement = !userAgreement">
 					<SvgIcon v-show="!userAgreement" class="check" iconName="/loginOrRegister/checkbox" />

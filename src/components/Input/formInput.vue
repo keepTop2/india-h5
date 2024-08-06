@@ -1,5 +1,5 @@
 <template>
-	<div class="from-input" :class="{ 'from-input-error': errorBorder }">
+	<div class="form-input" :class="{ 'form-input-error': errorBorder }">
 		<slot name="left"></slot>
 
 		<input
@@ -39,9 +39,10 @@ const emit = defineEmits(["update:modelValue", "blur", "focus"]);
 </script>
 
 <style scoped lang="scss">
-.from-input {
+.form-input {
 	position: relative;
 	display: flex;
+	flex: 1;
 	align-items: center;
 	height: 94px;
 	padding: 28px 24px;
@@ -69,7 +70,9 @@ const emit = defineEmits(["update:modelValue", "blur", "focus"]);
 	}
 }
 
-.from-input-error {
+.form-input-error {
+	position: relative;
+	transition: border 5s;
 	&::after {
 		content: "";
 		position: absolute;

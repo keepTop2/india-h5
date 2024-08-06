@@ -2,14 +2,14 @@
 	<div class="content">
 		<div class="title">{{ type == "email" ? $t('forgetPassword["邮箱验证"]') : $t('forgetPassword["手机号验证"]') }}</div>
 		<div class="change" @click="onChange">{{ $t('forgetPassword["其他方式"]') }}</div>
-		<div class="from">
+		<div class="form">
 			<!-- 邮箱 -->
 			<div v-show="type == 'email'">
-				<FromInput v-model="state.email" type="text" :placeholder="$t(`forgetPassword['请输入电子邮箱']`)" :errorBorder="!isEmailValid && state.email !== '' ? true : false">
+				<FormInput v-model="state.email" type="text" :placeholder="$t(`forgetPassword['请输入电子邮箱']`)" :errorBorder="!isEmailValid && state.email !== '' ? true : false">
 					<template v-slot:right>
 						<SvgIcon v-if="state.email" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.email = ''" />
 					</template>
-				</FromInput>
+				</FormInput>
 				<div class="error_text">
 					<span v-if="!isEmailValid && state.email !== ''" class="text">{{ $t('forgetPassword["邮箱格式不正确"]') }}</span>
 				</div>
@@ -17,24 +17,24 @@
 
 			<!-- 手机号码 -->
 			<div v-show="type == 'phone'">
-				<div class="phone">
+				<div class="phone" :class="{ 'form-input-error': !isPhoneValid && state.phone !== '' ? true : false }">
 					<div class="area_code">+888 <SvgIcon class="down" iconName="/loginOrRegister/navBar/down" /></div>
-					<FromInput v-model="state.phone" type="text" :placeholder="$t(`forgetPassword['请输入手机号']`)" :errorBorder="!isPhoneValid && state.phone !== '' ? true : false">
+					<FormInput v-model="state.phone" type="text" :placeholder="$t(`forgetPassword['请输入手机号']`)">
 						<template v-slot:right>
 							<SvgIcon v-if="state.phone" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.phone = ''" />
 						</template>
-					</FromInput>
+					</FormInput>
 				</div>
 				<div class="error_text">
 					<span v-if="!isPhoneValid && state.phone !== ''" class="text">{{ $t('forgetPassword["请输入8-12位数字"]') }}</span>
 				</div>
 			</div>
 
-			<FromInput v-model="state.email" type="text" :placeholder="$t(`common['验证码']`)">
+			<FormInput v-model="state.email" type="text" :placeholder="$t(`common['验证码']`)">
 				<template v-slot:right>
 					<CaptchaButton :disabled="captchaDisabled" />
 				</template>
-			</FromInput>
+			</FormInput>
 
 			<div class="tips">
 				{{ $t('forgetPassword["重新发送"]') }}<span class="help">{{ $t('common["联系客服"]') }}</span>
@@ -100,7 +100,7 @@ const onStep = async () => {
 		font-weight: 500;
 		text-decoration-line: underline;
 	}
-	.from {
+	.form {
 		margin-top: 40px;
 
 		.phone {
@@ -141,6 +141,24 @@ const onStep = async () => {
 			}
 			:deep(.from-input) {
 				flex: 1;
+			}
+		}
+		.form-input-error {
+			position: relative;
+			&::after {
+				content: "";
+				position: absolute;
+				top: 0px;
+				left: 0px;
+				width: 100%;
+				height: 100%;
+				border-radius: 12px;
+				border: 1px solid;
+				@include themeify {
+					border-color: themed("Theme");
+				}
+				box-sizing: border-box;
+				pointer-events: none; /* 确保伪元素不会阻止用户与实际内容交互 */
 			}
 		}
 

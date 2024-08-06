@@ -2,11 +2,11 @@
 	<div class="content">
 		<div class="title">{{ $t('forgetPassword["找回密码"]') }}</div>
 		<div class="from">
-			<FromInput v-model="state.account" type="text" :placeholder="$t(`forgetPassword['账户名']`)" :errorBorder="!isAccountValid && state.account !== '' ? true : false">
+			<FormInput v-model="state.account" type="text" :placeholder="$t(`forgetPassword['账户名']`)" :errorBorder="!isAccountValid && state.account !== '' ? true : false">
 				<template v-slot:right>
 					<SvgIcon v-if="state.account" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.account = ''" />
 				</template>
-			</FromInput>
+			</FormInput>
 			<div class="error_text">
 				<span v-if="!isAccountValid && state.account !== ''" class="text">{{ $t('register["请输入4-11位字母+数字组成，首位必须是字母"]') }}</span>
 			</div>
