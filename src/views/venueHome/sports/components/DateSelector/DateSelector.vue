@@ -28,7 +28,7 @@
  */
 
 import { ref, onMounted } from "vue";
-import common from ".././@/views/venueHome/sports/utils/common";
+import common from "/@/views/venueHome/sports/utils/common";
 import { i18n } from "/@/i18n/index";
 import { useSportsBetEventStore } from "/@/store/modules/sports/sportsBetData";
 const sportsBetEvent = useSportsBetEventStore();

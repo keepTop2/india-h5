@@ -22,9 +22,9 @@ import { OpenSportEventSourceParams } from "/@/views/venueHome/sports/models/spo
 import { useSportsInfoStore } from "/@/store/modules/sports/sportsInfo";
 import { useRoute } from "vue-router";
 import viewSportPubSubEventData from "/@/views/venueHome/sports/hooks/viewSportPubSubEventData";
-import common from ".././@/views/venueHome/sports/utils/common";
+import common from "/@/views/venueHome/sports/utils/common";
 import dayjs from "dayjs";
-import SportsCommonFn from ".././@/views/venueHome/sports/utils/common";
+import SportsCommonFn from "/@/views/venueHome/sports/utils/common";
 import useSportPubSubEvents from "/@/views/venueHome/sports/hooks/useSportPubSubEvents";
 import workerManage from "/@/webWorker/workerManage";
 import { useLoading } from "/@/directives/loading/hooks";
