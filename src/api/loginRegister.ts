@@ -50,3 +50,47 @@ export class verifyCodeApi {
 		});
 	};
 }
+
+// 忘记密码
+export class forgetPasswordApi {
+	// 验证账号
+	static submitAccount = (data = {}, headers = {}) => {
+		return useAxiosApi(`/app/login/api/submitAccount`, {
+			method: "POST",
+			data,
+			headers,
+		});
+	};
+	// 发送手机验证码
+	static sendSms = (data = {}, headers = {}) => {
+		return useAxiosApi(`/app/login/api/sendSms`, {
+			method: "POST",
+			data,
+			headers,
+		});
+	};
+	// 发送邮箱验证码
+	static sendMail = (data = {}, headers = {}) => {
+		return useAxiosApi(`/app/login/api/sendMail`, {
+			method: "POST",
+			data,
+			headers,
+		});
+	};
+	// 邮箱手机验证码校验
+	static checkVerifyCode = (data = {}, headers = {}) => {
+		return useAxiosApi(`/app/login/api/checkVerifyCode`, {
+			method: "POST",
+			data,
+			headers,
+		});
+	};
+	// 重置密码
+	static resetPassword = (data = {}, headers = {}) => {
+		return useAxiosApi(`/app/login/api/resetPassword`, {
+			method: "POST",
+			data,
+			headers,
+		});
+	};
+}

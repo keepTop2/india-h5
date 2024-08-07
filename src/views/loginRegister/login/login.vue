@@ -1,5 +1,6 @@
 <template>
 	<div class="login-container">
+		<NavBar />
 		<HeaderBG />
 		<div class="login-from">
 			<div class="title">{{ $t('login["登录"]') }}</div>
@@ -59,6 +60,7 @@
 </template>
 
 <script setup lang="ts">
+import NavBar from "/@/layout/loginRegister/components/navBar.vue";
 import { loginApi, verifyCodeApi } from "/@/api/loginRegister";
 import HeaderBG from "/@/views/loginRegister/components/headerBG.vue";
 // import { showToast } from "vant";

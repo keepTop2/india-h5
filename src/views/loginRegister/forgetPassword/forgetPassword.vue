@@ -1,5 +1,6 @@
 <template>
 	<div class="forgetPassword-container">
+		<NavBar />
 		<HeaderBG />
 
 		<component :is="componentMaps[state.computedIndex]" :data="state.params" @onStep="onStep" />
@@ -7,6 +8,7 @@
 </template>
 
 <script setup lang="ts" :defer="true">
+import NavBar from "/@/layout/loginRegister/components/navBar.vue";
 import HeaderBG from "/@/views/loginRegister/components/headerBG.vue";
 import StepOne from "/@/views/loginRegister/forgetPassword/components/stepOne.vue";
 import StepTwo from "/@/views/loginRegister/forgetPassword/components/stepTwo.vue";
@@ -21,13 +23,16 @@ const componentMaps = {
 };
 
 const state = reactive({
-	params: {},
-	computedIndex: 1,
+	params: {
+		userAccount: "",
+	},
+	computedIndex: 0,
 });
 
 onMounted(() => {});
 
-const onStep = () => {
+const onStep = (data?: any) => {
+	state.params = Object.assign({}, state.params, data);
 	if (state.computedIndex == 2) {
 		router.push("/login");
 	}

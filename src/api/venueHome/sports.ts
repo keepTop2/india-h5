@@ -6,7 +6,7 @@ class sportsApi {
 	 *@description 体育登录
 	 */
 	static sportsLogin = (data = {}, headers = {}) => {
-		return useAxiosApi(`/app-foreign/third/api/loginGame`, {
+		return useAxiosApi(`/app/third/api/loginGame`, {
 			method: "POST",
 			data,
 			headers,
@@ -16,14 +16,14 @@ class sportsApi {
 	 *@description 沙巴体育匿名登陆
 	 */
 	static sbaAnonLogin = (data = {}) => {
-		return useAxiosApi(`/app-foreign/anon/api/sbaAnonLogin`, {
+		return useAxiosApi(`/app/anon/api/sbaAnonLogin`, {
 			method: "POST",
 			data,
 		});
 	};
 	//获取关注列表
 	static getAttentionList = (data = {}) => {
-		return useAxiosApi(`/app-foreign/publicSetting/api/getSportsFollowDetail`, {
+		return useAxiosApi(`/app/publicSetting/api/getSportsFollowDetail`, {
 			method: "POST",
 			data,
 		});
@@ -31,14 +31,14 @@ class sportsApi {
 
 	//关注赛事
 	static saveFollow = (data = {}) => {
-		return useAxiosApi(`/app-foreign/publicSetting/api/saveFollow`, {
+		return useAxiosApi(`/app/publicSetting/api/saveFollow`, {
 			method: "POST",
 			data,
 		});
 	};
 	//取消关注赛事
 	static unFollow = (data = {}) => {
-		return useAxiosApi(`/app-foreign/publicSetting/api/unFollow`, {
+		return useAxiosApi(`/app/publicSetting/api/unFollow`, {
 			method: "POST",
 			data,
 		});
@@ -196,14 +196,14 @@ class sportsApi {
 	 *@description 获取沙巴体育注单ID
 	 */
 	static getBetOrderId = (data = {}) => {
-		return useAxiosApi(`/app-foreign/third/api/getBetOrderId`, {
+		return useAxiosApi(`/app/third/api/getBetOrderId`, {
 			method: "POST",
 			data,
 		});
 	};
 
 	static getBettingRecordList = (data?: object) => {
-		return useAxiosApi(`/app-foreign/order/api/client/orderRecord`, {
+		return useAxiosApi(`/app/order/api/client/orderRecord`, {
 			method: "POST",
 			data,
 		});
@@ -213,7 +213,7 @@ class sportsApi {
 	 * @description 查询体育购物车赔率变化配置
 	 */
 	static getPublicSetting = (data?: object) => {
-		return useAxiosApi(`/app-foreign/publicSetting/api/getPublicSetting`, {
+		return useAxiosApi(`/app/publicSetting/api/getPublicSetting`, {
 			method: "POST",
 			data,
 		});
@@ -223,7 +223,7 @@ class sportsApi {
 	 * @description 新增体育购物车赔率变化配置
 	 */
 	static saveSetting = (data?: object) => {
-		return useAxiosApi(`/app-foreign/publicSetting/api/saveSetting`, {
+		return useAxiosApi(`/app/publicSetting/api/saveSetting`, {
 			method: "POST",
 			data,
 		});

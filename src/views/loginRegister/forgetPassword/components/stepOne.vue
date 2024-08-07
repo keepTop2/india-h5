@@ -2,13 +2,13 @@
 	<div class="content">
 		<div class="title">{{ $t('forgetPassword["找回密码"]') }}</div>
 		<div class="from">
-			<FormInput v-model="state.account" type="text" :placeholder="$t(`forgetPassword['账户名']`)" :errorBorder="!isAccountValid && state.account !== '' ? true : false">
+			<FormInput v-model="state.userAccount" type="text" :placeholder="$t(`forgetPassword['账户名']`)" :errorBorder="!isAccountValid && state.userAccount !== '' ? true : false">
 				<template v-slot:right>
-					<SvgIcon v-if="state.account" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.account = ''" />
+					<SvgIcon v-if="state.userAccount" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.userAccount = ''" />
 				</template>
 			</FormInput>
 			<div class="error_text">
-				<span v-if="!isAccountValid && state.account !== ''" class="text">{{ $t('register["请输入4-11位字母+数字组成，首位必须是字母"]') }}</span>
+				<span v-if="!isAccountValid && state.userAccount !== ''" class="text">{{ $t('register["请输入4-11位字母+数字组成，首位必须是字母"]') }}</span>
 			</div>
 
 			<Button :type="!isAccountValid ? 'disabled' : 'default'" @click="onStep">{{ $t('forgetPassword["下一步"]') }}</Button>
@@ -23,40 +23,25 @@
 </template>
 
 <script setup lang="ts">
+import { forgetPasswordApi } from "/@/api/loginRegister";
 import common from "/@/utils/common";
 
 const emit = defineEmits(["onStep"]);
 
 const state = reactive({
-	account: "",
+	userAccount: "",
 });
 
 // 账号正则
 const isAccountValid = computed(() => {
-	return common.accountRG.test(state.account);
+	return common.accountRG.test(state.userAccount);
 });
 
 const onStep = async () => {
-	// if (state.type == "2") {
-	// 	state.account = state.areaCode + state.phone;
-	// 	// 校验手机
-	// } else {
-	// 	state.account = state.email;
-	// 	// 校验邮箱
-	// 	if (!Common.getInstance().emailReg(state.account)) {
-	// 		showToast($.t('login["电子邮箱不正确"]'));
-	// 		return;
-	// 	}
-	// }
-	// const params = {
-	// 	type: state.type,
-	// 	account: state.account,
-	// };
-	// const res = await ForgetPasswordApi.checkAccount(params).catch((err) => err);
-	// if (res.code == Common.getInstance().ResCode.SUCCESS) {
-	// 	emit("onStep", state);
-	// }
-	emit("onStep", state);
+	const res = await forgetPasswordApi.submitAccount(state).catch((err) => err);
+	if (res.code == common.getInstance().ResCode.SUCCESS) {
+		emit("onStep", state);
+	}
 };
 </script>
 
