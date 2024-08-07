@@ -28,8 +28,20 @@ const routes = [
 	VenueHome,
 	// 登录注册路由
 	LoginRegisterRouter,
+	{
+		path: "/mainCurrency",
+		name: "mainCurrency",
+		component: () => import("/@/views/loginRegister/mainCurrency/mainCurrency.vue"),
+		meta: { title: "选择主货币", leaveCaches: ["register"] },
+	},
+	{
+		path: "/userAgreement",
+		name: "userAgreement",
+		component: () => import("/@/views/loginRegister/userAgreement/userAgreement.vue"),
+		meta: { title: "用户协议" },
+	},
 	// 注册子页面
-	RegisterSubPage,
+	// RegisterSubPage,
 	// 钱包子页面
 	WalletSubRouter,
 	// 我的页面子页面

@@ -3,21 +3,21 @@
 		<div class="title">{{ $t('forgetPassword["设置新密码"]') }}</div>
 		<div class="from">
 			<FormInput
-				v-model="state.password"
+				v-model="state.newPassword"
 				:type="eyeShow ? 'password' : 'text'"
 				:maxlength="16"
 				:placeholder="$t(`forgetPassword['新密码']`)"
-				:errorBorder="!isPasswordValid && state.password !== '' ? true : false"
+				:errorBorder="!isPasswordValid && state.newPassword !== '' ? true : false"
 			>
 				<template v-slot:right>
 					<div class="right">
-						<SvgIcon v-if="state.password" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.password = ''" />
+						<SvgIcon v-if="state.newPassword" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.newPassword = ''" />
 						<SvgIcon class="icon" :iconName="eyeShow ? '/loginOrRegister/eye-off' : '/loginOrRegister/eye'" @click="eyeShow = !eyeShow" />
 					</div>
 				</template>
 			</FormInput>
 			<div class="error_text">
-				<span v-if="!isPasswordValid && state.password !== ''" class="text">{{ $t('register["密码为8-16位"]') }}</span>
+				<span v-if="!isPasswordValid && state.newPassword !== ''" class="text">{{ $t('register["密码为8-16位"]') }}</span>
 			</div>
 
 			<FormInput
@@ -44,24 +44,35 @@
 </template>
 
 <script setup lang="ts">
+import { forgetPasswordApi } from "/@/api/loginRegister";
 import common from "/@/utils/common";
+import { showToast } from "vant";
+import { useRouter } from "vue-router";
+
+const props = withDefaults(
+	defineProps<{
+		data?: any;
+	}>(),
+	{ data: {} }
+);
 
 const emit = defineEmits(["onStep"]);
+const router = useRouter();
 const eyeShow = ref(true);
 const btnDisabled = ref(true);
 const state = reactive({
-	password: "", // 密码
+	newPassword: "", // 密码
 	confirmPassword: "", // 密码
 });
 
 // 密码正则
 const isPasswordValid = computed(() => {
-	return common.passwordRG.test(state.password);
+	return common.passwordRG.test(state.newPassword);
 });
 
 // 密码正则
 const isConfirmPasswordValid = computed(() => {
-	return state.confirmPassword == state.password;
+	return state.confirmPassword == state.newPassword;
 });
 
 // 监听用户状态
@@ -80,26 +91,19 @@ watch(
 );
 
 const onStep = async () => {
-	// if (state.type == "2") {
-	// 	state.account = state.areaCode + state.phone;
-	// 	// 校验手机
-	// } else {
-	// 	state.account = state.email;
-	// 	// 校验邮箱
-	// 	if (!Common.getInstance().emailReg(state.account)) {
-	// 		showToast($.t('login["电子邮箱不正确"]'));
-	// 		return;
-	// 	}
-	// }
-	// const params = {
-	// 	type: state.type,
-	// 	account: state.account,
-	// };
-	// const res = await ForgetPasswordApi.checkAccount(params).catch((err) => err);
-	// if (res.code == Common.getInstance().ResCode.SUCCESS) {
-	// 	emit("onStep", state);
-	// }
-	emit("onStep", state);
+	const params = {
+		userAccount: props.data.userAccount,
+		account: props.data.type === "email" ? props.data.email : props.data.phone,
+		areaCode: props.data.type === "phone" ? props.data.areaCode : "",
+		verifyCode: props.data.verifyCode,
+		newPassword: state.newPassword,
+		confirmPassword: state.confirmPassword,
+	};
+	const res = await forgetPasswordApi.resetPassword(params).catch((err) => err);
+	if (res.code == common.getInstance().ResCode.SUCCESS) {
+		showToast("修改成功");
+		router.push("/login");
+	}
 };
 </script>
 

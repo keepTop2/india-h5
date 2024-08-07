@@ -1,10 +1,10 @@
 <template>
 	<div class="content">
-		<div class="title">{{ type == "email" ? $t('forgetPassword["邮箱验证"]') : $t('forgetPassword["手机号验证"]') }}</div>
+		<div class="title">{{ state.type == "email" ? $t('forgetPassword["邮箱验证"]') : $t('forgetPassword["手机号验证"]') }}</div>
 		<div class="change" @click="onChange">{{ $t('forgetPassword["其他方式"]') }}</div>
 		<div class="form">
 			<!-- 邮箱 -->
-			<div v-show="type == 'email'">
+			<div v-show="state.type == 'email'">
 				<FormInput v-model="state.email" type="text" :placeholder="$t(`forgetPassword['请输入电子邮箱']`)" :errorBorder="!isEmailValid && state.email !== '' ? true : false">
 					<template v-slot:right>
 						<SvgIcon v-if="state.email" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.email = ''" />
@@ -16,9 +16,11 @@
 			</div>
 
 			<!-- 手机号码 -->
-			<div v-show="type == 'phone'">
+			<div v-show="state.type == 'phone'">
 				<div class="phone" :class="{ 'form-input-error': !isPhoneValid && state.phone !== '' ? true : false }">
-					<div class="area_code">+888 <SvgIcon class="down" iconName="/loginOrRegister/navBar/down" /></div>
+					<div class="area_code">
+						<span>+{{ state.areaCode }}</span> <SvgIcon class="down" iconName="/loginOrRegister/navBar/down" />
+					</div>
 					<FormInput v-model="state.phone" type="text" :placeholder="$t(`forgetPassword['请输入手机号']`)">
 						<template v-slot:right>
 							<SvgIcon v-if="state.phone" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.phone = ''" />
@@ -30,9 +32,15 @@
 				</div>
 			</div>
 
-			<FormInput v-model="state.email" type="text" :placeholder="$t(`common['验证码']`)">
+			<FormInput v-model="state.verifyCode" type="text" :placeholder="$t(`common['验证码']`)">
 				<template v-slot:right>
-					<CaptchaButton :disabled="captchaDisabled" />
+					<CaptchaButton
+						:disabled="captchaDisabled"
+						:type="state.type"
+						:account="props.data.userAccount"
+						:value="state.type === 'phone' ? state.phone : state.email"
+						:areaCode="state.type === 'phone' ? state.areaCode : ''"
+					/>
 				</template>
 			</FormInput>
 
@@ -40,22 +48,31 @@
 				{{ $t('forgetPassword["重新发送"]') }}<span class="help">{{ $t('common["联系客服"]') }}</span>
 			</div>
 
-			<Button class="mt_40" :type="!state.email ? 'disabled' : 'default'" @click="onStep">{{ $t('forgetPassword["下一步"]') }}</Button>
+			<Button class="mt_40" :type="btnDisabled ? 'disabled' : 'default'" @click="onStep">{{ $t('forgetPassword["下一步"]') }}</Button>
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
+import { forgetPasswordApi } from "/@/api/loginRegister";
 import CaptchaButton from "/@/views/loginRegister/forgetPassword/components/captchaButton/captchaButton.vue";
 import common from "/@/utils/common";
 
+const props = withDefaults(
+	defineProps<{
+		data?: any;
+	}>(),
+	{ data: {} }
+);
+
 const emit = defineEmits(["onStep"]);
 
-const type = ref<"email" | "phone">("email");
-
 const state = reactive({
+	type: "email" as "email" | "phone",
 	email: "",
 	phone: "",
+	verifyCode: "",
+	areaCode: "86",
 });
 
 // 邮箱正则
@@ -66,17 +83,33 @@ const isPhoneValid = computed(() => common.phoneRG.test(state.phone));
 
 // 验证码按钮禁用状态
 const captchaDisabled = computed(() => {
-	if (type.value === "email") return !isEmailValid.value || state.email === "";
-	if (type.value === "phone") return !isPhoneValid.value || state.phone === "";
+	if (state.type === "email") return !isEmailValid.value || state.email === "";
+	if (state.type === "phone") return !isPhoneValid.value || state.phone === "";
+	return true;
+});
+
+// 下一步按钮禁用状态
+const btnDisabled = computed(() => {
+	if (state.type === "email") return !isEmailValid.value || state.email === "" || state.verifyCode === "";
+	if (state.type === "phone") return !isPhoneValid.value || state.phone === "" || state.verifyCode === "";
 	return true;
 });
 
 const onChange = () => {
-	type.value = type.value === "email" ? "phone" : "email";
+	state.type = state.type === "email" ? "phone" : "email";
 };
 
 const onStep = async () => {
-	emit("onStep", state);
+	const params = {
+		userAccount: props.data.userAccount,
+		account: state.type === "email" ? state.email : state.phone,
+		type: state.type === "email" ? 1 : 2,
+		verifyCode: state.verifyCode,
+	};
+	const res = await forgetPasswordApi.checkVerifyCode(params).catch((err) => err);
+	if (res.code == common.getInstance().ResCode.SUCCESS) {
+		emit("onStep", state);
+	}
 };
 </script>
 

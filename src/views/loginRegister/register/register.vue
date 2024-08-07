@@ -1,7 +1,7 @@
 <template>
 	<div class="register-container">
+		<NavBar />
 		<HeaderBG />
-
 		<div class="register-from">
 			<div class="title">{{ $t('register["注册"]') }}</div>
 			<div class="from">
@@ -100,6 +100,7 @@
 </template>
 
 <script setup lang="ts">
+import NavBar from "/@/layout/loginRegister/components/navBar.vue";
 import { registerApi, verifyCodeApi } from "/@/api/loginRegister";
 import HeaderBG from "/@/views/loginRegister/components/headerBG.vue";
 import { showToast } from "vant";

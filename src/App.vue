@@ -1,10 +1,9 @@
 <template>
 	<div class="container">
 		<MenuPopup />
-		<!-- <router-view /> -->
-		{{ keepAliveComps }}
+		<!-- <RouterView /> -->
 		<RouterView v-slot="{ Component }">
-			<KeepAlive :include="keepAliveComps">
+			<KeepAlive>
 				<component :is="Component" />
 			</KeepAlive>
 		</RouterView>
