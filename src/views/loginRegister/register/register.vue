@@ -5,13 +5,13 @@
 		<div class="register-from">
 			<div class="title">{{ $t('register["注册"]') }}</div>
 			<div class="from">
-				<FormInput v-model="state.account" type="text" :placeholder="$t(`register['输入账号']`)" :errorBorder="!isAccountValid && state.account !== '' ? true : false">
+				<FormInput v-model="state.userAccount" type="text" :placeholder="$t(`register['输入账号']`)" :errorBorder="!isAccountValid && state.userAccount !== '' ? true : false">
 					<template v-slot:right>
-						<SvgIcon v-if="state.account" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.account = ''" />
+						<SvgIcon v-if="state.userAccount" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.userAccount = ''" />
 					</template>
 				</FormInput>
 				<div class="error_text">
-					<span v-if="!isAccountValid && state.account !== ''" class="text">{{ $t('register["请输入4-11位字母+数字组成，首位必须是字母"]') }}</span>
+					<span v-if="!isAccountValid && state.userAccount !== ''" class="text">{{ $t('register["请输入4-11位字母+数字组成，首位必须是字母"]') }}</span>
 				</div>
 
 				<FormInput
@@ -94,35 +94,40 @@
 				</div>
 			</div>
 		</div>
+
+		<Hcaptcha ref="hcaptcha" @submit="onSubmit" />
 	</div>
 </template>
 
 <script setup lang="ts">
+import { registerApi, verifyCodeApi } from "/@/api/loginRegister";
 import HeaderBG from "/@/views/loginRegister/components/headerBG.vue";
 import { showToast } from "vant";
 import { useRouter } from "vue-router";
 import { i18n } from "/@/i18n/index";
 import common from "/@/utils/common";
+import { useUserStore } from "/@/store/modules/user";
+const store = useUserStore();
 const $: any = i18n.global;
 const router = useRouter();
-
+const hcaptcha: any = ref(null);
 const eyeShow = ref(true);
 const btnDisabled = ref(true);
 const mainCurrencyRG = ref(false);
 const userAgreement = ref(false); // 用户协议认证
 
 const state = reactive({
-	account: "", // 邮箱或者手机号
+	userAccount: "", // 邮箱或者手机号
 	password: "", // 密码
 	confirmPassword: "", // 密码
-	mainCurrency: "", // 货币
+	mainCurrency: "CNY", // 货币
 	inviteCode: "", // 推荐码
 	deviceNo: common.getInstance().getDevice(), // 设备
 });
 
 // 账号正则
 const isAccountValid = computed(() => {
-	return common.accountRG.test(state.account);
+	return common.accountRG.test(state.userAccount);
 });
 
 // 密码正则
@@ -175,6 +180,30 @@ const onRegister = async () => {
 	if (!state.mainCurrency) {
 		mainCurrencyRG.value = true;
 		return;
+	}
+	// 校验注册账号
+	const res = await registerApi.userRegister(state).catch((err) => err);
+	if (res.code == common.getInstance().ResCode.SUCCESS) {
+		// 图形验证
+		hcaptcha.value?.validate();
+	}
+};
+
+// 图形验证
+const onSubmit = async (token: string) => {
+	const res = await verifyCodeApi.verifyCode({ verifyToken: token }).catch((err) => err);
+	if (res.code == common.getInstance().ResCode.SUCCESS) {
+		submitRegister();
+	}
+};
+
+// 注册
+const submitRegister = async () => {
+	const res = await registerApi.submitRegister(state).catch((err) => err);
+	if (res.code == common.getInstance().ResCode.SUCCESS) {
+		showToast(res.message);
+		store.setInfo(res.data);
+		router.replace({ path: "/home" });
 	}
 };
 </script>

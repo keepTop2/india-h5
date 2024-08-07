@@ -23,6 +23,8 @@ const UserStore = useUserStore();
 const checked = ref(UserStore.getLang);
 const languageShow = ref(false);
 
+const handleConfirm = () => {};
+
 // 回退
 const goBack = () => {
 	window.history.back();
