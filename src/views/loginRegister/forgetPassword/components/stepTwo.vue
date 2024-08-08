@@ -34,13 +34,7 @@
 
 			<FormInput v-model="state.verifyCode" type="text" :placeholder="$t(`common['验证码']`)">
 				<template v-slot:right>
-					<CaptchaButton
-						:disabled="captchaDisabled"
-						:type="state.type"
-						:account="props.data.userAccount"
-						:value="state.type === 'phone' ? state.phone : state.email"
-						:areaCode="state.type === 'phone' ? state.areaCode : ''"
-					/>
+					<CaptchaButton ref="captchaButton" :disabled="captchaDisabled" @onCaptcha="onCaptcha" />
 				</template>
 			</FormInput>
 
@@ -64,6 +58,10 @@ const props = withDefaults(
 	}>(),
 	{ data: {} }
 );
+
+const captchaButton = ref<{
+	startCountdown: () => void;
+} | null>(null);
 
 const emit = defineEmits(["onStep"]);
 
@@ -97,6 +95,21 @@ const btnDisabled = computed(() => {
 
 const onChange = () => {
 	state.type = state.type === "email" ? "phone" : "email";
+};
+
+const onCaptcha = async () => {
+	let params = { userAccount: props.data.userAccount } as any;
+	let res;
+	if (state.type === "phone") {
+		params = { ...params, phone: state.phone, areaCode: state.areaCode };
+		res = await forgetPasswordApi.sendSms(params);
+	} else if (state.type === "email") {
+		params = { ...params, email: state.email };
+		res = await forgetPasswordApi.sendMail(params);
+	}
+	if (res.code === common.getInstance().ResCode.SUCCESS) {
+		captchaButton.value?.startCountdown();
+	}
 };
 
 const onStep = async () => {

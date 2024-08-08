@@ -3,14 +3,13 @@
 		<VantNavBar :title="$t(`VantNavBar['修改交易密码']`)" @onClickLeft="onClickLeft" />
 
 		<form class="form">
-			<!-- 原交易密码 -->
 			<span class="title">{{ $t('editTradingPassword["原交易密码"]') }}</span>
 			<FormInput
 				v-model="state.oldPassword"
 				:type="eyeShow ? 'password' : 'text'"
 				:maxlength="16"
 				:placeholder="$t(`editTradingPassword['原交易密码']`)"
-				:errorBorder="!isOldPasswordValid && state.oldPassword !== ''"
+				:errorBorder="!isOldPasswordValid && state.oldPassword !== '' ? true : false"
 			>
 				<template v-slot:right>
 					<div class="right">
@@ -23,14 +22,13 @@
 				<span v-if="!isOldPasswordValid && state.oldPassword !== ''" class="text">{{ $t('setTradingPassword["请输入6位数字"]') }}</span>
 			</div>
 
-			<!-- 新交易密码 -->
 			<span class="title">{{ $t('editTradingPassword["新交易密码"]') }}</span>
 			<FormInput
 				v-model="state.newPassword"
 				:type="eyeShow2 ? 'password' : 'text'"
 				:maxlength="16"
 				:placeholder="$t(`editTradingPassword['新交易密码']`)"
-				:errorBorder="(!isNewPasswordValid || isSameAsOldPassword) && state.newPassword !== ''"
+				:errorBorder="!isNewPasswordValid && isSameAsOldPassword && state.newPassword !== '' ? true : false"
 			>
 				<template v-slot:right>
 					<div class="right">
@@ -44,14 +42,13 @@
 				<span v-if="isNewPasswordValid && isSameAsOldPassword" class="text">{{ $t('editTradingPassword["新交易密码不能与旧交易密码相同"]') }}</span>
 			</div>
 
-			<!-- 确认交易密码 -->
 			<span class="title">{{ $t('editTradingPassword["确认交易密码"]') }}</span>
 			<FormInput
 				v-model="state.confirmPassword"
 				:type="eyeShow3 ? 'password' : 'text'"
 				:maxlength="16"
 				:placeholder="$t(`editTradingPassword['确认交易密码']`)"
-				:errorBorder="!isConfirmPasswordValid && state.confirmPassword !== ''"
+				:errorBorder="!isConfirmPasswordValid && state.confirmPassword !== '' ? true : false"
 			>
 				<template v-slot:right>
 					<div class="right">
@@ -64,83 +61,71 @@
 				<span v-if="!isConfirmPasswordValid && state.confirmPassword !== ''" class="text">{{ $t('setTradingPassword["两次交易密码不一致"]') }}</span>
 			</div>
 
-			<!-- 确定按钮 -->
-			<Button class="mt_40" :type="btnDisabled ? 'disabled' : 'default'" @click="onSubmit">{{ $t('editTradingPassword["确定"]') }}</Button>
+			<Button class="mt_40" :type="btnDisabled ? 'disabled' : 'default'" @click="onRegister">{{ $t('editTradingPassword["确定"]') }}</Button>
 
-			<!-- 忘记旧密码提示 -->
 			<div class="tips">
 				{{ $t('editTradingPassword["忘记了旧交易密码？"]') }}
-				<span @click="$router.push('/retrieveTradingPassword/email')">{{ $t('editTradingPassword["找回交易密码"]') }}</span>
+				<span @click="$router.push('/retrieveTradingPassword/email')"> {{ $t('editTradingPassword["找回交易密码"]') }}</span>
 			</div>
 		</form>
 	</div>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, watch } from "vue";
-import { tradingPasswordApi } from "/@/api/securityCenter";
 import common from "/@/utils/common";
 import { useRouter } from "vue-router";
 import { i18n } from "/@/i18n/index";
-import { showToast } from "vant";
 const router = useRouter();
-const $ = i18n.global;
+const $: any = i18n.global;
+
 const eyeShow = ref(true);
 const eyeShow2 = ref(true);
 const eyeShow3 = ref(true);
 const btnDisabled = ref(true);
 
 const state = reactive({
-	oldPassword: "", // 旧密码
-	newPassword: "", // 新密码
-	confirmPassword: "", // 确认新密码
+	oldPassword: "", // 密码
+	newPassword: "", // 密码
+	confirmPassword: "", // 密码
 });
 
-// 计算属性：检查旧密码是否符合正则表达式
+// 密码正则
 const isOldPasswordValid = computed(() => {
 	return common.tradingPasswordRG.test(state.oldPassword);
 });
 
-// 计算属性：检查新密码是否符合正则表达式
+// 新交易密码是否符合正则表达式的计算属性
 const isNewPasswordValid = computed(() => {
+	// 正则表达式验证6位数字
 	return common.tradingPasswordRG.test(state.newPassword);
 });
 
-// 计算属性：检查新密码是否与旧密码相同
+// 新交易密码是否与旧密码相同的计算属性
 const isSameAsOldPassword = computed(() => {
 	return state.oldPassword === state.newPassword;
 });
 
-// 计算属性：检查确认密码是否与新密码一致
+// 密码正则
 const isConfirmPasswordValid = computed(() => {
 	return state.confirmPassword === state.newPassword;
 });
 
-// 监听用户状态，确定按钮是否禁用
+// 监听用户状态
 watch(
-	[isOldPasswordValid, isNewPasswordValid, isSameAsOldPassword, isConfirmPasswordValid],
-	([oldPasswordValid, newPasswordValid, sameAsOldPassword, confirmPasswordValid]) => {
-		// 如果所有条件都满足，则启用按钮
-		btnDisabled.value = !(oldPasswordValid && newPasswordValid && !sameAsOldPassword && confirmPasswordValid);
+	[() => isOldPasswordValid.value, () => isNewPasswordValid.value, () => isSameAsOldPassword.value, () => isConfirmPasswordValid.value],
+	([isOldPasswordValid, isNewPasswordValid, isSameAsOldPassword, isConfirmPasswordValid]) => {
+		if (isOldPasswordValid && isNewPasswordValid && !isSameAsOldPassword && isConfirmPasswordValid) {
+			btnDisabled.value = false;
+		} else {
+			btnDisabled.value = true;
+		}
 	},
 	{
 		immediate: true,
 	}
 );
 
-const onSubmit = async () => {
-	const res = await tradingPasswordApi.changeWithdrawPwd(state).catch((err) => err);
-	if (res.code == common.getInstance().ResCode.SUCCESS) {
-		showToast(res.message);
-		clear();
-	}
-};
-
-const clear = () => {
-	state.oldPassword = "";
-	state.newPassword = "";
-	state.confirmPassword = "";
-};
+const onRegister = async () => {};
 
 const onClickLeft = () => {
 	router.go(-1);

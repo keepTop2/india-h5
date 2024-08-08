@@ -24,21 +24,21 @@
 
 			<span class="title">{{ $t('loginPassword["登录密码"]') }}</span>
 			<FormInput
-				v-model="state.password"
+				v-model="state.newPassword"
 				:type="eyeShow ? 'password' : 'text'"
 				:maxlength="16"
 				:placeholder="$t(`loginPassword['登录密码']`)"
-				:errorBorder="!isPasswordValid && state.password !== '' ? true : false"
+				:errorBorder="!isPasswordValid && state.newPassword !== '' ? true : false"
 			>
 				<template v-slot:right>
 					<div class="right">
-						<SvgIcon v-if="state.password" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.password = ''" />
+						<SvgIcon v-if="state.newPassword" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.newPassword = ''" />
 						<SvgIcon class="icon" :iconName="eyeShow ? '/loginOrRegister/eye-off' : '/loginOrRegister/eye'" @click="eyeShow = !eyeShow" />
 					</div>
 				</template>
 			</FormInput>
 			<div class="error_text">
-				<span v-if="!isPasswordValid && state.password !== ''" class="text">{{ $t('register["密码为8-16位"]') }}</span>
+				<span v-if="!isPasswordValid && state.newPassword !== ''" class="text">{{ $t('register["密码为8-16位"]') }}</span>
 			</div>
 
 			<span class="title">{{ $t('loginPassword["确认密码"]') }}</span>
@@ -60,15 +60,17 @@
 				<span v-if="!isConfirmPasswordValid" class="text">{{ $t('register["两次输入密码不一致"]') }}</span>
 			</div>
 
-			<Button class="mt_40" :type="btnDisabled ? 'disabled' : 'default'" @click="onRegister">{{ $t('loginPassword["确定"]') }}</Button>
+			<Button class="mt_40" :type="btnDisabled ? 'disabled' : 'default'" @click="onSubmit">{{ $t('loginPassword["确定"]') }}</Button>
 		</form>
 	</div>
 </template>
 
 <script setup lang="ts">
+import { loginPasswordApi } from "/@/api/securityCenter";
 import common from "/@/utils/common";
 import { useRouter } from "vue-router";
 import { i18n } from "/@/i18n/index";
+import { showToast } from "vant";
 const router = useRouter();
 const $: any = i18n.global;
 
@@ -77,7 +79,7 @@ const btnDisabled = ref(true);
 
 const state = reactive({
 	oldPassword: "", // 密码
-	password: "", // 密码
+	newPassword: "", // 密码
 	confirmPassword: "", // 密码
 });
 
@@ -88,12 +90,12 @@ const isOldPasswordValid = computed(() => {
 
 // 密码正则
 const isPasswordValid = computed(() => {
-	return common.passwordRG.test(state.password);
+	return common.passwordRG.test(state.newPassword);
 });
 
 // 密码正则
 const isConfirmPasswordValid = computed(() => {
-	return state.confirmPassword == state.password;
+	return state.confirmPassword == state.newPassword;
 });
 
 // 监听用户状态
@@ -111,7 +113,14 @@ watch(
 	}
 );
 
-const onRegister = async () => {};
+const onSubmit = async () => {
+	const res = await loginPasswordApi.changePassword().catch((err) => err);
+	if (res.code == common.getInstance().ResCode.SUCCESS) {
+		showToast($.t("common['修改成功']"));
+		// 返回上一个页面
+		router.go(-1);
+	}
+};
 
 const onClickLeft = () => {
 	router.go(-1);

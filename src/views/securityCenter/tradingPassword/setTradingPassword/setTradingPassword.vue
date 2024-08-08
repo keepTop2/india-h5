@@ -25,7 +25,7 @@
 			<span class="title">{{ $t('setTradingPassword["确认交易密码"]') }}</span>
 			<FormInput
 				v-model="state.confirmPassword"
-				:type="eyeShow ? 'password' : 'text'"
+				:type="eyeShow2 ? 'password' : 'text'"
 				:maxlength="16"
 				:placeholder="$t(`setTradingPassword['确认交易密码']`)"
 				:errorBorder="!isConfirmPasswordValid ? true : false"
@@ -33,43 +33,40 @@
 				<template v-slot:right>
 					<div class="right">
 						<SvgIcon v-if="state.confirmPassword" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.confirmPassword = ''" />
-						<SvgIcon class="icon" :iconName="eyeShow ? '/loginOrRegister/eye-off' : '/loginOrRegister/eye'" @click="eyeShow = !eyeShow" />
+						<SvgIcon class="icon" :iconName="eyeShow2 ? '/loginOrRegister/eye-off' : '/loginOrRegister/eye'" @click="eyeShow2 = !eyeShow2" />
 					</div>
 				</template>
 			</FormInput>
 			<div class="error_text">
-				<span v-if="!isConfirmPasswordValid" class="text">{{ $t('setTradingPassword["两次输入密码不一致"]') }}</span>
+				<span v-if="!isConfirmPasswordValid" class="text">{{ $t('setTradingPassword["两次交易密码不一致"]') }}</span>
 			</div>
 
-			<Button class="mt_40" :type="btnDisabled ? 'disabled' : 'default'" @click="onRegister">{{ $t('setTradingPassword["确定"]') }}</Button>
+			<Button class="mt_40" :type="btnDisabled ? 'disabled' : 'default'" @click="onSubmit">{{ $t('setTradingPassword["确定"]') }}</Button>
 		</form>
 	</div>
 </template>
 
 <script setup lang="ts">
+import { tradingPasswordApi } from "/@/api/securityCenter";
 import common from "/@/utils/common";
 import { useRouter } from "vue-router";
 import { i18n } from "/@/i18n/index";
+import { showToast } from "vant";
 const router = useRouter();
 const $: any = i18n.global;
 
 const eyeShow = ref(true);
+const eyeShow2 = ref(true);
 const btnDisabled = ref(true);
 
 const state = reactive({
-	oldPassword: "", // 密码
 	password: "", // 密码
 	confirmPassword: "", // 密码
 });
 
 // 密码正则
-const isOldPasswordValid = computed(() => {
-	return common.passwordRG.test(state.oldPassword);
-});
-
-// 密码正则
 const isPasswordValid = computed(() => {
-	return common.passwordRG.test(state.password);
+	return common.tradingPasswordRG.test(state.password);
 });
 
 // 密码正则
@@ -79,9 +76,9 @@ const isConfirmPasswordValid = computed(() => {
 
 // 监听用户状态
 watch(
-	[() => isOldPasswordValid.value, () => isPasswordValid.value, () => isConfirmPasswordValid.value],
-	([isOldPasswordValid, isPasswordValid, isConfirmPasswordValid]) => {
-		if (isOldPasswordValid && isPasswordValid && isConfirmPasswordValid) {
+	[() => isPasswordValid.value, () => isConfirmPasswordValid.value],
+	([isPasswordValid, isConfirmPasswordValid]) => {
+		if (isPasswordValid && isConfirmPasswordValid) {
 			btnDisabled.value = false;
 		} else {
 			btnDisabled.value = true;
@@ -92,7 +89,13 @@ watch(
 	}
 );
 
-const onRegister = async () => {};
+const onSubmit = async () => {
+	const res = await tradingPasswordApi.setWithdrawPwd(state).catch((err) => err);
+	if (res.code == common.getInstance().ResCode.SUCCESS) {
+		showToast(res.message);
+		router.go(-1);
+	}
+};
 
 const onClickLeft = () => {
 	router.go(-1);

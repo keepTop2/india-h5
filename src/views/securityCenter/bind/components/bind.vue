@@ -18,7 +18,10 @@
 		<div v-if="route.params.type == 'phone'">
 			<span class="title">{{ $t('bindPhone["手机号"]') }}</span>
 			<div class="phone" :class="{ 'form-input-error': !isPhoneValid && state.phone !== '' ? true : false }">
-				<div class="area_code">+888 <SvgIcon class="down" iconName="/loginOrRegister/navBar/down" /></div>
+				<div class="area_code">
+					<span>+{{ state.areaCode }}</span
+					><SvgIcon class="down" iconName="/loginOrRegister/navBar/down" />
+				</div>
 				<FormInput v-model="state.phone" type="text" :placeholder="$t(`forgetPassword['请输入手机号']`)">
 					<template v-slot:right>
 						<SvgIcon v-if="state.phone" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.phone = ''" />
@@ -31,9 +34,9 @@
 		</div>
 
 		<span class="title">{{ $t('bindPhone["验证码"]') }}</span>
-		<FormInput v-model="state.email" type="text" :placeholder="$t(`common['验证码']`)">
+		<FormInput v-model="state.verifyCode" type="text" :placeholder="$t(`common['验证码']`)">
 			<template v-slot:right>
-				<CaptchaButton :disabled="captchaDisabled" />
+				<CaptchaButton ref="captchaButton" :disabled="captchaDisabled" @onCaptcha="onCaptcha" />
 			</template>
 		</FormInput>
 
@@ -41,20 +44,28 @@
 			{{ $t('forgetPassword["重新发送"]') }}<span class="help">{{ $t('common["联系客服"]') }}</span>
 		</div>
 
-		<Button class="mt_40" :type="!state.email ? 'disabled' : 'default'" @click="onSubmit">{{ $t('bindPhone["确定"]') }}</Button>
+		<Button class="mt_40" :type="btnDisabled ? 'disabled' : 'default'" @click="onSubmit">{{ $t('bindPhone["确定"]') }}</Button>
 	</form>
 </template>
 
 <script setup lang="ts">
 import CaptchaButton from "/@/views/loginRegister/forgetPassword/components/captchaButton/captchaButton.vue";
+import { bindApi } from "/@/api/securityCenter";
 import common from "/@/utils/common";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
+import { showToast } from "vant";
 const route = useRoute();
-const btnDisabled = ref(true);
+const router = useRouter();
+
+const captchaButton = ref<{
+	startCountdown: () => void;
+} | null>(null);
 
 const state = reactive({
 	email: "",
 	phone: "",
+	verifyCode: "",
+	areaCode: "86",
 });
 
 // 邮箱正则
@@ -70,7 +81,41 @@ const captchaDisabled = computed(() => {
 	return true;
 });
 
-const onSubmit = async () => {};
+// 确定按钮禁用状态
+const btnDisabled = computed(() => {
+	if (route.params.type === "email") return !isEmailValid.value || state.email === "" || state.verifyCode === "";
+	if (route.params.type === "phone") return !isPhoneValid.value || state.phone === "" || state.verifyCode === "";
+	return true;
+});
+
+const onCaptcha = async () => {
+	let params = {} as any;
+	let res;
+	if (route.params.type === "phone") {
+		params = { phone: state.phone, areaCode: state.areaCode };
+		res = await bindApi.sendSms(params);
+	} else if (route.params.type === "email") {
+		params = { email: state.email };
+		res = await bindApi.sendMail(params);
+	}
+	if (res.code === common.getInstance().ResCode.SUCCESS) {
+		captchaButton.value?.startCountdown();
+	}
+};
+
+const onSubmit = async () => {
+	const params = {
+		areaCode: state.areaCode,
+		account: route.params.type === "email" ? state.email : state.phone,
+		type: route.params.type === "email" ? 1 : 2,
+		verifyCode: state.verifyCode,
+	};
+	const res = await bindApi.bindAccount(params).catch((err) => err);
+	if (res.code == common.getInstance().ResCode.SUCCESS) {
+		showToast(res.message);
+		router.go(-1);
+	}
+};
 </script>
 
 <style scoped lang="scss">
