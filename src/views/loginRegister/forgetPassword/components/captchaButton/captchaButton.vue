@@ -6,21 +6,17 @@
 </template>
 
 <script setup lang="ts">
-import { forgetPasswordApi } from "/@/api/loginRegister";
-import common from "/@/utils/common";
 import { withDefaults, computed } from "vue";
 import { useCountdown } from "/@/hooks/countdown";
+
+const emit = defineEmits(["onCaptcha"]);
 
 // 使用 ref 来存储组件状态
 const props = withDefaults(
 	defineProps<{
 		disabled: boolean;
-		account?: string;
-		value: number | string;
-		areaCode: number | string;
-		type?: "email" | "phone";
 	}>(),
-	{ account: "", disabled: false, type: "email" }
+	{ disabled: false }
 );
 
 // 使用 countdown hook
@@ -38,21 +34,12 @@ const buttonClass = computed(() => {
 // 处理验证码点击事件
 const onCaptcha = async () => {
 	if (props.disabled || isCountingDown.value) return;
-	const params = { userAccount: props.account };
-	let res;
-	// 默认请求手机验证码
-	if (props.type === "phone") {
-		params.phone = props.value;
-		params.areaCode = props.areaCode;
-		res = await forgetPasswordApi.sendSms(params).catch((err) => err);
-	} else if (props.type === "email") {
-		params.email = props.value;
-		res = await forgetPasswordApi.sendMail(params).catch((err) => err);
-	}
-	if (res.code == common.getInstance().ResCode.SUCCESS) {
-		startCountdown();
-	}
+	emit("onCaptcha");
 };
+
+defineExpose({
+	startCountdown,
+});
 </script>
 
 <style scoped lang="scss">

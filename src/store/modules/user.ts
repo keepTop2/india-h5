@@ -30,6 +30,7 @@ export const useUserStore = defineStore("User", {
 			i18nSetLang(this.lang);
 		},
 		setInfo(data: any) {
+			console.log("setInfo", data);
 			this.token = data.token;
 			this.userInfo = data ? data : {};
 		},
