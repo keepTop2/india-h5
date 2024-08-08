@@ -73,9 +73,25 @@ export class tradingPasswordApi {
 			headers,
 		});
 	};
-	// 修改交易密码;
+	// 修改交易密码
 	static changeWithdrawPwd = (data = {}, headers = {}) => {
 		return useAxiosApi(`/app/user-info/global/changeWithdrawPwd`, {
+			method: "POST",
+			data,
+			headers,
+		});
+	};
+	// 找回交易密码验证账号
+	static reFindWithdrawPwd = (data = {}, headers = {}) => {
+		return useAxiosApi(`/app/user-info/global/reFindWithdrawPwd`, {
+			method: "POST",
+			data,
+			headers,
+		});
+	};
+	// 找回交易密码-重置交易密码
+	static reSetWithdrawPwd = (data = {}, headers = {}) => {
+		return useAxiosApi(`/app/user-info/global/reSetWithdrawPwd`, {
 			method: "POST",
 			data,
 			headers,

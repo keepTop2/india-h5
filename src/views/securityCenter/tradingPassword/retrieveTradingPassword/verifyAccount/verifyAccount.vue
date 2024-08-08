@@ -1,6 +1,6 @@
 <template>
 	<div class="content">
-		<div class="title">{{ route.path === "/retrieveTradingPassword/email" ? $t('forgetPassword["邮箱验证"]') : $t('forgetPassword["手机号验证"]') }}</div>
+		<div class="title">{{ route.params.type === "email" ? $t('forgetPassword["邮箱验证"]') : $t('forgetPassword["手机号验证"]') }}</div>
 		<div class="change" @click="onChange">{{ $t('forgetPassword["其他方式"]') }}</div>
 		<div class="form">
 			<FormInput
@@ -21,12 +21,13 @@
 				<span v-if="!isPasswordValid && state.password !== ''" class="text">{{ $t('register["密码为8-16位"]') }}</span>
 			</div>
 
-			<Button class="mt_40" @click="onStep">{{ $t('forgetPassword["下一步"]') }}</Button>
+			<Button :type="btnDisabled ? 'disabled' : 'default'" class="mt_40" @click="onStep">{{ $t('forgetPassword["下一步"]') }}</Button>
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
+import { tradingPasswordApi } from "/@/api/securityCenter";
 import common from "/@/utils/common";
 import { useRoute, useRouter } from "vue-router";
 const router = useRouter();
@@ -39,7 +40,7 @@ const state = reactive({
 });
 
 const onChange = () => {
-	if (route.path === "/retrieveTradingPassword/email") {
+	if (route.params.type === "email") {
 		router.push(`/retrieveTradingPassword/phone`);
 	} else {
 		router.push(`/retrieveTradingPassword/email`);
@@ -67,10 +68,17 @@ watch(
 );
 
 const onStep = async () => {
-	if (route.path === "/retrieveTradingPassword/email") {
-		router.push(`/retrieveTradingPassword/email/retrieve`);
-	} else {
-		router.push(`/retrieveTradingPassword/phone/retrieve`);
+	const params = {
+		type: route.params.type === "email" ? 1 : 2,
+		password: state.password,
+	};
+	const res = await tradingPasswordApi.reFindWithdrawPwd(params).catch((err) => err);
+	if (res.code == common.getInstance().ResCode.SUCCESS) {
+		if (route.params.type === "email") {
+			router.push(`/retrieveTradingPassword/email/retrieve`);
+		} else {
+			router.push(`/retrieveTradingPassword/phone/retrieve`);
+		}
 	}
 };
 </script>

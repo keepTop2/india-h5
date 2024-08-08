@@ -13,7 +13,6 @@
 			</div>
 
 			<!-- 手机号码 -->
-
 			<div v-if="route.params.type == 'phone'">
 				<span class="title">{{ $t('editContactDetails["手机号验证"]') }}</span>
 				<p>
@@ -44,7 +43,6 @@ import { securityCenterApi, bindApi } from "/@/api/securityCenter";
 import common from "/@/utils/common";
 import { useRoute, useRouter } from "vue-router";
 import { i18n } from "/@/i18n/index";
-import { showToast } from "vant";
 const router = useRouter();
 const route = useRoute();
 const $: any = i18n.global;
