@@ -1,0 +1,90 @@
+.price_title {
+	font-size: 24px;
+	font-weight: 700;
+	margin-bottom: 12px;
+	@include themeify {
+		color: themed("T1");
+	}
+}
+.handicap {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 10px;
+	gap: 16px;
+	.handicap-item {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		width: 319px;
+		height: 68px;
+		padding: 17px 24px;
+		box-sizing: border-box;
+		font-size: 28px;
+		@include themeify {
+			background: themed("BG4");
+			span {
+				display: block;
+				color: themed("T1");
+			}
+			.value {
+				font-weight: bold;
+			}
+			.green {
+				color: themed("Wam-P1");
+			}
+			.red {
+				color: themed("Theme");
+			}
+		}
+	}
+	.lock-container {
+		display: flex;
+		justify-content: center;
+	}
+}
+
+.odds {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 10px;
+	gap: 16px;
+	.odds-item {
+		width: 159px;
+		height: 39px;
+		padding: 15px 24px;
+		border-radius: 12px;
+		display: flex;
+		align-items: center;
+		flex-direction: row;
+		justify-content: space-evenly;
+		@include themeify {
+			background: themed("BG4");
+			span {
+				display: block;
+				font-size: 28px;
+				color: themed("T1");
+			}
+
+			.value {
+				font-size: 28px;
+				color: themed("TB");
+			}
+		}
+	}
+}
+
+.oddsUp {
+	@include themeify {
+		color: themed("Theme") !important;
+	}
+}
+
+.oddsDown {
+	@include themeify {
+		color: themed("Wam-P1") !important;
+	}
+}
+.lock {
+	width: 32px;
+	height: 32px;
+}
