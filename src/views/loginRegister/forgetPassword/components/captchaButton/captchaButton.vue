@@ -9,13 +9,14 @@
 import { withDefaults, computed } from "vue";
 import { useCountdown } from "/@/hooks/countdown";
 
+const emit = defineEmits(["onCaptcha"]);
+
 // 使用 ref 来存储组件状态
 const props = withDefaults(
 	defineProps<{
 		disabled: boolean;
-		account?: string;
 	}>(),
-	{ account: "", disabled: false }
+	{ disabled: false }
 );
 
 // 使用 countdown hook
@@ -31,10 +32,14 @@ const buttonClass = computed(() => {
 });
 
 // 处理验证码点击事件
-const onCaptcha = () => {
+const onCaptcha = async () => {
 	if (props.disabled || isCountingDown.value) return;
-	startCountdown();
+	emit("onCaptcha");
 };
+
+defineExpose({
+	startCountdown,
+});
 </script>
 
 <style scoped lang="scss">

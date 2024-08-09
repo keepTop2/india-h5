@@ -1,72 +1,53 @@
 <template>
 	<div>
-		<VantNavBar :title="$t(`VantNavBar['修改密码']`)" @onClickLeft="onClickLeft" />
+		<VantNavBar :title="$t(`VantNavBar['设置交易密码']`)" @onClickLeft="onClickLeft" />
 
 		<form class="form">
-			<span class="title">{{ $t('loginPassword["旧密码"]') }}</span>
+			<span class="title">{{ $t('setTradingPassword["交易密码"]') }}</span>
 			<FormInput
-				v-model="state.oldPassword"
-				:type="eyeShow ? 'oldPassword' : 'text'"
-				:maxlength="16"
-				:placeholder="$t(`loginPassword['旧密码']`)"
-				:errorBorder="!isOldPasswordValid && state.oldPassword !== '' ? true : false"
-			>
-				<template v-slot:right>
-					<div class="right">
-						<SvgIcon v-if="state.oldPassword" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.oldPassword = ''" />
-						<SvgIcon class="icon" :iconName="eyeShow ? '/loginOrRegister/eye-off' : '/loginOrRegister/eye'" @click="eyeShow = !eyeShow" />
-					</div>
-				</template>
-			</FormInput>
-			<div class="error_text">
-				<span v-if="!isOldPasswordValid && state.oldPassword !== ''" class="text">{{ $t('register["密码为8-16位"]') }}</span>
-			</div>
-
-			<span class="title">{{ $t('loginPassword["登录密码"]') }}</span>
-			<FormInput
-				v-model="state.newPassword"
+				v-model="state.password"
 				:type="eyeShow ? 'password' : 'text'"
 				:maxlength="16"
-				:placeholder="$t(`loginPassword['登录密码']`)"
-				:errorBorder="!isPasswordValid && state.newPassword !== '' ? true : false"
+				:placeholder="$t(`setTradingPassword['交易密码']`)"
+				:errorBorder="!isPasswordValid && state.password !== '' ? true : false"
 			>
 				<template v-slot:right>
 					<div class="right">
-						<SvgIcon v-if="state.newPassword" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.newPassword = ''" />
+						<SvgIcon v-if="state.password" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.password = ''" />
 						<SvgIcon class="icon" :iconName="eyeShow ? '/loginOrRegister/eye-off' : '/loginOrRegister/eye'" @click="eyeShow = !eyeShow" />
 					</div>
 				</template>
 			</FormInput>
 			<div class="error_text">
-				<span v-if="!isPasswordValid && state.newPassword !== ''" class="text">{{ $t('register["密码为8-16位"]') }}</span>
+				<span v-if="!isPasswordValid && state.password !== ''" class="text">{{ $t('setTradingPassword["请输入6位数字"]') }}</span>
 			</div>
 
-			<span class="title">{{ $t('loginPassword["确认密码"]') }}</span>
+			<span class="title">{{ $t('setTradingPassword["确认交易密码"]') }}</span>
 			<FormInput
 				v-model="state.confirmPassword"
-				:type="eyeShow ? 'password' : 'text'"
+				:type="eyeShow2 ? 'password' : 'text'"
 				:maxlength="16"
-				:placeholder="$t(`loginPassword['确认密码']`)"
+				:placeholder="$t(`setTradingPassword['确认交易密码']`)"
 				:errorBorder="!isConfirmPasswordValid ? true : false"
 			>
 				<template v-slot:right>
 					<div class="right">
 						<SvgIcon v-if="state.confirmPassword" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.confirmPassword = ''" />
-						<SvgIcon class="icon" :iconName="eyeShow ? '/loginOrRegister/eye-off' : '/loginOrRegister/eye'" @click="eyeShow = !eyeShow" />
+						<SvgIcon class="icon" :iconName="eyeShow2 ? '/loginOrRegister/eye-off' : '/loginOrRegister/eye'" @click="eyeShow2 = !eyeShow2" />
 					</div>
 				</template>
 			</FormInput>
 			<div class="error_text">
-				<span v-if="!isConfirmPasswordValid" class="text">{{ $t('register["两次输入密码不一致"]') }}</span>
+				<span v-if="!isConfirmPasswordValid" class="text">{{ $t('setTradingPassword["两次交易密码不一致"]') }}</span>
 			</div>
 
-			<Button class="mt_40" :type="btnDisabled ? 'disabled' : 'default'" @click="onSubmit">{{ $t('loginPassword["确定"]') }}</Button>
+			<Button class="mt_40" :type="btnDisabled ? 'disabled' : 'default'" @click="onSubmit">{{ $t('setTradingPassword["确定"]') }}</Button>
 		</form>
 	</div>
 </template>
 
 <script setup lang="ts">
-import { loginPasswordApi } from "/@/api/securityCenter";
+import { tradingPasswordApi } from "/@/api/securityCenter";
 import common from "/@/utils/common";
 import { useRouter } from "vue-router";
 import { i18n } from "/@/i18n/index";
@@ -75,34 +56,29 @@ const router = useRouter();
 const $: any = i18n.global;
 
 const eyeShow = ref(true);
+const eyeShow2 = ref(true);
 const btnDisabled = ref(true);
 
 const state = reactive({
-	oldPassword: "", // 密码
-	newPassword: "", // 密码
+	password: "", // 密码
 	confirmPassword: "", // 密码
 });
 
 // 密码正则
-const isOldPasswordValid = computed(() => {
-	return common.passwordRG.test(state.oldPassword);
-});
-
-// 密码正则
 const isPasswordValid = computed(() => {
-	return common.passwordRG.test(state.newPassword);
+	return common.tradingPasswordRG.test(state.password);
 });
 
 // 密码正则
 const isConfirmPasswordValid = computed(() => {
-	return state.confirmPassword == state.newPassword;
+	return state.confirmPassword == state.password;
 });
 
 // 监听用户状态
 watch(
-	[() => isOldPasswordValid.value, () => isPasswordValid.value, () => isConfirmPasswordValid.value],
-	([isOldPasswordValid, isPasswordValid, isConfirmPasswordValid]) => {
-		if (isOldPasswordValid && isPasswordValid && isConfirmPasswordValid) {
+	[() => isPasswordValid.value, () => isConfirmPasswordValid.value],
+	([isPasswordValid, isConfirmPasswordValid]) => {
+		if (isPasswordValid && isConfirmPasswordValid) {
 			btnDisabled.value = false;
 		} else {
 			btnDisabled.value = true;
@@ -114,10 +90,9 @@ watch(
 );
 
 const onSubmit = async () => {
-	const res = await loginPasswordApi.changePassword().catch((err) => err);
+	const res = await tradingPasswordApi.setWithdrawPwd(state).catch((err) => err);
 	if (res.code == common.getInstance().ResCode.SUCCESS) {
-		showToast($.t("common['修改成功']"));
-		// 返回上一个页面
+		showToast(res.message);
 		router.go(-1);
 	}
 };

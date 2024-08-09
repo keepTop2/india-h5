@@ -48,6 +48,9 @@ class Common {
 	// 手机号正则 8-12数字
 	public static phoneRG = /^\d{8,12}$/;
 
+	// 交易密码 6位数字
+	public static tradingPasswordRG = /^\d{6}$/;
+
 	// 后端code
 	public ResCode = ResCode;
 

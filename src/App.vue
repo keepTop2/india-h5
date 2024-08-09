@@ -1,13 +1,16 @@
 <template>
 	<div class="container">
 		<MenuPopup />
-		<router-view />
+		<RouterView />
 	</div>
 </template>
 
 <script setup lang="ts">
 import MenuPopup from "/@/layout/home/components/menuPopup.vue";
 import { useThemesStore } from "/@/store/modules/themes";
+import { useRouterStore } from "/@/store/modules/cacheRouter";
+
+const { keepAliveComps } = storeToRefs(useRouterStore());
 const ThemesStore = useThemesStore();
 
 onBeforeMount(() => {

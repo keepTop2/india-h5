@@ -1,61 +1,76 @@
 <template>
 	<div class="content">
-		<div class="title">{{ type == "email" ? $t('forgetPassword["邮箱验证"]') : $t('forgetPassword["手机号验证"]') }}</div>
+		<div class="title">{{ state.type == "email" ? $t('forgetPassword["邮箱验证"]') : $t('forgetPassword["手机号验证"]') }}</div>
 		<div class="change" @click="onChange">{{ $t('forgetPassword["其他方式"]') }}</div>
-		<div class="from">
+		<div class="form">
 			<!-- 邮箱 -->
-			<div v-show="type == 'email'">
-				<FromInput v-model="state.email" type="text" :placeholder="$t(`forgetPassword['请输入电子邮箱']`)" :errorBorder="!isEmailValid && state.email !== '' ? true : false">
+			<div v-show="state.type == 'email'">
+				<FormInput v-model="state.email" type="text" :placeholder="$t(`forgetPassword['请输入电子邮箱']`)" :errorBorder="!isEmailValid && state.email !== '' ? true : false">
 					<template v-slot:right>
 						<SvgIcon v-if="state.email" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.email = ''" />
 					</template>
-				</FromInput>
+				</FormInput>
 				<div class="error_text">
 					<span v-if="!isEmailValid && state.email !== ''" class="text">{{ $t('forgetPassword["邮箱格式不正确"]') }}</span>
 				</div>
 			</div>
 
 			<!-- 手机号码 -->
-			<div v-show="type == 'phone'">
-				<div class="phone">
-					<div class="area_code">+888 <SvgIcon class="down" iconName="/loginOrRegister/navBar/down" /></div>
-					<FromInput v-model="state.phone" type="text" :placeholder="$t(`forgetPassword['请输入手机号']`)" :errorBorder="!isPhoneValid && state.phone !== '' ? true : false">
+			<div v-show="state.type == 'phone'">
+				<div class="phone" :class="{ 'form-input-error': !isPhoneValid && state.phone !== '' ? true : false }">
+					<div class="area_code">
+						<span>+{{ state.areaCode }}</span> <SvgIcon class="down" iconName="/loginOrRegister/navBar/down" />
+					</div>
+					<FormInput v-model="state.phone" type="text" :placeholder="$t(`forgetPassword['请输入手机号']`)">
 						<template v-slot:right>
 							<SvgIcon v-if="state.phone" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.phone = ''" />
 						</template>
-					</FromInput>
+					</FormInput>
 				</div>
 				<div class="error_text">
 					<span v-if="!isPhoneValid && state.phone !== ''" class="text">{{ $t('forgetPassword["请输入8-12位数字"]') }}</span>
 				</div>
 			</div>
 
-			<FromInput v-model="state.email" type="text" :placeholder="$t(`common['验证码']`)">
+			<FormInput v-model="state.verifyCode" type="text" :placeholder="$t(`common['验证码']`)">
 				<template v-slot:right>
-					<CaptchaButton :disabled="captchaDisabled" />
+					<CaptchaButton ref="captchaButton" :disabled="captchaDisabled" @onCaptcha="onCaptcha" />
 				</template>
-			</FromInput>
+			</FormInput>
 
 			<div class="tips">
 				{{ $t('forgetPassword["重新发送"]') }}<span class="help">{{ $t('common["联系客服"]') }}</span>
 			</div>
 
-			<Button class="mt_40" :type="!state.email ? 'disabled' : 'default'" @click="onStep">{{ $t('forgetPassword["下一步"]') }}</Button>
+			<Button class="mt_40" :type="btnDisabled ? 'disabled' : 'default'" @click="onStep">{{ $t('forgetPassword["下一步"]') }}</Button>
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
+import { forgetPasswordApi } from "/@/api/loginRegister";
 import CaptchaButton from "/@/views/loginRegister/forgetPassword/components/captchaButton/captchaButton.vue";
 import common from "/@/utils/common";
 
+const props = withDefaults(
+	defineProps<{
+		data?: any;
+	}>(),
+	{ data: {} }
+);
+
+const captchaButton = ref<{
+	startCountdown: () => void;
+} | null>(null);
+
 const emit = defineEmits(["onStep"]);
 
-const type = ref<"email" | "phone">("email");
-
 const state = reactive({
+	type: "email" as "email" | "phone",
 	email: "",
 	phone: "",
+	verifyCode: "",
+	areaCode: "86",
 });
 
 // 邮箱正则
@@ -66,17 +81,48 @@ const isPhoneValid = computed(() => common.phoneRG.test(state.phone));
 
 // 验证码按钮禁用状态
 const captchaDisabled = computed(() => {
-	if (type.value === "email") return !isEmailValid.value || state.email === "";
-	if (type.value === "phone") return !isPhoneValid.value || state.phone === "";
+	if (state.type === "email") return !isEmailValid.value || state.email === "";
+	if (state.type === "phone") return !isPhoneValid.value || state.phone === "";
+	return true;
+});
+
+// 下一步按钮禁用状态
+const btnDisabled = computed(() => {
+	if (state.type === "email") return !isEmailValid.value || state.email === "" || state.verifyCode === "";
+	if (state.type === "phone") return !isPhoneValid.value || state.phone === "" || state.verifyCode === "";
 	return true;
 });
 
 const onChange = () => {
-	type.value = type.value === "email" ? "phone" : "email";
+	state.type = state.type === "email" ? "phone" : "email";
+};
+
+const onCaptcha = async () => {
+	let params = { userAccount: props.data.userAccount } as any;
+	let res;
+	if (state.type === "phone") {
+		params = { ...params, phone: state.phone, areaCode: state.areaCode };
+		res = await forgetPasswordApi.sendSms(params);
+	} else if (state.type === "email") {
+		params = { ...params, email: state.email };
+		res = await forgetPasswordApi.sendMail(params);
+	}
+	if (res.code === common.getInstance().ResCode.SUCCESS) {
+		captchaButton.value?.startCountdown();
+	}
 };
 
 const onStep = async () => {
-	emit("onStep", state);
+	const params = {
+		userAccount: props.data.userAccount,
+		account: state.type === "email" ? state.email : state.phone,
+		type: state.type === "email" ? 1 : 2,
+		verifyCode: state.verifyCode,
+	};
+	const res = await forgetPasswordApi.checkVerifyCode(params).catch((err) => err);
+	if (res.code == common.getInstance().ResCode.SUCCESS) {
+		emit("onStep", state);
+	}
 };
 </script>
 
@@ -100,7 +146,7 @@ const onStep = async () => {
 		font-weight: 500;
 		text-decoration-line: underline;
 	}
-	.from {
+	.form {
 		margin-top: 40px;
 
 		.phone {
@@ -141,6 +187,24 @@ const onStep = async () => {
 			}
 			:deep(.from-input) {
 				flex: 1;
+			}
+		}
+		.form-input-error {
+			position: relative;
+			&::after {
+				content: "";
+				position: absolute;
+				top: 0px;
+				left: 0px;
+				width: 100%;
+				height: 100%;
+				border-radius: 12px;
+				border: 1px solid;
+				@include themeify {
+					border-color: themed("Theme");
+				}
+				box-sizing: border-box;
+				pointer-events: none; /* 确保伪元素不会阻止用户与实际内容交互 */
 			}
 		}
 

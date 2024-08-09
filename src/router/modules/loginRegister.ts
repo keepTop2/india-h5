@@ -1,8 +1,7 @@
-import Layout from "/@/layout/loginRegister/index.vue";
+// import Layout from "/@/layout/loginRegister/index.vue";
 
 export const LoginRegisterRouter = {
-	path: "/login",
-	component: Layout,
+	// component: () => import("/@/layout/loginRegister/index.vue"),
 	children: [
 		{
 			path: "/login",
@@ -18,6 +17,7 @@ export const LoginRegisterRouter = {
 			component: () => import("/@/views/loginRegister/register/register.vue"),
 			meta: {
 				title: "注册",
+				leaveCaches: ["mainCurrency"],
 			},
 		},
 		{
