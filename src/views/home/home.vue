@@ -69,6 +69,7 @@
 
 <script setup lang="ts">
 import sportsApi from "/@/api/venueHome/sports";
+import HomeApi from "/@/api/home";
 import workerManage from "/@/webWorker/workerManage";
 import { useLoading } from "/@/directives/loading/hooks";
 import { useSportsInfoStore } from "/@/store/modules/sports/sportsInfo";
@@ -109,6 +110,7 @@ const sportsBetEvent = useSportsBetEventStore();
 const { startLoading, stopLoading } = useLoading();
 const { startPolling, stopPolling, initSportPubsub, unSubSport, sportsLogin, clearState } = useSportPubSubEvents();
 const eventList = ref();
+
 watch(
 	() => viewSportPubSubEventData.getSportData(),
 	(newData) => {
@@ -130,6 +132,8 @@ watch(
 );
 // 注册一个钩子，在组件被挂载之前被调用。
 onBeforeMount(() => {
+	//获取体育赛事id
+	getSportEventsRecommend();
 	//初始化体育
 	initSport();
 });
@@ -143,6 +147,12 @@ onBeforeUnmount(() => {
 	// 清除体育数据缓存
 	clearStoreInfo();
 });
+
+const getSportEventsRecommend = async () => {
+	await HomeApi.querySportEventsRecommend().then((res) => {
+		eventList.value = res.data;
+	});
+};
 
 //初始化体育
 const initSport = async () => {
@@ -205,7 +215,7 @@ const openSportPush = async () => {
 			sportPushApi: SportPushApi.GetEvents_push,
 			webToPushApi: WebToPushApi.eventsRollingBall,
 			params: {
-				query: `$filter=eventId in (89881335)`,
+				query: `$filter=eventId in (${eventList.value.map((item) => item.eventsId).join(",")})`,
 			},
 			isMultiple: true,
 		},
