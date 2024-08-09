@@ -34,8 +34,9 @@
 
 				<div class="password-operation">
 					<div class="remember-password" @click="userAgreement = !userAgreement">
-						<SvgIcon v-show="!userAgreement" class="check" iconName="/loginOrRegister/checkbox" />
-						<SvgIcon v-show="userAgreement" class="check" iconName="/loginOrRegister/checkbox_active" />
+						<div class="check">
+							<SvgIcon class="check_icon" :iconName="userAgreement ? '/loginOrRegister/checkbox_active' : '/loginOrRegister/checkbox'" />
+						</div>
 						<span class="label">{{ $t('login["记住密码"]') }}</span>
 					</div>
 
@@ -63,22 +64,19 @@
 import NavBar from "/@/layout/loginRegister/components/navBar.vue";
 import { loginApi, verifyCodeApi } from "/@/api/loginRegister";
 import HeaderBG from "/@/views/loginRegister/components/headerBG.vue";
-// import { showToast } from "vant";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { i18n } from "/@/i18n/index";
 import common from "/@/utils/common";
 import { useUserStore } from "/@/store/modules/user";
 const store = useUserStore();
 const hcaptcha: any = ref(null);
 const router = useRouter();
-const $: any = i18n.global;
 const eyeShow = ref(true);
 const btnDisabled = ref(true);
 const userAgreement = ref(false);
 const state = reactive({
-	userAccount: "", // 邮箱或者手机号
-	password: "", // 密码
+	userAccount: "suqin0000", // 邮箱或者手机号
+	password: "abcd0321", // 密码
 	deviceNo: common.getInstance().getDevice(), // 设备
 });
 
@@ -90,6 +88,10 @@ const isAccountValid = computed(() => {
 // 密码正则
 const isPasswordValid = computed(() => {
 	return common.passwordRG.test(state.password);
+});
+
+const loginInfo = computed(() => {
+	return store.getLoginInfo;
 });
 
 // 监听状态密码状态
@@ -108,6 +110,8 @@ watch(
 );
 
 const onLogin = async () => {
+	// submitUserLogin();
+	// return;
 	const res = await loginApi.userLogin(state).catch((err) => err);
 	if (res.code == common.getInstance().ResCode.SUCCESS) {
 		hcaptcha.value?.validate();
@@ -125,9 +129,18 @@ const submitUserLogin = async () => {
 	const res = await loginApi.submitUserLogin(state).catch((err) => err);
 	if (res.code == common.getInstance().ResCode.SUCCESS) {
 		store.setInfo(res.data);
+		if (userAgreement.value) {
+			store.setLoginInfo({ userAccount: state.userAccount, password: state.password });
+		} else {
+			store.setLoginInfo();
+		}
 		router.replace({ path: "/home" });
 	}
 };
+
+onBeforeMount(() => {
+	userAgreement.value = !loginInfo.value ? false : true;
+});
 </script>
 
 <style lang="scss" scoped>
@@ -187,9 +200,16 @@ const submitUserLogin = async () => {
 					align-items: center;
 					justify-content: space-between;
 					.check {
+						display: flex;
+						align-items: center;
+						justify-content: center;
 						width: 32px;
 						height: 32px;
 						margin-right: 16px;
+						.check_icon {
+							width: 32px;
+							height: 32px;
+						}
 					}
 				}
 
