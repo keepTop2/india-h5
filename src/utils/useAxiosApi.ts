@@ -82,7 +82,7 @@ instance.interceptors.response.use(
 		}
 	},
 	(error) => {
-		// console.log("请求失败", error);
+		console.log("请求失败", error);
 		//判断当前请求是否设置了不显示 Loading（不显示自然无需隐藏）
 		if (error.config.headers.showLoading !== false) {
 			stopLoading();

@@ -27,7 +27,7 @@ interface UserInfo {
 	areaCode?: string;
 	phone?: string | number;
 	email?: string | number;
-	withdrawPwd?: string;
+	isSetPwd?: string;
 }
 
 let state = reactive<UserInfo>({});
@@ -74,7 +74,7 @@ const getUserGlobalSetInfo = async () => {
 			} else if (item.path === "/bind/email") {
 				return { ...item, edit: !!state.email };
 			} else if (item.path === "/setTradingPassword") {
-				return { ...item, edit: !!state.withdrawPwd };
+				return { ...item, edit: !!state.isSetPwd };
 			} else {
 				return item;
 			}
