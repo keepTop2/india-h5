@@ -22,6 +22,9 @@ import { ref, onMounted } from "vue";
 import SportsCommon from "/@/views/venueHome/sports/utils/common";
 import RiseOrFall from "/@/views/venueHome/sports/components/riseOrFall/riseOrFall.vue";
 import common from "/@/utils/common";
+import useSportPubSubEvents from "/@/views/venueHome/sports/hooks/useSportPubSubEvents";
+import { WebToPushApi } from "/@/views/venueHome/sports/enum/sportEventSourceEnum";
+const { clearSportsOddsChange } = useSportPubSubEvents();
 
 const commonFunc = common.getInstance();
 const emit = defineEmits(["animationEnd"]);
@@ -31,15 +34,20 @@ const props = defineProps({
 		required: true,
 	},
 });
-onMounted(() => {
-	console.log("Component mounted");
-});
+onMounted(() => {});
 
-const animationEnd = (selections) =>
-	emit("animationEnd", {
-		marketId: props.market.marketId,
-		selections,
-	});
+/**
+ * @description 动画结束删除oddsChange字段状态
+ */
+const animationEnd = (selection) => {
+	console.log(selection, "========dataaaaaa");
+	if (selection?.oddsChange) {
+		//删除 markets中的 oddsChange字段状态
+		clearSportsOddsChange({ webToPushApi: WebToPushApi.sportsEventDetail, marketId: props.market.marketId, selection });
+		//删除 childrenViewData中的状态
+		selection.oddsChange = "";
+	}
+};
 </script>
 
 <style scoped lang="scss">
