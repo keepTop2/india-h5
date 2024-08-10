@@ -16,14 +16,14 @@
 			</h3>
 			<CollectGames class="m24" />
 
-			<h3 class="title_more">
+			<h3 class="title_more" v-show="eventList?.length">
 				<span class="flex_align_center">
 					<SvgIcon iconName="home/event_game" alt="" />
 					{{ $t('home["我们的游戏"]') }}
 				</span>
 				<span class="more fw_400 fs_28 color_T1" @click="router.push('/sports')">更多</span>
 			</h3>
-			<EventList v-for="event in eventList" class="m24" :event="event" />
+			<EventList v-show="eventList?.length" v-for="event in eventList" class="m24" :event="event" />
 			<h3 class="title_more">
 				<span class="flex_align_center">
 					<SvgIcon iconName="home/event_777" alt="" />
@@ -69,6 +69,7 @@
 
 <script setup lang="ts">
 import sportsApi from "/@/api/venueHome/sports";
+import HomeApi from "/@/api/home";
 import workerManage from "/@/webWorker/workerManage";
 import { useLoading } from "/@/directives/loading/hooks";
 import { useSportsInfoStore } from "/@/store/modules/sports/sportsInfo";
@@ -109,10 +110,11 @@ const sportsBetEvent = useSportsBetEventStore();
 const { startLoading, stopLoading } = useLoading();
 const { startPolling, stopPolling, initSportPubsub, unSubSport, sportsLogin, clearState } = useSportPubSubEvents();
 const eventList = ref();
+
 watch(
 	() => viewSportPubSubEventData.getSportData(),
 	(newData) => {
-		console.log(JSON.stringify(newData));
+		// console.log(JSON.stringify(newData));
 		/**
 		 * @description 根据 sportType 获取对应的数据
 		 * @param {Sports} sportType
@@ -125,11 +127,13 @@ watch(
 			newEvents.push(...item.events);
 		});
 		eventList.value = newEvents;
-		console.log(newEvents, "===newEvents");
+		// console.log(newEvents, "===newEvents");
 	}
 );
 // 注册一个钩子，在组件被挂载之前被调用。
 onBeforeMount(() => {
+	//获取体育赛事id
+	getSportEventsRecommend();
 	//初始化体育
 	initSport();
 });
@@ -143,6 +147,12 @@ onBeforeUnmount(() => {
 	// 清除体育数据缓存
 	clearStoreInfo();
 });
+
+const getSportEventsRecommend = async () => {
+	await HomeApi.querySportEventsRecommend().then((res) => {
+		eventList.value = res.data;
+	});
+};
 
 //初始化体育
 const initSport = async () => {
@@ -205,15 +215,15 @@ const openSportPush = async () => {
 			sportPushApi: SportPushApi.GetEvents_push,
 			webToPushApi: WebToPushApi.eventsRollingBall,
 			params: {
-				query: `$filter=eventId in (89881335)`,
+				query: `$filter=eventId in (${eventList.value.map((item) => item.eventsId).join(",")})`,
 			},
-			isMultiple: true,
+			isMultiple: false,
 		},
 		params
 	);
 	//发送SSE指令到线程管理器
 	pubsub.publish(pubsub.PubSubEvents.WorkerEvents.viewToWorker.eventName, pubsub.PubSubEvents.WorkerEvents.viewToWorker.params);
-	stopLoading();
+	// stopLoading();
 };
 
 /**
@@ -221,7 +231,7 @@ const openSportPush = async () => {
  */
 
 const getAttention = () => {
-	console.log(getAttention, "====getAttention");
+	// console.log(getAttention, "====getAttention");
 	return new Promise((resolve, reject) => {
 		sportsApi.getAttentionList().then((res) => {
 			if (res?.ok) {

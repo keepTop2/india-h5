@@ -11,6 +11,7 @@
 						<div>{{ state.startTimeSlotText }}</div>
 						<div>{{ state.endTimeSlotText }}</div>
 					</div>
+					<SvgIcon size="3.2" iconName="common/arrowDown" />
 				</div>
 			</slot>
 		</div>
@@ -562,7 +563,7 @@ const listToTimestamp = (list: Array<string>, type) => {
 .widthSize1 {
 	box-sizing: border-box;
 	width: 100%;
-	height: 60px;
+	height: 80px;
 	padding: 20px;
 	border-radius: 12px;
 	border: 1px solid;
@@ -575,7 +576,7 @@ const listToTimestamp = (list: Array<string>, type) => {
 .widthSize2 {
 	box-sizing: border-box;
 	width: 300px;
-	height: 60px;
+	height: 80px;
 	padding: 20px;
 	border-radius: 12px;
 	border: 1px solid;
@@ -587,12 +588,13 @@ const listToTimestamp = (list: Array<string>, type) => {
 
 .widthSize3 {
 	box-sizing: border-box;
-	width: 188px;
-	//height: 60px;
-	padding: 20px;
+	width: 226px;
+	height: 80px;
+	padding: 9px 24px 9px 14px;
 	border-radius: 12px;
 	border: 1px solid;
-	font-size: 28px;
+	font-size: 22px;
+	line-height: 30px;
 	@include themeify {
 		border-color: themed("Line");
 		color: themed("T1");

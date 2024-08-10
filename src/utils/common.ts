@@ -279,6 +279,19 @@ class Common {
 	}
 
 	/**
+	 * @description 切换类名
+	 */
+	public changeClass(item): string {
+		if (!item?.oddsChange) {
+			return "";
+		} else if (item?.oddsChange == "oddsUp") {
+			return "oddsUp";
+		} else if (item?.oddsChange == "oddsDown") {
+			return "oddsDown";
+		}
+		return "";
+	}
+	/**
 	 * 上传验证
 	 */
 	public beforeAvatarUpload(file): boolean {

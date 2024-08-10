@@ -9,5 +9,13 @@ export const MySubRouter = {
 				title: "意见反馈",
 			},
 		},
+		{
+			path: "/betting/record",
+			name: "bettingRecord",
+			component: () => import("/@/views/BettingRecord/BettingRecord.vue"),
+			meta: {
+				title: "投注记录",
+			},
+		},
 	],
 };

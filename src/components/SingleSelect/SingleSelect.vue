@@ -2,12 +2,21 @@
 <template>
 	<div>
 		<div @click="isShow = true">
-			<slot name="select_conatiner">
-				<div class="ml_4 mr_4 vant_picker_select_left_text">{{ state.acitveName }}</div>
+			<slot name="active-name" :activeName="state.activeName">
+				<div class="ml_4 mr_4 vant_picker_select_left_text">{{ state.activeName }}</div>
 			</slot>
 		</div>
 
-		<van-popup teleport="body" v-model:show="isShow" position="bottom" @closed="onClosed" @opened="onOpened" :close-on-popstate="true" :close-on-click-overlay="closeOnClickOverlay">
+		<van-popup
+			teleport="body"
+			v-model:show="isShow"
+			position="bottom"
+			@click-close-icon="onCancel"
+			@closed="onClosed"
+			@opened="onOpened"
+			:close-on-popstate="true"
+			:close-on-click-overlay="closeOnClickOverlay"
+		>
 			<van-picker
 				class="van_picker_custom"
 				v-model="state.activeList"
@@ -25,7 +34,6 @@
 				:visible-option-num="visibleOptionNum"
 				v-bind="$attrs"
 				@confirm="onConfirm"
-				@cancel="onCancel"
 				@change="onChange"
 				@click-option="onClickOption"
 			>
@@ -94,7 +102,7 @@ const props = withDefaults(
 		show: false,
 		title: "标题",
 		confirmButtonText: "确认",
-		cancelButtonText: "X",
+		cancelButtonText: "×",
 		toolbarPosition: "top",
 		loading: false,
 		readonly: false,
@@ -108,7 +116,7 @@ const props = withDefaults(
 );
 
 const state = reactive({
-	acitveName: "",
+	activeName: "",
 	//是否点击确认
 	isConfirm: false,
 	oldctiveValue: "",
@@ -159,7 +167,7 @@ const initActiveName = () => {
 	const idx = state.columnsMap?.findIndex((item) => item.value == activeValue.value);
 	if (idx != -1 && state.columnsMap) {
 		//赋值
-		state.acitveName = state.columnsMap[idx]["text"];
+		state.activeName = state.columnsMap[idx]["text"];
 	}
 };
 
@@ -189,7 +197,7 @@ watch(
 // 点击完成按钮时触发
 const onConfirm = ({ selectedValues, selectedOptions, selectedIndexes }) => {
 	state.isConfirm = true;
-	state.acitveName = selectedOptions[0].text;
+	state.activeName = selectedOptions[0].text;
 	isShow.value = false;
 	emit("confirm", { selectedValues, selectedOptions, selectedIndexes });
 };
@@ -243,7 +251,14 @@ const onClosed = () => {
 	:deep(.van-picker__toolbar) {
 		height: 82px;
 		border-bottom: 2px solid;
-
+		.van-picker__cancel {
+			font-size: 52px;
+			font-weight: 200;
+		}
+		.van-picker__confirm {
+			font-size: 32px;
+			font-weight: 400;
+		}
 		.van-haptics-feedback {
 			@include themeify {
 				color: themed("T1");

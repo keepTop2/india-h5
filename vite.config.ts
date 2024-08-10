@@ -2,11 +2,7 @@ import { createVitePlugins } from "./build/vite/plugins";
 import { resolve } from "path";
 import { ConfigEnv, loadEnv, UserConfig } from "vite";
 import { wrapperEnv } from "./build/utils";
-// import { defineConfig } from "vite";
-// import vue from "@vitejs/plugin-vue";
 import path from "path";
-import { viteVConsole } from "vite-plugin-vconsole";
-// import { createSvgIconsPlugin } from "./plugins/svg-icons-plugin";
 import svgLoader from "vite-svg-loader";
 
 const pathResolve = (dir: string) => {
@@ -86,15 +82,6 @@ export default function ({ command, mode }: ConfigEnv): UserConfig {
 				},
 			}),
 			createVitePlugins(viteEnv, isProduction),
-			// VConsole 调试工具配置，若没有此配置，则调试工具控制台不会打印日志
-			viteVConsole({
-				entry: path.resolve("src/main.js"), // 入口文件，或者可以使用这个配置: [path.resolve('src/main.ts')]
-				localEnabled: false, // 本地是否启用
-				enabled: mode === "test", // 是否启用
-				config: {
-					maxLogNumber: 1000, // theme: 'light' // 主题颜色
-				},
-			}),
 		],
 		build: {
 			minify: "terser",
