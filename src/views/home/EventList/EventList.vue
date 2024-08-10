@@ -37,7 +37,7 @@
 </template>
 <script lang="ts" setup>
 import common from "/@/utils/common";
-import Markets from "./components/markets.vue";
+import Markets from "./components/markets/markets.vue";
 import sportsApi from "/@/api/venueHome/sports";
 import pubsub from "/@/pubSub/pubSub";
 import SportsCommonFn from "/@/views/venueHome/sports/utils/common";

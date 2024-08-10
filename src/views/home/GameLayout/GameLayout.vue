@@ -3,17 +3,19 @@
 		<div class="left-section">
 			<div class="item big" id="item-1">
 				<SvgIcon class="star" iconName="home/event_collect" />
-				<!-- <VantLazyImg :src="img" /> -->
-				<NoGameImg />
+				<VantLazyImg v-if="gameInfoList?.[0]?.icon" :src="gameInfoList?.[0]?.icon" />
+				<NoGameImg v-else />
 			</div>
 			<div class="small-items">
 				<div class="item" id="item-5">
 					<SvgIcon class="star" iconName="home/event_collect" />
-					<VantLazyImg :src="img" />
+					<VantLazyImg v-if="gameInfoList?.[1]?.icon" :src="gameInfoList?.[1]?.icon" />
+					<NoGameImg v-else />
 				</div>
 				<div class="item" id="item-6">
 					<SvgIcon class="star" iconName="home/event_collect" />
-					<VantLazyImg :src="img" />
+					<VantLazyImg v-if="gameInfoList?.[2]?.icon" :src="gameInfoList?.[2]?.icon" />
+					<NoGameImg v-else />
 				</div>
 			</div>
 		</div>
@@ -22,16 +24,19 @@
 				<div class="item" id="item-3">
 					<SvgIcon class="star" iconName="home/event_collect" />
 					<!-- <VantLazyImg :src="img" /> -->
-					<NoGameImg />
+					<VantLazyImg v-if="gameInfoList?.[3]?.icon" :src="gameInfoList?.[3]?.icon" />
+					<NoGameImg v-else />
 				</div>
 				<div class="item" id="item-4">
 					<SvgIcon class="star" iconName="home/event_collect" />
-					<VantLazyImg :src="img" />
+					<VantLazyImg v-if="gameInfoList?.[4]?.icon" :src="gameInfoList?.[4]?.icon" />
+					<NoGameImg v-else />
 				</div>
 			</div>
 			<div class="item big" id="item-2">
 				<SvgIcon class="star" iconName="home/event_collect" />
-				<VantLazyImg :src="img" />
+				<VantLazyImg v-if="gameInfoList?.[5]?.icon" :src="gameInfoList?.[5]?.icon" />
+				<NoGameImg v-else />
 			</div>
 		</div>
 	</div>
@@ -39,6 +44,10 @@
 <script setup lang="ts">
 import img from "./image.png";
 import VantLazyImg from "/@/components/vant/VantLazyImg.vue";
+import { GameInfoList } from "HomeApiData";
+const props = defineProps<{
+	gameInfoList: GameInfoList[];
+}>();
 </script>
 <style scoped lang="scss">
 .container {

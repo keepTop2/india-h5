@@ -17,9 +17,7 @@ const props = defineProps({
 	},
 });
 
-onMounted(() => {
-	console.log("Component mounted");
-});
+onMounted(() => {});
 </script>
 
 <style scoped lang="scss">
