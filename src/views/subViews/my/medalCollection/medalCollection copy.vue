@@ -1,39 +1,25 @@
 <template>
-	<!-- 顶部导航栏 -->
 	<VantNavBar :title="$t(`VantNavBar['勋章收藏者']`)" @onClickLeft="onClickLeft" />
-
-	<!-- 宝藏卡片区域 -->
 	<div class="treasure_card">
-		<!-- 宝藏勋章列表 -->
 		<div class="treasure_list">
-			<!-- 遍历展示每个勋章项目 -->
 			<div class="treasure_item" v-for="(item, index) in state.medalRewardRespVOS" :key="index">
-				<!-- 勋章图标 -->
-				<div class="icon" @click="onOpenMedalReward(item)">
+				<div class="icon">
 					<VantLazyImg :src="item.icon" />
 				</div>
-				<!-- 解锁勋章数量 -->
 				<div class="value">{{ item.unlockMedalNum }}</div>
-				<!-- 箭头图标，根据是否解锁显示不同的箭头 -->
 				<div class="arrow">
 					<VantLazyImg :src="state.canLightNum >= item.unlockMedalNum ? arrow : arrow2" />
 				</div>
 			</div>
 		</div>
-
-		<!-- 进度条区域 -->
 		<div class="progress">
-			<div class="value" :style="{ width: totalProgress + '%' }"></div>
+			<div class="value" :style="`width: ${totalProgress}%`"></div>
 		</div>
 
-		<!-- 文本提示列表 -->
 		<div class="text_list">
-			<!-- 提示图标 -->
-			<div class="tooltip">
-				<VantLazyImg class="icon" :src="tips_icon" />
-				<div class="tooltipText">{{ $t('medalCollection["宝箱奖励流水倍数为8倍"]') }}</div>
+			<div class="tip">
+				<VantLazyImg :src="tips_icon" />
 			</div>
-			<!-- 遍历展示解锁勋章的提示信息 -->
 			<i18n-t v-for="(item, index) in state.medalRewardRespVOS" :key="index" keypath="medalCollection.解锁勋章" :tag="'p'">
 				<template v-slot:value>
 					<span class="text">{{ $t("medalCollection.枚", { value: item.unlockMedalNum }) }}</span>
@@ -43,14 +29,11 @@
 		</div>
 	</div>
 
-	<!-- 已解锁勋章内容区域 -->
 	<div class="unlocked_content">
 		<div class="unlocked_header">
 			<span class="title">{{ $t('medalCollection["已解锁"]') }}</span>
-			<!-- 如果没有已解锁勋章，显示提示 -->
 			<span class="tips" v-if="state.hasUnlockList.length == 0">{{ $t('medalCollection["(您还未获得任何勋章，积极玩游戏获得更多勋章)"]') }}</span>
 		</div>
-		<!-- 已解锁勋章列表 -->
 		<div class="medal_list" v-if="state.hasUnlockList.length > 0">
 			<div class="medal_item" v-for="(item, index) in state.hasUnlockList" :key="index">
 				<div class="icon">
@@ -61,16 +44,13 @@
 			</div>
 		</div>
 	</div>
-
-	<!-- 未解锁勋章内容区域 -->
 	<div class="no_unlocked_content">
 		<div class="no_unlocked_header">
 			<span class="title">{{ $t('medalCollection["未解锁"]') }}</span>
 			<span class="tips">{{ $t('medalCollection["(提示：点击勋章图标查看勋章奖励和详情)"]') }}</span>
 		</div>
-		<!-- 未解锁勋章列表 -->
 		<div class="medal_list">
-			<div class="medal_item" v-for="(item, index) in state.notUnlockList" :key="index" @click="onLightUpMedal(item)">
+			<div class="medal_item" v-for="(item, index) in state.notUnlockList" :key="index">
 				<template v-if="item.lockStatus === 0">
 					<i></i>
 					<div class="bg"></div>
@@ -88,24 +68,20 @@
 import { medalApi } from "/@/api/my";
 import { MedalRewardRespVOS, NotUnlockList } from "./interface";
 import common from "/@/utils/common";
+import medal from "/@/assets/zh-CN/default/my/medal.png";
 import arrow from "/@/assets/zh-CN/default/my/medalCollection/arrow.png";
 import arrow2 from "/@/assets/zh-CN/default/my/medalCollection/arrow2.png";
 import tips_icon from "/@/assets/zh-CN/default/my/medalCollection/tips_icon.png";
 import treasure_box_1 from "/@/assets/zh-CN/default/my/medalCollection/treasure_box_1.png";
 import treasure_box_1_open from "/@/assets/zh-CN/default/my/medalCollection/treasure_box_1_open.png";
-import treasure_box_1_receive from "/@/assets/zh-CN/default/my/medalCollection/treasure_box_1_receive.png";
 import treasure_box_2 from "/@/assets/zh-CN/default/my/medalCollection/treasure_box_2.png";
 import treasure_box_2_open from "/@/assets/zh-CN/default/my/medalCollection/treasure_box_2_open.png";
-import treasure_box_2_receive from "/@/assets/zh-CN/default/my/medalCollection/treasure_box_2_receive.png";
 import treasure_box_3 from "/@/assets/zh-CN/default/my/medalCollection/treasure_box_3.png";
 import treasure_box_3_open from "/@/assets/zh-CN/default/my/medalCollection/treasure_box_3_open.png";
-import treasure_box_3_receive from "/@/assets/zh-CN/default/my/medalCollection/treasure_box_3_receive.png";
 import treasure_box_4 from "/@/assets/zh-CN/default/my/medalCollection/treasure_box_4.png";
 import treasure_box_4_open from "/@/assets/zh-CN/default/my/medalCollection/treasure_box_4_open.png";
-import treasure_box_4_receive from "/@/assets/zh-CN/default/my/medalCollection/treasure_box_4_receive.png";
 import treasure_box_5 from "/@/assets/zh-CN/default/my/medalCollection/treasure_box_5.png";
 import treasure_box_5_open from "/@/assets/zh-CN/default/my/medalCollection/treasure_box_5_open.png";
-import treasure_box_5_receive from "/@/assets/zh-CN/default/my/medalCollection/treasure_box_5_receive.png";
 import { useRouter } from "vue-router";
 const router = useRouter();
 
@@ -140,83 +116,29 @@ const totalProgress = computed(() => {
 const getUserMedalInfo = async () => {
 	const res = await medalApi.getUserMedalInfo().catch((err) => err);
 	if (res.code == common.getInstance().ResCode.SUCCESS) {
-		// 更新状态数据
 		state.medalRewardRespVOS = res.data.medalRewardRespVOS;
-		state.canLightNum = res.data.hasUnlockList.length;
-		state.hasUnlockList = res.data.hasUnlockList;
-		state.notUnlockList = res.data.notUnlockList;
-
-		// 定义每个状态对应的图标
-		const treasureIcons = [
-			{
-				normal: treasure_box_1,
-				receive: treasure_box_1_receive,
-				open: treasure_box_1_open,
-			},
-			{
-				normal: treasure_box_2,
-				receive: treasure_box_2_receive,
-				open: treasure_box_2_open,
-			},
-			{
-				normal: treasure_box_3,
-				receive: treasure_box_3_receive,
-				open: treasure_box_3_open,
-			},
-			{
-				normal: treasure_box_4,
-				receive: treasure_box_4_receive,
-				open: treasure_box_4_open,
-			},
-			{
-				normal: treasure_box_5,
-				receive: treasure_box_5_receive,
-				open: treasure_box_5_open,
-			},
-		];
-
-		// 根据openStatus设置图标
 		state.medalRewardRespVOS.forEach((item, index) => {
-			switch (item.openStatus) {
-				case 2:
-					item.icon = treasureIcons[index].normal;
-					break;
-				case 0:
-					item.icon = treasureIcons[index].receive;
-					break;
+			switch (index + 1) {
 				case 1:
-					item.icon = treasureIcons[index].open;
+					item.icon = item.openStatus === 1 ? treasure_box_1_open : treasure_box_1;
+					break;
+				case 2:
+					item.icon = item.openStatus === 1 ? treasure_box_2_open : treasure_box_2;
+					break;
+				case 3:
+					item.icon = item.openStatus === 1 ? treasure_box_3_open : treasure_box_3;
+					break;
+				case 4:
+					item.icon = item.openStatus === 1 ? treasure_box_4_open : treasure_box_4;
+					break;
+				case 5:
+					item.icon = item.openStatus === 1 ? treasure_box_5_open : treasure_box_5;
 					break;
 			}
 		});
-	}
-};
-
-// 领取宝箱
-const onOpenMedalReward = async (item) => {
-	// 确保勋章数量达到要求且宝箱状态为未领取
-	if (state.canLightNum >= item.unlockMedalNum && item.openStatus === 0) {
-		const params = {
-			condNum: item.unlockMedalNum,
-		};
-		const res = await medalApi.openMedalReward(params).catch((err) => err);
-
-		if (res.code == common.getInstance().ResCode.SUCCESS) {
-			// 成功领取后更新用户的勋章信息
-			await getUserMedalInfo();
-		}
-	}
-};
-
-// 点亮勋章
-const onLightUpMedal = async (item) => {
-	if (item.lockStatus !== 0) return;
-	const params = {
-		medalCode: item.medalCode,
-	};
-	const res = await medalApi.lightUpMedal(params).catch((err) => err);
-	if (res.code == common.getInstance().ResCode.SUCCESS) {
-		getUserMedalInfo();
+		state.canLightNum = res.data.hasUnlockList.length;
+		state.hasUnlockList = res.data.hasUnlockList;
+		state.notUnlockList = res.data.notUnlockList;
 	}
 };
 
@@ -302,44 +224,17 @@ const onClickLeft = () => {
 		margin-top: 23px;
 		padding: 0px 23px;
 
-		.tooltip {
+		.tip {
 			position: absolute;
 			top: 2px;
 			right: 27px;
-			.icon {
-				width: 30px;
-				height: 30px;
-			}
-			.tooltipText {
-				display: none;
-			}
-		}
-		.tooltip:hover {
-			.tooltipText {
-				position: absolute;
-				top: calc(100% + 10px);
-				right: -40px;
-				width: max-content;
-				min-width: 244px;
-				max-width: 370px;
-				min-height: 50px;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				padding: 5px 15px;
-				border-radius: 20px;
-				@include themeify {
-					color: themed("T3");
-					background: rgba(0, 0, 0, 0.77);
-				}
-				font-family: "PingFang SC";
-				font-size: 20px;
-				font-weight: 400;
-				text-align: center;
-				box-sizing: border-box;
+			width: 30px;
+			height: 30px;
+			img {
+				width: 100%;
+				height: 100%;
 			}
 		}
-
 		p {
 			@include themeify {
 				color: themed("TB");

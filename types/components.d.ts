@@ -24,7 +24,7 @@ declare module '@vue/runtime-core' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SingleSelect: typeof import('./../src/components/SingleSelect/SingleSelect.vue')['default']
-    SvgIcon: typeof import('./../src/components/SvgIcon/index.vue')['default']
+    SvgIcon: typeof import('./../src/components/svgIcon/index.vue')['default']
     Tabs: typeof import('./../src/components/Tabs/Tabs.vue')['default']
     VanButton: typeof import('vant/es')['Button']
     VanCellGroup: typeof import('vant/es')['CellGroup']
