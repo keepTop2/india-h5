@@ -24,15 +24,19 @@
 				<span class="more fw_400 fs_28 color_T1" @click="router.push('/sports')">更多</span>
 			</h3>
 			<EventList v-show="eventList?.length" v-for="event in eventList" class="m24" :event="event" />
-			<h3 class="title_more">
-				<span class="flex_align_center">
-					<SvgIcon iconName="home/event_777" alt="" />
-					{{ $t('home["热门电子"]') }}
-				</span>
-				<span class="more fw_400 fs_28 color_T1" @click="router.push('/game/arena/1')">更多</span>
-			</h3>
-			<GameLayout class="m24" />
-
+			<template v-for="(item, index) in lobbyTopGame" :key="index"">
+				<h3 class="title_more">
+					<span class="flex_align_center">
+						<!-- <SvgIcon iconName="home/event_777" alt="" /> -->
+						<VantLazyImg :src="item.icon" />
+						{{item.name}}
+					</span>
+					<span class="more fw_400 fs_28 color_T1" @click="router.push('/game/arena/1')">更多</span>
+				</h3>
+				<GameLayout v-if="item.gameInfoList.length" :gameList="item.gameInfoList" class="m24" />
+				<GameBigPic v-else class="m24" />
+			</template>
+			
 			<h3 class="title_more">
 				<span class="flex_align_center">
 					<SvgIcon iconName="home/event_people" alt="" />
@@ -103,6 +107,7 @@ import { OpenSportEventSourceParams } from "../venueHome/sports/models/sportEven
 import { sportTabPushActions } from "../venueHome/sports/sportsMap/sportsSSERequestMap";
 import { SportPushApi, WebToPushApi } from "../venueHome/sports/enum/sportEventSourceEnum";
 import viewSportPubSubEventData from "../venueHome/sports/hooks/viewSportPubSubEventData";
+import { GameInfoList, LobbyTopGame } from "HomeApiData";
 const router = useRouter();
 const UserStore = useUserStore();
 const sportsInfoStore = useSportsInfoStore();
@@ -110,7 +115,28 @@ const sportsBetEvent = useSportsBetEventStore();
 const { startLoading, stopLoading } = useLoading();
 const { startPolling, stopPolling, initSportPubsub, unSubSport, sportsLogin, clearState } = useSportPubSubEvents();
 const eventList = ref();
-
+const lobbyTopGame = ref<LobbyTopGame[]>([
+	{
+		gameOneId: "string",
+		name: "string",
+		icon: "string",
+		gameInfoList: [
+			{
+				id: "string",
+				name: "string",
+				icon: "string",
+				status: 0,
+				remark: "string",
+				sort: 0,
+				label: 0,
+				cornerLabels: 0,
+				maintenanceStartTime: 0,
+				maintenanceEndTime: 0,
+				collect: true,
+			},
+		],
+	},
+]);
 watch(
 	() => viewSportPubSubEventData.getSportData(),
 	(newData) => {
@@ -131,9 +157,10 @@ watch(
 	}
 );
 // 注册一个钩子，在组件被挂载之前被调用。
-onBeforeMount(() => {
+onBeforeMount(async () => {
+	await getLobbyTopGame();
 	//获取体育赛事id
-	getSportEventsRecommend();
+	await getSportEventsRecommend();
 	//初始化体育
 	initSport();
 });
@@ -153,13 +180,18 @@ const getSportEventsRecommend = async () => {
 		eventList.value = res.data;
 	});
 };
+const getLobbyTopGame = async () => {
+	await HomeApi.queryLobbyTopGame().then((res) => {
+		lobbyTopGame.value = res.data;
+	});
+};
 
 //初始化体育
 const initSport = async () => {
 	//开启体育线程
 	workerManage.startWorker(workerManage.WorkerMap.sportViewProcessWorker.workerName);
 	//体育登录
-	sportsLogin().then((res) => {
+	await sportsLogin().then((res) => {
 		if (res) {
 			initSportPubsub();
 			openSportPush();
@@ -227,7 +259,7 @@ const openSportPush = async () => {
 };
 
 /**
- * @description 获取关注列表
+ * @description 获取体育关注列表
  */
 
 const getAttention = () => {
