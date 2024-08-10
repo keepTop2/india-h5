@@ -4,123 +4,31 @@
 			<SvgIcon class="icon" v-if="event.sportType == 1" iconName="home/event_football" />
 			<SvgIcon class="icon" v-if="event.sportType == 2" iconName="home/event_basketBall" />
 			<span class="title color_T1">{{ event.leagueName }}</span>
-			<SvgIcon class="star" onName="home/event_collect" />
+			<!-- 关注 -->
+			<SvgIcon v-if="isAttention" iconName="home/event_collect" size="5.333333" @click="attentionEvent(true)" />
+			<!-- 取消关注 -->
+			<SvgIcon v-else iconName="home/event_collect_no" size="5.333333" @click="attentionEvent(false)" />
 		</div>
-		<div class="time color_T1">明天 02:00</div>
+		<div class="time color_T1">
+			{{ SportsCommonFn.getEventsTitle(event) }}
+			<span v-if="(event.gameInfo?.livePeriod == 2 || event.gameInfo?.livePeriod == 1) && !event.gameInfo?.delayLive && !event.gameInfo?.isHt">{{ formattedGameTime }}</span>
+		</div>
 		<div class="match-info mb_24">
 			<div class="team">
-				<img :src="event.teamInfo.homeIconUrl" alt="France" />
-				<span class="color_TB">{{ event.teamInfo.homeName }}</span>
+				<img :src="event.teamInfo?.homeIconUrl" alt="France" />
+				<span class="color_TB">{{ event.teamInfo?.homeName }}</span>
 			</div>
 			<div class="score color_TB bg_BG4">{{ event.gameInfo?.liveHomeScore }}</div>
 		</div>
 		<div class="match-info">
 			<div class="team">
-				<img :src="event.teamInfo.awayIconUrl" alt="" />
-				<span class="color_TB">{{ event.teamInfo.awayName }}</span>
+				<img :src="event.teamInfo?.awayIconUrl" alt="" />
+				<span class="color_TB">{{ event.teamInfo?.awayName }}</span>
 			</div>
 			<div class="score color_TB bg_BG4">{{ event.gameInfo?.liveAwayScore }}</div>
 		</div>
 		<div class="line bg_Line"></div>
-
-		<div class="price_title">全场独赢</div>
-		<div class="odds">
-			<div class="odds-item">
-				<span>主胜</span>
-				<span class="value" :class="[changeClass(event.markets[5].selections[0])]">
-					{{ event.markets[5].selections[0].oddsPrice.decimalPrice }}
-					<RiseOrFall
-						v-if="event.markets[5].selections[0].oddsChange"
-						:time="3000"
-						:status="event.markets[5].selections[0].oddsChange == 'oddsUp' ? 1 : 2"
-						@animationEnd="animationEnd(event.markets[5].marketId, event.markets[5].selections[0])"
-					/>
-				</span>
-			</div>
-			<div class="odds-item">
-				<span>平局</span>
-				<span class="value" :class="[changeClass(event.markets[5].selections[1])]"
-					>{{ event.markets[5].selections[1].oddsPrice.decimalPrice }}
-					<RiseOrFall
-						v-if="event.markets[5].selections[1].oddsChange"
-						:time="3000"
-						:status="event.markets[5].selections[1].oddsChange == 'oddsUp' ? 1 : 2"
-						@animationEnd="animationEnd(event.markets[5].marketId, event.markets[5].selections[1])"
-					/>
-				</span>
-			</div>
-			<div class="odds-item">
-				<span>客胜</span>
-				<span class="value" :class="[changeClass(event.markets[5].selections[2])]"
-					>{{ event.markets[5].selections[2].oddsPrice.decimalPrice }}
-					<RiseOrFall
-						v-if="event.markets[5].selections[2].oddsChange"
-						:time="3000"
-						:status="event.markets[5].selections[2].oddsChange == 'oddsUp' ? 1 : 2"
-						@animationEnd="animationEnd(event.markets[5].marketId, event.markets[5].selections[2])"
-					/>
-				</span>
-			</div>
-		</div>
-		<div class="price_title">全场让球</div>
-		<div class="handicap">
-			<div class="handicap-item">
-				<span>{{ SportsCommon.formatPoint({ betType: event.markets[1].betType, point: event.markets[1].selections[0].point, key: event.markets[1].selections[0].point?.key }) }}</span>
-				<span class="value" :class="[changeClass(event.markets[1].selections[0])]"
-					>{{ event.markets[1].selections[0].oddsPrice.decimalPrice }}
-					<RiseOrFall
-						v-if="event.markets[1].selections[0].oddsChange"
-						:time="3000"
-						:status="event.markets[1].selections[0].oddsChange == 'oddsUp' ? 1 : 2"
-						@animationEnd="animationEnd(event.markets[1].marketId, event.markets[1].selections[0])"
-					/>
-				</span>
-			</div>
-			<div class="handicap-item">
-				<span>{{ SportsCommon.formatPoint({ betType: event.markets[1].betType, point: event.markets[1].selections[1].point, key: event.markets[1].selections[1].point?.key }) }}</span>
-				<span class="value" :class="[changeClass(event.markets[1].selections[1])]"
-					>{{ event.markets[1].selections[1].oddsPrice.decimalPrice }}
-					<RiseOrFall
-						v-if="event.markets[1].selections[1].oddsChange"
-						:time="3000"
-						:status="event.markets[1].selections[1].oddsChange == 'oddsUp' ? 1 : 2"
-						@animationEnd="animationEnd(event.markets[1].marketId, event.markets[1].selections[1])"
-					/>
-				</span>
-			</div>
-		</div>
-		<div class="price_title">全场大小</div>
-		<div class="handicap">
-			<div class="handicap-item">
-				<span
-					>{{ event.markets[3].selections[0].keyName
-					}}{{ SportsCommon.formatPoint({ betType: event.markets[3].betType, point: event.markets[3].selections[0].point, key: event.markets[3].selections[0].point?.key }) }}</span
-				>
-				<span class="value" :class="[changeClass(event.markets[3].selections[0])]">{{ event.markets[3].selections[0].oddsPrice.decimalPrice }}</span>
-				<RiseOrFall
-					v-if="event.markets[3].selections[0].oddsChange"
-					:time="3000"
-					:status="event.markets[3].selections[0].oddsChange == 'oddsUp' ? 1 : 2"
-					@animationEnd="animationEnd(event.markets[3].marketId, event.markets[3].selections[0])"
-				/>
-			</div>
-			<div class="handicap-item">
-				<span
-					>{{ event.markets[3].selections[1].keyName
-					}}{{ SportsCommon.formatPoint({ betType: event.markets[3].betType, point: event.markets[3].selections[1].point, key: event.markets[3].selections[1].point?.key }) }}</span
-				>
-				<span class="value" :class="[changeClass(event.markets[3].selections[1])]">{{ event.markets[3].selections[1].oddsPrice.decimalPrice }}</span>
-				<RiseOrFall
-					v-if="event.markets[3].selections[1].oddsChange"
-					:time="3000"
-					:status="event.markets[3].selections[1].oddsChange == 'oddsUp' ? 1 : 2"
-					@animationEnd="animationEnd(event.markets[3].marketId, event.markets[3].selections[1])"
-				/>
-			</div>
-			<!-- <div class="handicap-item lock-container">
-				<SvgIcon class="lock" iconName="home/event_lock" />
-			</div> -->
-		</div>
+		<Markets :markets="event.markets" />
 		<div class="more-bets">
 			<span class="fs_28 color_T1">更多投注</span>
 			<SvgIcon iconName="home/right_arrow" />
@@ -128,42 +36,44 @@
 	</div>
 </template>
 <script lang="ts" setup>
-import SportsCommon from "/@/views/venueHome/sports/utils/common";
-import useSportPubSubEvents from "/@/views/venueHome/sports/hooks/useSportPubSubEvents";
-import RiseOrFall from "/@/views/venueHome/sports/components/riseOrFall/riseOrFall.vue";
-import { WebToPushApi } from "/@/views/venueHome/sports/enum/sportEventSourceEnum";
-
-const { startPolling, stopPolling, initSportPubsub, unSubSport, clearState, sportsLogin, clearSportsOddsChange } = useSportPubSubEvents();
-
+import common from "/@/utils/common";
+import Markets from "./components/markets.vue";
+import sportsApi from "/@/api/venueHome/sports";
+import pubsub from "/@/pubSub/pubSub";
+import SportsCommonFn from "/@/views/venueHome/sports/utils/common";
+import { useSportsBetEventStore } from "/@/store/modules/sports/sportsBetData";
+const commonFunc = common.getInstance();
+const sportsBetData = useSportsBetEventStore();
 const props = defineProps({
 	event: {
 		type: Object,
 		required: true,
 	},
 });
-/**
- * @description 动画结束删除oddsChange字段状态
- */
-const animationEnd = (marketId, selection) => {
-	if (selection.oddsChange) {
-		//删除 markets中的 oddsChange字段状态
-		clearSportsOddsChange({ webToPushApi: WebToPushApi.sportsEventDetail, marketId, selection });
-		//删除 childrenViewData中的状态
-		selection.oddsChange = "";
-	}
-};
+const isAttention = computed(() => {
+	return sportsBetData.attentionEventIdList.includes(props.event.eventId);
+});
 
-/**
- * @description 切换类名
- */
-const changeClass = (item) => {
-	if (!item.oddsChange) {
-		return "";
-	} else if (item.oddsChange == "oddsUp") {
-		return "oddsUp";
-	} else if (item.oddsChange == "oddsDown") {
-		return "oddsDown";
+// 定义计算属性 格式化比赛开始时间
+const formattedGameTime = computed(() => {
+	const minutes = Math.floor(props.event.gameInfo.seconds / 60);
+	const seconds = props.event.gameInfo.seconds % 60;
+	return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+});
+
+// 点击关注按钮
+const attentionEvent = async (isActive: boolean) => {
+	if (isActive) {
+		await sportsApi.unFollow({
+			thirdId: [props.event.eventId],
+		});
+	} else {
+		await sportsApi.saveFollow({
+			thirdId: props.event.eventId,
+			type: 2,
+		});
 	}
+	pubsub.publish(pubsub.PubSubEvents.SportEvents.attentionChange.eventName, {});
 };
 </script>
 <style scoped lang="scss">
@@ -176,21 +86,7 @@ $red-color: #f00;
 .container {
 	padding: 24px;
 	border-radius: 20px;
-	.oddsUp {
-		@include themeify {
-			color: themed("Theme") !important;
-		}
-	}
 
-	.oddsDown {
-		@include themeify {
-			color: themed("Wam-P1") !important;
-		}
-	}
-	.lock {
-		width: 32px;
-		height: 32px;
-	}
 	.line {
 		height: 1px;
 		margin: 24px 0;
@@ -267,73 +163,6 @@ $red-color: #f00;
 		}
 	}
 
-	.odds {
-		display: flex;
-		justify-content: space-between;
-		margin-bottom: 10px;
-		gap: 16px;
-		.odds-item {
-			width: 159px;
-			height: 39px;
-			padding: 15px 24px;
-			border-radius: 12px;
-			display: flex;
-			align-items: center;
-			flex-direction: row;
-			justify-content: space-evenly;
-			@include themeify {
-				background: themed("BG4");
-				span {
-					display: block;
-					font-size: 28px;
-					color: themed("T1");
-				}
-
-				.value {
-					font-size: 28px;
-					color: themed("TB");
-				}
-			}
-		}
-	}
-
-	.handicap {
-		display: flex;
-		justify-content: space-between;
-		margin-bottom: 10px;
-		gap: 16px;
-		.handicap-item {
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			width: 319px;
-			height: 68px;
-			padding: 17px 24px;
-			box-sizing: border-box;
-			font-size: 28px;
-			@include themeify {
-				background: themed("BG4");
-				span {
-					display: block;
-					color: themed("T1");
-				}
-				.value {
-					font-weight: bold;
-				}
-				.green {
-					color: themed("Wam-P1");
-				}
-
-				.red {
-					color: themed("Theme");
-				}
-			}
-		}
-		.lock-container {
-			display: flex;
-			justify-content: center;
-		}
-	}
 	.more-bets {
 		text-align: center;
 		font-size: 14px;

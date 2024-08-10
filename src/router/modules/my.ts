@@ -25,5 +25,13 @@ export const MySubRouter = {
 				title: "勋章详情",
 			},
 		},
+		{
+			path: "/betting/record",
+			name: "bettingRecord",
+			component: () => import("/@/views/BettingRecord/BettingRecord.vue"),
+			meta: {
+				title: "投注记录",
+			},
+		},
 	],
 };

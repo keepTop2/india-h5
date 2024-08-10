@@ -9212,16 +9212,6 @@ vary@^1:
   resolved "https://registry.npmjs.org/vary/-/vary-1.1.2.tgz"
   integrity sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==
 
-vconsole@^3.15.1:
-  version "3.15.1"
-  resolved "https://registry.npmjs.org/vconsole/-/vconsole-3.15.1.tgz"
-  integrity sha512-KH8XLdrq9T5YHJO/ixrjivHfmF2PC2CdVoK6RWZB4yftMykYIaXY1mxZYAic70vADM54kpMQF+dYmvl5NRNy1g==
-  dependencies:
-    "@babel/runtime" "^7.17.2"
-    copy-text-to-clipboard "^3.0.1"
-    core-js "^3.11.0"
-    mutation-observer "^1.0.3"
-
 verror@1.10.0:
   version "1.10.0"
   resolved "https://registry.npmjs.org/verror/-/verror-1.10.0.tgz"
@@ -9330,12 +9320,6 @@ vite-plugin-svg-icons@^2.0.1:
     pathe "^0.2.0"
     svg-baker "1.7.0"
     svgo "^2.8.0"
-
-vite-plugin-vconsole@^2.1.1:
-  version "2.1.1"
-  resolved "https://registry.npmjs.org/vite-plugin-vconsole/-/vite-plugin-vconsole-2.1.1.tgz"
-  integrity sha512-369FlBnQhzR5pF2+nsmbMeF5qNO6MzUIk3l+DHa8In15cscyk4eXT5pWfExoSLn41dgeI1FPP+kgAKViePYPdQ==
-
 vite-plugin-vue-setup-extend-plus@^0.1.0:
   version "0.1.0"
   resolved "https://registry.npmjs.org/vite-plugin-vue-setup-extend-plus/-/vite-plugin-vue-setup-extend-plus-0.1.0.tgz"
