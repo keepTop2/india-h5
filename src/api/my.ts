@@ -29,4 +29,28 @@ export class medalApi {
 			headers,
 		});
 	};
+	// 获取会员勋章信息
+	static getUserMedalInfo = (data = {}, headers = {}) => {
+		return useAxiosApi(`/app/user-info/api/getUserMedalInfo`, {
+			method: "POST",
+			data,
+			headers,
+		});
+	};
+	// 打开宝箱
+	static openMedalReward = (data = {}, headers = {}) => {
+		return useAxiosApi(`/app/user-info/api/openMedalReward`, {
+			method: "POST",
+			data,
+			headers,
+		});
+	};
+	// 点亮勋章
+	static lightUpMedal = (data = {}, headers = {}) => {
+		return useAxiosApi(`/app/user-info/api/lightUpMedal`, {
+			method: "POST",
+			data,
+			headers,
+		});
+	};
 }
