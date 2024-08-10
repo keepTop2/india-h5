@@ -10,7 +10,7 @@
 		<div v-else class="account_info">
 			<div class=""></div>
 			<div class="user">
-				<div class="userName">苏秦</div>
+				<div class="userName">{{ store.userInfo.userAccount }}</div>
 				<div class="balance">${{ common.getInstance().formatFloat(6000) }}</div>
 			</div>
 			<Notify />

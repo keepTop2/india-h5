@@ -10,6 +10,22 @@ export const MySubRouter = {
 			},
 		},
 		{
+			path: "/medalCollection",
+			name: "medalCollection",
+			component: () => import("/@/views/subViews/my/medalCollection/medalCollection.vue"),
+			meta: {
+				title: "勋章收藏者",
+			},
+		},
+		{
+			path: "/medalDetails",
+			name: "medalDetails",
+			component: () => import("/@/views/subViews/my/medalDetails/medalDetails.vue"),
+			meta: {
+				title: "勋章详情",
+			},
+		},
+		{
 			path: "/betting/record",
 			name: "bettingRecord",
 			component: () => import("/@/views/BettingRecord/BettingRecord.vue"),
