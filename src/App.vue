@@ -31,7 +31,8 @@ onBeforeMount(() => {
 // 自动登录
 const autoLogin = async () => {
 	// 没有登录信息与密钥则推出
-	if (!loginInfo.value && store.token) return;
+	if (store.token) return;
+	if (!loginInfo.value) return;
 	const params = {
 		userAccount: loginInfo.value?.userAccount,
 		password: loginInfo.value?.password,

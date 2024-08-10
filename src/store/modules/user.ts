@@ -30,9 +30,11 @@ export const useUserStore = defineStore("User", {
 			return this.userInfo || {};
 		},
 		getLoginInfo(): any {
+			// console.log("this.loginInfo", this.loginInfo);
 			if (!this.loginInfo) return null;
 			const decryptedInfo = EncryptionFn.decrypt(this.loginInfo);
-			return JSON.parse(decryptedInfo);
+			// console.log("decryptedInfo", decryptedInfo);
+			return decryptedInfo;
 		},
 		getLang(): any {
 			return this.lang;

@@ -56,7 +56,7 @@ class EncryptionFn {
 	 * @returns
 	 */
 	static decrypt = (data: any) => {
-		// console.log("开始解密", data);
+		console.log("开始解密", data);
 		// 检查 encryptedCiphertext 对象是否存在并包含 key 和 iv
 		const encryptedCiphertext = window.PLATFROM_CONFIG.encryptedCiphertext;
 		if (!encryptedCiphertext || !encryptedCiphertext.key || !encryptedCiphertext.iv) {
@@ -73,7 +73,7 @@ class EncryptionFn {
 			padding: CryptoJS.pad.Pkcs7,
 		});
 		const value = decrypted.toString(CryptoJS.enc.Utf8);
-		// console.log("解密完成", JSON.parse(value));
+		console.log("解密完成", JSON.parse(value));
 		return JSON.parse(value);
 	};
 

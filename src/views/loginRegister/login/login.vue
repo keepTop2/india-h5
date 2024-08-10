@@ -75,8 +75,8 @@ const eyeShow = ref(true);
 const btnDisabled = ref(true);
 const userAgreement = ref(false);
 const state = reactive({
-	userAccount: "suqin0000", // 邮箱或者手机号
-	password: "abcd0321", // 密码
+	userAccount: "", // 邮箱或者手机号
+	password: "", // 密码
 	deviceNo: common.getInstance().getDevice(), // 设备
 });
 
