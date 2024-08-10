@@ -28,9 +28,7 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
 const router = useRouter();
-const onClickLeft = () => {
-	router.go(-1);
-};
+
 const state = reactive({
 	params: {
 		feedbackType: "", // 反馈类型
@@ -60,6 +58,10 @@ watch(
 
 const homeBack = () => {
 	console.log("提交");
+};
+
+const onClickLeft = () => {
+	router.go(-1);
 };
 </script>
 <style lang="scss" scoped>

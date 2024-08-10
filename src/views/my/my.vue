@@ -9,7 +9,7 @@
 				<div class="avatar">
 					<VantLazyImg :src="avatar" />
 				</div>
-				<span class="user_name">Athena LEE</span>
+				<span class="user_name">{{ store.userInfo.userAccount }}</span>
 				<div class="user_id">
 					<span>ID: 455454</span>
 				</div>
@@ -30,19 +30,17 @@
 			<div class="my-content">
 				<!-- 勋章 -->
 				<div class="medal">
-					<div class="medal_header">
+					<div class="medal_header" @click="toPath('/medalCollection')">
 						<VantLazyImg class="line" :src="line" />
 						<div class="label">勋章</div>
+						<div class="badge" v-if="state.medalQuantity > 0">{{ state.medalQuantity }}</div>
 						<SvgIcon class="arrow" iconName="/common/arrow" />
 					</div>
 					<div class="medal_content">
-						<template v-for="item in 6">
-							<VantLazyImg class="medal" :src="medal" />
-
-							<div class="btn"></div>
-							<!-- <div class="btn"></div>
-						<div class="btn"></div> -->
-						</template>
+						<div class="item" :class="{ item_bg: item.lockStatus == 1 }" v-for="(item, index) in state.medalListData" :key="index">
+							<i v-if="item.lockStatus == 1"></i>
+							<VantLazyImg class="medal_icon" :src="getMedalIcon(item)" />
+						</div>
 					</div>
 				</div>
 				<!-- 总余额 -->
@@ -107,20 +105,19 @@
 </template>
 
 <script setup lang="ts">
+import { myApi, medalApi } from "/@/api/my";
+import { UserCenterMedalDetailRespVoList } from "./interface";
+import common from "/@/utils/common";
 import NavBar from "/@/views/my/components/navBar.vue";
 import NoLogin from "/@/views/my/components/noLogin.vue";
 import Progress from "/@/views/vip/components/vipProgress.vue";
-
 import InviteFriends from "/@/views/my/components/inviteFriends.vue";
 import pubsub from "/@/pubSub/pubSub";
 import { useRouter } from "vue-router";
 import { useUserStore } from "/@/store/modules/user";
-
 import avatar from "/@/assets/zh-CN/default/my/avatar.png";
 import vip_big from "/@/assets/zh-CN/default/vip/vip_big.png";
-
 import line from "/@/assets/zh-CN/default/common/line.png";
-import medal from "/@/assets/zh-CN/default/my/medal.png";
 import balance_operation_ck from "/@/assets/zh-CN/default/my/balance_operation_ck.png";
 import balance_operation_tx from "/@/assets/zh-CN/default/my/balance_operation_tx.png";
 import balance_operation_jy from "/@/assets/zh-CN/default/my/balance_operation_jy.png";
@@ -201,7 +198,37 @@ const menuData = {
 	],
 };
 
+let state = reactive({
+	medalQuantity: 0 as number,
+	medalListData: [] as UserCenterMedalDetailRespVoList[],
+});
+
 const loginOutShow = ref(false);
+
+const getMedalIcon = (item: any) => {
+	if (item.lockStatus == 2 || item.lockStatus == 0) {
+		return item.inactivatedPicUrl;
+	} else if (item.lockStatus == 1) {
+		return item.activatedPicUrl;
+	}
+};
+
+const getIndexInfo = async () => {
+	const res = await myApi.getIndexInfo().catch((err) => err);
+	if (res.code == common.getInstance().ResCode.SUCCESS) {
+	}
+};
+
+const topNList = async () => {
+	const res = await medalApi.topNList().catch((err) => err);
+	if (res.code == common.getInstance().ResCode.SUCCESS) {
+		state.medalQuantity = res.data.canLightNum;
+		state.medalListData = res.data.userCenterMedalDetailRespVoList;
+		console.log("state.medalListData", state.medalListData);
+	}
+};
+
+topNList();
 
 const onClickCell = (item) => {
 	if (item.path == "/inviteFriends") {
@@ -372,12 +399,33 @@ const loginOut = () => {
 			}
 
 			.label {
+				flex: 1;
 				@include themeify {
 					color: themed("TB1");
 				}
 				font-family: "PingFang SC";
 				font-size: 28px;
 				font-weight: 600;
+			}
+
+			.badge {
+				min-width: 28px;
+				height: 28px;
+				padding: 0 5px;
+				margin-right: 8px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				border-radius: 50%;
+				@include themeify {
+					background-color: themed("Theme");
+					color: themed("TB");
+				}
+
+				font-family: Inter;
+				font-size: 22px;
+				font-weight: 500;
+				box-sizing: border-box;
 			}
 
 			.value {
@@ -396,7 +444,45 @@ const loginOut = () => {
 		}
 		.medal_content {
 			display: flex;
-			padding: 28px 15px;
+			min-height: 92px;
+			padding: 22px 25px;
+			gap: 20px;
+			.item {
+				position: relative;
+				width: 92px;
+				height: 92px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				z-index: 2;
+
+				i {
+					position: absolute;
+					top: 4px;
+					right: 4px;
+					width: 16px;
+					height: 16px;
+					border: 2px solid #fff;
+					border-radius: 50%;
+					@include themeify {
+						background: themed("Theme");
+					}
+					z-index: 1;
+					box-sizing: border-box;
+				}
+
+				.medal_icon {
+					width: 72px;
+					height: 78px;
+				}
+			}
+
+			.item_bg {
+				width: 92px;
+				height: 92px;
+				background: url("/@/assets/zh-CN/default/my/medalCollection/highlight.png") no-repeat center bottom;
+				background-size: 92px 92px;
+			}
 		}
 		.balance_content {
 			display: flex;
