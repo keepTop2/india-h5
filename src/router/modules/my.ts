@@ -33,5 +33,11 @@ export const MySubRouter = {
 				title: "投注记录",
 			},
 		},
+		{
+			path: "/messageCenter",
+			name: "messageCenter",
+			component: () => import("/@/views/subViews/my/messageCenter/messageCenter.vue"),
+			meta: { title: "通知" },
+		},
 	],
 };

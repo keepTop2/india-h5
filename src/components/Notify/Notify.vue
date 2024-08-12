@@ -1,5 +1,5 @@
 <template>
-	<div class="notify">
+	<div class="notify" @click="router.push('./messageCenter')">
 		<div class="badge"></div>
 		<Notify class="notifyIcon van-haptics-feedback" />
 	</div>
@@ -7,6 +7,8 @@
 
 <script setup lang="ts">
 import Notify from "/@/assets/zh-CN/default/common/notify.svg";
+import { useRouter } from "vue-router";
+const router = useRouter();
 </script>
 
 <style scoped lang="scss">
