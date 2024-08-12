@@ -14,16 +14,16 @@ import {} from "vue";
 
 <style scoped lang="scss">
 .loading-mask {
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 9999;
 	width: 100%;
 	min-height: 100%;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	background: rgba(0, 0, 0, 0.5);
-	position: absolute;
-	top: 0;
-	left: 0;
-	z-index: 9999;
 
 	.typing-indicator {
 		width: 120px;
