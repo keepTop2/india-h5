@@ -52,7 +52,7 @@
 		</div>
 		<!-- 已解锁勋章列表 -->
 		<div class="medal_list" v-if="state.hasUnlockList.length > 0">
-			<div class="medal_item" v-for="(item, index) in state.hasUnlockList" :key="index">
+			<div class="medal_item" v-for="(item, index) in state.hasUnlockList" :key="index" @click="toPath(item)">
 				<div class="icon">
 					<VantLazyImg :src="item.activatedPicUrl" />
 				</div>
@@ -210,14 +210,21 @@ const onOpenMedalReward = async (item) => {
 
 // 点亮勋章
 const onLightUpMedal = async (item) => {
-	if (item.lockStatus !== 0) return;
-	const params = {
-		medalCode: item.medalCode,
-	};
-	const res = await medalApi.lightUpMedal(params).catch((err) => err);
-	if (res.code == common.getInstance().ResCode.SUCCESS) {
-		getUserMedalInfo();
+	if (item.lockStatus !== 0) {
+		toPath(item);
+	} else {
+		const params = {
+			medalCode: item.medalCode,
+		};
+		const res = await medalApi.lightUpMedal(params).catch((err) => err);
+		if (res.code == common.getInstance().ResCode.SUCCESS) {
+			getUserMedalInfo();
+		}
 	}
+};
+
+const toPath = (item) => {
+	router.push({ path: "/medalDetails", query: { data: encodeURIComponent(JSON.stringify(item)) } });
 };
 
 getUserMedalInfo();
