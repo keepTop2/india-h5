@@ -26,6 +26,7 @@ declare module '@vue/runtime-core' {
     SingleSelect: typeof import('./../src/components/SingleSelect/SingleSelect.vue')['default']
     SvgIcon: typeof import('./../src/components/svgIcon/index.vue')['default']
     Tabs: typeof import('./../src/components/Tabs/Tabs.vue')['default']
+    VanBadge: typeof import('vant/es')['Badge']
     VanButton: typeof import('vant/es')['Button']
     VanCellGroup: typeof import('vant/es')['CellGroup']
     VanDatePicker: typeof import('vant/es')['DatePicker']
