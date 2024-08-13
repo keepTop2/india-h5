@@ -57,6 +57,7 @@
 		align-items: center;
 		flex-direction: row;
 		justify-content: space-evenly;
+		position: relative;
 		@include themeify {
 			background: themed("BG4");
 			span {
