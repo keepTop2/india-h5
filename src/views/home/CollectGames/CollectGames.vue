@@ -2,8 +2,8 @@
 	<div class="CollectGames">
 		<ul>
 			<li v-for="item in collectList" class="gameCard">
-				<SvgIcon v-if="item.collect" iconName="home/event_collect" @click="handleCollect(item, false)" alt="" width="100%" />
-				<SvgIcon v-else iconName="home/event_collect_no" @click="handleCollect(item, true)" width="100%" />
+				<SvgIcon v-if="item.collect" iconName="home/event_collect" @click="handleCollect(item, false)" alt="" />
+				<SvgIcon v-else iconName="home/event_collect_no" @click="handleCollect(item, true)" />
 				<VantLazyImg :src="GameImg" :loadingSrc="loadingSrc" :errorSrc="loadingSrc" />
 			</li>
 		</ul>

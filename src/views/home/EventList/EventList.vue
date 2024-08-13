@@ -30,7 +30,7 @@
 		<div class="line bg_Line"></div>
 		<Markets :markets="event.markets" />
 		<div class="more-bets">
-			<span class="fs_28 color_T1">更多投注</span>
+			<span class="fs_28 color_T1" @click="showDetail()">更多投注</span>
 			<SvgIcon iconName="home/right_arrow" />
 		</div>
 	</div>
@@ -45,6 +45,7 @@ import { useSportsBetEventStore } from "/@/store/modules/sports/sportsBetData";
 import VantLazyImg from "/@/components/vant/VantLazyImg.vue";
 const commonFunc = common.getInstance();
 const sportsBetData = useSportsBetEventStore();
+const router = useRouter();
 const props = defineProps({
 	event: {
 		type: Object,
@@ -76,6 +77,10 @@ const attentionEvent = async (isActive: boolean) => {
 		});
 	}
 	pubsub.publish(pubsub.PubSubEvents.SportEvents.attentionChange.eventName, {});
+};
+
+const showDetail = () => {
+	router.push(`/sports/event/detail/${props.event.eventId}/${props.event.leagueId}/${props.event.sportType}`);
 };
 </script>
 <style scoped lang="scss">

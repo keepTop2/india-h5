@@ -179,6 +179,7 @@ const initSport = async () => {
 			if (UserStore.token) {
 				// 开始轮询登录接口
 				startPolling();
+				getAttention();
 				//切换关注状态后触发获取关注列表
 				pubsub.subscribe(pubsub.PubSubEvents.SportEvents.attentionChange.eventName, async () => {
 					await getAttention();

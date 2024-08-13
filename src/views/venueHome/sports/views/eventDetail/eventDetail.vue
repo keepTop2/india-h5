@@ -567,16 +567,18 @@ const animationEnd = (marketId, selection) => {
 };
 
 //回退至上一个路由
-const onClickLeft = () => {};
+const onClickLeft = () => {
+	router.back();
+};
 
 // 注册一个钩子，在组件被挂载之前被调用。
 onBeforeMount(async () => {
 	// if (route.query.data) {
 	routeData.value = route.params;
-		// //获取关注列表
-		// getAttention();
-		// //初始化体育
-		initSport();
+	// //获取关注列表
+	// getAttention();
+	// //初始化体育
+	initSport();
 	// }
 });
 

@@ -3,17 +3,17 @@
 		<div class="left-section">
 			<div class="item big" id="item-1">
 				<SvgIcon class="star" iconName="home/event_collect" />
-				<VantLazyImg :src="gameInfoList?.[0]?.icon" :loadingSrc="loadingSrc" :errorSrc="loadingSrc" />
+				<VantLazyImg :src="gameInfoList?.[0]?.icon || ''" :loadingSrc="loadingSrc" :errorSrc="loadingSrc" />
 				<!-- <NoGameImg v-else /> -->
 			</div>
 			<div class="small-items">
 				<div class="item" id="item-5">
 					<SvgIcon class="star" iconName="home/event_collect" />
-					<VantLazyImg :src="gameInfoList?.[1]?.icon" :loadingSrc="loadingSrc" :errorSrc="loadingSrc" />
+					<VantLazyImg :src="gameInfoList?.[1]?.icon || ''" :loadingSrc="loadingSrc" :errorSrc="loadingSrc" />
 				</div>
 				<div class="item" id="item-6">
 					<SvgIcon class="star" iconName="home/event_collect" />
-					<VantLazyImg :src="gameInfoList?.[2]?.icon" :loadingSrc="loadingSrc" :errorSrc="loadingSrc" />
+					<VantLazyImg :src="gameInfoList?.[2]?.icon || ''" :loadingSrc="loadingSrc" :errorSrc="loadingSrc" />
 				</div>
 			</div>
 		</div>
@@ -21,16 +21,16 @@
 			<div class="small-items">
 				<div class="item" id="item-3">
 					<SvgIcon class="star" iconName="home/event_collect" />
-					<VantLazyImg :src="gameInfoList?.[3]?.icon" :loadingSrc="loadingSrc" :errorSrc="loadingSrc" />
+					<VantLazyImg :src="gameInfoList?.[3]?.icon || ''" :loadingSrc="loadingSrc" :errorSrc="loadingSrc" />
 				</div>
 				<div class="item" id="item-4">
 					<SvgIcon class="star" iconName="home/event_collect" />
-					<VantLazyImg :src="gameInfoList?.[4]?.icon" :loadingSrc="loadingSrc" :errorSrc="loadingSrc" />
+					<VantLazyImg :src="gameInfoList?.[4]?.icon || ''" :loadingSrc="loadingSrc" :errorSrc="loadingSrc" />
 				</div>
 			</div>
 			<div class="item big" id="item-2">
 				<SvgIcon class="star" iconName="home/event_collect" />
-				<VantLazyImg :src="gameInfoList?.[5]?.icon" :loadingSrc="loadingSrc" :errorSrc="loadingSrc" />
+				<VantLazyImg :src="gameInfoList?.[5]?.icon || ''" :loadingSrc="loadingSrc" :errorSrc="loadingSrc" />
 			</div>
 		</div>
 	</div>
