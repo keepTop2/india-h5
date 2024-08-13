@@ -3,19 +3,17 @@
 		<div class="left-section">
 			<div class="item big" id="item-1">
 				<SvgIcon class="star" iconName="home/event_collect" />
-				<VantLazyImg v-if="gameInfoList?.[0]?.icon" :src="gameInfoList?.[0]?.icon" />
-				<NoGameImg v-else />
+				<VantLazyImg :src="gameInfoList?.[0]?.icon" :loadingSrc="loadingSrc" :errorSrc="loadingSrc" />
+				<!-- <NoGameImg v-else /> -->
 			</div>
 			<div class="small-items">
 				<div class="item" id="item-5">
 					<SvgIcon class="star" iconName="home/event_collect" />
-					<VantLazyImg v-if="gameInfoList?.[1]?.icon" :src="gameInfoList?.[1]?.icon" />
-					<NoGameImg v-else />
+					<VantLazyImg :src="gameInfoList?.[1]?.icon" :loadingSrc="loadingSrc" :errorSrc="loadingSrc" />
 				</div>
 				<div class="item" id="item-6">
 					<SvgIcon class="star" iconName="home/event_collect" />
-					<VantLazyImg v-if="gameInfoList?.[2]?.icon" :src="gameInfoList?.[2]?.icon" />
-					<NoGameImg v-else />
+					<VantLazyImg :src="gameInfoList?.[2]?.icon" :loadingSrc="loadingSrc" :errorSrc="loadingSrc" />
 				</div>
 			</div>
 		</div>
@@ -23,20 +21,16 @@
 			<div class="small-items">
 				<div class="item" id="item-3">
 					<SvgIcon class="star" iconName="home/event_collect" />
-					<!-- <VantLazyImg :src="img" /> -->
-					<VantLazyImg v-if="gameInfoList?.[3]?.icon" :src="gameInfoList?.[3]?.icon" />
-					<NoGameImg v-else />
+					<VantLazyImg :src="gameInfoList?.[3]?.icon" :loadingSrc="loadingSrc" :errorSrc="loadingSrc" />
 				</div>
 				<div class="item" id="item-4">
 					<SvgIcon class="star" iconName="home/event_collect" />
-					<VantLazyImg v-if="gameInfoList?.[4]?.icon" :src="gameInfoList?.[4]?.icon" />
-					<NoGameImg v-else />
+					<VantLazyImg :src="gameInfoList?.[4]?.icon" :loadingSrc="loadingSrc" :errorSrc="loadingSrc" />
 				</div>
 			</div>
 			<div class="item big" id="item-2">
 				<SvgIcon class="star" iconName="home/event_collect" />
-				<VantLazyImg v-if="gameInfoList?.[5]?.icon" :src="gameInfoList?.[5]?.icon" />
-				<NoGameImg v-else />
+				<VantLazyImg :src="gameInfoList?.[5]?.icon" :loadingSrc="loadingSrc" :errorSrc="loadingSrc" />
 			</div>
 		</div>
 	</div>
@@ -44,7 +38,8 @@
 <script setup lang="ts">
 import img from "./image.png";
 import VantLazyImg from "/@/components/vant/VantLazyImg.vue";
-import { GameInfoList } from "HomeApiData";
+import loadingSrc from "../static/loading.png";
+import { GameInfoList } from "/@/game";
 const props = defineProps<{
 	gameInfoList: GameInfoList[];
 }>();
@@ -78,7 +73,7 @@ const props = defineProps<{
 
 	.item {
 		position: relative;
-		border-radius: 8px;
+		// border-radius: 20px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -86,7 +81,7 @@ const props = defineProps<{
 		width: 152px;
 		height: 152px;
 		@include themeify {
-			border: 1px solid themed("T3");
+			// border: 1px solid themed("T3");
 		}
 		&.big {
 			width: 320px;

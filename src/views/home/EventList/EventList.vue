@@ -15,14 +15,14 @@
 		</div>
 		<div class="match-info mb_24">
 			<div class="team">
-				<img :src="event.teamInfo?.homeIconUrl" alt="France" />
+				<VantLazyImg :src="event.teamInfo?.homeIconUrl" alt="France" />
 				<span class="color_TB">{{ event.teamInfo?.homeName }}</span>
 			</div>
 			<div class="score color_TB bg_BG4">{{ event.gameInfo?.liveHomeScore }}</div>
 		</div>
 		<div class="match-info">
 			<div class="team">
-				<img :src="event.teamInfo?.awayIconUrl" alt="" />
+				<VantLazyImg :src="event.teamInfo?.awayIconUrl" alt="" />
 				<span class="color_TB">{{ event.teamInfo?.awayName }}</span>
 			</div>
 			<div class="score color_TB bg_BG4">{{ event.gameInfo?.liveAwayScore }}</div>
@@ -42,6 +42,7 @@ import sportsApi from "/@/api/venueHome/sports";
 import pubsub from "/@/pubSub/pubSub";
 import SportsCommonFn from "/@/views/venueHome/sports/utils/common";
 import { useSportsBetEventStore } from "/@/store/modules/sports/sportsBetData";
+import VantLazyImg from "/@/components/vant/VantLazyImg.vue";
 const commonFunc = common.getInstance();
 const sportsBetData = useSportsBetEventStore();
 const props = defineProps({
@@ -68,6 +69,7 @@ const attentionEvent = async (isActive: boolean) => {
 			thirdId: [props.event.eventId],
 		});
 	} else {
+		console.log(props.event, "==event info");
 		await sportsApi.saveFollow({
 			thirdId: props.event.eventId,
 			type: 2,

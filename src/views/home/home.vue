@@ -8,13 +8,13 @@
 				<SvgIcon iconName="home/fire" alt="" />
 				{{ $t('home["热门游戏"]') }}
 			</h3>
-			<HotGame class="m24" />
+			<HotGame class="m24"  @queryCollection="queryCollection" :gameInfoList="hotGames" />
 			<!-- 收藏游戏 -->
-			<h3 class="title">
+			<h3 class="title" v-show="isShowCollect">
 				<SvgIcon iconName="home/star" alt="" />
 				{{ $t('home["收藏游戏"]') }}
 			</h3>
-			<CollectGames class="m24" />
+			<CollectGames v-show="isShowCollect" @queryCollection="queryCollection" :collectList="collectList" class="m24" />
 
 			<h3 class="title_more" v-show="eventList?.length">
 				<span class="flex_align_center">
@@ -27,25 +27,14 @@
 			<template v-for="(item, index) in lobbyTopGame" :key="index"">
 				<h3 class="title_more">
 					<span class="flex_align_center">
-						<!-- <SvgIcon iconName="home/event_777" alt="" /> -->
 						<VantLazyImg :src="item.icon" />
 						{{item.name}}
 					</span>
 					<span class="more fw_400 fs_28 color_T1" @click="router.push('/game/arena/1')">更多</span>
 				</h3>
-				<GameLayout v-if="item.gameInfoList.length" :gameList="item.gameInfoList" class="m24" />
+				<GameLayout v-if="item.gameInfoList.length" :gameInfoList="item.gameInfoList" class="m24" />
 				<GameBigPic v-else class="m24" />
 			</template>
-			
-			<h3 class="title_more">
-				<span class="flex_align_center">
-					<SvgIcon iconName="home/event_people" alt="" />
-					{{ $t('home["热门真人"]') }}
-				</span>
-				<span class="more fw_400 fs_28 color_T1" @click="router.push('/game/arena/2')">更多</span>
-			</h3>
-			<GameLayout class="m24" />
-
 			<h3 class="title_more">
 				<span class="flex_align_center">
 					<SvgIcon iconName="home/electronic" alt="" />
@@ -74,6 +63,7 @@
 <script setup lang="ts">
 import sportsApi from "/@/api/venueHome/sports";
 import HomeApi from "/@/api/home";
+import GameApi from "/@/api/venueHome/games";
 import workerManage from "/@/webWorker/workerManage";
 import { useLoading } from "/@/directives/loading/hooks";
 import { useSportsInfoStore } from "/@/store/modules/sports/sportsInfo";
@@ -97,17 +87,15 @@ import Sponsor from "./Sponsor/sponsor.vue";
 import Currency from "./Currency/Currency.vue";
 // 负责任游戏
 import Footer from "./Footer/Footer.vue";
-import duty from "/@/views/home/static/images/duty.png";
 import { useUserStore } from "/@/store/modules/user";
 import { useRouter } from "vue-router";
 import pubsub from "/@/pubSub/pubSub";
 import { SportViewProcessWorkerCommandType, WorkerName } from "/@/enum/workerTransferEnum";
 import SportsCommonFn from "../venueHome/sports/utils/common";
 import { OpenSportEventSourceParams } from "../venueHome/sports/models/sportEventSourceModel";
-import { sportTabPushActions } from "../venueHome/sports/sportsMap/sportsSSERequestMap";
 import { SportPushApi, WebToPushApi } from "../venueHome/sports/enum/sportEventSourceEnum";
 import viewSportPubSubEventData from "../venueHome/sports/hooks/viewSportPubSubEventData";
-import { GameInfoList, LobbyTopGame } from "HomeApiData";
+import { GameInfoList, LobbyTopGame } from "/#/game";
 const router = useRouter();
 const UserStore = useUserStore();
 const sportsInfoStore = useSportsInfoStore();
@@ -115,28 +103,14 @@ const sportsBetEvent = useSportsBetEventStore();
 const { startLoading, stopLoading } = useLoading();
 const { startPolling, stopPolling, initSportPubsub, unSubSport, sportsLogin, clearState } = useSportPubSubEvents();
 const eventList = ref();
-const lobbyTopGame = ref<LobbyTopGame[]>([
-	{
-		gameOneId: "string",
-		name: "string",
-		icon: "string",
-		gameInfoList: [
-			{
-				id: "string",
-				name: "string",
-				icon: "string",
-				status: 0,
-				remark: "string",
-				sort: 0,
-				label: 0,
-				cornerLabels: 0,
-				maintenanceStartTime: 0,
-				maintenanceEndTime: 0,
-				collect: true,
-			},
-		],
-	},
-]);
+const collectList = ref([]);
+const hotGames = ref<GameInfoList[]>([]);
+const lobbyTopGame = ref<LobbyTopGame[]>();
+
+const isShowCollect = computed(() => {
+	return collectList.value.length > 0 && UserStore.token;
+})
+
 watch(
 	() => viewSportPubSubEventData.getSportData(),
 	(newData) => {
@@ -158,9 +132,12 @@ watch(
 );
 // 注册一个钩子，在组件被挂载之前被调用。
 onBeforeMount(async () => {
-	await getLobbyTopGame();
+	//获取游戏场馆热门赛事
+	getLobbyTopGame();
 	//获取体育赛事id
-	await getSportEventsRecommend();
+	getSportEventsRecommend();
+	//获取收藏的游戏列表
+	queryCollection();
 	//初始化体育
 	initSport();
 });
@@ -174,14 +151,18 @@ onBeforeUnmount(() => {
 	// 清除体育数据缓存
 	clearStoreInfo();
 });
-
-const getSportEventsRecommend = async () => {
-	await HomeApi.querySportEventsRecommend().then((res) => {
+const queryCollection = () => {
+	GameApi.queryCollection().then((res) => {
+		collectList.value = res.data.records;
+	});
+}
+const getSportEventsRecommend = () => {
+	HomeApi.querySportEventsRecommend().then((res) => {
 		eventList.value = res.data;
 	});
 };
-const getLobbyTopGame = async () => {
-	await HomeApi.queryLobbyTopGame().then((res) => {
+const getLobbyTopGame = () => {
+	GameApi.queryLobbyTopGame().then((res) => {
 		lobbyTopGame.value = res.data;
 	});
 };
@@ -237,7 +218,7 @@ const openSportPush = async () => {
 	};
 	// console.warn("第二步 准备发送指令到线程管理器");
 	//如果当前激活的tab是 滚球
-	startLoading();
+	// startLoading();
 	//清空参数
 	pubsub.PubSubEvents.WorkerEvents.viewToWorker.params!.data = {} as OpenSportEventSourceParams;
 	//参数赋值
