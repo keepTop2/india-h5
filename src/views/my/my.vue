@@ -38,8 +38,8 @@
 					</div>
 					<div class="medal_content">
 						<div class="item" :class="{ item_bg: item.lockStatus == 1 }" v-for="(item, index) in state.medalListData" :key="index">
-							<i v-if="item.lockStatus == 1"></i>
-							<VantLazyImg class="medal_icon" :src="getMedalIcon(item)" />
+							<i v-if="item.lockStatus == 0"></i>
+							<VantLazyImg class="medal_icon" :src="item.lockStatus == 0 || item.lockStatus == 2 ? item.inactivatedPicUrl : item.activatedPicUrl" />
 						</div>
 					</div>
 				</div>
@@ -77,7 +77,7 @@
 					<div class="cell">
 						<SvgIcon class="icon" iconName="/my/theme" />
 						<div class="label">{{ $t('my["主题"]') }}</div>
-						<SvgIcon class="themeChange_icon" iconName="/my/themeChange" />
+						<SvgIcon class="themeChange_icon" iconName="/my/themeChange" @click="changeTheme" />
 					</div>
 				</div>
 
@@ -106,7 +106,9 @@
 
 <script setup lang="ts">
 import { myApi, medalApi } from "/@/api/my";
+import { useThemesStore } from "/@/store/modules/themes";
 import { UserCenterMedalDetailRespVoList } from "./interface";
+import { ThemeEnum } from "/@/enum/appConfigEnum";
 import common from "/@/utils/common";
 import NavBar from "/@/views/my/components/navBar.vue";
 import NoLogin from "/@/views/my/components/noLogin.vue";
@@ -122,9 +124,10 @@ import balance_operation_ck from "/@/assets/zh-CN/default/my/balance_operation_c
 import balance_operation_tx from "/@/assets/zh-CN/default/my/balance_operation_tx.png";
 import balance_operation_jy from "/@/assets/zh-CN/default/my/balance_operation_jy.png";
 import balance_operation_tz from "/@/assets/zh-CN/default/my/balance_operation_tz.png";
-
 const router = useRouter();
 const store = useUserStore();
+const themesStore = useThemesStore();
+const theme = computed(() => themesStore.themeName);
 
 const balanceOperationList = [
 	{
@@ -205,14 +208,6 @@ let state = reactive({
 
 const loginOutShow = ref(false);
 
-const getMedalIcon = (item: any) => {
-	if (item.lockStatus == 2 || item.lockStatus == 0) {
-		return item.inactivatedPicUrl;
-	} else if (item.lockStatus == 1) {
-		return item.activatedPicUrl;
-	}
-};
-
 const getIndexInfo = async () => {
 	const res = await myApi.getIndexInfo().catch((err) => err);
 	if (res.code == common.getInstance().ResCode.SUCCESS) {
@@ -224,7 +219,6 @@ const topNList = async () => {
 	if (res.code == common.getInstance().ResCode.SUCCESS) {
 		state.medalQuantity = res.data.canLightNum;
 		state.medalListData = res.data.userCenterMedalDetailRespVoList;
-		console.log("state.medalListData", state.medalListData);
 	}
 };
 
@@ -242,8 +236,11 @@ const onClickCell = (item) => {
 	}
 };
 
+const changeTheme = () => {
+	themesStore.setTheme(theme.value === "light" ? "default" : "light");
+};
+
 const toPath = (path) => {
-	console.log("path", path);
 	router.push(path);
 };
 

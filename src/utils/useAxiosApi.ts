@@ -31,10 +31,7 @@ const instance = axios.create({
 // 请求拦截器
 instance.interceptors.request.use(
 	(config) => {
-		// console.log("请求", config);
 		//判断当前请求头是否设置了不显示 Loading，没有设置则默认加载
-		// console.log("LoadingRequestCount", LoadingRequestCount);
-
 		if (config.headers.showLoading !== false) {
 			startLoading();
 		}

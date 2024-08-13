@@ -9,6 +9,7 @@ import { WalletSubRouter } from "/@/router/modules/wallet";
 import { MySubRouter } from "/@/router/modules/my";
 import { VipRouter } from "/@/router/modules/vip";
 import { SecurityCenterRouter } from "/@/router/modules/securityCenter";
+import { ErrorRouter } from "/@/router/modules/error";
 
 /**
  * @description idx大小判断路由左切动画还是右切动画
@@ -52,6 +53,8 @@ const routes = [
 	SecurityCenterRouter,
 	// 公共组件使用demo
 	componentsDemo,
+	// 错误路由
+	ErrorRouter,
 ];
 
 const router: Router = createRouter({

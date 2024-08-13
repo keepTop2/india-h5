@@ -10,6 +10,7 @@ export interface StoreUser {
 		userAccount?: string;
 		password?: string;
 	} | null;
+	loginStatus: boolean;
 }
 
 export const useUserStore = defineStore("User", {
@@ -23,6 +24,8 @@ export const useUserStore = defineStore("User", {
 			lang: LangEnum["en-US"],
 			// 登录账号信息
 			loginInfo: null,
+			// 登录标记
+			loginStatus: false,
 		};
 	},
 	getters: {
@@ -64,9 +67,14 @@ export const useUserStore = defineStore("User", {
 			// 将 loginInfo 对象加密后转换为字符串
 			this.loginInfo = EncryptionFn.encryption(JSON.stringify(loginInfoObj));
 		},
+		// 记住密码状态
+		setLoginStatus(data: boolean) {
+			this.loginStatus = data;
+		},
 		clearInfo() {
 			this.token = "";
 			this.userInfo = {};
+			this.loginStatus = false;
 			localStorage.clear();
 		},
 	},
@@ -74,7 +82,7 @@ export const useUserStore = defineStore("User", {
 		{
 			key: "useUserStore",
 			storage: localStorage,
-			paths: ["lang"],
+			paths: ["lang", "loginStatus"],
 		},
 		{
 			key: "loginInfo",

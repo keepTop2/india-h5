@@ -94,6 +94,8 @@ const loginInfo = computed(() => {
 	return store.getLoginInfo;
 });
 
+console.log("loginInfo", loginInfo);
+
 // 监听状态密码状态
 watch(
 	[() => isAccountValid.value, () => isPasswordValid.value],
@@ -110,8 +112,8 @@ watch(
 );
 
 const onLogin = async () => {
-	// submitUserLogin();
-	// return;
+	submitUserLogin();
+	return;
 	const res = await loginApi.userLogin(state).catch((err) => err);
 	if (res.code == common.getInstance().ResCode.SUCCESS) {
 		hcaptcha.value?.validate();
@@ -130,7 +132,9 @@ const submitUserLogin = async () => {
 	if (res.code == common.getInstance().ResCode.SUCCESS) {
 		store.setInfo(res.data);
 		if (userAgreement.value) {
+			// 记住密码
 			store.setLoginInfo({ userAccount: state.userAccount, password: state.password });
+			store.setLoginStatus(true);
 		} else {
 			store.setLoginInfo();
 		}
@@ -139,7 +143,11 @@ const submitUserLogin = async () => {
 };
 
 onBeforeMount(() => {
-	userAgreement.value = !loginInfo.value ? false : true;
+	if (loginInfo.value) {
+		userAgreement.value = !loginInfo.value ? false : true;
+		state.userAccount = loginInfo.value.userAccount;
+		state.password = loginInfo.value.password;
+	}
 });
 </script>
 
