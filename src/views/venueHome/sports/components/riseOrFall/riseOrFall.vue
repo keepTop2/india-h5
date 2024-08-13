@@ -138,7 +138,7 @@ defineExpose({ state });
 
 		.icon {
 			display: none;
-			height: 20px;
+			// height: 20px;
 			width: 14px;
 			// display: flex;
 			flex-direction: column;
@@ -155,7 +155,7 @@ defineExpose({ state });
 				transform: rotate(0deg);
 			}
 			@include themeify {
-				color: themed("Warn-P");
+				color: themed("Theme");
 			}
 		}
 		&.fall {
@@ -164,7 +164,7 @@ defineExpose({ state });
 				transform: rotate(180deg);
 			}
 			@include themeify {
-				color: themed("Theme");
+				color: themed("Wam-P1");
 			}
 		}
 	}

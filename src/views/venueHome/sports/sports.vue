@@ -1,6 +1,7 @@
 <!-- 体育入口 -->
 <template>
 	<div class="Sports">
+		<Banner class="Home_Banner" />
 		<!-- 滚球 今日 早盘 冠军 关注 -->
 		<div class="tabs">
 			<div class="tab" :class="{ 'tab-active': tabActive == key }" v-for="(value, key) of sportTabPushActions" :key="key" @click="onTab(key)">
@@ -45,7 +46,7 @@
 			<div>
 				<SvgIcon class="sport_filter color_T3" v-if="isShowFilter" @click="filterLeague" iconName="/venueHome/sports/svg/sport_filter" />
 				<SvgIcon class="sport_fold color_T3" v-show="isFold" iconName="/venueHome/sports/svg/sport_fold2" @click="onExpandAngCollapse" />
-				<SvgIcon class="sport_fold color_T3" v-show="!isFold"  iconName="/venueHome/sports/svg/sport_fold" @click="onExpandAngCollapse" />
+				<SvgIcon class="sport_fold color_T3" v-show="!isFold" iconName="/venueHome/sports/svg/sport_fold" @click="onExpandAngCollapse" />
 			</div>
 		</div>
 		<!-- 赛事列表出口 -->
@@ -59,7 +60,7 @@
 import _ from "lodash";
 import dayjs from "dayjs";
 import { useRoute, useRouter } from "vue-router";
-
+import Banner from "./views/banner/banner.vue";
 import pubsub from "/@/pubSub/pubSub";
 import { useLoading } from "/@/directives/loading/hooks";
 import { useToLogin } from "/@/hooks/toLogin";
