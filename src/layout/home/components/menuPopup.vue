@@ -1,6 +1,6 @@
 <template>
 	<van-popup v-model:show="show" position="left">
-		<VantLazyImg class="close" :src="close" />
+		<VantLazyImg class="close" :src="theme === ThemeEnum.default ? close : close_light" />
 		<div class="menu_header">
 			<div class="logo">
 				<img :src="logo" alt="" />
@@ -19,11 +19,24 @@
 			</div>
 
 			<div class="menu_list">
-				<div class="menu van-haptics-feedback" v-for="(item, index) in 10" :key="index">
+				<div class="menu van-haptics-feedback">
 					<div class="icon">
-						<Contest />
+						<img :src="mrjs" />
 					</div>
-					<div class="label">目录{{ item }}</div>
+					<div class="label">{{ $t(`menuPopup["每日竞赛"]`) }}</div>
+				</div>
+				<div class="menu van-haptics-feedback">
+					<div class="icon">
+						<img :src="home" />
+					</div>
+					<div class="label">{{ $t(`menuPopup["首页"]`) }}</div>
+				</div>
+
+				<div class="menu van-haptics-feedback" v-for="(item, index) in state.menuList" :key="index">
+					<div class="icon">
+						<img :src="item.gameOneIcon" alt="" />
+					</div>
+					<div class="label">{{ item.homeName }}</div>
 				</div>
 			</div>
 		</div>
@@ -36,7 +49,7 @@
 			</div>
 			<div class="menu van-haptics-feedback">
 				<div class="icon">
-					<helpIcon />
+					<img :src="kefu" />
 				</div>
 				<div class="label">{{ $t(`menuPopup["客服"]`) }}</div>
 			</div>
@@ -49,14 +62,36 @@ import logo from "/@/assets/zh-CN/default/menuPopup/logo.png";
 import task_icon from "/@/assets/zh-CN/default/menuPopup/task_icon.png";
 import wheel_icon from "/@/assets/zh-CN/default/menuPopup/wheel_icon.png";
 import Contest from "/@/assets/zh-CN/default/menuPopup/contest.svg";
-import helpIcon from "/@/assets/zh-CN/default/menuPopup/helpIcon.svg";
 import close from "/@/assets/zh-CN/default/menuPopup/close.png";
+import close_light from "/@/assets/zh-CN/light/menuPopup/close.png";
+import mrjs from "/@/assets/zh-CN/default/menuPopup/mrjs.png";
+import home from "/@/assets/zh-CN/default/menuPopup/home.png";
+import kefu from "/@/assets/zh-CN/default/menuPopup/kefu.png";
 import pubsub from "/@/pubSub/pubSub";
+import CommonApi from "/@/api/common";
+import common from "/@/utils/common";
+import { ThemeEnum } from "/@/enum/appConfigEnum";
+import { useThemesStore } from "/@/store/modules/themes";
 import { ref } from "vue";
 const show = ref(false);
+const themesStore = useThemesStore();
+const theme = computed(() => themesStore.themeName);
+
+let state = reactive({
+	menuList: [],
+});
 
 const onCollapseMenu = () => {
 	show.value = true;
+	console.log("123132");
+	queryLobbyLabelList();
+};
+
+const queryLobbyLabelList = async () => {
+	const res = await CommonApi.queryLobbyLabelList().catch((err) => err);
+	if (res.code == common.getInstance().ResCode.SUCCESS) {
+		state.menuList = res.data;
+	}
 };
 
 pubsub.subscribe("onCollapseMenu", onCollapseMenu);
@@ -74,7 +109,7 @@ pubsub.subscribe("onCollapseMenu", onCollapseMenu);
 	.close {
 		position: absolute;
 		top: 50%;
-		right: -42px;
+		right: -41px;
 		transform: translate(0, -50%);
 		width: 40px;
 		height: 124px;
@@ -156,6 +191,10 @@ pubsub.subscribe("onCollapseMenu", onCollapseMenu);
 				.icon {
 					width: 32px;
 					height: 32px;
+					img {
+						width: 100%;
+						height: 100%;
+					}
 				}
 				.label {
 					margin-left: 16px;
@@ -182,6 +221,10 @@ pubsub.subscribe("onCollapseMenu", onCollapseMenu);
 			.icon {
 				width: 32px;
 				height: 32px;
+				img {
+					width: 100%;
+					height: 100%;
+				}
 			}
 			.label {
 				margin-left: 16px;
