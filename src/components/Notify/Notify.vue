@@ -24,12 +24,17 @@ const router = useRouter();
 		width: 20px;
 		height: 20px;
 		border-radius: 50%;
-		background-color: var(--Theme, #ff284b);
+		@include themeify {
+			background: themed("Theme");
+		}
 	}
 
 	.notifyIcon {
 		width: 100%;
 		height: 100%;
+		@include themeify {
+			color: themed("TB");
+		}
 	}
 }
 </style>

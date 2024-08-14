@@ -60,9 +60,7 @@ const props = withDefaults(
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			@include themeify {
-				color: themed("TB");
-			}
+			color: #fff;
 			font-family: "112-SS Yi Fang Ti";
 			font-size: 16px;
 			font-weight: 400;

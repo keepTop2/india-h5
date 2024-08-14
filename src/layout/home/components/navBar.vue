@@ -49,6 +49,10 @@ const onCollapse = () => {
 		width: 64px;
 		height: 64px;
 		margin-left: 28px;
+		@include themeify {
+			color: themed("TB");
+			stroke: themed("TB");
+		}
 	}
 
 	.noLogin {
@@ -61,18 +65,25 @@ const onCollapse = () => {
 			margin-right: 16px;
 			padding: 8px 28px;
 			border-radius: 12px;
-			border: 2px solid var(--T3-P, #6d727a);
+			border: 2px solid;
+			@include themeify {
+				border-color: themed("T3");
+				color: themed("TB");
+			}
 		}
 		.login {
 			margin-right: 24px;
 			padding: 8px 28px;
 			border-radius: 12px;
-			border: 2px solid #ff4588;
-			background: var(--Theme, #ff284b);
+			border: 2px solid;
+			@include themeify {
+				border-color: themed("Theme");
+				background: themed("Theme");
+				color: themed("TB1");
+			}
 		}
 		.register,
 		.login {
-			color: var(--TB-P, #fdfdfd);
 			text-align: center;
 			font-family: "PingFang SC";
 			font-size: 28px;
@@ -90,14 +101,18 @@ const onCollapse = () => {
 			flex: 1;
 			margin-left: 18px;
 			.userName {
-				color: var(--TB-P, #fdfdfd);
+				@include themeify {
+					color: themed("TB");
+				}
 				font-family: Inter;
 				font-size: 24px;
 				font-weight: 500;
 			}
 			.balance {
 				margin-top: 1px;
-				color: var(--TB-P, #fdfdfd);
+				@include themeify {
+					color: themed("TB");
+				}
 				font-family: Inter;
 				font-size: 28px;
 				font-weight: 700;

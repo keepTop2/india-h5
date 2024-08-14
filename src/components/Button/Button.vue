@@ -1,7 +1,5 @@
 <template>
-	<button class="button" :disabled="type === 'disabled'" type="button">
-		<slot></slot>
-	</button>
+	<button class="button" :disabled="type === 'disabled'" type="button"><slot></slot></button>
 </template>
 
 <script setup lang="ts">
@@ -31,13 +29,13 @@ const props = withDefaults(
 	border-radius: 12px;
 	@include themeify {
 		background: themed("Theme");
-		color: themed("TB");
+		color: themed("TB1");
 	}
 	text-align: center;
 	font-family: "PingFang SC";
 	font-size: 30px;
 	font-weight: 400;
-	transition: all 0.2s ease;
+	transition: all 0.1s ease;
 	box-sizing: border-box;
 }
 

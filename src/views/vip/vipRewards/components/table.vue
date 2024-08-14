@@ -162,7 +162,7 @@
 .styled-table tbody tr {
 	height: 76px;
 	@include themeify {
-		background-color: themed("BG3");
+		background-color: themed("BG1");
 	}
 }
 
@@ -179,6 +179,7 @@
 	@include themeify {
 		color: themed("TB");
 		border-color: themed("Line");
+		background-color: themed("BG3");
 	}
 }
 

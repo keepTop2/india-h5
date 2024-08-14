@@ -47,6 +47,9 @@ const goBack = () => {
 		.arrow {
 			width: 36px;
 			height: 36px;
+			@include themeify {
+				color: themed("TB");
+			}
 		}
 	}
 	.right {
@@ -62,6 +65,9 @@ const goBack = () => {
 			.down {
 				width: 22px;
 				height: 14px;
+				@include themeify {
+					color: themed("TB");
+				}
 			}
 		}
 	}

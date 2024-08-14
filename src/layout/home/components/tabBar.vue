@@ -2,7 +2,7 @@
 	<div class="tabList">
 		<!-- 边框区域 -->
 		<div class="border">
-			<img :src="tab_border" />
+			<img :src="theme === ThemeEnum.default ? tab_border : tab_border_light" />
 		</div>
 		<!-- 遍历 tabData 渲染每个 tab 项 -->
 		<div v-for="(item, index) in tabData" :key="index" :class="{ item: item.path !== '/home', 'home-item': item.path === '/home' }" @click="toPath(item)">
@@ -38,6 +38,7 @@
 </template>
 
 <script setup lang="ts">
+import { ThemeEnum } from "/@/enum/appConfigEnum";
 import discount from "/@/assets/zh-CN/default/layout/discount.png";
 import discount_active from "/@/assets/zh-CN/default/layout/discount_active.png";
 import records from "/@/assets/zh-CN/default/layout/records.png";
@@ -49,13 +50,16 @@ import wallet_active from "/@/assets/zh-CN/default/layout/wallet_active.png";
 import my from "/@/assets/zh-CN/default/layout/my.png";
 import my_active from "/@/assets/zh-CN/default/layout/my_active.png";
 import tab_border from "/@/assets/zh-CN/default/layout/tab_border.png";
+import tab_border_light from "/@/assets/zh-CN/light/layout/tab_border_light.png";
 import line from "/@/assets/zh-CN/default/layout/line.png";
+import { useThemesStore } from "/@/store/modules/themes";
 import { useRoute, useRouter } from "vue-router";
 import { i18n } from "/@/i18n/index";
-
+const themesStore = useThemesStore();
 const route = useRoute();
 const router = useRouter();
 const $: any = i18n.global;
+const theme = computed(() => themesStore.themeName);
 
 // 钱包二级页
 const walletPaths = ["/wallet/recharge", "/wallet/withdraw", "/wallet/records"];

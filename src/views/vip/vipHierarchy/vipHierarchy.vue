@@ -157,7 +157,9 @@ const onClickLeft = () => {
 	justify-content: space-between;
 	padding: 0px 24px;
 	border-radius: 20px 20px 0px 0px;
-	background: linear-gradient(90deg, #353a3e 0%, #2c2d2e 100%);
+	@include themeify {
+		background: themed("vip_bg2");
+	}
 	box-sizing: border-box;
 
 	&::after {
@@ -177,7 +179,7 @@ const onClickLeft = () => {
 		gap: 12px;
 		span {
 			@include themeify {
-				color: themed("TB1");
+				color: themed("TB");
 			}
 			font-family: "PingFang SC";
 			font-size: 28px;
@@ -188,6 +190,9 @@ const onClickLeft = () => {
 	.arrow {
 		width: 24px;
 		height: 24px;
+		@include themeify {
+			color: themed("TB");
+		}
 	}
 }
 
