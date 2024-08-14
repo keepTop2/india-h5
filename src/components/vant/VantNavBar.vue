@@ -89,6 +89,9 @@ const onClickRight = () => {
 .back {
 	width: 36px;
 	height: 36px;
+	@include themeify {
+		color: themed("TB");
+	}
 }
 
 .service_icon {

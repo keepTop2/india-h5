@@ -3,7 +3,7 @@
 		<div class="login_card">
 			<div class="info">
 				<div class="avatar">
-					<VantLazyImg :src="avatar" />
+					<VantLazyImg :src="theme === ThemeEnum.default ? avatar : avatar_light" />
 				</div>
 				<div class="tips">
 					<p>{{ $t('common["欢迎来到"]') }}<span>OKsport</span></p>
@@ -19,24 +19,36 @@
 
 		<div class="group">
 			<div class="cell">
-				<SvgIcon class="icon" iconName="/my/lang" />
+				<div class="icon"><SvgIcon iconName="/my/lang" /></div>
 				<div class="label">{{ $t('my["语言"]') }}</div>
 				<div class="value">中文</div>
-				<SvgIcon class="arrow" iconName="/common/arrow" />
+				<div class="arrow"><SvgIcon iconName="/common/arrow" /></div>
 			</div>
 			<div class="cell">
-				<SvgIcon class="icon" iconName="/my/theme" />
+				<div class="icon"><SvgIcon iconName="/my/theme" /></div>
 				<div class="label">{{ $t('my["主题"]') }}</div>
-				<SvgIcon class="themeChange_icon" iconName="/my/themeChange" />
+				<div class="themeChange_icon">
+					<SvgIcon :iconName="theme === ThemeEnum.default ? '/my/themeChange' : '/my/themeChange_light'" @click="changeTheme" />
+				</div>
 			</div>
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
+import { ThemeEnum } from "/@/enum/appConfigEnum";
+import { useThemesStore } from "/@/store/modules/themes";
 import avatar from "/@/assets/zh-CN/default/my/avatar.png";
+import avatar_light from "/@/assets/zh-CN/light/my/avatar.png";
 import { useRouter } from "vue-router";
+const themesStore = useThemesStore();
 const router = useRouter();
+
+const theme = computed(() => themesStore.themeName);
+
+const changeTheme = () => {
+	themesStore.setTheme(theme.value === ThemeEnum.light ? ThemeEnum.default : ThemeEnum.light);
+};
 
 const toPath = (path) => {
 	console.log("path", path);
@@ -51,7 +63,9 @@ const toPath = (path) => {
 		margin: 0px 24px;
 		padding: 24px;
 		border-radius: 16px;
-		background: var(--BG3-N, #2c2d2e);
+		@include themeify {
+			background-color: themed("BG3");
+		}
 		.info {
 			display: flex;
 			align-items: center;
@@ -67,13 +81,17 @@ const toPath = (path) => {
 			.tips {
 				flex: 1;
 				p {
-					color: var(--TB-N, #fff);
+					@include themeify {
+						color: themed("TB");
+					}
 					font-family: "PingFang SC";
 					font-size: 26px;
 					font-weight: 500;
 				}
 				span {
-					color: var(--Theme, #ff284b);
+					@include themeify {
+						color: themed("Theme");
+					}
 				}
 				.text2 {
 					margin-top: 10px;
@@ -101,12 +119,17 @@ const toPath = (path) => {
 				font-weight: 400;
 			}
 			.login {
-				border: 1px solid var(--Theme, #ff284b);
-				color: var(--Theme, #ff284b);
+				border: 1px solid;
+				@include themeify {
+					color: themed("Theme");
+					border-color: themed("Theme");
+				}
 			}
 			.register {
-				background: var(--Theme, #ff284b);
-				color: var(--TB1-P, #fdfdfd);
+				@include themeify {
+					color: themed("TB1");
+					background: themed("Theme");
+				}
 			}
 		}
 	}
@@ -114,7 +137,9 @@ const toPath = (path) => {
 	.group {
 		margin: 24px;
 		border-radius: 16px;
-		background: var(--BG3-N, #2c2d2e);
+		@include themeify {
+			background: themed("BG3");
+		}
 		.cell {
 			position: relative;
 			width: 100%;
@@ -133,7 +158,9 @@ const toPath = (path) => {
 				right: 24px;
 				width: 606px;
 				height: 1px;
-				background-color: var(--Line-N, #343434);
+				@include themeify {
+					background: themed("Line");
+				}
 			}
 			&:last-child::after {
 				display: none;
@@ -145,13 +172,17 @@ const toPath = (path) => {
 			}
 			.label {
 				flex: 1;
-				color: var(--TB-N, #fff);
+				@include themeify {
+					color: themed("TB");
+				}
 				font-family: "PingFang SC";
 				font-size: 28px;
 				font-weight: 400;
 			}
 			.value {
-				color: var(--T1-N, #999ba0);
+				@include themeify {
+					color: themed("T1");
+				}
 				font-family: "PingFang SC";
 				font-size: 24px;
 				font-weight: 400;

@@ -2,9 +2,9 @@
 	<div class="login-container">
 		<NavBar />
 		<HeaderBG />
-		<div class="login-from">
+		<div class="login-form">
 			<div class="title">{{ $t('login["登录"]') }}</div>
-			<div class="from">
+			<form class="form">
 				<FormInput v-model="state.userAccount" type="text" :placeholder="$t(`login['账户名']`)" :errorBorder="!isAccountValid && state.userAccount !== '' ? true : false">
 					<template v-slot:right>
 						<SvgIcon v-if="state.userAccount" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.userAccount = ''" />
@@ -54,7 +54,7 @@
 						<span class="help">{{ $t('common["联系客服"]') }}</span>
 					</div>
 				</div>
-			</div>
+			</form>
 		</div>
 		<Hcaptcha ref="hcaptcha" @submit="onSubmit" />
 	</div>
@@ -160,7 +160,7 @@ onBeforeMount(() => {
 		background-color: themed("BG1");
 	}
 
-	.login-from {
+	.login-form {
 		padding: 0px 55px;
 		.title {
 			font-size: 36px;
@@ -169,7 +169,7 @@ onBeforeMount(() => {
 				color: themed("TB");
 			}
 		}
-		.from {
+		.form {
 			margin-top: 40px;
 
 			.right {

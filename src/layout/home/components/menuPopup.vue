@@ -66,13 +66,15 @@ pubsub.subscribe("onCollapseMenu", onCollapseMenu);
 .van-popup {
 	width: 530px;
 	height: 100%;
-	background: var(--BG1-N, #222324);
+	@include themeify {
+		background: themed("BG1");
+	}
 	overflow-y: unset;
 
 	.close {
 		position: absolute;
 		top: 50%;
-		right: -40px;
+		right: -42px;
 		transform: translate(0, -50%);
 		width: 40px;
 		height: 124px;
@@ -98,7 +100,9 @@ pubsub.subscribe("onCollapseMenu", onCollapseMenu);
 
 	.menu_content {
 		border-bottom: 1px solid;
-		border-color: var(--TB-D, #333);
+		@include themeify {
+			border-color: themed("Line");
+		}
 		.menu_content_header {
 			display: flex;
 			gap: 20px;
@@ -124,7 +128,7 @@ pubsub.subscribe("onCollapseMenu", onCollapseMenu);
 				}
 				.label {
 					margin-left: 16px;
-					color: var(--Text_a, #fff);
+					color: #fff;
 					font-family: "PingFang SC";
 					font-size: 28px;
 					font-weight: 500;
@@ -155,7 +159,9 @@ pubsub.subscribe("onCollapseMenu", onCollapseMenu);
 				}
 				.label {
 					margin-left: 16px;
-					color: var(--Tag1-D, #eaecf2);
+					@include themeify {
+						color: themed("T1");
+					}
 					font-family: Inter;
 					font-size: 28px;
 					font-weight: 400;
@@ -179,7 +185,9 @@ pubsub.subscribe("onCollapseMenu", onCollapseMenu);
 			}
 			.label {
 				margin-left: 16px;
-				color: var(--Tag1-D, #eaecf2);
+				@include themeify {
+					color: themed("T1");
+				}
 				font-family: Inter;
 				font-size: 28px;
 				font-weight: 400;

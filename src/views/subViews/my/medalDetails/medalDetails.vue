@@ -2,8 +2,8 @@
 	<!-- 顶部导航栏 -->
 	<VantNavBar :title="$t(`VantNavBar['勋章详情']`)" @onClickLeft="onClickLeft" />
 	<div class="medalDetails_content">
-		<div class="content">
-			<div class="icon">
+		<div class="content" :class="theme">
+			<div class="icon" :class="theme">
 				<VantLazyImg :src="data.lockStatus == 1 ? data.activatedPicUrl : data.inactivatedPicUrl" />
 			</div>
 		</div>
@@ -27,10 +27,14 @@
 </template>
 
 <script setup lang="ts">
+// import { ThemeEnum } from "/@/enum/appConfigEnum";
+import { useThemesStore } from "/@/store/modules/themes";
 import { NotUnlockList } from "../medalCollection/interface";
 import { useRoute, useRouter } from "vue-router";
 const route = useRoute();
 const router = useRouter();
+const themesStore = useThemesStore();
+const theme = computed(() => themesStore.themeName);
 let data = reactive({} as NotUnlockList);
 data = JSON.parse(decodeURIComponent(route.query.data as any));
 
@@ -43,13 +47,18 @@ const onClickLeft = () => {
 .medalDetails_content {
 	min-height: 100vh;
 	background: url("/@/assets/zh-CN/default/vip/vip_content_bg.png") center top / 100% 100% no-repeat;
+
 	background-attachment: fixed; /* 背景图像固定 */
 	box-sizing: border-box;
 	.content {
 		position: relative;
 		width: 100%;
 		height: 712px;
-		background: url("/@/assets/zh-CN/default/my/medalDetails/content_bg.png") center top / 100% 712px no-repeat;
+		@include theme-bg("/my/medalDetails/content_bg.png");
+		background-position-x: center;
+		background-position-y: top;
+		background-repeat: no-repeat;
+		background-size: 100% 712px;
 
 		.icon {
 			position: absolute;
@@ -61,7 +70,11 @@ const onClickLeft = () => {
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			background: url("/@/assets/zh-CN/default/my/medalDetails/icon_bg.png") center top / 100% 100% no-repeat;
+			@include theme-bg("/my/medalDetails/icon_bg.png");
+			background-position-x: center;
+			background-position-y: top;
+			background-repeat: no-repeat;
+			background-size: 100% 100%;
 			img {
 				width: 328px;
 				height: 360px;

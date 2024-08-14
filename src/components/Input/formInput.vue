@@ -65,7 +65,7 @@ const emit = defineEmits(["update:modelValue", "blur", "focus"]);
 	}
 	::-webkit-input-placeholder {
 		@include themeify {
-			color: themed("T3-P");
+			color: themed("T3");
 		}
 	}
 }

@@ -8,12 +8,12 @@
 
 			<div class="btns">
 				<div class="btn1">{{ $t(`vipRewards["去玩游戏"]`) }}</div>
-				<div class="btn2">{{ $t(`vipRewards["查看福利"]`) }}</div>
+				<!-- <div class="btn2">{{ $t(`vipRewards["查看福利"]`) }}</div> -->
 			</div>
 		</div>
 
 		<div class="list">
-			<div class="card" v-for="(item, index) in welfareList" :key="index">
+			<div :class="theme === ThemeEnum.default ? 'card_default' : ''" class="card" v-for="(item, index) in welfareList" :key="index">
 				<div class="icon">
 					<VantLazyImg :src="item.icon" />
 				</div>
@@ -54,10 +54,14 @@ import icon2 from "/@/assets/zh-CN/default/vip/vipRewards/icon2.png";
 import icon3 from "/@/assets/zh-CN/default/vip/vipRewards/icon3.png";
 import icon4 from "/@/assets/zh-CN/default/vip/vipRewards/icon4.png";
 
+import { ThemeEnum } from "/@/enum/appConfigEnum";
+import { useThemesStore } from "/@/store/modules/themes";
 import { useRouter } from "vue-router";
 import { i18n } from "/@/i18n/index";
 const router = useRouter();
 const $: any = i18n.global;
+const themesStore = useThemesStore();
+const theme = computed(() => themesStore.themeName);
 
 const welfareList = [
 	{
@@ -150,21 +154,21 @@ const onClickLeft = () => {
 			font-size: 30px;
 			font-weight: 400;
 		}
-		.btn2 {
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			width: 295px;
-			height: 86px;
-			border-radius: 12px;
-			@include themeify {
-				background: themed("BG3");
-				color: themed("T3");
-			}
-			font-family: "PingFang SC";
-			font-size: 30px;
-			font-weight: 400;
-		}
+		// .btn2 {
+		// 	display: flex;
+		// 	align-items: center;
+		// 	justify-content: center;
+		// 	width: 295px;
+		// 	height: 86px;
+		// 	border-radius: 12px;
+		// 	@include themeify {
+		// 		background: themed("BG3");
+		// 		color: themed("T3");
+		// 	}
+		// 	font-family: "PingFang SC";
+		// 	font-size: 30px;
+		// 	font-weight: 400;
+		// }
 	}
 }
 
@@ -181,28 +185,10 @@ const onClickLeft = () => {
 		align-items: center;
 		padding: 20px 0px;
 		border-radius: 20px;
-		background: linear-gradient(0deg, rgba(53, 58, 62, 0.1) 0%, #2C2D2E99.8%);
+		@include themeify {
+			background: themed("vip_bg3");
+		}
 		box-sizing: border-box;
-
-		&::after {
-			content: "";
-			position: absolute;
-			top: 0px;
-			left: 43px;
-			width: 400px;
-			height: 1px;
-			background: url("/@/assets/zh-CN/default/vip/bg_line_top.png") center center / 100% 100% no-repeat;
-		}
-
-		&::before {
-			content: "";
-			position: absolute;
-			bottom: 0px;
-			right: 20px;
-			width: 400px;
-			height: 1px;
-			background: url("/@/assets/zh-CN/default/vip/bg_line_bottom.png") center center / 100% 100% no-repeat;
-		}
 
 		.icon {
 			width: 150px;
@@ -236,6 +222,27 @@ const onClickLeft = () => {
 				font-size: 20px;
 				font-weight: 400;
 			}
+		}
+	}
+	.card_default {
+		&::after {
+			content: "";
+			position: absolute;
+			top: 0px;
+			left: 43px;
+			width: 400px;
+			height: 1px;
+			background: url("/@/assets/zh-CN/default/vip/bg_line_top.png") center center / 100% 100% no-repeat;
+		}
+
+		&::before {
+			content: "";
+			position: absolute;
+			bottom: 0px;
+			right: 20px;
+			width: 400px;
+			height: 1px;
+			background: url("/@/assets/zh-CN/default/vip/bg_line_bottom.png") center center / 100% 100% no-repeat;
 		}
 	}
 }

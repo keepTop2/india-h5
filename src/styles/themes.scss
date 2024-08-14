@@ -12,7 +12,7 @@ $themes: (
 			Tag1: #343434,
 			T1: #999ba0,
 			T2: #62666a,
-			T3: #6d727a,
+			T3: #7d8086,
 			T4: #15222e,
 			TB: #ffffff,
 			TB1: #fdfdfd,
@@ -31,6 +31,12 @@ $themes: (
 			yellow-ffe-500: #ffe500,
 			green-00-ff-47: #00ff47,
 
+			// 我的页面卡片头部
+			my-header: linear-gradient(90deg, rgba(73, 86, 100, 0.4) 0%, rgba(44, 45, 46, 0.4) 100%),
+			// vip
+			vip_bg1: linear-gradient(90deg, #353a3e 0%, #2c2d2e 100%),
+			vip_bg2: linear-gradient(90deg, #353a3e 0%, #2c2d2e 100%),
+			vip_bg3: linear-gradient(0deg, rgba(53, 58, 62, 0.1) 0%, #2C2D2E99.8%),
 			// 体育卡片头部渐变背景于阴影效果
 			--JBS-CARD: linear-gradient(180deg, #555657 0%, #444547 100%),
 			--JBS-CARD--shadow: rgba(255, 255, 255, 0.25),
@@ -46,9 +52,9 @@ $themes: (
 			Hint: #ff7a00,
 			Fav: #ff007a,
 			Tag1: #eaecf2,
-			T1: #999ba0,
+			T1: #404040,
 			T2: #4d565e,
-			T3: #6d727a,
+			T3: #7d8086,
 			T4: #15222e,
 			TB: #333333,
 			TB1: #fdfdfd,
@@ -59,7 +65,7 @@ $themes: (
 			BG4: #eeeeee,
 			BG6: #495867,
 			BG8: #eaf0f8,
-			Line: #f2f2f2,
+			Line: #e8ebed,
 			Line2: linear-gradient(90deg, rgba(255, 40, 75, 0) 0%, #ff284b 51.5%, rgba(255, 40, 75, 0) 100%),
 			Shadow: #dedfe2,
 			// 导航阴影
@@ -67,6 +73,12 @@ $themes: (
 			yellow-ffe-500: #ffe500,
 			green-00-ff-47: #00ff47,
 
+			// 我的页面卡片头部
+			my-header: linear-gradient(90deg, rgba(73, 86, 100, 0.4) 0%, rgba(255, 255, 255, 0.4) 100%),
+			// vip
+			vip_bg1: linear-gradient(270deg, #f6f7fa 0%, #fdfdfd 100%),
+			vip_bg2: linear-gradient(270deg, #f6f7fa 0%, #fdfdfd 100%),
+			vip_bg3: linear-gradient(0deg, rgba(246, 247, 250, 0.6) 0%, #fdfdfd 100%),
 			// 体育卡片头部渐变背景于阴影效果
 			--JBS-CARD: linear-gradient(180deg, #555657 0%, #444547 100%),
 			--JBS-CARD--shadow: rgba(255, 255, 255, 0.25),

@@ -7,7 +7,7 @@
 		<template v-else>
 			<div class="user">
 				<div class="avatar">
-					<VantLazyImg :src="avatar" />
+					<VantLazyImg :src="theme === ThemeEnum.default ? avatar : avatar_light" />
 				</div>
 				<span class="user_name">{{ store.userInfo.userAccount }}</span>
 				<div class="user_id">
@@ -20,7 +20,7 @@
 				<VantLazyImg class="vip_big" :src="vip_big" />
 				<span class="vip_level">VIP0</span>
 				<div class="vip_info">
-					<span class="vip_experience">升级所需经验: <span class="warn">200</span> / <span>500</span></span>
+					<span class="vip_experience">升级所需经验: <span class="color_Warn">200</span> / <span>500</span></span>
 					<SvgIcon class="arrow" iconName="/my/arrow" @click="toPath('/vip')" />
 				</div>
 				<!-- VIP进度条 -->
@@ -77,7 +77,7 @@
 					<div class="cell">
 						<SvgIcon class="icon" iconName="/my/theme" />
 						<div class="label">{{ $t('my["主题"]') }}</div>
-						<SvgIcon class="themeChange_icon" iconName="/my/themeChange" @click="changeTheme" />
+						<SvgIcon class="themeChange_icon" :iconName="theme === ThemeEnum.default ? '/my/themeChange' : '/my/themeChange_light'" @click="changeTheme" />
 					</div>
 				</div>
 
@@ -118,6 +118,7 @@ import pubsub from "/@/pubSub/pubSub";
 import { useRouter } from "vue-router";
 import { useUserStore } from "/@/store/modules/user";
 import avatar from "/@/assets/zh-CN/default/my/avatar.png";
+import avatar_light from "/@/assets/zh-CN/light/my/avatar.png";
 import vip_big from "/@/assets/zh-CN/default/vip/vip_big.png";
 import line from "/@/assets/zh-CN/default/common/line.png";
 import balance_operation_ck from "/@/assets/zh-CN/default/my/balance_operation_ck.png";
@@ -237,7 +238,7 @@ const onClickCell = (item) => {
 };
 
 const changeTheme = () => {
-	themesStore.setTheme(theme.value === "light" ? "default" : "light");
+	themesStore.setTheme(theme.value === ThemeEnum.light ? ThemeEnum.default : ThemeEnum.light);
 };
 
 const toPath = (path) => {
@@ -384,7 +385,9 @@ const loginOut = () => {
 			justify-content: space-between;
 			padding: 0px 19px 0px 24px;
 			border-radius: 20px 20px 0px 0px;
-			background: linear-gradient(90deg, rgba(73, 86, 100, 0.4) 0%, rgba(44, 45, 46, 0.4) 100%);
+			@include themeify {
+				background: themed("my-header");
+			}
 
 			.line {
 				position: absolute;
@@ -398,7 +401,7 @@ const loginOut = () => {
 			.label {
 				flex: 1;
 				@include themeify {
-					color: themed("TB1");
+					color: themed("TB");
 				}
 				font-family: "PingFang SC";
 				font-size: 28px;
@@ -427,7 +430,7 @@ const loginOut = () => {
 
 			.value {
 				@include themeify {
-					color: themed("T1");
+					color: themed("T3");
 				}
 				font-family: "PingFang SC";
 				font-size: 24px;
@@ -437,6 +440,9 @@ const loginOut = () => {
 			.arrow {
 				width: 24px;
 				height: 24px;
+				@include themeify {
+					color: themed("T1");
+				}
 			}
 		}
 		.medal_content {
@@ -561,12 +567,15 @@ const loginOut = () => {
 					color: themed("T1");
 				}
 				font-family: "PingFang SC";
-				font-size: 24px;
+				font-size: 28px;
 				font-weight: 400;
 			}
 			.arrow {
 				width: 24px;
 				height: 24px;
+				@include themeify {
+					color: themed("T1");
+				}
 			}
 			.themeChange_icon {
 				width: 99px;

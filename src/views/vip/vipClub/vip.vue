@@ -6,7 +6,7 @@
 			<p>{{ $t(`vip["加入我们精英俱乐部，享受OKsport提供的最佳游戏体验。"]`) }}</p>
 		</div>
 
-		<div class="welfare_btn" @click="toPath('./vipHierarchy')">{{ $t(`vip["查看VIP福利"]`) }}</div>
+		<div class="welfare_btn" @click="toPath('./vipHierarchy')">{{ $t(`vip["查看VIP等级制度"]`) }}</div>
 
 		<div class="vip_card">
 			<VantLazyImg class="vip_big" :src="vip_big" />
@@ -23,7 +23,7 @@
 				<SvgIcon class="warning_icon" iconName="/vip/warning" />
 			</div>
 			<!-- VIP进度条 -->
-			<Progress class="vip_progress" :percentageShow="true" :percentage="100" />
+			<Progress class="vip_progress" :percentageShow="true" :percentage="9" />
 		</div>
 
 		<div class="notify">
@@ -35,7 +35,7 @@
 		<div class="vip_rewards">
 			<div class="header">
 				<img :src="vip_line_left" alt="" />
-				<span class="label">{{ $t(`vip["查看VIP福利"]`) }}</span>
+				<span class="label">{{ $t(`vip["VIP福利"]`) }}</span>
 				<img :src="vip_line_right" alt="" />
 			</div>
 			<div class="tips">{{ $t(`vip["通过OKSPORT专属VIP福利体系探索最佳游戏体验"]`) }}</div>
@@ -56,9 +56,9 @@
 					<span>2-7</span>
 				</div>
 
-				<div class="reward_cell" v-for="item in activeIndex">
+				<div :class="theme === ThemeEnum.default ? 'reward_cell' : 'reward_cell_light'" v-for="item in activeIndex">
 					<div class="icon">
-						<img :src="reward_icon1" alt="" />
+						<!-- <img :src="reward_icon1" alt="" /> -->
 						<div class="mask">
 							<SvgIcon class="lock" iconName="/vip/lock" />
 						</div>
@@ -67,9 +67,9 @@
 					<div class="value">总奖金: <span class="num">18.9$</span></div>
 				</div>
 
-				<div class="reward_cell">
+				<div :class="theme === ThemeEnum.default ? 'reward_cell' : 'reward_cell_light'">
 					<div class="icon">
-						<img :src="reward_icon1" alt="" />
+						<!-- <img :src="reward_icon1" alt="" /> -->
 						<div class="mask">
 							<SvgIcon class="lock" iconName="/vip/lock" />
 						</div>
@@ -97,10 +97,14 @@ import vip_big from "/@/assets/zh-CN/default/vip/vip_big.png";
 import vip_line_left from "/@/assets/zh-CN/default/vip/vip_line_left.png";
 import vip_line_right from "/@/assets/zh-CN/default/vip/vip_line_right.png";
 import reward_icon1 from "/@/assets/zh-CN/default/vip/reward_icon1.png";
+import { ThemeEnum } from "/@/enum/appConfigEnum";
+import { useThemesStore } from "/@/store/modules/themes";
 import { useRouter } from "vue-router";
 import { i18n } from "/@/i18n/index";
 const router = useRouter();
 const $: any = i18n.global;
+const themesStore = useThemesStore();
+const theme = computed(() => themesStore.themeName);
 
 const activeIndex = ref(1);
 
@@ -210,7 +214,7 @@ const onClickLeft = () => {
 			padding-top: 24px;
 			height: 48px;
 			@include themeify {
-				color: themed("TB");
+				color: themed("TB1");
 			}
 			font-family: "PingFang SC";
 			font-size: 24px;
@@ -245,13 +249,14 @@ const onClickLeft = () => {
 		}
 
 		.vip_level_progress {
+			min-height: 34px;
 			display: flex;
 			align-items: center;
 			gap: 12px;
 			margin-top: 16px;
 			padding: 0px 52px;
 			@include themeify {
-				color: themed("TB");
+				color: themed("TB1");
 			}
 			font-family: "PingFang SC";
 			font-size: 24px;
@@ -276,7 +281,9 @@ const onClickLeft = () => {
 		padding-right: 8px;
 		margin-top: 36px;
 		padding: 20px 66px;
-		background: linear-gradient(90deg, #353a3e 0%, #2c2d2e 100%);
+		@include themeify {
+			background: themed("vip_bg1");
+		}
 		border-radius: 20px;
 		box-sizing: border-box;
 
@@ -351,14 +358,18 @@ const onClickLeft = () => {
 
 				.value_active {
 					position: relative;
+					box-sizing: border-box;
 
 					&::after {
 						content: "";
 						position: absolute;
+						top: 0px;
+						left: 0px;
 						width: 100%;
 						height: 100%;
 						border-radius: 20px;
 						border: 2px solid #fa667e;
+						box-sizing: border-box;
 					}
 				}
 
@@ -369,7 +380,9 @@ const onClickLeft = () => {
 					align-items: center;
 					justify-content: center;
 					border-radius: 20px;
-					background: linear-gradient(90deg, #353a3e 0%, #2c2d2e 100%);
+					@include themeify {
+						background: themed("vip_bg2");
+					}
 					box-sizing: border-box;
 					.icon {
 						width: 68px;
@@ -406,9 +419,9 @@ const onClickLeft = () => {
 				gap: 10px;
 				padding: 18px 24px;
 				border-radius: 20px;
-				background: linear-gradient(90deg, #353a3e 0%, #2c2d2e 100%);
 				@include themeify {
-					color: themed("TB1");
+					background: themed("vip_bg2");
+					color: themed("TB");
 				}
 				font-family: "PingFang SC";
 				font-size: 28px;
@@ -441,7 +454,9 @@ const onClickLeft = () => {
 					"icon value";
 				padding: 20px 24px;
 				border-radius: 20px;
-				background: url("../../../assets/zh-CN/default/vip/reward_cell_bg.png") center bottom / 100% 156px no-repeat, linear-gradient(90deg, #353a3e 0%, #2c2d2e 100%);
+				@include themeify {
+					background: url("../../../assets/zh-CN/default/vip/reward_cell_bg.png") center bottom / 100% 156px no-repeat, themed("vip_bg2");
+				}
 				box-sizing: border-box;
 
 				&::after {
@@ -463,6 +478,82 @@ const onClickLeft = () => {
 					height: 1px;
 					background: url("../../../assets/zh-CN/default/vip/bg_line_bottom.png") center center / 100% 100% no-repeat;
 				}
+
+				.icon {
+					position: relative;
+					grid-area: icon;
+					align-self: center;
+					width: 74px;
+					height: 74px;
+					border-radius: 18px;
+					overflow: hidden;
+					img {
+						width: 100%;
+						height: 100%;
+					}
+					.mask {
+						position: absolute;
+						top: 0px;
+						left: 0px;
+						width: 100%;
+						height: 100%;
+						display: flex;
+						align-items: center;
+						justify-content: center;
+						background-color: rgba(0, 0, 0, 0.8);
+						.lock {
+							width: 36px;
+							height: 36px;
+						}
+					}
+				}
+
+				.label {
+					grid-area: label;
+					align-self: end;
+					@include themeify {
+						color: themed("TB");
+					}
+					font-family: "PingFang SC";
+					font-size: 30px;
+					font-weight: 500;
+				}
+
+				.value {
+					grid-area: value;
+					align-self: start;
+					@include themeify {
+						color: themed("T1");
+					}
+					font-family: "PingFang SC";
+					font-size: 24px;
+					font-weight: 400;
+					.num {
+						@include themeify {
+							color: themed("Hint");
+						}
+					}
+				}
+			}
+
+			.reward_cell_light {
+				position: relative;
+				width: 100%;
+				min-height: 156px;
+				display: grid;
+				column-gap: 24px;
+				row-gap: 12px;
+				grid-template-columns: auto 1fr;
+				grid-template-rows: auto auto;
+				grid-template-areas:
+					"icon label"
+					"icon value";
+				padding: 20px 24px;
+				border-radius: 20px;
+				@include themeify {
+					background: themed("vip_bg2");
+				}
+				box-sizing: border-box;
 
 				.icon {
 					position: relative;
