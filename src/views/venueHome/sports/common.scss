@@ -1,11 +1,11 @@
 .oddsUp {
 	@include themeify {
-		color: themed("Warn-P") !important;
+		color: themed("Theme") !important;
 	}
 }
 
 .oddsDown {
 	@include themeify {
-		color: themed("Theme") !important;
+		color: themed("Wam-P1") !important;
 	}
 }
