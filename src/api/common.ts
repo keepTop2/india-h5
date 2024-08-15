@@ -10,6 +10,28 @@ class CommonApi {
 			headers,
 		});
 	};
+
+	/**
+	 *@description 多语言数据
+	 */
+	static getLanguageDownBox = (data = {}, headers = {}) => {
+		return useAxiosApi(`/app/common/getLanguageDownBox`, {
+			method: "POST",
+			data,
+			headers,
+		});
+	};
+
+	/**
+	 *@description 根据ip获取语种
+	 */
+	static getLang = (data = {}, headers = {}) => {
+		return useAxiosApi(`/app/lang/api/getLang`, {
+			method: "POST",
+			data,
+			headers,
+		});
+	};
 }
 
 export default CommonApi;

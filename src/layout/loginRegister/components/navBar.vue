@@ -3,27 +3,60 @@
 		<div class="left">
 			<SvgIcon class="arrow" iconName="/loginOrRegister/navBar/arrow" @click="goBack()" />
 		</div>
-		<div class="right" @click="languageShow = true">
+		<div class="right" @click="onLang">
 			<div class="lang">
-				<div class="lang_icon"></div>
+				<div class="lang_icon">
+					<img :src="getLangPicture" alt="" />
+				</div>
 				<SvgIcon class="down" iconName="/loginOrRegister/navBar/down" />
 			</div>
 		</div>
 	</div>
 
-	<VantPicker v-model:select="checked" :multiple="true" v-model:show="languageShow" :columns="langList" title="" toText="label" @confirm="handleConfirm" />
+	<VantPicker v-model:select="checked" :multiple="true" v-model:show="languageShow" :columns="state.langList" title="" toText="value" toValue="code" @confirm="handleConfirm">
+		<template #option="item">
+			<div class="lang_cell">
+				<img class="icon" :src="item.item.icon" alt="" />
+				<span> {{ item.item.text }}</span>
+			</div>
+		</template>
+	</VantPicker>
 </template>
 
 <script setup lang="ts">
-import { langList } from "/@/i18n/record";
 import { useUserStore } from "/@/store/modules/user";
-
+import CommonApi from "/@/api/common";
+import common from "/@/utils/common";
 const UserStore = useUserStore();
 
 const checked = ref(UserStore.getLang);
 const languageShow = ref(false);
+const state = reactive({
+	langList: [],
+});
 
-const handleConfirm = () => {};
+console.log("checked", checked);
+
+const onLang = () => {
+	languageShow.value = true;
+	getLanguageDownBox();
+};
+
+const getLanguageDownBox = async () => {
+	const res = await CommonApi.getLanguageDownBox().catch((err) => err);
+	if (res.code == common.getInstance().ResCode.SUCCESS) {
+		state.langList = res.data;
+		getLangPicture();
+	}
+};
+
+const getLangPicture = () => {};
+
+const handleConfirm = (selectedValues, selectedOptions, selectedIndexes) => {
+	console.log("selectedValues", selectedValues);
+	console.log("selectedOptions", selectedOptions);
+	console.log("selectedIndexes", selectedIndexes);
+};
 
 // 回退
 const goBack = () => {
@@ -70,6 +103,15 @@ const goBack = () => {
 				}
 			}
 		}
+	}
+}
+
+.lang_cell {
+	display: flex;
+	gap: 8px;
+	.icon {
+		width: 32px;
+		height: 32px;
 	}
 }
 </style>

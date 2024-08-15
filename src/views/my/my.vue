@@ -72,7 +72,7 @@
 						<SvgIcon class="icon" :iconName="item.icon" />
 						<div class="label">{{ item.name }}</div>
 						<div class="value">{{ item.value }}</div>
-						<SvgIcon class="arrow" iconName="/common/arrow" />
+						<SvgIcon v-if="item.icon !== '/my/zhb'" class="arrow" iconName="/common/arrow" />
 					</div>
 					<div class="cell">
 						<SvgIcon class="icon" iconName="/my/theme" />
@@ -190,13 +190,13 @@ const menuData = {
 		{
 			name: "语言",
 			icon: "/my/lang",
-			value: "",
+			value: "中文",
 			path: "",
 		},
 		{
 			name: "版本号",
 			icon: "/my/beh",
-			value: "",
+			value: "v 1.00",
 			path: "",
 		},
 	],
@@ -278,7 +278,7 @@ const loginOut = () => {
 		@include themeify {
 			color: themed("TB");
 		}
-		font-family: Inter;
+		font-family: "PingFang SC";
 		font-size: 32px;
 		font-weight: 500;
 	}

@@ -32,6 +32,10 @@
 				<template #confirm>
 					<div class="right">{{ confirmButtonText }}</div>
 				</template>
+
+				<template #option="item">
+					<slot name="option" :item="item"></slot>
+				</template>
 			</van-picker>
 		</van-popup>
 
@@ -50,6 +54,7 @@ interface CustomFieldName {
 	text: string;
 	value: string | number;
 	children: any;
+	icon: string;
 }
 
 const props = withDefaults(
@@ -85,6 +90,7 @@ const props = withDefaults(
 		toText?: string;
 		//需要映射到组件value的后端字段key 默认为code
 		toValue?: string | number;
+		icon?: string;
 	}>(),
 	{
 		show: false,
@@ -101,6 +107,7 @@ const props = withDefaults(
 		optionHeight: "10.933333vw",
 		toText: "name",
 		toValue: "code",
+		icon: "icon",
 	}
 );
 
@@ -144,6 +151,7 @@ const dataMap = () => {
 		newObj.text = item[props.toText];
 		newObj.value = String(item[props.toValue]);
 		newObj.children = "";
+		newObj.icon = item[props.icon];
 		return newObj;
 	}) as Array<CustomFieldName>;
 	// console.log(state.columnsMap, "映射数据==============");

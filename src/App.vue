@@ -7,6 +7,7 @@
 
 <script setup lang="ts">
 import { loginApi } from "/@/api/loginRegister";
+import CommonApi from "/@/api/common";
 import common from "/@/utils/common";
 import { useRouter } from "vue-router";
 import MenuPopup from "/@/layout/home/components/menuPopup.vue";
@@ -24,6 +25,7 @@ const loginInfo = computed(() => {
 
 onBeforeMount(() => {
 	initTheme();
+	getLang();
 	autoLogin();
 	console.log("初始化");
 });
@@ -41,6 +43,12 @@ const autoLogin = async () => {
 	const res = await loginApi.submitUserLogin(params).catch((err) => err);
 	if (res.code == common.getInstance().ResCode.SUCCESS) {
 		store.setInfo(res.data);
+	}
+};
+
+const getLang = async () => {
+	const res = await CommonApi.getLang().catch((err) => err);
+	if (res.code == common.getInstance().ResCode.SUCCESS) {
 	}
 };
 
