@@ -5,7 +5,7 @@ export default class GameApi {
 	static queryLobbyTopGame = (data = {}, headers = {}) => {
 		return useAxiosApi(`/app/game_lobby/api/queryLobbyTopGame`, {
 			method: "POST",
-			// data,
+			data,
 			headers,
 		});
 	};
@@ -31,6 +31,14 @@ export default class GameApi {
 			method: "POST",
 			data,
 			headers,
+		});
+	};
+	// /app/game_lobby/api/queryGameInfoByOneClassId
+	static queryGameInfoByOneClassId = (data = {}) => {
+		return useAxiosApi(`/app/game_lobby/api/queryGameInfoByOneClassId`, {
+			method: "POST",
+			data,
+			// headers,
 		});
 	};
 }

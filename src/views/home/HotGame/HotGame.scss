@@ -10,12 +10,27 @@
 			width: 210px;
 			background-color: themed("BG3");
 			overflow: hidden;
-			// border-radius: 20px;
+			border-radius: 20px;
 			// border: 2px solid themed("T3");
 			box-sizing: border-box;
 			overflow: hidden;
 			position: relative;
 			margin-right: 16px;
+			.gameImg {
+				height: 210px;
+				width: 210px;
+			}
+			.gameInfo {
+				height: 72px;
+				display: flex;
+				align-items: center;
+				padding: 0 12px;
+				box-sizing: border-box;
+				p {
+					overflow-wrap: break-word;
+					width: 100%;
+				}
+			}
 			.collect {
 				position: absolute;
 				right: 10px;

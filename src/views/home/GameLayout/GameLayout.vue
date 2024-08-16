@@ -2,17 +2,20 @@
 	<div class="container bg_BG3">
 		<div class="left-section">
 			<div class="item big" id="item-1">
-				<SvgIcon class="star" iconName="home/event_collect" />
+				<SvgIcon v-if="gameInfoList?.[0]?.collect" @click="onClickCollect(gameInfoList?.[0], false)" iconName="home/event_collect" />
+				<SvgIcon v-else @click="onClickCollect(gameInfoList?.[0], true)" iconName="home/event_collect_no" />
 				<VantLazyImg :src="gameInfoList?.[0]?.icon || ''" :loadingSrc="loadingSrc" :errorSrc="loadingSrc" />
 				<!-- <NoGameImg v-else /> -->
 			</div>
 			<div class="small-items">
 				<div class="item" id="item-5">
-					<SvgIcon class="star" iconName="home/event_collect" />
+					<SvgIcon v-if="gameInfoList?.[1]?.collect" @click="onClickCollect(gameInfoList?.[1], false)" iconName="home/event_collect" />
+					<SvgIcon v-else @click="onClickCollect(gameInfoList?.[1], true)" iconName="home/event_collect_no" />
 					<VantLazyImg :src="gameInfoList?.[1]?.icon || ''" :loadingSrc="loadingSrc" :errorSrc="loadingSrc" />
 				</div>
 				<div class="item" id="item-6">
-					<SvgIcon class="star" iconName="home/event_collect" />
+					<SvgIcon v-if="gameInfoList?.[2]?.collect" @click="onClickCollect(gameInfoList?.[2], false)" iconName="home/event_collect" />
+					<SvgIcon v-else @click="onClickCollect(gameInfoList?.[2], true)" iconName="home/event_collect_no" />
 					<VantLazyImg :src="gameInfoList?.[2]?.icon || ''" :loadingSrc="loadingSrc" :errorSrc="loadingSrc" />
 				</div>
 			</div>
@@ -20,16 +23,19 @@
 		<div class="right-section">
 			<div class="small-items">
 				<div class="item" id="item-3">
-					<SvgIcon class="star" iconName="home/event_collect" />
+					<SvgIcon v-if="gameInfoList?.[3]?.collect" @click="onClickCollect(gameInfoList?.[3], false)" iconName="home/event_collect" />
+					<SvgIcon v-else @click="onClickCollect(gameInfoList?.[3], true)" iconName="home/event_collect_no" />
 					<VantLazyImg :src="gameInfoList?.[3]?.icon || ''" :loadingSrc="loadingSrc" :errorSrc="loadingSrc" />
 				</div>
 				<div class="item" id="item-4">
-					<SvgIcon class="star" iconName="home/event_collect" />
+					<SvgIcon v-if="gameInfoList?.[4]?.collect" @click="onClickCollect(gameInfoList?.[4], false)" iconName="home/event_collect" />
+					<SvgIcon v-else @click="onClickCollect(gameInfoList?.[4], true)" iconName="home/event_collect_no" />
 					<VantLazyImg :src="gameInfoList?.[4]?.icon || ''" :loadingSrc="loadingSrc" :errorSrc="loadingSrc" />
 				</div>
 			</div>
 			<div class="item big" id="item-2">
-				<SvgIcon class="star" iconName="home/event_collect" />
+				<SvgIcon v-if="gameInfoList?.[5]?.collect" @click="onClickCollect(gameInfoList?.[5], false)" iconName="home/event_collect" />
+				<SvgIcon v-else @click="onClickCollect(gameInfoList?.[5], true)" iconName="home/event_collect_no" />
 				<VantLazyImg :src="gameInfoList?.[5]?.icon || ''" :loadingSrc="loadingSrc" :errorSrc="loadingSrc" />
 			</div>
 		</div>
@@ -39,10 +45,23 @@
 import img from "./image.png";
 import VantLazyImg from "/@/components/vant/VantLazyImg.vue";
 import loadingSrc from "../static/loading.png";
-import { GameInfoList } from "/@/game";
+import { GameInfoList } from "/#/game";
+import GameApi from "/@/api/venueHome/games";
+import pubsub from "/@/pubSub/pubSub";
 const props = defineProps<{
 	gameInfoList: GameInfoList[];
 }>();
+
+const onClickCollect = async (item, collect) => {
+	const res = await GameApi.gameCollection({
+		gameId: item.id,
+		type: collect,
+	});
+	if (res.ok) {
+		item.collect = collect;
+		pubsub.publish("getCollect");
+	}
+};
 </script>
 <style scoped lang="scss">
 .container {
@@ -88,7 +107,7 @@ const props = defineProps<{
 			height: 320px; // Adjust the height as needed
 		}
 
-		.star {
+		svg {
 			position: absolute;
 			top: 10px;
 			right: 10px;
