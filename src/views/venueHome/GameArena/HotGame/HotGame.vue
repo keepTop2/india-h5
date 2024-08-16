@@ -76,6 +76,6 @@ const onClickCollect = async (item, collect) => {
 };
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 @import "./HotGame.scss";
 </style>
