@@ -104,18 +104,17 @@ const onCollapse = () => {
 				@include themeify {
 					color: themed("TB");
 				}
-				font-family: Inter;
+				font-family: "PingFang SC";
 				font-size: 24px;
 				font-weight: 500;
 			}
 			.balance {
-				margin-top: 1px;
 				@include themeify {
 					color: themed("TB");
 				}
-				font-family: Inter;
+				font-family: "PingFang SC";
 				font-size: 28px;
-				font-weight: 700;
+				font-weight: 600;
 			}
 		}
 	}

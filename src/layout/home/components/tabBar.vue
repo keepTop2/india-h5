@@ -23,7 +23,7 @@
 			</div>
 
 			<!-- 首页的 tab 项 -->
-			<div v-else class="content" :class="{ active: item.path === route.path }">
+			<div v-else class="content" :class="{ active: item.path === route.path, [theme]: true }">
 				<!-- 显示首页的图标 -->
 				<div class="home-icon">
 					<img :src="item.path !== route.path ? item.icon : item.active_icon" />
@@ -82,13 +82,13 @@ const getHighlightStatus = (item) => {
 // 获取 tab 项的背景色
 const getHighlightBG = (item) => {
 	// 如果 tab 项活跃，则返回 "active" 类，否则返回空字符串
-	if (isActivePath(item.path)) return "active";
+	if (isActivePath(item.path)) return `active ${theme.value}`;
 };
 
 // 获取 tab 项的标签样式
 const getHighlightClass = (item) => {
 	// 如果 tab 项活跃，则返回 "label_active" 类，否则返回空字符串
-	if (isActivePath(item.path)) return "label_active";
+	if (isActivePath(item.path)) return "label_active ";
 };
 
 // 判断是否显示高亮分隔线
@@ -150,7 +150,7 @@ const tabData = [
 
 	.border {
 		position: absolute;
-		top: -35px;
+		bottom: 0px;
 		width: 100%;
 		z-index: -1;
 	}
@@ -170,12 +170,16 @@ const tabData = [
 		}
 
 		.active {
-			background: url("/@/assets/zh-CN/default/layout/item_bg.png") center center no-repeat;
+			@include theme-bg("/layout/item_bg.png");
+			background-position-x: center;
+			background-position-y: center;
+			background-repeat: no-repeat;
 			background-size: 100% 100%;
 		}
 
 		.line {
 			position: absolute;
+			top: 0px;
 			width: 50px;
 			height: 3px;
 		}
@@ -203,8 +207,12 @@ const tabData = [
 		}
 
 		.active {
-			background: url("/@/assets/zh-CN/default/layout/home_item_bg.png") center center no-repeat;
-			background-size: 100% 100%;
+			@include theme-bg("/layout/home_item_bg.png");
+			background-position-x: center;
+			background-position-y: bottom;
+			background-repeat: no-repeat;
+			background-size: cover;
+			background-clip: border-box;
 		}
 		.home-icon {
 			position: absolute;

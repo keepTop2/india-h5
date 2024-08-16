@@ -18,10 +18,10 @@
 		</div>
 
 		<div class="group">
-			<div class="cell">
+			<div class="cell" @click="toPath('/language')">
 				<div class="icon"><SvgIcon iconName="/my/lang" /></div>
 				<div class="label">{{ $t('my["语言"]') }}</div>
-				<div class="value">中文</div>
+				<div class="value">{{ store.langName }}</div>
 				<div class="arrow"><SvgIcon iconName="/common/arrow" /></div>
 			</div>
 			<div class="cell">
@@ -38,10 +38,12 @@
 <script setup lang="ts">
 import { ThemeEnum } from "/@/enum/appConfigEnum";
 import { useThemesStore } from "/@/store/modules/themes";
+import { useUserStore } from "/@/store/modules/user";
 import avatar from "/@/assets/zh-CN/default/my/avatar.png";
 import avatar_light from "/@/assets/zh-CN/light/my/avatar.png";
 import { useRouter } from "vue-router";
 const themesStore = useThemesStore();
+const store = useUserStore();
 const router = useRouter();
 
 const theme = computed(() => themesStore.themeName);
@@ -149,6 +151,7 @@ const toPath = (path) => {
 			align-items: center;
 			justify-content: space-between;
 			padding: 0px 19px 0px 24px;
+
 			box-sizing: border-box;
 
 			&::after {
@@ -190,6 +193,12 @@ const toPath = (path) => {
 			.arrow {
 				width: 24px;
 				height: 24px;
+				@include themeify {
+					color: themed("T1");
+				}
+				svg {
+					vertical-align: top;
+				}
 			}
 			.themeChange_icon {
 				width: 99px;

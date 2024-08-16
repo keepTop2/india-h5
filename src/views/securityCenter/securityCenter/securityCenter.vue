@@ -163,6 +163,12 @@ const onClickLeft = () => {
 		.arrow {
 			width: 24px;
 			height: 24px;
+			@include themeify {
+				color: themed("T1");
+			}
+			svg {
+				vertical-align: top;
+			}
 		}
 		.themeChange_icon {
 			width: 99px;
