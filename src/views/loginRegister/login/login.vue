@@ -63,10 +63,10 @@
 <script setup lang="ts">
 import NavBar from "/@/layout/loginRegister/components/navBar.vue";
 import { loginApi, verifyCodeApi } from "/@/api/loginRegister";
+import common from "/@/utils/common";
 import HeaderBG from "/@/views/loginRegister/components/headerBG.vue";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import common from "/@/utils/common";
 import { useUserStore } from "/@/store/modules/user";
 const store = useUserStore();
 const hcaptcha: any = ref(null);
@@ -74,6 +74,7 @@ const router = useRouter();
 const eyeShow = ref(true);
 const btnDisabled = ref(true);
 const userAgreement = ref(false);
+
 const state = reactive({
 	userAccount: "", // 邮箱或者手机号
 	password: "", // 密码
@@ -93,8 +94,6 @@ const isPasswordValid = computed(() => {
 const loginInfo = computed(() => {
 	return store.getLoginInfo;
 });
-
-console.log("loginInfo", loginInfo);
 
 // 监听状态密码状态
 watch(
