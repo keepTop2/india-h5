@@ -26,7 +26,7 @@ export const useUserStore = defineStore("User", {
 			// 语言
 			lang: LangEnum["en-US"],
 			// 语言名称
-			langName: null,
+			langName: "English",
 			// 语言图标
 			langIcon: null,
 			// 语言选择标记
