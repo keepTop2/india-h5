@@ -7,16 +7,12 @@
 
 <script setup lang="ts">
 import { loginApi } from "/@/api/loginRegister";
-import CommonApi from "/@/api/common";
 import common from "/@/utils/common";
-import { useRouter } from "vue-router";
 import MenuPopup from "/@/layout/home/components/menuPopup.vue";
 import { useThemesStore } from "/@/store/modules/themes";
-import { useRouterStore } from "/@/store/modules/cacheRouter";
 import { useUserStore } from "/@/store/modules/user";
+import { LangEnum } from "/@/enum/appConfigEnum";
 const store = useUserStore();
-const router = useRouter();
-const { keepAliveComps } = storeToRefs(useRouterStore());
 const ThemesStore = useThemesStore();
 
 const loginInfo = computed(() => {
@@ -25,9 +21,8 @@ const loginInfo = computed(() => {
 
 onBeforeMount(() => {
 	initTheme();
-	getLang();
+	initLang();
 	autoLogin();
-	console.log("初始化");
 });
 
 // 自动登录
@@ -46,15 +41,18 @@ const autoLogin = async () => {
 	}
 };
 
-const getLang = async () => {
-	const res = await CommonApi.getLang().catch((err) => err);
-	if (res.code == common.getInstance().ResCode.SUCCESS) {
-	}
-};
-
 //初始化主题
 const initTheme = () => {
 	ThemesStore.setTheme(ThemesStore.themeName);
+};
+
+// 初始化语言
+const initLang = () => {
+	if (store.lang) {
+		store.setLang(store.lang);
+	} else {
+		store.setLang(LangEnum["en-US"]);
+	}
 };
 </script>
 

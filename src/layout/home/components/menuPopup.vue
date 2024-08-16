@@ -41,11 +41,11 @@
 			</div>
 		</div>
 		<div class="menu_footer">
-			<div class="menu van-haptics-feedback">
+			<div class="menu van-haptics-feedback" @click="toPath('/language')">
 				<div class="icon">
-					<Contest />
+					<img :src="userStore.langIcon" />
 				</div>
-				<div class="label">{{ $t(`menuPopup["中文"]`) }}</div>
+				<div class="label">{{ userStore.langName }}</div>
 			</div>
 			<div class="menu van-haptics-feedback">
 				<div class="icon">
@@ -58,10 +58,10 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from "vue";
 import logo from "/@/assets/zh-CN/default/menuPopup/logo.png";
 import task_icon from "/@/assets/zh-CN/default/menuPopup/task_icon.png";
 import wheel_icon from "/@/assets/zh-CN/default/menuPopup/wheel_icon.png";
-import Contest from "/@/assets/zh-CN/default/menuPopup/contest.svg";
 import close from "/@/assets/zh-CN/default/menuPopup/close.png";
 import close_light from "/@/assets/zh-CN/light/menuPopup/close.png";
 import mrjs from "/@/assets/zh-CN/default/menuPopup/mrjs.png";
@@ -72,7 +72,10 @@ import CommonApi from "/@/api/common";
 import common from "/@/utils/common";
 import { ThemeEnum } from "/@/enum/appConfigEnum";
 import { useThemesStore } from "/@/store/modules/themes";
-import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { useUserStore } from "/@/store/modules/user";
+const userStore = useUserStore();
+const router = useRouter();
 const show = ref(false);
 const themesStore = useThemesStore();
 const theme = computed(() => themesStore.themeName);
@@ -95,6 +98,11 @@ const queryLobbyLabelList = async () => {
 };
 
 pubsub.subscribe("onCollapseMenu", onCollapseMenu);
+
+const toPath = (path) => {
+	show.value = false;
+	router.push(path);
+};
 </script>
 
 <style scoped lang="scss">

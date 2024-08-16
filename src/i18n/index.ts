@@ -20,7 +20,6 @@ export function loadLang() {
 }
 
 export const i18n = createI18n({
-	// globalInjection: true,
 	legacy: false,
 	locale: langMaps.get(LangEnum["en-US"])?.serverLang,
 	fallbackLocale: langMaps.get(LangEnum["en-US"])?.serverLang,

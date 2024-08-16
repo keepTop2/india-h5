@@ -190,8 +190,8 @@ const menuData = {
 		{
 			name: "语言",
 			icon: "/my/lang",
-			value: "中文",
-			path: "",
+			value: store.lang,
+			path: "/language",
 		},
 		{
 			name: "版本号",

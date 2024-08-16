@@ -1,11 +1,8 @@
 export const lang = {
 	//公共翻译
 	common: {
-		你好世界: "Hello World",
-		选择单个日期: "Select individual dates",
-
-		你好: "你好",
-		欢迎来到: "欢迎来到",
+		你好: "Hello World",
+		欢迎来到: "Welcome To",
 		联系客服: " 联系客服 ",
 		验证码: " 验证码 ",
 		发送: " 发送",
@@ -100,6 +97,7 @@ export const lang = {
 		找回交易密码: "找回交易密码",
 		勋章收藏者: "勋章收藏者",
 		勋章详情: "勋章详情",
+		语言: "语言",
 	},
 	menuPopup: {
 		中文: "中文",

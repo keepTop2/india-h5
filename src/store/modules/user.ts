@@ -5,7 +5,10 @@ import EncryptionFn from "/@/utils/encryption";
 export interface StoreUser {
 	token: string;
 	userInfo: Record<any, any>;
-	lang: LangEnum;
+	lang: LangEnum | null;
+	langName: string | null;
+	langIcon: null | string;
+	langChoice: null | boolean;
 	loginInfo: {
 		userAccount?: string;
 		password?: string;
@@ -22,6 +25,12 @@ export const useUserStore = defineStore("User", {
 			userInfo: {},
 			// 语言
 			lang: LangEnum["en-US"],
+			// 语言名称
+			langName: null,
+			// 语言图标
+			langIcon: null,
+			// 语言选择标记
+			langChoice: null,
 			// 登录账号信息
 			loginInfo: null,
 			// 登录标记
@@ -33,10 +42,8 @@ export const useUserStore = defineStore("User", {
 			return this.userInfo || {};
 		},
 		getLoginInfo(): any {
-			// console.log("this.loginInfo", this.loginInfo);
 			if (!this.loginInfo) return null;
 			const decryptedInfo = EncryptionFn.decrypt(this.loginInfo);
-			// console.log("decryptedInfo", decryptedInfo);
 			return decryptedInfo;
 		},
 		getLang(): any {
@@ -48,6 +55,16 @@ export const useUserStore = defineStore("User", {
 		setLang(data: LangEnum) {
 			this.lang = data;
 			i18nSetLang(this.lang);
+		},
+		setLangName(data) {
+			this.langName = data;
+		},
+		setLangIcon(data) {
+			this.langIcon = data;
+		},
+		// 设置语言选择标识
+		setLangChoice() {
+			this.langChoice = true;
 		},
 		// 获取用户信息
 		setInfo(data: any) {
@@ -82,7 +99,7 @@ export const useUserStore = defineStore("User", {
 		{
 			key: "useUserStore",
 			storage: localStorage,
-			paths: ["lang", "loginStatus"],
+			paths: ["lang", "langName", "langIcon", "langChoice", "loginStatus"],
 		},
 		{
 			key: "loginInfo",

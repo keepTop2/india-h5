@@ -6,14 +6,14 @@
 		<div class="right" @click="onLang">
 			<div class="lang">
 				<div class="lang_icon">
-					<img :src="getLangPicture" alt="" />
+					<VantLazyImg :src="stateLang.langPicture" />
 				</div>
 				<SvgIcon class="down" iconName="/loginOrRegister/navBar/down" />
 			</div>
 		</div>
 	</div>
 
-	<VantPicker v-model:select="checked" :multiple="true" v-model:show="languageShow" :columns="state.langList" title="" toText="value" toValue="code" @confirm="handleConfirm">
+	<VantPicker v-model:select="checked" :multiple="true" v-model:show="languageShow" :columns="stateLang.langList" title="" toText="name" toValue="code" @confirm="handleConfirm">
 		<template #option="item">
 			<div class="lang_cell">
 				<img class="icon" :src="item.item.icon" alt="" />
@@ -24,38 +24,47 @@
 </template>
 
 <script setup lang="ts">
-import { useUserStore } from "/@/store/modules/user";
 import CommonApi from "/@/api/common";
 import common from "/@/utils/common";
-const UserStore = useUserStore();
-
-const checked = ref(UserStore.getLang);
-const languageShow = ref(false);
-const state = reactive({
-	langList: [],
-});
-
+import { useUserStore } from "/@/store/modules/user";
+const userStore = useUserStore();
+const checked = ref(userStore.getLang);
 console.log("checked", checked);
+
+const languageShow = ref(false);
+
+const stateLang = reactive({
+	langList: [],
+	langPicture: "" as null | string,
+});
 
 const onLang = () => {
 	languageShow.value = true;
-	getLanguageDownBox();
 };
 
+// 获取语言配置
 const getLanguageDownBox = async () => {
 	const res = await CommonApi.getLanguageDownBox().catch((err) => err);
 	if (res.code == common.getInstance().ResCode.SUCCESS) {
-		state.langList = res.data;
-		getLangPicture();
+		stateLang.langList = res.data;
+		if (!userStore.langChoice) {
+			const filteredData: any = stateLang.langList.find((item) => item.currLang === 1);
+			stateLang.langPicture = filteredData.icon;
+		}
 	}
 };
+stateLang.langPicture = userStore.langIcon;
+getLanguageDownBox();
 
-const getLangPicture = () => {};
-
-const handleConfirm = (selectedValues, selectedOptions, selectedIndexes) => {
-	console.log("selectedValues", selectedValues);
-	console.log("selectedOptions", selectedOptions);
-	console.log("selectedIndexes", selectedIndexes);
+const handleConfirm = (selectedValues) => {
+	const { selectedOptions } = selectedValues;
+	const options = selectedOptions[0];
+	console.log("options", options);
+	userStore.setLang(options.value);
+	userStore.setLangIcon(options.icon);
+	userStore.setLangName(options.text);
+	userStore.setLangChoice();
+	stateLang.langPicture = options.icon;
 };
 
 // 回退
@@ -94,6 +103,10 @@ const goBack = () => {
 			.lang_icon {
 				width: 28px;
 				height: 28px;
+				img {
+					width: 100%;
+					height: 100%;
+				}
 			}
 			.down {
 				width: 22px;

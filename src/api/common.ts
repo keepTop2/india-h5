@@ -21,17 +21,6 @@ class CommonApi {
 			headers,
 		});
 	};
-
-	/**
-	 *@description 根据ip获取语种
-	 */
-	static getLang = (data = {}, headers = {}) => {
-		return useAxiosApi(`/app/lang/api/getLang`, {
-			method: "POST",
-			data,
-			headers,
-		});
-	};
 }
 
 export default CommonApi;
