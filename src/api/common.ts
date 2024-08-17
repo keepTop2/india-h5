@@ -1,7 +1,7 @@
 import useAxiosApi from "/@/utils/useAxiosApi";
 class CommonApi {
 	/**
-	 *@description 游戏目录
+	 *@description POST 侧边栏
 	 */
 	static queryLobbyLabelList = (data = {}, headers = {}) => {
 		return useAxiosApi(`/app/game_lobby/api/queryLobbyLabelList`, {
