@@ -1,7 +1,11 @@
 <template>
 	<!-- 意见反馈 -->
 	<div class="content">
-		<VantNavBar :title="$t(`VantNavBar['意见反馈']`)" @onClickLeft="onClickLeft" />
+		<VantNavBar :title="$t(`VantNavBar['意见反馈']`)" @onClickLeft="onClickLeft" @onClickRight="onClickRight">
+			<template #right>
+				<span class="rightText">{{ $t(`VantNavBar['反馈记录']`) }}</span>
+			</template>
+		</VantNavBar>
 		<div class="box">
 			<p class="title">{{ $t(`feedback['帮助我们改善您的体验']`) }}</p>
 			<div class="content_one">
@@ -79,8 +83,21 @@ const homeBack = () => {
 const onClickLeft = () => {
 	router.go(-1);
 };
+const onClickRight = () => {
+	router.push("/feedbackRecords");
+};
 </script>
 <style lang="scss" scoped>
+.rightText {
+	@include themeify {
+		color: themed("Theme");
+	}
+	font-family: "PingFang SC";
+	font-size: 26px;
+	font-weight: 400;
+	text-decoration-line: underline;
+}
+
 .content {
 	display: flex;
 	flex-direction: column;

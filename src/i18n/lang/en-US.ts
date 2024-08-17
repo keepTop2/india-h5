@@ -84,6 +84,8 @@ export const lang = {
 		钱包: "Wallet",
 		投注订单: "Betting Orders",
 		意见反馈: "Feedback",
+		反馈记录: "Feedback Records",
+		反馈详情: "Feedback Details",
 		VIP俱乐部: "VIP Club",
 		VIP等级制度: "VIP Tier System",
 		安全中心: "Security Center",

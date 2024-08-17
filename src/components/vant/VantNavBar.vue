@@ -15,7 +15,9 @@
 			<template #left>
 				<span v-if="leftText">{{ leftText }}</span>
 				<slot v-else name="left">
-					<SvgIcon class="back" iconName="/vantNavBar/back" />
+					<div class="back">
+						<SvgIcon iconName="/vantNavBar/back" />
+					</div>
 				</slot>
 			</template>
 			<template #title>
@@ -142,6 +144,8 @@ const onClickRight = () => {
 
 :deep(.van-nav-bar__left) {
 	padding-left: 28px;
+
+	// align-items: end;
 }
 
 :deep(.van-nav-bar--fixed) {
