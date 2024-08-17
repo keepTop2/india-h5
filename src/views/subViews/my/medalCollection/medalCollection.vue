@@ -387,6 +387,9 @@ const onClickLeft = () => {
 		font-family: "PingFang SC";
 		font-size: 28px;
 		font-weight: 500;
+		.title {
+			width: min-content;
+		}
 		.tips {
 			font-size: 24px;
 			font-weight: 400;

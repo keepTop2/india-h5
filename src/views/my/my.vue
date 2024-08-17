@@ -11,7 +11,8 @@
 				</div>
 				<span class="user_name">{{ store.userInfo.userAccount }}</span>
 				<div class="user_id">
-					<span>ID: 455454</span>
+					<span>ID: {{ store.userInfo.userId }}</span>
+					<div class="icon" @click="common.getInstance().copy(store.userInfo.userId)"><SvgIcon iconName="/common/copy" /></div>
 				</div>
 			</div>
 
@@ -289,6 +290,7 @@ const loginOut = () => {
 		height: 40px;
 		padding: 0px 20px;
 		display: flex;
+		column-gap: 10px;
 		align-items: center;
 		align-self: center;
 		border-radius: 20px;
@@ -302,6 +304,17 @@ const loginOut = () => {
 		font-size: 24px;
 		font-weight: 400;
 		box-sizing: border-box;
+
+		.icon {
+			width: 28px;
+			height: 28px;
+			display: flex;
+			align-items: center;
+			svg {
+				width: 24px;
+				height: 24px;
+			}
+		}
 	}
 }
 
