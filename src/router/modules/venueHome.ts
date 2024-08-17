@@ -98,12 +98,17 @@ export const VenueHome = {
 		// 	meta: { title: "彩票" },
 		// },
 		{
-			path: "/game/arena/:gameType",
+			path: "/game/arena",
 			name: "GameArena",
 			component: () => import("/@/views/venueHome/GameArena/GameArena.vue"),
 			meta: {
 				title: "游戏大厅",
 			},
+		},
+		{
+			name: "GameLists",
+			path: "/game/arena/lists", // 动态路由参数，匹配球类
+			component: () => import("/@/views/venueHome/GameArena/GameLists/GameLists.vue"),
 		},
 	],
 };

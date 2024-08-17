@@ -2,7 +2,7 @@
 	<div class="GameArena bg_BG1">
 		<!-- 顶部搜索栏 -->
 		<div class="navBar bg_BG1">
-			<SvgIcon class="collapse_icon" iconName="common/collapse_icon" @click="onClickLeft" />
+			<SvgIcon class="collapse_icon color_TB" iconName="common/collapse_icon" @click="onClickLeft" />
 			<div class="nav_bar_input bg_BG3">
 				<SvgIcon iconName="venueHome/gameArena/search" />
 				<input v-model="searchValue" placeholder="输入游戏名称" type="text" class="color_T2" />
@@ -16,45 +16,48 @@
 		</div>
 		<div v-show="!searchValue">
 			<!-- 轮播图 -->
-			<Banner class="Home_Banner mb_35" />
+			<Banner class="Home_Banner" />
 			<div class="Game_Content">
-				<Tabs class="plr" v-model="tabsActiveKey" :list="tabList" />
+				<!-- <Tabs class="plr" v-model="tabsActiveKey" :list="tabList" /> -->
 				<!-- 热门游戏 -->
 				<h3 class="title">
-					<SvgIcon iconName="home/fire" alt="" />
+					<!-- <SvgIcon iconName="home/fire" alt="" /> -->
 					{{ $t('game["热门游戏"]') }}
+					<span class="color_T1 fs_28 fw_400" @click="showMoreList($t('热门游戏'), 1)">更多</span>
 				</h3>
-				<HotGame class="m24" />
+				<HotGame class="m24" :gameList="gameList?.[0]" />
 				<!-- 新游戏 -->
 				<h3 class="title">
-					<SvgIcon iconName="home/event_game" alt="" />
+					<!-- <SvgIcon iconName="home/event_game" alt="" /> -->
 					{{ $t('game["新游戏"]') }}
+					<span class="color_T1 fs_28 fw_400" @click="showMoreList($t('新游戏'), 2)">更多</span>
 				</h3>
-				<GameGrid class="m24" :games="games" />
-				<!-- 全部游戏 -->
-				<h3 class="title">
-					<SvgIcon iconName="home/star" alt="" />
-					{{ $t('game["全部游戏"]') }}
-				</h3>
-				<GameGrid class="m24" :games="games" :showMore="true" />
+				<NewGame class="m24" :gameList="gameList?.[1]" />
+				<!-- 二级列表 -->
+				<GameChunk v-for="(game, index) in games" :key="index" class="m24" :showMore="true" :gameList="game" />
 			</div>
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import Tabs from "/@/components/Tabs/Tabs.vue";
 import Banner from "./Banner/banner.vue";
 //热门游戏
 import HotGame from "./HotGame/HotGame.vue";
 //游戏6格布局
-import GameGrid from "./GameGrid/GameGrid.vue";
-import GameCard from "./GameGrid/GameCard.vue";
+import NewGame from "./NewGame/NewGame.vue";
+import GameCard from "./components/GameCard.vue";
+import GameChunk from "./GameChunk/GameChunk.vue";
+import GameApi from "/@/api/venueHome/games";
 import pubsub from "/@/pubSub/pubSub";
 import { i18n } from "/@/i18n";
 const $: any = i18n.global;
 const route = useRoute();
+const router = useRouter();
+const gameList = ref();
+const { gameOneId } = route.query;
 //初始化当前选中tab
 const tabsActiveKey = ref("all");
 const searchValue = ref();
@@ -81,18 +84,29 @@ const tabList = [
 		value: "4",
 	},
 ];
+const games = computed(() => {
+	return gameList.value?.filter((item) => item.label == 0);
+});
 
-const games = [
-	{ image: "path/to/image1.jpg", isNew: true },
-	{ image: "path/to/image2.jpg", isNew: true },
-	{ image: "path/to/image3.jpg", isNew: false },
-	{ image: "path/to/image4.jpg", isNew: false },
-	{ image: "path/to/image5.jpg", isNew: true },
-];
+onBeforeMount(() => {
+	//获取游戏列表
+	getGameList();
+});
+
+const getGameList = () => {
+	// 获取游戏列表
+	GameApi.queryGameInfoByOneClassId({ gameOneId: gameOneId }).then((res) => {
+		console.log("获取游戏列表", res);
+		gameList.value = res.data;
+	});
+};
 
 const onClickLeft = () => {
 	// 发布事件
 	pubsub.publish("onCollapseMenu");
+};
+const showMoreList = (title, label) => {
+	router.push({ name: "GameLists", query: { title, label, gameOneId } });
 };
 </script>
 
@@ -110,6 +124,9 @@ const onClickLeft = () => {
 .collapse_icon {
 	width: 64px;
 	height: 64px;
+	@include themeify {
+		stroke: themed("TB");
+	}
 }
 
 .navBar {

@@ -30,7 +30,7 @@
 						<VantLazyImg :src="item.icon" />
 						{{item.name}}
 					</span>
-					<span class="more fw_400 fs_28 color_T1" @click="router.push('/game/arena/1')">更多</span>
+					<span class="more fw_400 fs_28 color_T1" @click="handleMore(item?.gameOneId)">更多</span>
 				</h3>
 				<GameLayout v-if="item.gameInfoList.length" :gameInfoList="item.gameInfoList" class="m24" />
 				<GameBigPic v-else class="m24" />
@@ -140,6 +140,7 @@ onBeforeMount(async () => {
 	queryCollection();
 	//初始化体育
 	initSport();
+	pubsub.subscribe('getCollect',queryCollection)
 });
 
 // 注册一个钩子，在组件实例被卸载之前调用。
@@ -257,6 +258,15 @@ const getAttention = () => {
 		});
 	});
 };
+
+const handleMore = (gameOneId) => {
+	console.log(gameOneId,'=gameOneId')
+	router.push({
+		name: "GameArena",
+		query:{gameOneId}
+	})
+}
+
 </script>
 
 <style lang="scss" scoped>
