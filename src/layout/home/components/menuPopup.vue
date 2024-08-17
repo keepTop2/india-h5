@@ -89,7 +89,7 @@ const onCollapseMenu = () => {
 	queryLobbyLabelList();
 };
 const handleMenuClick = (item) => {
-	console.log(item,'===item')
+	console.log(item, "===item");
 	router.push({
 		name: "GameArena",
 		query: {
@@ -125,7 +125,7 @@ const toPath = (path) => {
 	.close {
 		position: absolute;
 		top: 50%;
-		right: -41px;
+		right: -40px;
 		transform: translate(0, -50%);
 		width: 40px;
 		height: 124px;

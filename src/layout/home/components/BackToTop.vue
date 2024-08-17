@@ -24,22 +24,22 @@ onUnmounted(() => {
 </script>
 <style lang="scss" scoped>
 .backToTop {
+	position: fixed;
+	bottom: 200px;
+	right: 24px;
 	display: flex;
-	width: 80px;
-	height: 80px;
-	padding: 22px 17px 6px 18px;
 	flex-direction: column;
 	justify-content: flex-end;
 	align-items: center;
+	width: 80px;
+	height: 80px;
+	padding: 22px 17px 6px 18px;
 	gap: 5.001px;
 	flex-shrink: 0;
 	border-radius: 28px;
 	background: rgba(255, 228, 228, 0.8);
 	box-sizing: border-box;
 	backdrop-filter: blur(3px);
-	position: fixed;
-	bottom: 200px;
-	right: 24px;
 	z-index: 2;
 	svg {
 		@include themeify {
