@@ -7,10 +7,17 @@
 			// padding-right: 30px;
 			.card {
 				position: relative;
+				height: 100%;
+
+				.message {
+					display: flex;
+					align-items: center;
+				}
 			}
 		}
 		.swiper-slide {
-			width: 420px;
+			width: 400px;
+			height: 400px;
 			background-color: themed("BG3");
 			overflow: hidden;
 			border-radius: 20px;

@@ -7,7 +7,10 @@
 						<VantLazyImg v-if="item.collect" :src="collectImg" @click="handleCollect(item, false)" alt="" width="100%" />
 						<VantLazyImg v-else :src="noCollectImg" alt="" @click="handleCollect(item, true)" width="100%" />
 					</div>
-					<VantLazyImg :src="item.icon" :loadingSrc="loadingSrc" :errorSrc="loadingSrc" alt="" width="100%" />
+					<VantLazyImg class="gameImg" :src="item.icon" :loadingSrc="loadingSrc" :errorSrc="loadingSrc" alt="" width="100%" />
+					<div class="gameInfo">
+						<p class="color_T1 bg_BG3 color_T1 fs_24">{{ item.name }}</p>
+					</div>
 				</div>
 			</swiper-slide>
 		</Swiper>
@@ -26,6 +29,7 @@ import collectImg from "./images/collect.png";
 import noCollectImg from "./images/noCollect.png";
 import loadingSrc from "../static/loading.png";
 import GameApi from "/@/api/venueHome/games";
+import pubsub from "/@/pubSub/pubSub";
 const autoplay = ref({
 	delay: 5500,
 	disableOnInteraction: false,
@@ -79,7 +83,7 @@ const handleCollect = async (item, collect) => {
 			disableOnInteraction: false,
 			pauseOnMouseEnter: true,
 		};
-		emit("queryCollection");
+		pubsub.publish("getCollect");
 	}
 };
 const handleClickCard = (item) => {
@@ -87,6 +91,6 @@ const handleClickCard = (item) => {
 };
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 @import "./HotGame.scss";
 </style>

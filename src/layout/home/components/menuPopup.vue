@@ -32,7 +32,7 @@
 					<div class="label">{{ $t(`menuPopup["首页"]`) }}</div>
 				</div>
 
-				<div class="menu van-haptics-feedback" v-for="(item, index) in state.menuList" :key="index">
+				<div class="menu van-haptics-feedback" v-for="(item, index) in state.menuList" @click="handleMenuClick(item)" :key="index">
 					<div class="icon">
 						<img :src="item.gameOneIcon" alt="" />
 					</div>
@@ -88,7 +88,16 @@ const onCollapseMenu = () => {
 	show.value = true;
 	queryLobbyLabelList();
 };
-
+const handleMenuClick = (item) => {
+	console.log(item,'===item')
+	router.push({
+		name: "GameArena",
+		query: {
+			title: item.homeName,
+			gameOneId: item.gameOneClassId,
+		},
+	});
+};
 const queryLobbyLabelList = async () => {
 	const res = await CommonApi.queryLobbyLabelList().catch((err) => err);
 	if (res.code == common.getInstance().ResCode.SUCCESS) {
