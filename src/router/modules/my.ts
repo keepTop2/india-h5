@@ -10,6 +10,22 @@ export const MySubRouter = {
 			},
 		},
 		{
+			path: "/feedbackRecords",
+			name: "feedbackRecords",
+			component: () => import("/@/views/subViews/my/feedbackRecords/feedbackRecords.vue"),
+			meta: {
+				title: "反馈记录",
+			},
+		},
+		{
+			path: "/feedbackDetails",
+			name: "feedbackDetails",
+			component: () => import("/@/views/subViews/my/feedbackDetails/feedbackDetails.vue"),
+			meta: {
+				title: "反馈详情",
+			},
+		},
+		{
 			path: "/medalCollection",
 			name: "medalCollection",
 			component: () => import("/@/views/subViews/my/medalCollection/medalCollection.vue"),

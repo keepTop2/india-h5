@@ -16,6 +16,9 @@ img {
 html {
 	touch-action: manipulation;
 }
+svg {
+	overflow: visible;
+}
 body,
 html {
 	height: 100%;

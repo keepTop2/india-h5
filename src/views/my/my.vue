@@ -125,6 +125,8 @@ import balance_operation_ck from "/@/assets/zh-CN/default/my/balance_operation_c
 import balance_operation_tx from "/@/assets/zh-CN/default/my/balance_operation_tx.png";
 import balance_operation_jy from "/@/assets/zh-CN/default/my/balance_operation_jy.png";
 import balance_operation_tz from "/@/assets/zh-CN/default/my/balance_operation_tz.png";
+import { i18n } from "/@/i18n/index";
+const $: any = i18n.global;
 const router = useRouter();
 const store = useUserStore();
 const themesStore = useThemesStore();
@@ -132,22 +134,22 @@ const theme = computed(() => themesStore.themeName);
 
 const balanceOperationList = [
 	{
-		name: "存款",
+		name: $.t("my['存款']"),
 		icon: balance_operation_ck,
 		path: "/wallet/recharge",
 	},
 	{
-		name: "提现",
+		name: $.t("my['提现']"),
 		icon: balance_operation_tx,
 		path: "/wallet/withdraw",
 	},
 	{
-		name: "交易",
+		name: $.t("my['交易']"),
 		icon: balance_operation_jy,
 		path: "",
 	},
 	{
-		name: "投注记录",
+		name: $.t("my['投注记录']"),
 		icon: balance_operation_tz,
 		path: "",
 	},
@@ -156,19 +158,19 @@ const balanceOperationList = [
 const menuData = {
 	group1: [
 		{
-			name: "安全中心",
+			name: $.t("my['安全中心']"),
 			icon: "/my/aqzx",
 			value: "",
 			path: "/securityCenter",
 		},
 		{
-			name: "邀请好友",
+			name: $.t("my['邀请好友']"),
 			icon: "/my/yqhy",
 			value: "",
 			path: "/inviteFriends",
 		},
 		{
-			name: "代理联盟",
+			name: $.t("my['代理联盟']"),
 			icon: "/my/dllm",
 			value: "",
 			path: "",
@@ -176,25 +178,25 @@ const menuData = {
 	],
 	group2: [
 		{
-			name: "意见反馈",
+			name: $.t("my['意见反馈']"),
 			icon: "/my/yjfk",
 			value: "",
 			path: "/feedback",
 		},
 		{
-			name: "主货币",
+			name: $.t("my['主货币']"),
 			icon: "/my/zhb",
 			value: "",
 			path: "",
 		},
 		{
-			name: "语言",
+			name: $.t("my['语言']"),
 			icon: "/my/lang",
-			value: store.lang,
+			value: store.langName,
 			path: "/language",
 		},
 		{
-			name: "版本号",
+			name: $.t("my['版本号']"),
 			icon: "/my/beh",
 			value: "v 1.00",
 			path: "",

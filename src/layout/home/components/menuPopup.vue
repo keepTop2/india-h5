@@ -86,7 +86,6 @@ let state = reactive({
 
 const onCollapseMenu = () => {
 	show.value = true;
-	console.log("123132");
 	queryLobbyLabelList();
 };
 const handleMenuClick = (item) => {
