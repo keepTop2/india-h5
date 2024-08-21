@@ -107,8 +107,21 @@ export const VenueHome = {
 		},
 		{
 			name: "GameLists",
-			path: "/game/arena/lists", // 动态路由参数，匹配球类
+			path: "/game/arena/lists",
+			meta: {
+				title: "游戏列表",
+				hideTabBar: true,
+			},
 			component: () => import("/@/views/venueHome/GameArena/GameLists/GameLists.vue"),
+		},
+		{
+			name: "GameSearch",
+			path: "/game/arena/search",
+			meta: {
+				title: "游戏搜索",
+				hideTabBar: true,
+			},
+			component: () => import(/* webpackPreload: true */ "/@/views/venueHome/GameArena/GameSearch/GameSearch.vue"),
 		},
 	],
 };
