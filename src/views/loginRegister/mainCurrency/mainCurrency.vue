@@ -41,7 +41,7 @@ const onClickLeft = () => {
 				height: 69px;
 				display: flex;
 				align-items: center;
-				padding: 10px 24px;
+				padding: 20px 55px;
 				@include themeify {
 					color: themed("TB");
 				}

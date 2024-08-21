@@ -7,6 +7,7 @@
 				<SvgIcon iconName="venueHome/gameArena/search" />
 				<input v-model="searchValue" @keydown.enter="handleSearch" ref="searchRef" placeholder="输入游戏名称" type="search" class="color_T2" />
 			</div>
+			<Button @click="handleSearch">搜索</Button>
 		</div>
 
 		<div class="gameList">
@@ -61,6 +62,13 @@ const onClickLeft = () => {
 </script>
 
 <style lang="scss" scoped>
+.GameArena {
+	button {
+		width: 104px;
+		height: 56px;
+		border-radius: 10px;
+	}
+}
 .no_data_container {
 	display: flex;
 	justify-content: center;
@@ -110,10 +118,10 @@ input[type="search"]::-webkit-search-cancel-button {
 	}
 	.nav_bar_input {
 		display: flex;
-		width: 600px;
+		width: 522px;
 		height: 64px;
 		padding: 10px 24px;
-		margin-left: 30px;
+		// margin-left: 30px;
 		display: flex;
 		gap: 16px;
 		border-radius: 12px;
