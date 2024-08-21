@@ -20,3 +20,15 @@ export interface LobbyTopGame {
 	icon: string;
 	gameInfoList: GameInfoList[];
 }
+/**
+ * @description 搜索游戏列表
+ */
+export interface searchGameListRequestBody {
+	orderField?: "string";
+	orderType?: "string";
+	orderName?: "string";
+	orderValue?: "string";
+	pageNumber?: 1;
+	pageSize?: 10;
+	gameName?: "string";
+}

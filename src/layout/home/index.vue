@@ -6,7 +6,7 @@
 	<div class="HomeContainer">
 		<RouterView class="content" />
 	</div>
-	<TabBar />
+	<TabBar v-show="isTabBar" />
 </template>
 
 <script setup lang="ts">
@@ -17,6 +17,10 @@ import { useRoute } from "vue-router";
 const blacklist = ["/home", "/discount"];
 
 const route = useRoute();
+const isTabBar = computed(() => {
+	console.log(route.meta.isTabBar, "=route.meta.isTabBar");
+	return !route.meta.hideTabBar;
+});
 </script>
 
 <style scoped lang="scss">

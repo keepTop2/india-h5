@@ -41,4 +41,12 @@ export default class GameApi {
 			// headers,
 		});
 	};
+	//搜索游戏接口
+	static queryGameInfoByName = (data = {}) => {
+		return useAxiosApi(`/app/game_lobby/api/queryGameInfoByName`, {
+			method: "POST",
+			data,
+			// headers,
+		});
+	};
 }

@@ -24,6 +24,7 @@ const props = defineProps({
 	},
 });
 const onClickCollect = async (item, collect) => {
+	//点击收藏 判断是否登录 未登录添加提示信息
 	const res = await GameApi.gameCollection({
 		gameId: item.id,
 		type: collect,

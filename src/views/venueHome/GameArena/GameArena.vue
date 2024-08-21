@@ -5,7 +5,7 @@
 			<SvgIcon class="collapse_icon color_TB" iconName="common/collapse_icon" @click="onClickLeft" />
 			<div class="nav_bar_input bg_BG3">
 				<SvgIcon iconName="venueHome/gameArena/search" />
-				<input v-model="searchValue" placeholder="输入游戏名称" type="text" class="color_T2" />
+				<input @focus="router.push('/game/arena/search')" placeholder="输入游戏名称" type="text" class="color_T2" />
 			</div>
 		</div>
 		<!-- <SvgIcon iconName="home/event_collect" /> -->
@@ -14,7 +14,7 @@
 				<GameCard v-for="(game, index) in games" :key="index" :image="game.image" />
 			</div>
 		</div>
-		<div v-show="!searchValue">
+		<div>
 			<!-- 轮播图 -->
 			<Banner class="Home_Banner" />
 			<div class="Game_Content">
