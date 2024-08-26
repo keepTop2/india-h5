@@ -18,10 +18,10 @@ const stateLang = reactive({
 });
 
 // 获取语言配置
-const getLanguageDownBox = async () => {
-	const res = await CommonApi.getLanguageDownBox().catch((err) => err);
+const getCommonBusinessDownBox = async () => {
+	const res = await CommonApi.getCommonBusinessDownBox().catch((err) => err);
 	if (res.code == common.getInstance().ResCode.SUCCESS) {
-		stateLang.langList = res.data;
+		stateLang.langList = res.data.languageEnums;
 	}
 };
 
@@ -32,7 +32,7 @@ const onLang = (item) => {
 	userStore.setLangChoice();
 };
 
-getLanguageDownBox();
+getCommonBusinessDownBox();
 
 const onClickLeft = () => {
 	router.go(-1);

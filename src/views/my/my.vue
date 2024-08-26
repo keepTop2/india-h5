@@ -11,7 +11,8 @@
 				</div>
 				<span class="user_name">{{ store.userInfo.userAccount }}</span>
 				<div class="user_id">
-					<span>ID: 455454</span>
+					<span>ID: {{ store.userInfo.userId }}</span>
+					<div class="icon" @click="common.getInstance().copy(store.userInfo.userId)"><SvgIcon iconName="/common/copy" /></div>
 				</div>
 			</div>
 
@@ -131,7 +132,7 @@ const router = useRouter();
 const store = useUserStore();
 const themesStore = useThemesStore();
 const theme = computed(() => themesStore.themeName);
-
+const loginOutShow = ref(false);
 const balanceOperationList = [
 	{
 		name: $.t("my['存款']"),
@@ -186,7 +187,7 @@ const menuData = {
 		{
 			name: $.t("my['主货币']"),
 			icon: "/my/zhb",
-			value: "",
+			value: store.userInfo.mainCurrency,
 			path: "",
 		},
 		{
@@ -209,13 +210,11 @@ let state = reactive({
 	medalListData: [] as UserCenterMedalDetailRespVoList[],
 });
 
-const loginOutShow = ref(false);
-
-const getIndexInfo = async () => {
-	const res = await myApi.getIndexInfo().catch((err) => err);
-	if (res.code == common.getInstance().ResCode.SUCCESS) {
+onMounted(() => {
+	if (store.token) {
+		topNList();
 	}
-};
+});
 
 const topNList = async () => {
 	const res = await medalApi.topNList().catch((err) => err);
@@ -224,8 +223,6 @@ const topNList = async () => {
 		state.medalListData = res.data.userCenterMedalDetailRespVoList;
 	}
 };
-
-topNList();
 
 const onClickCell = (item) => {
 	if (item.path == "/inviteFriends") {
@@ -289,6 +286,7 @@ const loginOut = () => {
 		height: 40px;
 		padding: 0px 20px;
 		display: flex;
+		column-gap: 10px;
 		align-items: center;
 		align-self: center;
 		border-radius: 20px;
@@ -302,6 +300,17 @@ const loginOut = () => {
 		font-size: 24px;
 		font-weight: 400;
 		box-sizing: border-box;
+
+		.icon {
+			width: 28px;
+			height: 28px;
+			display: flex;
+			align-items: center;
+			svg {
+				width: 24px;
+				height: 24px;
+			}
+		}
 	}
 }
 
@@ -349,8 +358,14 @@ const loginOut = () => {
 			font-weight: 400;
 		}
 		.arrow {
-			width: 12px;
-			height: 20px;
+			width: 24px;
+			height: 24px;
+			@include themeify {
+				color: themed("T1");
+			}
+			svg {
+				vertical-align: top;
+			}
 		}
 	}
 

@@ -11,7 +11,7 @@
 			<span>{{ data.unlockTime }}</span>
 			<span>{{ $t('medalDetails["获奖"]') }}</span>
 		</div>
-		<div class="describe">{{ data.medalDesc }}</div>
+		<div class="describe">{{ data.medalDescI18 }}</div>
 
 		<div class="cell_list">
 			<div class="cell">
