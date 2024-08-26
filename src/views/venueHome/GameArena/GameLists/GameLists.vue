@@ -29,11 +29,7 @@ const { gameOneId, label, title, gameTwoId } = route.query as unknown as QueryPa
 
 onMounted(() => {
 	console.log(route, "====route");
-	if (label == 0 || !label) {
-		queryLobbyTopGame();
-	} else {
-		queryGameInfoByOneClassId();
-	}
+	queryLobbyTopGame();
 });
 
 const onClickLeft = () => {
@@ -41,16 +37,9 @@ const onClickLeft = () => {
 	router.back();
 };
 const queryLobbyTopGame = async () => {
-	const res = await GameApi.queryLobbyTopGame({ gameTwoId: gameTwoId });
+	const res = await GameApi.queryGameInfoDetail({ gameOneId, label, gameTwoId: gameTwoId });
 	if (res?.ok) {
-		gameLists.value = res.data;
-	}
-};
-
-const queryGameInfoByOneClassId = async () => {
-	const res = await GameApi.queryGameInfoByOneClassId({ gameOneId, label });
-	if (res?.ok) {
-		gameLists.value = res.data?.[0].gameInfoList;
+		gameLists.value = res.data.records;
 	}
 };
 </script>
