@@ -187,7 +187,7 @@ const menuData = {
 		{
 			name: $.t("my['主货币']"),
 			icon: "/my/zhb",
-			value: "",
+			value: store.userInfo.mainCurrency,
 			path: "",
 		},
 		{

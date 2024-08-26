@@ -50,7 +50,13 @@
 					<span v-if="!isConfirmPasswordValid" class="text">{{ $t('register["两次输入密码不一致"]') }}</span>
 				</div>
 
-				<FormInput v-model="state.mainCurrency" :placeholder="$t(`register['选择主货币']`)" readonly :errorBorder="mainCurrencyRG ? true : false" @click="router.push('/mainCurrency')">
+				<FormInput
+					v-model="state.mainCurrency"
+					:placeholder="$t(`register['选择主货币']`)"
+					readonly
+					:errorBorder="mainCurrencyRG ? true : false"
+					@click="router.push({ path: '/mainCurrency', query: { currency: state.mainCurrency } })"
+				>
 					<template v-slot:right>
 						<SvgIcon class="icon" iconName="/loginOrRegister/arrow" />
 					</template>
@@ -104,12 +110,13 @@ import NavBar from "/@/layout/loginRegister/components/navBar.vue";
 import { registerApi, verifyCodeApi } from "/@/api/loginRegister";
 import HeaderBG from "/@/views/loginRegister/components/headerBG.vue";
 import { showToast } from "vant";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { i18n } from "/@/i18n/index";
 import common from "/@/utils/common";
 import { useUserStore } from "/@/store/modules/user";
 const store = useUserStore();
 const $: any = i18n.global;
+const route = useRoute();
 const router = useRouter();
 const hcaptcha: any = ref(null);
 const eyeShow = ref(true);
@@ -121,10 +128,15 @@ const state = reactive({
 	userAccount: "", // 邮箱或者手机号
 	password: "", // 密码
 	confirmPassword: "", // 密码
-	mainCurrency: "CNY", // 货币
+	mainCurrency: "", // 货币
 	inviteCode: "", // 推荐码
 	deviceNo: common.getInstance().getDevice(), // 设备
 });
+
+// 判断有无选择币种
+if (route.query.currency) {
+	state.mainCurrency = route.query.currency as string;
+}
 
 // 账号正则
 const isAccountValid = computed(() => {

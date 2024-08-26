@@ -4,43 +4,45 @@
 
 	<!-- 宝藏卡片区域 -->
 	<div class="treasure_card">
-		<!-- 宝藏勋章列表 -->
-		<div class="treasure_list">
-			<!-- 遍历展示每个勋章项目 -->
-			<div class="treasure_item" v-for="(item, index) in state.medalRewardRespVOS" :key="index">
-				<!-- 勋章图标 -->
-				<div class="icon" @click="onOpenMedalReward(item)">
-					<VantLazyImg :src="item.icon" />
-				</div>
-				<!-- 解锁勋章数量 -->
-				<div class="value">{{ item.unlockMedalNum }}</div>
-				<!-- 箭头图标，根据是否解锁显示不同的箭头 -->
-				<div class="arrow">
-					<VantLazyImg :src="state.canLightNum >= item.unlockMedalNum ? arrow : theme === ThemeEnum.default ? arrow2 : arrow3" />
+		<template v-if="state.medalRewardRespVOS.length > 0">
+			<!-- 宝藏勋章列表 -->
+			<div class="treasure_list">
+				<!-- 遍历展示每个勋章项目 -->
+				<div class="treasure_item" v-for="(item, index) in state.medalRewardRespVOS" :key="index">
+					<!-- 勋章图标 -->
+					<div class="icon" @click="onOpenMedalReward(item)">
+						<VantLazyImg :src="item.icon" />
+					</div>
+					<!-- 解锁勋章数量 -->
+					<div class="value">{{ item.unlockMedalNum }}</div>
+					<!-- 箭头图标，根据是否解锁显示不同的箭头 -->
+					<div class="arrow">
+						<VantLazyImg :src="state.canLightNum >= item.unlockMedalNum ? arrow : theme === ThemeEnum.default ? arrow2 : arrow3" />
+					</div>
 				</div>
 			</div>
-		</div>
 
-		<!-- 进度条区域 -->
-		<div class="progress">
-			<div class="value" :style="{ width: totalProgress + '%' }"></div>
-		</div>
-
-		<!-- 文本提示列表 -->
-		<div class="text_list">
-			<!-- 提示图标 -->
-			<div class="tooltip">
-				<VantLazyImg class="icon" :src="theme === ThemeEnum.default ? tips_icon : tips_icon_light" />
-				<div class="tooltipText">{{ $t('medalCollection["宝箱奖励流水倍数为8倍"]') }}</div>
+			<!-- 进度条区域 -->
+			<div class="progress">
+				<div class="value" :style="{ width: totalProgress + '%' }"></div>
 			</div>
-			<!-- 遍历展示解锁勋章的提示信息 -->
-			<i18n-t v-for="(item, index) in state.medalRewardRespVOS" :key="index" keypath="medalCollection.解锁勋章" :tag="'p'">
-				<template v-slot:value>
-					<span class="text">{{ $t("medalCollection.枚", { value: item.unlockMedalNum }) }}</span>
-				</template>
-				<template v-slot:num>{{ item.rewardAmount }} </template>
-			</i18n-t>
-		</div>
+
+			<!-- 文本提示列表 -->
+			<div class="text_list">
+				<!-- 提示图标 -->
+				<div class="tooltip">
+					<VantLazyImg class="icon" :src="theme === ThemeEnum.default ? tips_icon : tips_icon_light" />
+					<div class="tooltipText">{{ $t('medalCollection["宝箱奖励流水倍数为8倍"]') }}</div>
+				</div>
+				<!-- 遍历展示解锁勋章的提示信息 -->
+				<i18n-t v-for="(item, index) in state.medalRewardRespVOS" :key="index" keypath="medalCollection.解锁勋章" :tag="'p'">
+					<template v-slot:value>
+						<span class="text">{{ $t("medalCollection.枚", { value: item.unlockMedalNum }) }}</span>
+					</template>
+					<template v-slot:num>{{ item.rewardAmount }} </template>
+				</i18n-t>
+			</div>
+		</template>
 	</div>
 
 	<!-- 已解锁勋章内容区域 -->
@@ -388,7 +390,7 @@ const onClickLeft = () => {
 		font-size: 28px;
 		font-weight: 500;
 		.title {
-			width: min-content;
+			// width: min-content;
 		}
 		.tips {
 			font-size: 24px;
