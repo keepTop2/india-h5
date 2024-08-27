@@ -73,7 +73,7 @@
 						<SvgIcon class="icon" :iconName="item.icon" />
 						<div class="label">{{ item.name }}</div>
 						<div class="value">{{ item.value }}</div>
-						<SvgIcon v-if="item.icon !== '/my/zhb'" class="arrow" iconName="/common/arrow" />
+						<SvgIcon v-if="item.arrow" class="arrow" iconName="/common/arrow" />
 					</div>
 					<div class="cell">
 						<SvgIcon class="icon" iconName="/my/theme" />
@@ -183,24 +183,28 @@ const menuData = {
 			icon: "/my/yjfk",
 			value: "",
 			path: "/feedback",
+			arrow: true,
 		},
 		{
 			name: $.t("my['主货币']"),
 			icon: "/my/zhb",
 			value: store.userInfo.mainCurrency,
 			path: "",
+			arrow: false,
 		},
 		{
 			name: $.t("my['语言']"),
 			icon: "/my/lang",
 			value: store.langName,
 			path: "/language",
+			arrow: true,
 		},
 		{
 			name: $.t("my['版本号']"),
 			icon: "/my/beh",
 			value: "v 1.00",
 			path: "",
+			arrow: false,
 		},
 	],
 };
