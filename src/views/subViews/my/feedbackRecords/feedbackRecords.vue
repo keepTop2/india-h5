@@ -7,6 +7,7 @@
 				<div class="left">2020-05-04 10:10:10</div>
 				<div class="right">
 					<span>ID:{{ 123123123123 }}</span>
+					<div class="icon" @click="common.getInstance().copy(123123123123)"><SvgIcon iconName="/common/copy2" /></div>
 				</div>
 			</div>
 			<div class="content">
@@ -18,6 +19,7 @@
 </template>
 
 <script setup lang="ts">
+import common from "/@/utils/common";
 import { useRouter } from "vue-router";
 const router = useRouter();
 
@@ -56,12 +58,19 @@ const onClickLeft = () => {
 				font-weight: 400;
 			}
 			.right {
+				display: flex;
+				column-gap: 10px;
 				@include themeify {
 					color: themed("T2");
 				}
 				font-family: "PingFang SC";
 				font-size: 24px;
 				font-weight: 400;
+
+				.icon {
+					width: 32px;
+					height: 32px;
+				}
 			}
 		}
 		.content {

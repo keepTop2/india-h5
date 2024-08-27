@@ -161,6 +161,7 @@ export const lang = {
 	},
 	mainCurrency: {
 		请输入货币名称或简称: "请输入货币名称或简称",
+		没结果: "没结果...",
 	},
 	wallet: {
 		类型: "类型",

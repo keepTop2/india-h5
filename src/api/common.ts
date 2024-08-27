@@ -12,10 +12,10 @@ class CommonApi {
 	};
 
 	/**
-	 *@description 多语言数据
+	 *@description 下拉框-语言、币种
 	 */
-	static getLanguageDownBox = (data = {}, headers = {}) => {
-		return useAxiosApi(`/app/common/getLanguageDownBox`, {
+	static getCommonBusinessDownBox = (data = {}, headers = {}) => {
+		return useAxiosApi(`/app/common/getCommonBusinessDownBox`, {
 			method: "POST",
 			data,
 			headers,

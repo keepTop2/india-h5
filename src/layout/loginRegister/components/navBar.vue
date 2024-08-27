@@ -29,7 +29,6 @@ import common from "/@/utils/common";
 import { useUserStore } from "/@/store/modules/user";
 const userStore = useUserStore();
 const checked = ref(userStore.getLang);
-console.log("checked", checked);
 
 const languageShow = ref(false);
 
@@ -43,10 +42,10 @@ const onLang = () => {
 };
 
 // 获取语言配置
-const getLanguageDownBox = async () => {
-	const res = await CommonApi.getLanguageDownBox().catch((err) => err);
+const getCommonBusinessDownBox = async () => {
+	const res = await CommonApi.getCommonBusinessDownBox().catch((err) => err);
 	if (res.code == common.getInstance().ResCode.SUCCESS) {
-		stateLang.langList = res.data;
+		stateLang.langList = res.data.languageEnums;
 		if (!userStore.langChoice) {
 			const filteredData: any = stateLang.langList.find((item) => item.currLang === 1);
 			stateLang.langPicture = filteredData.icon;
@@ -54,7 +53,7 @@ const getLanguageDownBox = async () => {
 	}
 };
 stateLang.langPicture = userStore.langIcon;
-getLanguageDownBox();
+getCommonBusinessDownBox();
 
 const handleConfirm = (selectedValues) => {
 	const { selectedOptions } = selectedValues;
