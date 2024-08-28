@@ -8,19 +8,19 @@
 			<div class="btn1">
 				<!-- 可下注 -->
 				<div v-if="[0, 1].includes(sportsBetEvent.bettingStatus)" :class="[1].includes(sportsBetEvent.bettingStatus) ? 'disabled_container' : 'container van-haptics-feedback'" @click="onBet">
-					<div class="label">投注</div>
+					<div class="label">{{ $t('sports["投注"]') }}</div>
 					<div class="valuation">
-						<span>最高可赢</span>
+						<span>{{ $t('sports["最高可赢"]') }}</span>
 						<span class="ml_6">{{ singleTicketWinningAmount }}</span>
 					</div>
 				</div>
 				<!-- 赔率变化 -->
-				<div v-else-if="sportsBetEvent.bettingStatus == 4" class="container van-haptics-feedback" @click="oddsChanges">接受赔率变化</div>
+				<div v-else-if="sportsBetEvent.bettingStatus == 4" class="container van-haptics-feedback" @click="oddsChanges">{{ $t('sports["[接受赔率变化]"]') }}</div>
 			</div>
 
 			<div class="btn2 van-haptics-feedback" @click="closePopup">
 				<SvgIcon iconName="/venueHome/sports/svg/sports_plus" size="3.466667" />
-				<span class="label">串</span>
+				<span class="label">{{ $t('sports["串"]') }}</span>
 			</div>
 		</div>
 	</div>

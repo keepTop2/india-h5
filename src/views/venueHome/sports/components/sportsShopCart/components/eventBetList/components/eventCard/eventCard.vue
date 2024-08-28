@@ -28,9 +28,9 @@
 			</div>
 			<div class="bet_slip_type mt_2">
 				<div>
-					<span v-if="props.data.isLive" class="theme mr_8">[滚球]</span>
+					<span v-if="props.data.isLive" class="theme mr_8">{{ $t('sports["[滚球]"]') }}</span>
 					<span class="mr_8">{{ props.data.betMarketInfo.betTypeName }}</span>
-					<span>[欧洲盘]</span>
+					<span>{{ $t('sports["[欧洲盘]"]') }}</span>
 				</div>
 				<div v-if="getEventsStatusText(props.data)">
 					<span class="tip">{{ getEventsStatusText(props.data) }}</span>
@@ -54,7 +54,8 @@ import shopCartPubSub from "/@/views/venueHome/sports/hooks/shopCartPubSub";
 import { SportsRootObject } from "/@/views/venueHome/sports/utils/interface";
 import { useSportsBetEventStore } from "/@/store/modules/sports/sportsBetData";
 import SportsCommon from "/@/views/venueHome/sports/utils/common";
-
+import { i18n } from "/@/i18n/index";
+const $: any = i18n.global;
 const sportsBetEvent = useSportsBetEventStore();
 
 const props = withDefaults(
@@ -76,7 +77,7 @@ const getName = (item) => {
 	} else if ((item.betMarketInfo.betType == 5 || item.betMarketInfo.betType == 15) && item.betMarketInfo.key == "2") {
 		return item.teamInfo.awayName;
 	} else if ((item.betMarketInfo.betType == 5 || item.betMarketInfo.betType == 15) && item.betMarketInfo.key == "x") {
-		return "平局";
+		return $.t(`sports['平局']`);
 	} else if ((item.betMarketInfo.betType == 1303 || item.betMarketInfo.betType == 704) && item.betMarketInfo.key == "h") {
 		return item.teamInfo.homeName;
 	} else if ((item.betMarketInfo.betType == 1303 || item.betMarketInfo.betType == 704) && item.betMarketInfo.key == "a") {
@@ -121,15 +122,15 @@ const opacityFn = (item: any) => {
 const getEventsStatusText = (item) => {
 	// 判断赛事状态 与 盘口状态
 	if (item.eventStatus !== "running" || item.betMarketInfo?.marketStatus !== "running") {
-		return "盘口已关闭";
+		return $.t(`sports["盘口已关闭"]`);
 	}
 	if (sportsBetEvent.sportsBetEventData.length > 1) {
 		// 判断当前投注赛事信息 球类 是否支持串关 赛事小节是否支持串关
 		if (item.betMarketInfo?.differentBalls || !item.isParlay || item.betMarketInfo?.combo == 0) {
-			return "不支持串关";
+			return $.t(`sports["不支持串关"]`);
 		}
 		if (item.betMarketInfo.stateCode && item.betMarketInfo.stateCode != 0) {
-			return "暂不支持投注";
+			return $.t(`sports["暂不支持投注"]`);
 		}
 	}
 };

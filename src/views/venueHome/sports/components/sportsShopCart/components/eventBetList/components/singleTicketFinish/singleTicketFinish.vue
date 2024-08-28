@@ -21,9 +21,9 @@
 					</div>
 					<div class="bet_slip_type mt_2">
 						<div>
-							<span v-if="item.isLive" class="theme mr_8">[滚球]</span>
+							<span v-if="item.isLive" class="theme mr_8">{{ $t('sports["[滚球]"]') }}</span>
 							<span class="mr_8">{{ item.betMarketInfo.betTypeName }}</span>
-							<span>[欧洲盘]</span>
+							<span>{{ $t('sports["[欧洲盘]"]') }}</span>
 						</div>
 					</div>
 					<div class="bet_slip_name">
@@ -38,18 +38,18 @@
 
 			<div class="bet-details">
 				<div class="bet-cell">
-					<span class="label">投注金额</span>
+					<span class="label">{{ $t('sports["投注金额"]') }}</span>
 					<span class="value">{{ common.getInstance().formatFloat(props.data.stake) }}</span>
 				</div>
 				<div class="bet-cell">
-					<span class="label">可赢金额</span>
+					<span class="label">{{ $t('sports["可赢金额"]') }}</span>
 					<span class="value">{{ singleTicketWinningAmount }}</span>
 				</div>
 				<div class="bet-cell">
-					<span class="label">注单号</span>
+					<span class="label">{{ $t('sports["注单号"]') }}</span>
 					<span class="order">{{ sportsBetInfo.vendorTransId }}</span>
 				</div>
-				<div class="button" @click="clearCart">确认</div>
+				<div class="button" @click="clearCart">{{ $t('sports["确认"]') }}</div>
 			</div>
 		</div>
 	</div>
@@ -86,7 +86,7 @@ const getName = (item) => {
 	} else if ((item.betMarketInfo.betType == 5 || item.betMarketInfo.betType == 15) && item.betMarketInfo.key == "2") {
 		return item.teamInfo.awayName;
 	} else if ((item.betMarketInfo.betType == 5 || item.betMarketInfo.betType == 15) && item.betMarketInfo.key == "x") {
-		return "平局";
+		return $.t(`sports['平局']`);
 	} else if ((item.betMarketInfo.betType == 1303 || item.betMarketInfo.betType == 704) && item.betMarketInfo.key == "h") {
 		return item.teamInfo.homeName;
 	} else if ((item.betMarketInfo.betType == 1303 || item.betMarketInfo.betType == 704) && item.betMarketInfo.key == "a") {
