@@ -4,7 +4,9 @@
 			<input
 				v-model="stake"
 				type="text"
-				:placeholder="`限额 ${common.getInstance().formatFloat(sportsBetInfo.singleTicketInfo.minBet)} ~ ${common.getInstance().formatFloat(sportsBetInfo.singleTicketInfo.maxBet)}`"
+				:placeholder="`${$t('sports[\'限额\']')} ${common.getInstance().formatFloat(sportsBetInfo.singleTicketInfo.minBet)} ~ ${common
+					.getInstance()
+					.formatFloat(sportsBetInfo.singleTicketInfo.maxBet)}`"
 				readonly
 			/>
 			<div class="unit">USD</div>

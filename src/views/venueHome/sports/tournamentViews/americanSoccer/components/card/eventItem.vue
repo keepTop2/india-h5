@@ -143,40 +143,6 @@ const filterMarkets = (markets: Market[], betTypes: number[]): Market[] => {
 	return results;
 };
 
-// 使用safeAccess函数来安全地访问深层属性 防止多级访问出现undefined报错
-// function safeAccess(obj, path) {
-// 	return path.reduce((xs, x) => (xs && xs[x] != null ? xs[x] : null), obj);
-// }
-
-// 计算是上半场还是下半场 根据 livePeriod 判断当前是第几节
-// const livePeriod = computed(() => {
-// 	const gameInfo = safeAccess(props.event, ["gameInfo"]);
-// 	const eventStatus = safeAccess(props.event, ["eventStatus"]);
-// 	const globalShowTime = safeAccess(props.event, ["globalShowTime"]);
-// 	const { livePeriod, delayLive, isHt } = gameInfo;
-// 	if (eventStatus == "closed") {
-// 		return $.t("sports['比赛已关闭']");
-// 	}
-// 	if (eventStatus == "postponed") {
-// 		return $.t("sports['比赛已推迟']");
-// 	}
-// 	if (SportsCommonFn.isStartMatch(globalShowTime)) {
-// 		if (livePeriod == 0 && !delayLive && isHt) {
-// 			return $.t("sports['中场休息']");
-// 		}
-// 		if (livePeriod == 0 && delayLive && !isHt) {
-// 			return $.t("sports['延迟开赛']");
-// 		}
-// 		if (livePeriod == 1 && !delayLive && !isHt) {
-// 			return $.t("sports['上半场']");
-// 		}
-// 		if (livePeriod == 2 && !delayLive && !isHt) {
-// 			return $.t("sports['下半场']");
-// 		}
-// 	}
-// 	return convertUtcToUtc5AndFormatMD(globalShowTime);
-// });
-
 // 定义计算属性 格式化比赛开始时间
 const formattedGameTime = computed(() => {
 	const minutes = Math.floor(props.event.gameInfo.seconds / 60);

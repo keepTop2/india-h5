@@ -2,14 +2,14 @@
 	<div>
 		<div class="radio" @click="onRadio">
 			<SvgIcon style="fill: none" :iconName="sportsBetEvent.radioStatus ? 'sports_radio_active' : 'sports_radio'" size="3.466667" />
-			<span>自动接受较优赔率</span>
+			<span>{{ $t('sports["自动接受较优赔率"]') }}</span>
 		</div>
 
 		<van-popup v-model:show="show">
 			<div class="container">
-				<div class="title">取消后您将“自动接受较优赔率”</div>
-				<div class="content">即无论下注时的赔率如何变化，系统都将默认您可以接受，页面会出现赔率变化提示，但不会中断您的下注行为。</div>
-				<div class="footer" @click="show = false">我知道了</div>
+				<div class="title">{{ $t('sports["取消后您将“自动接受较优赔率”"]') }}</div>
+				<div class="content">{{ $t('sports["即无论下注时的赔率如何变化，系统都将默认您可以接受，页面会出现赔率变化提示，但不会中断您的下注行为。"]') }}</div>
+				<div class="footer" @click="show = false">{{ $t('sports["我知道了"]') }}</div>
 			</div>
 		</van-popup>
 	</div>

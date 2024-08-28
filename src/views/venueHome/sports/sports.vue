@@ -21,26 +21,27 @@
 				</div>
 			</div>
 			<!-- 遮罩 -->
-			<div class="left-mask"></div>
-			<div class="right-mask"></div>
+			<!--<div class="left-mask"></div>
+			<div class="right-mask"></div>-->
 		</div>
 
 		<div class="operation" v-if="tabActive != 'matchResult'">
 			<!-- 冠军显示 -->
 			<div v-if="tabActive == 'champion'">
-				<span class="fs_24 color_TB">冠军</span>
+				<span class="fs_24 color_TB">{{ $t('sports["冠军"]') }}</span>
 			</div>
 			<!-- 关注显示 -->
 			<div v-if="tabActive == 'attention'" class="bg_BG3 attention">
-				<span :class="[attentionSwitch == 'event' && 'active', 'fs_24']" @click="handleAttentionSwitch('event')">赛事收藏</span>
-				<span :class="[attentionSwitch == 'outright' && 'active', 'fs_24']" @click="handleAttentionSwitch('outright')">冠军盘口</span>
+				<span :class="[attentionSwitch == 'event' && 'active', 'fs_24']" @click="handleAttentionSwitch('event')">{{ $t('sports["赛事收藏"]') }}</span>
+				<span :class="[attentionSwitch == 'outright' && 'active', 'fs_24']" @click="handleAttentionSwitch('outright')">{{ $t('sports["冠军盘口"]') }}</span>
 			</div>
 			<!-- 赛事列表显示 -->
 			<div v-if="isShowFilter">
 				<div v-if="isShowHot">
-					<span :class="['fs_24', (activeSwitchingSort == 'hot' && 'color_TB') || 'color_T3']" @click="switchingSort('hot')">热门</span>&nbsp;
+					<span :class="['fs_24', (activeSwitchingSort == 'hot' && 'color_TB') || 'color_T3']" @click="switchingSort('hot')">{{ $t('sports["热门"]') }}</span
+					>&nbsp;
 					<SvgIcon class="sport_switch" :iconName="(activeSwitchingSort == 'time' && '/venueHome/sports/svg/sport_switch2') || '/venueHome/sports/svg/sport_switch'" />
-					&nbsp;<span :class="['fs_24', (activeSwitchingSort == 'time' && 'color_TB') || 'color_T3']" @click="switchingSort('time')">时间</span>
+					&nbsp;<span :class="['fs_24', (activeSwitchingSort == 'time' && 'color_TB') || 'color_T3']" @click="switchingSort('time')">{{ $t('sports["时间"]') }}</span>
 				</div>
 			</div>
 			<div>
@@ -60,7 +61,7 @@
 import _ from "lodash";
 import dayjs from "dayjs";
 import { useRoute, useRouter } from "vue-router";
-import Banner from "./views/banner/banner.vue";
+import Banner from "./components/banner/banner.vue";
 import pubsub from "/@/pubSub/pubSub";
 import { useLoading } from "/@/directives/loading/hooks";
 import { useToLogin } from "/@/hooks/toLogin";
@@ -106,6 +107,7 @@ const isShowBet = computed(() => {
  * @description 球类列表
  */
 const sportList = computed(() => viewSportPubSubEventData.viewSportData.sports);
+
 /**
  * @description 是否显示过滤  冠军与关注不展示 时间热门切换与联赛筛选
  */
@@ -222,7 +224,7 @@ const openSportPush = async () => {
 	};
 	// console.warn("第二步 准备发送指令到线程管理器");
 	//如果当前激活的tab是 滚球
-	console.log("tabActive.value", tabActive.value);
+	// console.log("tabActive.value", tabActive.value);
 	if (tabActive.value == "rollingBall") {
 		startLoading();
 		//清空参数
@@ -447,7 +449,7 @@ const initRouter = () => {
 		}
 		sportState.sportTypeActive = sportList.value[0]?.sportType;
 		sportsBetEvent.clearLeagueSelect();
-		console.log("firstSportTypePath", firstSportTypePath);
+		// console.log("firstSportTypePath", firstSportTypePath);
 
 		router.push({ path: firstSportTypePath });
 	}
@@ -770,12 +772,12 @@ const unSport = () => {
 	text-align: center;
 }
 .attention {
-	width: 312px;
+	min-width: 312px;
 	height: 52px;
 	border-radius: 25px;
 	line-height: 52px;
 	span {
-		width: 96px;
+		min-width: 96px;
 		padding: 0 30px;
 		display: inline-block;
 		@include themeify {

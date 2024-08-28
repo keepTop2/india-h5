@@ -7,8 +7,8 @@
 				</span>
 			</div>
 			<div class="header_right">
-				<span class="color_T1 fw_400 fs_20">半场</span>
-				<span class="color_T1 fw_400 fs_20">全场</span>
+				<span class="color_T1 fw_400 fs_20">{{ $t('sports["半场"]') }}</span>
+				<span class="color_T1 fw_400 fs_20">{{ $t('sports["全场"]') }}</span>
 			</div>
 		</div>
 		<div class="event_content">

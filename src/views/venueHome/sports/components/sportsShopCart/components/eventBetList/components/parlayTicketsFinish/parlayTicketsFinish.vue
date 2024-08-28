@@ -21,9 +21,9 @@
 					</div>
 					<div class="bet_slip_type mt_2">
 						<div>
-							<span v-if="item.isLive" class="theme mr_8">[滚球]</span>
+							<span v-if="item.isLive" class="theme mr_8">{{ $t('sports["[滚球]"]') }}</span>
 							<span class="mr_8">{{ item.betMarketInfo.betTypeName }}</span>
-							<span>[欧洲盘]</span>
+							<span>{{ $t('sports["[欧洲盘]"]') }}</span>
 						</div>
 					</div>
 					<div class="bet_slip_name">
@@ -45,16 +45,17 @@
 					</div>
 				</div>
 				<div class="bet-cell">
-					<span class="value">预计可赢：{{ getParlayTicketsWinningAmount(item) }} USD</span>
-					<span class="text">小计：{{ common.getInstance().formatFloat(common.getInstance().mul(item.stake, item.betCount)) }} USD</span>
+					<span class="value">{{ $t('sports["[预计可赢]"]') }}{{ getParlayTicketsWinningAmount(item) }} USD</span>
+					<span class="text">{{ $t('sports["[小计]"]') }}{{ common.getInstance().formatFloat(common.getInstance().mul(item.stake, item.betCount)) }} USD</span>
 				</div>
 			</div>
 
 			<div class="footer-button">
 				<div class="button" @click="clearCart">
-					<span>确认</span><span v-if="props.data.betStatus === 0">合计：{{ singleTicketWinningAmount }}</span>
+					<span>{{ $t('sports["[确认]"]') }}</span
+					><span v-if="props.data.betStatus === 0">{{ $t('sports["[合计]"]') }}{{ singleTicketWinningAmount }}</span>
 				</div>
-				<div class="button2" @click="onSecondBet">保留选项，继续投注</div>
+				<div class="button2" @click="onSecondBet">{{ $t('sports["[保留选项]"]') }}</div>
 			</div>
 		</div>
 	</div>
@@ -100,7 +101,7 @@ const getName = (item) => {
 	} else if ((item.betMarketInfo.betType == 5 || item.betMarketInfo.betType == 15) && item.betMarketInfo.key == "2") {
 		return item.teamInfo.awayName;
 	} else if ((item.betMarketInfo.betType == 5 || item.betMarketInfo.betType == 15) && item.betMarketInfo.key == "x") {
-		return "平局";
+		return "$.t(`sports['平局']`);";
 	} else if ((item.betMarketInfo.betType == 1303 || item.betMarketInfo.betType == 704) && item.betMarketInfo.key == "h") {
 		return item.teamInfo.homeName;
 	} else if ((item.betMarketInfo.betType == 1303 || item.betMarketInfo.betType == 704) && item.betMarketInfo.key == "a") {

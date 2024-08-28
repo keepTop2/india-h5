@@ -9,11 +9,11 @@
 				<div class="bet_slip_cell_input" :class="{ input_active: inputActive == item.comboType }" @click="focusInput(item)">
 					<div class="input">
 						<span v-if="betValueState[item.comboType]">{{ betValueState[item.comboType] }}</span>
-						<span v-else class="placeholder">{{ `限额 ${common.getInstance().formatFloat(item.minBet)} ~ ${common.getInstance().formatFloat(item.maxBet)}` }}</span>
+						<span v-else class="placeholder">{{ $t('sports["限额"]') }}{{ `${common.getInstance().formatFloat(item.minBet)} ~ ${common.getInstance().formatFloat(item.maxBet)}` }}</span>
 					</div>
 				</div>
 			</div>
-			<div v-if="betValueState[item.comboType]" class="subtotal">小计：{{ common.getInstance().mul(betValueState[item.comboType], item.betCount) }} USD</div>
+			<div v-if="betValueState[item.comboType]" class="subtotal">{{ $t('sports["小计"]') }}{{ common.getInstance().mul(betValueState[item.comboType], item.betCount) }} USD</div>
 		</div>
 	</div>
 </template>
