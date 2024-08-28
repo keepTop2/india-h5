@@ -1,10 +1,9 @@
 <template>
-	<div class="BetLatest bg_BG3">
-		<VantNavBar title="规则" @onClickLeft="onClickLeft" />
-		<div class="content fs_28 pl_32 pr_32">
-			<h3 class="color_TB fs_32">规则-每日投注大赛</h3>
+	<div class="BetLatest">
+		<div class="content fs_28">
+			<!-- <h3 class="color_TB fs_32">规则-每日投注大赛</h3>
 			<span class="fs_24">{{ Time }}</span>
-			<br />
+			<br /> -->
 			1.比赛奖池与资金密切相关，玩家下注越多，奖池越大。当前奖池将显示在竞赛页面上。<br />
 			2. 10名下注最多的玩家瓜分奖池。<br />
 			3.本次比赛支持投注币种：XEN, MATIC, COP, APT, UAH, IOTX, SHIB, KES, XOF, NEAR, WLD, HNT, FLOOR, IDR, RUNE, DOG, DGB, VNDC, BCD, BSV, NBX,
@@ -96,14 +95,14 @@ const onClickLeft = () => {
 .BetLatest {
 	// height: 100vh;
 	@include themeify {
-		background: themed("BG3");
+		// background: themed("BG3");
 		color: themed("T1");
 	}
 	.content {
 		@include themeify {
-			background: themed("BG3");
+			// background: themed("BG3");
 		}
-		padding-top: 24px;
+		// padding-top: 24px;
 		padding-bottom: 24px;
 		overflow-y: scroll;
 		line-height: 38px;

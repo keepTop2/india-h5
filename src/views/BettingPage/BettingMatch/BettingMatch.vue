@@ -7,13 +7,13 @@
 			<div class="top mt_70">
 				<div>
 					<h3 class="color_TB fs_36 fw_400">{{ $t('betting["比赛奖池"]') }}</h3>
-					<span class="money color_Theme fw_700 fs_64 flex">
+					<span class="money color_Hint fw_700 fs_64 flex">
 						<img :src="icon" alt="" />
 						800,000,00
 					</span>
 				</div>
 				<img class="topimg" :src="topimg" alt="" />
-				<SvgIcon class="hint" @click="rulePage" iconName="common/hint" />
+				<SvgIcon class="hint" @click="ruleShow = true" iconName="common/hint" />
 			</div>
 			<div class="top2 flex">
 				<div class="countDown br_8">
@@ -22,14 +22,14 @@
 				</div>
 				<div class="championInfo bg_BG3 br_8">
 					<img class="jiao" :src="jiao" alt="" />
-					<h3 class="title fw_500 flex fs_24"><img class="size_24" :src="winner" alt="" />{{ $t('betting["上届冠军"]') }}</h3>
+					<h3 class="title fw_500 flex fs_24 color_Hint"><img class="size_24" :src="winner" alt="" />{{ $t('betting["上届冠军"]') }}</h3>
 					<div class="line_home"></div>
 					<div class="winnerInfo flex">
 						<img :src="userIcon" alt="" />
 						<div>
 							<h3 class="userName color_TB fw_600 fs_24">用户昵称</h3>
 							<span class="color_TB fs_22 fw_400">{{ $t('betting["奖金"]') }}</span>
-							<span class="color_TB fs_20 flex fw_700"> <img class="size_20" :src="icon" alt="" /><span class="color_Theme">987,654,321.00</span><span></span> (50%) </span>
+							<span class="color_TB fs_20 flex fw_700"> <img class="size_20" :src="icon" alt="" /><span class="color_Wam-P1">987,654,321.00</span><span></span> (50%) </span>
 						</div>
 					</div>
 				</div>
@@ -42,7 +42,7 @@
 				<div class="userInfo_Bottom">
 					<div class="userInfo_Bottom_left">
 						<p class="color_T3 fs_24 fw_400 lh_34">{{ $t('betting["我的位置"]') }}</p>
-						<p class="color_yellow-ffe-500 fs30 fw_400 lh_40">50+</p>
+						<p class="color_Hint fs30 fw_400 lh_40">50+</p>
 					</div>
 					<div class="rightLine"></div>
 					<div class="userInfo_Bottom_right" style="text-align: center">
@@ -112,6 +112,12 @@
 					</template>
 				</Table>
 			</Dialog>
+			<Dialog class="dialog" :visible="ruleShow" @close="ruleShow = false">
+				<template #title>
+					<div class="title fs_30 color_TB">规则说明</div>
+				</template>
+				<RulePage />
+			</Dialog>
 		</div>
 	</div>
 </template>
@@ -120,6 +126,7 @@
 import { ref, computed } from "vue";
 import Table from "./components/Table/Table.vue";
 import Dialog from "./components/Dialog/Dialog.vue";
+import RulePage from "../BetRule/BetRule.vue";
 import { RouteRecordRaw, useRouter } from "vue-router";
 import countDown from "./components/CountDown/CountDown.vue";
 import { useUserStore } from "/@/store/modules/user";
@@ -134,7 +141,7 @@ const router = useRouter();
 /**
  * 投注比赛
  */
-
+const ruleShow = ref(false);
 const dialogShow = ref(false);
 const UserStore = useUserStore();
 const userInfo = computed(() => {
