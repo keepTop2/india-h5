@@ -74,6 +74,7 @@
 					height: 170px;
 				}
 				.countDown {
+					width: 342px;
 					padding: 23px 30px;
 					box-sizing: border-box;
 					border-radius: 20px;
@@ -85,6 +86,7 @@
 					}
 				}
 				.championInfo {
+					width: 342px;
 					position: relative;
 					border-radius: 20px;
 					background: linear-gradient(90deg, #9923b6 0%, rgba(153, 35, 182, 0.2) 100%);
@@ -110,7 +112,6 @@
 					gap: 12px;
 					// height: 66px;
 					line-height: 62px;
-					color: #ffe500;
 				}
 				.line {
 					margin: 0;

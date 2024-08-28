@@ -42,14 +42,6 @@ export const MySubRouter = {
 			},
 		},
 		{
-			path: "/betting/record",
-			name: "bettingRecord",
-			component: () => import("/@/views/BettingRecord/BettingRecord.vue"),
-			meta: {
-				title: "投注记录",
-			},
-		},
-		{
 			path: "/messageCenter",
 			name: "messageCenter",
 			component: () => import("/@/views/subViews/my/messageCenter/messageCenter.vue"),

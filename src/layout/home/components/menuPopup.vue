@@ -12,14 +12,14 @@
 					<div class="icon"><img :src="task_icon" alt="" /></div>
 					<div class="label">{{ $t(`menuPopup["任务"]`) }}</div>
 				</div>
-				<div class="wheel van-haptics-feedback">
+				<div class="wheel van-haptics-feedback" @click="toPath('/lottery')">
 					<div class="icon"><img :src="wheel_icon" alt="" /></div>
 					<div class="label">{{ $t(`menuPopup["转盘"]`) }}</div>
 				</div>
 			</div>
 
 			<div class="menu_list">
-				<div class="menu van-haptics-feedback">
+				<div class="menu van-haptics-feedback" @click="toPath('/bettingMatch')">
 					<div class="icon">
 						<img :src="mrjs" />
 					</div>

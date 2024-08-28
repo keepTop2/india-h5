@@ -41,6 +41,15 @@ const routes = [
 		component: () => import("/@/views/loginRegister/userAgreement/userAgreement.vue"),
 		meta: { title: "用户协议" },
 	},
+	{
+		//转盘
+		path: "/lottery",
+		name: "Lottery",
+		component: () => import("/@/views/Lottery/Lottery.vue"),
+		meta: {
+			title: "转盘",
+		},
+	},
 	// 注册子页面
 	// RegisterSubPage,
 	// 钱包子页面
