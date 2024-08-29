@@ -2,51 +2,53 @@
 <template>
 	<div class="Sports">
 		<Banner class="Home_Banner" />
-		<!-- 滚球 今日 早盘 冠军 关注 -->
-		<div class="tabs">
-			<div class="tab" :class="{ 'tab-active': tabActive == key }" v-for="(value, key) of sportTabPushActions" :key="key" @click="onTab(key)">
-				{{ value.name }}
+		<van-sticky>
+			<!-- 滚球 今日 早盘 冠军 关注 -->
+			<div class="tabs">
+				<div class="tab" :class="{ 'tab-active': tabActive == key }" v-for="(value, key) of sportTabPushActions" :key="key" @click="onTab(key)">
+					{{ value.name }}
+				</div>
 			</div>
-		</div>
 
-		<!-- 球类 -->
-		<div class="list">
-			<div class="type-list" v-show="tabActive != 'attention'">
-				<div class="type-item" v-for="(item, index) in sportList" v-show="item.count" :key="index" @click="onSportsType(item)">
-					<div class="value" :class="{ 'label-active': sportState.sportTypeActive == item?.sportType }">{{ item.count }}</div>
-					<div class="icon" :class="{ 'icon-active': sportState.sportTypeActive == item?.sportType }">
-						<SvgIcon :iconName="sportState.sportTypeActive == item?.sportType ? item.activeIcon : item.icon" size="5.333333" />
+			<!-- 球类 -->
+			<div class="list">
+				<div class="type-list" v-show="tabActive != 'attention'">
+					<div class="type-item" v-for="(item, index) in sportList" v-show="item.count" :key="index" @click="onSportsType(item)">
+						<div class="value" :class="{ 'label-active': sportState.sportTypeActive == item?.sportType }">{{ item.count }}</div>
+						<div class="icon" :class="{ 'icon-active': sportState.sportTypeActive == item?.sportType }">
+							<SvgIcon :iconName="sportState.sportTypeActive == item?.sportType ? item.activeIcon : item.icon" size="5.333333" />
+						</div>
+						<div class="label" :class="{ 'label-active': sportState.sportTypeActive == item?.sportType }">{{ item.sportName }}</div>
 					</div>
-					<div class="label" :class="{ 'label-active': sportState.sportTypeActive == item?.sportType }">{{ item.sportName }}</div>
 				</div>
 			</div>
-		</div>
 
-		<div class="operation" :class="{ pt_zero: tabActive == 'attention' }" v-if="tabActive != 'matchResult'">
-			<!-- 冠军显示 -->
-			<template v-if="tabActive == 'champion'">
-				<span class="fs_24 color_TB">{{ $t('sports["冠军"]') }}</span>
-			</template>
-			<!-- 关注显示 -->
-			<div v-if="tabActive == 'attention'" class="bg_BG3 attention">
-				<span :class="[attentionSwitch == 'event' && 'active', 'fs_22']" @click="handleAttentionSwitch('event')">{{ $t('sports["赛事收藏"]') }}</span>
-				<span :class="[attentionSwitch == 'outright' && 'active', 'fs_22']" @click="handleAttentionSwitch('outright')">{{ $t('sports["冠军盘口"]') }}</span>
-			</div>
-			<!-- 赛事列表显示 -->
-			<template v-if="isShowFilter">
-				<div v-if="isShowHot">
-					<span :class="['fs_24', (activeSwitchingSort == 'hot' && 'color_TB') || 'color_T3']" @click="switchingSort('hot')">{{ $t('sports["热门"]') }}</span
-					>&nbsp;
-					<SvgIcon class="sport_switch" :iconName="(activeSwitchingSort == 'time' && '/venueHome/sports/svg/sport_switch2') || '/venueHome/sports/svg/sport_switch'" />
-					&nbsp;<span :class="['fs_24', (activeSwitchingSort == 'time' && 'color_TB') || 'color_T3']" @click="switchingSort('time')">{{ $t('sports["时间"]') }}</span>
+			<div class="operation" :class="{ pt_zero: tabActive == 'attention' }" v-if="tabActive != 'matchResult'">
+				<!-- 冠军显示 -->
+				<template v-if="tabActive == 'champion'">
+					<span class="fs_24 color_TB">{{ $t('sports["冠军"]') }}</span>
+				</template>
+				<!-- 关注显示 -->
+				<div v-if="tabActive == 'attention'" class="bg_BG3 attention">
+					<span :class="[attentionSwitch == 'event' && 'active', 'fs_22']" @click="handleAttentionSwitch('event')">{{ $t('sports["赛事收藏"]') }}</span>
+					<span :class="[attentionSwitch == 'outright' && 'active', 'fs_22']" @click="handleAttentionSwitch('outright')">{{ $t('sports["冠军盘口"]') }}</span>
 				</div>
-			</template>
-			<div>
-				<SvgIcon class="sport_filter color_T3" v-if="isShowFilter" @click="filterLeague" iconName="/venueHome/sports/svg/sport_filter" />
-				<SvgIcon class="sport_fold color_T3" v-show="isFold" iconName="/venueHome/sports/svg/sport_fold2" @click="onExpandAngCollapse" />
-				<SvgIcon class="sport_fold color_T3" v-show="!isFold" iconName="/venueHome/sports/svg/sport_fold" @click="onExpandAngCollapse" />
+				<!-- 赛事列表显示 -->
+				<template v-if="isShowFilter">
+					<div v-if="isShowHot">
+						<span :class="['fs_24', (activeSwitchingSort == 'hot' && 'color_TB') || 'color_T3']" @click="switchingSort('hot')">{{ $t('sports["热门"]') }}</span
+						>&nbsp;
+						<SvgIcon class="sport_switch" :iconName="(activeSwitchingSort == 'time' && '/venueHome/sports/svg/sport_switch2') || '/venueHome/sports/svg/sport_switch'" />
+						&nbsp;<span :class="['fs_24', (activeSwitchingSort == 'time' && 'color_TB') || 'color_T3']" @click="switchingSort('time')">{{ $t('sports["时间"]') }}</span>
+					</div>
+				</template>
+				<div>
+					<SvgIcon class="sport_filter color_T3" v-if="isShowFilter" @click="filterLeague" iconName="/venueHome/sports/svg/sport_filter" />
+					<SvgIcon class="sport_fold color_T3" v-show="isFold" iconName="/venueHome/sports/svg/sport_fold2" @click="onExpandAngCollapse" />
+					<SvgIcon class="sport_fold color_T3" v-show="!isFold" iconName="/venueHome/sports/svg/sport_fold" @click="onExpandAngCollapse" />
+				</div>
 			</div>
-		</div>
+		</van-sticky>
 		<!-- 赛事列表出口 -->
 		<RouterView />
 		<!-- 体育购物车 -->
@@ -607,6 +609,9 @@ const unSport = () => {
 		align-items: center;
 		justify-content: space-between;
 		padding: 24px;
+		@include themeify {
+			background-color: themed("BG1");
+		}
 		box-sizing: border-box;
 
 		.sport_switch {
@@ -669,6 +674,9 @@ const unSport = () => {
 			width: 0; /* 隐藏垂直滚动条 */
 			height: 0; /* 隐藏水平滚动条 */
 		}
+		@include themeify {
+			background-color: themed("BG1");
+		}
 
 		.tab {
 			flex: 1;
@@ -699,7 +707,9 @@ const unSport = () => {
 
 	.list {
 		position: relative;
-
+		@include themeify {
+			background-color: themed("BG1");
+		}
 		.type-list {
 			display: flex;
 			align-items: center;
