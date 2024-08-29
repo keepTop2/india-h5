@@ -16,7 +16,7 @@ const gameList = [{ icon: Img }, { icon: Img }, { icon: Img }];
 /* Your styles here */
 .banner {
 	// margin: 32px 0;
+	width: 100%;
 	height: 360px;
-	margin-bottom: 36px;
 }
 </style>

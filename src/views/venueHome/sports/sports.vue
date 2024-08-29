@@ -13,37 +13,34 @@
 		<div class="list">
 			<div class="type-list" v-show="tabActive != 'attention'">
 				<div class="type-item" v-for="(item, index) in sportList" v-show="item.count" :key="index" @click="onSportsType(item)">
+					<div class="value" :class="{ 'label-active': sportState.sportTypeActive == item?.sportType }">{{ item.count }}</div>
 					<div class="icon" :class="{ 'icon-active': sportState.sportTypeActive == item?.sportType }">
-						<div class="value">{{ item.count }}</div>
 						<SvgIcon :iconName="sportState.sportTypeActive == item?.sportType ? item.activeIcon : item.icon" size="5.333333" />
 					</div>
 					<div class="label" :class="{ 'label-active': sportState.sportTypeActive == item?.sportType }">{{ item.sportName }}</div>
 				</div>
 			</div>
-			<!-- 遮罩 -->
-			<!--<div class="left-mask"></div>
-			<div class="right-mask"></div>-->
 		</div>
 
-		<div class="operation" v-if="tabActive != 'matchResult'">
+		<div class="operation" :class="{ pt_zero: tabActive == 'attention' }" v-if="tabActive != 'matchResult'">
 			<!-- 冠军显示 -->
-			<div v-if="tabActive == 'champion'">
+			<template v-if="tabActive == 'champion'">
 				<span class="fs_24 color_TB">{{ $t('sports["冠军"]') }}</span>
-			</div>
+			</template>
 			<!-- 关注显示 -->
 			<div v-if="tabActive == 'attention'" class="bg_BG3 attention">
-				<span :class="[attentionSwitch == 'event' && 'active', 'fs_24']" @click="handleAttentionSwitch('event')">{{ $t('sports["赛事收藏"]') }}</span>
-				<span :class="[attentionSwitch == 'outright' && 'active', 'fs_24']" @click="handleAttentionSwitch('outright')">{{ $t('sports["冠军盘口"]') }}</span>
+				<span :class="[attentionSwitch == 'event' && 'active', 'fs_22']" @click="handleAttentionSwitch('event')">{{ $t('sports["赛事收藏"]') }}</span>
+				<span :class="[attentionSwitch == 'outright' && 'active', 'fs_22']" @click="handleAttentionSwitch('outright')">{{ $t('sports["冠军盘口"]') }}</span>
 			</div>
 			<!-- 赛事列表显示 -->
-			<div v-if="isShowFilter">
+			<template v-if="isShowFilter">
 				<div v-if="isShowHot">
 					<span :class="['fs_24', (activeSwitchingSort == 'hot' && 'color_TB') || 'color_T3']" @click="switchingSort('hot')">{{ $t('sports["热门"]') }}</span
 					>&nbsp;
 					<SvgIcon class="sport_switch" :iconName="(activeSwitchingSort == 'time' && '/venueHome/sports/svg/sport_switch2') || '/venueHome/sports/svg/sport_switch'" />
 					&nbsp;<span :class="['fs_24', (activeSwitchingSort == 'time' && 'color_TB') || 'color_T3']" @click="switchingSort('time')">{{ $t('sports["时间"]') }}</span>
 				</div>
-			</div>
+			</template>
 			<div>
 				<SvgIcon class="sport_filter color_T3" v-if="isShowFilter" @click="filterLeague" iconName="/venueHome/sports/svg/sport_filter" />
 				<SvgIcon class="sport_fold color_T3" v-show="isFold" iconName="/venueHome/sports/svg/sport_fold2" @click="onExpandAngCollapse" />
@@ -603,29 +600,66 @@ const unSport = () => {
 .Sports {
 	height: 100%;
 	box-sizing: border-box;
+
 	.operation {
+		max-height: 74px;
 		display: flex;
+		align-items: center;
 		justify-content: space-between;
-		padding: 17px 24px;
+		padding: 24px;
+		box-sizing: border-box;
+
+		.sport_switch {
+			width: 18px;
+			height: 16px;
+		}
+		.sport_filter {
+			margin-right: 40px;
+		}
+		.sport_filter,
+		.sport_fold {
+			width: 26px;
+			height: 26px;
+		}
+
+		.attention {
+			display: flex;
+			gap: 8px;
+			min-width: 288px;
+			height: 48px;
+			padding: 4px 8px;
+			border-radius: 12px;
+			box-sizing: border-box;
+			span {
+				display: block;
+				min-width: 136px;
+				height: 40px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				padding: 0px 10px;
+				@include themeify {
+					color: themed("T1");
+				}
+			}
+			.active {
+				@include themeify {
+					color: themed("TB-P");
+					background-color: themed("Theme");
+					border-radius: 10px;
+				}
+			}
+		}
 	}
-	.sport_switch {
-		width: 18px;
-		height: 16px;
+	.pt_zero {
+		padding-top: 0px;
 	}
-	.sport_filter {
-		margin-right: 40px;
-	}
-	.sport_filter,
-	.sport_fold {
-		width: 26px;
-		height: 26px;
-	}
+
 	.tabs {
 		width: 100%;
-		height: 52px;
 		display: flex;
-		padding: 0px 24px;
-		margin-bottom: 15px;
+		gap: 12px;
+		padding: 36px 24px;
 		overflow-x: auto; /* 允许横向滚动 */
 		white-space: nowrap; /* 禁止内容换行折行 */
 		box-sizing: border-box;
@@ -635,13 +669,11 @@ const unSport = () => {
 			width: 0; /* 隐藏垂直滚动条 */
 			height: 0; /* 隐藏水平滚动条 */
 		}
-		// scrollbar-width: none; /* 隐藏滚动条宽度 */
 
 		.tab {
-			min-width: 108px;
 			flex: 1;
+			min-width: 108px;
 			height: 52px;
-			margin-left: 11px;
 			padding: 8px 15px;
 			border-radius: 12px;
 			@include themeify {
@@ -655,9 +687,7 @@ const unSport = () => {
 			line-height: 36px;
 			display: inline-table;
 			box-sizing: border-box;
-			&:first-child {
-				margin-left: 0px;
-			}
+			cursor: pointer;
 		}
 		.tab-active {
 			@include themeify {
@@ -674,7 +704,6 @@ const unSport = () => {
 			display: flex;
 			align-items: center;
 			height: 118px;
-			padding: 0px 24px;
 			@include themeify {
 				// background-color: themed("BG3");
 			}
@@ -690,52 +719,47 @@ const unSport = () => {
 			scrollbar-width: none; /* 隐藏滚动条宽度 */
 
 			.type-item {
-				margin-right: 53px;
-				&:last-child {
-					margin-right: 0px;
+				position: relative;
+				min-width: 140px;
+				text-align: center;
+				.value {
+					position: absolute;
+					top: 0px;
+					right: 15px;
+					font-family: "PingFang SC";
+					@include themeify {
+						color: themed("T1");
+					}
+					font-size: 20px;
+					font-weight: 400;
 				}
 				.icon {
-					position: relative;
-					width: 40px;
-					height: 40px;
-					margin: 0 auto;
-					margin-top: 20px;
+					width: 44px;
+					height: 44px;
+					margin: 20px auto 0px;
 					@include themeify {
 						color: themed("T3");
-					}
-					.value {
-						position: absolute;
-						top: -20px;
-						left: calc(100% + 4px);
-						font-family: "PingFang SC";
-						@include themeify {
-							color: themed("T1");
-						}
-						font-size: 20px;
-						font-weight: 400;
 					}
 				}
 				.icon-active {
 					@include themeify {
 						color: themed("T3");
 					}
-					.value {
-						@include themeify {
-							color: themed("Theme");
-						}
-					}
 				}
 				.label {
 					margin-top: 8px;
+					padding: 0px 5px;
 					@include themeify {
 						color: themed("T1");
 					}
 					font-family: "PingFang SC";
-					font-size: 24px;
+					font-size: 22px;
 					font-weight: 400;
 					line-height: 36px;
+					white-space: nowrap; /* 禁止文本换行 */
+					overflow: hidden; /* 隐藏超出容器的内容 */
+					text-overflow: ellipsis; /* 超出部分显示省略号 */
 				}
-
 				.label-active {
 					@include themeify {
 						color: themed("Theme");
@@ -743,53 +767,10 @@ const unSport = () => {
 				}
 			}
 		}
-
-		.left-mask {
-			position: absolute;
-			top: 0;
-			left: 0;
-			width: 40px;
-			height: 100%;
-			@include themeify {
-				background: themed("tab-left-mask");
-			}
-		}
-
-		.right-mask {
-			position: absolute;
-			top: 0;
-			right: 0;
-			width: 40px;
-			height: 100%;
-			@include themeify {
-				background: themed("tab-right-mask");
-			}
-		}
 	}
 }
 .card {
 	padding: 0px 24px;
 	text-align: center;
-}
-.attention {
-	min-width: 312px;
-	height: 52px;
-	border-radius: 25px;
-	line-height: 52px;
-	span {
-		min-width: 96px;
-		padding: 0 30px;
-		display: inline-block;
-		@include themeify {
-			color: themed("T1");
-		}
-	}
-	.active {
-		@include themeify {
-			color: themed("TB-P");
-			background-color: themed("Theme");
-			border-radius: 25px;
-		}
-	}
 }
 </style>
