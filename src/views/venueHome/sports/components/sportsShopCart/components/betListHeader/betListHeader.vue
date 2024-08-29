@@ -19,6 +19,8 @@ import { getIndexInfo } from "/@/views/venueHome/sports/utils/commonFn";
 import { useSportsBetEventStore } from "/@/store/modules/sports/sportsBetData";
 import { useSportsBetInfoStore } from "/@/store/modules/sports/sportsBetInfo";
 import { useSportsBetChampionStore } from "/@/store/modules/sports/sportsBetChampionData";
+import { i18n } from "/@/i18n/index";
+const $: any = i18n.global;
 const sportsBetEvent = useSportsBetEventStore();
 const sportsBetInfo = useSportsBetInfoStore();
 const sportsBetChampion = useSportsBetChampionStore();
@@ -35,13 +37,13 @@ const props = withDefaults(
 const headerLabel = () => {
 	if (props.isShowBet) {
 		if (sportsBetEvent.sportsBetEventData.length == 1) {
-			return "单";
+			return $.t(`sports["单"]`);
 		}
 		if (sportsBetEvent.sportsBetEventData.length > 1) {
-			return "串";
+			return $.t(`sports["串"]`);
 		}
 	} else {
-		return "单";
+		return $.t(`sports["单"]`);
 	}
 };
 

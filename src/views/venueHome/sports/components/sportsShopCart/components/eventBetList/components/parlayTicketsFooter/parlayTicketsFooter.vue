@@ -15,21 +15,21 @@
 					:class="[1, 2, 5].includes(sportsBetEvent.bettingStatus) ? 'disabled_container' : 'container van-haptics-feedback'"
 					@click="onBet"
 				>
-					<div class="label">投注</div>
+					<div class="label">{{ $t('sports["投注"]') }}</div>
 					<div class="valuation">
-						<span>最高可赢</span>
+						<span>{{ $t('sports["最高可赢"]') }}</span>
 						<span>{{ getParlayTicketsWinningAmount }}</span>
 					</div>
 				</div>
 				<!-- 串关数量没达到要求 -->
-				<div v-else-if="sportsBetEvent.bettingStatus == 3" class="container disabled_container">至少选择{{ combo }}场比赛</div>
+				<div v-else-if="sportsBetEvent.bettingStatus == 3" class="container disabled_container">{{ $t('sports["至少选择场比赛"]', { value: combo }) }}</div>
 				<!-- 赔率变化 -->
-				<div v-else-if="sportsBetEvent.bettingStatus == 4" class="container van-haptics-feedback" @click="oddsChanges">接受赔率变化</div>
+				<div v-else-if="sportsBetEvent.bettingStatus == 4" class="container van-haptics-feedback" @click="oddsChanges">{{ $t('sports["接受赔率变化"]') }}</div>
 			</div>
 
 			<div class="btn2 van-haptics-feedback" @click="closePopup">
 				<SvgIcon iconName="/venueHome/sports/svg/sports_plus" size="3.466667" />
-				<span class="label">串</span>
+				<span class="label">{{ $t('sports["串"]') }}</span>
 			</div>
 		</div>
 	</div>

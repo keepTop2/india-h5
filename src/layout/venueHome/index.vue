@@ -17,11 +17,11 @@ const isTabBar = computed(() => {
 <style scoped lang="scss">
 .venueHome-container {
 	min-height: 100vh;
-	.content {
-		padding-bottom: 160px;
-	}
 	@include themeify {
 		background-color: themed("BG1");
+	}
+	.content {
+		height: 100vh;
 	}
 }
 </style>

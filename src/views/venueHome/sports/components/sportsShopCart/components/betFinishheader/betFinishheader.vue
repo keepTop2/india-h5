@@ -3,8 +3,8 @@
 		<div class="header-title">
 			<img v-if="props.betStatus == 0" :src="success_icon" />
 			<img v-if="props.betStatus == 1" :src="close_icon" />
-			<span v-if="props.betStatus == 0">投注成功</span>
-			<span v-if="props.betStatus == 1">投注失败</span>
+			<span v-if="props.betStatus == 0">{{ $t('sports["投注成功"]') }}</span>
+			<span v-if="props.betStatus == 1">{{ $t('sports["投注失败"]') }}</span>
 		</div>
 		<div class="header-right">
 			<SvgIcon iconName="/venueHome/sports/svg/close" size="3.466667" @click="clearCart" />

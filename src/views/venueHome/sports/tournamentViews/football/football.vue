@@ -41,8 +41,10 @@ const toggleDisplay = (val?: number) => {
 </script>
 
 <style scoped lang="scss">
-@import "/@/views/venueHome/sports/common.scss";
 .list-content {
-	height: calc(100vh - 97px);
+	height: 100%;
+	@include themeify {
+		background-color: themed("BG1");
+	}
 }
 </style>

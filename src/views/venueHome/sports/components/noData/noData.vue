@@ -28,7 +28,7 @@ import noData from "/@/assets/zh-CN/default/venueHome/sports/noData.png";
 	.label {
 		margin-top: 24px;
 		@include themeify {
-			color: themed("T3-P");
+			color: themed("T3");
 		}
 		font-family: "PingFang SC";
 		font-size: 24px;

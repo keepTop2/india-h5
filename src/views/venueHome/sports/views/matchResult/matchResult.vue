@@ -7,7 +7,6 @@
 					<Card v-if="item.events.length" :data="item" :isExpand="isExpand" :dataIndex="index" @toggleDisplay="toggleDisplay" />
 				</template>
 			</VirtualScrollVirtualList>
-
 			<NoData v-else />
 		</div>
 	</div>
@@ -120,8 +119,13 @@ const toggleDisplay = (val?: number) => {
 		}
 	}
 }
-
+.content {
+	height: 100%;
+}
 .list-content {
-	height: calc(100vh - 97px);
+	height: 100%;
+	@include themeify {
+		background-color: themed("BG1");
+	}
 }
 </style>

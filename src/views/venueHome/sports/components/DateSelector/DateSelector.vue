@@ -78,7 +78,7 @@ onMounted(() => {
 .dateSelector {
 	width: 100%;
 	display: flex;
-	gap: 24px;
+	gap: 12px;
 	padding: 24px;
 	box-sizing: border-box;
 	overflow-x: auto;
@@ -91,28 +91,29 @@ onMounted(() => {
 	}
 	// scrollbar-width: none;
 	.date_item {
-		padding: 4px 36px;
+		min-width: 144px;
+		display: inline-table;
 		height: 84px;
+		padding: 4px 10px;
 		border-radius: 16px;
 		text-align: center;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
 		@include themeify {
 			border: 2px solid themed("Line");
 			color: themed("TB");
 		}
+		box-sizing: border-box;
 		.date {
 			white-space: nowrap;
-			font-size: 22px;
+			font-size: 24px;
 			font-weight: 400;
+			line-height: 38px;
 		}
 	}
 	.active {
 		@include themeify {
 			background-color: themed("Theme");
 			color: themed("TB-P");
-			border: 0;
+			border: 2px solid transparent;
 		}
 	}
 }

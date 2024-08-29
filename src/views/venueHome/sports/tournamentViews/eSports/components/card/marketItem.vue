@@ -11,7 +11,9 @@
 			<div class="data_item" v-if="item">
 				<div v-if="market.marketStatus === 'running'" :class="{ isBright: isBright(item) }" @click="onSetSportsEventData(item)">
 					<div class="label">
-						<span v-if="market.betType == 20"> <template v-if="item?.key == 'h'">主胜</template> <template v-if="item?.key == 'a'">客胜</template></span>
+						<span v-if="market.betType == 20">
+							<template v-if="item?.key == 'h'">{{ $t(`sports["主胜"]`) }}</template> <template v-if="item?.key == 'a'">{{ $t(`sports["客胜"]`) }}</template></span
+						>
 						<span v-if="market.betType == 1">{{ SportsCommon.formatPoint({ betType: market.betType, point: item?.point, key: item?.key }) }}</span>
 						<span v-if="market.betType == 3">
 							{{ item?.keyName }}

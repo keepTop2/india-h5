@@ -14,8 +14,8 @@
 			</div>
 			<div class="bet_slip_type mt_2">
 				<div>
-					<span>[优胜冠军]</span>
-					<span class="ml_8">[欧洲盘]</span>
+					<span>{{ $t('sports["[优胜冠军]"]') }}</span>
+					<span class="ml_8">{{ $t('sports["[欧洲盘]"]') }}</span>
 				</div>
 				<div v-if="getEventsStatusText(props.data)">
 					<span class="tip">{{ getEventsStatusText(props.data) }}</span>

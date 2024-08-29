@@ -7,11 +7,9 @@
  * 
 -->
 <template>
-	<div>
-		<DateSelector v-model="activeDate" :daysNumber="7" :other="true" :direction="true" />
-		<component v-if="leagues" :is="sportsMap[Number(route.params.sportType)]" :listData="leagues" :sportType:string="route.params.sportType" />
-		<NoData v-else />
-	</div>
+	<DateSelector v-model="activeDate" :daysNumber="7" :other="true" :direction="true" />
+	<component v-if="leagues" :is="sportsMap[Number(route.params.sportType)]" :listData="leagues" :sportType:string="route.params.sportType" />
+	<NoData v-else />
 </template>
 
 <script setup lang="ts">
