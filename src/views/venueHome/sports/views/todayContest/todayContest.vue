@@ -7,10 +7,8 @@
  * 
 -->
 <template>
-	<div>
-		<component v-if="events" :is="sportsMap[Number(route.params.sportType)]" :listData="events" :sportType:string="route.params.sportType" />
-		<NoData v-else />
-	</div>
+	<component v-if="events" :is="sportsMap[Number(route.params.sportType)]" :listData="events" :sportType:string="route.params.sportType" />
+	<NoData v-else />
 </template>
 
 <script setup lang="ts">

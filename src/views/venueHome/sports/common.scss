@@ -123,10 +123,12 @@
 			height: 276px;
 			display: flex;
 			padding: 0px 18px 0px 12px;
+			box-sizing: border-box;
 			.content-left {
 				width: 304px;
 				padding-right: 10px;
 				padding-bottom: 20px;
+				box-sizing: border-box;
 				.team-tournament-info {
 					height: 32px;
 					display: flex;
@@ -287,10 +289,10 @@
 				}
 			}
 			.content-right {
+				position: relative;
 				width: 368px;
 				margin-top: 4px;
-				position: relative;
-
+				box-sizing: border-box;
 				.arrow {
 					position: absolute;
 					top: 118px;
