@@ -433,7 +433,7 @@
 		box-shadow: none;
 		.van-dropdown-menu__title {
 			@include themeify {
-				color: themed("TB-P");
+				color: themed("TB");
 				max-width: 370px;
 				text-align: center;
 				white-space: nowrap; /* 禁止换行 */

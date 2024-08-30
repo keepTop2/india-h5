@@ -238,7 +238,7 @@ const clearCart = () => {
 
 				@include themeify {
 					background-color: themed("Theme");
-					color: themed("TB-P");
+					color: themed("TB1");
 				}
 
 				font-family: "PingFang SC";

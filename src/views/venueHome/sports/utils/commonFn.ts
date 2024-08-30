@@ -14,7 +14,7 @@ export const getIndexInfo = async () => {
 	const sportsBetInfo = useSportsBetInfoStore();
 	const res = await CommonApi.getIndexInfo().catch((err) => err);
 	if (res.code == Common.getInstance().ResCode.SUCCESS) {
-		sportsBetInfo.balance = res.data.balance;
+		sportsBetInfo.balance = res.data.totalBalance;
 	}
 };
 

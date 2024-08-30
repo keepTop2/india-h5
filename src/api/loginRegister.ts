@@ -11,13 +11,13 @@ export class loginApi {
 		});
 	};
 	// 登录
-	static submitUserLogin = (data = {}, headers = {}) => {
-		return useAxiosApi(`/app/login/api/submitUserLogin`, {
-			method: "POST",
-			data,
-			headers,
-		});
-	};
+	// static submitUserLogin = (data = {}, headers = {}) => {
+	// 	return useAxiosApi(`/app/login/api/submitUserLogin`, {
+	// 		method: "POST",
+	// 		data,
+	// 		headers,
+	// 	});
+	// };
 }
 
 // 注册
@@ -30,14 +30,14 @@ export class registerApi {
 			headers,
 		});
 	};
-	// 注册
-	static submitRegister = (data = {}, headers = {}) => {
-		return useAxiosApi(`/app/login/api/submitRegister`, {
-			method: "POST",
-			data,
-			headers,
-		});
-	};
+	// // 注册
+	// static submitRegister = (data = {}, headers = {}) => {
+	// 	return useAxiosApi(`/app/login/api/submitRegister`, {
+	// 		method: "POST",
+	// 		data,
+	// 		headers,
+	// 	});
+	// };
 }
 
 // 验证码

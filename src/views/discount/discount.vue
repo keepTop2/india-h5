@@ -199,7 +199,7 @@ const getActivity = async (): Promise<void> => {
 					// line-height: 54px;
 					box-sizing: border-box;
 					@include themeify {
-						color: themed("TB-P");
+						color: themed("TB");
 					}
 					text-align: center;
 

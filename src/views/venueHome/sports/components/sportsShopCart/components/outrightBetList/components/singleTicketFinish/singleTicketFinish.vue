@@ -175,7 +175,7 @@ const clearCart = () => {
 				border-radius: 8px;
 				@include themeify {
 					background-color: themed("Theme");
-					color: themed("TB-P");
+					color: themed("TB");
 				}
 				font-family: "PingFang SC";
 				font-size: 30px;

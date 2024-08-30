@@ -65,7 +65,7 @@ const showPopup = () => {
 		justify-content: center;
 		border-radius: 16px;
 		@include themeify {
-			background-color: themed("TB-P");
+			background-color: themed("TB1");
 			color: themed("Theme");
 		}
 		font-family: "DIN Alternate";

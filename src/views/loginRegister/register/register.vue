@@ -124,7 +124,7 @@ const btnDisabled = ref(true);
 const mainCurrencyRG = ref(false);
 const userAgreement = ref(false); // 用户协议认证
 
-const state = reactive({
+let state = reactive({
 	userAccount: "", // 邮箱或者手机号
 	password: "", // 密码
 	confirmPassword: "", // 密码
@@ -194,25 +194,17 @@ const onRegister = async () => {
 		mainCurrencyRG.value = true;
 		return;
 	}
-	// 校验注册账号
-	const res = await registerApi.userRegister(state).catch((err) => err);
-	if (res.code == common.getInstance().ResCode.SUCCESS) {
-		// 图形验证
-		hcaptcha.value?.validate();
-	}
-};
-
-// 图形验证
-const onSubmit = async (token: string) => {
-	const res = await verifyCodeApi.verifyCode({ verifyToken: token }).catch((err) => err);
-	if (res.code == common.getInstance().ResCode.SUCCESS) {
-		submitRegister();
-	}
+	// 图形验证
+	hcaptcha.value?.validate();
 };
 
 // 注册
-const submitRegister = async () => {
-	const res = await registerApi.submitRegister(state).catch((err) => err);
+const onSubmit = async (token: string) => {
+	const params = {
+		verifyToken: token,
+	};
+	state = Object.assign({}, params, state);
+	const res = await registerApi.userRegister(state).catch((err) => err);
 	if (res.code == common.getInstance().ResCode.SUCCESS) {
 		showToast(res.message);
 		store.setInfo(res.data);

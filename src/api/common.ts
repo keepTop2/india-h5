@@ -21,6 +21,17 @@ class CommonApi {
 			headers,
 		});
 	};
+
+	/**
+	 *@description 获取会员首页信息
+	 */
+	static getIndexInfo = (data = {}, headers = {}) => {
+		return useAxiosApi(`/app/user-info/api/getIndexInfo`, {
+			method: "POST",
+			data,
+			headers,
+		});
+	};
 }
 
 export default CommonApi;
