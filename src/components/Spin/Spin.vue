@@ -79,7 +79,7 @@ watch(
 			console.error("奖品信息错误");
 			return;
 		}
-		spinRotate.value = `${(360 / 16) * (16 - findIndex) + 270}deg`;
+		spinRotate.value = `${(360 / 16) * (16 - findIndex) + 90}deg`;
 		await nextTick();
 		rewardAni.value = true;
 	}
@@ -195,9 +195,11 @@ const handleStartSpin = () => {
 </script>
 
 <style lang="scss" scoped>
-
-#canvas{
-	touch-action: auto; width: 80px; height: 100px; cursor: inherit
+#canvas {
+	touch-action: auto;
+	width: 80px;
+	height: 100px;
+	cursor: inherit;
 }
 
 .spin-layer {
@@ -244,14 +246,16 @@ const handleStartSpin = () => {
 }
 .spin {
 	position: relative;
-	width: 340px;
+	width: 644px;
 	// margin-left: 10%;
+	padding-top: 60px;
+
 	height: max-content;
 	.spin-wrap {
 		/* transform-origin: center; */
 		width: 100%;
 		height: 100%;
-
+		position: relative;
 		&.rotate {
 			animation: rotate 1s linear infinite;
 			-webkit-animation: rotate 1s linear infinite;
@@ -283,15 +287,15 @@ const handleStartSpin = () => {
 
 		.currency {
 			.spin-item {
-				height:24px;
+				// height: 24px;
 				position: absolute;
-				top: 158px;
+				top: 46%;
 				left: 50%;
 				line-height: 1.5rem;
-				transform-origin: -64px center;
-				margin-left: 64px;
+				transform-origin: -140px center;
+				margin-left: 140px;
 				color: #fff;
-				font-size: 12px;
+				font-size: 32px;
 				display: flex;
 				align-items: center;
 				justify-content: space-between;
@@ -304,8 +308,8 @@ const handleStartSpin = () => {
 				.amount {
 					text-align: right;
 					margin-right: 4px;
-					font-weight: 600;
-					font-size: 14px;
+					font-weight: 700;
+					font-size: 32px;
 					// text-shadow: 0px 2px 0px rgba(0, 0, 0, 0.3);
 					color: #fff;
 					padding-left: 8px;
@@ -317,10 +321,10 @@ const handleStartSpin = () => {
 	.point-img {
 		position: absolute;
 		z-index: 5;
-		top: -30px;
-		left: 127px;
-		height: 150px;
-		width: 86px;
+		top: 0px;
+		left: calc(50% - 85px);
+		height: 282px;
+		width: 170px;
 		transform-origin: left center;
 		.reward {
 			animation: rewardRotate 0.3s ease-out forwards;
@@ -335,10 +339,10 @@ const handleStartSpin = () => {
 
 	.btn-img {
 		position: absolute;
-		width: 100px;
-		height: 100px;
-		top: 175px;
-		left: 50%;
+		width: 200px;
+		height: 200px;
+		top: 342px;
+		left: calc(50% - 50px);
 		margin-left: -50px;
 		margin-top: -55px;
 		z-index: 11;

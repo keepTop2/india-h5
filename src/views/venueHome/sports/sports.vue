@@ -1,8 +1,8 @@
 <!-- 体育入口 -->
 <template>
-	<div class="Sports">
+	<div class="Sports" ref="sportsContainer">
 		<Banner class="Home_Banner" />
-		<van-sticky>
+		<van-sticky :offset-top="0" @change="handleStickyChange">
 			<!-- 滚球 今日 早盘 冠军 关注 -->
 			<div class="tabs">
 				<div class="tab" :class="{ 'tab-active': tabActive == key }" v-for="(value, key) of sportTabPushActions" :key="key" @click="onTab(key)">
@@ -596,11 +596,21 @@ const unSport = () => {
 	handleAttentionSwitch("event");
 	workerManage.stopWorker(workerManage.WorkerMap.sportViewProcessWorker.workerName);
 };
+
+const sportsContainer = ref<HTMLElement | null>(null);
+
+const handleStickyChange = (isSticky: boolean) => {
+	// 当 sticky 状态改变时，触发滚动开关
+	nextTick(() => {
+		pubsub.publish("virtualScrollDisabled", !isSticky);
+	});
+};
 </script>
 
 <style lang="scss" scoped>
 .Sports {
-	height: 100%;
+	height: 100vh;
+	overflow-y: auto;
 	box-sizing: border-box;
 
 	.operation {

@@ -896,7 +896,7 @@ const setAllIsExpand = (isExpand: boolean) => {
  * @return {*}
  */
 const setScollTop = async (val?: number) => {
-	console.log('setScollTop 0')
+	console.log("setScollTop 0");
 	try {
 		if (val && val >= 0) {
 			listRef.value.scrollTop = state.positions[val].top;
@@ -908,7 +908,7 @@ const setScollTop = async (val?: number) => {
 		scrollEvent();
 		await onPositionsChange(_listData.value);
 	} catch (error) {
-		console.log(error,'====error')
+		console.log(error, "====error");
 	}
 };
 

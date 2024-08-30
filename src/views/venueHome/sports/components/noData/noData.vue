@@ -14,7 +14,7 @@ import noData from "/@/assets/zh-CN/default/venueHome/sports/noData.png";
 <style scoped lang="scss">
 .noData-content {
 	width: 100%;
-	height: 100%;
+	// height: 100%;
 	display: flex;
 	justify-content: center;
 	.noData-icon {
