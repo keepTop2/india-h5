@@ -115,7 +115,7 @@ const onkeyPress = (value) => {
 		display: flex;
 		justify-content: space-between;
 		@include themeify {
-			color: themed("TB-P");
+			color: themed("TB");
 		}
 		.btn1 {
 			width: 100%;

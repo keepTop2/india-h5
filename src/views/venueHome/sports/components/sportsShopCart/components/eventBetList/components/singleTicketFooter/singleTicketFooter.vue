@@ -29,6 +29,7 @@
 <script setup lang="ts">
 import { showToast } from "vant";
 import Radio from "../../../radio/index.vue";
+import BetNumber from "/@/views/venueHome/sports/components/Bet/BetNumber.vue";
 import shopCartPubSub from "/@/views/venueHome/sports/hooks/shopCartPubSub";
 import { useSportsBetEventStore } from "/@/store/modules/sports/sportsBetData";
 import { useSportsBetInfoStore } from "/@/store/modules/sports/sportsBetInfo";
@@ -37,6 +38,8 @@ import sportsApi from "/@/api/venueHome/sports";
 const sportsBetEvent = useSportsBetEventStore();
 const sportsBetInfo = useSportsBetInfoStore();
 const betNumberShow = computed(() => shopCartPubSub.getBetNumberShow());
+console.log("betNumberShow", betNumberShow);
+
 const singleTicketWinningAmount = computed(() => shopCartPubSub.getSingleTicketWinningAmount());
 const stake = computed(() => shopCartPubSub.getSingleTicketBetValue());
 
@@ -131,7 +134,7 @@ const onkeyPress = (value) => {
 		display: flex;
 		justify-content: space-between;
 		@include themeify {
-			color: themed("TB-P");
+			color: themed("TB1");
 		}
 		.btn1 {
 			width: 503px;
@@ -181,12 +184,15 @@ const onkeyPress = (value) => {
 			display: flex;
 			align-items: center;
 			justify-content: center;
+			gap: 6px;
+			padding: 0px 10px;
 			border-radius: 8px;
 			@include themeify {
 				background-color: themed("Theme");
 			}
+			box-sizing: border-box;
 			.label {
-				margin-left: 6px;
+				text-align: center;
 			}
 		}
 	}

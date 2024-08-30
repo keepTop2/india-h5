@@ -95,8 +95,12 @@ onMounted(() => {
 	// scrollbar-width: none;
 	.date_item {
 		min-width: 144px;
-		display: inline-table;
 		height: 84px;
+		display: inline-table;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: center;
 		padding: 4px 10px;
 		border-radius: 16px;
 		text-align: center;
@@ -115,7 +119,7 @@ onMounted(() => {
 	.active {
 		@include themeify {
 			background-color: themed("Theme");
-			color: themed("TB-P");
+			color: themed("TB");
 			border: 2px solid transparent;
 		}
 	}

@@ -153,7 +153,7 @@ const onClickLeft = () => {
 						height: 30px;
 						border-radius: 57px;
 						@include themeify {
-							color: themed("TB-P");
+							color: themed("TB");
 						}
 						background: var(--, #f00);
 						text-align: center;

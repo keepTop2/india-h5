@@ -6,9 +6,11 @@
 		<div class="header-right">
 			<div class="amount-info" @click="getBalance">
 				<span class="value">{{ Common.getInstance().formatAmount(sportsBetInfo.balance) }}</span>
-				<SvgIcon class="color_Theme" iconName="/venueHome/sports/svg/sports_refresh" size="3.466667" />
+				<SvgIcon class="color_Theme" iconName="/venueHome/sports/svg/sports_refresh" />
 			</div>
-			<SvgIcon iconName="/venueHome/sports/svg/close" size="3.466667" @click="closePopup" />
+			<div class="close">
+				<SvgIcon iconName="/venueHome/sports/svg/close" @click="closePopup" />
+			</div>
 		</div>
 	</div>
 </template>
@@ -79,15 +81,16 @@ const closePopup = () => {
 		display: flex;
 		align-items: center;
 		.header-badge {
-			width: 40px;
+			min-width: 40px;
 			height: 40px;
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			border-radius: 50%;
+			padding: 0px 10px;
+			border-radius: 20px;
 			@include themeify {
 				background-color: themed("Theme");
-				color: themed("TB-P");
+				color: themed("TB1");
 			}
 			font-family: "PingFang SC";
 			font-size: 26px;
@@ -114,6 +117,21 @@ const closePopup = () => {
 				font-family: "DIN Alternate";
 				font-size: 24px;
 				font-weight: 700;
+			}
+			.color_Theme {
+				width: 22px;
+				height: 22px;
+			}
+		}
+		.close {
+			width: 40px;
+			height: 40px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			svg {
+				width: 26px;
+				height: 26px;
 			}
 		}
 	}

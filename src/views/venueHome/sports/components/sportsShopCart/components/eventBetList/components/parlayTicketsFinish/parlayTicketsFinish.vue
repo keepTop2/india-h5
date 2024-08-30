@@ -45,17 +45,17 @@
 					</div>
 				</div>
 				<div class="bet-cell">
-					<span class="value">{{ $t('sports["[预计可赢]"]') }}{{ getParlayTicketsWinningAmount(item) }} USD</span>
-					<span class="text">{{ $t('sports["[小计]"]') }}{{ common.getInstance().formatFloat(common.getInstance().mul(item.stake, item.betCount)) }} USD</span>
+					<span class="value">{{ $t('sports["预计可赢"]') }}{{ getParlayTicketsWinningAmount(item) }} USD</span>
+					<span class="text">{{ $t('sports["小计"]') }}{{ common.getInstance().formatFloat(common.getInstance().mul(item.stake, item.betCount)) }} USD</span>
 				</div>
 			</div>
 
 			<div class="footer-button">
 				<div class="button" @click="clearCart">
-					<span>{{ $t('sports["[确认]"]') }}</span
-					><span v-if="props.data.betStatus === 0">{{ $t('sports["[合计]"]') }}{{ singleTicketWinningAmount }}</span>
+					<span>{{ $t('sports["确认"]') }}</span
+					><span v-if="props.data.betStatus === 0">{{ $t('sports["合计"]') }}{{ singleTicketWinningAmount }}</span>
 				</div>
-				<div class="button2" @click="onSecondBet">{{ $t('sports["[保留选项]"]') }}</div>
+				<div class="button2" @click="onSecondBet">{{ $t('sports["保留选项"]') }}</div>
 			</div>
 		</div>
 	</div>
@@ -274,7 +274,7 @@ const onSecondBet = () => {
 
 				@include themeify {
 					background-color: themed("Theme");
-					color: themed("TB-P");
+					color: themed("TB1");
 				}
 
 				font-family: "PingFang SC";

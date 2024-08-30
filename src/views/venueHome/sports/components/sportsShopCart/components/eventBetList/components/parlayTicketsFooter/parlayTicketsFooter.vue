@@ -38,6 +38,7 @@
 <script setup lang="ts">
 import { showToast } from "vant";
 import Radio from "../../../radio/index.vue";
+import BetNumber from "/@/views/venueHome/sports/components/Bet/BetNumber.vue";
 import shopCartPubSub from "/@/views/venueHome/sports/hooks/shopCartPubSub";
 import { useSportsBetEventStore } from "/@/store/modules/sports/sportsBetData";
 import { useSportsBetInfoStore } from "/@/store/modules/sports/sportsBetInfo";
@@ -195,7 +196,7 @@ const closePopup = () => {
 		justify-content: space-between;
 		gap: 4px;
 		@include themeify {
-			color: themed("TB-P");
+			color: themed("TB1");
 		}
 		.btn1 {
 			flex: 1;
@@ -203,6 +204,8 @@ const closePopup = () => {
 			display: flex;
 			align-items: center;
 			justify-content: center;
+			text-align: center;
+
 			border-radius: 8px;
 			@include themeify {
 				background-color: themed("Theme");
@@ -217,6 +220,8 @@ const closePopup = () => {
 				align-items: center;
 				justify-content: center;
 				flex-direction: column;
+				padding: 0px 10px;
+				box-sizing: border-box;
 				.label {
 					font-family: "PingFang SC";
 					font-size: 30px;
@@ -247,12 +252,15 @@ const closePopup = () => {
 			display: flex;
 			align-items: center;
 			justify-content: center;
+			gap: 6px;
+			padding: 0px 10px;
 			border-radius: 8px;
 			@include themeify {
 				background-color: themed("Theme");
 			}
+			box-sizing: border-box;
 			.label {
-				margin-left: 6px;
+				text-align: center;
 			}
 		}
 	}

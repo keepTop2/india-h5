@@ -168,7 +168,7 @@ watch(
 		border-radius: 8px;
 		@include themeify {
 			background: themed("T3");
-			color: themed("TB-P");
+			color: themed("TB");
 		}
 	}
 	.tournament-info {

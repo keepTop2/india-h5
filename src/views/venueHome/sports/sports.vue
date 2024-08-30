@@ -659,7 +659,7 @@ const handleStickyChange = (isSticky: boolean) => {
 			}
 			.active {
 				@include themeify {
-					color: themed("TB-P");
+					color: themed("TB");
 					background-color: themed("Theme");
 					border-radius: 10px;
 				}
