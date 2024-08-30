@@ -7,7 +7,7 @@
  * 
 -->
 <template>
-	<div class="dateSelector">
+	<div class="dateSelector bg_BG1">
 		<div :class="['date_item', modelValue == item.date && 'active']" v-for="(item, index) in dateList" :key="index" @click="changeDate(item)">
 			<div class="date">{{ item.label }}</div>
 			<div class="date">{{ weekEnum[item.week] }}</div>
@@ -76,7 +76,10 @@ onMounted(() => {
 
 <style scoped lang="scss">
 .dateSelector {
+	position: sticky;
 	width: 100%;
+	top: 316px;
+	z-index: 2;
 	display: flex;
 	gap: 12px;
 	padding: 24px;

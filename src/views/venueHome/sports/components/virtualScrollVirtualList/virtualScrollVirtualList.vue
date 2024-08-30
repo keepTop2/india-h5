@@ -3,7 +3,7 @@
  * @Description: 虚拟滚动组件-真实滚动高度
 -->
 <template>
-	<div ref="listRef" class="infinite-list-container">
+	<div ref="listRef" class="infinite-list-container" :class="{ 'scroll-disabled': scrollDisabled }" @scroll="!scrollDisabled && scrollEvent($event)">
 		<div ref="phantomRef" class="infinite-list-phantom" :style="{ height: `${listHeight}px` }"></div>
 
 		<div ref="centerRef" class="infinite-list" v-if="listRef">
@@ -28,7 +28,6 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeMount, onBeforeUnmount, onMounted, onUpdated, reactive, ref, watch, watchEffect } from "vue";
 import listWorker from "./virtualScrollVirtualWorker.ts?worker&url";
-// import listWorker from "./virtualScrollVirtualWorker.ts?worker&inline";
 import _ from "lodash";
 import CententItem from "./cententItem/cententItem.vue";
 import Common from "/@/utils/common";
@@ -57,6 +56,7 @@ interface VirtualListType {
 	minDivClass?: string;
 	/** 可获取展开时-子集卡片高度 class    */
 	childrenDivClass?: string;
+	disabledScroll?: boolean;
 }
 
 /** 序列数据类型 */
@@ -110,7 +110,11 @@ const props = withDefaults(defineProps<VirtualListType>(), {
 	minDivClass: "tournament-header",
 	/** 可获取展开时-子集卡片高度 class    */
 	childrenDivClass: "content",
+	/** 禁用滚动 */
+	disabledScroll: false,
 });
+/**控制滚动条是否禁用 true 禁止滚动 false 可以滚动 */
+const scrollDisabled = ref(props.disabledScroll);
 onUpdated(() => {
 	nextTick(function () {
 		if (!itemsRef.value || !itemsRef.value.length) {
@@ -425,6 +429,7 @@ const scrollDebounce = _.debounce(() => {
 
 //滚动事件
 const scrollEvent = (event?: any) => {
+	if (scrollDisabled) return;
 	state.isSizeOption = true;
 	scrollDebounce();
 };
@@ -659,7 +664,11 @@ const changeUpdated = _.throttle(
 	300,
 	{ trailing: false }
 );
-
+onBeforeMount(() => {
+	pubSub.subscribe("virtualScrollDisabled", (val) => {
+		scrollDisabled.value = val;
+	});
+});
 onMounted(() => {
 	nextTick(async () => {
 		if (listRef.value) {
@@ -676,19 +685,32 @@ onBeforeUnmount(() => {
 	worker.terminate();
 });
 
-defineExpose({ setlistDataEisExpand, setAllIsExpand, setScollTop });
+defineExpose({ setlistDataEisExpand, setAllIsExpand, setScollTop, scrollEvent });
+
+// 监听 scrollDisabled 的变化
+watch(
+	() => scrollDisabled,
+	(newValue) => {
+		if (!newValue) {
+			// 当 scrollDisabled 变为 false 时，触发一次 scrollEvent
+			nextTick(() => {
+				scrollEvent();
+			});
+		}
+	}
+);
 </script>
 
 <style scoped lang="scss">
-// a {
-// 	transform: matrix3d();
-// }
 .infinite-list-container {
 	overflow: auto;
 	position: relative;
 	-webkit-overflow-scrolling: touch;
-	// min-height: 100vh;
 	height: 100%;
+
+	&.scroll-disabled {
+		overflow: hidden;
+	}
 }
 
 .infinite-list-phantom {

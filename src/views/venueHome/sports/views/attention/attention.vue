@@ -9,6 +9,7 @@
 <template>
 	<div class="list-content">
 		<VirtualScrollVirtualList
+			:disabledScroll="true"
 			ref="VirtualScrollVirtualListRef"
 			:childrenKey="(attentionSwitch == 'outright' && 'teams') || 'events'"
 			v-if="listData.length"

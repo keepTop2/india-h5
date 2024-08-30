@@ -1,6 +1,7 @@
 <template>
 	<div class="list-content">
 		<VirtualScrollVirtualList
+			:disabledScroll="true"
 			ref="VirtualScrollVirtualListRef"
 			v-if="listData && listData.length"
 			:list-data="listData"
