@@ -7,11 +7,11 @@
 -->
 <template>
 	<div class="list-content">
-		<VirtualScrollVirtualList ref="VirtualScrollVirtualListRef" v-if="listData.length" :list-data="listData" :item-max-size="170" :item-min-size="20" :is-expand="true">
+		<virtualScrollVirtualList :disabledScroll="true" ref="VirtualScrollVirtualListRef" v-if="listData.length" :list-data="listData" :item-max-size="170" :item-min-size="20" :is-expand="true">
 			<template #default="{ item, index, isExpand }">
 				<Card :data="item" :isExpand="isExpand" :dataIndex="index" :sportType="props.sportType" @toggleDisplay="toggleDisplay" />
 			</template>
-		</VirtualScrollVirtualList>
+		</virtualScrollVirtualList>
 
 		<NoData v-else />
 	</div>
