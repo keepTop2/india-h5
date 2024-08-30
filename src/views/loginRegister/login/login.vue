@@ -75,7 +75,7 @@ const eyeShow = ref(true);
 const btnDisabled = ref(true);
 const userAgreement = ref(false);
 
-const state = reactive({
+let state = reactive({
 	userAccount: "", // 邮箱或者手机号
 	password: "", // 密码
 	deviceNo: common.getInstance().getDevice(), // 设备
@@ -111,23 +111,15 @@ watch(
 );
 
 const onLogin = async () => {
-	submitUserLogin();
-	return;
-	const res = await loginApi.userLogin(state).catch((err) => err);
-	if (res.code == common.getInstance().ResCode.SUCCESS) {
-		hcaptcha.value?.validate();
-	}
+	hcaptcha.value?.validate();
 };
 
 const onSubmit = async (token: string) => {
-	const res = await verifyCodeApi.verifyCode({ verifyToken: token }).catch((err) => err);
-	if (res.code == common.getInstance().ResCode.SUCCESS) {
-		submitUserLogin();
-	}
-};
-
-const submitUserLogin = async () => {
-	const res = await loginApi.submitUserLogin(state).catch((err) => err);
+	const params = {
+		verifyToken: token,
+	};
+	state = Object.assign({}, params, state);
+	const res = await loginApi.userLogin(state).catch((err) => err);
 	if (res.code == common.getInstance().ResCode.SUCCESS) {
 		store.setInfo(res.data);
 		if (userAgreement.value) {
