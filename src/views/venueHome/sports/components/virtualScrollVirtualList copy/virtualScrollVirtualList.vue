@@ -3,7 +3,7 @@
  * @Description: 虚拟滚动组件-真实滚动高度
 -->
 <template>
-	<div ref="listRef" class="infinite-list-container" :class="{ 'scroll-disabled': scrollDisabled }">
+	<div ref="listRef" class="infinite-list-container" :class="{ 'scroll-disabled': scrollDisabled }" @scroll="!scrollDisabled && scrollEvent($event)">
 		<div ref="phantomRef" class="infinite-list-phantom" :style="{ height: `${listHeight}px` }"></div>
 
 		<div ref="centerRef" class="infinite-list" v-if="listRef">
@@ -28,7 +28,6 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeMount, onBeforeUnmount, onMounted, onUpdated, reactive, ref, watch, watchEffect } from "vue";
 import listWorker from "./virtualScrollVirtualWorker.ts?worker&url";
-// import listWorker from "./virtualScrollVirtualWorker.ts?worker&inline";
 import _ from "lodash";
 import CententItem from "./cententItem/cententItem.vue";
 import Common from "/@/utils/common";
@@ -111,6 +110,8 @@ const props = withDefaults(defineProps<VirtualListType>(), {
 	minDivClass: "tournament-header",
 	/** 可获取展开时-子集卡片高度 class    */
 	childrenDivClass: "content",
+	/** 禁用滚动 */
+	disabledScroll: false,
 });
 /**控制滚动条是否禁用 true 禁止滚动 false 可以滚动 */
 const scrollDisabled = ref(props.disabledScroll);
@@ -165,6 +166,22 @@ watch(
 		immediate: true,
 	}
 );
+
+/** 最大高度集合 （用于计算平均最大高度值）  */
+const maxHegiht = ref([]);
+/** 平均高度 */
+const averageHeight = computed(() => {
+	if (maxHegiht.value && maxHegiht.value.length) {
+		let sum = maxHegiht.value.reduce((acc, val) => {
+			return Common.getInstance().add(acc, val);
+		}, 0);
+		// 将总和除以数组长度
+		let ave = Common.getInstance().div(sum, maxHegiht.value.length);
+		return ave;
+	} else {
+		return props.itemMaxSize;
+	}
+});
 
 /** 格式化后的所有数据 list-序列 */
 const _listData = ref([]);
@@ -252,6 +269,16 @@ watch(
 			/** 每一次数据更新时都进行一次数据最小高度获取*/
 			findMinHeight();
 			findMaxHeight();
+		}
+	}
+);
+
+watch(
+	() => state.itemMinSize,
+	(newValue, oldValue) => {
+		/** 监听最小值变化 ，最小值小于默认高度且不和前一次相等时；重新调用数据渲染及数据量更改 */
+		if (newValue && newValue < averageHeight.value && newValue != oldValue) {
+			scrollEvent();
 		}
 	}
 );
@@ -402,6 +429,7 @@ const scrollDebounce = _.debounce(() => {
 
 //滚动事件
 const scrollEvent = (event?: any) => {
+	if (scrollDisabled) return;
 	state.isSizeOption = true;
 	scrollDebounce();
 };
@@ -432,6 +460,9 @@ const findMaxHeight = () => {
 		if (maxValueObject && maxValueObject?.height) {
 			const height: number = maxValueObject.height;
 			state.itemMaxSize = height;
+			if (maxHegiht.value.indexOf(height) == -1) {
+				maxHegiht.value.push(height);
+			}
 		}
 	} catch (error) {
 		console.info(error);
@@ -614,9 +645,6 @@ onBeforeMount(() => {
 	state.itemMinSize = props.itemMinSize;
 	pubSub.subscribe(pubSub.PubSubEvents.SportEvents.onExpandAngCollapse.eventName, setAllIsExpand);
 	pubSub.subscribe(pubSub.PubSubEvents.SportEvents.onVirtualScrollToTop.eventName, setScollTop);
-	pubSub.subscribe("virtualScrollDisabled", (val) => {
-		scrollDisabled.value = val;
-	});
 });
 /**option 发生变化更新 */
 const changeUpdated = _.throttle(
@@ -636,7 +664,11 @@ const changeUpdated = _.throttle(
 	300,
 	{ trailing: false }
 );
-
+// onBeforeMount(() => {
+// 	pubSub.subscribe("virtualScrollDisabled", (val) => {
+// 		scrollDisabled.value = val;
+// 	});
+// });
 onMounted(() => {
 	nextTick(async () => {
 		if (listRef.value) {
@@ -645,6 +677,7 @@ onMounted(() => {
 			state.end = state.start + visibleCount.value;
 			changeUpdated();
 			await getStateDomeHeight();
+			// changeUpdated();
 		}
 	});
 });
@@ -652,19 +685,29 @@ onBeforeUnmount(() => {
 	worker.terminate();
 });
 
-defineExpose({ setlistDataEisExpand, setAllIsExpand, setScollTop });
+defineExpose({ setlistDataEisExpand, setAllIsExpand, setScollTop, scrollEvent });
+
+// 监听 scrollDisabled 的变化
+watch(
+	() => scrollDisabled,
+	(newValue) => {
+		if (!newValue) {
+			// 当 scrollDisabled 变为 false 时，触发一次 scrollEvent
+			nextTick(() => {
+				scrollEvent();
+			});
+		}
+	}
+);
 </script>
 
 <style scoped lang="scss">
-// a {
-// 	transform: matrix3d();
-// }
 .infinite-list-container {
 	overflow: auto;
 	position: relative;
 	-webkit-overflow-scrolling: touch;
-	// min-height: 100vh;
 	height: 100%;
+
 	&.scroll-disabled {
 		overflow: hidden;
 	}
