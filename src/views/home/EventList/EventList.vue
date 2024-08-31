@@ -28,9 +28,9 @@
 			<div class="score color_TB bg_BG4">{{ event.gameInfo?.liveAwayScore }}</div>
 		</div>
 		<div class="line bg_Line"></div>
-		<Markets :markets="event.markets" />
+		<Markets :markets="event.markets" :sportType="event.sportType" />
 		<div class="more-bets">
-			<span class="fs_28 color_T1" @click="showDetail()">更多投注</span>
+			<span class="fs_28 color_T1" @click="showDetail()">{{ $t('home["更多投注"]') }}</span>
 			<SvgIcon iconName="home/right_arrow" />
 		</div>
 	</div>
@@ -51,6 +51,9 @@ const props = defineProps({
 		type: Object,
 		required: true,
 	},
+});
+onMounted(() => {
+	console.log(props.event, "==event info");
 });
 const isAttention = computed(() => {
 	return sportsBetData.attentionEventIdList.includes(props.event.eventId);

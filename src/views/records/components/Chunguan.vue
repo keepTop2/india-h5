@@ -2,11 +2,11 @@
 	<div class="bet-detail2">
 		<div class="header">
 			<span class="color_TB">串关 | 3串1 @5.98</span>
-			<span class="PendingSettlement">待结算</span>
+			<span class="PendingSettlement">{{ $t('records["待结算"]') }}</span>
 		</div>
 		<div class="order-info">
 			<div class="order-number">
-				<span class="label">单号：</span>
+				<span class="label">{{ $t('records["单号"]') }}：</span>
 				<span>2103102391230123</span>
 				<SvgIcon @click="copy('2103102391230123')" iconName="common/copy2" />
 			</div>
@@ -15,7 +15,7 @@
 			</div>
 		</div>
 		<div class="bet-amount">
-			<span class="label">投注金额：</span>
+			<span class="label">{{ $t('records["投注金额"]') }}：</span>
 			<span>999999.00</span>
 		</div>
 		<div class="match-details" v-for="(match, index) in list" :key="index">

@@ -1,40 +1,43 @@
 <template>
-	<div class="GameArena bg_BG1">
-		<!-- 顶部搜索栏 -->
-		<div class="navBar bg_BG1">
-			<SvgIcon class="collapse_icon color_TB" iconName="common/collapse_icon" @click="onClickLeft" />
-			<div class="nav_bar_input bg_BG3">
-				<SvgIcon iconName="venueHome/gameArena/search" />
-				<input @focus="router.push('/game/arena/search')" placeholder="输入游戏名称" type="text" class="color_T2" />
+	<div>
+		<div class="GameArena bg_BG1">
+			<!-- 顶部搜索栏 -->
+			<div class="navBar bg_BG1">
+				<SvgIcon class="collapse_icon color_TB" iconName="common/collapse_icon" @click="onClickLeft" />
+				<div class="nav_bar_input bg_BG3">
+					<SvgIcon iconName="venueHome/gameArena/search" />
+					<input @focus="router.push('/game/arena/search')" disabled :placeholder="$t(`game['输入游戏名称']`)" type="text" class="color_T2" />
+				</div>
 			</div>
-		</div>
-		<!-- <SvgIcon iconName="home/event_collect" /> -->
-		<div v-if="searchValue" class="search_list_container">
-			<div class="game-grid">
-				<GameCard v-for="(game, index) in games" :key="index" :image="game.image" />
+			<!-- <SvgIcon iconName="home/event_collect" /> -->
+			<div v-if="searchValue" class="search_list_container">
+				<div class="game-grid">
+					<GameCard v-for="(game, index) in games" :key="index" :image="game.image" />
+				</div>
 			</div>
-		</div>
-		<div>
-			<!-- 轮播图 -->
-			<Banner class="Home_Banner" />
-			<div class="Game_Content">
-				<!-- <Tabs class="plr" v-model="tabsActiveKey" :list="tabList" /> -->
-				<!-- 热门游戏 -->
-				<h3 class="title">
-					<!-- <SvgIcon iconName="home/fire" alt="" /> -->
-					{{ $t('game["热门游戏"]') }}
-					<span class="color_T1 fs_28 fw_400" @click="showMoreList($t('热门游戏'), 1)">更多</span>
-				</h3>
-				<HotGame class="m24" :gameList="gameList?.[0]" />
-				<!-- 新游戏 -->
-				<h3 class="title">
-					<!-- <SvgIcon iconName="home/event_game" alt="" /> -->
-					{{ $t('game["新游戏"]') }}
-					<span class="color_T1 fs_28 fw_400" @click="showMoreList($t('新游戏'), 2)">更多</span>
-				</h3>
-				<NewGame class="m24" :gameList="gameList?.[1]" />
-				<!-- 二级列表 -->
-				<GameChunk v-for="(game, index) in games" :key="index" class="m24" :showMore="true" :gameList="game" />
+			<div>
+				<!-- 轮播图 -->
+				<Banner class="Home_Banner" />
+				<div class="Game_Content">
+					<!-- <Tabs class="plr" v-model="tabsActiveKey" :list="tabList" /> -->
+					<!-- 热门游戏 -->
+					<h3 class="title">
+						<!-- <SvgIcon iconName="home/fire" alt="" /> -->
+						<!-- :placeholder="$t(`game['输入游戏名称']`)" -->
+						{{ $t('game["热门游戏"]') }}
+						<span class="color_T1 fs_28 fw_400" @click="showMoreList($t(`game['热门游戏']`), 1)">{{ $t(`home["更多"]`) }}</span>
+					</h3>
+					<HotGame class="m24" :gameList="gameList?.[0]" />
+					<!-- 新游戏 -->
+					<h3 class="title" v-show="gameList?.[1].length">
+						<!-- <SvgIcon iconName="home/event_game" alt="" /> -->
+						{{ $t('game["新游戏"]') }}
+						<span class="color_T1 fs_28 fw_400" @click="showMoreList($t(`game['热门游戏']`), 2)">{{ $t(`home["更多"]`) }}</span>
+					</h3>
+					<NewGame class="m24" :gameList="gameList?.[1]" />
+					<!-- 二级列表 -->
+					<GameChunk v-for="(game, index) in games" :key="index" class="m24" :showMore="true" :gameList="game" />
+				</div>
 			</div>
 		</div>
 	</div>
