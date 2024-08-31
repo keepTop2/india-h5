@@ -23,7 +23,7 @@
 				</span>
 				<span class="more fw_400 fs_28 color_T1" @click="router.push('/sports')">更多</span>
 			</h3>
-			<EventList v-show="eventList?.length" v-for="event in eventList" class="m24" :event="event" />
+			<EventList v-show="eventList?.length" v-for="event,index in eventList" class="m24" :event="event" :key="index"/>
 				<!-- 体育购物车 -->
 			<SportsShopCart :isShowBet="true" />
 			<template v-for="(item, index) in lobbyTopGame" :key="index"">
@@ -130,7 +130,7 @@ watch(
 			newEvents.push(...item.events);
 		});
 		eventList.value = newEvents;
-		// console.log(newEvents, "===newEvents");
+		console.log(newEvents, "===newEvents");
 	}
 );
 // 注册一个钩子，在组件被挂载之前被调用。
@@ -162,6 +162,7 @@ const queryCollection = () => {
 }
 const getSportEventsRecommend = () => {
 	HomeApi.querySportEventsRecommend().then((res) => {
+		console.log('res',res);
 		eventList.value = res.data;
 	});
 };

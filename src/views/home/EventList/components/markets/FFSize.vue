@@ -29,6 +29,10 @@ const { clearSportsOddsChange } = useSportPubSubEvents();
 const commonFunc = common.getInstance();
 const emit = defineEmits(["onSetSportsEventData"]);
 const props = defineProps({
+	listKye: {
+		type: String,
+		required: true,
+	},
 	market: {
 		type: Object,
 		required: true,
@@ -36,8 +40,10 @@ const props = defineProps({
 });
 onMounted(() => {});
 
+console.log("market", props.market);
+
 const onSetSportsEventData = (selection) => {
-	emit("onSetSportsEventData", selection);
+	emit("onSetSportsEventData", props.market, selection);
 };
 
 /**

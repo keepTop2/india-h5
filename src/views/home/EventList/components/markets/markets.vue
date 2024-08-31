@@ -1,8 +1,8 @@
 <template>
 	<div class="content">
-		<capot :market="markets?.[5]" @onSetSportsEventData="onSetSportsEventData" />
-		<concede :market="markets?.[1]" @onSetSportsEventData="onSetSportsEventData" />
-		<FFSize :market="markets?.[3]" @onSetSportsEventData="onSetSportsEventData" />
+		<capot :market="markets?.[5]" :listKye="sportsBetEvent.getEventInfo[props.event.eventId]?.listKye" @onSetSportsEventData="onSetSportsEventData" />
+		<concede :market="markets?.[1]" :listKye="sportsBetEvent.getEventInfo[props.event.eventId]?.listKye" @onSetSportsEventData="onSetSportsEventData" />
+		<FFSize :market="markets?.[3]" :listKye="sportsBetEvent.getEventInfo[props.event.eventId]?.listKye" @onSetSportsEventData="onSetSportsEventData" />
 	</div>
 </template>
 
@@ -29,23 +29,25 @@ const props = defineProps({
 	},
 });
 
+console.log("markets", props.markets);
+
 /**
  * @description 判断当前盘口是否存在pinia中
  */
-const isBright = (selection) => {
-	return sportsBetEvent.getEventInfo[props.event.eventId]?.listKye == `${props.markets.marketId}-${selection.key}`;
+const isBright = (market, selection) => {
+	return sportsBetEvent.getEventInfo[props.event.eventId]?.listKye == `${market.marketId}-${selection.key}`;
 };
 
-const onSetSportsEventData = (selection) => {
-	const { markets, event } = props;
+const onSetSportsEventData = (market, selection) => {
+	const { event } = props;
 	//存储盘口唯一标识
-	if (isBright(selection)) {
+	if (isBright(market, selection)) {
 		// 删除Pinia数据
 		sportsBetEvent.removeEventCart(event);
 	} else {
 		sportsBetEvent.storeEventInfo(event.eventId, {
-			marketId: markets.marketId,
-			betType: markets.betType,
+			marketId: market.marketId,
+			betType: market.betType,
 			selectionKey: selection.key,
 		});
 		// 存储Pinia数据

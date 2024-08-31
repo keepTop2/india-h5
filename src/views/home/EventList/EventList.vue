@@ -28,7 +28,7 @@
 			<div class="score color_TB bg_BG4">{{ event.gameInfo?.liveAwayScore }}</div>
 		</div>
 		<div class="line bg_Line"></div>
-		<Markets :event="props.event" :markets="event.markets" />
+		<Markets :event="event" :markets="event.markets" />
 		<div class="more-bets">
 			<span class="fs_28 color_T1" @click="showDetail()">更多投注</span>
 			<SvgIcon iconName="home/right_arrow" />
@@ -36,14 +36,12 @@
 	</div>
 </template>
 <script lang="ts" setup>
-import common from "/@/utils/common";
 import Markets from "./components/markets/markets.vue";
 import sportsApi from "/@/api/venueHome/sports";
 import pubsub from "/@/pubSub/pubSub";
 import SportsCommonFn from "/@/views/venueHome/sports/utils/common";
 import { useSportsBetEventStore } from "/@/store/modules/sports/sportsBetData";
 import VantLazyImg from "/@/components/vant/VantLazyImg.vue";
-const commonFunc = common.getInstance();
 const sportsBetData = useSportsBetEventStore();
 const router = useRouter();
 const props = defineProps({
@@ -52,12 +50,16 @@ const props = defineProps({
 		required: true,
 	},
 });
+
+console.log("event--------------------------------->", props.event);
+
 const isAttention = computed(() => {
 	return sportsBetData.attentionEventIdList.includes(props.event.eventId);
 });
 
 // 定义计算属性 格式化比赛开始时间
 const formattedGameTime = computed(() => {
+	console.log("props.event.gameInfo", props.event.gameInfo);
 	const minutes = Math.floor(props.event.gameInfo.seconds / 60);
 	const seconds = props.event.gameInfo.seconds % 60;
 	return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
