@@ -27,6 +27,10 @@ const props = defineProps({
 		type: Object,
 		required: true,
 	},
+	sportType: {
+		type: Number,
+		required: true,
+	},
 });
 
 console.log("markets", props.markets);

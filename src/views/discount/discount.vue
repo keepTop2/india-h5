@@ -14,7 +14,7 @@
 						<div class="deadline">截止时间：2024.1.5 24:00:00</div>
 						<div class="activity_name">2024年新年投注赛</div>
 					</div>
-					<Button class="mt_40"> 进行中</Button>
+					<Button class="mt_40"> {{ $t('discount["进行中"]') }}</Button>
 				</div>
 			</div>
 		</div>
@@ -27,7 +27,7 @@
 						<div class="activity_name">2024年新年投注赛</div>
 					</div>
 					<!-- <Button class="mt_40"> 进行中</Button> -->
-					<span class="mt_40 color_T3 fs_24"> 活动结束</span>
+					<span class="mt_40 color_T3 fs_24"> {{ $t('discount["活动结束"]') }}</span>
 				</div>
 			</div>
 		</div>
@@ -41,16 +41,18 @@ import { onBeforeMount } from "vue";
 import Banner from "./Banner/banner.vue";
 import NavBar from "./components/Navbar.vue";
 import { useRouter } from "vue-router";
+import { i18n } from "/@/i18n/index";
+const $: any = i18n.global;
 const router = useRouter();
 const state = reactive({
 	tabList: [
 		{
 			code: "0",
-			value: "最新活动",
+			value: $.t("discount['最新活动']"),
 		},
 		{
 			code: "1",
-			value: "已过期",
+			value: $.t("discount['已过期']"),
 		},
 	],
 	activityList: [],

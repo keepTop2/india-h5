@@ -21,7 +21,7 @@
 					<SvgIcon iconName="home/event_game" alt="" />
 					{{ $t('home["我们的游戏"]') }}
 				</span>
-				<span class="more fw_400 fs_28 color_T1" @click="router.push('/sports')">更多</span>
+				<span class="more fw_400 fs_28 color_T1" @click="router.push('/sports')">{{ $t(`home["更多"]`) }}</span>
 			</h3>
 			<EventList v-show="eventList?.length" v-for="event,index in eventList" class="m24" :event="event" :key="index"/>
 				<!-- 体育购物车 -->
@@ -32,7 +32,7 @@
 						<VantLazyImg :src="item.icon" />
 						{{item.name}}
 					</span>
-					<span class="more fw_400 fs_28 color_T1" @click="handleMore(item?.gameOneId)">更多</span>
+					<span class="more fw_400 fs_28 color_T1" @click="handleMore(item?.gameOneId)">{{ $t(`home["更多"]`) }}</span>
 				</h3>
 				<GameLayout v-if="item.gameInfoList.length" :gameInfoList="item.gameInfoList" class="m24" />
 				<GameBigPic v-else class="m24" />
@@ -105,6 +105,7 @@ const sportsInfoStore = useSportsInfoStore();
 const sportsBetEvent = useSportsBetEventStore();
 const { startLoading, stopLoading } = useLoading();
 const { startPolling, stopPolling, initSportPubsub, unSubSport, sportsLogin, clearState } = useSportPubSubEvents();
+const eventIDList = ref();
 const eventList = ref();
 const collectList = ref([]);
 const hotGames = ref<GameInfoList[]>([]);
@@ -116,7 +117,7 @@ const isShowCollect = computed(() => {
 
 watch(
 	() => viewSportPubSubEventData.getSportData(),
-	(newData) => {
+	(newData,oldData) => {
 		// console.log(JSON.stringify(newData));
 		/**
 		 * @description 根据 sportType 获取对应的数据
@@ -162,8 +163,7 @@ const queryCollection = () => {
 }
 const getSportEventsRecommend = () => {
 	HomeApi.querySportEventsRecommend().then((res) => {
-		console.log('res',res);
-		eventList.value = res.data;
+		eventIDList.value = res.data;
 	});
 };
 const getLobbyTopGame = () => {
@@ -234,7 +234,7 @@ const openSportPush = async () => {
 			sportPushApi: SportPushApi.GetEvents_push,
 			webToPushApi: WebToPushApi.eventsRollingBall,
 			params: {
-				query: `$filter=eventId in (${eventList.value.map((item) => item.eventsId).join(",")})`,
+				query: `$filter=eventId in (${eventIDList.value.map((item) => item.eventsId).join(",")})`,
 			},
 			isMultiple: false,
 		},

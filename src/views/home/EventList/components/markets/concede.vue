@@ -1,5 +1,6 @@
 <template>
-	<div class="price_title">全场让球</div>
+	<div class="price_title" v-if="sportType == 1">{{ $t(`sports["全场让球"]`) }}</div>
+	<div class="price_title" v-else>{{ $t(`sports["让分"]`) }}</div>
 	<div class="handicap">
 		<div class="handicap-item" @click="onSetSportsEventData(market?.selections[0])">
 			<span>{{ SportsCommon.formatPoint({ betType: market?.betType, point: market?.selections[0].point, key: market?.selections[0].point?.key }) }}</span>
@@ -36,6 +37,10 @@ const props = defineProps({
 	},
 	market: {
 		type: Object,
+		required: true,
+	},
+	sportType: {
+		type: Number,
 		required: true,
 	},
 });
