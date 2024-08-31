@@ -124,7 +124,7 @@ type basisParamsType = ListItemType | Array<PositionType>;
 					/**最大高度(展开时)；*/
 					const eventsLength = item[this.childrenKey].length;
 					const mul = Common.mul(eventsLength, this.itemChildSize);
-					const add = Common.add(mul, this.itemMinSize);
+					const add = Common.add(mul, this.itemChildSize);
 					const add2 = Common.add(add, this.itemChildMarginBottom);
 					dHeight = Number(Common.formatFloat(add2, 2));
 				} catch (error) {
@@ -250,6 +250,45 @@ type basisParamsType = ListItemType | Array<PositionType>;
 				return position;
 			}
 		};
+
+		/**
+		 * @description:dome 大小改变 -使用差值计算高度差(容易错乱)
+		 * @param {*} obj
+		 *  @param {*} activation 激活方式
+		 */
+		private domeResize(obj?: any, activation?: string) {
+			const newPosition = JSON.parse(JSON.stringify(this.positions));
+			return new Promise((resolve, reject) => {
+				// console.info("计算时的打印", obj);
+				const { _key, height, width } = obj;
+				const index = _key;
+				try {
+					const oldHeight = newPosition[index]?.height;
+					const dValue = Common.sub(oldHeight, height);
+					//存在差值
+					if (dValue) {
+						newPosition[index].height = height;
+						const indexBottom = Common.sub(newPosition[index].bottom, dValue);
+						if (indexBottom > 0) {
+							newPosition[index].bottom = indexBottom;
+						}
+						for (let k = 0; k < newPosition.length; k++) {
+							newPosition[k].top = this.getTopHeight(k);
+							try {
+								newPosition[k].height = this.getItemHeight(this._listData, newPosition[k].isExpand);
+							} catch (error) {}
+							newPosition[k].bottom = this.getBottomHeiht(k);
+						}
+						this.positions = newPosition;
+						resolve(true);
+					} else {
+						resolve(true);
+					}
+				} catch (error) {
+					reject(error);
+				}
+			});
+		}
 	}
 
 	const Instance: any = new Position();

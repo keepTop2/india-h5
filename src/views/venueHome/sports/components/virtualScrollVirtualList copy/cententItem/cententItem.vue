@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, reactive, ref } from "vue";
+import { computed, nextTick, onBeforeMount, onBeforeUnmount, onMounted, onUpdated, reactive, ref, watch } from "vue";
 interface cententItem {
 	/**上级索引 */
 	_key: number;
