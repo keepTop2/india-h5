@@ -28,7 +28,7 @@
 			<div class="score color_TB bg_BG4">{{ event.gameInfo?.liveAwayScore }}</div>
 		</div>
 		<div class="line bg_Line"></div>
-		<Markets :markets="event.markets" />
+		<Markets :event="props.event" :markets="event.markets" />
 		<div class="more-bets">
 			<span class="fs_28 color_T1" @click="showDetail()">更多投注</span>
 			<SvgIcon iconName="home/right_arrow" />

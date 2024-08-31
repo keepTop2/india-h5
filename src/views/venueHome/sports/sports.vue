@@ -164,22 +164,27 @@ onBeforeUnmount(() => {
 	// 关闭登录接口轮询
 	stopPolling();
 	// 清除体育数据缓存
-	clearStoreInfo();
+	// clearStoreInfo();
 });
 
+// 清楚购物车数据内存
 const clearStoreInfo = () => {
-	// 清楚购物车数据内存
+	// 清空购物车数据状态
 	sportsBetEvent.clearShopCart();
+	// 清空冠军购物车数据状态
 	sportsBetChampion.clearChampionShopCart();
+	// 清空体育状态信息
 	sportsInfoStore.clearStoreInfo();
 };
 
 // 判断是否进入体育子路由 不是则清空购物车数据
 onBeforeRouteLeave((to, from) => {
+	console.log(to.name);
 	if (to.name == "sportsLeagueSelect" || to.name == "sportsMatchResultDetail" || to.name == "sportsEventDetail") {
-		console.log();
+		console.log("不做任何操作");
 	} else {
-		clearStoreInfo();
+		console.log("触发清空操作");
+		// clearStoreInfo();
 	}
 });
 
@@ -596,9 +601,7 @@ const unSport = () => {
 	handleAttentionSwitch("event");
 	workerManage.stopWorker(workerManage.WorkerMap.sportViewProcessWorker.workerName);
 };
-
 const sportsContainer = ref<HTMLElement | null>(null);
-
 const handleStickyChange = (isSticky: boolean) => {
 	// 当 sticky 状态改变时，触发滚动开关
 	nextTick(() => {

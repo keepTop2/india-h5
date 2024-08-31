@@ -71,6 +71,8 @@ const isBright = (selection) => {
  * @description 处理盘口高亮状态，拼接 marketid 与 selection key 作为唯一标识，存储值pinia中
  */
 const onSetSportsEventData = (selection) => {
+	console.log("props", props);
+	console.log("selection", selection);
 	const { market, event } = props;
 	//存储盘口唯一标识
 	if (isBright(selection)) {

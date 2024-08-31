@@ -24,6 +24,8 @@
 				<span class="more fw_400 fs_28 color_T1" @click="router.push('/sports')">更多</span>
 			</h3>
 			<EventList v-show="eventList?.length" v-for="event in eventList" class="m24" :event="event" />
+				<!-- 体育购物车 -->
+			<SportsShopCart :isShowBet="true" />
 			<template v-for="(item, index) in lobbyTopGame" :key="index"">
 				<h3 class="title_more">
 					<span class="flex_align_center">
@@ -69,6 +71,7 @@ import { useLoading } from "/@/directives/loading/hooks";
 import { useSportsInfoStore } from "/@/store/modules/sports/sportsInfo";
 import { useSportsBetEventStore } from "/@/store/modules/sports/sportsBetData";
 import useSportPubSubEvents from "/@/views/venueHome/sports/hooks/useSportPubSubEvents";
+import SportsShopCart from "/@/views/venueHome/sports/components/sportsShopCart/sportsShopCart.vue";
 
 import Banner from "./Banner/banner.vue";
 //热门游戏

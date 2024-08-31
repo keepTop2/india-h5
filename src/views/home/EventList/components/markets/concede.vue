@@ -1,14 +1,14 @@
 <template>
 	<div class="price_title">全场让球</div>
 	<div class="handicap">
-		<div class="handicap-item">
+		<div class="handicap-item" @click="onSetSportsEventData(market?.selections[0])">
 			<span>{{ SportsCommon.formatPoint({ betType: market?.betType, point: market?.selections[0].point, key: market?.selections[0].point?.key }) }}</span>
 			<span class="value" :class="[commonFunc.changeClass(market?.selections[0])]"
 				>{{ market?.selections[0].oddsPrice.decimalPrice }}
 				<RiseOrFall v-if="market?.selections[0]?.oddsChange" :time="3000" :status="market?.selections[0]?.oddsChange == 'oddsUp' ? 1 : 2" @animationEnd="animationEnd(market?.selections[0])" />
 			</span>
 		</div>
-		<div class="handicap-item">
+		<div class="handicap-item" @click="onSetSportsEventData(market?.selections[1])">
 			<span>{{ SportsCommon.formatPoint({ betType: market?.betType, point: market?.selections[1].point, key: market?.selections[1].point?.key }) }}</span>
 			<span class="value" :class="[commonFunc.changeClass(market?.selections[1])]"
 				>{{ market?.selections[1].oddsPrice.decimalPrice }}
@@ -28,7 +28,7 @@ import { WebToPushApi } from "/@/views/venueHome/sports/enum/sportEventSourceEnu
 const { clearSportsOddsChange } = useSportPubSubEvents();
 
 const commonFunc = common.getInstance();
-const emit = defineEmits(["animationEnd"]);
+const emit = defineEmits(["onSetSportsEventData"]);
 const props = defineProps({
 	market: {
 		type: Object,
@@ -36,6 +36,10 @@ const props = defineProps({
 	},
 });
 onMounted(() => {});
+
+const onSetSportsEventData = (selection) => {
+	emit("onSetSportsEventData", selection);
+};
 
 /**
  * @description 动画结束删除oddsChange字段状态
