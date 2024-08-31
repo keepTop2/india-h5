@@ -28,7 +28,7 @@
 			<div class="score color_TB bg_BG4">{{ event.gameInfo?.liveAwayScore }}</div>
 		</div>
 		<div class="line bg_Line"></div>
-		<Markets :markets="event.markets" :sportType="event.sportType" />
+		<Markets :event="event" :markets="event.markets" :sportType="event.sportType" />
 		<div class="more-bets">
 			<span class="fs_28 color_T1" @click="showDetail()">{{ $t('home["更多投注"]') }}</span>
 			<SvgIcon iconName="home/right_arrow" />
@@ -57,7 +57,6 @@ const isAttention = computed(() => {
 
 // 定义计算属性 格式化比赛开始时间
 const formattedGameTime = computed(() => {
-	console.log("props.event.gameInfo", props.event.gameInfo);
 	const minutes = Math.floor(props.event.gameInfo.seconds / 60);
 	const seconds = props.event.gameInfo.seconds % 60;
 	return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;

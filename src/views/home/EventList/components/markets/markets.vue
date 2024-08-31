@@ -1,8 +1,8 @@
 <template>
 	<div class="content">
-		<capot :market="markets?.[5]" :listKye="sportsBetEvent.getEventInfo[props.event.eventId]?.listKye" @onSetSportsEventData="onSetSportsEventData" />
-		<concede :market="markets?.[1]" :listKye="sportsBetEvent.getEventInfo[props.event.eventId]?.listKye" @onSetSportsEventData="onSetSportsEventData" />
-		<FFSize :market="markets?.[3]" :listKye="sportsBetEvent.getEventInfo[props.event.eventId]?.listKye" @onSetSportsEventData="onSetSportsEventData" />
+		<capot :market="markets?.[5]" :sportType="sportType" :listKye="sportsBetEvent.getEventInfo[props.event.eventId]?.listKye" @onSetSportsEventData="onSetSportsEventData" />
+		<concede :market="markets?.[1]" :sportType="sportType" :listKye="sportsBetEvent.getEventInfo[props.event.eventId]?.listKye" @onSetSportsEventData="onSetSportsEventData" />
+		<FFSize :market="markets?.[3]" :sportType="sportType" :listKye="sportsBetEvent.getEventInfo[props.event.eventId]?.listKye" @onSetSportsEventData="onSetSportsEventData" />
 	</div>
 </template>
 
