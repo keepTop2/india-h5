@@ -1,8 +1,8 @@
 <template>
 	<div class="content">
-		<capot :market="markets?.[5]" />
-		<concede :market="markets?.[1]" />
-		<FFSize :market="markets?.[3]" />
+		<capot :market="markets?.[5]" :sportType="sportType" />
+		<concede :market="markets?.[1]" :sportType="sportType" />
+		<FFSize :market="markets?.[3]" :sportType="sportType" />
 	</div>
 </template>
 
@@ -18,6 +18,10 @@ import FFSize from "./FFSize.vue";
 const props = defineProps({
 	markets: {
 		type: Object,
+		required: true,
+	},
+	sportType: {
+		type: Number,
 		required: true,
 	},
 });

@@ -5,9 +5,9 @@
 			<SvgIcon class="collapse_icon color_TB" iconName="common/arrowLeft" @click="onClickLeft" />
 			<div class="nav_bar_input bg_BG3">
 				<SvgIcon iconName="venueHome/gameArena/search" />
-				<input v-model="searchValue" @keydown.enter="handleSearch" ref="searchRef" placeholder="输入游戏名称" type="search" class="color_T2" />
+				<input v-model="searchValue" @keydown.enter="handleSearch" ref="searchRef" :placeholder="$t(`game['输入游戏名称']`)" type="search" class="color_T2" />
 			</div>
-			<Button @click="handleSearch">搜索</Button>
+			<Button @click="handleSearch">{{ $t("game[`搜索`]") }}</Button>
 		</div>
 
 		<div class="gameList">

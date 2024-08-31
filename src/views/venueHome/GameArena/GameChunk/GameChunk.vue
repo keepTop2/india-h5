@@ -5,7 +5,7 @@
 				<!-- <SvgIcon iconName="home/star" alt="" /> -->
 				{{ gameList?.name }}
 			</span>
-			<span class="fs_28 color_T1 fw_400" @click="handleMore(gameList)">更多</span>
+			<span class="fs_28 color_T1 fw_400" @click="handleMore(gameList)">{{ $t(`home["更多"]`) }}</span>
 		</h3>
 		<div class="game-grid">
 			<GameCard v-for="(game, index) in gameList?.gameInfoList.splice(0, 6)" :key="index" :game-info="game" />

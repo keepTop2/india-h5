@@ -55,15 +55,15 @@
 		<div class="BettingRecord_List">
 			<div class="stats-container color_T1 bg_BG3">
 				<div class="stat-item">
-					<span class="label">投注金额：</span>
+					<span class="label">{{ $t('records["投注金额"]') }}：</span>
 					<span class="value">99999999</span>
 				</div>
 				<div class="stat-item">
-					<span class="label">输赢金额：</span>
+					<span class="label">{{ $t('records["输赢金额"]') }}：</span>
 					<span class="value negative">-99999999</span>
 				</div>
 				<div class="stat-item">
-					<span class="label">投注笔数：</span>
+					<span class="label">{{ $t('records["投注笔数"]') }}：</span>
 					<span class="value">999999</span>
 				</div>
 			</div>
