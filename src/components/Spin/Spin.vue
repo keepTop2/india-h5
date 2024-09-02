@@ -24,6 +24,15 @@
 			<img class="btn-txt" :src="crypto_btn" alt="" />
 		</div>
 	</div>
+	<div class="dialog">
+		<div class="dialog-content">
+			<div class="dialog-title color_Hint">恭喜</div>
+
+			<div class="dialog-title color_Hint mb_21">获得幸运大奖</div>
+			<div class="dialog-desc color_Theme mb_18">$ +0.01000 USD</div>
+			<Button>好的</Button>
+		</div>
+	</div>
 </template>
 
 <script setup lang="ts">
@@ -159,7 +168,7 @@ onMounted(async () => {
 		}
 	};
 	pageLoading.value = false;
-	setTimeout(() => canvasAction(), 0);
+	// setTimeout(() => canvasAction(), 0);
 });
 
 // 计算每个奖品项的样式
@@ -653,7 +662,26 @@ canvas {
 		transform: rotate(360deg);
 	}
 }
+.dialog {
+	position: absolute;
+	top: 90px;
+	background: url(./img/message_bg.png) no-repeat;
+	background-color: rgba(0, 0, 0, 0.5);
+	background-size: 100%;
+	z-index: 100;
+	z-index: 100;
+	height: 100%;
+	width: 100%;
 
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	.dialog-content {
+		margin-top: -150px;
+		text-align: center;
+		font-size: 40px;
+	}
+}
 .app_isApp {
 	.spin {
 		width: 337px;

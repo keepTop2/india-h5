@@ -53,18 +53,18 @@
 							<ul v-if="isEventRunning && eventDetail">
 								<li class="color_TB-P fs_26" v-if="eventDetail?.channelCode" @click="getStreaming">
 									<SvgIcon iconName="/venueHome/sports/svg/sport_live_2" />
-									视频
+									{{ $t('sports["视频"]') }}
 								</li>
 								<li class="line bg_T3" v-if="eventDetail?.channelCode"></li>
 								<li @click="attentionEvent()" :class="[(isAttention && 'color_TB-P') || 'color_T3', 'fs_26']">
 									<!-- <SvgIcon class="color_T3" iconName="/venueHome/sports/svg/sport_start" size="6" /> -->
 									<SvgIcon v-if="isAttention" iconName="/venueHome/sports/svg/collection2" size="6" />
 									<SvgIcon v-else iconName="/venueHome/sports/svg/collection" size="6" />
-									{{ (isAttention && "已关注") || "关注" }}
+									{{ (isAttention && $t('sports["已关注"]')) || $t('sports["关注"]') }}
 								</li>
 							</ul>
 							<ul v-if="!isEventRunning && eventsList">
-								<li class="color_T3">{{ eventsList ? (eventDetail ? gameStatus(eventDetail?.eventStatus) : "比赛已结束") : "-" }}</li>
+								<li class="color_T3">{{ eventsList ? (eventDetail ? gameStatus(eventDetail?.eventStatus) : $t('sports["比赛已结束"]')) : "-" }}</li>
 							</ul>
 						</div>
 						<div class="pl_40 pr_40 fs_20 color_TB-P fw_700" v-if="Number(routeData.sportType) == 1 && eventDetail?.isLive && eventDetail?.gameInfo?.inPlayTime">
@@ -164,7 +164,7 @@
 				<div class="tabBox bg_BG1" :class="{ 'fixed-tab': isFixed }">
 					<div class="tabs">
 						<ul class="tab bg_BG1">
-							<li @click="changeTab('all')" key="all" :class="{ selected: activeTab == 'all' }">所有投注</li>
+							<li @click="changeTab('all')" key="all" :class="{ selected: activeTab == 'all' }">{{ $t('sports["所有投注"]') }}</li>
 							<li v-for="(i, index) in markets" :key="i.betTypeName" @click="changeTab(i.betTypeName)" :class="{ selected: activeTab == i.betTypeName }">{{ i.betTypeName }}</li>
 						</ul>
 					</div>
@@ -215,8 +215,8 @@
 					</Collapse>
 				</div>
 				<div v-if="!markets.length" class="noData color_T3">
-					<div class="fs_24">盘口已关闭</div>
-					<div class="fs_24">当前无法进行投注</div>
+					<div class="fs_24">{{ $t('sports["盘口已关闭"]') }}</div>
+					<div class="fs_24">{{ $t('sports["当前无法进行投注"]') }}</div>
 				</div>
 			</div>
 		</div>
@@ -227,6 +227,7 @@
 
 <script setup lang="ts">
 import RiseOrFall from "/@/views/venueHome/sports/components/riseOrFall/riseOrFall.vue";
+import { i18n } from "/@/i18n/index";
 import { onMounted, onUnmounted, ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import DropDownEvent from "./components/dropDownEvent.vue";
@@ -262,7 +263,7 @@ const videoPlayer = ref();
 const myPlayer = ref();
 const route = useRoute();
 let routeData: Ref<{ eventId?: number; leagueId?: number; sportType?: number } | undefined> = ref({});
-
+const $ = i18n.global;
 const router = useRouter();
 //获取token
 const sportsInfoStore = useSportsInfoStore();
@@ -492,11 +493,11 @@ const filterSelections = (data) => {
 const gameStatus = (eventStatus) => {
 	switch (eventStatus) {
 		case "postponed":
-			return "比赛已推迟";
+			return $.t('sports["比赛已推迟"]');
 		case "closed":
-			return "比赛已结束";
+			return $.t('sports["比赛已结束"]');
 		case "deleted":
-			return "比赛已取消";
+			return $.t('sports["比赛已取消"]');
 		default:
 			return "";
 	}
