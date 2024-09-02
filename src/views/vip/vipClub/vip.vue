@@ -69,7 +69,43 @@
 							</div>
 						</div>
 						<div class="label">{{ item.label }}</div>
-						<div class="value">{{ item.text }}</div>
+
+						<template v-if="item.upgradeFlag">
+							<div class="value">
+								<i18n-t keypath="vip['总奖金']" :tag="'span'">
+									<template v-slot:value>
+										<span class="num"> {{ item.upgrade }}$ </span>
+									</template>
+								</i18n-t>
+							</div>
+						</template>
+						<template v-else-if="item.weekAmountFlag">
+							<div class="value">
+								<i18n-t keypath="vip['会员根据每周投注额度获得周流水的礼金奖励']" :tag="'span'">
+									<template v-slot:value>
+										<span class="num"> {{ item.weekAmountProp1 }}</span>
+									</template>
+									<template v-slot:value2>
+										<span class="num"> {{ item.weekAmountProp2 }}</span>
+									</template>
+								</i18n-t>
+							</div>
+						</template>
+						<template v-else-if="item.monthAmountFlag">
+							<div class="value">
+								<i18n-t keypath="vip['会员根据每月投注额度获得月流水的礼金奖励']" :tag="'span'">
+									<template v-slot:value>
+										<span class="num"> {{ item.monthAmountProp1 }}</span>
+									</template>
+									<template v-slot:value2>
+										<span class="num"> {{ item.monthAmountProp2 }}</span>
+									</template>
+								</i18n-t>
+							</div>
+						</template>
+						<template v-else>
+							<div class="value">{{ item.text }}</div>
+						</template>
 					</div>
 				</template>
 			</div>
@@ -254,7 +290,6 @@ const matchTierRewardListData = () => {
 			});
 		}
 	});
-	// console.log("	state.rankRewardConfig", state.rankRewardConfig);
 };
 
 // 判断对应奖励是否存在
@@ -736,17 +771,17 @@ const onClickLeft = () => {
 			align-items: center;
 			justify-content: center;
 			margin: 36px auto 0px;
+			padding: 10px;
 			border-radius: 12px;
 			border: 1px solid;
-
 			@include themeify {
 				border-color: themed("Theme");
 				color: themed("Theme");
 			}
-
 			font-family: "PingFang SC";
 			font-size: 30px;
 			font-weight: 400;
+			text-align: center;
 			box-sizing: border-box;
 		}
 	}
