@@ -23,7 +23,9 @@
 				</span>
 				<span class="more fw_400 fs_28 color_T1" @click="router.push('/sports')">{{ $t(`home["更多"]`) }}</span>
 			</h3>
-			<EventList v-show="eventList?.length" v-for="event in eventList" class="m24" :event="event" />
+			<EventList v-show="eventList?.length" v-for="event,index in eventList" class="m24" :event="event" :key="index"/>
+				<!-- 体育购物车 -->
+			<SportsShopCart :isShowBet="true" />
 			<template v-for="(item, index) in lobbyTopGame" :key="index"">
 				<h3 class="title_more">
 					<span class="flex_align_center">
@@ -69,6 +71,7 @@ import { useLoading } from "/@/directives/loading/hooks";
 import { useSportsInfoStore } from "/@/store/modules/sports/sportsInfo";
 import { useSportsBetEventStore } from "/@/store/modules/sports/sportsBetData";
 import useSportPubSubEvents from "/@/views/venueHome/sports/hooks/useSportPubSubEvents";
+import SportsShopCart from "/@/views/venueHome/sports/components/sportsShopCart/sportsShopCart.vue";
 
 import Banner from "./Banner/banner.vue";
 //热门游戏
@@ -128,7 +131,7 @@ watch(
 			newEvents.push(...item.events);
 		});
 		eventList.value = newEvents;
-		// console.log(newEvents, "===newEvents");
+		console.log(newEvents, "===newEvents");
 	}
 );
 // 注册一个钩子，在组件被挂载之前被调用。

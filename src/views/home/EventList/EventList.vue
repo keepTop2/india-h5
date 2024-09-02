@@ -28,7 +28,7 @@
 			<div class="score color_TB bg_BG4">{{ event.gameInfo?.liveAwayScore }}</div>
 		</div>
 		<div class="line bg_Line"></div>
-		<Markets :markets="event.markets" :sportType="event.sportType" />
+		<Markets :event="event" :markets="event.markets" :sportType="event.sportType" />
 		<div class="more-bets">
 			<span class="fs_28 color_T1" @click="showDetail()">{{ $t('home["更多投注"]') }}</span>
 			<SvgIcon iconName="home/right_arrow" />
@@ -36,14 +36,12 @@
 	</div>
 </template>
 <script lang="ts" setup>
-import common from "/@/utils/common";
 import Markets from "./components/markets/markets.vue";
 import sportsApi from "/@/api/venueHome/sports";
 import pubsub from "/@/pubSub/pubSub";
 import SportsCommonFn from "/@/views/venueHome/sports/utils/common";
 import { useSportsBetEventStore } from "/@/store/modules/sports/sportsBetData";
 import VantLazyImg from "/@/components/vant/VantLazyImg.vue";
-const commonFunc = common.getInstance();
 const sportsBetData = useSportsBetEventStore();
 const router = useRouter();
 const props = defineProps({
@@ -52,9 +50,7 @@ const props = defineProps({
 		required: true,
 	},
 });
-onMounted(() => {
-	console.log(props.event, "==event info");
-});
+
 const isAttention = computed(() => {
 	return sportsBetData.attentionEventIdList.includes(props.event.eventId);
 });

@@ -119,7 +119,7 @@ onMounted(() => {
 	.active {
 		@include themeify {
 			background-color: themed("Theme");
-			color: themed("TB");
+			color: themed("TB1");
 			border: 2px solid transparent;
 		}
 	}
