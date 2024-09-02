@@ -41,7 +41,7 @@
 	"editor.tabSize": 2,
 	"editor.formatOnType": true,
 	"javascript.format.enable": false,
-	"workbench.iconTheme": "material-icon-theme",
+	"workbench.iconTheme": null,
 	"backgroundCover.imagePath": "d:\\360downloads\\upload.jpg",
 	"search.followSymlinks": false,
 	"backgroundCover.opacity": 0.5,
