@@ -23,15 +23,6 @@ const LayoutRouter = {
 			},
 		},
 		{
-			//最近投注
-			path: "/betLatest",
-			name: "BetLatest",
-			component: () => import("/@/views/BettingPage/BetLatest/BetLatest.vue"),
-			meta: {
-				title: "最近投注",
-			},
-		},
-		{
 			//规则
 			path: "/betRule",
 			name: "BetRule",
