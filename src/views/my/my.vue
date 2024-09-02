@@ -19,13 +19,15 @@
 			<!-- vip -->
 			<div class="vip_container">
 				<VantLazyImg class="vip_big" :src="vip_big" />
-				<span class="vip_level">VIP0</span>
+				<span class="vip_level">VIP{{ state.userVipInfo.vipGradeCode }}</span>
 				<div class="vip_info">
-					<span class="vip_experience">升级所需经验: <span class="color_Warn">200</span> / <span>500</span></span>
+					<span class="vip_experience"
+						>升级所需经验: <span class="color_Warn">{{ state.userVipInfo.currentExp }}</span> / <span>{{ state.userVipInfo.upgradeVipExp }}</span></span
+					>
 					<SvgIcon class="arrow" iconName="/my/arrow" @click="toPath('/vip')" />
 				</div>
 				<!-- VIP进度条 -->
-				<Progress class="vip_progress" />
+				<Progress class="vip_progress" :userVipInfo="state.userVipInfo" />
 			</div>
 
 			<div class="my-content">
@@ -107,8 +109,10 @@
 
 <script setup lang="ts">
 import { myApi, medalApi } from "/@/api/my";
+import { vipApi } from "/@/api/vip";
 import { useThemesStore } from "/@/store/modules/themes";
 import { UserCenterMedalDetailRespVoList } from "./interface";
+import { VIP } from "/@/views/vip/interface";
 import { ThemeEnum } from "/@/enum/appConfigEnum";
 import common from "/@/utils/common";
 import NavBar from "/@/views/my/components/navBar.vue";
@@ -210,6 +214,7 @@ const menuData = {
 };
 
 let state = reactive({
+	userVipInfo: {} as VIP,
 	medalQuantity: 0 as number,
 	medalListData: [] as UserCenterMedalDetailRespVoList[],
 });
@@ -217,9 +222,19 @@ let state = reactive({
 onMounted(() => {
 	if (store.token) {
 		topNList();
+		getUserVipInfo();
 	}
 });
 
+// 获取VIP信息
+const getUserVipInfo = async () => {
+	const res = await vipApi.getUserVipInfo().catch((err) => err);
+	if (res.code == common.getInstance().ResCode.SUCCESS) {
+		state.userVipInfo = res.data;
+	}
+};
+
+// 获取勋章信息
 const topNList = async () => {
 	const res = await medalApi.topNList().catch((err) => err);
 	if (res.code == common.getInstance().ResCode.SUCCESS) {
