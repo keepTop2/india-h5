@@ -18,7 +18,7 @@
 
 			<!-- vip -->
 			<div class="vip_container">
-				<VantLazyImg class="vip_big" :src="vip_big" />
+				<!-- <VantLazyImg class="vip_big" :src="vip_big" /> -->
 				<span class="vip_level">VIP{{ state.userVipInfo.vipGradeCode }}</span>
 				<div class="vip_info">
 					<span class="vip_experience"

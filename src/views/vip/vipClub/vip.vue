@@ -363,7 +363,7 @@ const onClickLeft = () => {
 	.vip_card {
 		position: relative;
 		// height: 341px;
-		margin-top: 24px;
+		margin-top: 57px;
 		background: url("/@/assets/zh-CN/default/vip/crad_bg.png") center center / 100% 100% no-repeat;
 
 		.vip_big {
@@ -371,10 +371,10 @@ const onClickLeft = () => {
 			// margin-top: 13px;
 			// margin-right: 26px;
 			position: absolute;
-			top: 13px;
-			right: 26px;
-			width: 207px;
-			height: 198.049px;
+			top: -42px;
+			right: 20px;
+			width: 200px;
+			height: 200px;
 		}
 
 		.head {
@@ -403,7 +403,7 @@ const onClickLeft = () => {
 		}
 
 		.vip_level {
-			margin-top: 28px;
+			margin-top: 44px;
 			padding: 0px 52px;
 			text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 			font-family: "112-SS Yi Fang Ti";
@@ -422,7 +422,7 @@ const onClickLeft = () => {
 			display: flex;
 			align-items: center;
 			gap: 12px;
-			margin-top: 16px;
+			margin-top: 18px;
 			padding: 0px 52px;
 
 			@include themeify {
@@ -440,7 +440,7 @@ const onClickLeft = () => {
 		}
 
 		.vip_progress {
-			padding: 53px 56px 58px;
+			padding: 37px 58px 52px;
 		}
 	}
 
