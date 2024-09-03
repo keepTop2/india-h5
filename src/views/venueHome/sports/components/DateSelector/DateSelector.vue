@@ -2,12 +2,12 @@
  * @Author: Hida
  * @Date: 2024-06-02 21:49:41
  * @LastEditors: hida
- * @LastEditTime: 2024-06-10 17:03:42
+ * @LastEditTime: 2024-09-03 19:27:45
  * @Description: 
  * 
 -->
 <template>
-	<div class="dateSelector bg_BG1">
+	<div class="dateSelector bg_BG1" :style="{ top: stickyHeight + 'px' }">
 		<div :class="['date_item', modelValue == item.date && 'active']" v-for="(item, index) in dateList" :key="index" @click="changeDate(item)">
 			<div class="date">{{ item.label }}</div>
 			<div class="date">{{ weekEnum[item.week] }}</div>
@@ -33,6 +33,10 @@ import { i18n } from "/@/i18n/index";
 import { useSportsBetEventStore } from "/@/store/modules/sports/sportsBetData";
 const sportsBetEvent = useSportsBetEventStore();
 const $: any = i18n.global;
+const stickyHeight = computed(() => {
+	const offsetHeight = document.getElementsByClassName("van-sticky")[0]?.offsetHeight;
+	return Math.round(offsetHeight);
+});
 
 const weekEnum = {
 	1: $.t("sports['星期一']"),
@@ -78,7 +82,6 @@ onMounted(() => {
 .dateSelector {
 	position: sticky;
 	width: 100%;
-	top: 316px;
 	z-index: 2;
 	display: flex;
 	gap: 12px;
