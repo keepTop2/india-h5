@@ -24,7 +24,7 @@
 import { useRoute } from "vue-router";
 import { computed, ref } from "vue";
 import viewSportPubSubEventData from "/@/views/venueHome/sports/hooks/viewSportPubSubEventData";
-import { VirtualScrollVirtualList } from "/@/views/venueHome/sports/components/virtualScrollVirtualList/index";
+import VirtualScrollVirtualList from "/@/views/venueHome/sports/components/virtualScrollVirtualList/virtualScrollVirtualList.vue";
 // import OutRightItem from "./components/outRightItem.vue";
 import NoData from "/@/views/venueHome/sports/components/noData/noData.vue";
 // import { defineAsyncComponent } from "vue";
