@@ -24,13 +24,13 @@
 			<img class="btn-txt" :src="crypto_btn" alt="" />
 		</div>
 	</div>
-	<div class="dialog">
+	<div class="dialog" v-show="dialogVisible">
 		<div class="dialog-content">
 			<div class="dialog-title color_Hint">恭喜</div>
 
 			<div class="dialog-title color_Hint mb_21">获得幸运大奖</div>
 			<div class="dialog-desc color_Theme mb_18">$ +0.01000 USD</div>
-			<Button>好的</Button>
+			<Button @click="dialogVisible = false">好的</Button>
 		</div>
 	</div>
 </template>
@@ -48,7 +48,7 @@ const spinOver = ref(false);
 const spinRotate = ref("0deg");
 const pageLoading = ref(true);
 const rewardAni = ref(false);
-
+const dialogVisible = ref(true);
 /**
  * @description 转盘组件
  * @param {Array<Coin>} spinList 奖品列表
