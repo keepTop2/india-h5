@@ -1,11 +1,3 @@
-/*
- * @Author: Hida
- * @Date: 2024-06-07 17:40:18
- * @LastEditors: hida
- * @LastEditTime: 2024-06-15 11:30:48
- * @Description:
- *
- */
 // 体育静态文件
 import sportsMap from "/@/views/venueHome/sports/sportsMap/sportsMap";
 import dayjs from "dayjs";
