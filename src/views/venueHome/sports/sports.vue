@@ -136,7 +136,7 @@ const sportState = reactive({ sportTypeActive: null as number | null });
 const filterLeague = () => {
 	// const leagueList = formatEvent2League(viewSportPubSubEventData.viewSportData.childrenViewData[Number(route.params.sportType)]);
 	// sportsBetEvent.setSelectLeaguesList(leagueList);
-	router.push(`/sports/league/select/${sportState.sportTypeActive}`);
+	router.push(`/venueHome/sports/league/select/${sportState.sportTypeActive}`);
 };
 
 const handleAttentionSwitch = async (val) => {
@@ -443,7 +443,7 @@ watch(
 const initRouter = () => {
 	// 首次加载 sportState.sportTypeActive 没有值时，设置默认值为第一位球类列表
 	if (sportList.value.length) {
-		const firstSportTypePath = "/sports/" + tabActive.value + "/" + sportList.value[0]?.sportType;
+		const firstSportTypePath = "/venueHome/sports/" + tabActive.value + "/" + sportList.value[0]?.sportType;
 		if (route.params.sportType) {
 			const sport = sportList.value.find((item) => item?.sportType === Number(route.params.sportType));
 			if (sport && sport.count > 0) {
@@ -481,9 +481,9 @@ const onTab = async (path) => {
 		clearFilter();
 	}
 	if (path != "attention") {
-		router.push({ path: `/sports/${path}/${route.params.sportType}` });
+		router.push({ path: `/venueHome/sports/${path}/${route.params.sportType}` });
 	} else {
-		router.push({ path: `/sports/${path}` });
+		router.push({ path: `/venueHome/sports/${path}` });
 		await getAttention();
 	}
 	initSportPubsub();
@@ -516,7 +516,7 @@ const onSportsType = (item: Sports) => {
 	sportsBetEvent.clearHotLeagueList();
 	activeSwitchingSort.value = "time";
 	sportState.sportTypeActive = item?.sportType;
-	router.push({ path: "/sports/" + tabActive.value + "/" + item?.sportType });
+	router.push({ path: "/venueHome/sports/" + tabActive.value + "/" + item?.sportType });
 };
 
 /**
