@@ -18,6 +18,9 @@
 </template>
 
 <script setup lang="ts">
+/**
+ * @description 获取热门游戏列表
+ */
 import { ref } from "vue";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import "swiper/css";
@@ -57,9 +60,11 @@ const props = defineProps({
 });
 
 onBeforeMount(() => {
+	// 获取热门游戏
 	getGameInfoDetail();
 });
 
+// 获取热门游戏
 const getGameInfoDetail = () => {
 	GameApi.queryGameInfoDetail({
 		// "pageNumber": 1,
@@ -70,7 +75,7 @@ const getGameInfoDetail = () => {
 		gameList.value = res.data.records;
 	});
 };
-
+// 触发收藏
 const handleCollect = async (item, collect) => {
 	const res = await GameApi.gameCollection({
 		gameId: item.id,

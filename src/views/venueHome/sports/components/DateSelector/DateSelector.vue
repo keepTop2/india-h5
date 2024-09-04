@@ -1,11 +1,3 @@
-<!--
- * @Author: Hida
- * @Date: 2024-06-02 21:49:41
- * @LastEditors: hida
- * @LastEditTime: 2024-09-03 19:27:45
- * @Description: 
- * 
--->
 <template>
 	<div class="dateSelector bg_BG1" :style="{ top: stickyHeight + 'px' }">
 		<div :class="['date_item', modelValue == item.date && 'active']" v-for="(item, index) in dateList" :key="index" @click="changeDate(item)">

@@ -17,6 +17,12 @@
 import GameCard from "../components/GameCard.vue";
 import { useRouter } from "vue-router";
 const router = useRouter();
+
+/**
+ * @description: 二级游戏列表
+ * @param {*} gameList Object 游戏列表数据
+ * @param {*} showMore Boolean 是否显示更多按钮
+ */
 const props = defineProps({
 	gameList: {
 		type: Object,

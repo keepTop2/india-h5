@@ -2,11 +2,10 @@
  * @Author: Hida
  * @Date: 2024-06-02 21:49:42
  * @LastEditors: hida
- * @LastEditTime: 2024-06-17 13:22:26
- * @Description:
+ * @LastEditTime: 2024-09-04 13:06:01
+ * @Description: 格式化体育赛事数据
  *
  */
-// 体育静态文件
 import sportsMap from "/@/views/venueHome/sports/sportsMap/sportsMap";
 
 /**

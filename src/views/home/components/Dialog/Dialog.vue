@@ -18,7 +18,12 @@
 
 <script setup lang="ts">
 import closeIcon from "./close.png";
-
+/**
+ * @description 弹窗
+ * @param visible 显示隐藏
+ * @param title 标题
+ * @param width 弹窗宽度
+ */
 const props = defineProps({
 	visible: { type: Boolean, default: false },
 	width: {

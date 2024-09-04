@@ -110,11 +110,12 @@ const eventList = ref();
 const collectList = ref([]);
 const hotGames = ref<GameInfoList[]>([]);
 const lobbyTopGame = ref<LobbyTopGame[]>();
-
+//判断是否收藏
 const isShowCollect = computed(() => {
 	return collectList.value.length > 0 && UserStore.token;
 })
 
+//监听处理好的体育联赛数据列表 从中获取后台配置好的赛事展示在首页。
 watch(
 	() => viewSportPubSubEventData.getSportData(),
 	(newData,oldData) => {
@@ -156,16 +157,19 @@ onBeforeUnmount(() => {
 	// 清除体育数据缓存
 	clearStoreInfo();
 });
+//获取关注列表
 const queryCollection = () => {
 	GameApi.queryCollection().then((res) => {
 		collectList.value = res.data.records;
 	});
 }
+//获取推荐赛事列表
 const getSportEventsRecommend = () => {
 	HomeApi.querySportEventsRecommend().then((res) => {
 		eventIDList.value = res.data;
 	});
 };
+//获取游戏场馆热门赛事
 const getLobbyTopGame = () => {
 	GameApi.queryLobbyTopGame().then((res) => {
 		lobbyTopGame.value = res.data;

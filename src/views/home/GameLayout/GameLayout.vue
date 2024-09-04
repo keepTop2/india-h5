@@ -48,6 +48,10 @@ import loadingSrc from "../static/loading.png";
 import { GameInfoList } from "/#/game";
 import GameApi from "/@/api/venueHome/games";
 import pubsub from "/@/pubSub/pubSub";
+/**
+ * @description 游戏6格基础布局
+ * @param {GameInfoList[]} gameInfoList 游戏列表
+ */
 const props = defineProps<{
 	gameInfoList: GameInfoList[];
 }>();

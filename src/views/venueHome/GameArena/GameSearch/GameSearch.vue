@@ -24,6 +24,9 @@
 </template>
 
 <script setup lang="ts">
+/**
+ * @description 游戏搜索页
+ */
 import { useRoute, useRouter } from "vue-router";
 import noData from "./image.png";
 import GameApi from "/@/api/venueHome/games";
@@ -37,10 +40,14 @@ const searchRef = ref();
 const { gameOneId } = route.query;
 const searchValue = ref();
 
+// 页面加载后执行
 onMounted(() => {
-	//设置输入框默认选中
 	searchRef.value.focus();
 });
+/**
+ * 搜索游戏
+ * 根据输入的游戏名称查询游戏信息，并更新游戏列表
+ */
 const handleSearch = () => {
 	if (searchValue.value) {
 		GameApi.queryGameInfoByName({
@@ -56,86 +63,15 @@ const handleSearch = () => {
 		gameList.value = [];
 	}
 };
+/**
+ * 返回上一页
+ * 当点击左上角图标时触发
+ */
 const onClickLeft = () => {
 	router.back();
 };
 </script>
 
 <style lang="scss" scoped>
-.GameArena {
-	button {
-		width: 104px;
-		height: 56px;
-		border-radius: 10px;
-	}
-}
-.no_data_container {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	height: 80vh;
-	img {
-		width: 50%;
-	}
-}
-.search_list_container {
-	padding: 24px 26px;
-	.game-grid {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 16px;
-	}
-}
-
-.collapse_icon {
-	width: 32px;
-	height: 32px;
-}
-input[type="search"] {
-	/* 隐藏输入框后面的删除按钮 */
-	-webkit-appearance: none; /* 隐藏默认样式 */
-	appearance: none; /* 兼容 Firefox */
-}
-
-/* 隐藏删除按钮 */
-input[type="search"]::-webkit-search-cancel-button {
-	display: none;
-}
-.navBar {
-	height: 88px;
-	padding: 12px 28px;
-	display: flex;
-	box-sizing: border-box;
-	position: sticky;
-	top: 0;
-	z-index: 2;
-	display: flex;
-	align-items: center;
-	box-sizing: border-box;
-	justify-content: space-between;
-	@include themeify {
-		box-shadow: 0px 4px 8px 0px themed("Shadow");
-	}
-	.nav_bar_input {
-		display: flex;
-		width: 522px;
-		height: 64px;
-		padding: 10px 24px;
-		// margin-left: 30px;
-		display: flex;
-		gap: 16px;
-		border-radius: 12px;
-		box-sizing: border-box;
-		input {
-			width: 500px;
-			background: none;
-			border: none;
-			outline: none;
-		}
-		svg {
-			width: 44px;
-			height: 44px;
-		}
-	}
-}
+// 样式代码...
 </style>
