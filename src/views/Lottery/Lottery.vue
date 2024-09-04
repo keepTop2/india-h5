@@ -38,12 +38,14 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
 import Spin from "/@/components/Spin/Spin.vue";
 import { mockDoGetReward, mockGetSpinList } from "./api.ts";
 import bronze from "./images/bronze_footer.png";
 const spinList = ref();
 const reward = ref();
 const currentTab = ref("1");
+const router = useRouter();
 const tabs = ref([
 	{
 		name: "青铜",

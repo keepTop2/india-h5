@@ -2,7 +2,7 @@
 <template>
 	<div class="Sports" ref="sportsContainer">
 		<Banner class="Home_Banner" />
-		<van-sticky :offset-top="0" @change="handleStickyChange">
+		<van-sticky @change="handleStickyChange">
 			<!-- 滚球 今日 早盘 冠军 关注 -->
 			<div class="tabs">
 				<div class="tab" :class="{ 'tab-active': tabActive == key }" v-for="(value, key) of sportTabPushActions" :key="key" @click="onTab(key)">
@@ -461,6 +461,7 @@ const initRouter = () => {
 
 // 切换tab时 根据path处理对应的获取数据逻辑
 const onTab = async (path) => {
+	console.log(path, "====path");
 	activeSwitchingSort.value = "time";
 	if (tabActive.value == path) {
 		return;
