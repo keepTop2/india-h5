@@ -4,109 +4,109 @@
 			<thead>
 				<tr>
 					<th></th>
-					<th>青铜</th>
-					<th>白银</th>
-					<th>黄金</th>
-					<th>白金I</th>
-					<th>白金II</th>
-					<th>钻石I</th>
-					<th>钻石II</th>
-					<th>钻石III</th>
+					<th v-for="(item, index) in state.userVipInfo.vipBenefit" :key="index">{{ item.vipRankNameI18nCode }}</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr>
-					<td>升级奖金</td>
-					<td>-</td>
-					<td>-</td>
-					<td>-</td>
-					<td>-</td>
-					<td>-</td>
-					<td>-</td>
-					<td>-</td>
-					<td>-</td>
+					<td>{{ $t(`vip['升级奖励']`) }}</td>
+					<td v-for="(item, index) in state.userVipInfo.vipBenefit" :key="index">
+						<img v-if="item.upgradeFlag != 0" :src="item.icon" />
+						<span v-else>-</span>
+					</td>
 				</tr>
 				<tr>
-					<td>幸运转盘</td>
-					<td>-</td>
-					<td>-</td>
-					<td>-</td>
-					<td>-</td>
-					<td>-</td>
-					<td>-</td>
-					<td>-</td>
-					<td>-</td>
+					<td>{{ $t(`vip['幸运转盘']`) }}</td>
+					<td v-for="(item, index) in state.userVipInfo.vipBenefit" :key="index">
+						<img v-if="item.luckFlag != 0" :src="item.icon" />
+						<span v-else>-</span>
+					</td>
 				</tr>
 				<tr>
-					<td>每周流水礼金</td>
-					<td>-</td>
-					<td>-</td>
-					<td>-</td>
-					<td>-</td>
-					<td>-</td>
-					<td>-</td>
-					<td>-</td>
-					<td>-</td>
+					<td>{{ $t(`vip['每周流水礼金']`) }}</td>
+					<td v-for="(item, index) in state.userVipInfo.vipBenefit" :key="index">
+						<img v-if="item.weekAmountFlag != 0" :src="item.icon" />
+						<span v-else>-</span>
+					</td>
 				</tr>
 				<tr>
-					<td>每月流水礼金</td>
-					<td>-</td>
-					<td>-</td>
-					<td>-</td>
-					<td>-</td>
-					<td>-</td>
-					<td>-</td>
-					<td>-</td>
-					<td>-</td>
+					<td>{{ $t(`vip['每月流水礼金']`) }}</td>
+					<td v-for="(item, index) in state.userVipInfo.vipBenefit" :key="index">
+						<img v-if="item.monthAmountFlag != 0" :src="item.icon" />
+						<span v-else>-</span>
+					</td>
 				</tr>
 				<tr>
-					<td>周体育流水礼金</td>
-					<td>-</td>
-					<td>-</td>
-					<td>-</td>
-					<td>-</td>
-					<td>-</td>
-					<td>-</td>
-					<td>-</td>
-					<td>-</td>
+					<td>{{ $t(`vip['周体育流水礼金']`) }}</td>
+					<td v-for="(item, index) in state.userVipInfo.vipBenefit" :key="index">
+						<img v-if="item.weekSportFlag != 0" :src="item.icon" />
+						<span v-else>-</span>
+					</td>
 				</tr>
 				<tr>
-					<td>免费提款</td>
-					<td>-</td>
-					<td>-</td>
-					<td>-</td>
-					<td>-</td>
-					<td>-</td>
-					<td>-</td>
-					<td>-</td>
-					<td>-</td>
+					<td>{{ $t(`vip['SVIP专属福利']`) }}</td>
+					<td v-for="(item, index) in state.userVipInfo.vipBenefit" :key="index">
+						<img v-if="item.svipWelfareFlag != 0" :src="item.icon" />
+						<span v-else>-</span>
+					</td>
 				</tr>
 				<tr>
-					<td>豪华赠品</td>
-					<td>-</td>
-					<td>-</td>
-					<td>-</td>
-					<td>-</td>
-					<td>-</td>
-					<td>-</td>
-					<td>-</td>
-					<td>-</td>
-				</tr>
-				<tr>
-					<td>VIP定制客服</td>
-					<td>-</td>
-					<td>-</td>
-					<td>-</td>
-					<td>-</td>
-					<td>-</td>
-					<td>-</td>
-					<td>-</td>
-					<td>-</td>
+					<td>{{ $t(`vip['豪华赠品']`) }}</td>
+					<td v-for="(item, index) in state.userVipInfo.vipBenefit" :key="index">
+						<img v-if="item.luxuriousGiftsFlag != 0" :src="item.icon" />
+						<span v-else>-</span>
+					</td>
 				</tr>
 			</tbody>
 		</table>
 	</div>
 </template>
+
+<script setup lang="ts">
+import vipRankCodeIcon_0 from "/@/assets/zh-CN/default/vip/vipRewards/vipRankCodeIcon_0.png";
+import vipRankCodeIcon_1 from "/@/assets/zh-CN/default/vip/vipRewards/vipRankCodeIcon_1.png";
+import vipRankCodeIcon_2 from "/@/assets/zh-CN/default/vip/vipRewards/vipRankCodeIcon_2.png";
+import vipRankCodeIcon_3 from "/@/assets/zh-CN/default/vip/vipRewards/vipRankCodeIcon_3.png";
+import vipRankCodeIcon_4 from "/@/assets/zh-CN/default/vip/vipRewards/vipRankCodeIcon_4.png";
+import { vipApi } from "/@/api/vip";
+import common from "/@/utils/common";
+import { i18n } from "/@/i18n/index";
+import { VIP } from "/@/views/vip/interface";
+const $: any = i18n.global;
+
+const state = reactive({
+	userVipInfo: {} as VIP,
+});
+
+// 获取VIP信息
+const getUserVipInfo = async () => {
+	const res = await vipApi.getUserVipInfo().catch((err) => err);
+	if (res.code === common.getInstance().ResCode.SUCCESS) {
+		state.userVipInfo = res.data;
+		state.userVipInfo.vipBenefit.forEach((item) => {
+			if (item.vipRankCode == 0) {
+				item.icon = vipRankCodeIcon_0;
+			} else if (item.vipRankCode == 1) {
+				item.icon = vipRankCodeIcon_1;
+			} else if (item.vipRankCode == 2) {
+				item.icon = vipRankCodeIcon_2;
+			} else if (item.vipRankCode == 3) {
+				item.icon = vipRankCodeIcon_3;
+			} else if (item.vipRankCode == 4) {
+				item.icon = vipRankCodeIcon_3;
+			} else if (item.vipRankCode == 5) {
+				item.icon = vipRankCodeIcon_4;
+			} else if (item.vipRankCode == 6) {
+				item.icon = vipRankCodeIcon_4;
+			} else if (item.vipRankCode == 7) {
+				item.icon = vipRankCodeIcon_4;
+			}
+		});
+	}
+};
+
+getUserVipInfo();
+</script>
 
 <style scoped lang="scss">
 /* 表格容器样式 */
@@ -197,6 +197,11 @@
 		color: themed("T3");
 		background-color: themed("BG3");
 		border-color: themed("Line");
+	}
+	img {
+		width: 40px;
+		height: 40px;
+		margin: 0px auto;
 	}
 }
 
