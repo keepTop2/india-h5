@@ -33,6 +33,11 @@ interface TableData {
 }
 
 // 使用 as() 关键字为 props 定义类型和默认值
+/**
+ * @description 动态生成table
+ * @param columns 列数据
+ * @param tableData 表格数据
+ */
 const props = defineProps({
 	columns: {
 		type: Array as () => Array<Column>,

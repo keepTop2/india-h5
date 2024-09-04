@@ -1,9 +1,9 @@
 <!--
  * @Author: Hida
  * @Date: 2024-06-06 20:55:25
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-07-09 18:30:18
- * @Description: 
+ * @LastEditors: hida
+ * @LastEditTime: 2024-09-04 13:07:40
+ * @Description: 滚球赛事列表
  * 
 -->
 <template>

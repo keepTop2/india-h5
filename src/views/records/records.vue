@@ -76,11 +76,14 @@
 </template>
 
 <script setup lang="ts">
+/**
+ * @description 投注记录
+ */
 import { TimeShortcutOptionsEnum } from "/@/enum/componentsEnum";
 import VantNavBar from "/@/components/vant/VantNavBar.vue";
 import pubsub from "/@/pubSub/pubSub";
 import Sports from "./components/Tiyu.vue";
-import Chuanguan from "./components/Chunguan.vue";
+import Chuanguan from "./components/Chuanguan.vue";
 import Qipai from "./components/Qipai.vue";
 import Zhenren from "./components/Zhenren.vue";
 const onClickLeft = () => {
@@ -157,6 +160,10 @@ const matches = ref([
 	{ teams: "荷兰 VS 英格兰", betContent: "荷兰全场独赢", result: "-", odds: "2.98" },
 ]);
 
+/**
+ * @description: 复制单号
+ * @return {*}
+ */
 const copyOrderNumber = () => {
 	navigator.clipboard.writeText("2103102391230123").then(() => {
 		alert("单号已复制");

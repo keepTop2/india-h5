@@ -1,9 +1,9 @@
 <!--
  * @Author: Hida
  * @Date: 2024-05-18 10:54:05
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-07-15 18:29:08
- * @Description: 
+ * @LastEditors: hida
+ * @LastEditTime: 2024-09-04 13:08:06
+ * @Description: 关注赛事列表
  * 
 -->
 <template>

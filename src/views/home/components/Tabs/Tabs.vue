@@ -11,7 +11,12 @@ type ListItem = {
 	name: string;
 	value: string | number;
 };
-
+/**
+ * @description 动态生成tabs
+ * @param modelValue 当前选中的tab
+ * @param list tab列表
+ * @param bg 背景颜色
+ */
 const props = defineProps({
 	modelValue: {
 		type: [String, Number],
