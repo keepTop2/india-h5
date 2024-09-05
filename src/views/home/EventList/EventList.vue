@@ -42,16 +42,22 @@ import pubsub from "/@/pubSub/pubSub";
 import SportsCommonFn from "/@/views/venueHome/sports/utils/common";
 import { useSportsBetEventStore } from "/@/store/modules/sports/sportsBetData";
 import VantLazyImg from "/@/components/vant/VantLazyImg.vue";
+
 const sportsBetData = useSportsBetEventStore();
 const router = useRouter();
-//接受入参event 赛事详细信息
+
+/**
+ * @description 接受入参event 赛事详细信息
+ * @param {Object} event - 赛事详细信息对象
+ */
 const props = defineProps({
 	event: {
 		type: Object,
 		required: true,
 	},
 });
-//判断赛事是否关注
+
+// 判断赛事是否关注
 const isAttention = computed(() => {
 	return sportsBetData.attentionEventIdList.includes(props.event.eventId);
 });
@@ -63,7 +69,10 @@ const formattedGameTime = computed(() => {
 	return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
 });
 
-// 点击关注按钮
+/**
+ * @description 点击关注按钮
+ * @param {boolean} isActive - 是否激活关注
+ */
 const attentionEvent = async (isActive: boolean) => {
 	if (isActive) {
 		await sportsApi.unFollow({
@@ -78,7 +87,10 @@ const attentionEvent = async (isActive: boolean) => {
 	}
 	pubsub.publish(pubsub.PubSubEvents.SportEvents.attentionChange.eventName, {});
 };
-//跳转体育详情页
+
+/**
+ * @description 跳转体育详情页
+ */
 const showDetail = () => {
 	router.push(`/sports/event/detail/${props.event.eventId}/${props.event.leagueId}/${props.event.sportType}`);
 };

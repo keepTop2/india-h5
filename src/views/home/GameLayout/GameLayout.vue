@@ -48,14 +48,20 @@ import loadingSrc from "../static/loading.png";
 import { GameInfoList } from "/#/game";
 import GameApi from "/@/api/venueHome/games";
 import pubsub from "/@/pubSub/pubSub";
+
 /**
- * @description 游戏6格基础布局
+ * @description 游戏6格基础布局组件的属性定义
  * @param {GameInfoList[]} gameInfoList 游戏列表
  */
 const props = defineProps<{
 	gameInfoList: GameInfoList[];
 }>();
 
+/**
+ * @description 处理游戏收藏/取消收藏的点击事件
+ * @param {Object} item 游戏信息对象
+ * @param {boolean} collect 是否收藏
+ */
 const onClickCollect = async (item, collect) => {
 	const res = await GameApi.gameCollection({
 		gameId: item.id,

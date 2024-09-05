@@ -30,7 +30,11 @@ interface TableData {
 	address: string;
 }
 
-// 使用 as() 关键字为 props 定义类型和默认值
+/**
+ * @description 定义组件的props
+ * @param columns 表格列配置数组
+ * @param tableData 表格数据数组
+ */
 const props = defineProps({
 	columns: {
 		type: Array as () => Array<Column>,
