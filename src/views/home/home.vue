@@ -21,7 +21,7 @@
 					<SvgIcon iconName="home/event_game" alt="" />
 					{{ $t('home["我们的游戏"]') }}
 				</span>
-				<span class="more fw_400 fs_28 color_T1" @click="router.push('/sports')">{{ $t(`home["更多"]`) }}</span>
+				<span class="more fw_400 fs_28 color_T1" @click="router.push('/venueHome/sports')">{{ $t(`home["更多"]`) }}</span>
 			</h3>
 			<EventList v-show="eventList?.length" v-for="event,index in eventList" class="m24" :event="event" :key="index"/>
 				<!-- 体育购物车 -->
@@ -252,7 +252,6 @@ const openSportPush = async () => {
 /**
  * @description 获取体育关注列表
  */
-
 const getAttention = () => {
 	// console.log(getAttention, "====getAttention");
 	return new Promise((resolve, reject) => {
