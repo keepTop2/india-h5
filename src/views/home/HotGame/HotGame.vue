@@ -117,8 +117,21 @@ const handleCollect = async (item, collect) => {
  * @description 处理点击游戏卡片
  * @param {Object} item - 游戏项
  */
+
+//  device*	设备：0:后台 1:PC 2:IOS_H5 3:IOS_APP 4:Android_H5 5:Android_APP[...]
+// venueCode*	string
+// title: 场馆code
+// gameCode	string
+// title: 游戏code
 const handleClickCard = (item) => {
 	// dialogShow.value = true;
+	console.log(item, "=====item");
+	GameApi.gameLogin({
+		device: "H5",
+		// userAccount: "hida",
+		venueCode: item.venueCode,
+		gameCode: item.gameCode,
+	});
 };
 </script>
 
