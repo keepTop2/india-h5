@@ -86,7 +86,7 @@ export default function useSportPubSubEvents() {
 	};
 
 	// 体育登录
-	const sportsLogin = async (showLoadingObject: { showLoading?: boolean } = {}) => {
+	const sportsLogin = async (showLoadingObject?: object) => {
 		const store = useUserStore();
 		const sportsInfoStore = useSportsInfoStore();
 		const params = {

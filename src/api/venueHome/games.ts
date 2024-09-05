@@ -1,6 +1,16 @@
 import useAxiosApi from "/@/utils/useAxiosApi";
 
 export default class GameApi {
+	/**
+	 *@description 游戏登录
+	 */
+	static gameLogin = (data, headers = {}) => {
+		return useAxiosApi(`/app/third/api/loginGame`, {
+			method: "POST",
+			data,
+			headers,
+		});
+	};
 	// 获取游戏大厅热门游戏
 	static queryLobbyTopGame = (data = {}, headers = {}) => {
 		return useAxiosApi(`/app/game_lobby/api/queryLobbyTopGame`, {

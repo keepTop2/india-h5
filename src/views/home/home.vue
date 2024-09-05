@@ -181,7 +181,16 @@ const initSport = async () => {
 	//开启体育线程
 	workerManage.startWorker(workerManage.WorkerMap.sportViewProcessWorker.workerName);
 	//体育登录
-	await sportsLogin().then((res) => {
+// 	device*	设备：0:后台 1:PC 2:IOS_H5 3:IOS_APP 4:Android_H5 5:Android_APP[...]
+// venueCode*	string
+// title: 场馆code
+// gameCode	string
+// title: 游戏code
+	await sportsLogin({
+		device: 1,
+		venueCode:'',
+		gameCode: '',
+	}).then((res) => {
 		if (res) {
 			initSportPubsub();
 			openSportPush();
