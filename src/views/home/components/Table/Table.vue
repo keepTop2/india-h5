@@ -32,11 +32,10 @@ interface TableData {
 	address: string;
 }
 
-// 使用 as() 关键字为 props 定义类型和默认值
 /**
- * @description 动态生成table
- * @param columns 列数据
- * @param tableData 表格数据
+ * @description 定义组件的props
+ * @param columns 列数据，包含每列的字段名和标签
+ * @param tableData 表格数据，包含每行的具体内容
  */
 const props = defineProps({
 	columns: {

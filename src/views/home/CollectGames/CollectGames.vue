@@ -16,18 +16,32 @@ import GameImg from "/@/views/home/static/images/GameImg.png";
 import { GameInfoList } from "/#/game";
 import loadingSrc from "../static/loading.png";
 import GameApi from "/@/api/venueHome/games";
+
+// 定义组件的emit事件
 const emit = defineEmits(["queryCollection"]);
+
+/**
+ * @description 组件的props定义
+ * @param {Array<GameInfoList>} collectList - 收藏游戏列表
+ */
 const props = defineProps({
 	collectList: {
 		type: Array<GameInfoList>,
 		default: () => [],
 	},
 });
+
+// 组件挂载后的生命周期钩子
 onMounted(() => {
 	console.log("Component mounted");
-	// 调用接口获取收藏游戏的列表
+	// TODO: 调用接口获取收藏游戏的列表
 });
 
+/**
+ * @description 处理游戏收藏/取消收藏的函数
+ * @param {Object} item - 游戏项
+ * @param {boolean} collect - 是否收藏
+ */
 const handleCollect = async (item, collect) => {
 	const res = await GameApi.gameCollection({
 		gameId: item.id,

@@ -18,11 +18,12 @@
 
 <script setup lang="ts">
 import closeIcon from "./close.png";
+
 /**
- * @description 弹窗
- * @param visible 显示隐藏
- * @param title 标题
- * @param width 弹窗宽度
+ * @description 定义组件的props
+ * @param {boolean} visible - 控制弹窗的显示和隐藏
+ * @param {string} width - 弹窗的宽度
+ * @param {string} title - 弹窗的标题
  */
 const props = defineProps({
 	visible: { type: Boolean, default: false },
@@ -37,6 +38,9 @@ const props = defineProps({
 	title: { type: String, default: "123" },
 });
 
+/**
+ * @description 定义组件的emit事件
+ */
 const emits = defineEmits(["close"]);
 
 // 使用一个ref来存储计算后的maxHeight，避免每次渲染都重新计算
@@ -47,6 +51,9 @@ window.addEventListener("resize", () => {
 	maxHeightRef.value = window.innerHeight * 0.8;
 });
 
+/**
+ * @description 关闭弹窗的方法
+ */
 const close = () => {
 	emits("close");
 };

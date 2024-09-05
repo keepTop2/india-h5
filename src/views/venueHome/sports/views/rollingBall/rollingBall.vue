@@ -1,11 +1,3 @@
-<!--
- * @Author: Hida
- * @Date: 2024-06-06 20:55:25
- * @LastEditors: hida
- * @LastEditTime: 2024-09-04 13:07:40
- * @Description: 滚球赛事列表
- * 
--->
 <template>
 	<component v-if="leagues" :is="sportsMap[Number(route.params.sportType)]" :listData="leagues" :sportType:string="route.params.sportType" />
 	<NoData v-else />

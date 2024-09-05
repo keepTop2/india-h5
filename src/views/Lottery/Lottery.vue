@@ -42,10 +42,15 @@ import { useRouter } from "vue-router";
 import Spin from "/@/components/Spin/Spin.vue";
 import { mockDoGetReward, mockGetSpinList } from "./api.ts";
 import bronze from "./images/bronze_footer.png";
+
+// 奖项列表
 const spinList = ref();
+// 获得的奖励
 const reward = ref();
+// 当前选中的标签
 const currentTab = ref("1");
 const router = useRouter();
+// 标签列表
 const tabs = ref([
 	{
 		name: "青铜",
@@ -64,38 +69,54 @@ const tabs = ref([
 		value: "4",
 	},
 ]);
+
 onMounted(() => {
 	/**
 	 * @description 获取奖项列表
 	 */
-
 	mockGetSpinList().then((res: { data: Array<object> }) => {
 		spinList.value = res.data;
 	});
 });
 
-// 根据currentTab返回不同的img
+/**
+ * @description 根据currentTab返回不同的img
+ * @param {string} val - 当前选中的标签值
+ * @returns {string} 图片URL
+ */
 const getImg = (val: string) => {
 	return new URL(`./images/tab_bg${val}.png`, import.meta.url).href;
 };
+
+/**
+ * @description 处理返回按钮点击事件
+ */
 const onClickLeft = () => {
 	router.go(-1);
 };
+
+/**
+ * @description 选择标签
+ * @param {string} tabKey - 选中的标签值
+ */
 const selectTab = (tabKey: string) => {
 	currentTab.value = tabKey;
 };
+
+/**
+ * @description 抽奖开始
+ */
 const spinStart = () => {
-	/**
-	 * @description 抽奖开始
-	 */
 	mockDoGetReward().then((res: { data: {} }) => {
 		reward.value = res.data;
 	});
 };
+
+/**
+ * @description 处理转盘停止后的逻辑
+ */
 const spinEnd = () => {
-	/**
-	 * 处理转盘停止后的逻辑
-	 */
+	// 处理转盘停止后的逻辑
 };
 </script>
 

@@ -1,11 +1,3 @@
-<!--
- * @Author: Hida
- * @Date: 2024-06-06 20:55:25
- * @LastEditors: hida
- * @LastEditTime: 2024-09-04 13:06:50
- * @Description: 今日赛事
- * 
--->
 <template>
 	<component v-if="events" :is="sportsMap[Number(route.params.sportType)]" :listData="events" :sportType:string="route.params.sportType" />
 	<NoData v-else />

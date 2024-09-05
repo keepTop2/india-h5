@@ -10,6 +10,7 @@
 </template>
 
 <script setup lang="ts">
+//游戏大厅 新游戏布局
 import GameCard from "../components/GameCard.vue";
 import { useRoute } from "vue-router";
 const route = useRoute();

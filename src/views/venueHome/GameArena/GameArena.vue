@@ -9,12 +9,6 @@
 					<input @focus="router.push('/game/arena/search')" disabled :placeholder="$t(`game['输入游戏名称']`)" type="text" class="color_T2" />
 				</div>
 			</div>
-			<!-- <SvgIcon iconName="home/event_collect" /> -->
-			<div v-if="searchValue" class="search_list_container">
-				<div class="game-grid">
-					<GameCard v-for="(game, index) in games" :key="index" :image="game.image" />
-				</div>
-			</div>
 			<div>
 				<!-- 轮播图 -->
 				<Banner class="Home_Banner" />
@@ -44,27 +38,31 @@
 </template>
 
 <script setup lang="ts">
+/**
+ * @description 游戏大厅
+ */
 import { useRoute, useRouter } from "vue-router";
 import Tabs from "/@/components/Tabs/Tabs.vue";
 import Banner from "./Banner/banner.vue";
-//热门游戏
+// 热门游戏组件
 import HotGame from "./HotGame/HotGame.vue";
-//游戏6格布局
+// 新游戏组件
 import NewGame from "./NewGame/NewGame.vue";
 import GameCard from "./components/GameCard.vue";
 import GameChunk from "./GameChunk/GameChunk.vue";
 import GameApi from "/@/api/venueHome/games";
 import pubsub from "/@/pubSub/pubSub";
 import { i18n } from "/@/i18n";
+
 const $: any = i18n.global;
 const route = useRoute();
 const router = useRouter();
 const gameList = ref();
 const { gameOneId } = route.query;
-//初始化当前选中tab
+// 初始化当前选中tab
 const tabsActiveKey = ref("all");
-const searchValue = ref();
-//tabs 切换
+
+// tabs 切换选项
 const tabList = [
 	{
 		name: $.t("game['全部']"),
@@ -87,27 +85,40 @@ const tabList = [
 		value: "4",
 	},
 ];
+
+// 计算属性：过滤出label为0的游戏列表
 const games = computed(() => {
 	return gameList.value?.filter((item) => item.label == 0);
 });
 
 onBeforeMount(() => {
-	//获取游戏列表
+	// 获取游戏列表
 	getGameList();
 });
 
+/**
+ * @description 获取游戏列表
+ */
 const getGameList = () => {
-	// 获取游戏列表
 	GameApi.queryGameInfoByOneClassId({ gameOneId: gameOneId }).then((res) => {
 		console.log("获取游戏列表", res);
 		gameList.value = res.data;
 	});
 };
 
+/**
+ * @description 点击左侧按钮时触发
+ */
 const onClickLeft = () => {
-	// 发布事件
+	// 发布折叠菜单事件
 	pubsub.publish("onCollapseMenu");
 };
+
+/**
+ * @description 显示更多游戏列表
+ * @param {string} title - 游戏类别标题
+ * @param {number} label - 游戏类别标签
+ */
 const showMoreList = (title, label) => {
 	router.push({ name: "GameLists", query: { title, label, gameOneId } });
 };
