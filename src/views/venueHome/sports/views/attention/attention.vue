@@ -1,11 +1,3 @@
-<!--
- * @Author: Hida
- * @Date: 2024-05-18 10:54:05
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-07-15 18:29:08
- * @Description: 
- * 
--->
 <template>
 	<div class="list-content">
 		<VirtualScrollVirtualList

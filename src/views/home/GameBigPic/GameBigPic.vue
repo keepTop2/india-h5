@@ -4,6 +4,9 @@
 	</div>
 </template>
 <script lang="ts" setup>
+/**
+ * @description 游戏布局大图片展示
+ */
 import img from "./image.png";
 </script>
 <style scoped lang="scss">

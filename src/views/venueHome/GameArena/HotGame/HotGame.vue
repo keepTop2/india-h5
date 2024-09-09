@@ -32,6 +32,9 @@
 </template>
 
 <script setup lang="ts">
+/**
+ * @description 游戏大厅 热门游戏布局
+ */
 import { ref } from "vue";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import "swiper/css";

@@ -19,6 +19,12 @@
 <script setup lang="ts">
 import closeIcon from "./close.png";
 
+/**
+ * @description 定义组件的props
+ * @param visible 控制对话框是否可见
+ * @param width 对话框的宽度
+ * @param title 对话框的标题
+ */
 const props = defineProps({
 	visible: { type: Boolean, default: false },
 	width: {
@@ -32,6 +38,9 @@ const props = defineProps({
 	title: { type: String, default: "123" },
 });
 
+/**
+ * @description 定义组件的emit事件
+ */
 const emits = defineEmits(["close"]);
 
 // 使用一个ref来存储计算后的maxHeight，避免每次渲染都重新计算
@@ -42,6 +51,9 @@ window.addEventListener("resize", () => {
 	maxHeightRef.value = window.innerHeight * 0.8;
 });
 
+/**
+ * @description 关闭对话框的方法
+ */
 const close = () => {
 	emits("close");
 };

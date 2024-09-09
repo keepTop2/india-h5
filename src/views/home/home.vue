@@ -110,11 +110,12 @@ const eventList = ref();
 const collectList = ref([]);
 const hotGames = ref<GameInfoList[]>([]);
 const lobbyTopGame = ref<LobbyTopGame[]>();
-
+//判断是否收藏
 const isShowCollect = computed(() => {
 	return collectList.value.length > 0 && UserStore.token;
 })
 
+//监听处理好的体育联赛数据列表 从中获取后台配置好的赛事展示在首页。
 watch(
 	() => viewSportPubSubEventData.getSportData(),
 	(newData,oldData) => {
@@ -156,16 +157,19 @@ onBeforeUnmount(() => {
 	// 清除体育数据缓存
 	clearStoreInfo();
 });
+//获取关注列表
 const queryCollection = () => {
 	GameApi.queryCollection().then((res) => {
 		collectList.value = res.data.records;
 	});
 }
+//获取推荐赛事列表
 const getSportEventsRecommend = () => {
 	HomeApi.querySportEventsRecommend().then((res) => {
 		eventIDList.value = res.data;
 	});
 };
+//获取游戏场馆热门赛事
 const getLobbyTopGame = () => {
 	GameApi.queryLobbyTopGame().then((res) => {
 		lobbyTopGame.value = res.data;
@@ -177,7 +181,16 @@ const initSport = async () => {
 	//开启体育线程
 	workerManage.startWorker(workerManage.WorkerMap.sportViewProcessWorker.workerName);
 	//体育登录
-	await sportsLogin().then((res) => {
+// 	device*	设备：0:后台 1:PC 2:IOS_H5 3:IOS_APP 4:Android_H5 5:Android_APP[...]
+// venueCode*	string
+// title: 场馆code
+// gameCode	string
+// title: 游戏code
+	await sportsLogin({
+		device: 1,
+		venueCode:'',
+		gameCode: '',
+	}).then((res) => {
 		if (res) {
 			initSportPubsub();
 			openSportPush();

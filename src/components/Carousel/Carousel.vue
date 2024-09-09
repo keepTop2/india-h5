@@ -1,7 +1,8 @@
-<!-- 顶部轮播 -->
+<!-- 顶部轮播组件 -->
 
 <template>
 	<div class="Carousel">
+		<!-- Swiper 组件用于创建轮播效果 -->
 		<Swiper
 			@swiper="setSwiperRef"
 			:slidesPerView="slidesPerView"
@@ -17,7 +18,9 @@
 			:modules="modules"
 			class="Carousel__swiper"
 		>
+			<!-- 遍历 gameList 创建轮播项 -->
 			<swiper-slide v-for="(item, index) in gameList" :key="index">
+				<!-- 使用 VantLazyImg 组件实现图片懒加载 -->
 				<VantLazyImg :src="item.icon || game" alt="" />
 			</swiper-slide>
 		</Swiper>
@@ -33,8 +36,10 @@ import "swiper/css/navigation";
 import game from "./banner.png";
 import { Pagination, Navigation, Autoplay } from "swiper/modules";
 
-const modules = ref([Autoplay, Pagination, Navigation]); //swiper配置项
+// 定义 Swiper 使用的模块
+const modules = ref([Autoplay, Pagination, Navigation]);
 
+// 自定义分页配置
 const paginationDom = {
 	clickable: true, // 启用可点击的分页
 	renderBullet: (index, className) => {
@@ -42,10 +47,12 @@ const paginationDom = {
 	},
 };
 
+// 定义 Game 类型
 type Game = {
 	icon: string;
 };
 
+// 组件属性定义
 const props = defineProps({
 	imageKey: {
 		// image对应后端字段中的key
@@ -55,16 +62,16 @@ const props = defineProps({
 	gameList: {
 		type: Array<Game>,
 		default: [
-			// 默认值
-			{
-				icon: "", // 默认图标
-			},
-			{
-				icon: "", // 默认图标
-			},
-			{
-				icon: "", // 默认图标
-			},
+				// 默认值
+				{
+					icon: "", // 默认图标
+				},
+				{
+					icon: "", // 默认图标
+				},
+				{
+					icon: "", // 默认图标
+				},
 		],
 	},
 	slidesPerView: {
@@ -85,8 +92,10 @@ const props = defineProps({
 	},
 });
 
+// 存储 Swiper 实例的引用
 const SwiperRef = ref(); // Swiper 实例的引用
 
+// 设置 Swiper 实例的引用
 const setSwiperRef = (swiper: any) => {
 	console.log("swiper", swiper);
 

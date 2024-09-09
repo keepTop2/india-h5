@@ -15,6 +15,9 @@
 </template>
 
 <script setup lang="ts">
+/**
+ * @description 游戏卡片组件
+ */
 import { GameInfoList, LobbyTopGame } from "/#/game";
 import GameApi from "/@/api/venueHome/games";
 const props = defineProps({

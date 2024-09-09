@@ -19,7 +19,11 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-// 假设有一个函数，可以从配置中动态加载图片
+/**
+ * @description 从配置中动态加载图片
+ * @param {Array} config - 包含图片配置的数组
+ * @returns {Array} 返回处理后的图片数组
+ */
 function loadImages(config) {
 	return config.map((item) => ({
 		id: item.id,
@@ -27,7 +31,10 @@ function loadImages(config) {
 	}));
 }
 
+// 第一组赞助商图片列表
 const imgList = ref(loadImages([{ id: "play1" }, { id: "play2" }, { id: "play3" }]));
+
+// 第二组赞助商图片列表
 const imgList2 = ref(loadImages([{ id: "play4" }, { id: "play5" }, { id: "play6" }]));
 </script>
 

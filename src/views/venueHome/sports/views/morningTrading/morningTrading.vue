@@ -1,11 +1,3 @@
-<!--
- * @Author: Hida
- * @Date: 2024-06-06 20:55:25
- * @LastEditors: hida
- * @LastEditTime: 2024-06-17 15:44:16
- * @Description: 
- * 
--->
 <template>
 	<DateSelector v-model="activeDate" :daysNumber="7" :other="true" :direction="true" />
 	<component v-if="leagues" :is="sportsMap[Number(route.params.sportType)]" :listData="leagues" :sportType:string="route.params.sportType" />

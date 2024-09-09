@@ -41,7 +41,7 @@
 <script setup lang="ts">
 /**
  *
- * @description: 体育投注模板
+ * @description: 棋牌投注记录模板
  */
 import { ref, onMounted } from "vue";
 import { copy } from "../common";

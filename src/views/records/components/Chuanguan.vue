@@ -35,7 +35,7 @@
 <script setup lang="ts">
 /**
  *
- * @description: 体育投注模板
+ * @description: 体育串关投注记录模板
  */
 interface Match {
 	teams: string;
@@ -45,6 +45,10 @@ interface Match {
 }
 import { ref, onMounted, PropType } from "vue";
 import { copy } from "../common";
+/**
+ * @description 父组件传递的参数
+ * @param list: Match[] 接收投注列表
+ */
 const props = defineProps({
 	list: {
 		default: [],

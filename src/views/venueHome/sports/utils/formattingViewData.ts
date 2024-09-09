@@ -1,12 +1,3 @@
-/*
- * @Author: Hida
- * @Date: 2024-06-02 21:49:42
- * @LastEditors: hida
- * @LastEditTime: 2024-06-17 13:22:26
- * @Description:
- *
- */
-// 体育静态文件
 import sportsMap from "/@/views/venueHome/sports/sportsMap/sportsMap";
 
 /**
