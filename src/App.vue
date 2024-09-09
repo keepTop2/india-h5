@@ -35,10 +35,10 @@ const autoLogin = async () => {
 		password: loginInfo.value?.password,
 		deviceNo: common.getInstance().getDevice(), // 设备
 	};
-	const res = await loginApi.submitUserLogin(params).catch((err) => err);
-	if (res.code == common.getInstance().ResCode.SUCCESS) {
-		store.setInfo(res.data);
-	}
+	// const res = await loginApi.submitUserLogin(params).catch((err) => err);
+	// if (res.code == common.getInstance().ResCode.SUCCESS) {
+	// 	store.setInfo(res.data);
+	// }
 };
 
 //初始化主题

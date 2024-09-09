@@ -1,8 +1,8 @@
 <!-- 体育入口 -->
 <template>
-	<div class="Sports" ref="sportsContainer">
+	<div class="Sports" ref="sportsContainer" @scroll="onScroll">
 		<Banner class="Home_Banner" />
-		<van-sticky @change="handleStickyChange">
+		<div class="sports-container" ref="stickyContainer">
 			<!-- 滚球 今日 早盘 冠军 关注 -->
 			<div class="tabs">
 				<div class="tab" :class="{ 'tab-active': tabActive == key }" v-for="(value, key) of sportTabPushActions" :key="key" @click="onTab(key)">
@@ -48,7 +48,7 @@
 					<SvgIcon class="sport_fold color_T3" v-show="!isFold" iconName="/venueHome/sports/svg/sport_fold" @click="onExpandAngCollapse" />
 				</div>
 			</div>
-		</van-sticky>
+		</div>
 		<!-- 赛事列表出口 -->
 		<RouterView />
 		<!-- 体育购物车 -->
@@ -92,6 +92,14 @@ const activeSwitchingSort = ref("time");
 const isFold = computed(() => sportsBetEvent.isFold);
 const attentionSwitch = computed(() => sportsBetEvent.attentionType);
 const store = useUserStore();
+const stickyContainer = ref();
+const isSticky = ref(false);
+
+watch(isSticky, (newValue) => {
+  console.log("Sticky state changed:", newValue);
+	// 这里可以添加其他需要在sticky状态变化时执行的逻辑
+	handleStickyChange(newValue);
+});
 
 const isShowBet = computed(() => {
 	if (tabActive.value != "champion" && sportsBetEvent.attentionType == "event") {
@@ -188,6 +196,12 @@ onBeforeRouteLeave((to, from) => {
 	}
 });
 
+const onScroll = () => {
+	// 监听 ref stickyContainer 是否到顶部了
+	if (stickyContainer.value) {
+		isSticky.value = stickyContainer.value.getBoundingClientRect().top <= 0;
+	}
+}
 //初始化体育
 const initSport = async () => {
 	tabActive.value = route.meta.name as TabOptions;
@@ -616,7 +630,11 @@ const handleStickyChange = (isSticky: boolean) => {
 	height: 100vh;
 	overflow-y: auto;
 	box-sizing: border-box;
-
+	.sports-container {
+		position: sticky;
+		top: 0;
+		z-index: 2;
+	}
 	.operation {
 		max-height: 74px;
 		display: flex;

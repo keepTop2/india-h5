@@ -26,8 +26,8 @@ import { useSportsBetEventStore } from "/@/store/modules/sports/sportsBetData";
 const sportsBetEvent = useSportsBetEventStore();
 const $: any = i18n.global;
 const stickyHeight = computed(() => {
-	const offsetHeight = document.getElementsByClassName("van-sticky")[0]?.offsetHeight;
-	return Math.round(offsetHeight);
+	const clientHeight = document.getElementsByClassName("sports-container")[0]?.clientHeight;
+	return Math.round(clientHeight);
 });
 
 const weekEnum = {
@@ -73,6 +73,7 @@ onMounted(() => {
 <style scoped lang="scss">
 .dateSelector {
 	position: sticky;
+	top: 240px;
 	width: 100%;
 	z-index: 2;
 	display: flex;

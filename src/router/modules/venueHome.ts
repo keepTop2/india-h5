@@ -81,7 +81,7 @@ export const VenueHome = {
 		{
 			path: "/venueHome/sports/league/select/:sportType",
 			name: "sportsLeagueSelect",
-			meta: { title: "联赛筛选" },
+			meta: { title: "联赛筛选", hideTabBar: true },
 			component: () => import("/@/views/venueHome/sports/views/leagueSelect/leagueSelect.vue"),
 		},
 		// 联赛详情

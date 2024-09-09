@@ -24,39 +24,39 @@
 									<div class="teamLogo">
 										<img v-if="eventDetail?.teamInfo?.homeIconUrl" :src="eventDetail?.teamInfo?.homeIconUrl" alt="" />
 									</div>
-									<div class="teamName fs_26 color_TB-P fw_400">{{ eventDetail?.teamInfo?.homeName }}</div>
+									<div class="teamName fs_26 color_TB1 fw_400">{{ eventDetail?.teamInfo?.homeName }}</div>
 								</div>
 								<div class="time">
 									<div v-if="eventDetail?.isLive && isEventRunning">
-										<div class="date fs_24 color_TB-P fw_600">
+										<div class="date fs_24 color_TB1 fw_600">
 											{{ eventDetail && SportsCommon.getEventsTitle(eventDetail) }} <span>{{ formattedGameTime }}</span>
 										</div>
-										<div class="time fs_50 color_TB-P fw_700">{{ eventDetail?.gameInfo.liveHomeScore }}-{{ eventDetail?.gameInfo.liveAwayScore }}</div>
+										<div class="time fs_50 color_TB1 fw_700">{{ eventDetail?.gameInfo.liveHomeScore }}-{{ eventDetail?.gameInfo.liveAwayScore }}</div>
 									</div>
 									<div v-if="eventDetail?.isLive && eventDetail?.eventStatus == 'closed'">
-										<div class="time fs_50 color_TB-P fw_700">{{ eventDetail?.gameInfo.liveHomeScore }}-{{ eventDetail?.gameInfo.liveAwayScore }}</div>
+										<div class="time fs_50 color_TB1 fw_700">{{ eventDetail?.gameInfo.liveHomeScore }}-{{ eventDetail?.gameInfo.liveAwayScore }}</div>
 									</div>
 									<div v-if="!eventDetail?.isLive || !isEventRunning">
-										<div class="date fs_24 color_TB-P fw_600">{{ timeFormate(eventDetail?.globalShowTime).date }}</div>
-										<div class="time fs_50 color_TB-P fw_700">{{ timeFormate(eventDetail?.globalShowTime).time }}</div>
+										<div class="date fs_24 color_TB1 fw_600">{{ timeFormate(eventDetail?.globalShowTime).date }}</div>
+										<div class="time fs_50 color_TB1 fw_700">{{ timeFormate(eventDetail?.globalShowTime).time }}</div>
 									</div>
 								</div>
 								<div class="team2">
 									<div class="teamLogo">
 										<img v-if="eventDetail?.teamInfo?.awayIconUrl" :src="eventDetail?.teamInfo?.awayIconUrl" alt="" />
 									</div>
-									<div class="teamName fs_26 color_TB-P fw_400">{{ eventDetail?.teamInfo?.awayName }}</div>
+									<div class="teamName fs_26 color_TB1 fw_400">{{ eventDetail?.teamInfo?.awayName }}</div>
 								</div>
 							</div>
 						</div>
 						<div class="card">
 							<ul v-if="isEventRunning && eventDetail">
-								<li class="color_TB-P fs_26" v-if="eventDetail?.channelCode" @click="getStreaming">
+								<li class="color_TB1 fs_26" v-if="eventDetail?.channelCode" @click="getStreaming">
 									<SvgIcon iconName="/venueHome/sports/svg/sport_live_2" />
 									{{ $t('sports["视频"]') }}
 								</li>
 								<li class="line bg_T3" v-if="eventDetail?.channelCode"></li>
-								<li @click="attentionEvent()" :class="[(isAttention && 'color_TB-P') || 'color_T3', 'fs_26']">
+								<li @click="attentionEvent()" :class="[(isAttention && 'color_TB1') || 'color_T3', 'fs_26']">
 									<!-- <SvgIcon class="color_T3" iconName="/venueHome/sports/svg/sport_start" size="6" /> -->
 									<SvgIcon v-if="isAttention" iconName="/venueHome/sports/svg/collection2" size="6" />
 									<SvgIcon v-else iconName="/venueHome/sports/svg/collection" size="6" />
@@ -67,7 +67,7 @@
 								<li class="color_T3">{{ eventsList ? (eventDetail ? gameStatus(eventDetail?.eventStatus) : $t('sports["比赛已结束"]')) : "-" }}</li>
 							</ul>
 						</div>
-						<div class="pl_40 pr_40 fs_20 color_TB-P fw_700" v-if="Number(routeData.sportType) == 1 && eventDetail?.isLive && eventDetail?.gameInfo?.inPlayTime">
+						<div class="pl_40 pr_40 fs_20 color_TB1 fw_700" v-if="Number(routeData.sportType) == 1 && eventDetail?.isLive && eventDetail?.gameInfo?.inPlayTime">
 							<span>HT </span>
 							<span>{{ `${eventDetail?.gameInfo?.liveHomeScore}-${eventDetail.gameInfo?.liveAwayScore}` }}</span>
 						</div>
@@ -139,21 +139,21 @@
 				</div>
 			</div>
 			<!-- 滑动到指定位置队伍信息及比分固定在顶部 -->
-			<div class="smallHeader color_TB-P" :class="{ fixed: isFixed }">
+			<div class="smallHeader color_TB1" :class="{ fixed: isFixed }">
 				<div class="goback" @click="onClickLeft">
 					<SvgIcon class="color_T3" iconName="/common/arrowLeft" alt="" />
 				</div>
-				<div class="teamName fs_26 color_TB-P fw_400">
+				<div class="teamName fs_26 color_TB1 fw_400">
 					<span class="w_123">{{ eventDetail?.teamInfo?.homeName }}</span
 					>&nbsp;&nbsp;
 					<span class="w_20" v-show="eventDetail?.isLive">{{ eventDetail?.gameInfo.liveHomeScore }}</span>
 				</div>
-				<div class="date fs_22 color_TB-P fw_400">
+				<div class="date fs_22 color_TB1 fw_400">
 					<span
 						>{{ eventDetail && SportsCommon.getEventsTitle(eventDetail) }} <span>{{ formattedGameTime }}</span></span
 					>
 				</div>
-				<div class="teamName fs_26 color_TB-P fw_400">
+				<div class="teamName fs_26 color_TB1 fw_400">
 					<span class="w_20" v-show="eventDetail?.isLive">{{ eventDetail?.gameInfo.liveAwayScore }}</span>
 					&nbsp;&nbsp;
 					<span class="w_123">{{ eventDetail?.teamInfo?.awayName }}</span>
