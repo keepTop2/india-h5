@@ -23,7 +23,7 @@
 					</h3>
 					<HotGame class="m24" :gameList="gameList?.[0]" />
 					<!-- 新游戏 -->
-					<h3 class="title" v-show="gameList?.[1].length">
+					<h3 class="title" v-show="gameList?.[1]?.length">
 						<!-- <SvgIcon iconName="home/event_game" alt="" /> -->
 						{{ $t('game["新游戏"]') }}
 						<span class="color_T1 fs_28 fw_400" @click="showMoreList($t(`game['热门游戏']`), 2)">{{ $t(`home["更多"]`) }}</span>
