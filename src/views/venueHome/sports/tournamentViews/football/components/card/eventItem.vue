@@ -188,7 +188,7 @@ const formattedGameTime = computed(() => {
 
 // 跳转详情
 const showDetail = (eventId, leagueId) => {
-	router.push(`/sports/event/detail/${eventId}/${leagueId}/${props.event.sportType}`);
+	router.push(`/venueHome/sports/event/detail/${eventId}/${leagueId}/${props.event.sportType}`);
 };
 </script>
 

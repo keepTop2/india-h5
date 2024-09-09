@@ -92,7 +92,7 @@ const attentionEvent = async (isActive: boolean) => {
  * @description 跳转体育详情页
  */
 const showDetail = () => {
-	router.push(`/sports/event/detail/${props.event.eventId}/${props.event.leagueId}/${props.event.sportType}`);
+	router.push(`/venueHome/sports/event/detail/${props.event.eventId}/${props.event.leagueId}/${props.event.sportType}`);
 };
 </script>
 <style scoped lang="scss">
