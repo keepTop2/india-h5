@@ -65,7 +65,7 @@ export const VenueHome = {
 					component: () => import("/@/views/venueHome/sports/views/attention/attention.vue"),
 				},
 				{
-					path: "/sports/matchResult",
+					path: "/venueHome/sports/matchResult",
 					name: "matchResultList",
 					meta: { name: "matchResult", title: "赛果" },
 					component: () => import("/@/views/venueHome/sports/views/matchResult/matchResult.vue"),

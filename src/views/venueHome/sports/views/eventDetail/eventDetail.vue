@@ -472,7 +472,7 @@ const handleChangeEvent = async (eventId) => {
 	iframeLoaded.value = false;
 	router.push({
 		query: {
-			path: "/sports/event/detail",
+			path: "/venueHome/sports/event/detail",
 			data: JSON.stringify({
 				eventId,
 				leagueId,
