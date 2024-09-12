@@ -23,6 +23,14 @@ const LayoutRouter = {
 			},
 		},
 		{
+			path: "/discount/detail",
+			name: "discountDetail",
+			component: () => import("/@/views/discount/FirstDeposit/FirstDeposit.vue"),
+			meta: {
+				title: "活动详情",
+			},
+		},
+		{
 			//规则
 			path: "/betRule",
 			name: "BetRule",
