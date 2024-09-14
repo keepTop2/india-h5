@@ -84,7 +84,7 @@ onBeforeMount(() => {
  */
 const getGameInfoDetail = () => {
 	GameApi.queryGameInfoDetail({
-		label: 0,
+		label: 1,
 		pageSize: -1,
 	}).then((res) => {
 		console.log(res, "==queryGameInfoDetail");
