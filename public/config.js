@@ -5,8 +5,10 @@ window.PLATFROM_CONFIG = {
 	productionFileUrl: "/files/",
 	// 体育打包编译后请求域名地址(运维专用)
 	productionSportUrl: "https://apistaging.wx7777.com",
+
 	// 本地开发地址(开发专用)
 	developmentBaseURL: "https://gw.playesoversea.store",
+	developmentWsURL: "wss://gw.playes.bar/websocket/baowang/websocket", //本地开发websocket地址
 	// 本地开发传文件(开发专用)
 	developmentFileUrl: "http://192.168.30.72:7900",
 	//体育本地开发地址(开发专用)
@@ -16,4 +18,6 @@ window.PLATFROM_CONFIG = {
 		key: "6XGTv3TWSQEMcRs2/zitwkoImRCH6JmUi4372d7ZDfs=",
 		iv: "WlrgxCborZYymTHBlRlirPRrUhjISG39WGwBBfb1mpk=",
 	},
+	//本地开发websocket地址
+	developmentWsURL: "wss://gw.playes.bar/websocket/baowang/websocket",
 };
