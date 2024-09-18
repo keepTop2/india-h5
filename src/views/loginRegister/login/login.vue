@@ -56,25 +56,26 @@
 				</div>
 			</form>
 		</div>
-		<Hcaptcha ref="hcaptcha" @submit="onSubmit" />
+		<div id="captcha-element" ref="captchaBtn"></div>
+		<Hcaptcha ref="refhcaptcha" :onSubmit="onSubmit" />
 	</div>
 </template>
 
 <script setup lang="ts">
 import NavBar from "/@/layout/loginRegister/components/navBar.vue";
-import { loginApi, verifyCodeApi } from "/@/api/loginRegister";
+import { loginApi } from "/@/api/loginRegister";
 import common from "/@/utils/common";
 import HeaderBG from "/@/views/loginRegister/components/headerBG.vue";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useUserStore } from "/@/store/modules/user";
 const store = useUserStore();
-const hcaptcha: any = ref(null);
+const refhcaptcha: any = ref(null);
 const router = useRouter();
 const eyeShow = ref(true);
 const btnDisabled = ref(true);
 const userAgreement = ref(false);
-
+const captchaBtn = ref(null);
 let state = reactive({
 	userAccount: "", // 邮箱或者手机号
 	password: "", // 密码
@@ -111,15 +112,12 @@ watch(
 );
 
 const onLogin = async () => {
-	hcaptcha.value?.validate();
+	captchaBtn.value?.click();
 };
 
-const onSubmit = async (token: string) => {
-	const params = {
-		verifyToken: token,
-	};
-	state = Object.assign({}, params, state);
-	const res = await loginApi.userLogin(state).catch((err) => err);
+const onSubmit = async () => {
+	const certifyId = refhcaptcha.value.certifyId;
+	const res = await loginApi.userLogin({ ...state, certifyId }).catch((err) => err);
 	if (res.code == common.getInstance().ResCode.SUCCESS) {
 		store.setInfo(res.data);
 		if (userAgreement.value) {

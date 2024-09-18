@@ -1,9 +1,11 @@
 <template>
 	<!-- 活动 -->
+	<VantNavBar title="优惠活动" :leftArrow="false" />
 	<div v-loading="state.pageLoading" class="discount_container">
-		<Banner class="home_banner mb_35" />
-		<NavBar class="mb_24 discount_navbar" v-model:active="active" :tab-list="state.tabList" @on-change-nav-bar="onChangeNavBar" />
-		<!-- 轮播图 -->
+		<!-- <Banner class="home_banner mb_35" /> -->
+
+		<NavBar class="mt_32 mb_24 discount_navbar" v-model:active="active" :tab-list="state.tabList" @on-change-nav-bar="onChangeNavBar" />
+
 		<div class="activityList_item bg_Tag1" @click="onToDeatils('12')">
 			<div class="img_container">
 				<div class="activityGraph">
@@ -48,11 +50,19 @@ const state = reactive({
 	tabList: [
 		{
 			code: "0",
-			value: $.t("discount['最新活动']"),
+			value: $.t("discount['全部']"),
 		},
 		{
 			code: "1",
-			value: $.t("discount['已过期']"),
+			value: $.t("discount['促销活动']"),
+		},
+		{
+			code: "2",
+			value: $.t("discount['新人活动']"),
+		},
+		{
+			code: "3",
+			value: $.t("discount['首充活动']"),
 		},
 	],
 	activityList: [],
