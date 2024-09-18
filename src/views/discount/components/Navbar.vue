@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="navBar_conatiner">
-			<VantTabs v-model="value" :swipeThreshold="3" @clickTab="onChangeNavBar">
+			<VantTabs v-model="value" :swipeThreshold="3" @clickTab="onChangeNavBar" shrink>
 				<template #van-tab>
 					<van-tab v-for="(item, index) in tabList" :key="index" :title="item.value" :name="item.code" />
 				</template>
@@ -48,11 +48,11 @@ const onChangeNavBar = () => {
 }
 
 :deep(.van-tabs__wrap) {
-	width: 416px;
 	height: 68px;
 }
 
 .navBar_conatiner:deep(.van-tabs__nav) {
+	padding: 0 !important;
 	@include themeify {
 		background: themed("BG1");
 	}
@@ -62,7 +62,7 @@ const onChangeNavBar = () => {
 	@include themeify {
 		color: themed("T1");
 	}
-
+	padding: 0 30px;
 	/* Text1-文本1 */
 	font-family: "PingFang SC";
 	font-size: 24px;
@@ -73,9 +73,11 @@ const onChangeNavBar = () => {
 
 .navBar_conatiner:deep(.van-tab--active) {
 	border-radius: 8px;
+	font-weight: 500 important;
+	font-size: 30px;
 	@include themeify {
-		color: themed("TB");
-		background: themed("Tag1");
+		color: themed("Theme");
+		background: themed("BG3");
 	}
 
 	/* Text1-文本1 */

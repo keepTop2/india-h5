@@ -101,7 +101,8 @@
 			</div>
 		</div>
 
-		<Hcaptcha ref="hcaptcha" @submit="onSubmit" />
+		<div id="captcha-element" ref="captchaBtn"></div>
+		<Hcaptcha ref="refhcaptcha" :onSubmit="onSubmit" />
 	</div>
 </template>
 
@@ -118,12 +119,12 @@ const store = useUserStore();
 const $: any = i18n.global;
 const route = useRoute();
 const router = useRouter();
-const hcaptcha: any = ref(null);
+const refhcaptcha: any = ref(null);
 const eyeShow = ref(true);
 const btnDisabled = ref(true);
 const mainCurrencyRG = ref(false);
 const userAgreement = ref(false); // 用户协议认证
-
+const captchaBtn = ref(null);
 let state = reactive({
 	userAccount: "", // 邮箱或者手机号
 	password: "", // 密码
@@ -195,20 +196,19 @@ const onRegister = async () => {
 		return;
 	}
 	// 图形验证
-	hcaptcha.value?.validate();
+	captchaBtn.value?.click();
 };
 
 // 注册
-const onSubmit = async (token: string) => {
-	const params = {
-		verifyToken: token,
-	};
-	state = Object.assign({}, params, state);
-	const res = await registerApi.userRegister(state).catch((err) => err);
+const onSubmit = async () => {
+	const certifyId = refhcaptcha.value.certifyId;
+	const res = await registerApi.userRegister({ ...state, certifyId }).catch((err) => err);
 	if (res.code == common.getInstance().ResCode.SUCCESS) {
 		showToast(res.message);
 		store.setInfo(res.data);
 		router.replace({ path: "/home" });
+	} else {
+		showToast(res.message);
 	}
 };
 </script>
