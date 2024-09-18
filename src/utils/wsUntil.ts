@@ -17,24 +17,51 @@ function getUrl() {
  * @description websocket 工具类
  */
 export default class WsUtil {
-	//链接地址
+	/**
+	 * @description 链接地址
+	 */
 	private url: string;
-	//重连间隔时间
+
+	/**
+	 * @description 重连间隔时间
+	 */
 	private reconnectInterval: number;
-	//重连定时器
+
+	/**
+	 * @description 重连定时器
+	 */
 	private reconnectTimer: null | TimeoutHandle = null;
-	//心跳间隔时间
+
+	/**
+	 * @description 心跳间隔时间
+	 */
 	private pingInterval: number = 5000;
-	//心跳超时计数
+
+	/**
+	 * @description 心跳超时计数
+	 */
 	private pingTimeout: number = 0;
-	//心跳超时最大值
+
+	/**
+	 * @description 心跳超时最大值
+	 */
 	private pingTimeoutMax: number = 5;
-	//心跳定时器
+
+	/**
+	 * @description 心跳定时器
+	 */
 	private pingTimer: null | TimeoutHandle = null;
-	//心跳超时定时器
+
+	/**
+	 * @description 心跳超时定时器
+	 */
 	private pingTimeoutTimer: null | TimeoutHandle = null;
-	//是否主动关闭通道
+
+	/**
+	 * @description 是否主动关闭通道
+	 */
 	private isProactive: boolean = false;
+
 	private websocket: WebSocket | null;
 	constructor(reconnectInterval: number = 3000) {
 		// if()
