@@ -3,7 +3,7 @@ import { useUserStore } from "/@/store/modules/user";
  * @description
  */
 function getUrl() {
-	console.log(import.meta.env.VITE_BASEENV, "====================环境变量", window["PLATFROM_CONFIG"]);
+	// console.log(import.meta.env.VITE_BASEENV, "====================环境变量", window["PLATFROM_CONFIG"]);
 	switch (import.meta.env.VITE_BASEENV) {
 		case "development":
 			return window["PLATFROM_CONFIG"].developmentWsURL;
@@ -67,7 +67,7 @@ export default class WsUtil {
 	constructor(reconnectInterval: number = 3000) {
 		// if()
 		this.url = getUrl();
-		console.log(this.url, "===============看下连接地址");
+		// console.log(this.url, "===============看下连接地址");
 		this.reconnectInterval = reconnectInterval;
 		this.websocket = null;
 
@@ -129,7 +129,7 @@ export default class WsUtil {
 		//接收消息
 		this.websocket.onmessage = (event: MessageEvent) => {
 			const data = JSON.parse(event.data);
-			console.log("WebSocket message received:", data);
+			// console.log("WebSocket message received:", data);
 			if (data == 2) {
 				this.pingTimeout = 0;
 				//清除心跳超时计时
