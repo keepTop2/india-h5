@@ -3,6 +3,7 @@ import { useUserStore } from "/@/store/modules/user";
  * @description
  */
 function getUrl() {
+	// console.log(import.meta.env.VITE_BASEENV, "====================环境变量", window["PLATFROM_CONFIG"]);
 	switch (import.meta.env.VITE_BASEENV) {
 		case "development":
 			return window["PLATFROM_CONFIG"].developmentWsURL;
@@ -17,28 +18,56 @@ function getUrl() {
  * @description websocket 工具类
  */
 export default class WsUtil {
-	//链接地址
+	/**
+	 * @description 链接地址
+	 */
 	private url: string;
-	//重连间隔时间
+
+	/**
+	 * @description 重连间隔时间
+	 */
 	private reconnectInterval: number;
-	//重连定时器
+
+	/**
+	 * @description 重连定时器
+	 */
 	private reconnectTimer: null | TimeoutHandle = null;
-	//心跳间隔时间
-	private pingInterval: number = 5000;
-	//心跳超时计数
+
+	/**
+	 * @description 心跳间隔时间
+	 */
+	private pingInterval: number = 2000;
+
+	/**
+	 * @description 心跳超时计数
+	 */
 	private pingTimeout: number = 0;
-	//心跳超时最大值
+
+	/**
+	 * @description 心跳超时最大值
+	 */
 	private pingTimeoutMax: number = 5;
-	//心跳定时器
+
+	/**
+	 * @description 心跳定时器
+	 */
 	private pingTimer: null | TimeoutHandle = null;
-	//心跳超时定时器
+
+	/**
+	 * @description 心跳超时定时器
+	 */
 	private pingTimeoutTimer: null | TimeoutHandle = null;
-	//是否主动关闭通道
+
+	/**
+	 * @description 是否主动关闭通道
+	 */
 	private isProactive: boolean = false;
+
 	private websocket: WebSocket | null;
 	constructor(reconnectInterval: number = 3000) {
 		// if()
 		this.url = getUrl();
+		// console.log(this.url, "===============看下连接地址");
 		this.reconnectInterval = reconnectInterval;
 		this.websocket = null;
 
@@ -56,7 +85,7 @@ export default class WsUtil {
 			this.websocket.close();
 			this.websocket = null;
 		}
-		this.websocket = new WebSocket(`${this.url}/${token.value}/1`);
+		this.websocket = new WebSocket(`${this.url}?p=${token.value}`);
 
 		this.websocket.onopen = () => {
 			// console.log('WebSocket connection established');
@@ -100,8 +129,8 @@ export default class WsUtil {
 		//接收消息
 		this.websocket.onmessage = (event: MessageEvent) => {
 			const data = JSON.parse(event.data);
-			// console.log('WebSocket message received:', data);
-			if (data.messageType == "0") {
+			// console.log("WebSocket message received:", data);
+			if (data == 2) {
 				this.pingTimeout = 0;
 				//清除心跳超时计时
 				this.clearPingTimeout();
@@ -120,7 +149,7 @@ export default class WsUtil {
 	 * 开始心跳
 	 */
 	private startPing() {
-		const message = { ping: "1" };
+		const message = 1;
 		this.send(message);
 		if (this.pingTimer) {
 			clearTimeout(this.pingTimer);

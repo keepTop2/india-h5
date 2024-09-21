@@ -1,74 +1,70 @@
 <template>
-	<div ref="hcaptchaContainer"></div>
+	<div id="hcaptchaContainer"></div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
-import { useLoading } from "/@/directives/loading/hooks";
-
-const { startLoading, stopLoading } = useLoading();
-
-const hcaptchaContainer = ref<HTMLDivElement | null>(null);
-const siteKey = "dcbefb7f-d3a4-4e87-8ae3-7b4a93813cbf";
-
-// 扩展 Window 接口以包含 hcaptcha 属性
-declare global {
-	interface Window {
-		hcaptcha: any;
-	}
-}
-
-let hcaptcha: any = null;
-
-const emit = defineEmits(["submit", "opened"]);
-
-// 打开验证
-const validate = () => {
-	startLoading();
-	if (hcaptcha) {
-		hcaptcha.execute();
-	}
-};
-
-// 验证打开回调
-const opened = () => {
-	stopLoading();
-};
-
-// 验证完成回调
-const onSubmit = (token: string) => {
-	emit("submit", token);
-	// stopLoading();
-};
-
-// 验证关闭回调
-const closed = () => {};
-
-defineExpose({
-	validate,
+import { onMounted, ref } from "vue";
+import { verifyCodeApi } from "/@/api/loginRegister";
+import common from "/@/utils/common";
+const certifyId = ref(null);
+const props = defineProps({
+	onSubmit: {
+		type: Function,
+		default: () => {},
+	},
+});
+const captcha = ref(null);
+onMounted(() => {
+	(window as any).initAliyunCaptcha({
+		SceneId: "qxye14r6d",
+		prefix: "5zbecta",
+		mode: "popup",
+		element: "#hcaptchaContainer",
+		button: "#captcha-element",
+		captchaVerifyCallback: captchaVerifyCallback,
+		onBizResultCallback: onSubmit,
+		getInstance: getInstance,
+		slideStyle: {
+			width: 360,
+			height: 200,
+		},
+		language: "cn",
+		region: "sgp",
+	});
 });
 
-onMounted(() => {
-	const script = document.createElement("script");
-	script.src = "https://js.hcaptcha.com/1/api.js";
-	script.async = true;
-	script.defer = true;
-	script.onload = () => {
-		if (hcaptchaContainer.value) {
-			hcaptcha = window.hcaptcha;
-			hcaptcha.render(hcaptchaContainer.value, {
-				sitekey: siteKey,
-				callback: onSubmit,
-				size: "invisible",
-				"open-callback": opened,
-				"close-callback": closed,
-			});
+const getInstance = (instance: any) => {
+	captcha.value = instance;
+};
+// 验证码验证回调
+const captchaVerifyCallback = (captchaVerifyParam: any) => {
+	return verifyCodeApi.verifyCode({ captchaVerifyParam: captchaVerifyParam }).then((res: any) => {
+		if (res.code === common.getInstance().ResCode.SUCCESS) {
+			// 构造标准返回参数
+			const verifyResult = {
+				captchaResult: res.data.captchaResult,
+				bizResult: res.data.captchaResult,
+			};
+			certifyId.value = JSON.parse(captchaVerifyParam).certifyId;
+			console.log(verifyResult);
+
+			return verifyResult;
+		} else {
+			// 构造标准返回参数
+			const verifyResult = {
+				captchaResult: res.data.captchaResult,
+				bizResult: res.data.captchaResult,
+			};
+			return verifyResult;
 		}
-	};
-	script.onerror = () => {
-		console.error("Failed to load hCaptcha script.");
-		stopLoading();
-	};
-	document.head.appendChild(script);
+	});
+};
+const onSubmit = () => {
+	props.onSubmit();
+};
+defineExpose({
+	certifyId,
 });
 </script>
+
+<style scoped></style>

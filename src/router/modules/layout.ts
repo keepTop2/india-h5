@@ -9,6 +9,7 @@ const LayoutRouter = {
 		{
 			path: "/discount",
 			name: "discount",
+			layout: false,
 			component: () => import("/@/views/discount/discount.vue"),
 			meta: {
 				title: "优惠",

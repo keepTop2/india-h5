@@ -14,7 +14,7 @@
 		>
 			<template #left>
 				<span v-if="leftText">{{ leftText }}</span>
-				<slot v-else name="left">
+				<slot v-else-if="leftArrow" name="left">
 					<div class="back">
 						<SvgIcon iconName="/vantNavBar/back" />
 					</div>

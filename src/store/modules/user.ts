@@ -94,6 +94,9 @@ export const useUserStore = defineStore("User", {
 			this.loginStatus = false;
 			localStorage.clear();
 		},
+		logOut() {
+			this.clearInfo();
+		},
 	},
 	persist: [
 		{

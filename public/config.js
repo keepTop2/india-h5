@@ -8,7 +8,10 @@ window.PLATFROM_CONFIG = {
 
 	// 本地开发地址(开发专用)
 	developmentBaseURL: "https://gw.playesoversea.store",
-	developmentWsURL: "wss://gw.playes.bar/websocket/baowang/websocket", //本地开发websocket地址
+
+	//本地开发websocket地址
+	developmentWsURL: "wss://gw.playesoversea.store/ws",
+
 	// 本地开发传文件(开发专用)
 	developmentFileUrl: "http://192.168.30.72:7900",
 	//体育本地开发地址(开发专用)
@@ -18,6 +21,4 @@ window.PLATFROM_CONFIG = {
 		key: "6XGTv3TWSQEMcRs2/zitwkoImRCH6JmUi4372d7ZDfs=",
 		iv: "WlrgxCborZYymTHBlRlirPRrUhjISG39WGwBBfb1mpk=",
 	},
-	//本地开发websocket地址
-	developmentWsURL: "wss://gw.playes.bar/websocket/baowang/websocket",
 };

@@ -10,13 +10,17 @@ import { loginApi } from "/@/api/loginRegister";
 import common from "/@/utils/common";
 import MenuPopup from "/@/layout/home/components/menuPopup.vue";
 import { useThemesStore } from "/@/store/modules/themes";
+
 import { useUserStore } from "/@/store/modules/user";
 import { LangEnum } from "/@/enum/appConfigEnum";
-const store = useUserStore();
+import WsUtil from "/@/utils/wsUntil";
+
+let ws: WsUtil | null;
+const userStore = useUserStore();
 const ThemesStore = useThemesStore();
 
 const loginInfo = computed(() => {
-	return store.getLoginInfo;
+	return userStore.getLoginInfo;
 });
 
 onBeforeMount(() => {
@@ -25,11 +29,37 @@ onBeforeMount(() => {
 	autoLogin();
 });
 
+//监听token
+watch(
+	[() => userStore.token],
+	([newToken]) => {
+		//每次token变化
+		if (newToken) {
+			//如果ws已经存在则关闭并释放
+			if (ws) {
+				ws.close();
+				ws = null;
+			}
+			//重新建立新连接通道
+			ws = new WsUtil();
+		} else {
+			if (ws) {
+				ws.close();
+				ws = null;
+			}
+		}
+	},
+	{
+		immediate: true,
+		deep: true,
+	}
+);
+
 // 自动登录
 const autoLogin = async () => {
 	// 没有登录信息与密钥则推出
-	if (!store.loginStatus) return;
-	if (store.token) return;
+	if (!userStore.loginStatus) return;
+	if (userStore.token) return;
 	const params = {
 		userAccount: loginInfo.value?.userAccount,
 		password: loginInfo.value?.password,
@@ -37,7 +67,7 @@ const autoLogin = async () => {
 	};
 	// const res = await loginApi.submitUserLogin(params).catch((err) => err);
 	// if (res.code == common.getInstance().ResCode.SUCCESS) {
-	// 	store.setInfo(res.data);
+	// 	userStore.setInfo(res.data);
 	// }
 };
 
@@ -48,10 +78,10 @@ const initTheme = () => {
 
 // 初始化语言
 const initLang = () => {
-	if (store.lang) {
-		store.setLang(store.lang);
+	if (userStore.lang) {
+		userStore.setLang(userStore.lang);
 	} else {
-		store.setLang(LangEnum["en-US"]);
+		userStore.setLang(LangEnum["en-US"]);
 	}
 };
 </script>
