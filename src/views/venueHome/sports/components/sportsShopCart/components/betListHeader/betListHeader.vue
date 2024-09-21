@@ -6,10 +6,10 @@
 		<div class="header-right">
 			<div class="amount-info" @click="getBalance">
 				<span class="value">{{ Common.getInstance().formatAmount(sportsBetInfo.balance) }}</span>
-				<SvgIcon class="color_Theme" iconName="/venueHome/sports/svg/sports_refresh" />
+				<SvgIcon class="color_Theme" iconName="venueHome/sports/svg/sports_refresh" />
 			</div>
 			<div class="close">
-				<SvgIcon iconName="/venueHome/sports/svg/close" @click="closePopup" />
+				<SvgIcon iconName="venueHome/sports/svg/close" @click="closePopup" />
 			</div>
 		</div>
 	</div>

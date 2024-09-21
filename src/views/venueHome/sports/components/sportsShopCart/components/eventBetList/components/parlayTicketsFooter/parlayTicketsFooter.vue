@@ -6,7 +6,7 @@
 		</div>
 		<div class="btns">
 			<div class="delete_btn" @click="onDelete">
-				<SvgIcon iconName="/venueHome/sports/svg/sports_delete" size="3.8" />
+				<SvgIcon iconName="venueHome/sports/svg/sports_delete" size="3.8" />
 			</div>
 
 			<div class="btn1">
@@ -28,7 +28,7 @@
 			</div>
 
 			<div class="btn2 van-haptics-feedback" @click="closePopup">
-				<SvgIcon iconName="/venueHome/sports/svg/sports_plus" size="3.466667" />
+				<SvgIcon iconName="venueHome/sports/svg/sports_plus" size="3.466667" />
 				<span class="label">{{ $t('sports["串"]') }}</span>
 			</div>
 		</div>

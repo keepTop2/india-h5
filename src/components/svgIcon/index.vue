@@ -1,40 +1,60 @@
 <template>
-	<DynamicSvgComponent v-if="DynamicSvgComponent" :iconName="iconName" :width="size || width ? `${size || width}vw` : undefined" :height="size || height ? `${height || size}vw` : undefined" />
+  <svg :style="svgStyle">
+    <use :xlink:href="symbolId" />
+  </svg>
 </template>
 
 <script setup lang="ts">
-/**
- * 引入动态 SVG 组件
- * @param {string} iconName - SVG 图标路径/名称
- */
+import { computed } from "vue";
 
-import { shallowRef } from "vue";
-
-const props = defineProps(["iconName", "width", "height", "size"]);
-
-// 使用 shallowRef 浅层响应 存储异步加载的 SVG 图标路径
-const DynamicSvgComponent = shallowRef(null);
-
-const getIconUrl = () => {
-	// 在 setup 函数中动态加载 SVG 文件，并将加载完成后的 URL 赋值给 DynamicSvgComponent
-	import(/* @vite-ignore */ `/@/assets/zh-CN/default/${props.iconName}.svg`)
-		.then((module) => {
-			DynamicSvgComponent.value = module.default;
-		})
-		.catch((error) => {
-			console.log("加载失败");
-		});
-};
-
-onMounted(() => {
-	if (props.iconName) {
-		getIconUrl();
-	}
+const props = defineProps({
+  iconName: {
+    type: String,
+    required: true
+  },
+  size: {
+    type: [String, Number]
+  },
+  width: {
+    type: [String, Number]
+  },
+  height: {
+    type: [String, Number]
+  },
+  color: {
+    type: String
+  }
 });
-watch(
-	() => props.iconName,
-	() => {
-		getIconUrl();
-	}
-);
+const symbolId = computed(() => {
+  const iconPath = props.iconName.split('/');
+  if (iconPath.length > 2) {
+    const transformedPath = iconPath.slice(0, -1).join('-') + '/' + iconPath[iconPath.length - 1];
+    return `#icon/${transformedPath}`;
+  }
+  return `#icon/${props.iconName}`;
+});
+const svgStyle = computed(() => {
+  const convertToVw = (value: string | number | undefined): string | undefined => {
+    if (typeof value === 'string') {
+      if (value.endsWith('vw')) {
+        return value;
+      }
+      if (value.endsWith('px')) {
+        const numericValue = parseFloat(value);
+        return `${(numericValue / 7.5).toFixed(6)}vw`;
+      }
+    }
+    return value ? `${value}vw` : undefined;
+  };
+
+  const size = convertToVw(props.size);
+  const width = convertToVw(props.width);
+  const height = convertToVw(props.height);
+
+  return {
+    width: size || width,
+    height: size || height,
+    color: props.color
+  };
+});
 </script>

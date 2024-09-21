@@ -14,7 +14,7 @@
 				<RiseOrFall v-if="market?.selections[0]?.oddsChange" :time="3000" :status="market?.selections[0]?.oddsChange == 'oddsUp' ? 1 : 2" @animationEnd="animationEnd(market?.selections[0])" />
 			</div>
 			<div v-else class="lock">
-				<SvgIcon iconName="/venueHome/sports/svg/sport_lock" size="4.6" />
+				<SvgIcon iconName="venueHome/sports/svg/sport_lock" size="4.6" />
 			</div>
 		</div>
 		<div v-else class="handicap-item">
@@ -33,7 +33,7 @@
 				<RiseOrFall v-if="market?.selections[1]?.oddsChange" :time="3000" :status="market?.selections[1]?.oddsChange == 'oddsUp' ? 1 : 2" @animationEnd="animationEnd(market?.selections[1])" />
 			</div>
 			<div v-else class="lock">
-				<SvgIcon iconName="/venueHome/sports/svg/sport_lock" size="4.6" />
+				<SvgIcon iconName="venueHome/sports/svg/sport_lock" size="4.6" />
 			</div>
 		</div>
 		<div v-else class="handicap-item">

@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="radio" @click="onRadio">
-			<SvgIcon style="fill: none" :iconName="sportsBetEvent.radioStatus ? '/venueHome/sports/svg/sports_radio_active' : '/venueHome/sports/svg/sports_radio'" size="3.466667" />
+			<SvgIcon style="fill: none" :iconName="sportsBetEvent.radioStatus ? 'venueHome/sports/svg/sports_radio_active' : 'venueHome/sports/svg/sports_radio'" size="3.466667" />
 			<span>{{ $t('sports["自动接受较优赔率"]') }}</span>
 		</div>
 
