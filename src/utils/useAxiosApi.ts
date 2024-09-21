@@ -64,19 +64,24 @@ instance.interceptors.response.use(
 			stopLoading();
 		}
 		const res = response.data;
-		// 如果自定义代码不是 200，则判断为错误。
-		if (res.code !== ResCode.SUCCESS) {
-			if (res.type == "image/png") {
-				return res;
-			}
-			handleRequestError({
-				name: "mainApp",
-				res,
-			});
-			return Promise.reject("ERR" || "Error");
-		} else {
-			return res;
+		if (res.code === 10008) {
+			useUserStore().logOut();
 		}
+
+		return res;
+		// 如果自定义代码不是 200，则判断为错误。
+		// if (res.code !== ResCode.SUCCESS) {
+		// 	if (res.type == "image/png") {
+		// 		return res;
+		// 	}
+		// 	handleRequestError({
+		// 		name: "mainApp",
+		// 		res,
+		// 	});
+		// 	return Promise.reject("ERR" || "Error");
+		// } else {
+		// 	return res;
+		// }
 	},
 	(error) => {
 		console.log("请求失败", error);
