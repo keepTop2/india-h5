@@ -4,6 +4,7 @@ import { ConfigEnv, loadEnv, UserConfig } from "vite";
 import { wrapperEnv } from "./build/utils";
 import path from "path";
 import svgLoader from "vite-svg-loader";
+import { createSvgIconsPlugin } from "vite-plugin-svg-icons";
 
 const pathResolve = (dir: string) => {
 	return resolve(process.cwd(), ".", dir);
@@ -76,12 +77,14 @@ export default function ({ command, mode }: ConfigEnv): UserConfig {
 			},
 		},
 		plugins: [
-			svgLoader({
-				svgoConfig: {
-					plugins: ["prefixIds"],
-				},
-			}),
+			svgLoader(),
 			createVitePlugins(viteEnv, isProduction),
+			createSvgIconsPlugin({
+				// 指定需要缓存的图标文件夹
+				iconDirs: [path.resolve(process.cwd(), "src/assets/zh-CN/default")],
+				// 指定symbolId格式
+				symbolId: "icon/[dir]/[name]",
+			}),
 		],
 		build: {
 			minify: "terser",

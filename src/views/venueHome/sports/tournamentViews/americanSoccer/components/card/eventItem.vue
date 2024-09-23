@@ -7,9 +7,9 @@
 			<div class="left">
 				<div class="icon">
 					<!-- 关注 -->
-					<SvgIcon class="icon" v-if="isAttention" iconName="/venueHome/sports/svg/collection2" @click="attentionEvent(true)" />
+					<SvgIcon class="icon" v-if="isAttention" iconName="venueHome/sports/svg/collection2" @click="attentionEvent(true)" />
 					<!-- 取消关注 -->
-					<SvgIcon class="icon" v-else iconName="/venueHome/sports/svg/collection" @click="attentionEvent(false)" />
+					<SvgIcon class="icon" v-else iconName="venueHome/sports/svg/collection" @click="attentionEvent(false)" />
 				</div>
 				<div class="label" :class="{ 'color_Theme-P': event.isLive, color_TB: !event.isLive }">
 					<span class="mr_6">{{ SportsCommonFn.getEventsTitle(event) }}</span>
@@ -62,10 +62,10 @@
 				<div class="others">
 					<!-- 上半场比分 下半场不显示 -->
 					<div v-if="event.streamingOption != 0 && event.channelCode" class="other3">
-						<SvgIcon iconName="/venueHome/sports/svg/sport_live" />
+						<SvgIcon iconName="venueHome/sports/svg/sport_live" />
 					</div>
 					<!-- <div class="other4">
-						<SvgIcon iconName="/venueHome/sports/svg/sport_match_status" size="4.266667" />
+						<SvgIcon iconName="venueHome/sports/svg/sport_match_status" size="4.266667" />
 					</div> -->
 					<div class="other5">{{ event.marketCount }}</div>
 				</div>

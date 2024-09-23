@@ -30,7 +30,7 @@
 					<span class="fs_32 fw_700 color_TB">{{ (data.awayScore != null && data.awayScore) || "-" }}</span>
 				</div>
 			</div>
-			<!-- <SvgIcon class="arrow_right" @click="showDetail(data.eventId)" iconName="/venueHome/sports/svg/sport_arrow_right" /> -->
+			<!-- <SvgIcon class="arrow_right" @click="showDetail(data.eventId)" iconName="venueHome/sports/svg/sport_arrow_right" /> -->
 		</div>
 	</div>
 </template>

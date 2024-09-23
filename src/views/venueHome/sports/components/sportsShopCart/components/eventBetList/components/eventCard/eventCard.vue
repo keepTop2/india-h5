@@ -2,7 +2,7 @@
 	<div class="bet_slip_item">
 		<!-- 删除按钮 -->
 		<div class="remove_icon"></div>
-		<SvgIcon class="sports_remove" iconName="/venueHome/sports/svg/sports_remove" size="3.466667" @click="onDeleteBetEvent(props.data)" />
+		<SvgIcon class="sports_remove" iconName="venueHome/sports/svg/sports_remove" size="3.466667" @click="onDeleteBetEvent(props.data)" />
 		<!-- 投注赛事信息 -->
 		<div class="bet_slip_info" :style="{ opacity: opacityFn(props.data) }">
 			<div class="bet_slip_label">

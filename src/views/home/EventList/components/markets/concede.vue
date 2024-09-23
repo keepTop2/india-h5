@@ -16,7 +16,7 @@
 				</span>
 			</div>
 			<div v-else class="lock">
-				<SvgIcon iconName="/venueHome/sports/svg/sport_lock" size="4.6" />
+				<SvgIcon iconName="venueHome/sports/svg/sport_lock" size="4.6" />
 			</div>
 		</div>
 		<div v-else class="handicap-item">
@@ -37,7 +37,7 @@
 				</span>
 			</div>
 			<div v-else class="lock">
-				<SvgIcon iconName="/venueHome/sports/svg/sport_lock" size="4.6" />
+				<SvgIcon iconName="venueHome/sports/svg/sport_lock" size="4.6" />
 			</div>
 		</div>
 		<div v-else class="handicap-item">
