@@ -6,7 +6,7 @@
 	<div class="RiseOrFall-container">
 		<div class="centent" :class="statusValue[state?.status as keyof number & 3]">
 			<div class="icon">
-				<SvgIcon iconName="/venueHome/sports/svg/direction" class="directionSvg" />
+				<SvgIcon iconName="venueHome/sports/svg/direction" class="directionSvg" />
 			</div>
 		</div>
 	</div>

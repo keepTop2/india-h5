@@ -1,6 +1,6 @@
 <template lang="">
 	<div class="backToTop" v-show="showButton">
-		<SvgIcon @click="backToTop" iconName="common/arrowTop" class="color_Theme" />
+		<SvgIcon @click="backToTop" iconName="common/arrowTop" size="3.333333" class="color_Theme" />
 		<span class="color_Tag1 fs_22">TOP</span>
 	</div>
 </template>

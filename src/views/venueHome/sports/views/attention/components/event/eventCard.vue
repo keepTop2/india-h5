@@ -7,7 +7,7 @@
 				</div>
 				<div class="tournament-name">{{ data.leagueName }}</div>
 			</div>
-			<SvgIcon :class="{ sport_arrow: !displayContent }" iconName="/venueHome/sports/svg/sport_arrow" size="5.333333" />
+			<SvgIcon :class="{ sport_arrow: !displayContent }" iconName="venueHome/sports/svg/sport_arrow" size="5.333333" />
 		</div>
 		<template v-if="displayContent">
 			<component v-for="(event, index) in data.events" :key="index" :is="sportsMap[event.sportType]" :event="event" :sportType="event.sportType" />

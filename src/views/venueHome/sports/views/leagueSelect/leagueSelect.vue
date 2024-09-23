@@ -3,20 +3,20 @@
 		<VantNavBar :title="$t(`sports['联赛筛选']`)" @onClickLeft="onClickLeft" />
 		<div class="leagueSelect bg_BG1">
 			<div class="search bg_BG3 mb_24">
-				<SvgIcon iconName="/venueHome/sports/svg/magnifier" class="size_32 color_Tag1" />
+				<SvgIcon iconName="venueHome/sports/svg/magnifier" class="size_32 color_Tag1" />
 				<input class="color_T3 fs_26 fw_400" autocomplete="off" v-model="searchValue" :placeholder="$t(`sports['请输入联赛名']`)" type="text" name="search" />
 			</div>
 			<ul>
 				<li class="bg_BG3 mb_8 fs_26 fw_400" v-for="(item, index) in leaguesList" :key="index" @click="handleChange(item)">
 					<span class="leagueName color_T1">{{ item.leagueName }}</span>
-					<SvgIcon style="fill: none" :iconName="isActive(item) ? '/venueHome/sports/svg/sport_checked' : '/venueHome/sports/svg/sport_unChecked'" class="size_32 color_Theme" />
+					<SvgIcon style="fill: none" :iconName="isActive(item) ? 'venueHome/sports/svg/sport_checked' : 'venueHome/sports/svg/sport_unChecked'" class="size_32 color_Theme" />
 				</li>
 			</ul>
 		</div>
 		<div class="league_select_footer">
 			<div class="mr_50 flex-center">
 				<span class="theme flex-center" @click="handleAllLeague"
-					><SvgIcon style="fill: none" :iconName="isAll ? '/venueHome/sports/svg/sport_checked' : '/venueHome/sports/svg/sport_unChecked'" class="size_32 mr_16" /><span
+					><SvgIcon style="fill: none" :iconName="isAll ? 'venueHome/sports/svg/sport_checked' : 'venueHome/sports/svg/sport_unChecked'" class="size_32 mr_16" /><span
 						class="color_T1 fs_26 fw_500 mr_50"
 						>{{ $t('sports["全选"]') }}</span
 					></span

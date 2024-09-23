@@ -19,7 +19,7 @@
 				</div>
 				<template v-else>
 					<div>
-						<SvgIcon iconName="/venueHome/sports/svg/sport_lock" size="4.6" />
+						<SvgIcon iconName="venueHome/sports/svg/sport_lock" size="4.6" />
 					</div>
 				</template>
 			</div>

@@ -4,7 +4,7 @@
 			<div class="tournament-info">
 				<div class="tournament-name">{{ data.leagueName }}</div>
 			</div>
-			<SvgIcon :class="{ sport_arrow: !displayContent }" iconName="/venueHome/sports/svg/sport_arrow" size="5.333333" />
+			<SvgIcon :class="{ sport_arrow: !displayContent }" iconName="venueHome/sports/svg/sport_arrow" size="5.333333" />
 		</div>
 		<ul class="bg_Bg3 leagueList" v-if="displayContent">
 			<li class="color_T1 fs_20" v-for="(item, index) in data.events" :key="index">

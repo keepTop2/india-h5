@@ -1,7 +1,7 @@
 <template>
 	<div v-if="eventsValue > 0" class="shopping-cart-icon" @click="showPopup">
 		<div class="badge">{{ eventsValue }}</div>
-		<SvgIcon iconName="/venueHome/sports/svg/sport_checklist" size="6.15384" />
+		<SvgIcon iconName="venueHome/sports/svg/sport_checklist" size="6.15384" />
 	</div>
 </template>
 
