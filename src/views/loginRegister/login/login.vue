@@ -69,6 +69,7 @@ import HeaderBG from "/@/views/loginRegister/components/headerBG.vue";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useUserStore } from "/@/store/modules/user";
+import { showFailToast } from "vant";
 const store = useUserStore();
 const refhcaptcha: any = ref(null);
 const router = useRouter();
@@ -128,6 +129,8 @@ const onSubmit = async () => {
 			store.setLoginInfo();
 		}
 		router.replace({ path: "/home" });
+	} else {
+		showFailToast(res.message);
 	}
 };
 

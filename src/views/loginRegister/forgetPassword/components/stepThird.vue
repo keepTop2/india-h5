@@ -46,7 +46,7 @@
 <script setup lang="ts">
 import { forgetPasswordApi } from "/@/api/loginRegister";
 import common from "/@/utils/common";
-import { showToast } from "vant";
+import { showFailToast, showToast } from "vant";
 import { useRouter } from "vue-router";
 
 const props = withDefaults(
@@ -103,6 +103,8 @@ const onStep = async () => {
 	if (res.code == common.getInstance().ResCode.SUCCESS) {
 		showToast("修改成功");
 		router.push("/login");
+	} else {
+		showFailToast(res.message);
 	}
 };
 </script>

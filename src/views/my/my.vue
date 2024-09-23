@@ -131,6 +131,7 @@ import balance_operation_tx from "/@/assets/zh-CN/default/my/balance_operation_t
 import balance_operation_jy from "/@/assets/zh-CN/default/my/balance_operation_jy.png";
 import balance_operation_tz from "/@/assets/zh-CN/default/my/balance_operation_tz.png";
 import { i18n } from "/@/i18n/index";
+import { loginApi } from "/@/api/loginRegister";
 const $: any = i18n.global;
 const router = useRouter();
 const store = useUserStore();
@@ -264,8 +265,13 @@ const toPath = (path) => {
 };
 
 const onLoginOut = () => {
-	store.clearInfo();
-	router.push("/login");
+	loginApi
+		.logout()
+		.then(() => {})
+		.finally(() => {
+			store.clearInfo();
+			router.push("/login");
+		});
 };
 
 const loginOut = () => {

@@ -50,13 +50,7 @@
 					<span v-if="!isConfirmPasswordValid" class="text">{{ $t('register["两次输入密码不一致"]') }}</span>
 				</div>
 
-				<FormInput
-					v-model="state.mainCurrency"
-					:placeholder="$t(`register['选择主货币']`)"
-					readonly
-					:errorBorder="mainCurrencyRG ? true : false"
-					@click="router.push({ path: '/mainCurrency', query: { currency: state.mainCurrency } })"
-				>
+				<FormInput v-model="state.mainCurrency" :placeholder="$t(`register['选择主货币']`)" readonly :errorBorder="mainCurrencyRG ? true : false" @click="goTomainCurrency">
 					<template v-slot:right>
 						<SvgIcon class="icon" iconName="/loginOrRegister/arrow" />
 					</template>
@@ -77,7 +71,7 @@
 					<p :class="userAgreement ? 'text' : 'text3'">
 						<i18n-t keypath="register['我同意用户协议并确认我已年满18岁']" :tag="'span'">
 							<template v-slot:text
-								><span class="text2" @click="router.push('/userAgreement')"> {{ $t('register["用户协议"]') }} </span></template
+								><span class="text2" @click=""> {{ $t('register["用户协议"]') }} </span></template
 							>
 						</i18n-t>
 					</p>
@@ -91,9 +85,7 @@
 						</i18n-t>
 					</span>
 				</div>
-
 				<Button class="mt_40" :type="btnDisabled ? 'disabled' : 'default'" @click="onRegister">{{ $t('register["注册"]') }}</Button>
-
 				<div class="footer">
 					<span class="text">{{ $t('register["已有账户？"]') }}</span>
 					<span class="create van-haptics-feedback" @click="router.push('/login')">{{ $t('register["登录"]') }}</span>
@@ -134,10 +126,13 @@ let state = reactive({
 	deviceNo: common.getInstance().getDevice(), // 设备
 });
 
-// 判断有无选择币种
-if (route.query.currency) {
-	state.mainCurrency = route.query.currency as string;
-}
+onMounted(() => {
+	Object.assign(state, store.getregisterInfo);
+	// 判断有无选择币种
+	if (route.query.currency) {
+		state.mainCurrency = route.query.currency as string;
+	}
+});
 
 // 账号正则
 const isAccountValid = computed(() => {
@@ -156,9 +151,9 @@ const isConfirmPasswordValid = computed(() => {
 
 // 监听用户状态
 watch(
-	[() => isAccountValid.value, () => isPasswordValid.value, () => isConfirmPasswordValid.value],
+	[() => isAccountValid.value, () => isPasswordValid.value, () => isConfirmPasswordValid.value, () => state.mainCurrency],
 	([isAccountValid, isPasswordValid, isConfirmPasswordValid]) => {
-		if (isAccountValid && isPasswordValid && isConfirmPasswordValid) {
+		if (isAccountValid && isPasswordValid && isConfirmPasswordValid && state.mainCurrency) {
 			btnDisabled.value = false;
 		} else {
 			btnDisabled.value = true;
@@ -210,6 +205,10 @@ const onSubmit = async () => {
 	} else {
 		showToast(res.message);
 	}
+};
+const goTomainCurrency = () => {
+	store.setregisterInfo(state);
+	router.push({ path: "/mainCurrency", query: { currency: state.mainCurrency } });
 };
 </script>
 
