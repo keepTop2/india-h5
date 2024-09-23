@@ -11,6 +11,7 @@
 			:readonly="props.readonly"
 			:placeholder="props.placeholder"
 			:maxlength="props.maxlength"
+			autocomplete="new-password"
 		/>
 		<slot name="right"></slot>
 	</div>

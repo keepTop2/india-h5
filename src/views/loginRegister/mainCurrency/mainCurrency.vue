@@ -11,7 +11,7 @@
 				</div>
 			</div>
 
-			<div v-else class="noData">{{ $t(`mainCurrency['没结果']`) }}</div>
+			<div v-else class="noData">{{ $t(`mainCurrency['暂不支持此货币']`) }}</div>
 		</div>
 	</div>
 </template>

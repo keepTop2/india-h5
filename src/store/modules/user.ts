@@ -14,6 +14,7 @@ export interface StoreUser {
 		password?: string;
 	} | null;
 	loginStatus: boolean;
+	registerInfo: any;
 }
 
 export const useUserStore = defineStore("User", {
@@ -35,6 +36,9 @@ export const useUserStore = defineStore("User", {
 			loginInfo: null,
 			// 登录标记
 			loginStatus: false,
+
+			// 注册信息
+			registerInfo: {},
 		};
 	},
 	getters: {
@@ -48,6 +52,9 @@ export const useUserStore = defineStore("User", {
 		},
 		getLang(): any {
 			return this.lang;
+		},
+		getregisterInfo(): any {
+			return this.registerInfo;
 		},
 	},
 	actions: {
@@ -65,6 +72,10 @@ export const useUserStore = defineStore("User", {
 		// 设置语言选择标识
 		setLangChoice() {
 			this.langChoice = true;
+		},
+
+		setregisterInfo(data) {
+			this.registerInfo = data;
 		},
 		// 获取用户信息
 		setInfo(data: any) {
