@@ -23,6 +23,7 @@
 </template>
 
 <script setup lang="ts">
+import { showFailToast } from "vant";
 import { forgetPasswordApi } from "/@/api/loginRegister";
 import common from "/@/utils/common";
 
@@ -41,6 +42,8 @@ const onStep = async () => {
 	const res = await forgetPasswordApi.submitAccount(state).catch((err) => err);
 	if (res.code == common.getInstance().ResCode.SUCCESS) {
 		emit("onStep", state);
+	} else {
+		showFailToast(res.message);
 	}
 };
 </script>

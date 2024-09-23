@@ -10,6 +10,14 @@ export class loginApi {
 			headers,
 		});
 	};
+	// 登录检验
+	static logout = (data = {}, headers = {}) => {
+		return useAxiosApi(`/app/login/api/logout`, {
+			method: "POST",
+			data,
+			headers,
+		});
+	};
 	// 登录
 	// static submitUserLogin = (data = {}, headers = {}) => {
 	// 	return useAxiosApi(`/app/login/api/submitUserLogin`, {

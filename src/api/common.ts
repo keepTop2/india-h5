@@ -32,6 +32,17 @@ class CommonApi {
 			headers,
 		});
 	};
+
+	/**
+	 *@description 获取会员首页信息
+	 */
+	static getAreaCodeDownBox = (data = {}, headers = {}) => {
+		return useAxiosApi(`/app/common/getAreaCodeDownBox`, {
+			method: "POST",
+			data,
+			headers,
+		});
+	};
 }
 
 export default CommonApi;
