@@ -54,7 +54,7 @@
 		</div>
 
 		<div class="order-card">
-			<SvgIcon class="card-tag" iconName="/wallet/line" :size="0.8" :height="5.333333" />
+			<SvgIcon class="card-tag" iconName="wallet/line" :size="0.8" :height="5.333333" />
 			<div class="herder mb_10">
 				<span class="title">{{ $t('rechargeOrder["订单信息"]') }}</span>
 			</div>

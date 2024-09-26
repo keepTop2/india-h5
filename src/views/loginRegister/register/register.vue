@@ -7,7 +7,7 @@
 			<div class="from">
 				<FormInput v-model="state.userAccount" type="text" :placeholder="$t(`register['输入账号']`)" :errorBorder="!isAccountValid && state.userAccount !== '' ? true : false">
 					<template v-slot:right>
-						<SvgIcon v-if="state.userAccount" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.userAccount = ''" />
+						<SvgIcon v-if="state.userAccount" class="clearIcon" iconName="loginOrRegister/clear" @click="state.userAccount = ''" />
 					</template>
 				</FormInput>
 				<div class="error_text">
@@ -23,8 +23,8 @@
 				>
 					<template v-slot:right>
 						<div class="right">
-							<SvgIcon v-if="state.password" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.password = ''" />
-							<SvgIcon class="icon" :iconName="eyeShow ? '/loginOrRegister/eye-off' : '/loginOrRegister/eye'" @click="eyeShow = !eyeShow" />
+							<SvgIcon v-if="state.password" class="clearIcon" iconName="loginOrRegister/clear" @click="state.password = ''" />
+							<SvgIcon class="icon" :iconName="eyeShow ? 'loginOrRegister/eye-off' : 'loginOrRegister/eye'" @click="eyeShow = !eyeShow" />
 						</div>
 					</template>
 				</FormInput>
@@ -41,8 +41,8 @@
 				>
 					<template v-slot:right>
 						<div class="right">
-							<SvgIcon v-if="state.confirmPassword" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.confirmPassword = ''" />
-							<SvgIcon class="icon" :iconName="eyeShow ? '/loginOrRegister/eye-off' : '/loginOrRegister/eye'" @click="eyeShow = !eyeShow" />
+							<SvgIcon v-if="state.confirmPassword" class="clearIcon" iconName="loginOrRegister/clear" @click="state.confirmPassword = ''" />
+							<SvgIcon class="icon" :iconName="eyeShow ? 'loginOrRegister/eye-off' : 'loginOrRegister/eye'" @click="eyeShow = !eyeShow" />
 						</div>
 					</template>
 				</FormInput>
@@ -52,7 +52,7 @@
 
 				<FormInput v-model="state.mainCurrency" :placeholder="$t(`register['选择主货币']`)" readonly :errorBorder="mainCurrencyRG ? true : false" @click="goTomainCurrency">
 					<template v-slot:right>
-						<SvgIcon class="icon" iconName="/loginOrRegister/arrow" />
+						<SvgIcon class="icon" iconName="loginOrRegister/arrow" />
 					</template>
 				</FormInput>
 				<div class="error_text">
@@ -61,13 +61,13 @@
 
 				<FormInput v-model="state.inviteCode" type="text" :placeholder="$t(`register['推荐码(非必填)']`)">
 					<template v-slot:right>
-						<SvgIcon v-if="state.inviteCode" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.inviteCode = ''" />
+						<SvgIcon v-if="state.inviteCode" class="clearIcon" iconName="loginOrRegister/clear" @click="state.inviteCode = ''" />
 					</template>
 				</FormInput>
 
 				<div class="checkbox" @click="userAgreement = !userAgreement">
-					<SvgIcon v-show="!userAgreement" class="check" iconName="/loginOrRegister/checkbox" />
-					<SvgIcon v-show="userAgreement" class="check" iconName="/loginOrRegister/checkbox_active" />
+					<SvgIcon v-show="!userAgreement" class="check" iconName="loginOrRegister/checkbox" />
+					<SvgIcon v-show="userAgreement" class="check" iconName="loginOrRegister/checkbox_active" />
 					<p :class="userAgreement ? 'text' : 'text3'">
 						<i18n-t keypath="register['我同意用户协议并确认我已年满18岁']" :tag="'span'">
 							<template v-slot:text
@@ -78,7 +78,7 @@
 				</div>
 
 				<div class="checkbox">
-					<SvgIcon class="check" iconName="/loginOrRegister/checkbox_active" />
+					<SvgIcon class="check" iconName="loginOrRegister/checkbox_active" />
 					<span class="text">
 						<i18n-t keypath="register['我同意接收[平台名称]的营销促销信息']" :tag="'span'">
 							<template v-slot:text>OKsport</template>

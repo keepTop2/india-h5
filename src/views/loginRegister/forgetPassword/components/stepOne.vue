@@ -4,7 +4,7 @@
 		<div class="from">
 			<FormInput v-model="state.userAccount" type="text" :placeholder="$t(`forgetPassword['账户名']`)" :errorBorder="!isAccountValid && state.userAccount !== '' ? true : false">
 				<template v-slot:right>
-					<SvgIcon v-if="state.userAccount" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.userAccount = ''" />
+					<SvgIcon v-if="state.userAccount" class="clearIcon" iconName="loginOrRegister/clear" @click="state.userAccount = ''" />
 				</template>
 			</FormInput>
 			<div class="error_text">

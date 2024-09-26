@@ -1,14 +1,14 @@
 <template>
 	<div class="header">
 		<div class="left">
-			<SvgIcon class="arrow" iconName="/loginOrRegister/navBar/arrow" @click="goBack()" />
+			<SvgIcon class="arrow" iconName="loginOrRegister/navBar/arrow" @click="goBack()" />
 		</div>
 		<div class="right" @click="onLang">
 			<div class="lang">
 				<div class="lang_icon">
 					<VantLazyImg :src="stateLang.langPicture" />
 				</div>
-				<SvgIcon class="down" iconName="/loginOrRegister/navBar/down" />
+				<SvgIcon class="down" iconName="loginOrRegister/navBar/down" />
 			</div>
 		</div>
 	</div>

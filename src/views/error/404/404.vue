@@ -1,7 +1,7 @@
 <template>
 	<VantNavBar @onClickLeft="onClickLeft">
 		<template v-slot:left>
-			<SvgIcon class="back" iconName="/vantNavBar/back" />
+			<SvgIcon class="back" iconName="vantNavBar/back" />
 			<span>123</span>
 		</template>
 	</VantNavBar>

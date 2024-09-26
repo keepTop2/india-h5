@@ -20,16 +20,16 @@
 			<div class="vip_level_progress">
 				<span>{{ $t(`vip["升级所需经验"]`) }}</span>
 				<span>{{ state.userVipInfo.currentExp }} / {{ state.userVipInfo.upgradeVipExp }}</span>
-				<SvgIcon class="warning_icon" iconName="/vip/warning" />
+				<SvgIcon class="warning_icon" iconName="vip/warning" />
 			</div>
 			<!-- VIP进度条 -->
 			<Progress class="vip_progress" :userVipInfo="state.userVipInfo" :percentageShow="true" />
 		</div>
 
 		<div class="notify">
-			<SvgIcon class="lock" iconName="/vip/lock" />
+			<SvgIcon class="lock" iconName="vip/lock" />
 			<span class="text">{{ $t(`vip["通过VIP升级获得专属定制化服务"]`) }}</span>
-			<SvgIcon class="warning_icon" iconName="/vip/warning" />
+			<SvgIcon class="warning_icon" iconName="vip/warning" />
 		</div>
 
 		<div class="vip_rewards">
@@ -64,7 +64,7 @@
 							<div :class="{ mask: !isUnlocked(item) }">
 								<img :src="reward_icon1" />
 								<div v-if="!isUnlocked(item)" class="lock">
-									<SvgIcon iconName="/vip/lock" />
+									<SvgIcon iconName="vip/lock" />
 								</div>
 							</div>
 						</div>

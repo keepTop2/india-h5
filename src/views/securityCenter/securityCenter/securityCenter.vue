@@ -6,7 +6,7 @@
 			<div class="label">{{ item.name }}</div>
 			<div v-if="item.edit" class="value van-haptics-feedback" @click.stop="toPath(item.editPath)">{{ item.value }}</div>
 			<div v-else class="arrow">
-				<SvgIcon iconName="/common/arrow" />
+				<SvgIcon iconName="common/arrow" />
 			</div>
 		</div>
 	</div>

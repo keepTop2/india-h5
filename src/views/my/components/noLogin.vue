@@ -19,17 +19,15 @@
 
 		<div class="group">
 			<div class="cell" @click="toPath('/language')">
-				<div class="icon"><SvgIcon iconName="/my/lang" /></div>
+				<SvgIcon class="icon" iconName="my/lang" />
 				<div class="label">{{ $t('my["语言"]') }}</div>
 				<div class="value">{{ store.langName }}</div>
-				<div class="arrow"><SvgIcon iconName="/common/arrow" /></div>
+				<div class="arrow"><SvgIcon iconName="common/arrow" /></div>
 			</div>
 			<div class="cell">
-				<div class="icon"><SvgIcon iconName="/my/theme" /></div>
+				<SvgIcon iconName="my/theme" class="icon" />
 				<div class="label">{{ $t('my["主题"]') }}</div>
-				<div class="themeChange_icon">
-					<SvgIcon :iconName="theme === ThemeEnum.default ? '/my/themeChange' : '/my/themeChange_light'" @click="changeTheme" />
-				</div>
+				<SvgIcon class="themeChange_icon" :iconName="theme === ThemeEnum.default ? 'my/themeChange' : 'my/themeChange_light'" @click="changeTheme" />
 			</div>
 		</div>
 	</div>

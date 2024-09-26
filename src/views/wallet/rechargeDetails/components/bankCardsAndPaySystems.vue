@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div v-if="route.query.type === 'bankCard'" class="card">
-			<SvgIcon class="card-tag" iconName="/wallet/line" :size="0.8" :height="5.333333" />
+			<SvgIcon class="card-tag" iconName="wallet/line" :size="0.8" :height="5.333333" />
 			<div class="herder mb_24">
 				<span class="title">{{ $t('recharge["个人信息"]') }}</span>
 			</div>
@@ -37,14 +37,14 @@
 				<h5>{{ $t('recharge["国家"]') }}</h5>
 				<van-field class="field mt_12 cell-field" v-model="state.value1" :placeholder="$t(`recharge['请选择']`)" readonly @click="showPicker = true">
 					<template #right-icon>
-						<SvgIcon class="arrow" iconName="/common/arrow" />
+						<SvgIcon class="arrow" iconName="common/arrow" />
 					</template>
 				</van-field>
 			</div>
 		</div>
 
 		<div class="card mt_24">
-			<SvgIcon class="card-tag" iconName="/wallet/line" :size="0.8" :height="5.333333" />
+			<SvgIcon class="card-tag" iconName="wallet/line" :size="0.8" :height="5.333333" />
 			<div class="herder mb_10">
 				<span class="title">{{ $t('recharge["充值金额"]') }}</span>
 				<span class="limit">${{ 100 }}-{{ 1000 }}</span>

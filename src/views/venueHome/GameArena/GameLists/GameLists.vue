@@ -3,7 +3,7 @@
 	<VantNavBar :title="title" @onClickLeft="onClickLeft">
 		<!-- 左侧自定义槽位，用于返回按钮 -->
 		<template v-slot:left>
-			<SvgIcon class="collapse_icon color_TB" iconName="/common/arrowLeft" alt="" />
+			<SvgIcon class="collapse_icon color_TB" iconName="common/arrowLeft" alt="" />
 		</template>
 	</VantNavBar>
 	<!-- 游戏列表容器 -->

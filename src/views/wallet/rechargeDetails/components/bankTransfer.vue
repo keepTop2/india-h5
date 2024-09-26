@@ -1,6 +1,6 @@
 <template>
 	<div class="card">
-		<SvgIcon class="card-tag" iconName="/wallet/line" :size="0.8" :height="5.333333" />
+		<SvgIcon class="card-tag" iconName="wallet/line" :size="0.8" :height="5.333333" />
 		<div class="herder mb_10">
 			<span class="title">{{ $t('recharge["个人信息"]') }}</span>
 		</div>
@@ -20,7 +20,7 @@
 	</div>
 
 	<div class="card mt_12">
-		<SvgIcon class="card-tag" iconName="/wallet/line" :size="0.8" :height="5.333333" />
+		<SvgIcon class="card-tag" iconName="wallet/line" :size="0.8" :height="5.333333" />
 		<div class="herder mb_10">
 			<span class="title">{{ $t('recharge["充值金额"]') }}</span>
 			<span class="limit">${{ 100 }}-{{ 1000 }}</span>

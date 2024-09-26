@@ -1,6 +1,6 @@
 <template>
 	<div class="card">
-		<SvgIcon class="card-tag" iconName="/wallet/line" :size="0.8" :height="5.333333" />
+		<SvgIcon class="card-tag" iconName="wallet/line" :size="0.8" :height="5.333333" />
 		<div class="title mb_10">{{ title }}</div>
 		<div class="items">
 			<div class="item" v-for="(item, index) in data" :key="index" @click="onCheck(item)">

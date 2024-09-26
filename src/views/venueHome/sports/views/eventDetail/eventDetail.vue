@@ -5,7 +5,7 @@
 				<!-- 导航栏 -->
 				<div class="navBar" :class="{ showDropDown }">
 					<div class="goback" @click="onClickLeft">
-						<SvgIcon class="color_T3" iconName="/common/arrowLeft" alt="" />
+						<SvgIcon class="color_T3" iconName="common/arrowLeft" alt="" />
 					</div>
 					<div class="teamList" v-show="eventsList">
 						<DropDownEvent @changeEvent="handleChangeEvent" :eventsList="eventsList" @handleClose="handleClose" @handleOpen="handleOpen" />
@@ -141,7 +141,7 @@
 			<!-- 滑动到指定位置队伍信息及比分固定在顶部 -->
 			<div class="smallHeader color_TB1" :class="{ fixed: isFixed }">
 				<div class="goback" @click="onClickLeft">
-					<SvgIcon class="color_T3" iconName="/common/arrowLeft" alt="" />
+					<SvgIcon class="color_T3" iconName="common/arrowLeft" alt="" />
 				</div>
 				<div class="teamName fs_26 color_TB1 fw_400">
 					<span class="w_123">{{ eventDetail?.teamInfo?.homeName }}</span

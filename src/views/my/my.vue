@@ -12,7 +12,7 @@
 				<span class="user_name">{{ store.userInfo.userAccount }}</span>
 				<div class="user_id">
 					<span>ID: {{ store.userInfo.userId }}</span>
-					<div class="icon" @click="common.getInstance().copy(store.userInfo.userId)"><SvgIcon iconName="/common/copy" /></div>
+					<div class="icon" @click="common.getInstance().copy(store.userInfo.userId)"><SvgIcon iconName="common/copy" /></div>
 				</div>
 			</div>
 
@@ -24,7 +24,7 @@
 					<span class="vip_experience"
 						>升级所需经验: <span class="color_Warn">{{ state.userVipInfo.currentExp }}</span> / <span>{{ state.userVipInfo.upgradeVipExp }}</span></span
 					>
-					<SvgIcon class="arrow" iconName="/my/arrow" @click="toPath('/vip')" />
+					<SvgIcon class="arrow" iconName="my/arrow" @click="toPath('/vip')" />
 				</div>
 				<!-- VIP进度条 -->
 				<Progress class="vip_progress" :userVipInfo="state.userVipInfo" />
@@ -37,7 +37,7 @@
 						<VantLazyImg class="line" :src="line" />
 						<div class="label">勋章</div>
 						<div class="badge" v-if="state.medalQuantity > 0">{{ state.medalQuantity }}</div>
-						<SvgIcon class="arrow" iconName="/common/arrow" />
+						<SvgIcon class="arrow" iconName="common/arrow" />
 					</div>
 					<div class="medal_content">
 						<div class="item" :class="{ item_bg: item.lockStatus == 1 }" v-for="(item, index) in state.medalListData" :key="index">
@@ -66,7 +66,7 @@
 						<SvgIcon class="icon" :iconName="item.icon" />
 						<div class="label">{{ item.name }}</div>
 						<div class="value">{{ item.value }}</div>
-						<SvgIcon class="arrow" iconName="/common/arrow" />
+						<SvgIcon class="arrow" iconName="common/arrow" />
 					</div>
 				</div>
 
@@ -75,10 +75,10 @@
 						<SvgIcon class="icon" :iconName="item.icon" />
 						<div class="label">{{ item.name }}</div>
 						<div class="value">{{ item.value }}</div>
-						<SvgIcon v-if="item.arrow" class="arrow" iconName="/common/arrow" />
+						<SvgIcon v-if="item.arrow" class="arrow" iconName="common/arrow" />
 					</div>
 					<div class="cell">
-						<SvgIcon class="icon" iconName="/my/theme" />
+						<SvgIcon class="icon" iconName="my/theme" />
 						<div class="label">{{ $t('my["主题"]') }}</div>
 						<SvgIcon class="themeChange_icon" :iconName="theme === ThemeEnum.default ? '/my/themeChange' : '/my/themeChange_light'" @click="changeTheme" />
 					</div>
@@ -96,7 +96,7 @@
 		<van-popup v-model:show="loginOutShow" position="bottom">
 			<header>
 				<span class="label">登出</span>
-				<SvgIcon class="close_icon" iconName="/common/close" @click="loginOutShow = false" />
+				<SvgIcon class="close_icon" iconName="common/close" @click="loginOutShow = false" />
 			</header>
 			<div class="content">您确定要退出登录吗?</div>
 			<div class="btns">

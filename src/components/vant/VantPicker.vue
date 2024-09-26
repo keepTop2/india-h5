@@ -24,7 +24,7 @@
 				@click-option="onClickOption"
 			>
 				<template #cancel>
-					<SvgIcon class="close" iconName="/loginOrRegister/clear" />
+					<SvgIcon class="close" iconName="loginOrRegister/clear" />
 				</template>
 				<template #title>
 					<div class="title">{{ title }}</div>
