@@ -1,6 +1,6 @@
 <template>
 	<div class="card">
-		<SvgIcon class="card-tag" iconName="/wallet/line" :size="0.8" :height="5.333333" />
+		<SvgIcon class="card-tag" iconName="wallet/line" :size="0.8" :height="5.333333" />
 		<div class="herder mb_12">
 			<span class="title">{{ $t('recharge["网络协议"]') }}</span>
 		</div>

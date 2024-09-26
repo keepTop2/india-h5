@@ -9,7 +9,7 @@
 				<div class="percentage_info">
 					<div v-if="props.percentageShow" class="percentage">
 						<div class="value">{{ progressPercentage }}%</div>
-						<SvgIcon class="arrow" iconName="/vip/progress_bar_percent_arrow" />
+						<SvgIcon class="arrow" iconName="vip/progress_bar_percent_arrow" />
 					</div>
 					<VantLazyImg class="vip_jdt" :src="vip_jdt" />
 				</div>

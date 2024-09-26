@@ -7,7 +7,7 @@
 			<form class="form" autocomplete="off">
 				<FormInput v-model="state.userAccount" type="text" :placeholder="$t(`login['账户名']`)" :errorBorder="!isAccountValid && state.userAccount !== '' ? true : false">
 					<template v-slot:right>
-						<SvgIcon v-if="state.userAccount" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.userAccount = ''" />
+						<SvgIcon v-if="state.userAccount" class="clearIcon" iconName="loginOrRegister/clear" @click="state.userAccount = ''" />
 					</template>
 				</FormInput>
 				<div class="error_text">
@@ -23,8 +23,8 @@
 				>
 					<template v-slot:right>
 						<div class="right">
-							<SvgIcon v-if="state.password" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.password = ''" />
-							<SvgIcon class="icon" :iconName="eyeShow ? '/loginOrRegister/eye-off' : '/loginOrRegister/eye'" @click="eyeShow = !eyeShow" />
+							<SvgIcon v-if="state.password" class="clearIcon" iconName="loginOrRegister/clear" @click="state.password = ''" />
+							<SvgIcon class="icon" :iconName="eyeShow ? 'loginOrRegister/eye-off' : 'loginOrRegister/eye'" @click="eyeShow = !eyeShow" />
 						</div>
 					</template>
 				</FormInput>
@@ -35,7 +35,7 @@
 				<div class="password-operation">
 					<div class="remember-password" @click="userAgreement = !userAgreement">
 						<div class="check">
-							<SvgIcon class="check_icon" :iconName="userAgreement ? '/loginOrRegister/checkbox_active' : '/loginOrRegister/checkbox'" />
+							<SvgIcon class="check_icon" :iconName="userAgreement ? 'loginOrRegister/checkbox_active' : 'loginOrRegister/checkbox'" />
 						</div>
 						<span class="label">{{ $t('login["记住密码"]') }}</span>
 					</div>

@@ -10,7 +10,7 @@
 						<span>VIP</span>
 						<span>{{ item.minVipGrade }}-{{ item.maxVipGrade }}</span>
 					</div>
-					<SvgIcon class="arrow" iconName="/vip/vipRewards/arrow" />
+					<SvgIcon class="arrow" iconName="vip/vipRewards/arrow" />
 				</div>
 			</template>
 			<template #content>

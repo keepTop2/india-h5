@@ -6,7 +6,7 @@
 			<div class="left">2020-05-04 10:10:10</div>
 			<div class="right">
 				<span>ID:{{ 123123123123 }}</span>
-				<div class="icon" @click="common.getInstance().copy(123123123123)"><SvgIcon iconName="/common/copy2" /></div>
+				<div class="icon" @click="common.getInstance().copy(123123123123)"><SvgIcon iconName="common/copy2" /></div>
 			</div>
 		</div>
 		<div class="content">

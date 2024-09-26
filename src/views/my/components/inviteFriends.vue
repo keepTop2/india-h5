@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<van-popup v-model:show="inviteFriendsShow" position="bottom">
-			<SvgIcon class="close_icon van-haptics-feedback" iconName="/common/close" @click="inviteFriendsShow = false" />
+			<SvgIcon class="close_icon van-haptics-feedback" iconName="common/close" @click="inviteFriendsShow = false" />
 			<div class="invite">
 				<div class="banner">
 					<VantLazyImg class="icon" :src="icon" />

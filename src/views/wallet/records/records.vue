@@ -18,7 +18,7 @@
 					</div>
 					<div class="value">
 						{{ item.status }}
-						<SvgIcon class="arrow" iconName="/common/arrow" />
+						<SvgIcon class="arrow" iconName="common/arrow" />
 					</div>
 				</div>
 			</div>

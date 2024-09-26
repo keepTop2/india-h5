@@ -7,7 +7,7 @@
 			<div v-show="state.type == 'email'">
 				<FormInput v-model="state.email" type="text" :placeholder="$t(`forgetPassword['请输入电子邮箱']`)" :errorBorder="!isEmailValid && state.email !== '' ? true : false">
 					<template v-slot:right>
-						<SvgIcon v-if="state.email" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.email = ''" />
+						<SvgIcon v-if="state.email" class="clearIcon" iconName="loginOrRegister/clear" @click="state.email = ''" />
 					</template>
 				</FormInput>
 				<div class="error_text">
@@ -19,11 +19,11 @@
 			<div v-show="state.type == 'phone'">
 				<div class="phone" :class="{ 'form-input-error': !isPhoneValid && state.phone !== '' ? true : false }">
 					<div class="area_code" @click="showAreaCode = true">
-						<span>+{{ state.areaCode }}</span> <SvgIcon class="down" iconName="/loginOrRegister/navBar/down" />
+						<span>+{{ state.areaCode }}</span> <SvgIcon class="down" iconName="loginOrRegister/navBar/down" />
 					</div>
 					<FormInput v-model="state.phone" type="text" :placeholder="$t(`forgetPassword['请输入手机号']`)">
 						<template v-slot:right>
-							<SvgIcon v-if="state.phone" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.phone = ''" />
+							<SvgIcon v-if="state.phone" class="clearIcon" iconName="loginOrRegister/clear" @click="state.phone = ''" />
 						</template>
 					</FormInput>
 				</div>
@@ -46,7 +46,7 @@
 		</div>
 		<van-action-sheet v-model:show="showAreaCode" style="min-height: 80%">
 			<div class="AreaCodeHeader">
-				<span> <SvgIcon class="close_icon" iconName="/common/close" @click="showAreaCode = false" /></span>
+				<span> <SvgIcon class="close_icon" iconName="common/close" @click="showAreaCode = false" /></span>
 				<span class="AreaCodeHeaderTitle">选择区号</span>
 				<span class="fs_30" @click="showAreaCode = false">确定</span>
 			</div>
