@@ -1,6 +1,6 @@
 <template>
   <svg :style="svgStyle">
-    <use :xlink:href="symbolId" :fill="color" />
+    <use :xlink:href="symbolId" />
   </svg>
 </template>
 
@@ -22,8 +22,7 @@ const props = defineProps({
     type: [String, Number]
   },
   color: {
-    type: String,
-    default: 'currentColor'
+    type: String
   }
 });
 const symbolId = computed(() => {
@@ -37,7 +36,7 @@ const symbolId = computed(() => {
 const svgStyle = computed(() => {
   const convertToVw = (value: string | number | undefined): string | undefined => {
     if (typeof value === 'string') {
-      if (value.endsWith('vw') || value.endsWith('%')) {
+      if (value.endsWith('vw')) {
         return value;
       }
       if (value.endsWith('px')) {
@@ -52,16 +51,10 @@ const svgStyle = computed(() => {
   const width = convertToVw(props.width);
   const height = convertToVw(props.height);
 
-  const style: { width?: string; height?: string } = {};
-
-  if (size) {
-    style.width = size;
-    style.height = size;
-  } else {
-    if (width) style.width = width;
-    if (height) style.height = height;
-  }
-
-  return style;
+  return {
+    width: size || width,
+    height: size || height,
+    color: props.color
+  };
 });
 </script>
