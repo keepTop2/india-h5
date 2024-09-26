@@ -89,14 +89,19 @@ const onCollapseMenu = () => {
 	queryLobbyLabelList();
 };
 const handleMenuClick = (item) => {
+	show.value = false;
 	console.log(item, "===item");
-	router.push({
-		name: "GameArena",
-		query: {
-			title: item.homeName,
-			gameOneId: item.gameOneClassId,
-		},
-	});
+	if (item.modelCode === "PE") {
+		router.push("/venueHome/sports");
+	} else {
+		router.push({
+			name: "GameArena",
+			query: {
+				title: item.homeName,
+				gameOneId: item.gameOneClassId,
+			},
+		});
+	}
 };
 const queryLobbyLabelList = async () => {
 	const res = await CommonApi.queryLobbyLabelList().catch((err) => err);
