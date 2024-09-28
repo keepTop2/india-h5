@@ -58,6 +58,12 @@
 		padding: 0 32px;
 		/* float: left; */
 		gap: 50px;
+		.goback {
+			svg {
+				width: 32px;
+				height: 32px;
+			}
+		}
 		.teamName {
 			display: flex;
 		}
