@@ -59,11 +59,19 @@
 					<span v-if="mainCurrencyRG" class="text">{{ $t('register["请选择"]') }}</span>
 				</div>
 
-				<FormInput v-model="state.inviteCode" type="text" :placeholder="$t(`register['推荐码(非必填)']`)">
-					<template v-slot:right>
-						<SvgIcon v-if="state.inviteCode" class="clearIcon" iconName="loginOrRegister/clear" @click="state.inviteCode = ''" />
-					</template>
-				</FormInput>
+				<div class="invite-code-wrapper">
+					<div class="invite-code-toggle" @click="toggleInviteCode">
+						{{ $t('register["输入推荐码"]') }}
+						<SvgIcon :class="['toggle-icon', { 'rotate': showInviteCode }]" iconName="loginOrRegister/arrow" />
+					</div>
+					<transition name="slide-fade">
+						<FormInput v-if="showInviteCode" v-model="state.inviteCode" type="text" :placeholder="$t(`register['推荐码(非必填)']`)">
+							<template v-slot:right>
+								<SvgIcon v-if="state.inviteCode" class="clearIcon" iconName="loginOrRegister/clear" @click="state.inviteCode = ''" />
+							</template>
+						</FormInput>
+					</transition>
+				</div>
 
 				<div class="checkbox" @click="userAgreement = !userAgreement">
 					<SvgIcon v-show="!userAgreement" class="check" iconName="loginOrRegister/checkbox" />
@@ -77,8 +85,9 @@
 					</p>
 				</div>
 
-				<div class="checkbox">
-					<SvgIcon class="check" iconName="loginOrRegister/checkbox_active" />
+				<div class="checkbox" @click="marketingAgreement = !marketingAgreement">
+					<SvgIcon v-show="!marketingAgreement" class="check" iconName="loginOrRegister/checkbox" />
+					<SvgIcon v-show="marketingAgreement" class="check" iconName="loginOrRegister/checkbox_active" />
 					<span class="text">
 						<i18n-t keypath="register['我同意接收[平台名称]的营销促销信息']" :tag="'span'">
 							<template v-slot:text>OKsport</template>
@@ -116,7 +125,9 @@ const eyeShow = ref(true);
 const btnDisabled = ref(true);
 const mainCurrencyRG = ref(false);
 const userAgreement = ref(false); // 用户协议认证
+const marketingAgreement = ref(false); // 营销协议认证
 const captchaBtn = ref(null);
+const showInviteCode = ref(false);
 let state = reactive({
 	userAccount: "", // 邮箱或者手机号
 	password: "", // 密码
@@ -151,9 +162,9 @@ const isConfirmPasswordValid = computed(() => {
 
 // 监听用户状态
 watch(
-	[() => isAccountValid.value, () => isPasswordValid.value, () => isConfirmPasswordValid.value, () => state.mainCurrency],
-	([isAccountValid, isPasswordValid, isConfirmPasswordValid]) => {
-		if (isAccountValid && isPasswordValid && isConfirmPasswordValid && state.mainCurrency) {
+	[() => isAccountValid.value, () => isPasswordValid.value, () => isConfirmPasswordValid.value, () => state.mainCurrency, () => userAgreement.value, () => marketingAgreement.value],
+	([isAccountValid, isPasswordValid, isConfirmPasswordValid, mainCurrency, userAgreement, marketingAgreement]) => {
+		if (isAccountValid && isPasswordValid && isConfirmPasswordValid && mainCurrency && userAgreement && marketingAgreement) {
 			btnDisabled.value = false;
 		} else {
 			btnDisabled.value = true;
@@ -210,6 +221,10 @@ const goTomainCurrency = () => {
 	store.setregisterInfo(state);
 	router.push({ path: "/mainCurrency", query: { currency: state.mainCurrency } });
 };
+
+const toggleInviteCode = () => {
+	showInviteCode.value = !showInviteCode.value;
+};
 </script>
 
 <style lang="scss" scoped>
@@ -259,6 +274,43 @@ const goTomainCurrency = () => {
 					@include themeify {
 						color: themed("Theme");
 					}
+				}
+			}
+
+			.invite-code-wrapper {
+				// margin-top: 10px;
+				
+				.invite-code-toggle {
+					display: flex;
+					align-items: center;
+					justify-content: flex-start;
+					padding: 10px 0;
+					font-size: 24px;
+					cursor: pointer;
+					@include themeify {
+						color: themed("T1");
+					}
+					
+					.toggle-icon {
+						width: 24px;
+						height: 24px;
+						transition: transform 0.3s ease;
+						
+						&.rotate {
+							transform: rotate(90deg);
+						}
+					}
+				}
+				
+				.slide-fade-enter-active,
+				.slide-fade-leave-active {
+					transition: all 0.3s ease;
+				}
+				
+				.slide-fade-enter-from,
+				.slide-fade-leave-to {
+					transform: translateY(-20px);
+					opacity: 0;
 				}
 			}
 

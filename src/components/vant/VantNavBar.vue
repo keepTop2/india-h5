@@ -91,6 +91,10 @@ const onClickRight = () => {
 .back {
 	width: 36px;
 	height: 36px;
+	svg {
+		width: 100%;
+		height: 100%;
+	}
 	@include themeify {
 		color: themed("TB");
 	}

@@ -37,10 +37,10 @@ class Common {
 	};
 
 	// 4-11位字母+数字组成，首位必须是字母
-	public static accountRG = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{4,11}$/;
+	public static accountRG = /^[a-zA-Z][a-zA-Z0-9]{3,10}$/;
 
-	// 8-16位，必须包含 数字和字母， 可包含@ _ $
-	public static passwordRG = /^(?=.*[a-zA-Z])(?=.*\d)[A-Za-z\d@_$]{8,16}$/;
+	// 8-16位，必须包含数字和字母
+	public static passwordRG = /^(?=.*[a-zA-Z])(?=.*\d)[A-Za-z\d]{8,16}$/;
 
 	// 邮箱正则
 	public static emailRG = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;

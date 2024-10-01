@@ -130,7 +130,7 @@ export const lang = {
 		"已有账户？": "Already have an account?",
 		请同意我们的用户协议: "Please agree to our User Agreement.",
 		"请输入4-11位字母+数字组成，首位必须是字母": "Please enter 4-11 characters consisting of letters and numbers, with the first character being a letter.",
-		"密码为8-16位": "Password must be 8-16 characters, including letters and numbers, and may contain {'@'}{'_'}{'$'}",
+		"密码为8-16位": "Password must be 8-16 characters, including letters and numbers",
 		两次输入密码不一致: "Passwords do not match.",
 		请选择: "Please select.",
 		请确定已阅读用户协议: "Please confirm that you have read the User Agreement.",
