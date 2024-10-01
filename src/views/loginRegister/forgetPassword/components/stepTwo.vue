@@ -64,8 +64,8 @@
 							@click="selectAreaCode(itemAreacode)"
 							:class="state.areaCode == itemAreacode.areaCode ? 'activeCode' : ''"
 						>
-							<span>
-								<span>{{ itemAreacode.icon }}</span>
+							<span class="phonelist">
+								<img :src="itemAreacode.icon" class="icon" />
 								<span>{{ itemAreacode.countryCode }}</span>
 								<span>{{ itemAreacode.countryName }}</span>
 							</span>
@@ -350,6 +350,15 @@ const selectAreaCode = (item: CountryData) => {
 		.itemAreacodeCell {
 			display: flex;
 			justify-content: space-between;
+		}
+		.phonelist {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+		}
+		.icon {
+			width: 32px;
+			height: 32px;
 		}
 	}
 	.activeCode {

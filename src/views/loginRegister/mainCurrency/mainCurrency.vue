@@ -11,7 +11,7 @@
 				</div>
 			</div>
 
-			<div v-else class="noData">{{ $t(`mainCurrency['暂不支持此货币']`) }}</div>
+			<div v-else-if="state.dataLoaded && state.value !== ''" class="noData">{{ $t(`mainCurrency['暂不支持此货币']`) }}</div>
 		</div>
 	</div>
 </template>
@@ -33,6 +33,7 @@ const router = useRouter();
 const state = reactive({
 	currencyList: [] as CurrencyEnums[],
 	value: "",
+	dataLoaded: false,
 });
 
 console.log("route", route);
@@ -42,6 +43,7 @@ const getCommonBusinessDownBox = async () => {
 	const res = await CommonApi.getCommonBusinessDownBox().catch((err) => err);
 	if (res.code == common.getInstance().ResCode.SUCCESS) {
 		state.currencyList = res.data.currencyEnums;
+		state.dataLoaded = true;
 	}
 };
 
