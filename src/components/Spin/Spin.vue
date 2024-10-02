@@ -24,15 +24,6 @@
 			<img class="btn-txt" :src="crypto_btn" alt="" />
 		</div>
 	</div>
-	<div class="dialog" v-show="dialogVisible">
-		<div class="dialog-content">
-			<div class="dialog-title color_Hint">恭喜</div>
-
-			<div class="dialog-title color_Hint mb_21">获得幸运大奖</div>
-			<div class="dialog-desc color_Theme mb_18">$ +0.01000 USD</div>
-			<Button @click="dialogVisible = false">好的</Button>
-		</div>
-	</div>
 </template>
 
 <script setup lang="ts">
@@ -48,7 +39,7 @@ const spinOver = ref(false);
 const spinRotate = ref("0deg");
 const pageLoading = ref(true);
 const rewardAni = ref(false);
-const dialogVisible = ref(true);
+const dialogVisible = ref(false);
 /**
  * @description 转盘组件
  * @param {Array<Coin>} spinList 奖品列表
@@ -73,14 +64,14 @@ const props = withDefaults(defineProps<Spin>(), {
 });
 
 // startSpinningCallback 开始旋转的回掉函数
-const emit = defineEmits(["startSpinningCallback"]);
+const emit = defineEmits(["startSpinningCallback", "endSpinningCallback"]);
 
 // 监听props中的reward变化，以触发停止旋转
 watch(
 	() => props.reward,
 	async () => {
 		await nextTick();
-		spinOver.value = true;
+
 		const { coin, currency } = props.reward;
 		const findIndex = props.spinList.findIndex((i) => i.coin === coin && i.currency === currency);
 		if (findIndex === -1) {
@@ -91,6 +82,13 @@ watch(
 		spinRotate.value = `${(360 / 16) * (16 - findIndex) + 90}deg`;
 		await nextTick();
 		rewardAni.value = true;
+		const timer = setTimeout(() => {
+			spinning.value = false;
+			spinOver.value = true;
+			dialogVisible.value = true;
+			emit("endSpinningCallback");
+			clearTimeout(timer);
+		}, 2500);
 	}
 );
 
@@ -196,9 +194,10 @@ const clearSpin = () => {
 };
 // 处理开始旋转的逻辑
 const handleStartSpin = () => {
-	clearSpin();
 	if (spinning.value) return;
+	clearSpin();
 	spinning.value = true;
+
 	emit("startSpinningCallback");
 };
 </script>
@@ -662,26 +661,7 @@ canvas {
 		transform: rotate(360deg);
 	}
 }
-.dialog {
-	position: absolute;
-	top: 90px;
-	background: url(./img/message_bg.png) no-repeat;
-	background-color: rgba(0, 0, 0, 0.5);
-	background-size: 100%;
-	z-index: 100;
-	z-index: 100;
-	height: 100%;
-	width: 100%;
 
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	.dialog-content {
-		margin-top: -150px;
-		text-align: center;
-		font-size: 40px;
-	}
-}
 .app_isApp {
 	.spin {
 		width: 337px;

@@ -4,7 +4,11 @@
 	</template>
 	<BackToTop />
 	<div class="HomeContainer">
-		<RouterView class="content" />
+		<router-view v-slot="{ Component }">
+			<transition name="fade" mode="out-in">
+				<component :is="Component" class="content" />
+			</transition>
+		</router-view>
 	</div>
 	<TabBar v-show="isTabBar" />
 </template>
@@ -13,14 +17,14 @@
 import NavBar from "/@/layout/home/components/navBar.vue";
 import TabBar from "/@/layout/home/components/tabBar.vue";
 import BackToTop from "/@/layout/home/components/BackToTop.vue";
-import { useRoute } from "vue-router";
-const blacklist = ["/home"];
 
+const blacklist = ["/home"];
 const route = useRoute();
 const isTabBar = computed(() => {
 	console.log(route.meta.isTabBar, "=route.meta.isTabBar");
 	return !route.meta.hideTabBar;
 });
+// 监听路由变化
 </script>
 
 <style scoped lang="scss">
@@ -32,5 +36,13 @@ const isTabBar = computed(() => {
 	@include themeify {
 		background-color: themed("BG1");
 	}
+}
+.fade-enter-active,
+.fade-leave-active {
+	transition: opacity 0.3s ease;
+}
+.fade-enter,
+.fade-leave-to {
+	opacity: 0;
 }
 </style>

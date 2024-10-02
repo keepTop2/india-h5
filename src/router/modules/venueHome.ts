@@ -1,6 +1,7 @@
 import Layout from "/@/layout/venueHome/index.vue";
 
 export const VenueHome = {
+	path: "/venueHome",
 	component: Layout,
 	children: [
 		{

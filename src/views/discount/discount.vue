@@ -6,30 +6,17 @@
 
 		<NavBar class="mt_32 mb_24 discount_navbar" v-model:active="active" :tab-list="state.tabList" @on-change-nav-bar="onChangeNavBar" />
 
-		<div class="activityList_item bg_Tag1" @click="onToDeatils('12')">
+		<div class="activityList_item bg_Tag1" @click="onToDeatils(item)" v-for="(item, index) in state.activityList" :key="index">
 			<div class="img_container">
 				<div class="activityGraph">
 					<VantLazyImg class="discount_img" :src="discount1" />
 				</div>
 				<div class="text_container">
 					<div class="date">
-						<div class="deadline">截止时间：2024.1.5 24:00:00</div>
-						<div class="activity_name">2024年新年投注赛</div>
+						<div class="deadline">截止时间：{{ item.activityEndTime }}</div>
+						<div class="activity_name">{{ item.activityNameI18nCode }}</div>
 					</div>
 					<Button class="mt_40"> {{ $t('discount["进行中"]') }}</Button>
-				</div>
-			</div>
-		</div>
-		<div class="activityList_item bg_Tag1">
-			<div class="img_container">
-				<VantLazyImg class="discount_img" :src="discount1" />
-				<div class="text_container">
-					<div class="date">
-						<div class="deadline">截止时间：2024.1.5 24:00:00</div>
-						<div class="activity_name">2024年新年投注赛</div>
-					</div>
-					<!-- <Button class="mt_40"> 进行中</Button> -->
-					<span class="mt_40 color_T3 fs_24"> {{ $t('discount["活动结束"]') }}</span>
 				</div>
 			</div>
 		</div>
@@ -44,68 +31,70 @@ import Banner from "./Banner/banner.vue";
 import NavBar from "./components/Navbar.vue";
 import { useRouter } from "vue-router";
 import { i18n } from "/@/i18n/index";
+import { activityApi } from "/@/api/activity";
+import Common from "/@/utils/common";
 const $: any = i18n.global;
 const router = useRouter();
-const state = reactive({
-	tabList: [
-		{
-			code: "0",
-			value: $.t("discount['全部']"),
-		},
-		{
-			code: "1",
-			value: $.t("discount['促销活动']"),
-		},
-		{
-			code: "2",
-			value: $.t("discount['新人活动']"),
-		},
-		{
-			code: "3",
-			value: $.t("discount['首充活动']"),
-		},
-	],
+const state: any = reactive({
+	tabList: [],
 	activityList: [],
 	pageLoading: false,
 });
 // const store = useUserStore();
 const active = ref<string | number>("");
-
 onBeforeMount(async () => {
 	await getActivityTab();
-	await getActivity();
+	await activityPageList();
+	// await getActivity();
 });
-// const discountIndexApi: DiscountIndexApi = new DiscountIndexApi();
-
+const params = reactive({
+	pageNumber: 1,
+	pageSize: 10,
+	labelId: "",
+});
 // 查活动页签
-const getActivityTab = async (): Promise<void> => {
-	// const params = {
-	// 	supportTerminal: Common.getInstance().getDevice(),
-	// };
+const getActivityTab = async () => {
 	state.pageLoading = true;
-	// const res = await discountIndexApi.getActivityTab(params).catch((err) => err);
+	const res: any = await activityApi.activityTabsList();
 	state.pageLoading = false;
-	// if (res.code == Common.getInstance().ResCode.SUCCESS) {
-	// 	const allObj: SystemParamVO = {
-	// 		code: "",
-	// 		type: "",
-	// 		value: "全部",
-	// 	};
-	// state.tabList.push(allObj);
-	// state.tabList = state.tabList.concat(res.data);
-	active.value = state.tabList[0].code;
-	// }
+	if (res.code == Common.getInstance().ResCode.SUCCESS) {
+		res.data.forEach((item, index) => {
+			state.tabList.push({
+				code: index + 1,
+				value: item.labNameI18Code,
+				labelId: item.id,
+			});
+		});
+		state.tabList.unshift({
+			code: 0,
+			value: "全部",
+			labelId: 0,
+		});
+	}
 };
 
-// 点击切换页签
-const onChangeNavBar = () => {
-	getActivity();
+const onChangeNavBar = async () => {
+	params.pageNumber = 1;
+	activityPageList();
 };
+const activityPageList = async () => {
+	if (active.value == 0) {
+		params.labelId = "";
+	} else {
+		params.labelId = state.tabList[active.value].labelId;
+	}
 
+	const res: any = await activityApi.activityPageList(params);
+	if (res.code == Common.getInstance().ResCode.SUCCESS) {
+		state.activityList = res.data.records;
+		params.pageNumber += 1;
+	}
+};
 //跳转活动详情
 const onToDeatils = (item) => {
+	console.log(item);
 	router.push({
-		path: "/discount/activityParticulars",
+		path: `/activity/${item.activityTemplate}`,
 		query: { data: encodeURIComponent(JSON.stringify(item)) },
 	});
 
@@ -146,8 +135,24 @@ const getActivity = async (): Promise<void> => {
 
 <style lang="scss" scoped>
 .discount_container {
+	padding-bottom: 160px;
 	.discount_navbar {
 		padding: 0 24px;
+	}
+	:deep(.van-tab) {
+		@include themeify {
+			background: themed("BG3");
+			margin: 0 10px;
+			border-radius: 12px;
+		}
+	}
+	:deep(.van-tab--active) {
+		@include themeify {
+			background: themed("Theme");
+			margin: 0 10px;
+			border-radius: 12px;
+			color: themed("TB1");
+		}
 	}
 
 	.activityList_item {
