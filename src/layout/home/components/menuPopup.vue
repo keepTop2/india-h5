@@ -12,7 +12,7 @@
 					<div class="icon"><img :src="task_icon" alt="" /></div>
 					<div class="label">{{ $t(`menuPopup["任务"]`) }}</div>
 				</div>
-				<div class="wheel van-haptics-feedback" @click="toPath('/lottery')">
+				<div class="wheel van-haptics-feedback" @click="toPath('/activity/SPIN_WHEEL')">
 					<div class="icon"><img :src="wheel_icon" alt="" /></div>
 					<div class="label">{{ $t(`menuPopup["转盘"]`) }}</div>
 				</div>
