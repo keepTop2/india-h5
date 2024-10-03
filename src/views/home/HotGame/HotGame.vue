@@ -2,7 +2,7 @@
 	<div class="GameSwiper">
 		<Swiper slidesPerView="auto" :loop="true" :autoplay="autoplay" :modules="modules" class="mySwiper">
 			<swiper-slide v-for="(item, index) in gameList" :key="index">
-				<div @click="handleClickCard(item)">
+				<div @click="Common.goToGame(item)">
 					<div class="collect">
 						<VantLazyImg v-if="item.collect" :src="collectImg" @click="handleCollect(item, false)" alt="" width="100%" />
 						<VantLazyImg v-else :src="noCollectImg" alt="" @click="handleCollect(item, true)" width="100%" />
@@ -33,6 +33,8 @@ import noCollectImg from "./images/noCollect.png";
 import loadingSrc from "../static/loading.png";
 import GameApi from "/@/api/venueHome/games";
 import pubsub from "/@/pubSub/pubSub";
+import { showToast } from "vant";
+import Common from "/@/utils/common";
 
 // 自动播放配置
 const autoplay = ref({
@@ -125,13 +127,17 @@ const handleCollect = async (item, collect) => {
 // title: 游戏code
 const handleClickCard = (item) => {
 	// dialogShow.value = true;
-	console.log(item, "=====item");
-	GameApi.gameLogin({
-		device: "H5",
-		// userAccount: "hida",
-		venueCode: item.venueCode,
-		gameCode: item.gameCode,
-	});
+	// GameApi.gameLogin({
+	// 	device: "H5",
+	// 	// userAccount: "hida",
+	// 	venueCode: item.venueCode,
+	// 	gameCode: item.gameCode,
+	// }).then((res: any) => {
+	// 	if (res.code !== Common.getInstance().ResCode.SUCCESS) {
+	// 		showToast(res.message);
+	// 	} else {
+	// 	}
+	// });
 };
 </script>
 

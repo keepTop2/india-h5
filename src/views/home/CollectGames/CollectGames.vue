@@ -1,7 +1,7 @@
 <template>
 	<div class="CollectGames">
 		<ul>
-			<li v-for="item in collectList" class="gameCard">
+			<li v-for="(item, index) in collectList" class="gameCard" :key="index" @click="Common.goToGame(item)">
 				<SvgIcon v-if="item.collect" iconName="home/event_collect" @click="handleCollect(item, false)" alt="" />
 				<SvgIcon v-else iconName="home/event_collect_no" @click="handleCollect(item, true)" />
 				<VantLazyImg :src="GameImg" :loadingSrc="loadingSrc" :errorSrc="loadingSrc" />
@@ -16,7 +16,7 @@ import GameImg from "/@/views/home/static/images/GameImg.png";
 import { GameInfoList } from "/#/game";
 import loadingSrc from "../static/loading.png";
 import GameApi from "/@/api/venueHome/games";
-
+import Common from "/@/utils/common";
 // 定义组件的emit事件
 const emit = defineEmits(["queryCollection"]);
 

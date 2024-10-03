@@ -7,9 +7,10 @@ import { showToast } from "vant";
 import { Decimal } from "decimal.js";
 // 引入复制插件
 import useClipboard from "vue-clipboard3";
-
+import GameApi from "/@/api/venueHome/games";
 import mitt from "mitt";
-
+import qs from "qs";
+import router from "../router";
 dayjs.extend(utc);
 dayjs.extend(tz);
 dayjs.locale("en");
@@ -534,6 +535,71 @@ class Common {
 	 */
 	public dayForMat10(date: string): number {
 		return dayjs(date, "YYYY年-MM-DD").tz("Asia/Shanghai").endOf("day").valueOf();
+	}
+	// 获取 config 配置请求 api
+	static getUrl() {
+		switch (import.meta.env.VITE_BASEENV) {
+			case "development":
+				return (window as any)["PLATFROM_CONFIG"].developS128Url;
+			case "production":
+				return (window as any)["PLATFROM_CONFIG"].productionS128Url;
+			default:
+				return "";
+		}
+	}
+	static goToGame(gameinfo: any) {
+		const params = {
+			venueCode: gameinfo.venueCode,
+			gameCode: gameinfo.gameCode,
+		};
+		GameApi.gameLogin(params).then((res: any) => {
+			if (res.code === ResCode.SUCCESS) {
+				const { source, userAccount, type } = res.data;
+				const state = {
+					source: "",
+					userAccount: "",
+					type: "",
+				};
+				switch (type) {
+					case "url": {
+						state.source = source;
+						state.userAccount = userAccount;
+						state.type = type;
+						break;
+					}
+					case "html": {
+						// 将HTML编码的文本字符串转换为Blob对象
+						const blob: any = new Blob([source], { type: "text/html" });
+						// 将Blob对象作为iframe的源
+						state.source = URL.createObjectURL(blob);
+						// window.open(state.source, "_blank");
+						// window.open(state.source, "_self");
+						state.userAccount = userAccount;
+						state.type = type;
+						break;
+					}
+					case "token": {
+						const params = {
+							session_id: source,
+							lang: "zh-CN",
+							login_id: userAccount,
+						};
+						const url = this.getUrl();
+						state.source = url + `/api/cash/auth?${qs.stringify(params)}`;
+						state.userAccount = userAccount;
+						state.type = type;
+						break;
+					}
+					default:
+						break;
+				}
+				console.log(state);
+
+				router.push({ path: "/gamePage", query: { ...state } });
+			} else {
+				showToast(res.message);
+			}
+		});
 	}
 }
 

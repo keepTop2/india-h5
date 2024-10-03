@@ -102,6 +102,12 @@ const routes = [
 		path: "/demo",
 		component: () => import("/@/views/demoApp/demoApp.vue"),
 	},
+	{
+		path: "/gamePage",
+		name: "gamePage",
+		component: () => import("/@/views/game/index.vue"),
+		meta: { title: "gamePage" },
+	},
 	// 一级页路由
 
 	// 游戏场馆主页
