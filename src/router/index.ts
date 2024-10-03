@@ -102,6 +102,12 @@ const routes = [
 		path: "/demo",
 		component: () => import("/@/views/demoApp/demoApp.vue"),
 	},
+	{
+		path: "/gamePage",
+		name: "gamePage",
+		component: () => import("/@/views/game/index.vue"),
+		meta: { title: "gamePage" },
+	},
 	// 一级页路由
 
 	// 游戏场馆主页
@@ -119,15 +125,6 @@ const routes = [
 		name: "userAgreement",
 		component: () => import("/@/views/loginRegister/userAgreement/userAgreement.vue"),
 		meta: { title: "用户协议" },
-	},
-	{
-		//转盘
-		path: "/lottery",
-		name: "Lottery",
-		component: () => import("/@/views/Lottery/Lottery.vue"),
-		meta: {
-			title: "转盘",
-		},
 	},
 	// 注册子页面
 	// RegisterSubPage,

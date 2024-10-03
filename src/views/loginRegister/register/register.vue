@@ -62,7 +62,7 @@
 				<div class="invite-code-wrapper">
 					<div class="invite-code-toggle" @click="toggleInviteCode">
 						{{ $t('register["输入推荐码"]') }}
-						<SvgIcon :class="['toggle-icon', { 'rotate': showInviteCode }]" iconName="loginOrRegister/arrow" />
+						<SvgIcon :class="['toggle-icon', { rotate: showInviteCode }]" iconName="loginOrRegister/arrow" />
 					</div>
 					<transition name="slide-fade">
 						<FormInput v-if="showInviteCode" v-model="state.inviteCode" type="text" :placeholder="$t(`register['推荐码(非必填)']`)">
@@ -212,7 +212,7 @@ const onSubmit = async () => {
 	if (res.code == common.getInstance().ResCode.SUCCESS) {
 		showToast(res.message);
 		store.setInfo(res.data);
-		router.replace({ path: "/home" });
+		router.replace({ path: "/" });
 	} else {
 		showToast(res.message);
 	}
@@ -279,7 +279,7 @@ const toggleInviteCode = () => {
 
 			.invite-code-wrapper {
 				// margin-top: 10px;
-				
+
 				.invite-code-toggle {
 					display: flex;
 					align-items: center;
@@ -290,23 +290,23 @@ const toggleInviteCode = () => {
 					@include themeify {
 						color: themed("T1");
 					}
-					
+
 					.toggle-icon {
 						width: 24px;
 						height: 24px;
 						transition: transform 0.3s ease;
-						
+
 						&.rotate {
 							transform: rotate(90deg);
 						}
 					}
 				}
-				
+
 				.slide-fade-enter-active,
 				.slide-fade-leave-active {
 					transition: all 0.3s ease;
 				}
-				
+
 				.slide-fade-enter-from,
 				.slide-fade-leave-to {
 					transform: translateY(-20px);
