@@ -128,7 +128,7 @@ const onSubmit = async () => {
 		} else {
 			store.setLoginInfo();
 		}
-		router.replace({ path: "/home" });
+		router.replace({ path: "/" });
 	} else {
 		showFailToast(res.message);
 	}

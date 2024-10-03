@@ -108,7 +108,7 @@ const status: any = {
 
 const getActivityReward = () => {
 	activityStore.setIsShowRedBagRain(true);
-	router.push("/home");
+	router.push("/");
 };
 const onClickLeft = () => {
 	router.back();
