@@ -21,7 +21,7 @@
 					<div class="area_code" @click="showAreaCode = true">
 						<span>+{{ state.areaCode }}</span> <SvgIcon class="down" iconName="loginOrRegister/navBar/down" />
 					</div>
-					<FormInput v-model="state.phone" type="text" :placeholder="$t(`forgetPassword['请输入手机号']`)">
+					<FormInput v-model="state.phone" type="text" :placeholder="$t(`forgetPassword['请输入手机号']`)" :maxlength="areaCodeObj.maxLength">
 						<template v-slot:right>
 							<SvgIcon v-if="state.phone" class="clearIcon" iconName="loginOrRegister/clear" @click="state.phone = ''" />
 						</template>
@@ -351,11 +351,7 @@ const selectAreaCode = (item: CountryData) => {
 			display: flex;
 			justify-content: space-between;
 		}
-		.phonelist {
-			display: flex;
-			align-items: center;
-			gap: 10px;
-		}
+		.p
 		.icon {
 			width: 32px;
 			height: 32px;

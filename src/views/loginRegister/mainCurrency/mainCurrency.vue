@@ -6,8 +6,9 @@
 
 			<div class="option mt_18" v-if="filteredCurrencyList.length > 0">
 				<div class="item" :class="{ active_item: item.code == route.query.currency }" v-for="(item, index) in filteredCurrencyList" :key="index" @click="onSelectCurrency(item)">
+					<span class="value">{{ item.value }}</span>
+					
 					<span class="label">{{ item.code }}</span>
-					<!-- <span class="value">({{ item.value }})</span> -->
 				</div>
 			</div>
 
@@ -92,6 +93,7 @@ const onClickLeft = () => {
 				display: flex;
 				align-items: center;
 				padding: 18px 24px;
+				justify-content: space-between;
 				@include themeify {
 					color: themed("TB");
 				}
