@@ -1,5 +1,5 @@
 <template>
-	<div ref="draggable" class="draggable" :style="{ position: 'fixed', left: `${position.x}px`, top: `${position.y}px` }" @touchstart="onTouchStart">
+	<div ref="draggable" class="draggable" :style="{ position: 'fixed', left: `${position.x}px`, top: `${position.y}px` }" @touchstart="onTouchStart" v-if="modelValue">
 		<div class="parent">
 			<div class="child curp">
 				<div class="curp">
@@ -20,7 +20,6 @@ import { onMounted, ref, onBeforeUnmount } from "vue";
 import pubsub from "../../pubSub/pubSub";
 import { useCountdown } from "../../hooks/countdown";
 import { activityApi } from "/@/api/activity";
-
 import router from "/@/router";
 const { countdown } = useCountdown();
 const draggable = ref<HTMLElement | null>(null);
@@ -30,22 +29,34 @@ const offset = ref({ x: 0, y: 0 });
 const clickDisabled = ref(false);
 let startMousePosition = ref({ x: 0, y: 0 });
 let startTouchPosition = ref({ x: 0, y: 0 });
+const props = defineProps(["modelValue"]);
+const emit = defineEmits(["update:modelValue"]);
+// const proprs = defineProps({
+// 	showCountdown: {
+// 		type: Boolean,
+// 		default: false,
+// 	},
+// });
 
+// 订阅红包雨消息
 pubsub.subscribe("/activity/redBagRain", (data) => {
 	console.log("Received:", data);
 });
-const handleClickCountdown = async () => {
-	console.log(123123);
 
-	await activityApi.getRedBagInfo().then((res) => {
-		router.push("/activity/RED_BAG_RAIN");
+// 点击红包进入详情页
+const handleClickCountdown = async () => {
+	await activityApi.getRedBagInfo().then((res: any) => {
+		if (res.code === 1000) {
+			router.push("/activity/RED_BAG_RAIN");
+		}
 	});
 };
-
+// 关闭倒计时
 const closeRedbagRainCountdown = () => {
-	// Implement close functionality if needed
+	emit("update:modelValue", false);
 };
 
+// 拖动功能
 const onTouchStart = (event: TouchEvent) => {
 	const touch = event.touches[0];
 	startDrag(touch.clientX, touch.clientY);
@@ -53,28 +64,27 @@ const onTouchStart = (event: TouchEvent) => {
 	window.addEventListener("touchmove", onTouchMove);
 	window.addEventListener("touchend", onTouchEnd);
 };
-
+// 拖动功能
 const onTouchMove = (event: TouchEvent) => {
 	const touch = event.touches[0];
 	moveDrag(touch.clientX, touch.clientY);
 };
-
+// 拖动功能
 const onTouchEnd = () => {
 	endDrag();
 	// 移除触摸事件监听
 	window.removeEventListener("touchmove", onTouchMove);
 	window.removeEventListener("touchend", onTouchEnd);
 };
-
+// 拖动功能
 const startDrag = (x: number, y: number) => {
 	startMousePosition.value = { x, y };
-
 	offset.value = {
 		x: x - position.value.x,
 		y: y - position.value.y,
 	};
 };
-
+// 拖动功能
 const moveDrag = (x: number, y: number) => {
 	const distanceMoved = Math.sqrt(Math.pow(x - startMousePosition.value.x, 2) + Math.pow(y - startMousePosition.value.y, 2));
 	if (distanceMoved > 5) {
@@ -84,17 +94,11 @@ const moveDrag = (x: number, y: number) => {
 		position.value.y = Math.max(60, Math.min(window.innerHeight - 100, y - offset.value.y));
 	}
 };
-
+// 拖动功能
 const endDrag = () => {
 	isDragging.value = false;
 };
-
-onMounted(() => {
-	position.value.x = 0;
-	position.value.y = 500;
-	window.addEventListener("resize", updatePosition);
-});
-
+// 更新位置
 const updatePosition = () => {
 	const grandParentElement: any = draggable.value?.parentElement?.parentElement;
 	const grandParentRect = grandParentElement?.getBoundingClientRect();
@@ -104,6 +108,13 @@ const updatePosition = () => {
 	}
 };
 
+// 初始化，设置定位
+onMounted(() => {
+	position.value.x = 0;
+	position.value.y = 500;
+	window.addEventListener("resize", updatePosition);
+});
+// 卸载事件
 onBeforeUnmount(() => {
 	window.removeEventListener("touchmove", onTouchMove);
 	window.removeEventListener("touchend", onTouchEnd);
@@ -132,7 +143,6 @@ onBeforeUnmount(() => {
 			bottom: 5px;
 			left: 50%;
 			transform: translateX(-50%);
-
 			text-align: center;
 			font-size: 20px;
 			@include themeify {

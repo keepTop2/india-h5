@@ -3,9 +3,6 @@ export const WalletRouter = {
 	name: "wallet",
 	redirect: "/wallet/recharge",
 	component: () => import("/@/views/wallet/wallet.vue"),
-	meta: {
-		title: "钱包",
-	},
 	children: [
 		{
 			path: "/wallet/recharge",
@@ -13,6 +10,7 @@ export const WalletRouter = {
 			component: () => import("/@/views/wallet/recharge/recharge.vue"),
 			meta: {
 				title: "充值",
+				keepAlive: false,
 			},
 		},
 		{
@@ -21,6 +19,7 @@ export const WalletRouter = {
 			component: () => import("/@/views/wallet/withdraw/withdraw.vue"),
 			meta: {
 				title: "提现",
+				keepAlive: true,
 			},
 		},
 		{
@@ -29,6 +28,7 @@ export const WalletRouter = {
 			component: () => import("/@/views/wallet/records/records.vue"),
 			meta: {
 				title: "记录",
+				keepAlive: true,
 			},
 		},
 	],

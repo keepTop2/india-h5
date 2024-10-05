@@ -1,6 +1,6 @@
 <template>
 	<div class="first-deposit-activity">
-		<VantNavBar title="次存活动" @onClickLeft="onClickLeft" />
+		<VantNavBar title="次存活动" @onClickLeft="router.back()" />
 
 		<div class="content">
 			<img src="../image/firstDeposit.png" class="main-image" />
@@ -95,8 +95,11 @@
 
 <script lang="ts" setup>
 import firstDeposit from "../image/firstDeposit.svg";
+
 import { ref } from "vue";
+import { activityApi } from "/@/api/activity";
 const router = useRouter();
+const route = useRoute();
 const depositAmount = ref(100.0);
 const requiredTurnover = ref(100.0);
 const bonusAmount = ref(50.0);
@@ -110,8 +113,20 @@ const activityRules = ref([
 	"这是活动内容活动内容活动内容这是活动内容活动内容活动内容这是活动内容活动内容这是活动内容活动内容活动内容活动内容这是",
 	"这是活动内容活动内容活动内容这是活动内容活动内容活动内容这是活动内容活动内容这是活动内容活动内容活动内容活动内容这是",
 ]);
-const onClickLeft = () => {
-	router.push({ path: "/discount" });
+const activityInfo = JSON.parse(decodeURIComponent(route.query.data as string));
+const activityData = ref();
+console.log();
+onBeforeMount(() => {
+	getConfigDetail();
+});
+const getConfigDetail = () => {
+	const params = {
+		activityTemplate: activityInfo.activityTemplate,
+		id: activityInfo.id,
+	};
+	activityApi.getConfigDetail(params).then((res) => {
+		activityData.value = res.data;
+	});
 };
 </script>
 

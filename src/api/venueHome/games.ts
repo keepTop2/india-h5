@@ -56,7 +56,9 @@ export default class GameApi {
 		return useAxiosApi(`/app/game_lobby/api/queryGameInfoByName`, {
 			method: "POST",
 			data,
-			// headers,
+			headers: {
+				showLoading: true,
+			},
 		});
 	};
 }

@@ -10,16 +10,21 @@
 			</ul>
 		</div>
 		<div class="lottery">
-			<Spin @start-spinning-callback="spinStart" @end-spinning-callback="spinEnd" :reward="reward" :spinList="spinList" />
+			<Spin
+				@start-spinning-callback="spinStart"
+				@end-spinning-callback="spinEnd"
+				:reward="reward"
+				:spinList="currentTab == '1' ? activityData?.bronze : currentTab == '2' ? activityData?.silver : activityData?.gold"
+			/>
 		</div>
-		<div class="remaining_times_bg">{{ $t('home["剩余抽奖次数"]') }}：1</div>
+		<div class="remaining_times_bg">{{ $t('home["剩余抽奖次数"]') }}：{{ activityData?.balanceCount }}</div>
 		<div class="container">
 			<div class="box bonus_bg">
 				<div class="title fs_30 color_TB">转盘奖金总计</div>
-				<div class="amount fs_32 color_Theme">987,654,321.00</div>
+				<div class="amount fs_32 color_Theme">{{ activityData?.totalAmount || 0 }}</div>
 			</div>
 			<div class="box record_bg">
-				<div class="reward color_TB fs_30" @click="showRecord = true">我的抽奖记录<SvgIcon iconName="common/arrow" /></div>
+				<div class="reward color_TB fs_30" @click="handleShowRecord">我的抽奖记录<SvgIcon iconName="common/arrow" /></div>
 			</div>
 		</div>
 
@@ -73,49 +78,6 @@
 					<span>{{ item.activityAmount }}</span>
 					<span>{{ item.receiveTime }}</span>
 				</div>
-				<div v-for="(item, index) in recordList" :key="index" class="dialogTableItem">
-					<span>{{ item.rewardRankText }}</span>
-					<span>{{ item.prizeName }}</span>
-					<span>{{ item.activityAmount }}</span>
-					<span>{{ item.receiveTime }}</span>
-				</div>
-
-				<div v-for="(item, index) in recordList" :key="index" class="dialogTableItem">
-					<span>{{ item.rewardRankText }}</span>
-					<span>{{ item.prizeName }}</span>
-					<span>{{ item.activityAmount }}</span>
-					<span>{{ item.receiveTime }}</span>
-				</div>
-				<div v-for="(item, index) in recordList" :key="index" class="dialogTableItem">
-					<span>{{ item.rewardRankText }}</span>
-					<span>{{ item.prizeName }}</span>
-					<span>{{ item.activityAmount }}</span>
-					<span>{{ item.receiveTime }}</span>
-				</div>
-				<div v-for="(item, index) in recordList" :key="index" class="dialogTableItem">
-					<span>{{ item.rewardRankText }}</span>
-					<span>{{ item.prizeName }}</span>
-					<span>{{ item.activityAmount }}</span>
-					<span>{{ item.receiveTime }}</span>
-				</div>
-				<div v-for="(item, index) in recordList" :key="index" class="dialogTableItem">
-					<span>{{ item.rewardRankText }}</span>
-					<span>{{ item.prizeName }}</span>
-					<span>{{ item.activityAmount }}</span>
-					<span>{{ item.receiveTime }}</span>
-				</div>
-				<div v-for="(item, index) in recordList" :key="index" class="dialogTableItem">
-					<span>{{ item.rewardRankText }}</span>
-					<span>{{ item.prizeName }}</span>
-					<span>{{ item.activityAmount }}</span>
-					<span>{{ item.receiveTime }}</span>
-				</div>
-				<div v-for="(item, index) in recordList" :key="index" class="dialogTableItem">
-					<span>{{ item.rewardRankText }}</span>
-					<span>{{ item.prizeName }}</span>
-					<span>{{ item.activityAmount }}</span>
-					<span>{{ item.receiveTime }}</span>
-				</div>
 			</div>
 			<div class="close" @click="showRecord = false">
 				<img src="./images/close.png" alt="" />
@@ -127,10 +89,8 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import nodata from "./images/nodata.png";
 import Spin from "/@/components/Spin/Spin.vue";
-import { mockDoGetReward, mockGetSpinList } from "./api";
-import bronze from "./images/bronze_footer.png";
+import { activityApi } from "/@/api/activity";
 const showResult = ref(false);
 const showRecord = ref(false);
 // 奖项列表
@@ -175,12 +135,14 @@ const recordList = [
 		activityAmount: "9999",
 	},
 ];
+
+const activityData: any = ref({});
 onMounted(() => {
 	/**
 	 * @description 获取奖项列表
 	 */
-	mockGetSpinList().then((res: { data: Array<object> }) => {
-		spinList.value = res.data;
+	activityApi.getSpinDetail().then((res) => {
+		activityData.value = res.data;
 	});
 });
 
@@ -212,8 +174,13 @@ const selectTab = (tabKey: string) => {
  * @description 抽奖开始
  */
 const spinStart = () => {
-	mockDoGetReward().then((res: { data: {} }) => {
-		reward.value = res.data;
+	const params = {
+		id: activityData.value.id,
+		vipRankCode: currentTab.value,
+	};
+	activityApi.getSpinPrizeResult(params).then((res) => {
+		reward.value = res;
+		console.log(res);
 	});
 };
 
@@ -223,6 +190,15 @@ const spinStart = () => {
 const spinEnd = () => {
 	// 处理转盘停止后的逻辑
 	showResult.value = true;
+};
+const handleShowRecord = () => {
+	showRecord.value = true;
+	querySpinWheelOrderRecord();
+};
+const querySpinWheelOrderRecord = () => {
+	activityApi.querySpinWheelOrderRecord().then((res) => {
+		console.log(res);
+	});
 };
 </script>
 

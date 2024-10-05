@@ -38,8 +38,6 @@ class activitySocketService {
 	connect(): Promise<void> {
 		return new Promise((resolve, reject) => {
 			const userStore = useUserStore(); // 获取用户信息
-			console.log(userStore, 99999999); // 打印用户信息
-
 			// 如果没有token则不建立连接
 			if (!userStore.token) return;
 			this.socket = new WebSocket(`${this.url}?p=${userStore.token}`); // 使用token建立WebSocket连接

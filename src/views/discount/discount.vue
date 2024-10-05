@@ -1,7 +1,7 @@
 <template>
 	<!-- 活动 -->
 	<VantNavBar title="优惠活动" :leftArrow="false" />
-	<div v-loading="state.pageLoading" class="discount_container">
+	<div class="discount_container">
 		<!-- <Banner class="home_banner mb_35" /> -->
 
 		<NavBar class="mt_32 mb_24 discount_navbar" v-model:active="active" :tab-list="state.tabList" @on-change-nav-bar="onChangeNavBar" />
@@ -33,6 +33,10 @@ import { useRouter } from "vue-router";
 import { i18n } from "/@/i18n/index";
 import { activityApi } from "/@/api/activity";
 import Common from "/@/utils/common";
+import { showToast } from "vant";
+defineOptions({
+	name: "discount",
+});
 const $: any = i18n.global;
 const router = useRouter();
 const state: any = reactive({
@@ -42,11 +46,18 @@ const state: any = reactive({
 });
 // const store = useUserStore();
 const active = ref<string | number>("");
-onBeforeMount(async () => {
+onMounted(async () => {
 	await getActivityTab();
 	await activityPageList();
 	// await getActivity();
 });
+onActivated(() => {
+	console.log(123123, "组件被激活了");
+});
+onMounted(() => {
+	console.log(123123, "组件挂载了");
+});
+
 const params = reactive({
 	pageNumber: 1,
 	pageSize: 10,
@@ -55,6 +66,7 @@ const params = reactive({
 // 查活动页签
 const getActivityTab = async () => {
 	state.pageLoading = true;
+
 	const res: any = await activityApi.activityTabsList();
 	state.pageLoading = false;
 	if (res.code == Common.getInstance().ResCode.SUCCESS) {
@@ -92,29 +104,14 @@ const activityPageList = async () => {
 };
 //跳转活动详情
 const onToDeatils = (item) => {
-	console.log(item);
+	if (item.entrancePictureGrey) {
+		showToast("活动已过期");
+		return;
+	}
 	router.push({
 		path: `/activity/${item.activityTemplate}`,
 		query: { data: encodeURIComponent(JSON.stringify(item)) },
 	});
-
-	// if (item.entrancePictureGrey) {
-	// 	Toast("活动已过期");
-	// 	return;
-	// }
-	// console.log(item);
-	// if (item.activityTemplate == 5 || item.activityTemplate == 6) {
-	// 	if (item.activityTemplate == 5) {
-	// 		router.push({ path: "/discountGift", query: { id: item.id } });
-	// 	} else {
-	// 		router.push({ path: "/inviteFriendsTripleGift", query: { id: item.id } });
-	// 	}
-	// } else {
-	// 	router.push({
-	// 		path: "/discountDetails",
-	// 		query: { data: encodeURIComponent(JSON.stringify(item)) },
-	// 	});
-	// }
 };
 
 // 根据活动页id查对应活动

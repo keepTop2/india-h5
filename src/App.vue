@@ -1,7 +1,12 @@
 <template>
 	<div class="container">
 		<MenuPopup />
-		<RouterView />
+
+		<router-view v-slot="{ Component }">
+			<KeepAlive :max="10">
+				<component :is="Component" />
+			</KeepAlive>
+		</router-view>
 	</div>
 </template>
 

@@ -4,7 +4,7 @@
 		<Banner class="Home_Banner" />
 		<div class="Home_Content">
 			<!-- 热门游戏 -->
-			<h3 class="title">
+			<h3 class="title" v-if="hotGames.length">
 				<SvgIcon iconName="home/fire" alt="" />
 				{{ $t('home["热门游戏"]') }}
 			</h3>
@@ -60,7 +60,7 @@
 			<Footer />
 		</div>
 
-		<redbagRainCountdown />
+		<redbagRainCountdown v-model="showCountdown" />
 		<rainPage v-if="showRedBagRain" />
 	</div>
 </template>
@@ -126,6 +126,7 @@ const isShowCollect = computed(() => {
 	return collectList.value.length > 0 && UserStore.token;
 });
 
+const showCountdown = ref(true);
 //监听处理好的体育联赛数据列表 从中获取后台配置好的赛事展示在首页。
 watch(
 	() => viewSportPubSubEventData.getSportData(),
@@ -178,9 +179,11 @@ onBeforeUnmount(() => {
 });
 //获取关注列表
 const queryCollection = () => {
-	GameApi.queryCollection().then((res) => {
-		collectList.value = res.data.records || [];
-	});
+	if (useUserStore().token) {
+		GameApi.queryCollection().then((res) => {
+			collectList.value = res.data.records || [];
+		});
+	}
 };
 //获取推荐赛事列表
 const getSportEventsRecommend = () => {

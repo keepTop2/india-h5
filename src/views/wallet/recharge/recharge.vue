@@ -10,6 +10,15 @@ import Card from "/@/views/wallet/components/card.vue";
 import { useRouter } from "vue-router";
 const router = useRouter();
 
+defineOptions({
+	name: "recharge",
+});
+onActivated(() => {
+	console.log(123123, "recharge组件被激活了");
+});
+onMounted(() => {
+	console.log(123123, "recharge组件挂载了");
+});
 const dataList = [
 	{
 		label: "推荐方式",

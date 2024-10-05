@@ -601,6 +601,58 @@ class Common {
 			}
 		});
 	}
+	static getLast30Days() {
+		const today = new Date();
+		const columns: any = [];
+
+		for (let i = 0; i < 30; i++) {
+			const currentDate = new Date(today);
+			currentDate.setDate(today.getDate() - i);
+
+			const year = currentDate.getFullYear();
+			const month = currentDate.getMonth() + 1; // 月份从0开始，所以需要加1
+			const day = currentDate.getDate();
+
+			// 查找年份
+			let yearNode: any = columns.find((node: any) => node.value === String(year));
+			if (!yearNode) {
+				yearNode = {
+					text: String(year),
+					value: String(year),
+					children: [],
+				};
+				columns.unshift(yearNode);
+			}
+
+			// 查找月份
+			let monthNode = yearNode.children.find((node) => node.value === String(month));
+			if (!monthNode) {
+				monthNode = {
+					text: `${month}月`,
+					value: String(month),
+					children: [],
+				};
+				yearNode.children.unshift(monthNode);
+			}
+
+			// 添加日期
+			if (!monthNode.children.find((node) => node.value === String(day))) {
+				monthNode.children.unshift({
+					text: String(day),
+					value: String(day),
+				});
+			}
+		}
+		// 计算默认选中的索引
+		const currentYear = today.getFullYear();
+		const currentMonth = today.getMonth() + 1; // 月份从0开始，所以需要加1
+		const currentDay = today.getDate();
+
+		return {
+			columns: columns,
+			defaultIndex: [String(currentYear), String(currentMonth), String(currentDay)],
+		};
+	}
 }
 
 export default Common;

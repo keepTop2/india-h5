@@ -1,6 +1,6 @@
 <template>
 	<van-popup v-model:show="show" position="left">
-		<VantLazyImg class="close" :src="theme === ThemeEnum.default ? close : close_light" />
+		<VantLazyImg class="close" :src="theme === ThemeEnum.default ? close : close_light" @click="show = false" />
 		<div class="menu_header">
 			<div class="logo">
 				<img :src="logo" alt="" />
@@ -19,7 +19,7 @@
 			</div>
 
 			<div class="menu_list">
-				<div class="menu van-haptics-feedback" @click="toPath('/bettingMatch')">
+				<div class="menu van-haptics-feedback" @click="toPath('/activity/DAILY_COMPETITION')">
 					<div class="icon">
 						<img :src="mrjs" />
 					</div>
@@ -34,7 +34,7 @@
 
 				<div class="menu van-haptics-feedback" v-for="(item, index) in state.menuList" @click="handleMenuClick(item)" :key="index">
 					<div class="icon">
-						<img :src="item.gameOneIcon" alt="" />
+						<img :src="item.icon" alt="" />
 					</div>
 					<div class="label">{{ item.homeName }}</div>
 				</div>
@@ -80,7 +80,7 @@ const show = ref(false);
 const themesStore = useThemesStore();
 const theme = computed(() => themesStore.themeName);
 
-let state = reactive({
+let state: any = reactive({
 	menuList: [],
 });
 

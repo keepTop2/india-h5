@@ -8,6 +8,7 @@ import { useSportsBetChampionStore } from "/@/store/modules/sports/sportsBetCham
 import { useLoading } from "/@/directives/loading/hooks";
 import dayjs from "dayjs";
 import { convertUtcToUtc5AndFormat } from "/@/webWorker/module/utils/formattingChildrenViewData";
+import { useUserStore } from "/@/store/modules/user";
 
 // 请求余额信息
 export const getIndexInfo = async () => {
@@ -15,6 +16,7 @@ export const getIndexInfo = async () => {
 	const res = await CommonApi.getIndexInfo().catch((err) => err);
 	if (res.code == Common.getInstance().ResCode.SUCCESS) {
 		sportsBetInfo.balance = res.data.totalBalance;
+		useUserStore().setInfo({ ...useUserStore().getUserInfo, ...res.data });
 	}
 };
 
