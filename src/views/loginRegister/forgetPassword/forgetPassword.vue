@@ -25,7 +25,7 @@ const state = reactive({
 	params: {
 		userAccount: "",
 	},
-	computedIndex: 0,
+	computedIndex: 1,
 });
 
 onMounted(() => {});
