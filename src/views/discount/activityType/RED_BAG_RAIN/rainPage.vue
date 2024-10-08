@@ -52,9 +52,10 @@ import readyGo from "./image/readyGo.png";
 import RED_BAG_RAIN_Dialog from "./RED_BAG_RAIN_Dialog/index.vue";
 import { useActivityStore } from "/@/store/modules/activity";
 
-const props = defineProps({
+defineProps({
 	modelValue: Boolean,
 });
+
 const activityStore = useActivityStore();
 const activitySocket = activitySocketService.getInstance();
 const { countdown, startCountdown } = useCountdown();
@@ -66,15 +67,14 @@ const showRedBagRainResult = ref(false);
 const getReadyCountdown = ref(3);
 const dialogTitle = ref("温馨提示");
 let ctx: CanvasRenderingContext2D | null = null;
-
+let redBagInterval: ReturnType<typeof setInterval> | null = null;
 // 创建红包图片对象
-const activityData = ref({});
+const activityData: any = ref({});
 const img = new Image();
 img.src = redBagImg;
 const openedImg = new Image();
 openedImg.src = openRedBagImg;
 
-let redBagInterval: ReturnType<typeof setInterval> | null = null; // Declare interval variable
 // 红包对象接口
 interface RedBag {
 	x: number;
@@ -213,17 +213,15 @@ function drawCountdown() {
 		ctx.fillText(countdownValue, centerX + textWidth1, centerY);
 	}
 }
+
 // 鼠标点击监听
 function handleClick(event: MouseEvent) {
 	if (isPaused.value) return;
-
 	// 获取鼠标相对画布的位置
 	const rect = canvas.value!.getBoundingClientRect();
 	const mouseX = event.clientX - rect.left;
 	const mouseY = event.clientY - rect.top;
-
 	let clickedRedBag: RedBag | null = null;
-
 	// 倒序遍历，查找最上面的红包
 	for (let i = redBags.length - 1; i >= 0; i--) {
 		const redBag = redBags[i];
@@ -235,7 +233,7 @@ function handleClick(event: MouseEvent) {
 	// 如果找到被点击的红包，发送请求并标记为已点击
 	if (clickedRedBag) {
 		activitySocket.send(JSON.stringify({ redbagSessionId: activityData.value.redbagSessionId }));
-		clickedRedBag.isClicked = true; // 标记红包为已点击
+		clickedRedBag.isClicked = true;
 	}
 }
 
@@ -297,7 +295,7 @@ function exitGame() {
 	if (canvas.value) {
 		ctx!.clearRect(0, 0, canvas.value.width, canvas.value!.height); // 清空画布
 		redBags.length = 0; // 清空红包数组
-		pubsub.subscribe("/activity/redBagRain/settlement", (data) => {});
+		// pubsub.subscribe("/activity/redBagRain/settlement", (data) => {});
 		const parmas =
 			"/activity/redBagRain/settlement" +
 			":" +
@@ -315,6 +313,7 @@ const confirmDialog = () => {
 };
 // 生命周期管理
 onMounted(async () => {
+	activityData.value = activityStore.getActivityData;
 	await redBagParticipate();
 	initReadyTime();
 	initRedbagRain();
@@ -322,6 +321,7 @@ onMounted(async () => {
 onActivated(() => {
 	emit("update:modelValue", true);
 });
+
 const redBagParticipate = async () => {
 	await activityApi.redBagParticipate({ redbagSessionId: activityData.value.redbagSessionId }).then((res) => {
 		console.log(res);

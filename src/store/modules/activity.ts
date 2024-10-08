@@ -4,11 +4,15 @@ export const useActivityStore = defineStore("activity", {
 	state: () => {
 		return {
 			isShowRedBagRain: false,
+			ActivityData: {},
 		};
 	},
 	getters: {
 		getIsShowRedBagRain(): any {
 			return this.isShowRedBagRain;
+		},
+		getActivityData() {
+			return this.ActivityData;
 		},
 	},
 	actions: {
@@ -18,6 +22,9 @@ export const useActivityStore = defineStore("activity", {
 		 */
 		setIsShowRedBagRain(value: boolean) {
 			this.isShowRedBagRain = value;
+		},
+		setActivityData(value: {}) {
+			this.ActivityData = value;
 		},
 	},
 });

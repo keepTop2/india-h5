@@ -7,8 +7,8 @@
 				</div>
 				<img class="CountdownImg" src="./image/redbagRainCountdown.png" alt="" @click="handleClickCountdown" />
 				<div class="countdown" @click="handleClickCountdown">
-					<p>倒计时</p>
-					<p>{{ countdown }}</p>
+					<p v-if="redBagInfo.advanceTime">倒计时</p>
+					<p>{{ redBagInfo.advanceTime ? Common.dayFormatHMS(redBagInfo.advanceTime) : "进行中" }}</p>
 				</div>
 			</div>
 		</div>
@@ -17,31 +17,20 @@
 
 <script lang="ts" setup>
 import { onMounted, ref, onBeforeUnmount } from "vue";
-import pubsub from "../../pubSub/pubSub";
 import { useCountdown } from "../../hooks/countdown";
-import { activityApi } from "/@/api/activity";
 import router from "/@/router";
+import Common from "/@/utils/common";
 const { countdown } = useCountdown();
 const draggable = ref<HTMLElement | null>(null);
 const position = ref({ x: 0, y: 0 });
 const isDragging = ref(false);
 const offset = ref({ x: 0, y: 0 });
-const clickDisabled = ref(false);
 let startMousePosition = ref({ x: 0, y: 0 });
-let startTouchPosition = ref({ x: 0, y: 0 });
-const props = defineProps(["modelValue"]);
-const emit = defineEmits(["update:modelValue"]);
-// const proprs = defineProps({
-// 	showCountdown: {
-// 		type: Boolean,
-// 		default: false,
-// 	},
-// });
-
-// 订阅红包雨消息
-pubsub.subscribe("/activity/redBagRain", (data) => {
-	console.log("Received:", data);
+const props = defineProps({
+	modelValue: Boolean,
+	redBagInfo: {} as any,
 });
+const emit = defineEmits(["update:modelValue"]);
 
 // 点击红包进入详情页
 const handleClickCountdown = async () => {

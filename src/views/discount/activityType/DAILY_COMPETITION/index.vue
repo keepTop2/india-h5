@@ -166,7 +166,7 @@ const UserStore = useUserStore();
 const userInfo = computed(() => {
 	return UserStore.getUserInfo;
 });
-
+const currentDay = ref("");
 const showPicker = ref(false);
 // 控制是否显示参与按钮
 const participation = ref(false);
@@ -219,12 +219,13 @@ const queryActivityDailyContest = () => {
 	initPrizePool();
 };
 
-const initPrizePool = (day = "") => {
+const initPrizePool = () => {
 	clearInterval(PrizePoolTimer.value);
 	const params = {
 		id: currentVenueCode.value,
-		day,
+		day: currentDay.value,
 	};
+
 	activityApi.queryActivityDailyPrizePool(params).then((res) => {
 		PrizePool.value = res.data;
 	});
@@ -234,6 +235,7 @@ const initPrizePool = (day = "") => {
 	PrizePoolTimer.value = setInterval(() => {
 		const params = {
 			id: currentVenueCode.value,
+			day: currentDay.value,
 		};
 		activityApi.queryActivityDailyPrizePool(params).then((res) => {
 			PrizePool.value = res.data;
@@ -245,11 +247,9 @@ const initPrizePool = (day = "") => {
 };
 
 const onChangeNavBar = async (value) => {
-	console.log(value);
-
 	clearInterval(PrizePoolTimer.value);
+	currentDay.value = "";
 	currentVenueCode.value = tabList.value[tabsActiveKey.value].id;
-
 	queryActivityDailyContest();
 };
 const confirmPicker = (value) => {
@@ -257,7 +257,8 @@ const confirmPicker = (value) => {
 	defaultDate.value = value.selectedValues;
 	showPicker.value = false;
 	clearInterval(PrizePoolTimer.value);
-	initPrizePool(day);
+	currentDay.value = day;
+	initPrizePool();
 };
 
 const cancelPicker = () => {

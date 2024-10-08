@@ -2,7 +2,7 @@
 	<div class="first-deposit-activity">
 		<VantNavBar title="次存活动" @onClickLeft="router.back()" />
 		<div class="content">
-			<img src="../image/firstDeposit.png" class="main-image" />
+			<img :src="activityData?.headPicturePcI18nCode" class="main-image" />
 			<div class="bonus-card">
 				<div class="bonus-header">红利赠送</div>
 				<div class="bonus-content">
@@ -73,12 +73,7 @@
 					</div>
 				</div>
 				<div class="detail-content">
-					<div class="rules-row">
-						<p>1、这是活动内容活动内容活动内容这是活动内容活动内容活动内容这是活动内容活动内容活动内容这是</p>
-					</div>
-					<div class="rules-row">
-						<p>1、这是活动内容活动内容活动内容这是活动内容活动内容活动内容这是活动内容活动内容活动内容这是</p>
-					</div>
+					<div v-html="activityData?.activityRuleI18nCode"></div>
 				</div>
 				<div class="detail-footer"></div>
 			</div>
@@ -141,7 +136,6 @@ const confirmDialog = () => {
 	@include themeify {
 		color: themed("TB");
 	}
-	padding: 0 22px;
 	font-size: 24px;
 	:deep(.vantNavBar) {
 		box-shadow: none;
@@ -179,7 +173,9 @@ const confirmDialog = () => {
 	}
 
 	.main-image {
+		height: 580px;
 		width: 100%;
+		object-fit: cover;
 		margin-bottom: 20px;
 	}
 
@@ -299,7 +295,7 @@ const confirmDialog = () => {
 			padding: 0 62px;
 			background: url("../image/detail_content.png") no-repeat;
 			background-size: 100% 100%;
-			min-height: 300px;
+
 			.detail-row {
 				.label {
 					height: 50px;
@@ -320,8 +316,12 @@ const confirmDialog = () => {
 					}
 				}
 			}
+
 			.rules-row {
 				margin: 0 24px 24px;
+			}
+			.rules-row:last-child {
+				margin: 0 24px;
 			}
 		}
 		.detail-footer {

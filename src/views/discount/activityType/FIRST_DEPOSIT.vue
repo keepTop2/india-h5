@@ -2,7 +2,7 @@
 	<div class="first-deposit-activity">
 		<VantNavBar title="首存活动" @onClickLeft="router.back()" />
 		<div class="content">
-			<img src="../image/firstDeposit.png" class="main-image" />
+			<img :src="activityData?.headPicturePcI18nCode" class="main-image" />
 			<div class="bonus-card">
 				<div class="bonus-header">红利赠送</div>
 				<div class="bonus-content">
@@ -23,7 +23,7 @@
 						<span class="Amount highlight"><span>$</span>{{ activityData?.activityAmount }}</span>
 					</div>
 				</div>
-				<button class="apply-button" @click="apply">立即申请</button>
+				<button class="apply-button active" @click="apply">立即申请</button>
 			</div>
 
 			<div class="activity-details">
@@ -73,12 +73,7 @@
 					</div>
 				</div>
 				<div class="detail-content">
-					<div class="rules-row">
-						<p>1、这是活动内容活动内容活动内容这是活动内容活动内容活动内容这是活动内容活动内容活动内容这是</p>
-					</div>
-					<div class="rules-row">
-						<p>1、这是活动内容活动内容活动内容这是活动内容活动内容活动内容这是活动内容活动内容活动内容这是</p>
-					</div>
+					<div v-html="activityData?.activityRuleI18nCode"></div>
 				</div>
 				<div class="detail-footer"></div>
 			</div>
@@ -141,7 +136,7 @@ const confirmDialog = () => {
 	@include themeify {
 		color: themed("TB");
 	}
-	padding: 0 22px;
+	padding: 0;
 	font-size: 24px;
 	:deep(.vantNavBar) {
 		box-shadow: none;
@@ -179,10 +174,11 @@ const confirmDialog = () => {
 	}
 
 	.main-image {
+		height: 580px;
 		width: 100%;
+		object-fit: cover;
 		margin-bottom: 20px;
 	}
-
 	.bonus-card {
 		background: url("../image/bonus-card.png");
 		background-size: 100% 100%;
@@ -250,16 +246,21 @@ const confirmDialog = () => {
 		}
 
 		.apply-button {
-			background: linear-gradient(283deg, #ff284b 7.2%, #fd677f 97.93%);
+			background: url("../image/btnBg.png");
+			background-size: 100% 100%;
 			color: white;
 			border: none;
 			width: calc(100% - 95px);
-			padding: 20px;
+			padding: 20px 20px 30px;
 			margin: 20px 42.5px 42px;
 			border-radius: 10px;
 			box-sizing: border-box;
 			font-size: 26px;
 			cursor: pointer;
+		}
+		.apply-button.active {
+			background: url("../image/btnActiveBg.png");
+			background-size: 100% 100%;
 		}
 	}
 
@@ -299,7 +300,6 @@ const confirmDialog = () => {
 			padding: 0 62px;
 			background: url("../image/detail_content.png") no-repeat;
 			background-size: 100% 100%;
-			min-height: 300px;
 			.detail-row {
 				.label {
 					height: 50px;

@@ -16,6 +16,15 @@ export const activityRoutes = {
 			},
 		},
 		{
+			path: "/activity/LOSS_IN_SPORTS",
+			name: "LOSS_IN_SPORTS",
+			component: () => import("/@/views/discount/activityType/LOSS_IN_SPORTS.vue"),
+			meta: {
+				title: "LOSS_IN_SPORTS",
+				KeepAlive: true,
+			},
+		},
+		{
 			path: "/activity/FIRST_DEPOSIT",
 			name: "FIRST_DEPOSIT",
 			component: () => import("/@/views/discount/activityType/FIRST_DEPOSIT.vue"),

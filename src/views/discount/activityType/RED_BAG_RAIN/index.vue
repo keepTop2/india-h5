@@ -12,12 +12,12 @@
 					<div class="bonus-card">
 						<div class="bonus-header">红包雨</div>
 						<div class="bonus-content">
-							<div class="bonus-row1">距离本场红包雨结束</div>
+							<div class="bonus-row1 color_Theme">{{ redBagInfo.clientStatus == 1 ? "距离本场红包雨结束" : "距离下一场红包雨还有" }}</div>
 							<div class="countdown">
-								<span class="">00:00:01</span>
+								<span class="">{{ Common.convertMilliseconds(countdown * 1000) }}</span>
 							</div>
 						</div>
-						<button class="apply-button" @click="getActivityReward">抢</button>
+						<button class="apply-button" @click="getActivityReward" :class="redBagInfo.clientStatus == 1 ? 'active' : ''">抢</button>
 					</div>
 				</div>
 				<div class="activity-details">
@@ -32,25 +32,15 @@
 					</div>
 					<div class="detail-content">
 						<div class="sessions">
-							<!-- <div v-for="(item, index) in redBagInfo.sessionInfoList" class="session" :key="index">
-								<div>{{ Common.getInstance().dayFormat2(item.startTime) }}</div>
+							<div v-for="(item, index) in redBagInfo.sessionInfoList" class="session" :key="index">
+								<div class="color_T1">{{ Common.dayFormatHMS(item.startTime) }}</div>
 								<div class="sideBox">
 									<img src="./image/sessionCricle.svg" alt="" v-if="item.status == 0" />
 									<img src="./image/sessionCricle1.svg" alt="" v-if="item.status == 1" />
 									<img src="./image/sessionCricle2.svg" alt="" v-if="item.status == 2" />
 								</div>
-								<div :class="'status' + item.status">{{ status[item.status] }}</div>
-								<span class="side" v-if="index !== redBagInfo.sessionInfoList.length - 1" :class="'type' + item.status"></span>
-							</div> -->
-							<div v-for="(item, index) in 3" class="session" :key="index">
-								<div>00:01</div>
-								<div class="sideBox">
-									<img src="./image/sessionCricle.svg" alt="" v-if="index == 0" />
-									<img src="./image/sessionCricle1.svg" alt="" v-if="index == 1" />
-									<img src="./image/sessionCricle2.svg" alt="" v-if="index == 2" />
-								</div>
-								<div :class="'status' + 2">{{ index }}</div>
-								<span class="side" :class="'type' + index"></span>
+								<div :class="'status' + item.status">{{ item.status == 0 ? "未开始" : item.status == 1 ? "进行中" : "已结束" }}</div>
+								<span class="side" :class="'type' + item.status"></span>
 							</div>
 						</div>
 					</div>
@@ -74,10 +64,10 @@
 								<div>获得红包</div>
 								<div>时间</div>
 							</div>
-							<div class="winnerListBody" v-for="(item, index) in 3" :key="index">
-								<div>1****7</div>
-								<div>8.6 BCD</div>
-								<div>2023-09-06 23:59:59</div>
+							<div class="winnerListBody" v-for="(item, index) in redBagInfo.winnerList" :key="index">
+								<div>{{ item.userId }}</div>
+								<div>{{ item.redBagAmount }}</div>
+								<div>{{ item.hitTime }}</div>
 							</div>
 						</div>
 					</div>
@@ -94,7 +84,7 @@
 						</div>
 					</div>
 					<div class="detail-content">
-						<div>123123123</div>
+						<div v-html="redBagInfo.ruleDesc"></div>
 					</div>
 					<div class="detail-footer"></div>
 				</div>
@@ -107,23 +97,51 @@
 import { onMounted } from "vue";
 import { activityApi } from "/@/api/activity";
 import { useRouter } from "vue-router";
-import { computed } from "vue";
-import Common from "/@/utils/common";
 import { useActivityStore } from "/@/store/modules/activity";
+import Common from "/@/utils/common";
+import { useCountdown } from "/@/hooks/countdown";
+const { countdown, startCountdown, stopCountdown } = useCountdown();
 const activityStore = useActivityStore();
 const router = useRouter();
 const redBagInfo: any = ref({});
 onMounted(() => {
 	getRedBagInfo();
 });
+watch(
+	() => countdown.value,
+	() => {
+		if (countdown.value == 0) {
+			startCountdown();
+			getRedBagInfo();
+		}
+	}
+);
 const getRedBagInfo = () => {
 	activityApi.getRedBagInfo().then((res: any) => {
 		if (res.code === 10000) {
 			redBagInfo.value = res.data;
+			activityStore.setActivityData(res.data);
+			// 判断活动在进行中
+			if (redBagInfo.value.clientStatus === 1) {
+				// 进行中倒计时
+				startCountdown(redBagInfo.value.advanceTime);
+				// 判断活动已活动已全部结束
+			} else if (redBagInfo.value.clientStatus === 2) {
+				//  获取明天第一场的时间
+				const time = res.data.sessionInfoList[0].startTime + 1000 * 60 * 60 * 24 - new Date().getTime();
+				startCountdown(Math.floor(time / 1000));
+			}
 		}
 	});
 };
-const getActivityReward = () => {
+const getActivityReward = async () => {
+	// 活动不在进行中
+	if (redBagInfo.value.clientStatus !== 1) return;
+	// 校验参与资格
+	await activityApi.redBagParticipate({ redbagSessionId: redBagInfo.value.redbagSessionId }).then((res) => {
+		console.log(res);
+	});
+	// 保存活动信息
 	activityStore.setIsShowRedBagRain(true);
 	router.push("/");
 };
@@ -229,7 +247,7 @@ const onClickLeft = () => {
 	}
 
 	.apply-button {
-		background: url("./image/btn_active.png") no-repeat;
+		background: url("./image/btnBg.png") no-repeat;
 		background-size: 100% 100%;
 		color: white;
 		border: none;
@@ -237,10 +255,12 @@ const onClickLeft = () => {
 		width: calc(100% - 95px);
 		margin: 20px 42.5px 42px;
 		border-radius: 10px;
-		box-sizing: border-box;
-		font-size: 32px;
-		line-height: 68px;
+		padding-bottom: 13px;
+		font-size: 26px;
 		cursor: pointer;
+	}
+	.apply-button.active {
+		background: url("./image/btn_active.png") no-repeat;
 	}
 }
 
@@ -281,7 +301,6 @@ const onClickLeft = () => {
 		background: url("../../image/detail_content.png");
 		background-size: 100% 100%;
 		font-size: 24px;
-		min-height: 240px;
 		.detail-row {
 			.label {
 				height: 50px;

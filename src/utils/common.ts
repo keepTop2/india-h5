@@ -217,6 +217,15 @@ class Common {
 	/**
 	 * 时间戳转化为年月日
 	 */
+	static dayFormatHMS(date: any): string {
+		if (date) {
+			return dayjs(date).format("HH:mm:ss");
+		}
+		return "";
+	}
+	/**
+	 * 时间戳转化为年月日
+	 */
 	public dayFormat1(date: number | string | null): string {
 		if (date) {
 			return dayjs(date).tz("Asia/Shanghai").format("YYYY-MM-DD");
@@ -601,7 +610,15 @@ class Common {
 			}
 		});
 	}
+	static convertMilliseconds(ms: number) {
+		const seconds = Math.floor(ms / 1000);
+		const minutes = Math.floor(seconds / 60);
+		const hours = Math.floor(minutes / 60);
+		const remainingSeconds = seconds % 60;
+		const remainingMinutes = minutes % 60;
 
+		return `${String(hours).padStart(2, "0")}:${String(remainingMinutes).padStart(2, "0")}:${String(remainingSeconds).padStart(2, "0")}`;
+	}
 	// 获取30天年月日
 	static getLast30Days() {
 		const today = new Date();

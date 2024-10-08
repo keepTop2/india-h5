@@ -60,7 +60,7 @@ onMounted(() => {
 
 const params = reactive({
 	pageNumber: 1,
-	pageSize: 10,
+	pageSize: 1000,
 	labelId: "",
 });
 // 查活动页签
@@ -104,18 +104,24 @@ const activityPageList = async () => {
 };
 //跳转活动详情
 const onToDeatils = (item) => {
-	if (item.entrancePictureGrey) {
+	// 长期活动
+	if (item.activityDeadline) {
+		router.push({
+			path: `/activity/${item.activityTemplate}`,
+			query: { data: encodeURIComponent(JSON.stringify(item)) },
+		});
+	} else if (item.entrancePictureGrey) {
 		showToast("活动已过期");
 		return;
-	}
-	if (!item.enable) {
+	} else if (!item.enable) {
 		showToast("活动未开启");
 		return;
+	} else {
+		router.push({
+			path: `/activity/${item.activityTemplate}`,
+			query: { data: encodeURIComponent(JSON.stringify(item)) },
+		});
 	}
-	router.push({
-		path: `/activity/${item.activityTemplate}`,
-		query: { data: encodeURIComponent(JSON.stringify(item)) },
-	});
 };
 
 // 根据活动页id查对应活动

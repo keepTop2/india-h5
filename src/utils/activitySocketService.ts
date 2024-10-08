@@ -41,7 +41,6 @@ class activitySocketService {
 			// 如果没有token则不建立连接
 			if (!userStore.token) return;
 			this.socket = new WebSocket(`${this.url}?p=${userStore.token}`); // 使用token建立WebSocket连接
-
 			// WebSocket连接打开时
 			this.socket.onopen = () => {
 				this.reconnectAttempts = 0; // 重置重连次数
@@ -51,12 +50,13 @@ class activitySocketService {
 
 			// 收到消息时根据消息类型推送出去
 			this.socket.onmessage = (event) => {
-				switch (event.data.msgTopic) {
+				const data = JSON.parse(event.data);
+				switch (data.msgTopic) {
 					case "/activity/redBagRain":
-						pubsub.publish("/activity/redBagRain", event.data); // 红包雨活动消息
+						pubsub.publish("/activity/redBagRain", data.data.data); // 红包雨活动消息
 						break;
 					case "/activity/redBagRain/settlement":
-						pubsub.publish("/activity/redBagRain/settlement", event.data); // 红包雨结算消息
+						pubsub.publish("/activity/redBagRain/settlement", data.data); // 红包雨结算消息
 						break;
 				}
 			};
