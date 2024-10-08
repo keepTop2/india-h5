@@ -11,7 +11,7 @@
 			<div class=""></div>
 			<div class="user">
 				<div class="userName">{{ store.userInfo.userAccount }}</div>
-				<div class="balance">${{ common.getInstance().formatFloat(6000) }}</div>
+				<div class="balance">${{ common.getInstance().formatFloat(store.userInfo.totalBalance) }}</div>
 			</div>
 			<Notify />
 		</div>

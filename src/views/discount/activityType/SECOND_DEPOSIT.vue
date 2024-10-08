@@ -1,30 +1,29 @@
 <template>
 	<div class="first-deposit-activity">
-		<VantNavBar title="次存活动" @onClickLeft="onClickLeft" />
-
+		<VantNavBar title="次存活动" @onClickLeft="router.back()" />
 		<div class="content">
-			<img src="../image/firstDeposit.png" class="main-image" />
+			<img :src="activityData?.headPicturePcI18nCode" class="main-image" />
 			<div class="bonus-card">
 				<div class="bonus-header">红利赠送</div>
 				<div class="bonus-content">
 					<div class="bonus-row1">
 						<div class="bonus-row">
 							<span class="text">存款金额</span>
-							<span class="Amount"><span>$</span>{{ depositAmount }}</span>
+							<span class="Amount"><span>$</span>{{ activityData?.depositAmount }}</span>
 						</div>
 						<div class="bonus-row1-line"></div>
 						<div class="bonus-row">
 							<span class="text">需打流水</span>
-							<span class="Amount"><span>$</span>{{ requiredTurnover }}</span>
+							<span class="Amount"><span>$</span>{{ activityData?.runningWater }}</span>
 						</div>
 					</div>
 					<div class="bonus-row-line"></div>
 					<div class="bonus-row2">
 						<span>可得金额:</span>
-						<span class="Amount highlight"><span>$</span>{{ bonusAmount }}</span>
+						<span class="Amount highlight"><span>$</span>{{ activityData?.activityAmount }}</span>
 					</div>
 				</div>
-				<button class="apply-button">立即申请</button>
+				<button class="apply-button" @click="apply">立即申请</button>
 			</div>
 
 			<div class="activity-details">
@@ -45,19 +44,19 @@
 						<p class="label">
 							<span>活动对象</span>
 						</p>
-						<p class="value">全体会员</p>
+						<p class="value">{{ activityData?.userTypeName }}</p>
 					</div>
 					<div class="detail-row">
 						<p class="label">
 							<span>活动时间</span>
 						</p>
-						<p class="value">{{ activityPeriod }}</p>
+						<p class="value">{{ dayjs(activityData?.activityStartTime).format("YYYY-MM-DD HH:mm:ss") }}~{{ dayjs(activityData?.activityEndTime).format("YYYY-MM-DD HH:mm:ss") }}</p>
 					</div>
 					<div class="detail-row">
 						<p class="label">
 							<span>活动描述</span>
 						</p>
-						<p class="value">{{ activityDescription }}</p>
+						<p class="value">{{ activityData?.activityDescI18nCode }}</p>
 					</div>
 				</div>
 				<div class="detail-footer"></div>
@@ -74,62 +73,73 @@
 					</div>
 				</div>
 				<div class="detail-content">
-					<div class="detail-row">
-						<p>活动时间：2024年1月15日~长期</p>
-					</div>
-					<div class="detail-row">
-						<p>活动对象：首存会员</p>
-					</div>
-					<div class="rules-row">
-						<p>1、这是活动内容活动内容活动内容这是活动内容活动内容活动内容这是活动内容活动内容活动内容这是</p>
-					</div>
-					<div class="rules-row">
-						<p>1、这是活动内容活动内容活动内容这是活动内容活动内容活动内容这是活动内容活动内容活动内容这是</p>
-					</div>
+					<div v-html="activityData?.activityRuleI18nCode"></div>
 				</div>
 				<div class="detail-footer"></div>
 			</div>
 		</div>
+		<activityDialog v-model="showDialog" title="温馨提示" :confirm="confirmDialog">
+			{{ dialogInfo.message }}
+			<template v-slot:footer v-if="dialogInfo.status === 30049"> 去存款 </template>
+		</activityDialog>
 	</div>
 </template>
 
 <script lang="ts" setup>
-import firstDeposit from "../image/firstDeposit.svg";
 import { ref } from "vue";
+import { activityApi } from "/@/api/activity";
+import activityDialog from "../components/Dialog.vue";
+import dayjs from "dayjs";
 const router = useRouter();
-const depositAmount = ref(100.0);
-const requiredTurnover = ref(100.0);
-const bonusAmount = ref(50.0);
-
-const activityPeriod = ref("2024-08-10 12:00:00 ~2024-08-10 12:00:00");
-const activityDescription = ref("所有会员每日（美东时间）在真人场馆投注即可参与流水排名，每日前10名将按比例瓜分奖池");
-
-const rulesPeriod = ref("2024年1月15日~长期");
-const rulesTarget = ref("首存会员");
-const activityRules = ref([
-	"这是活动内容活动内容活动内容这是活动内容活动内容活动内容这是活动内容活动内容这是活动内容活动内容活动内容活动内容这是",
-	"这是活动内容活动内容活动内容这是活动内容活动内容活动内容这是活动内容活动内容这是活动内容活动内容活动内容活动内容这是",
-]);
-const onClickLeft = () => {
-	router.push({ path: "/discount" });
+const route = useRoute();
+const showDialog = ref(false);
+const dialogInfo: any = ref({});
+const activityInfo = JSON.parse(decodeURIComponent(route.query.data as string));
+const activityData = ref();
+onBeforeMount(() => {
+	getConfigDetail();
+});
+const getConfigDetail = () => {
+	const params = {
+		activityTemplate: activityInfo.activityTemplate,
+		id: activityInfo.id,
+	};
+	activityApi.getConfigDetail(params).then((res) => {
+		activityData.value = res.data;
+	});
+};
+const apply = () => {
+	activityApi.toActivity({ id: activityInfo.id }).then((res: any) => {
+		if (res.code === 10000) {
+			if (res.data.status !== 10000) {
+				dialogInfo.value = res.data;
+				showDialog.value = true;
+			}
+		}
+	});
+};
+const confirmDialog = () => {
+	if (dialogInfo.value.status === 30049) {
+		router.push("/wallet/recharge");
+	}
+	showDialog.value = false;
 };
 </script>
 
 <style lang="scss" scoped>
 .first-deposit-activity {
-	@include themeify {
-		color: themed("TB");
-	}
-	padding: 0 22px;
-	font-size: 24px;
-	:deep(.vantNavBar) {
-		box-shadow: none;
-	}
 	min-height: 100vh;
 	background: url("/@/assets/zh-CN/default/vip/vip_content_bg.png") center top / 100% 100% no-repeat;
 	background-attachment: fixed;
 	/* 背景图像固定 */
 	box-sizing: border-box;
+	@include themeify {
+		color: themed("TB");
+	}
+	font-size: 24px;
+	:deep(.vantNavBar) {
+		box-shadow: none;
+	}
 
 	header {
 		text-align: center;
@@ -163,7 +173,9 @@ const onClickLeft = () => {
 	}
 
 	.main-image {
+		height: 580px;
 		width: 100%;
+		object-fit: cover;
 		margin-bottom: 20px;
 	}
 
@@ -283,7 +295,7 @@ const onClickLeft = () => {
 			padding: 0 62px;
 			background: url("../image/detail_content.png") no-repeat;
 			background-size: 100% 100%;
-			min-height: 300px;
+
 			.detail-row {
 				.label {
 					height: 50px;
@@ -304,8 +316,12 @@ const onClickLeft = () => {
 					}
 				}
 			}
+
 			.rules-row {
-				margin: 24px 0;
+				margin: 0 24px 24px;
+			}
+			.rules-row:last-child {
+				margin: 0 24px;
 			}
 		}
 		.detail-footer {

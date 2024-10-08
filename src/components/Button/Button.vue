@@ -5,11 +5,7 @@
 <script setup lang="ts">
 const props = withDefaults(
 	defineProps<{
-		/**
-		 * default 默认高亮
-		 * disabled 默认未高亮且禁用
-		 */
-		type: "default" | "disabled";
+		type?: "default" | "disabled";
 	}>(),
 	{
 		type: "default",

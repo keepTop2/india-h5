@@ -17,7 +17,7 @@ import {} from "vue";
 	position: fixed;
 	top: 0;
 	left: 0;
-	z-index: 9999;
+	z-index: 10000001;
 	width: 100%;
 	min-height: 100%;
 	display: flex;

@@ -33,7 +33,8 @@ const value = computed({
 /**
  * 点击标签时触发
  */
-const clickTab = () => {
+const clickTab = (item) => {
+	if (item.name === value.value) return;
 	emit("clickTab");
 };
 /**
