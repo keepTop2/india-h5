@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { showFailToast } from "vant";
+import { showToast } from "vant";
 import { forgetPasswordApi } from "/@/api/loginRegister";
 import common from "/@/utils/common";
 
@@ -43,7 +43,7 @@ const onStep = async () => {
 	if (res.code == common.getInstance().ResCode.SUCCESS) {
 		emit("onStep", state);
 	} else {
-		showFailToast(res.message);
+		showToast(res.message);
 	}
 };
 </script>

@@ -98,6 +98,10 @@ const onClickRight = () => {
 	@include themeify {
 		color: themed("TB");
 	}
+	svg {
+		width: 100%;
+		height: 100%;
+	}
 }
 
 .service_icon {

@@ -17,7 +17,6 @@ import BackToTop from "/@/layout/home/components/BackToTop.vue";
 const blacklist = ["/"];
 const route = useRoute();
 const isTabBar = computed(() => {
-	console.log(route.meta.isTabBar, "=route.meta.isTabBar");
 	return !route.meta.hideTabBar;
 });
 // 监听路由变化
