@@ -154,9 +154,9 @@ const isConfirmPasswordValid = computed(() => {
 
 // 监听用户状态
 watch(
-	[() => isAccountValid.value, () => isPasswordValid.value, () => isConfirmPasswordValid.value, () => state.mainCurrency, () => userAgreement.value, () => marketingAgreement.value],
-	([isAccountValid, isPasswordValid, isConfirmPasswordValid, mainCurrency, userAgreement, marketingAgreement]) => {
-		if (isAccountValid && isPasswordValid && isConfirmPasswordValid && mainCurrency && userAgreement && marketingAgreement) {
+	[() => isAccountValid.value, () => isPasswordValid.value, () => isConfirmPasswordValid.value, () => state.mainCurrency, () => userAgreement.value],
+	([isAccountValid, isPasswordValid, isConfirmPasswordValid, mainCurrency, userAgreement]) => {
+		if (isAccountValid && isPasswordValid && isConfirmPasswordValid && mainCurrency && userAgreement) {
 			btnDisabled.value = false;
 		} else {
 			btnDisabled.value = true;
