@@ -2,16 +2,16 @@
 	<div class="content">
 		<div class="title">{{ $t('forgetPassword["找回密码"]') }}</div>
 		<div class="from">
-			<FormInput v-model="state.userAccount" type="text" :placeholder="$t(`forgetPassword['账户名']`)" :errorBorder="!isAccountValid && state.userAccount !== '' ? true : false">
+			<FormInput v-model="state.userAccount" type="text" :placeholder="$t(`forgetPassword['账户名']`)">
 				<template v-slot:right>
 					<SvgIcon v-if="state.userAccount" class="clearIcon" iconName="loginOrRegister/clear" @click="state.userAccount = ''" />
 				</template>
 			</FormInput>
-			<div class="error_text">
+			<!-- <div class="error_text">
 				<span v-if="!isAccountValid && state.userAccount !== ''" class="text">{{ $t('register["请输入4-11位字母+数字组成，首位必须是字母"]') }}</span>
-			</div>
+			</div> -->
 
-			<Button :type="!isAccountValid ? 'disabled' : 'default'" @click="onStep">{{ $t('forgetPassword["下一步"]') }}</Button>
+			<Button class="mt_40" :type="!isAccountValid ? 'disabled' : 'default'" @click="onStep">{{ $t('forgetPassword["下一步"]') }}</Button>
 
 			<div class="footer">
 				<div>
