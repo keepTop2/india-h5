@@ -327,11 +327,7 @@ const selectAreaCode = (item, i: CountryData) => {
 			display: flex;
 			justify-content: space-between;
 		}
-		.phonelist {
-			display: flex;
-			align-items: center;
-			gap: 10px;
-		}
+		.p
 		.icon {
 			width: 32px;
 			height: 32px;

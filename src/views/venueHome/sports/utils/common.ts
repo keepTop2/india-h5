@@ -228,21 +228,19 @@ class SportsCommonFn {
 	 * @description 提供一个数据区间 startDate 今天12点 endDate 明天12点
 	 * */
 	public static getResultDateRange = (date) => {
-		// 传入的日期为UTC-5时间
+		// 传入的日期为用户所在地时间
 		const easternTime = dayjs(date);
 		// 计算0点（开始时间）
-		const startDate = easternTime.startOf("day").add(5, "hour").format("YYYY-MM-DDTHH:mm:ss");
+		const startDate = easternTime.startOf("day").toISOString();
 		// 计算23:59:59（结束时间），注意endOf返回的是下一周期的开始，所以需要减去1毫秒
-		const endDate = easternTime.endOf("day").add(5, "hour").subtract(1, "millisecond").format("YYYY-MM-DDTHH:mm:ss");
+		const endDate = easternTime.endOf("day").subtract(1, "millisecond").toISOString();
 
 		return { startDate, endDate };
 	};
-	// 获取 utc-5的当天 日期
+	// 获取当天 日期
 	public static todayDate = () => {
-		console.info(dayjs.utc());
-		console.info(dayjs.utc().subtract(5, "hour").format("YYYY-MM-DD"));
 		// console.info(dayjs.utc());
-		return dayjs.utc().subtract(5, "hour").format("YYYY-MM-DD");
+		return dayjs().utc().format("YYYY-MM-DD");
 	};
 	/**
 	 * @description 生成指定日期区间内的日期数组

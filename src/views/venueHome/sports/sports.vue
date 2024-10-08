@@ -292,10 +292,10 @@ const openSportPush = async () => {
 		startLoading();
 		const sportsParams = {
 			query: `$filter=sportType in (${SportsCommonFn.getRequestSportsType()})`,
-			from: dayjs.utc().subtract(5, "hour").endOf("day").add(5, "hour").format("YYYY-MM-DDTHH:mm:ss"),
-			until: dayjs.utc().add(14, "day").subtract(5, "hour").endOf("day").add(5, "hour").format("YYYY-MM-DDTHH:mm:ss"),
+			from: dayjs().endOf("day").toISOString(),
+			until: dayjs().add(14, "day").endOf("day").toISOString(),
 		};
-		const date = dayjs.utc().add(1, "day").subtract(5, "hour").format("YYYY-MM-DD");
+		const date = dayjs.utc().add(1, "day").format("YYYY-MM-DD");
 		const { startDate, endDate } = SportsCommonFn.getResultDateRange(date);
 		const queryParams = {
 			params: {
@@ -571,6 +571,7 @@ const getAttention = () => {
 /**
  * @description 调用获取赛果赛事数量接口
  */
+//  dayjs().add(1, "day").startOf("day").toISOString()
 const getMatchResult = async () => {
 	// 获取当前日期
 	const today = SportsCommonFn.todayDate();
@@ -578,8 +579,8 @@ const getMatchResult = async () => {
 	const sevenDays = dayjs(today).subtract(6, "day");
 	const params = {
 		language: "zhcn",
-		from: `${sevenDays.add(5, "hour").format("YYYY-MM-DDTHH:mm:ss")}`,
-		until: `${dayjs(today).endOf("day").add(5, "hour").format("YYYY-MM-DDTHH:mm:ss")}`,
+		from: `${sevenDays.toISOString()}`,
+		until: `${dayjs(today).endOf("day").toISOString()}`,
 	};
 	const res = await sportsApi.GetSportResults(params).catch((err) => err);
 	//获取赛果数量后 添加到sports中
