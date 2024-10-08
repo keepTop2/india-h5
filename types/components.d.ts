@@ -20,6 +20,7 @@ declare module '@vue/runtime-core' {
     FormInput: typeof import('./../src/components/Input/formInput.vue')['default']
     Hcaptcha: typeof import('./../src/components/Hcaptcha/hcaptcha.vue')['default']
     MultipleSelect: typeof import('./../src/components/MultipleSelect/MultipleSelect.vue')['default']
+    Nodata: typeof import('./../src/components/Nodata/index.vue')['default']
     NoGameImg: typeof import('./../src/components/NoGameImg/NoGameImg.vue')['default']
     Notify: typeof import('./../src/components/Notify/Notify.vue')['default']
     RedbagRainCountdown: typeof import('./../src/components/redbagRainCountdown/index.vue')['default']

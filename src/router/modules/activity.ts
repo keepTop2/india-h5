@@ -1,4 +1,10 @@
 export const activityRoutes = {
+	path: "/activity",
+	name: "activity",
+	meta: {
+		title: "activity",
+		KeepAlive: true,
+	},
 	children: [
 		{
 			path: "/activity/SECOND_DEPOSIT",
@@ -6,6 +12,25 @@ export const activityRoutes = {
 			component: () => import("/@/views/discount/activityType/SECOND_DEPOSIT.vue"),
 			meta: {
 				title: "SECOND_DEPOSIT",
+				KeepAlive: true,
+			},
+		},
+		{
+			path: "/activity/LOSS_IN_SPORTS",
+			name: "LOSS_IN_SPORTS",
+			component: () => import("/@/views/discount/activityType/LOSS_IN_SPORTS.vue"),
+			meta: {
+				title: "LOSS_IN_SPORTS",
+				KeepAlive: true,
+			},
+		},
+		{
+			path: "/activity/FIRST_DEPOSIT",
+			name: "FIRST_DEPOSIT",
+			component: () => import("/@/views/discount/activityType/FIRST_DEPOSIT.vue"),
+			meta: {
+				title: "FIRST_DEPOSIT",
+				KeepAlive: true,
 			},
 		},
 		{
@@ -19,9 +44,10 @@ export const activityRoutes = {
 		{
 			path: "/activity/DAILY_COMPETITION",
 			name: "DAILY_COMPETITION",
-			component: () => import("/@/views/discount/activityType/DAILY_COMPETITION.vue"),
+			component: () => import("/@/views/discount/activityType/DAILY_COMPETITION/index.vue"),
 			meta: {
 				title: "DAILY_COMPETITION",
+				KeepAlive: true,
 			},
 		},
 		{

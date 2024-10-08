@@ -1,0 +1,379 @@
+<template>
+	<div class="first-deposit-activity">
+		<VantNavBar title="体育负盈利" @onClickLeft="router.back()" />
+		<div class="content">
+			<img :src="activityData?.headPicturePcI18nCode" class="main-image" />
+
+			<div class="activity-details">
+				<div class="detail_icon">
+					<img src="../image/detail_icon.png" alt="" />
+				</div>
+				<div class="details-header">
+					<div class="details-header-title-left">
+						<img src="../image/details-header-title-left.png" alt="" />
+					</div>
+					活动条件
+					<div class="details-header-title-right">
+						<img src="../image/details-header-title-right.png" alt="" />
+					</div>
+				</div>
+				<div class="detail-content">
+					<div class="detail-row">
+						<p class="label">
+							<span>活动对象</span>
+						</p>
+						<p class="value">{{ activityData?.userTypeName }}</p>
+					</div>
+					<div class="detail-row">
+						<p class="label">
+							<span>活动时间</span>
+						</p>
+						<p class="value">{{ dayjs(activityData?.activityStartTime).format("YYYY-MM-DD HH:mm:ss") }}~{{ dayjs(activityData?.activityEndTime).format("YYYY-MM-DD HH:mm:ss") }}</p>
+					</div>
+					<div class="detail-row">
+						<p class="label">
+							<span>活动描述</span>
+						</p>
+						<p class="value">{{ activityData?.activityDescI18nCode }}</p>
+					</div>
+				</div>
+				<div class="detail-footer"></div>
+			</div>
+
+			<div class="activity-details">
+				<div class="details-header">
+					<div class="details-header-title-left">
+						<img src="../../image/details-header-title-left.png" alt="" />
+					</div>
+					<span>活动规则</span>
+					<div class="details-header-title-right">
+						<img src="../../image/details-header-title-right.png" alt="" />
+					</div>
+				</div>
+				<div class="detail-content">
+					<div class="winnerListTable">
+						<div class="winnerListHeader">
+							<div>亏损金额</div>
+							<div>返还比例</div>
+						</div>
+						<div class="winnerListBody" v-for="(item, index) in 3" :key="index">
+							<div>{{ 1 }}</div>
+							<div>{{ 2 }}</div>
+						</div>
+					</div>
+				</div>
+				<div class="detail-footer"></div>
+			</div>
+		</div>
+		<div class="applyBtn">
+			<div class="active">立即申请</div>
+		</div>
+		<activityDialog v-model="showDialog" title="温馨提示" :confirm="confirmDialog">
+			{{ dialogInfo.message }}
+			<template v-slot:footer v-if="dialogInfo.status === 30049"> 去存款 </template>
+		</activityDialog>
+	</div>
+</template>
+
+<script lang="ts" setup>
+import { ref } from "vue";
+import { activityApi } from "/@/api/activity";
+import activityDialog from "../components/Dialog.vue";
+import dayjs from "dayjs";
+const router = useRouter();
+const route = useRoute();
+const showDialog = ref(false);
+const dialogInfo: any = ref({});
+const activityInfo = JSON.parse(decodeURIComponent(route.query.data as string));
+const activityData = ref();
+onBeforeMount(() => {
+	getConfigDetail();
+});
+const getConfigDetail = () => {
+	const params = {
+		activityTemplate: activityInfo.activityTemplate,
+		id: activityInfo.id,
+	};
+	activityApi.getConfigDetail(params).then((res) => {
+		activityData.value = res.data;
+	});
+};
+const apply = () => {
+	activityApi.toActivity({ id: activityInfo.id }).then((res: any) => {
+		if (res.code === 10000) {
+			if (res.data.status !== 10000) {
+				dialogInfo.value = res.data;
+				showDialog.value = true;
+			}
+		}
+	});
+};
+const confirmDialog = () => {
+	if (dialogInfo.value.status === 30049) {
+		router.push("/wallet/recharge");
+	}
+	showDialog.value = false;
+};
+</script>
+
+<style lang="scss" scoped>
+.first-deposit-activity {
+	min-height: 100vh;
+	background: url("/@/assets/zh-CN/default/vip/vip_content_bg.png") center top / 100% 100% no-repeat;
+	background-attachment: fixed;
+	/* 背景图像固定 */
+	box-sizing: border-box;
+	@include themeify {
+		color: themed("TB");
+	}
+	padding: 0;
+	font-size: 24px;
+	:deep(.vantNavBar) {
+		box-shadow: none;
+	}
+
+	header {
+		text-align: center;
+		margin-bottom: 20px;
+		margin-top: 60px;
+		h1 {
+			background: linear-gradient(90deg, #ff284b 0%, #ff667f 50%, #ff284b 100%);
+			background-clip: text;
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+			margin-bottom: 22px;
+			text-align: center;
+			text-shadow: 0px 4px 4px rgba(255, 40, 75, 0.3);
+			font-family: "Paytone One";
+			font-size: 50px;
+			font-style: normal;
+			font-weight: 400;
+			line-height: 42px; /* 84% */
+			text-transform: uppercase;
+		}
+
+		h2 {
+			font-size: 18px;
+		}
+	}
+
+	.content {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.main-image {
+		height: 580px;
+		width: 100%;
+		object-fit: cover;
+		margin-bottom: 20px;
+	}
+
+	.bonus-card {
+		background: url("../image/bonus-card.png");
+		background-size: 100% 100%;
+		border-radius: 10px;
+		overflow: hidden;
+		width: 100%;
+		padding: 20px;
+		box-sizing: border-box;
+		.bonus-header {
+			color: white;
+			margin-top: -8px;
+			text-align: center;
+		}
+
+		.bonus-content {
+			color: black;
+			padding: 15px 45px;
+			.bonus-row1 {
+				display: flex;
+				margin: 40px 0 20px;
+				padding-bottom: 20px;
+
+				@include themeify {
+					border-bottom: 1px solid themed("T3");
+				}
+			}
+			.bonus-row {
+				width: 50%;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				margin-bottom: 10px;
+				.text {
+					font-size: 26px;
+					margin-bottom: 5px;
+				}
+			}
+			.bonus-row2 {
+				margin-top: 16px;
+				height: 50px;
+				line-height: 50px;
+				text-align: center;
+			}
+			.Amount {
+				font-size: 38px;
+
+				font-weight: 900;
+				@include themeify {
+					color: themed("T4");
+				}
+				span {
+					font-size: 26px;
+				}
+				&.highlight {
+					color: #ff4d4d;
+				}
+			}
+
+			.bonus-row1-line {
+				width: 1px;
+				@include themeify {
+					background: themed("T3");
+				}
+			}
+		}
+
+		.apply-button {
+			background: linear-gradient(283deg, #ff284b 7.2%, #fd677f 97.93%);
+			color: white;
+			border: none;
+			width: calc(100% - 95px);
+			padding: 20px;
+			margin: 20px 42.5px 42px;
+			border-radius: 10px;
+			box-sizing: border-box;
+			font-size: 26px;
+			cursor: pointer;
+		}
+	}
+
+	.activity-details,
+	.activity-rules {
+		border-radius: 10px;
+		padding: 15px;
+		width: 100%;
+		margin-bottom: 20px;
+		background: url("../image/detail_bg.png");
+		background-size: 100%;
+		position: relative;
+		.detail_icon {
+			position: absolute;
+			right: 62px;
+			top: 120px;
+			img {
+				height: 160px;
+				border-radius: 16px;
+			}
+		}
+		.details-header {
+			background: url("../image/detail_header.png");
+			background-size: 100% 100%;
+			height: 112px;
+			line-height: 112px;
+			text-align: center;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			img {
+				height: 6px;
+				margin: 0 56px;
+			}
+		}
+		.detail-content {
+			padding: 0 62px;
+			background: url("../image/detail_content.png") no-repeat;
+			background-size: 100% 100%;
+			min-height: 300px;
+			.detail-row {
+				.label {
+					height: 50px;
+					line-height: 50px;
+					background: url("../image/detail_label_bg.png") no-repeat;
+					background-size: auto 100%;
+					margin-bottom: 16px;
+					span {
+						padding-left: 60px;
+					}
+				}
+				.value {
+					margin-bottom: 24px;
+				}
+				&:last-child {
+					.value {
+						margin-bottom: 0;
+					}
+				}
+			}
+			.rules-row {
+				margin: 0 24px 24px;
+			}
+		}
+		.winnerListTable {
+			border: 2px solid rgba(255, 40, 75, 0.4);
+			border-radius: 12px;
+			border-top: none;
+			.winnerListHeader,
+			.winnerListBody {
+				display: flex;
+				> div {
+					flex: 1;
+					height: 64px;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					text-align: center;
+					border-bottom: 2px solid rgba(255, 40, 75, 0.4);
+					border-right: 2px solid rgba(255, 40, 75, 0.4);
+				}
+				> div:last-child {
+					border-right: none;
+				}
+			}
+			.winnerListHeader {
+				border-radius: 12px 12px 0 0;
+				background: linear-gradient(180deg, rgba(255, 40, 75, 0.7) 0%, rgba(255, 40, 75, 0.4) 100%);
+			}
+		}
+		.detail-footer {
+			height: 66px;
+			background: url("../image/detail_footer.png");
+			background-size: 100% 100%;
+		}
+	}
+	.applyBtn {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 120px;
+		border-radius: 12px 12px 0 0;
+		@include themeify {
+			background: themed("BG2");
+		}
+		div {
+			width: 561px;
+			height: 64px;
+			background: url("../image/btnBg.png");
+			background-size: 100% 100%;
+			text-align: center;
+			line-height: 54px;
+			font-size: 26px;
+		}
+		div.active {
+			background: url("../image/btnActiveBg.png");
+			background-size: 100% 100%;
+		}
+	}
+	.activity-rules {
+		ol {
+			padding-left: 20px;
+		}
+
+		li {
+			margin-bottom: 10px;
+		}
+	}
+}
+</style>
