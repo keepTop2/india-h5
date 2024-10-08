@@ -101,6 +101,7 @@ export default (function () {
 
 		// 改变单关键盘显示状态
 		public setBetNumberShow() {
+			console.log("触发了吗？");
 			this.betValueState.betNumberShow = true;
 		}
 

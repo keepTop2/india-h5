@@ -15,7 +15,7 @@
 					</div>
 				</div>
 				<!-- 赔率变化 -->
-				<div v-else-if="sportsBetEvent.bettingStatus == 4" class="container van-haptics-feedback" @click="oddsChanges">{{ $t('sports["[接受赔率变化]"]') }}</div>
+				<div v-else-if="sportsBetEvent.bettingStatus == 4" class="container van-haptics-feedback" @click="oddsChanges">{{ $t("sports['接受赔率变化']") }}</div>
 			</div>
 
 			<div class="btn2 van-haptics-feedback" @click="closePopup">
