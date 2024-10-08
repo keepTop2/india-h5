@@ -124,15 +124,6 @@ const routes = [
 	VipRouter,
 	// 安全中心相关路由
 	SecurityCenterRouter,
-	{
-		//转盘
-		path: "/lottery",
-		name: "Lottery",
-		component: () => import("/@/views/Lottery/Lottery.vue"),
-		meta: {
-			title: "转盘",
-		},
-	},
 	// 公共组件使用demo
 	componentsDemo,
 	// 活动路由
