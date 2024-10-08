@@ -153,7 +153,9 @@ const formattedGameTime = computed(() => {
 });
 
 // 跳转详情
-const showDetail = (eventId, leagueId) => {};
+const showDetail = (eventId, leagueId) => {
+	router.push(`/venueHome/sports/event/detail/${eventId}/${leagueId}/${props.event.sportType}`);
+};
 </script>
 
 <style scoped lang="scss">
