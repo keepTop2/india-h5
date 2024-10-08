@@ -20,7 +20,7 @@ const props = withDefaults(
 );
 
 // 使用 countdown hook
-const { countdown, isCountingDown, startCountdown } = useCountdown();
+const { countdown, isCountingDown, startCountdown, stopCountdown } = useCountdown();
 
 // 计算按钮类名
 // 计算按钮的类名
@@ -39,6 +39,7 @@ const onCaptcha = async () => {
 
 defineExpose({
 	startCountdown,
+	stopCountdown,
 });
 </script>
 

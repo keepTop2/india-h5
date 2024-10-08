@@ -1,7 +1,11 @@
 <template>
 	<div class="container">
 		<MenuPopup />
-		<RouterView />
+		<RouterView v-slot="{ Component }">
+			<KeepAlive :include="keepAliveComps">
+				<component :is="Component" />
+			</KeepAlive>
+		</RouterView>
 	</div>
 </template>
 
@@ -10,12 +14,13 @@ import { loginApi } from "/@/api/loginRegister";
 import common from "/@/utils/common";
 import MenuPopup from "/@/layout/home/components/menuPopup.vue";
 import { useThemesStore } from "/@/store/modules/themes";
-
 import { useUserStore } from "/@/store/modules/user";
+import { useRouterStore } from "/@/store/modules/cacheRouter";
 import { LangEnum } from "/@/enum/appConfigEnum";
 import WsUtil from "/@/utils/wsUntil";
 
 let ws: WsUtil | null;
+const { keepAliveComps } = storeToRefs(useRouterStore());
 const userStore = useUserStore();
 const ThemesStore = useThemesStore();
 

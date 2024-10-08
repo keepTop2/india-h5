@@ -5,37 +5,31 @@
 		<div class="login-form">
 			<div class="title">{{ $t('login["登录"]') }}</div>
 			<form class="form" autocomplete="off">
-				<FormInput v-model="state.userAccount" type="text" :placeholder="$t(`login['账户名']`)" :errorBorder="!isAccountValid && state.userAccount !== '' ? true : false">
+				<FormInput v-model="state.userAccount" type="text" :placeholder="$t(`login['账户名']`)">
 					<template v-slot:right>
-						<SvgIcon v-if="state.userAccount" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.userAccount = ''" />
+						<SvgIcon v-if="state.userAccount" class="clearIcon" iconName="loginOrRegister/clear" @click="state.userAccount = ''" />
 					</template>
 				</FormInput>
-				<div class="error_text">
+				<!-- <div class="error_text">
 					<span v-if="!isAccountValid && state.userAccount !== ''" class="text">{{ $t('register["请输入4-11位字母+数字组成，首位必须是字母"]') }}</span>
-				</div>
+				</div> -->
 
-				<FormInput
-					v-model="state.password"
-					:type="eyeShow ? 'password' : 'text'"
-					:maxlength="16"
-					:placeholder="$t(`login['登录密码']`)"
-					:errorBorder="!isPasswordValid && state.password !== '' ? true : false"
-				>
+				<FormInput class="mt_20" v-model="state.password" :type="eyeShow ? 'password' : 'text'" :maxlength="16" :placeholder="$t(`login['登录密码']`)">
 					<template v-slot:right>
 						<div class="right">
-							<SvgIcon v-if="state.password" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.password = ''" />
-							<SvgIcon class="icon" :iconName="eyeShow ? '/loginOrRegister/eye-off' : '/loginOrRegister/eye'" @click="eyeShow = !eyeShow" />
+							<SvgIcon v-if="state.password" class="clearIcon" iconName="loginOrRegister/clear" @click="state.password = ''" />
+							<SvgIcon class="icon" :iconName="eyeShow ? 'loginOrRegister/eye-off' : 'loginOrRegister/eye'" @click="eyeShow = !eyeShow" />
 						</div>
 					</template>
 				</FormInput>
-				<div class="error_text">
+				<!-- <div class="error_text">
 					<span v-if="!isPasswordValid && state.password !== ''" class="text">{{ $t('register["密码为8-16位"]') }}</span>
-				</div>
+				</div> -->
 
-				<div class="password-operation">
+				<div class="password-operation mt_32">
 					<div class="remember-password" @click="userAgreement = !userAgreement">
 						<div class="check">
-							<SvgIcon class="check_icon" :iconName="userAgreement ? '/loginOrRegister/checkbox_active' : '/loginOrRegister/checkbox'" />
+							<SvgIcon class="check_icon" :iconName="userAgreement ? 'loginOrRegister/checkbox_active' : 'loginOrRegister/checkbox'" />
 						</div>
 						<span class="label">{{ $t('login["记住密码"]') }}</span>
 					</div>
@@ -69,7 +63,7 @@ import HeaderBG from "/@/views/loginRegister/components/headerBG.vue";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useUserStore } from "/@/store/modules/user";
-import { showFailToast } from "vant";
+import { showToast } from "vant";
 const store = useUserStore();
 const refhcaptcha: any = ref(null);
 const router = useRouter();
@@ -130,7 +124,7 @@ const onSubmit = async () => {
 		}
 		router.replace({ path: "/home" });
 	} else {
-		showFailToast(res.message);
+		showToast(res.message);
 	}
 };
 
@@ -209,6 +203,7 @@ onBeforeMount(() => {
 						.check_icon {
 							width: 32px;
 							height: 32px;
+							color: themed("Theme");
 						}
 					}
 				}

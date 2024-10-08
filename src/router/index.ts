@@ -29,28 +29,7 @@ const routes = [
 	VenueHome,
 	// 登录注册路由
 	LoginRegisterRouter,
-	{
-		path: "/mainCurrency",
-		name: "mainCurrency",
-		component: () => import("/@/views/loginRegister/mainCurrency/mainCurrency.vue"),
-		meta: { title: "选择主货币", leaveCaches: ["register"] },
-	},
-	{
-		path: "/userAgreement",
-		name: "userAgreement",
-		component: () => import("/@/views/loginRegister/userAgreement/userAgreement.vue"),
-		meta: { title: "用户协议" },
-	},
-	{
-		//转盘
-		path: "/lottery",
-		name: "Lottery",
-		component: () => import("/@/views/Lottery/Lottery.vue"),
-		meta: {
-			title: "转盘",
-		},
-	},
-	// 注册子页面
+	// 主货币；协议
 	// RegisterSubPage,
 	// 钱包子页面
 	WalletSubRouter,
@@ -60,6 +39,15 @@ const routes = [
 	VipRouter,
 	// 安全中心相关路由
 	SecurityCenterRouter,
+	{
+		//转盘
+		path: "/lottery",
+		name: "Lottery",
+		component: () => import("/@/views/Lottery/Lottery.vue"),
+		meta: {
+			title: "转盘",
+		},
+	},
 	// 公共组件使用demo
 	componentsDemo,
 	// 错误路由
@@ -69,13 +57,6 @@ const routes = [
 const router: Router = createRouter({
 	history: createWebHashHistory("/"),
 	routes: routes,
-	scrollBehavior(to, from, savedPosition) {
-		if (savedPosition) {
-			return savedPosition;
-		} else {
-			return { left: 0, top: 0 };
-		}
-	},
 } as any);
 
 export default router;

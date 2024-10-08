@@ -18,7 +18,6 @@ const blacklist = ["/home"];
 
 const route = useRoute();
 const isTabBar = computed(() => {
-	console.log(route.meta.isTabBar, "=route.meta.isTabBar");
 	return !route.meta.hideTabBar;
 });
 </script>

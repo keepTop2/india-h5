@@ -7,11 +7,11 @@
 			<div class="from">
 				<FormInput v-model="state.userAccount" type="text" :placeholder="$t(`register['输入账号']`)" :errorBorder="!isAccountValid && state.userAccount !== '' ? true : false">
 					<template v-slot:right>
-						<SvgIcon v-if="state.userAccount" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.userAccount = ''" />
+						<SvgIcon v-if="state.userAccount" class="clearIcon" iconName="loginOrRegister/clear" @click="state.userAccount = ''" />
 					</template>
 				</FormInput>
 				<div class="error_text">
-					<span v-if="!isAccountValid && state.userAccount !== ''" class="text">{{ $t('register["请输入4-11位字母+数字组成，首位必须是字母"]') }}</span>
+					<span v-if="!isAccountValid && state.userAccount !== ''" class="text">{{ $t('register["4-11位，字母、数字组成 ，首位必须是字母"]') }}</span>
 				</div>
 
 				<FormInput
@@ -23,8 +23,8 @@
 				>
 					<template v-slot:right>
 						<div class="right">
-							<SvgIcon v-if="state.password" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.password = ''" />
-							<SvgIcon class="icon" :iconName="eyeShow ? '/loginOrRegister/eye-off' : '/loginOrRegister/eye'" @click="eyeShow = !eyeShow" />
+							<SvgIcon v-if="state.password" class="clearIcon" iconName="loginOrRegister/clear" @click="state.password = ''" />
+							<SvgIcon class="icon" :iconName="eyeShow ? 'loginOrRegister/eye-off' : 'loginOrRegister/eye'" @click="eyeShow = !eyeShow" />
 						</div>
 					</template>
 				</FormInput>
@@ -41,8 +41,8 @@
 				>
 					<template v-slot:right>
 						<div class="right">
-							<SvgIcon v-if="state.confirmPassword" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.confirmPassword = ''" />
-							<SvgIcon class="icon" :iconName="eyeShow ? '/loginOrRegister/eye-off' : '/loginOrRegister/eye'" @click="eyeShow = !eyeShow" />
+							<SvgIcon v-if="state.confirmPassword" class="clearIcon" iconName="loginOrRegister/clear" @click="state.confirmPassword = ''" />
+							<SvgIcon class="icon" :iconName="eyeShow ? 'loginOrRegister/eye-off' : 'loginOrRegister/eye'" @click="eyeShow = !eyeShow" />
 						</div>
 					</template>
 				</FormInput>
@@ -52,7 +52,7 @@
 
 				<FormInput v-model="state.mainCurrency" :placeholder="$t(`register['选择主货币']`)" readonly :errorBorder="mainCurrencyRG ? true : false" @click="goTomainCurrency">
 					<template v-slot:right>
-						<SvgIcon class="icon" iconName="/loginOrRegister/arrow" />
+						<SvgIcon class="icon" iconName="loginOrRegister/arrow" />
 					</template>
 				</FormInput>
 				<div class="error_text">
@@ -61,13 +61,13 @@
 
 				<FormInput v-model="state.inviteCode" type="text" :placeholder="$t(`register['推荐码(非必填)']`)">
 					<template v-slot:right>
-						<SvgIcon v-if="state.inviteCode" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.inviteCode = ''" />
+						<SvgIcon v-if="state.inviteCode" class="clearIcon" iconName="loginOrRegister/clear" @click="state.inviteCode = ''" />
 					</template>
 				</FormInput>
 
 				<div class="checkbox" @click="userAgreement = !userAgreement">
-					<SvgIcon v-show="!userAgreement" class="check" iconName="/loginOrRegister/checkbox" />
-					<SvgIcon v-show="userAgreement" class="check" iconName="/loginOrRegister/checkbox_active" />
+					<SvgIcon v-show="!userAgreement" class="check" iconName="loginOrRegister/checkbox" />
+					<SvgIcon v-show="userAgreement" class="check" iconName="loginOrRegister/checkbox_active" />
 					<p :class="userAgreement ? 'text' : 'text3'">
 						<i18n-t keypath="register['我同意用户协议并确认我已年满18岁']" :tag="'span'">
 							<template v-slot:text
@@ -77,9 +77,10 @@
 					</p>
 				</div>
 
-				<div class="checkbox">
-					<SvgIcon class="check" iconName="/loginOrRegister/checkbox_active" />
-					<span class="text">
+				<div class="checkbox" @click="marketingPromotion = !marketingPromotion">
+					<SvgIcon v-show="!marketingPromotion" class="check" iconName="loginOrRegister/checkbox" />
+					<SvgIcon v-show="marketingPromotion" class="check" iconName="loginOrRegister/checkbox_active" />
+					<span :class="marketingPromotion ? 'text' : 'text3'">
 						<i18n-t keypath="register['我同意接收[平台名称]的营销促销信息']" :tag="'span'">
 							<template v-slot:text>OKsport</template>
 						</i18n-t>
@@ -116,6 +117,7 @@ const eyeShow = ref(true);
 const btnDisabled = ref(true);
 const mainCurrencyRG = ref(false);
 const userAgreement = ref(false); // 用户协议认证
+const marketingPromotion = ref(true); // 营销促销信息 默认勾选
 const captchaBtn = ref(null);
 let state = reactive({
 	userAccount: "", // 邮箱或者手机号
@@ -124,14 +126,6 @@ let state = reactive({
 	mainCurrency: "", // 货币
 	inviteCode: "", // 推荐码
 	deviceNo: common.getInstance().getDevice(), // 设备
-});
-
-onMounted(() => {
-	Object.assign(state, store.getregisterInfo);
-	// 判断有无选择币种
-	if (route.query.currency) {
-		state.mainCurrency = route.query.currency as string;
-	}
 });
 
 // 账号正则
@@ -173,6 +167,13 @@ watch(
 	}
 );
 
+watch(
+	() => route.query.currency,
+	(newValue) => {
+		state.mainCurrency = newValue as string;
+	}
+);
+
 const onRegister = async () => {
 	// 校验用户协议
 	if (!userAgreement.value && !state.mainCurrency) {
@@ -207,7 +208,7 @@ const onSubmit = async () => {
 	}
 };
 const goTomainCurrency = () => {
-	store.setregisterInfo(state);
+	// store.setregisterInfo(state);
 	router.push({ path: "/mainCurrency", query: { currency: state.mainCurrency } });
 };
 </script>
@@ -270,6 +271,9 @@ const goTomainCurrency = () => {
 				.check {
 					width: 32px;
 					height: 32px;
+					@include themeify {
+						color: themed("Theme");
+					}
 				}
 				.text,
 				.text3 {

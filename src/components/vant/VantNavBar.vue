@@ -16,7 +16,7 @@
 				<span v-if="leftText">{{ leftText }}</span>
 				<slot v-else-if="leftArrow" name="left">
 					<div class="back">
-						<SvgIcon iconName="/vantNavBar/back" />
+						<SvgIcon iconName="vantNavBar/back" />
 					</div>
 				</slot>
 			</template>
@@ -93,6 +93,10 @@ const onClickRight = () => {
 	height: 36px;
 	@include themeify {
 		color: themed("TB");
+	}
+	svg {
+		width: 100%;
+		height: 100%;
 	}
 }
 
