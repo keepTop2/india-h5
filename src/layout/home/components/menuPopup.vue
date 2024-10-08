@@ -1,6 +1,6 @@
 <template>
 	<van-popup v-model:show="show" position="left">
-		<VantLazyImg class="close" :src="theme === ThemeEnum.default ? close : close_light" />
+		<VantLazyImg class="close" :src="theme === ThemeEnum.default ? close : close_light" @click="show = false" />
 		<div class="menu_header">
 			<div class="logo">
 				<img :src="logo" alt="" />
@@ -8,18 +8,18 @@
 		</div>
 		<div class="menu_content">
 			<div class="menu_content_header">
-				<div class="task van-haptics-feedback">
+				<div class="task van-haptics-feedback" @click="toPath('/activity/SPIN_WHEEL')">
 					<div class="icon"><img :src="task_icon" alt="" /></div>
 					<div class="label">{{ $t(`menuPopup["任务"]`) }}</div>
 				</div>
-				<div class="wheel van-haptics-feedback" @click="toPath('/lottery')">
+				<div class="wheel van-haptics-feedback" @click="toPath('/activity/SPIN_WHEEL')">
 					<div class="icon"><img :src="wheel_icon" alt="" /></div>
 					<div class="label">{{ $t(`menuPopup["转盘"]`) }}</div>
 				</div>
 			</div>
 
 			<div class="menu_list">
-				<div class="menu van-haptics-feedback" @click="toPath('/bettingMatch')">
+				<div class="menu van-haptics-feedback" @click="toPath('/activity/DAILY_COMPETITION')">
 					<div class="icon">
 						<img :src="mrjs" />
 					</div>
@@ -34,7 +34,7 @@
 
 				<div class="menu van-haptics-feedback" v-for="(item, index) in state.menuList" @click="handleMenuClick(item)" :key="index">
 					<div class="icon">
-						<img :src="item.gameOneIcon" alt="" />
+						<img :src="item.icon" alt="" />
 					</div>
 					<div class="label">{{ item.homeName }}</div>
 				</div>
@@ -74,13 +74,14 @@ import { ThemeEnum } from "/@/enum/appConfigEnum";
 import { useThemesStore } from "/@/store/modules/themes";
 import { useRouter } from "vue-router";
 import { useUserStore } from "/@/store/modules/user";
+import { activityApi } from "/@/api/activity";
 const userStore = useUserStore();
 const router = useRouter();
 const show = ref(false);
 const themesStore = useThemesStore();
 const theme = computed(() => themesStore.themeName);
 
-let state = reactive({
+let state: any = reactive({
 	menuList: [],
 });
 
@@ -113,8 +114,20 @@ const queryLobbyLabelList = async () => {
 pubsub.subscribe("onCollapseMenu", onCollapseMenu);
 
 const toPath = (path) => {
+	if (useUserStore().token) {
+		if (path === "/activity/SPIN_WHEEL") {
+			activityApi.toSpinActivity().then((res: any) => {
+				if (res.code == 10000) {
+					router.push(path);
+				}
+			});
+		} else {
+			router.push(path);
+		}
+	} else {
+		router.push("/login");
+	}
 	show.value = false;
-	router.push(path);
 };
 </script>
 

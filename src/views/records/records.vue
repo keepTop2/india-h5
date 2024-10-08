@@ -1,76 +1,78 @@
 <!-- 单项选择器使用示例demo -->
 <template>
-	<VantNavBar :title="$t(`VantNavBar['投注订单']`)" @onClickLeft="onClickLeft">
-		<template v-slot:left>
-			<SvgIcon size="8.53" class="collapse_icon" iconName="common/collapse_icon" />
-		</template>
-	</VantNavBar>
-	<div class="BettingRecord">
-		<div class="BettingRecord_Top">
-			<!--使用插槽-->
-			<SingleSelect
-				class="color_T1 fs_28 fw_400"
-				:toText="'webName'"
-				:toValue="'javaName'"
-				v-model:show="state.showPicker2"
-				v-model:select="state.activeList2"
-				:columns="state.typeList2"
-				:title="''"
-				@confirm="onTypeConfrim"
-			>
-				<!--外部触发插槽-->
-				<template v-slot:active-name="{ activeName }">
-					<div class="bettingSelect">
-						{{ activeName }}
-						<SvgIcon iconName="common/arrowDown" />
-					</div>
-				</template>
-			</SingleSelect>
-			<!--使用插槽-->
-			<SingleSelect
-				class="color_T1 fs_28 fw_400"
-				:toText="'webName'"
-				:toValue="'javaName'"
-				v-model:show="state.showPicker"
-				v-model:select="state.activeList"
-				:columns="state.typeList"
-				:title="''"
-				@confirm="onTypeConfrim"
-			>
-				<!--外部触发插槽-->
-				<template v-slot:active-name="{ activeName }">
-					<div class="bettingSelect">
-						{{ activeName }}
-						<SvgIcon iconName="common/arrowDown" />
-					</div>
-				</template>
-			</SingleSelect>
-			<DateRangeSelect
-				v-model:select="dateRangeSelectDemoState.timeShortcutOptionsValue"
-				v-model:start-time-u="dateRangeSelectDemoState.startTime"
-				v-model:end-time-u="dateRangeSelectDemoState.endTime"
-				@on-confirm-date="onConfirmDate"
-			/>
-		</div>
-		<div class="BettingRecord_List">
-			<div class="stats-container color_T1 bg_BG3">
-				<div class="stat-item">
-					<span class="label">{{ $t('records["投注金额"]') }}：</span>
-					<span class="value">99999999</span>
-				</div>
-				<div class="stat-item">
-					<span class="label">{{ $t('records["输赢金额"]') }}：</span>
-					<span class="value negative">-99999999</span>
-				</div>
-				<div class="stat-item">
-					<span class="label">{{ $t('records["投注笔数"]') }}：</span>
-					<span class="value">999999</span>
-				</div>
+	<div>
+		<VantNavBar :title="$t(`VantNavBar['投注订单']`)" @onClickLeft="onClickLeft">
+			<template v-slot:left>
+				<SvgIcon size="8.53" class="collapse_icon" iconName="common/collapse_icon" />
+			</template>
+		</VantNavBar>
+		<div class="BettingRecord">
+			<div class="BettingRecord_Top">
+				<!--使用插槽-->
+				<SingleSelect
+					class="color_T1 fs_28 fw_400"
+					:toText="'webName'"
+					:toValue="'javaName'"
+					v-model:show="state.showPicker2"
+					v-model:select="state.activeList2"
+					:columns="state.typeList2"
+					:title="''"
+					@confirm="onTypeConfrim"
+				>
+					<!--外部触发插槽-->
+					<template v-slot:active-name="{ activeName }">
+						<div class="bettingSelect">
+							{{ activeName }}
+							<SvgIcon iconName="common/arrowDown" />
+						</div>
+					</template>
+				</SingleSelect>
+				<!--使用插槽-->
+				<SingleSelect
+					class="color_T1 fs_28 fw_400"
+					:toText="'webName'"
+					:toValue="'javaName'"
+					v-model:show="state.showPicker"
+					v-model:select="state.activeList"
+					:columns="state.typeList"
+					:title="''"
+					@confirm="onTypeConfrim"
+				>
+					<!--外部触发插槽-->
+					<template v-slot:active-name="{ activeName }">
+						<div class="bettingSelect">
+							{{ activeName }}
+							<SvgIcon iconName="common/arrowDown" />
+						</div>
+					</template>
+				</SingleSelect>
+				<DateRangeSelect
+					v-model:select="dateRangeSelectDemoState.timeShortcutOptionsValue"
+					v-model:start-time-u="dateRangeSelectDemoState.startTime"
+					v-model:end-time-u="dateRangeSelectDemoState.endTime"
+					@on-confirm-date="onConfirmDate"
+				/>
 			</div>
-			<Sports />
-			<Chuanguan :list="matches" />
-			<Qipai />
-			<Zhenren />
+			<div class="BettingRecord_List">
+				<div class="stats-container color_T1 bg_BG3">
+					<div class="stat-item">
+						<span class="label">{{ $t('records["投注金额"]') }}：</span>
+						<span class="value">99999999</span>
+					</div>
+					<div class="stat-item">
+						<span class="label">{{ $t('records["输赢金额"]') }}：</span>
+						<span class="value negative">-99999999</span>
+					</div>
+					<div class="stat-item">
+						<span class="label">{{ $t('records["投注笔数"]') }}：</span>
+						<span class="value">999999</span>
+					</div>
+				</div>
+				<Sports />
+				<Chuanguan :list="matches" />
+				<Qipai />
+				<Zhenren />
+			</div>
 		</div>
 	</div>
 </template>

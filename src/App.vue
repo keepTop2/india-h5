@@ -1,7 +1,11 @@
 <template>
 	<div class="container">
 		<MenuPopup />
-		<RouterView />
+		<RouterView v-slot="{ Component }">
+			<KeepAlive :include="keepAliveComps">
+				<component :is="Component" />
+			</KeepAlive>
+		</RouterView>
 	</div>
 </template>
 
@@ -10,12 +14,12 @@ import { loginApi } from "/@/api/loginRegister";
 import common from "/@/utils/common";
 import MenuPopup from "/@/layout/home/components/menuPopup.vue";
 import { useThemesStore } from "/@/store/modules/themes";
-
 import { useUserStore } from "/@/store/modules/user";
+import { useRouterStore } from "/@/store/modules/cacheRouter";
 import { LangEnum } from "/@/enum/appConfigEnum";
-import WsUtil from "/@/utils/wsUntil";
 
 let ws: WsUtil | null;
+const { keepAliveComps } = storeToRefs(useRouterStore());
 const userStore = useUserStore();
 const ThemesStore = useThemesStore();
 
@@ -28,32 +32,6 @@ onBeforeMount(() => {
 	initLang();
 	autoLogin();
 });
-
-//监听token
-watch(
-	[() => userStore.token],
-	([newToken]) => {
-		//每次token变化
-		if (newToken) {
-			//如果ws已经存在则关闭并释放
-			if (ws) {
-				ws.close();
-				ws = null;
-			}
-			//重新建立新连接通道
-			ws = new WsUtil();
-		} else {
-			if (ws) {
-				ws.close();
-				ws = null;
-			}
-		}
-	},
-	{
-		immediate: true,
-		deep: true,
-	}
-);
 
 // 自动登录
 const autoLogin = async () => {

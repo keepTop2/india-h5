@@ -60,7 +60,7 @@ const emit = defineEmits(["onSetSportsEventData"]);
 const props = defineProps({
 	listKye: {
 		type: String,
-		required: true,
+		required: false,
 	},
 	market: {
 		type: Object,

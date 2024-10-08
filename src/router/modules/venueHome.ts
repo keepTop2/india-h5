@@ -1,6 +1,7 @@
 import Layout from "/@/layout/venueHome/index.vue";
 
 export const VenueHome = {
+	path: "/venueHome",
 	component: Layout,
 	children: [
 		{
@@ -8,7 +9,9 @@ export const VenueHome = {
 			name: "sports",
 			redirect: "/venueHome/sports/rollingBall",
 			component: () => import("/@/views/venueHome/sports/sports.vue"),
-			meta: { title: "体育" },
+			meta: {
+				title: "体育",
+			},
 			children: [
 				{
 					path: "/venueHome/sports/rollingBall",
@@ -111,6 +114,7 @@ export const VenueHome = {
 			meta: {
 				title: "游戏列表",
 				hideTabBar: true,
+				KeepAlive: true,
 			},
 			component: () => import("/@/views/venueHome/GameArena/GameLists/GameLists.vue"),
 		},

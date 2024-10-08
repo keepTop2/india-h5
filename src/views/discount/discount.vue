@@ -1,131 +1,127 @@
 <template>
 	<!-- 活动 -->
-	<VantNavBar title="优惠活动" :leftArrow="false" />
-	<div v-loading="state.pageLoading" class="discount_container">
-		<!-- <Banner class="home_banner mb_35" /> -->
-
-		<NavBar class="mt_32 mb_24 discount_navbar" v-model:active="active" :tab-list="state.tabList" @on-change-nav-bar="onChangeNavBar" />
-
-		<div class="activityList_item bg_Tag1" @click="onToDeatils('12')">
-			<div class="img_container">
-				<div class="activityGraph">
-					<VantLazyImg class="discount_img" :src="discount1" />
-				</div>
-				<div class="text_container">
-					<div class="date">
-						<div class="deadline">截止时间：2024.1.5 24:00:00</div>
-						<div class="activity_name">2024年新年投注赛</div>
+	<div>
+		<VantNavBar title="优惠活动" :leftArrow="false" />
+		<div class="discount_container">
+			<!-- <Banner class="home_banner mb_35" /> -->
+			<NavBar class="mt_32 mb_24 discount_navbar" v-model:active="active" :tab-list="state.tabList" @on-change-nav-bar="onChangeNavBar" />
+			<div class="activityList_item bg_Tag1" @click="onToDeatils(item)" v-for="(item, index) in state.activityList" :key="index">
+				<div class="img_container">
+					<div class="activityGraph">
+						<VantLazyImg class="discount_img" :src="item.entrancePictureI18nCode" />
 					</div>
-					<Button class="mt_40"> {{ $t('discount["进行中"]') }}</Button>
+					<div class="text_container">
+						<div class="date">
+							<div class="deadline">截止时间：{{ Common.getInstance().dayFormat2(item.activityEndTime) }}</div>
+							<div class="activity_name">{{ item.activityNameI18nCode }}</div>
+						</div>
+						<Button class="mt_40"> {{ $t('discount["进行中"]') }}</Button>
+					</div>
 				</div>
 			</div>
-		</div>
-		<div class="activityList_item bg_Tag1">
-			<div class="img_container">
-				<VantLazyImg class="discount_img" :src="discount1" />
-				<div class="text_container">
-					<div class="date">
-						<div class="deadline">截止时间：2024.1.5 24:00:00</div>
-						<div class="activity_name">2024年新年投注赛</div>
-					</div>
-					<!-- <Button class="mt_40"> 进行中</Button> -->
-					<span class="mt_40 color_T3 fs_24"> {{ $t('discount["活动结束"]') }}</span>
-				</div>
+			<div v-if="state.activityList.length < 1" class="nodata">
+				<Nodata></Nodata>
 			</div>
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
-import discount1 from "./image/discount1.png";
 import { reactive } from "vue";
-import { onBeforeMount } from "vue";
-import Banner from "./Banner/banner.vue";
 import NavBar from "./components/Navbar.vue";
 import { useRouter } from "vue-router";
 import { i18n } from "/@/i18n/index";
+import { activityApi } from "/@/api/activity";
+import Common from "/@/utils/common";
+import { showToast } from "vant";
+defineOptions({
+	name: "discount",
+});
 const $: any = i18n.global;
 const router = useRouter();
-const state = reactive({
-	tabList: [
-		{
-			code: "0",
-			value: $.t("discount['全部']"),
-		},
-		{
-			code: "1",
-			value: $.t("discount['促销活动']"),
-		},
-		{
-			code: "2",
-			value: $.t("discount['新人活动']"),
-		},
-		{
-			code: "3",
-			value: $.t("discount['首充活动']"),
-		},
-	],
+const state: any = reactive({
+	tabList: [],
 	activityList: [],
 	pageLoading: false,
 });
 // const store = useUserStore();
 const active = ref<string | number>("");
-
-onBeforeMount(async () => {
+onMounted(async () => {
 	await getActivityTab();
-	await getActivity();
+	await activityPageList();
+	// await getActivity();
 });
-// const discountIndexApi: DiscountIndexApi = new DiscountIndexApi();
+onActivated(() => {
+	console.log(123123, "组件被激活了");
+});
+onMounted(() => {
+	console.log(123123, "组件挂载了");
+});
 
+const params = reactive({
+	pageNumber: 1,
+	pageSize: 1000,
+	labelId: "",
+});
 // 查活动页签
-const getActivityTab = async (): Promise<void> => {
-	// const params = {
-	// 	supportTerminal: Common.getInstance().getDevice(),
-	// };
+const getActivityTab = async () => {
 	state.pageLoading = true;
-	// const res = await discountIndexApi.getActivityTab(params).catch((err) => err);
+
+	const res: any = await activityApi.activityTabsList();
 	state.pageLoading = false;
-	// if (res.code == Common.getInstance().ResCode.SUCCESS) {
-	// 	const allObj: SystemParamVO = {
-	// 		code: "",
-	// 		type: "",
-	// 		value: "全部",
-	// 	};
-	// state.tabList.push(allObj);
-	// state.tabList = state.tabList.concat(res.data);
-	active.value = state.tabList[0].code;
-	// }
+	if (res.code == Common.getInstance().ResCode.SUCCESS) {
+		res.data.forEach((item, index) => {
+			state.tabList.push({
+				code: index + 1,
+				value: item.labNameI18Code,
+				labelId: item.id,
+			});
+		});
+		state.tabList.unshift({
+			code: 0,
+			value: "全部",
+			labelId: 0,
+		});
+	}
 };
 
-// 点击切换页签
-const onChangeNavBar = () => {
-	getActivity();
+const onChangeNavBar = async () => {
+	params.pageNumber = 1;
+	activityPageList();
 };
+const activityPageList = async () => {
+	if (active.value == 0) {
+		params.labelId = "";
+	} else {
+		params.labelId = state.tabList[active.value].labelId;
+	}
 
+	const res: any = await activityApi.activityPageList(params);
+	if (res.code == Common.getInstance().ResCode.SUCCESS) {
+		state.activityList = res.data.records;
+		params.pageNumber += 1;
+	}
+};
 //跳转活动详情
 const onToDeatils = (item) => {
-	router.push({
-		path: "/discount/activityParticulars",
-		query: { data: encodeURIComponent(JSON.stringify(item)) },
-	});
-
-	// if (item.entrancePictureGrey) {
-	// 	Toast("活动已过期");
-	// 	return;
-	// }
-	// console.log(item);
-	// if (item.activityTemplate == 5 || item.activityTemplate == 6) {
-	// 	if (item.activityTemplate == 5) {
-	// 		router.push({ path: "/discountGift", query: { id: item.id } });
-	// 	} else {
-	// 		router.push({ path: "/inviteFriendsTripleGift", query: { id: item.id } });
-	// 	}
-	// } else {
-	// 	router.push({
-	// 		path: "/discountDetails",
-	// 		query: { data: encodeURIComponent(JSON.stringify(item)) },
-	// 	});
-	// }
+	// 长期活动
+	if (item.activityDeadline) {
+		router.push({
+			path: `/activity/${item.activityTemplate}`,
+			query: { data: encodeURIComponent(JSON.stringify(item)) },
+		});
+	} else if (item.entrancePictureGrey) {
+		showToast("活动已过期");
+		return;
+	} else if (!item.enable) {
+		showToast("活动未开启");
+		return;
+	} else {
+		router.push({
+			path: `/activity/${item.activityTemplate}`,
+			query: { data: encodeURIComponent(JSON.stringify(item)) },
+		});
+	}
 };
 
 // 根据活动页id查对应活动
@@ -146,8 +142,24 @@ const getActivity = async (): Promise<void> => {
 
 <style lang="scss" scoped>
 .discount_container {
+	padding-bottom: 160px;
 	.discount_navbar {
 		padding: 0 24px;
+	}
+	:deep(.van-tab) {
+		@include themeify {
+			background: themed("BG3");
+			margin: 0 10px;
+			border-radius: 12px;
+		}
+	}
+	:deep(.van-tab--active) {
+		@include themeify {
+			background: themed("Theme");
+			margin: 0 10px;
+			border-radius: 12px;
+			color: themed("TB1");
+		}
 	}
 
 	.activityList_item {

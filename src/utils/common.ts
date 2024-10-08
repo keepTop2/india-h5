@@ -7,9 +7,10 @@ import { showToast } from "vant";
 import { Decimal } from "decimal.js";
 // 引入复制插件
 import useClipboard from "vue-clipboard3";
-
+import GameApi from "/@/api/venueHome/games";
 import mitt from "mitt";
-
+import qs from "qs";
+import router from "../router";
 dayjs.extend(utc);
 dayjs.extend(tz);
 dayjs.locale("en");
@@ -216,6 +217,15 @@ class Common {
 	/**
 	 * 时间戳转化为年月日
 	 */
+	static dayFormatHMS(date: any): string {
+		if (date) {
+			return dayjs(date).format("HH:mm:ss");
+		}
+		return "";
+	}
+	/**
+	 * 时间戳转化为年月日
+	 */
 	public dayFormat1(date: number | string | null): string {
 		if (date) {
 			return dayjs(date).tz("Asia/Shanghai").format("YYYY-MM-DD");
@@ -228,7 +238,7 @@ class Common {
 	 */
 	public dayFormat2(date: number | string | null): string {
 		if (date) {
-			return dayjs(Number(date)).tz("Asia/Shanghai").format("YYYY-MM-DD HH:mm:ss");
+			return dayjs(Number(date)).format("YYYY-MM-DD HH:mm:ss");
 		}
 		return "";
 	}
@@ -534,6 +544,133 @@ class Common {
 	 */
 	public dayForMat10(date: string): number {
 		return dayjs(date, "YYYY年-MM-DD").tz("Asia/Shanghai").endOf("day").valueOf();
+	}
+	// 获取 config 配置请求 api
+	static getUrl() {
+		switch (import.meta.env.VITE_BASEENV) {
+			case "development":
+				return (window as any)["PLATFROM_CONFIG"].developS128Url;
+			case "production":
+				return (window as any)["PLATFROM_CONFIG"].productionS128Url;
+			default:
+				return "";
+		}
+	}
+	static goToGame(gameinfo: any) {
+		const params = {
+			venueCode: gameinfo.venueCode,
+			gameCode: gameinfo.gameCode,
+		};
+		GameApi.gameLogin(params).then((res: any) => {
+			if (res.code === ResCode.SUCCESS) {
+				const { source, userAccount, type } = res.data;
+				const state = {
+					source: "",
+					userAccount: "",
+					type: "",
+				};
+				switch (type) {
+					case "url": {
+						state.source = source;
+						state.userAccount = userAccount;
+						state.type = type;
+						break;
+					}
+					case "html": {
+						// 将HTML编码的文本字符串转换为Blob对象
+						const blob: any = new Blob([source], { type: "text/html" });
+						// 将Blob对象作为iframe的源
+						state.source = URL.createObjectURL(blob);
+						// window.open(state.source, "_blank");
+						// window.open(state.source, "_self");
+						state.userAccount = userAccount;
+						state.type = type;
+						break;
+					}
+					case "token": {
+						const params = {
+							session_id: source,
+							lang: "zh-CN",
+							login_id: userAccount,
+						};
+						const url = this.getUrl();
+						state.source = url + `/api/cash/auth?${qs.stringify(params)}`;
+						state.userAccount = userAccount;
+						state.type = type;
+						break;
+					}
+					default:
+						break;
+				}
+				console.log(state);
+
+				router.push({ path: "/gamePage", query: { ...state } });
+			} else {
+				showToast(res.message);
+			}
+		});
+	}
+	static convertMilliseconds(ms: number) {
+		const seconds = Math.floor(ms / 1000);
+		const minutes = Math.floor(seconds / 60);
+		const hours = Math.floor(minutes / 60);
+		const remainingSeconds = seconds % 60;
+		const remainingMinutes = minutes % 60;
+
+		return `${String(hours).padStart(2, "0")}:${String(remainingMinutes).padStart(2, "0")}:${String(remainingSeconds).padStart(2, "0")}`;
+	}
+	// 获取30天年月日
+	static getLast30Days() {
+		const today = new Date();
+		const columns: any = [];
+
+		for (let i = 0; i < 30; i++) {
+			const currentDate = new Date(today);
+			currentDate.setDate(today.getDate() - i);
+
+			const year = currentDate.getFullYear();
+			const month = currentDate.getMonth() + 1; // 月份从0开始，所以需要加1
+			const day = currentDate.getDate();
+
+			// 查找年份
+			let yearNode: any = columns.find((node: any) => node.value === String(year));
+			if (!yearNode) {
+				yearNode = {
+					text: String(year),
+					value: String(year),
+					children: [],
+				};
+				columns.unshift(yearNode);
+			}
+
+			// 查找月份
+			let monthNode = yearNode.children.find((node) => node.value === String(month));
+			if (!monthNode) {
+				monthNode = {
+					text: `${month}月`,
+					value: String(month),
+					children: [],
+				};
+				yearNode.children.unshift(monthNode);
+			}
+
+			// 添加日期
+			if (!monthNode.children.find((node) => node.value === String(day))) {
+				monthNode.children.unshift({
+					text: String(day),
+					value: String(day),
+				});
+			}
+		}
+		// 计算默认选中的索引
+		const currentYear = today.getFullYear();
+		const currentMonth = today.getMonth() + 1; // 月份从0开始，所以需要加1
+		const currentDay = today.getDate();
+
+		return {
+			columns: columns,
+			defaultIndex: [String(currentYear), String(currentMonth), String(currentDay)],
+		};
 	}
 }
 

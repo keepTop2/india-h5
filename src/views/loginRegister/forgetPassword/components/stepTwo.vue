@@ -44,37 +44,14 @@
 
 			<Button class="mt_40" :type="btnDisabled ? 'disabled' : 'default'" @click="onStep">{{ $t('forgetPassword["下一步"]') }}</Button>
 		</div>
-		<van-action-sheet v-model:show="showAreaCode" style="min-height: 80%">
-			<div class="AreaCodeHeader">
-				<span> <SvgIcon class="close_icon" iconName="common/close" @click="showAreaCode = false" /></span>
-				<span class="AreaCodeHeaderTitle">选择区号</span>
-				<span class="fs_30" @click="showAreaCode = false">确定</span>
-			</div>
-			<div>
-				<van-search v-model="searchAreaCode" placeholder="搜索区号" class="ml_20 mr_20" />
-			</div>
-			<van-index-bar :index-list="indexList" :sticky="false" @change="selectAreaCodeIndex">
-				<van-index-anchor :index="item" v-for="(item, index) in Object.keys(areaCode)">
-					<div :class="currentAreaCodeIndex == item ? 'activeCode' : ''">{{ item }}</div>
-					<van-cell :key="index" class="areaCodeBox">
-						<div
-							v-for="(itemAreacode, index) in areaCode[item]"
-							:key="index"
-							class="itemAreacodeCell"
-							@click="selectAreaCode(itemAreacode)"
-							:class="state.areaCode == itemAreacode.areaCode ? 'activeCode' : ''"
-						>
-							<span class="phonelist">
-								<img :src="itemAreacode.icon" class="icon" />
-								<span>{{ itemAreacode.countryCode }}</span>
-								<span>{{ itemAreacode.countryName }}</span>
-							</span>
-							<span>(+{{ itemAreacode.areaCode }} )</span>
-						</div>
-					</van-cell>
-				</van-index-anchor>
-			</van-index-bar>
-		</van-action-sheet>
+		<AreaCodePicker
+			v-model:showAreaCode="showAreaCode"
+			v-model:searchAreaCode="searchAreaCode"
+			:currentAreaCodeIndex="currentAreaCodeIndex"
+			:indexList="indexList"
+			:areaCode="areaCode"
+			@selectAreaCode="selectAreaCode"
+		/>
 	</div>
 </template>
 
@@ -82,7 +59,7 @@
 import { forgetPasswordApi } from "/@/api/loginRegister";
 import CaptchaButton from "/@/views/loginRegister/forgetPassword/components/captchaButton/captchaButton.vue";
 import common from "/@/utils/common";
-import { showFailToast } from "vant";
+import { showToast } from "vant";
 import CommonApi from "/@/api/common";
 
 const props = withDefaults(
@@ -101,17 +78,18 @@ interface CountryData {
 }
 const captchaButton = ref<{
 	startCountdown: () => void;
+	stopCountdown: () => void;
 } | null>(null);
 
 const emit = defineEmits(["onStep"]);
 const areaCode: any = ref([]);
 const indexList: any = ref([]);
-const showAreaCode = ref(false);
+const showAreaCode = ref(true);
 const searchAreaCode = ref("");
 const areaCodeObj: any = ref({});
 const currentAreaCodeIndex: Ref<number | string> = ref("");
 const state = reactive({
-	type: "email" as "email" | "phone",
+	type: "phone" as "email" | "phone",
 	email: "",
 	phone: "",
 	verifyCode: "",
@@ -139,7 +117,7 @@ const getAreaCodeDownBox = () => {
 		if (res.code == common.getInstance().ResCode.SUCCESS) {
 			countries.value = res.data;
 			areaCode.value = groupByFirstLetter(countries.value || []);
-
+			console.log("areaCode.value", areaCode.value);
 			indexList.value = Object.keys(areaCode.value);
 			state.areaCode = countries.value[0].areaCode;
 			areaCodeObj.value = countries.value[0];
@@ -168,6 +146,7 @@ const btnDisabled = computed(() => {
 
 const onChange = () => {
 	state.type = state.type === "email" ? "phone" : "email";
+	captchaButton.value?.stopCountdown();
 };
 
 const onCaptcha = async () => {
@@ -183,7 +162,7 @@ const onCaptcha = async () => {
 	if (res.code === common.getInstance().ResCode.SUCCESS) {
 		captchaButton.value?.startCountdown();
 	} else {
-		showFailToast(res.message);
+		showToast(res.message);
 	}
 };
 
@@ -198,7 +177,7 @@ const onStep = async () => {
 	if (res.code == common.getInstance().ResCode.SUCCESS) {
 		emit("onStep", state);
 	} else {
-		showFailToast(res.message);
+		showToast(res.message);
 	}
 };
 const groupByFirstLetter = (countries: CountryData[]) => {
@@ -211,14 +190,11 @@ const groupByFirstLetter = (countries: CountryData[]) => {
 		return acc;
 	}, {} as Record<string, CountryData[]>);
 };
-const selectAreaCodeIndex = (index: number | string) => {
-	console.log(index);
 
-	currentAreaCodeIndex.value = index;
-};
-const selectAreaCode = (item: CountryData) => {
-	areaCodeObj.value = item;
-	state.areaCode = item.areaCode;
+const selectAreaCode = (item, i: CountryData) => {
+	currentAreaCodeIndex.value = item;
+	areaCodeObj.value = i;
+	state.areaCode = i.areaCode;
 	showAreaCode.value = false;
 };
 </script>
@@ -360,45 +336,5 @@ const selectAreaCode = (item: CountryData) => {
 	.activeCode {
 		color: themed("Theme");
 	}
-}
-
-.AreaCodeHeader {
-	display: flex;
-	padding: 25px 48px;
-	align-items: center;
-	.AreaCodeHeaderTitle {
-		flex: 1;
-		text-align: center;
-
-		@include themeify {
-			color: themed("TB-D") !important;
-			font-size: 32px;
-		}
-	}
-	.close_icon {
-		width: 26px;
-		height: 26px;
-		display: flex;
-		align-items: center;
-	}
-}
-</style>
-<style lang="scss">
-.van-index-bar__index--active {
-	@include themeify {
-		color: themed("Theme") !important;
-	}
-}
-.van-search {
-	background: transparent;
-}
-.van-action-sheet__content {
-	background: themed("BG1") !important;
-}
-.van-cell {
-	background: transparent;
-	padding: 0;
-	font-weight: 400;
-	padding-right: 20px;
 }
 </style>

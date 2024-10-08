@@ -4,18 +4,17 @@
 		<Banner class="Home_Banner" />
 		<div class="Home_Content">
 			<!-- 热门游戏 -->
-			<h3 class="title">
+			<h3 class="title" v-if="hotGames.length">
 				<SvgIcon iconName="home/fire" alt="" />
 				{{ $t('home["热门游戏"]') }}
 			</h3>
-			<HotGame class="m24"  @queryCollection="queryCollection" :gameInfoList="hotGames" />
+			<HotGame class="m24" @queryCollection="queryCollection" :gameInfoList="hotGames" />
 			<!-- 收藏游戏 -->
 			<h3 class="title" v-show="isShowCollect">
 				<SvgIcon iconName="home/star" alt="" />
 				{{ $t('home["收藏游戏"]') }}
 			</h3>
 			<CollectGames v-show="isShowCollect" @queryCollection="queryCollection" :collectList="collectList" class="m24" />
-
 			<h3 class="title_more" v-show="eventList?.length">
 				<span class="flex_align_center">
 					<SvgIcon iconName="home/event_game" alt="" />
@@ -23,14 +22,14 @@
 				</span>
 				<span class="more fw_400 fs_28 color_T1" @click="router.push('/venueHome/sports')">{{ $t(`home["更多"]`) }}</span>
 			</h3>
-			<EventList v-show="eventList?.length" v-for="event,index in eventList" class="m24" :event="event" :key="index"/>
-				<!-- 体育购物车 -->
+			<EventList v-show="eventList?.length" v-for="(event, index) in eventList" class="m24" :event="event" :key="index" />
+			<!-- 体育购物车 -->
 			<SportsShopCart :isShowBet="true" />
-			<template v-for="(item, index) in lobbyTopGame" :key="index"">
+			<template v-for="(item, index) in lobbyTopGame" :key="index">
 				<h3 class="title_more">
 					<span class="flex_align_center">
 						<VantLazyImg :src="item.icon" />
-						{{item.name}}
+						{{ item.name }}
 					</span>
 					<span class="more fw_400 fs_28 color_T1" @click="handleMore(item?.gameOneId)">{{ $t(`home["更多"]`) }}</span>
 				</h3>
@@ -59,6 +58,10 @@
 			<!-- 负责任游戏 -->
 			<Footer />
 		</div>
+		<!-- 红包雨倒计时 -->
+		<redbagRainCountdown v-model="showCountdown" :redBagInfo="redBagInfo" />
+		<!-- 红包雨页面 -->
+		<rainPage v-if="showRedBagRain" v-model="showRedBagRain" />
 	</div>
 </template>
 
@@ -67,12 +70,13 @@ import sportsApi from "/@/api/venueHome/sports";
 import HomeApi from "/@/api/home";
 import GameApi from "/@/api/venueHome/games";
 import workerManage from "/@/webWorker/workerManage";
-import { useLoading } from "/@/directives/loading/hooks";
 import { useSportsInfoStore } from "/@/store/modules/sports/sportsInfo";
 import { useSportsBetEventStore } from "/@/store/modules/sports/sportsBetData";
 import useSportPubSubEvents from "/@/views/venueHome/sports/hooks/useSportPubSubEvents";
 import SportsShopCart from "/@/views/venueHome/sports/components/sportsShopCart/sportsShopCart.vue";
-
+import rainPage from "/@/views/discount/activityType/RED_BAG_RAIN/rainPage.vue";
+import redbagRainCountdown from "../../components/redbagRainCountdown/index.vue";
+//热门游戏
 import Banner from "./Banner/banner.vue";
 //热门游戏
 import HotGame from "./HotGame/HotGame.vue";
@@ -91,7 +95,7 @@ import Currency from "./Currency/Currency.vue";
 // 负责任游戏
 import Footer from "./Footer/Footer.vue";
 import { useUserStore } from "/@/store/modules/user";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import pubsub from "/@/pubSub/pubSub";
 import { SportViewProcessWorkerCommandType, WorkerName } from "/@/enum/workerTransferEnum";
 import SportsCommonFn from "../venueHome/sports/utils/common";
@@ -99,33 +103,38 @@ import { OpenSportEventSourceParams } from "../venueHome/sports/models/sportEven
 import { SportPushApi, WebToPushApi } from "../venueHome/sports/enum/sportEventSourceEnum";
 import viewSportPubSubEventData from "../venueHome/sports/hooks/viewSportPubSubEventData";
 import { GameInfoList, LobbyTopGame } from "/#/game";
+import activitySocketService from "/@/utils/activitySocketService";
+const websocketService = activitySocketService.getInstance();
 const router = useRouter();
 const UserStore = useUserStore();
 const sportsInfoStore = useSportsInfoStore();
 const sportsBetEvent = useSportsBetEventStore();
-const { startLoading, stopLoading } = useLoading();
 const { startPolling, stopPolling, initSportPubsub, unSubSport, sportsLogin, clearState } = useSportPubSubEvents();
 const eventIDList = ref();
 const eventList = ref();
 const collectList = ref([]);
 const hotGames = ref<GameInfoList[]>([]);
 const lobbyTopGame = ref<LobbyTopGame[]>();
+const showRedBagRain = ref(false);
 //判断是否收藏
 const isShowCollect = computed(() => {
 	return collectList.value.length > 0 && UserStore.token;
-})
-
+});
+// 红包倒计时
+const showCountdown = ref(false);
+// 红包开始信息
+const redBagInfo: any = ref({});
 //监听处理好的体育联赛数据列表 从中获取后台配置好的赛事展示在首页。
 watch(
 	() => viewSportPubSubEventData.getSportData(),
-	(newData,oldData) => {
+	(newData, oldData) => {
 		// console.log(JSON.stringify(newData));
 		/**
 		 * @description 根据 sportType 获取对应的数据
 		 * @param {Sports} sportType
 		 */
-		const football = newData[1];
-		const basketball = newData[2];
+		const football = newData[1] || [];
+		const basketball = newData[2] || [];
 		const leagues = [...football, ...basketball];
 		const newEvents = [] as object[];
 		leagues.forEach((item) => {
@@ -135,8 +144,8 @@ watch(
 		console.log(newEvents, "===newEvents");
 	}
 );
-// 注册一个钩子，在组件被挂载之前被调用。
-onBeforeMount(async () => {
+
+onActivated(() => {
 	//获取游戏场馆热门赛事
 	getLobbyTopGame();
 	//获取体育赛事id
@@ -145,24 +154,29 @@ onBeforeMount(async () => {
 	queryCollection();
 	//初始化体育
 	initSport();
-	pubsub.subscribe('getCollect',queryCollection)
+	pubsub.subscribe("getCollect", queryCollection);
+	// 初始化活动ws连接
+	initializeWebSocket();
 });
-
-// 注册一个钩子，在组件实例被卸载之前调用。
-onBeforeUnmount(() => {
+onDeactivated(() => {
 	// 卸载体育
 	unSport();
 	// 关闭登录接口轮询
 	stopPolling();
 	// 清除体育数据缓存
 	clearStoreInfo();
+
+	//关闭ws连接
+	destroyWS();
 });
 //获取关注列表
 const queryCollection = () => {
-	GameApi.queryCollection().then((res) => {
-		collectList.value = res.data.records;
-	});
-}
+	if (useUserStore().token) {
+		GameApi.queryCollection().then((res) => {
+			collectList.value = res.data.records || [];
+		});
+	}
+};
 //获取推荐赛事列表
 const getSportEventsRecommend = () => {
 	HomeApi.querySportEventsRecommend().then((res) => {
@@ -181,15 +195,15 @@ const initSport = async () => {
 	//开启体育线程
 	workerManage.startWorker(workerManage.WorkerMap.sportViewProcessWorker.workerName);
 	//体育登录
-// 	device*	设备：0:后台 1:PC 2:IOS_H5 3:IOS_APP 4:Android_H5 5:Android_APP[...]
-// venueCode*	string
-// title: 场馆code
-// gameCode	string
-// title: 游戏code
+	// 	device*	设备：0:后台 1:PC 2:IOS_H5 3:IOS_APP 4:Android_H5 5:Android_APP[...]
+	// venueCode*	string
+	// title: 场馆code
+	// gameCode	string
+	// title: 游戏code
 	await sportsLogin({
 		device: 1,
-		venueCode:'',
-		gameCode: '',
+		venueCode: "",
+		gameCode: "",
 	}).then((res) => {
 		if (res) {
 			initSportPubsub();
@@ -276,13 +290,28 @@ const getAttention = () => {
 };
 
 const handleMore = (gameOneId) => {
-	console.log(gameOneId,'=gameOneId')
+	console.log(gameOneId, "=gameOneId");
 	router.push({
 		name: "GameArena",
-		query:{gameOneId}
-	})
-}
+		query: { gameOneId },
+	});
+};
 
+const initializeWebSocket = async () => {
+	// 订阅红包雨推送消息
+	pubsub.subscribe("/activity/redBagRain", (data) => {
+		showCountdown.value = true;
+		redBagInfo.value = data;
+	});
+	// ws连接
+	await websocketService.connect().then(() => {
+		websocketService.send("/activity/redBagRain");
+	});
+};
+const destroyWS = () => {
+	pubsub.unsubscribe("/activity/redBagRain", () => {});
+	websocketService.close();
+};
 </script>
 
 <style lang="scss" scoped>

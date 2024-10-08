@@ -11,7 +11,7 @@
 					</template>
 				</FormInput>
 				<div class="error_text">
-					<span v-if="!isAccountValid && state.userAccount !== ''" class="text">{{ $t('register["请输入4-11位字母+数字组成，首位必须是字母"]') }}</span>
+					<span v-if="!isAccountValid && state.userAccount !== ''" class="text">{{ $t('register["4-11位，字母、数字组成 ，首位必须是字母"]') }}</span>
 				</div>
 
 				<FormInput
@@ -62,7 +62,7 @@
 				<div class="invite-code-wrapper">
 					<div class="invite-code-toggle" @click="toggleInviteCode">
 						{{ $t('register["输入推荐码"]') }}
-						<SvgIcon :class="['toggle-icon', { 'rotate': showInviteCode }]" iconName="loginOrRegister/arrow" />
+						<SvgIcon :class="['toggle-icon', { rotate: showInviteCode }]" iconName="loginOrRegister/arrow" />
 					</div>
 					<transition name="slide-fade">
 						<FormInput v-if="showInviteCode" v-model="state.inviteCode" type="text" :placeholder="$t(`register['推荐码(非必填)']`)">
@@ -85,10 +85,10 @@
 					</p>
 				</div>
 
-				<div class="checkbox" @click="marketingAgreement = !marketingAgreement">
-					<SvgIcon v-show="!marketingAgreement" class="check" iconName="loginOrRegister/checkbox" />
-					<SvgIcon v-show="marketingAgreement" class="check" iconName="loginOrRegister/checkbox_active" />
-					<span class="text">
+				<div class="checkbox" @click="marketingPromotion = !marketingPromotion">
+					<SvgIcon v-show="!marketingPromotion" class="check" iconName="loginOrRegister/checkbox" />
+					<SvgIcon v-show="marketingPromotion" class="check" iconName="loginOrRegister/checkbox_active" />
+					<span :class="marketingPromotion ? 'text' : 'text3'">
 						<i18n-t keypath="register['我同意接收[平台名称]的营销促销信息']" :tag="'span'">
 							<template v-slot:text>OKsport</template>
 						</i18n-t>
@@ -125,7 +125,7 @@ const eyeShow = ref(true);
 const btnDisabled = ref(true);
 const mainCurrencyRG = ref(false);
 const userAgreement = ref(false); // 用户协议认证
-const marketingAgreement = ref(false); // 营销协议认证
+const marketingPromotion = ref(true); // 营销促销信息 默认勾选
 const captchaBtn = ref(null);
 const showInviteCode = ref(false);
 let state = reactive({
@@ -135,14 +135,6 @@ let state = reactive({
 	mainCurrency: "", // 货币
 	inviteCode: "", // 推荐码
 	deviceNo: common.getInstance().getDevice(), // 设备
-});
-
-onMounted(() => {
-	Object.assign(state, store.getregisterInfo);
-	// 判断有无选择币种
-	if (route.query.currency) {
-		state.mainCurrency = route.query.currency as string;
-	}
 });
 
 // 账号正则
@@ -162,9 +154,9 @@ const isConfirmPasswordValid = computed(() => {
 
 // 监听用户状态
 watch(
-	[() => isAccountValid.value, () => isPasswordValid.value, () => isConfirmPasswordValid.value, () => state.mainCurrency, () => userAgreement.value, () => marketingAgreement.value],
-	([isAccountValid, isPasswordValid, isConfirmPasswordValid, mainCurrency, userAgreement, marketingAgreement]) => {
-		if (isAccountValid && isPasswordValid && isConfirmPasswordValid && mainCurrency && userAgreement && marketingAgreement) {
+	[() => isAccountValid.value, () => isPasswordValid.value, () => isConfirmPasswordValid.value, () => state.mainCurrency, () => userAgreement.value],
+	([isAccountValid, isPasswordValid, isConfirmPasswordValid, mainCurrency, userAgreement]) => {
+		if (isAccountValid && isPasswordValid && isConfirmPasswordValid && mainCurrency && userAgreement) {
 			btnDisabled.value = false;
 		} else {
 			btnDisabled.value = true;
@@ -181,6 +173,13 @@ watch(
 		if (newValue) {
 			mainCurrencyRG.value = false;
 		}
+	}
+);
+
+watch(
+	() => route.query.currency,
+	(newValue) => {
+		state.mainCurrency = newValue as string;
 	}
 );
 
@@ -212,13 +211,13 @@ const onSubmit = async () => {
 	if (res.code == common.getInstance().ResCode.SUCCESS) {
 		showToast(res.message);
 		store.setInfo(res.data);
-		router.replace({ path: "/home" });
+		router.replace({ path: "/" });
 	} else {
 		showToast(res.message);
 	}
 };
 const goTomainCurrency = () => {
-	store.setregisterInfo(state);
+	// store.setregisterInfo(state);
 	router.push({ path: "/mainCurrency", query: { currency: state.mainCurrency } });
 };
 
@@ -279,7 +278,7 @@ const toggleInviteCode = () => {
 
 			.invite-code-wrapper {
 				// margin-top: 10px;
-				
+
 				.invite-code-toggle {
 					display: flex;
 					align-items: center;
@@ -290,23 +289,23 @@ const toggleInviteCode = () => {
 					@include themeify {
 						color: themed("T1");
 					}
-					
+
 					.toggle-icon {
 						width: 24px;
 						height: 24px;
 						transition: transform 0.3s ease;
-						
+
 						&.rotate {
 							transform: rotate(90deg);
 						}
 					}
 				}
-				
+
 				.slide-fade-enter-active,
 				.slide-fade-leave-active {
 					transition: all 0.3s ease;
 				}
-				
+
 				.slide-fade-enter-from,
 				.slide-fade-leave-to {
 					transform: translateY(-20px);
@@ -322,6 +321,9 @@ const toggleInviteCode = () => {
 				.check {
 					width: 32px;
 					height: 32px;
+					@include themeify {
+						color: themed("Theme");
+					}
 				}
 				.text,
 				.text3 {

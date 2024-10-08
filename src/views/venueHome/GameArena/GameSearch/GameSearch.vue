@@ -2,12 +2,19 @@
 	<div class="GameArena bg_BG1">
 		<!-- 顶部搜索栏 -->
 		<div class="navBar bg_BG1">
-			<SvgIcon class="collapse_icon color_TB" iconName="common/arrowLeft" @click="onClickLeft" />
-			<div class="nav_bar_input bg_BG3">
+			<!-- <SvgIcon class="collapse_icon color_TB" iconName="common/arrowLeft" @click="onClickLeft" /> -->
+			<!-- <div class="nav_bar_input bg_BG3">
 				<SvgIcon iconName="venueHome/gameArena/search" />
 				<input v-model="searchValue" @keydown.enter="handleSearch" ref="searchRef" :placeholder="$t(`game['输入游戏名称']`)" type="search" class="color_T2" />
-			</div>
-			<Button @click="handleSearch">{{ $t("game[`搜索`]") }}</Button>
+			</div> -->
+			<VantNavBar @onClickLeft="onClickLeft">
+				<template v-slot:title>
+					<input v-model="searchValue" @keydown.enter="handleSearch" ref="searchRef" style="width: 100%" :placeholder="$t(`game['输入游戏名称']`)" type="search" class="color_T2" />
+				</template>
+				<template v-slot:right>
+					<div @click="handleSearch" class="searchBtn">搜索</div>
+				</template>
+			</VantNavBar>
 		</div>
 
 		<div class="gameList">
@@ -74,4 +81,45 @@ const onClickLeft = () => {
 
 <style lang="scss" scoped>
 // 样式代码...
+.navBar {
+	.searchBtn {
+		width: 104px;
+		height: 56px;
+		border-radius: 10px;
+		background: #ff284b;
+		line-height: 56px;
+	}
+	@include themeify {
+		input {
+			padding: 12.5px 24px;
+			background-color: themed("BG3") !important;
+			border: none;
+		}
+	}
+}
+:deep(.van-nav-bar__title) {
+	margin: 90px;
+	width: 500px;
+	max-width: 100%;
+	display: block;
+	position: relative;
+	border: none;
+	outline: none;
+}
+.no_data_container {
+	text-align: center;
+
+	img {
+		width: 300px;
+		margin: 0 auto;
+	}
+}
+.gameList {
+	padding: 24px 26px;
+	.game-grid {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 16px;
+	}
+}
 </style>

@@ -5,9 +5,9 @@
 			<img :src="theme === ThemeEnum.default ? tab_border : tab_border_light" />
 		</div>
 		<!-- 遍历 tabData 渲染每个 tab 项 -->
-		<div v-for="(item, index) in tabData" :key="index" :class="{ item: item.path !== '/home', 'home-item': item.path === '/home' }" @click="toPath(item)">
+		<div v-for="(item, index) in tabData" :key="index" :class="{ item: item.path !== '/', 'home-item': item.path === '/' }" @click="toPath(item)">
 			<!-- 非首页的 tab 项 -->
-			<div v-if="item.path !== '/home'" class="content" :class="getHighlightBG(item)">
+			<div v-if="item.path !== '/'" class="content" :class="getHighlightBG(item)">
 				<!-- 显示高亮的分隔线 -->
 				<div v-if="getHighlightLine(item)" class="line">
 					<img :src="line" />
@@ -121,7 +121,7 @@ const tabData = [
 		icon: home,
 		active_icon: home_active,
 		label: $.t('layout["首页"]'),
-		path: "/home",
+		path: "/",
 	},
 	{
 		icon: wallet,

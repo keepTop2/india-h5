@@ -5,8 +5,8 @@
 			<img class="spin-img" :src="spinBG" alt="" />
 			<div class="currency">
 				<div v-for="(i, index) in spinList" :key="index" class="spin-item" :style="getItemStyle(index)">
-					<span class="amount">{{ showCoin(i.coin) }}</span>
-					<img :src="getImg(i.currency)" />
+					<span class="amount"><img :src="i.prizePictureUrl" alt="" /></span>
+					<!-- <img :src="getImg(i.currency)" /> -->
 				</div>
 			</div>
 		</div>
@@ -24,31 +24,20 @@
 			<img class="btn-txt" :src="crypto_btn" alt="" />
 		</div>
 	</div>
-	<div class="dialog" v-show="dialogVisible">
-		<div class="dialog-content">
-			<div class="dialog-title color_Hint">恭喜</div>
-
-			<div class="dialog-title color_Hint mb_21">获得幸运大奖</div>
-			<div class="dialog-desc color_Theme mb_18">$ +0.01000 USD</div>
-			<Button @click="dialogVisible = false">好的</Button>
-		</div>
-	</div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, getCurrentInstance, watch, nextTick } from "vue";
+import { ref, watch, nextTick } from "vue";
 import crypto_point from "./img/crypto_point.png";
 import crypto_btn from "./img/crypto_btn.png";
-import img10001 from "./img/10001.png";
 import spinBG from "./img/spin_bg.png";
+import { activityApi } from "/@/api/activity";
 
-const lightActive = ref(false);
 const spinning = ref(false);
 const spinOver = ref(false);
 const spinRotate = ref("0deg");
-const pageLoading = ref(true);
 const rewardAni = ref(false);
-const dialogVisible = ref(true);
+const dialogVisible = ref(false);
 /**
  * @description 转盘组件
  * @param {Array<Coin>} spinList 奖品列表
@@ -64,16 +53,18 @@ interface Coin {
 
 interface Spin {
 	spinList: Coin[]; //奖品列表
-	reward: Coin; //选中的奖品
+	reward: any;
+	balanceCount: number;
 }
 
 const props = withDefaults(defineProps<Spin>(), {
-	spinList: () => [],
+	spinList: () => [] as any,
 	reward: () => ({} as Coin),
+	balanceCount: Number,
 });
 
 // startSpinningCallback 开始旋转的回掉函数
-const emit = defineEmits(["startSpinningCallback"]);
+const emit = defineEmits(["startSpinningCallback", "endSpinningCallback"]);
 
 // 监听props中的reward变化，以触发停止旋转
 watch(
@@ -81,113 +72,31 @@ watch(
 	async () => {
 		await nextTick();
 		spinOver.value = true;
-		const { coin, currency } = props.reward;
-		const findIndex = props.spinList.findIndex((i) => i.coin === coin && i.currency === currency);
+		const { id } = props.reward;
+		const findIndex = props.spinList.findIndex((i: any) => i.id === id);
 		if (findIndex === -1) {
 			// 错误处理
 			console.error("奖品信息错误");
+			clearSpin();
 			return;
 		}
 		spinRotate.value = `${(360 / 16) * (16 - findIndex) + 90}deg`;
 		await nextTick();
 		rewardAni.value = true;
+		const timer = setTimeout(() => {
+			spinning.value = false;
+			dialogVisible.value = true;
+			emit("endSpinningCallback");
+			clearTimeout(timer);
+		}, 2500);
 	}
 );
-
-onMounted(async () => {
-	lightActive.value = true;
-	const canvasAction = () => {
-		// Canvas动画逻辑...
-		let width = 128;
-		let height = 128;
-		const image = new Image();
-		image.onload = drawImageActualSize;
-		image.src = img10001;
-		const canvas = document.getElementById("canvas");
-		const ctx = canvas.getContext("2d");
-		const moveInfo = {
-			currentX: 0,
-			currentY: 0,
-			maxX: 60,
-			minX: 0,
-			speed: 2,
-			currentScale: 1.3,
-		};
-
-		let positive = true; // 正反 0 向上  1向下
-
-		// 绘制
-		function draw() {
-			let x = 0;
-			let y = 0;
-			if (positive) {
-				x = moveInfo.currentX + moveInfo.speed;
-				moveInfo.currentX = x;
-				y = moveInfo.currentY + moveInfo.speed;
-				moveInfo.currentY = y;
-
-				if (x > moveInfo.maxX) {
-					positive = !positive;
-				}
-			} else {
-				x = moveInfo.currentX - moveInfo.speed;
-				moveInfo.currentX = x;
-				y = moveInfo.currentY - moveInfo.speed;
-				moveInfo.currentY = y;
-
-				if (x < moveInfo.minX) {
-					positive = !positive;
-				}
-			}
-			let scaleVal = 0.3 / (moveInfo.maxX / moveInfo.speed);
-			if (positive) {
-				moveInfo.currentScale -= scaleVal;
-			} else {
-				moveInfo.currentScale += scaleVal;
-			}
-			ctx.reset();
-			ctx.save();
-			ctx.scale(moveInfo.currentScale, moveInfo.currentScale);
-			ctx.drawImage(image, 0, 0, width / 2, height, 0, 40, 128, 128);
-			ctx.restore();
-			ctx.save();
-			ctx.rotate((90 * Math.PI) / 180);
-			ctx.translate(0, -width / 2);
-			ctx.scale(moveInfo.currentScale, moveInfo.currentScale);
-			ctx.drawImage(image, width / 2 + 25, 0, width / 2, height, x, -30, 128, 128);
-			ctx.restore();
-			ctx.setTransform(1, 0, 0, 1, 0, 0);
-			window.requestAnimationFrame(draw);
-		}
-
-		function drawImageActualSize() {
-			console.log("this.width", this.width, this.height);
-			width = this.width;
-			height = this.height;
-			window.requestAnimationFrame(draw);
-		}
-	};
-	pageLoading.value = false;
-	// setTimeout(() => canvasAction(), 0);
-});
 
 // 计算每个奖品项的样式
 const getItemStyle = (index: number) => ({
 	opacity: "1",
 	transform: `rotate(${(360 / 16) * index}deg)`,
 });
-// 获取奖品图标的路径
-const getImg = (url: string) => {
-	return new URL(`./img/coin/${url}.black.png`, import.meta.url).href;
-};
-// 格式化显示币种小数点数
-const showCoin = (c: string) => {
-	let coin = Number(c).toFixed(7).toString().slice(0, 7);
-	if (coin.indexOf(".") === 6) {
-		coin = coin.slice(0, 6);
-	}
-	return coin;
-};
 // 重置旋转动画状态
 const clearSpin = () => {
 	spinOver.value = false;
@@ -195,11 +104,18 @@ const clearSpin = () => {
 	rewardAni.value = false;
 };
 // 处理开始旋转的逻辑
-const handleStartSpin = () => {
-	clearSpin();
+const handleStartSpin = async () => {
+	if (props.balanceCount < 1) {
+		return emit("endSpinningCallback");
+	}
 	if (spinning.value) return;
-	spinning.value = true;
-	emit("startSpinningCallback");
+	activityApi.toSpinActivity().then((res: any) => {
+		if (res.code === 10000) {
+			clearSpin();
+			spinning.value = true;
+			emit("startSpinningCallback");
+		}
+	});
 };
 </script>
 
@@ -310,8 +226,8 @@ const handleStartSpin = () => {
 				justify-content: space-between;
 				/* border: 1px solid red; */
 				img {
-					width: 24px;
-					height: 24px;
+					width: 56px;
+					height: 56px;
 				}
 
 				.amount {
@@ -321,7 +237,8 @@ const handleStartSpin = () => {
 					font-size: 32px;
 					// text-shadow: 0px 2px 0px rgba(0, 0, 0, 0.3);
 					color: #fff;
-					padding-left: 8px;
+					padding-left: 60px;
+					object-fit: cover;
 					font-family: "DIN Alternate";
 				}
 			}
@@ -662,26 +579,7 @@ canvas {
 		transform: rotate(360deg);
 	}
 }
-.dialog {
-	position: absolute;
-	top: 90px;
-	background: url(./img/message_bg.png) no-repeat;
-	background-color: rgba(0, 0, 0, 0.5);
-	background-size: 100%;
-	z-index: 100;
-	z-index: 100;
-	height: 100%;
-	width: 100%;
 
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	.dialog-content {
-		margin-top: -150px;
-		text-align: center;
-		font-size: 40px;
-	}
-}
 .app_isApp {
 	.spin {
 		width: 337px;
