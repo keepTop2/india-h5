@@ -82,7 +82,7 @@
 import { forgetPasswordApi } from "/@/api/loginRegister";
 import CaptchaButton from "/@/views/loginRegister/forgetPassword/components/captchaButton/captchaButton.vue";
 import common from "/@/utils/common";
-import { showFailToast } from "vant";
+import { showToast } from "vant";
 import CommonApi from "/@/api/common";
 
 const props = withDefaults(
@@ -101,6 +101,7 @@ interface CountryData {
 }
 const captchaButton = ref<{
 	startCountdown: () => void;
+	stopCountdown: () => void;
 } | null>(null);
 
 const emit = defineEmits(["onStep"]);
@@ -168,6 +169,7 @@ const btnDisabled = computed(() => {
 
 const onChange = () => {
 	state.type = state.type === "email" ? "phone" : "email";
+	captchaButton.value?.stopCountdown();
 };
 
 const onCaptcha = async () => {
@@ -183,7 +185,7 @@ const onCaptcha = async () => {
 	if (res.code === common.getInstance().ResCode.SUCCESS) {
 		captchaButton.value?.startCountdown();
 	} else {
-		showFailToast(res.message);
+		showToast(res.message);
 	}
 };
 
@@ -198,7 +200,7 @@ const onStep = async () => {
 	if (res.code == common.getInstance().ResCode.SUCCESS) {
 		emit("onStep", state);
 	} else {
-		showFailToast(res.message);
+		showToast(res.message);
 	}
 };
 const groupByFirstLetter = (countries: CountryData[]) => {

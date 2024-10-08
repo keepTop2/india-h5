@@ -24,18 +24,20 @@
 </template>
 
 <script setup lang="ts">
+import { useRoute } from "vue-router";
 import CommonApi from "/@/api/common";
 import common from "/@/utils/common";
 import { useUserStore } from "/@/store/modules/user";
+const route = useRoute();
 const userStore = useUserStore();
 const checked = ref(userStore.getLang);
-
 const languageShow = ref(false);
-
 const stateLang = reactive({
 	langList: [],
 	langPicture: "" as null | string,
 });
+
+const emit = defineEmits(["onPreviousStep"]);
 
 const onLang = () => {
 	languageShow.value = true;
@@ -43,22 +45,28 @@ const onLang = () => {
 
 // 获取语言配置
 const getCommonBusinessDownBox = async () => {
+	// 调用通用业务下拉框接口，并捕获任何可能的错误
 	const res = await CommonApi.getCommonBusinessDownBox().catch((err) => err);
+	// 如果响应的状态码为成功状态码
 	if (res.code == common.getInstance().ResCode.SUCCESS) {
+		// 将获取的语言列表赋值给 stateLang 的 langList 属性
 		stateLang.langList = res.data.languageEnums;
+		// 如果用户没有选择语言（即 langChoice 为空）
 		if (!userStore.langChoice) {
-			const filteredData: any = stateLang.langList.find((item) => item.currLang === 1);
+			// 查找默认的语言（currLang 为 1 表示默认语言）
+			const filteredData = stateLang.langList.find((item) => item.currLang === 1);
+			// 将默认语言的图标赋值给 stateLang 的 langPicture 属性
 			stateLang.langPicture = filteredData.icon;
 		}
 	}
 };
+
 stateLang.langPicture = userStore.langIcon;
 getCommonBusinessDownBox();
 
 const handleConfirm = (selectedValues) => {
 	const { selectedOptions } = selectedValues;
 	const options = selectedOptions[0];
-	console.log("options", options);
 	userStore.setLang(options.value);
 	userStore.setLangIcon(options.icon);
 	userStore.setLangName(options.text);
@@ -68,7 +76,12 @@ const handleConfirm = (selectedValues) => {
 
 // 回退
 const goBack = () => {
-	window.history.back();
+	// 如果是忘记密码页面 单端判断返回场景
+	if (route.path === "/forgetPassword") {
+		emit("onPreviousStep");
+	} else {
+		window.history.back();
+	}
 };
 </script>
 

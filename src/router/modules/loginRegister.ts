@@ -1,7 +1,8 @@
 // import Layout from "/@/layout/loginRegister/index.vue";
 
 export const LoginRegisterRouter = {
-	// component: () => import("/@/layout/loginRegister/index.vue"),
+	path: "/login",
+	redirect: "/login",
 	children: [
 		{
 			path: "/login",
@@ -28,11 +29,6 @@ export const LoginRegisterRouter = {
 				title: "忘记密码",
 			},
 		},
-	],
-};
-
-export const RegisterSubPage = {
-	children: [
 		{
 			path: "/mainCurrency",
 			name: "mainCurrency",

@@ -1,8 +1,7 @@
 <template>
 	<div class="forgetPassword-container">
-		<NavBar />
+		<NavBar @onPreviousStep="onPreviousStep" />
 		<HeaderBG />
-
 		<component :is="componentMaps[state.computedIndex]" :data="state.params" @onStep="onStep" />
 	</div>
 </template>
@@ -38,6 +37,14 @@ const onStep = (data?: any) => {
 	}
 	state.computedIndex++;
 	console.log("state.computedIndex", state.computedIndex);
+};
+
+const onPreviousStep = () => {
+	if (state.computedIndex > 0) {
+		state.computedIndex--;
+	} else if (state.computedIndex <= 0) {
+		window.history.back();
+	}
 };
 </script>
 
