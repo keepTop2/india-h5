@@ -7,9 +7,9 @@ class activitySocketService {
 	private url: string;
 	private reconnectAttempts: number = 0; // 重连尝试次数
 	private maxReconnectAttempts: number = 5; // 最大重连尝试次数
-	private heartbeatInterval: number = 10000; // 心跳间隔时间
+	private heartbeatInterval: number = 5000; // 心跳间隔时间
 	private heartbeatTimer: any = null; // 心跳定时器
-
+	private isManuallyClosed: boolean = false; // 标志：是否手动关闭连接
 	private constructor() {
 		this.url = this.getUrl(); // 初始化WebSocket URL
 	}
@@ -71,7 +71,9 @@ class activitySocketService {
 			this.socket.onclose = () => {
 				console.log("WebSocket连接已关闭"); // 打印连接关闭日志
 				this.stopHeartbeat(); // 停止心跳
-				this.handleReconnect(); // 处理重连
+				if (!this.isManuallyClosed) {
+					this.handleReconnect(); // 处理重连
+				}
 				reject(new Error("WebSocket连接已关闭")); // 拒绝Promise
 			};
 		});
@@ -93,8 +95,10 @@ class activitySocketService {
 
 	// 关闭WebSocket连接
 	close(): void {
+		this.isManuallyClosed = true; // 设置手动关闭标志
 		if (this.socket) {
 			this.socket.close(); // 关闭连接
+			this.stopHeartbeat(); // 停止心跳
 		}
 	}
 
