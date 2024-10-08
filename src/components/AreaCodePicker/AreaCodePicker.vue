@@ -10,22 +10,26 @@
 				<div class="search_input">
 					<div class="icon"><SvgIcon iconName="common/search_input_icon" @click="showAreaCode = false" /></div>
 					<input v-model="searchAreaCode" type="text" placeholder="搜索区号" />
+					<div v-if="searchAreaCode" class="icon"><SvgIcon class="clear_icon" iconName="common/close" @click="searchAreaCode = ''" /></div>
 				</div>
-				<van-index-bar :index-list="props.indexList" :sticky="false">
-					<van-index-anchor :index="1" v-for="item in Object.keys(props.areaCode)">
-						<div class="cell_header">{{ item }}</div>
-						<div class="cell_item" :class="{ cell_item_active: currentAreaCodeIndex == item }" v-for="(i, idx) in areaCode[item]" :key="idx" @click="selectAreaCode(item, i)">
-							<div class="label">
-								<img :src="i.icon" class="icon" />
-								<span>{{ i.countryCode }}</span>
-								<span>{{ i.countryName }}</span>
+				<template v-if="Object.keys(props.areaCode).length > 0">
+					<van-index-bar :index-list="props.indexList" :sticky="false">
+						<van-index-anchor :index="1" v-for="item in Object.keys(props.areaCode)">
+							<div class="cell_header">{{ item }}</div>
+							<div class="cell_item" :class="{ cell_item_active: currentAreaCodeIndex == item }" v-for="(i, idx) in areaCode[item]" :key="idx" @click="selectAreaCode(item, i)">
+								<div class="label">
+									<img :src="i.icon" class="icon" />
+									<span>{{ i.countryCode }}</span>
+									<span>{{ i.countryName }}</span>
+								</div>
+								<div class="value">
+									<span>(+{{ i.areaCode }} )</span>
+								</div>
 							</div>
-							<div class="value">
-								<span>(+{{ i.areaCode }} )</span>
-							</div>
-						</div>
-					</van-index-anchor>
-				</van-index-bar>
+						</van-index-anchor>
+					</van-index-bar>
+				</template>
+				<div class="no_data">未搜索到相关区号</div>
 			</template>
 		</van-action-sheet>
 	</div>
@@ -146,6 +150,15 @@ const selectAreaCode = (item, i) => {
 		font-size: 28px;
 		font-weight: 400;
 	}
+
+	.clear_icon {
+		width: 32px;
+		height: 32px;
+		svg {
+			width: 100%;
+			height: 100%;
+		}
+	}
 }
 
 .cell_header {
@@ -239,5 +252,20 @@ const selectAreaCode = (item, i) => {
 	&::after {
 		bottom: 0;
 	}
+}
+
+.no_data {
+	width: 100%;
+	height: 66px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: var(--tag-2-pnt-3-p, #6d727a);
+	text-align: right;
+	font-family: "PingFang SC";
+	font-size: 28px;
+	font-style: normal;
+	font-weight: 400;
+	line-height: 36px; /* 128.571% */
 }
 </style>
