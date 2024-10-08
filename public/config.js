@@ -8,6 +8,7 @@ window.PLATFROM_CONFIG = {
 
 	// 本地开发地址(开发专用)
 	developmentBaseURL: "https://gw.playesoversea.store",
+	// developmentBaseURL: "http://192.168.30.117:9999",
 
 	//本地开发websocket地址
 	developmentWsURL: "wss://gw.playesoversea.store/ws",

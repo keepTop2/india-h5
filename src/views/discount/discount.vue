@@ -1,33 +1,33 @@
 <template>
 	<!-- 活动 -->
-	<VantNavBar title="优惠活动" :leftArrow="false" />
-	<div class="discount_container">
-		<!-- <Banner class="home_banner mb_35" /> -->
-
-		<NavBar class="mt_32 mb_24 discount_navbar" v-model:active="active" :tab-list="state.tabList" @on-change-nav-bar="onChangeNavBar" />
-
-		<div class="activityList_item bg_Tag1" @click="onToDeatils(item)" v-for="(item, index) in state.activityList" :key="index">
-			<div class="img_container">
-				<div class="activityGraph">
-					<VantLazyImg class="discount_img" :src="discount1" />
-				</div>
-				<div class="text_container">
-					<div class="date">
-						<div class="deadline">截止时间：{{ item.activityEndTime }}</div>
-						<div class="activity_name">{{ item.activityNameI18nCode }}</div>
+	<div>
+		<VantNavBar title="优惠活动" :leftArrow="false" />
+		<div class="discount_container">
+			<!-- <Banner class="home_banner mb_35" /> -->
+			<NavBar class="mt_32 mb_24 discount_navbar" v-model:active="active" :tab-list="state.tabList" @on-change-nav-bar="onChangeNavBar" />
+			<div class="activityList_item bg_Tag1" @click="onToDeatils(item)" v-for="(item, index) in state.activityList" :key="index">
+				<div class="img_container">
+					<div class="activityGraph">
+						<VantLazyImg class="discount_img" :src="item.entrancePictureI18nCode" />
 					</div>
-					<Button class="mt_40"> {{ $t('discount["进行中"]') }}</Button>
+					<div class="text_container">
+						<div class="date">
+							<div class="deadline">截止时间：{{ Common.getInstance().dayFormat2(item.activityEndTime) }}</div>
+							<div class="activity_name">{{ item.activityNameI18nCode }}</div>
+						</div>
+						<Button class="mt_40"> {{ $t('discount["进行中"]') }}</Button>
+					</div>
 				</div>
+			</div>
+			<div v-if="state.activityList.length < 1" class="nodata">
+				<Nodata></Nodata>
 			</div>
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
-import discount1 from "./image/discount1.png";
 import { reactive } from "vue";
-import { onBeforeMount } from "vue";
-import Banner from "./Banner/banner.vue";
 import NavBar from "./components/Navbar.vue";
 import { useRouter } from "vue-router";
 import { i18n } from "/@/i18n/index";
@@ -106,6 +106,10 @@ const activityPageList = async () => {
 const onToDeatils = (item) => {
 	if (item.entrancePictureGrey) {
 		showToast("活动已过期");
+		return;
+	}
+	if (!item.enable) {
+		showToast("活动未开启");
 		return;
 	}
 	router.push({

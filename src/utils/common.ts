@@ -229,7 +229,7 @@ class Common {
 	 */
 	public dayFormat2(date: number | string | null): string {
 		if (date) {
-			return dayjs(Number(date)).tz("Asia/Shanghai").format("YYYY-MM-DD HH:mm:ss");
+			return dayjs(Number(date)).format("YYYY-MM-DD HH:mm:ss");
 		}
 		return "";
 	}
@@ -601,6 +601,8 @@ class Common {
 			}
 		});
 	}
+
+	// 获取30天年月日
 	static getLast30Days() {
 		const today = new Date();
 		const columns: any = [];

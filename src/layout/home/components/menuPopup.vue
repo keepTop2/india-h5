@@ -8,7 +8,7 @@
 		</div>
 		<div class="menu_content">
 			<div class="menu_content_header">
-				<div class="task van-haptics-feedback">
+				<div class="task van-haptics-feedback" @click="toPath('/activity/SPIN_WHEEL')">
 					<div class="icon"><img :src="task_icon" alt="" /></div>
 					<div class="label">{{ $t(`menuPopup["任务"]`) }}</div>
 				</div>
@@ -74,6 +74,7 @@ import { ThemeEnum } from "/@/enum/appConfigEnum";
 import { useThemesStore } from "/@/store/modules/themes";
 import { useRouter } from "vue-router";
 import { useUserStore } from "/@/store/modules/user";
+import { activityApi } from "/@/api/activity";
 const userStore = useUserStore();
 const router = useRouter();
 const show = ref(false);
@@ -113,8 +114,20 @@ const queryLobbyLabelList = async () => {
 pubsub.subscribe("onCollapseMenu", onCollapseMenu);
 
 const toPath = (path) => {
+	if (useUserStore().token) {
+		if (path === "/activity/SPIN_WHEEL") {
+			activityApi.toSpinActivity().then((res: any) => {
+				if (res.code == 10000) {
+					router.push(path);
+				}
+			});
+		} else {
+			router.push(path);
+		}
+	} else {
+		router.push("/login");
+	}
 	show.value = false;
-	router.push(path);
 };
 </script>
 

@@ -6,7 +6,9 @@ export const activityApi = {
 		return useAxiosApi(`/app/activityParticipate/api/activityPageList`, {
 			method: "POST",
 			data,
-			headers,
+			headers: {
+				showLoading: true,
+			},
 		});
 	},
 	// 活动分类
@@ -14,7 +16,9 @@ export const activityApi = {
 		return useAxiosApi(`/app/activityLabs/api/queryList`, {
 			method: "GET",
 			data,
-			headers,
+			headers: {
+				showLoading: true,
+			},
 		});
 	},
 	// 活动详情
@@ -23,6 +27,16 @@ export const activityApi = {
 			method: "POST",
 			data,
 			headers,
+		});
+	},
+	// 参加活动校验
+	toActivity: (data = {}) => {
+		return useAxiosApi(`/app/activityParticipate/api/toActivity`, {
+			method: "POST",
+			data,
+			headers: {
+				showLoading: true,
+			},
 		});
 	},
 	// 领取活动
@@ -38,7 +52,9 @@ export const activityApi = {
 		return useAxiosApi(`/app/activityRedBag/api/clientInfo`, {
 			method: "POST",
 			data,
-			headers,
+			headers: {
+				showLoading: true,
+			},
 		});
 	},
 	// 红包雨校验
@@ -54,7 +70,9 @@ export const activityApi = {
 		return useAxiosApi(`/app/activityParticipate/api/queryActivityDailyContestVenueCode`, {
 			method: "POST",
 			data,
-			headers,
+			headers: {
+				showLoading: true,
+			},
 		});
 	},
 
@@ -89,7 +107,9 @@ export const activityApi = {
 		return useAxiosApi(`/app/activity/spin/api/detail`, {
 			method: "POST",
 			data,
-			headers,
+			headers: {
+				showLoading: true,
+			},
 		});
 	},
 	// 参加转盘校验

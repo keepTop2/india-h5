@@ -25,37 +25,36 @@
 						<div class="details-header-title-left">
 							<img src="../../image/details-header-title-left.png" alt="" />
 						</div>
-						活动条件
+						红包雨场次
 						<div class="details-header-title-right">
 							<img src="../../image/details-header-title-right.png" alt="" />
 						</div>
 					</div>
 					<div class="detail-content">
-						<div>
-							<div class="detail-row">
-								<p class="label">
-									<span>活动对象</span>
-								</p>
-								<p class="value">全体会员</p>
-							</div>
-							<div class="detail-row">
-								<p class="label">
-									<span>活动时间</span>
-								</p>
-								<p class="value">{{ activityPeriod }}</p>
-							</div>
-							<div class="detail-row">
-								<p class="label">
-									<span>活动描述</span>
-								</p>
-								<p class="value">{{ activityDescription }}</p>
+						<div class="sessions">
+							<!-- <div v-for="(item, index) in redBagInfo.sessionInfoList" class="session" :key="index">
+								<div>{{ Common.getInstance().dayFormat2(item.startTime) }}</div>
+								<div class="sideBox">
+									<img src="./image/sessionCricle.svg" alt="" v-if="item.status == 0" />
+									<img src="./image/sessionCricle1.svg" alt="" v-if="item.status == 1" />
+									<img src="./image/sessionCricle2.svg" alt="" v-if="item.status == 2" />
+								</div>
+								<div :class="'status' + item.status">{{ status[item.status] }}</div>
+								<span class="side" v-if="index !== redBagInfo.sessionInfoList.length - 1" :class="'type' + item.status"></span>
+							</div> -->
+							<div v-for="(item, index) in 3" class="session" :key="index">
+								<div>00:01</div>
+								<div class="sideBox">
+									<img src="./image/sessionCricle.svg" alt="" v-if="index == 0" />
+									<img src="./image/sessionCricle1.svg" alt="" v-if="index == 1" />
+									<img src="./image/sessionCricle2.svg" alt="" v-if="index == 2" />
+								</div>
+								<div :class="'status' + 2">{{ index }}</div>
+								<span class="side" :class="'type' + index"></span>
 							</div>
 						</div>
 					</div>
 					<div class="detail-footer"></div>
-					<div class="detail_icon">
-						<img src="../../image/detail_icon.png" alt="" />
-					</div>
 				</div>
 
 				<div class="activity-details">
@@ -75,12 +74,27 @@
 								<div>获得红包</div>
 								<div>时间</div>
 							</div>
-							<div class="winnerListBody" v-for="(item, index) in 5" :key="index">
+							<div class="winnerListBody" v-for="(item, index) in 3" :key="index">
 								<div>1****7</div>
 								<div>8.6 BCD</div>
 								<div>2023-09-06 23:59:59</div>
 							</div>
 						</div>
+					</div>
+					<div class="detail-footer"></div>
+				</div>
+				<div class="activity-details">
+					<div class="details-header">
+						<div class="details-header-title-left">
+							<img src="../../image/details-header-title-left.png" alt="" />
+						</div>
+						<span>活动规则</span>
+						<div class="details-header-title-right">
+							<img src="../../image/details-header-title-right.png" alt="" />
+						</div>
+					</div>
+					<div class="detail-content">
+						<div>123123123</div>
 					</div>
 					<div class="detail-footer"></div>
 				</div>
@@ -98,14 +112,17 @@ import Common from "/@/utils/common";
 import { useActivityStore } from "/@/store/modules/activity";
 const activityStore = useActivityStore();
 const router = useRouter();
-import pubsub from "/@/pubSub/pubSub";
-const activityData = ref({});
-const status: any = {
-	0: "未开始",
-	1: "进行中",
-	2: "已结束",
+const redBagInfo: any = ref({});
+onMounted(() => {
+	getRedBagInfo();
+});
+const getRedBagInfo = () => {
+	activityApi.getRedBagInfo().then((res: any) => {
+		if (res.code === 10000) {
+			redBagInfo.value = res.data;
+		}
+	});
 };
-
 const getActivityReward = () => {
 	activityStore.setIsShowRedBagRain(true);
 	router.push("/");
@@ -264,6 +281,7 @@ const onClickLeft = () => {
 		background: url("../../image/detail_content.png");
 		background-size: 100% 100%;
 		font-size: 24px;
+		min-height: 240px;
 		.detail-row {
 			.label {
 				height: 50px;
@@ -289,6 +307,80 @@ const onClickLeft = () => {
 		}
 		.rules-row {
 			margin: 24px 0;
+		}
+		.winnerListTable {
+			border: 2px solid rgba(255, 40, 75, 0.4);
+			border-radius: 12px;
+			border-top: none;
+			.winnerListHeader,
+			.winnerListBody {
+				display: flex;
+				> div {
+					flex: 1;
+					height: 64px;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					text-align: center;
+					border-bottom: 2px solid rgba(255, 40, 75, 0.4);
+					border-right: 2px solid rgba(255, 40, 75, 0.4);
+				}
+				> div:last-child {
+					border-right: none;
+				}
+			}
+			.winnerListHeader {
+				border-radius: 12px 12px 0 0;
+				background: linear-gradient(180deg, rgba(255, 40, 75, 0.7) 0%, rgba(255, 40, 75, 0.4) 100%);
+			}
+		}
+		.sessions {
+			display: flex;
+			justify-content: center;
+			.session {
+				min-width: 115px;
+				text-align: center;
+				position: relative;
+				.sideBox {
+					margin: 20px 0;
+					position: relative;
+					display: flex;
+					justify-content: center;
+				}
+				.side {
+					display: inline-block;
+					width: 68px;
+					height: 6px;
+					@include themeify {
+						background-color: themed("T1");
+					}
+					position: absolute;
+					left: calc(50% + 22px);
+					top: 50%;
+					transform: translateY(-50%);
+				}
+
+				.type2 {
+					@include themeify {
+						background-color: themed("Theme");
+					}
+				}
+				.status2 {
+					@include themeify {
+						color: themed("Theme");
+					}
+				}
+				.status1 {
+					@include themeify {
+						color: themed("Hint");
+					}
+				}
+			}
+			.session:last-child {
+				.side {
+					display: none;
+				}
+			}
 		}
 	}
 	.detail-footer {

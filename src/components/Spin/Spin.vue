@@ -27,18 +27,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, getCurrentInstance, watch, nextTick } from "vue";
+import { ref, watch, nextTick } from "vue";
 import crypto_point from "./img/crypto_point.png";
 import crypto_btn from "./img/crypto_btn.png";
-import img10001 from "./img/10001.png";
 import spinBG from "./img/spin_bg.png";
 import { activityApi } from "/@/api/activity";
 
-const lightActive = ref(false);
 const spinning = ref(false);
 const spinOver = ref(false);
 const spinRotate = ref("0deg");
-const pageLoading = ref(true);
 const rewardAni = ref(false);
 const dialogVisible = ref(false);
 /**
@@ -57,11 +54,13 @@ interface Coin {
 interface Spin {
 	spinList: Coin[]; //奖品列表
 	reward: any;
+	balanceCount: number;
 }
 
 const props = withDefaults(defineProps<Spin>(), {
 	spinList: () => [] as any,
 	reward: () => ({} as Coin),
+	balanceCount: Number,
 });
 
 // startSpinningCallback 开始旋转的回掉函数
@@ -106,6 +105,9 @@ const clearSpin = () => {
 };
 // 处理开始旋转的逻辑
 const handleStartSpin = async () => {
+	if (props.balanceCount < 1) {
+		return emit("endSpinningCallback");
+	}
 	if (spinning.value) return;
 	activityApi.toSpinActivity().then((res: any) => {
 		if (res.code === 10000) {

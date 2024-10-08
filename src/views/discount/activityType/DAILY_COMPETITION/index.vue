@@ -38,7 +38,7 @@
 							<span class="color_TB fs_22 fw_400">{{ $t('betting["奖金"]') }}</span>
 							<span class="color_TB fs_20 flex fw_700">
 								<img class="size_20" :src="icon" alt="" /><span class="color_Wam-P1">{{ currentData.previous?.awardAmount }}</span
-								><span></span> (50%)
+								><span></span> ({{ currentData.previous?.activityAmountPer }}%)
 							</span>
 						</div>
 					</div>
@@ -84,26 +84,35 @@
 					</div>
 					<SvgIcon @click="dialogShow = true" class="history size_32" iconName="common/history" />
 				</div>
-				<!-- 表格组件 -->
-				<Table :tableData="tableData" :height="68" :columns="columns">
-					<!-- 排名列自定义渲染 -->
-					<template #cell-name="{ index }">
-						<span class="home_paihang" v-if="index + 1 == 1">
-							<SvgIcon iconName="venueHome/bettingMatch/jinpai" />
-						</span>
-						<span class="home_paihang" v-if="index + 1 == 2">
-							<SvgIcon iconName="venueHome/bettingMatch/yinpai" />
-						</span>
-						<span class="home_paihang" v-if="index + 1 == 3">
-							<SvgIcon iconName="venueHome/bettingMatch/tongpai" />
-						</span>
-						<span class="home_paihang Text1" v-if="index + 1 > 3">{{ index + 1 }}</span>
-					</template>
-					<!-- 奖金列自定义渲染 -->
-					<template #cell-Profit="{ data }">
-						<span class="color_Warn-P">{{ data.Profit }}</span>
-					</template>
-				</Table>
+
+				<div class="table">
+					<div class="header">
+						<div v-for="(item, index) in columns" :key="index" class="color_TB">
+							{{ item.label }}
+						</div>
+					</div>
+					<div class="body">
+						<div v-for="(item, index) in tableData" :key="index" class="cell" :class="item.specialShow ? 'active' : ''">
+							<div>
+								<span class="home_paihang" v-if="index + 1 == 1">
+									<SvgIcon iconName="venueHome/bettingMatch/jinpai" class="pt_8" />
+								</span>
+								<span class="home_paihang" v-else-if="index + 1 == 2">
+									<SvgIcon iconName="venueHome/bettingMatch/yinpai" class="pt_8" />
+								</span>
+								<span class="home_paihang" v-else-if="index + 1 == 3">
+									<SvgIcon iconName="venueHome/bettingMatch/tongpai" class="pt_8" />
+								</span>
+								<span v-else class="color_T1">
+									{{ index + 1 }}
+								</span>
+							</div>
+							<div class="color_T1">{{ item.userAccount }}</div>
+							<div class="color_TB">{{ item.betAmount }}</div>
+							<div class="color_TB">{{ item.awardAmount }}</div>
+						</div>
+					</div>
+				</div>
 			</div>
 
 			<!-- 规则说明对话框 -->
@@ -111,7 +120,10 @@
 				<template #title>
 					<div class="title fs_30 color_TB">规则说明</div>
 				</template>
-				<RulePage />
+				<div class="color_T1">
+					{{ currentData.activityRule }}
+				</div>
+				<!-- <RulePage /> -->
 			</Dialog>
 			<van-popup v-model:show="showPicker" round position="bottom">
 				<datePicker :columns="Common.getLast30Days().columns" :defaultDate="defaultDate" @confirmPicker="confirmPicker" @cancelPicker="cancelPicker" title="自定义时间" />
@@ -129,9 +141,7 @@ defineOptions({
  * @description 每日竞赛页面
  */
 import { ref, computed } from "vue";
-import Table from "./components/Table/Table.vue";
 import Dialog from "./components/Dialog/Dialog.vue";
-import RulePage from "/@/views/BettingPage/BetRule/BetRule.vue";
 import { RouteRecordRaw, useRouter } from "vue-router";
 import countDown from "./components/CountDown/CountDown.vue";
 import datePicker from "./components/datePicker.vue";
@@ -141,8 +151,6 @@ import icon from "./images/icon.png";
 import userIcon from "./images/userIcon.png";
 import winner from "./images/winner.png";
 import topimg from "./images/topimg.png";
-import history from "./images/history.png";
-import close from "./images/close.png";
 import { activityApi } from "/@/api/activity";
 import NavBar from "../../components/Navbar.vue";
 import Common from "/@/utils/common";
@@ -172,7 +180,7 @@ const columns = [
 	{ field: "awardAmount", label: "奖金" },
 ];
 
-const tableData = ref([]);
+const tableData: any = ref([]);
 // 当前选中的标签页
 const tabsActiveKey = ref(0);
 const currentVenueCode = ref(null);
@@ -191,31 +199,30 @@ const onClickLeft = () => {
 
 const queryActivityDailyContestVenueCode = async () => {
 	await activityApi.queryActivityDailyContestVenueCode().then((res) => {
-		currentVenueCode.value = res.data[0].venueCode;
+		currentVenueCode.value = res.data[0].id;
 		tabList.value = res.data.map((item, index) => {
 			return {
 				value: item.activityName,
 				code: index,
-				venueCode: item.venueCode,
+				id: item.id,
 			};
 		});
 	});
 };
 const queryActivityDailyContest = () => {
 	const params = {
-		venueCode: currentVenueCode.value,
+		id: currentVenueCode.value,
 	};
 	activityApi.queryActivityDailyContest(params).then((res) => {
-		currentData.value = res.data;
+		currentData.value = res.data || [];
 	});
-
 	initPrizePool();
 };
 
 const initPrizePool = (day = "") => {
 	clearInterval(PrizePoolTimer.value);
 	const params = {
-		venueCode: currentVenueCode.value,
+		id: currentVenueCode.value,
 		day,
 	};
 	activityApi.queryActivityDailyPrizePool(params).then((res) => {
@@ -226,7 +233,7 @@ const initPrizePool = (day = "") => {
 	});
 	PrizePoolTimer.value = setInterval(() => {
 		const params = {
-			venueCode: currentVenueCode.value,
+			id: currentVenueCode.value,
 		};
 		activityApi.queryActivityDailyPrizePool(params).then((res) => {
 			PrizePool.value = res.data;
@@ -237,9 +244,12 @@ const initPrizePool = (day = "") => {
 	}, 3000);
 };
 
-const onChangeNavBar = async () => {
+const onChangeNavBar = async (value) => {
+	console.log(value);
+
 	clearInterval(PrizePoolTimer.value);
-	currentVenueCode.value = tabList.value[tabsActiveKey.value].venueCode;
+	currentVenueCode.value = tabList.value[tabsActiveKey.value].id;
+
 	queryActivityDailyContest();
 };
 const confirmPicker = (value) => {
@@ -256,8 +266,8 @@ const cancelPicker = () => {
 
 onActivated(async () => {
 	await queryActivityDailyContestVenueCode();
-	initCountDownTime();
 	queryActivityDailyContest();
+	initCountDownTime();
 });
 
 const initCountDownTime = () => {
@@ -279,4 +289,33 @@ onDeactivated(() => {
 
 <style lang="scss" scoped>
 @import "./style.scss";
+.table {
+	.header {
+		display: flex;
+		justify-content: space-around;
+		margin-bottom: 22px;
+		> div {
+			width: 25%;
+			text-align: center;
+		}
+	}
+	.body {
+		.cell {
+			display: flex;
+			justify-content: space-around;
+			height: 52px;
+			margin-bottom: 22px;
+			line-height: 52px;
+
+			> div {
+				width: 25%;
+				text-align: center;
+			}
+		}
+		.active {
+			background: url("./images/table_active_bg.png") no-repeat;
+			background-size: 100% 100%;
+		}
+	}
+}
 </style>

@@ -1,13 +1,8 @@
 <template>
 	<div>
-		<VantNavBar :title="$t(`VantNavBar['钱包']`)" @onClickLeft="onClickLeft">
-			<template v-slot:left>
-				<SvgIcon class="collapse_icon" iconName="common/collapse_icon" />
-			</template>
-		</VantNavBar>
-		<div class="tabs">
+		<!-- <div class="tabs">
 			<div :class="item.path != route.path ? 'tab' : 'tab_active'" v-for="(item, index) in tabList" :key="index" @click="router.push(item.path)">{{ item.name }}</div>
-		</div>
+		</div> -->
 		<router-view v-slot="{ Component }">
 			<keep-alive :max="10">
 				<component :is="Component" />
@@ -18,28 +13,6 @@
 
 <script setup lang="ts">
 import pubsub from "/@/pubSub/pubSub";
-import { useRoute, useRouter } from "vue-router";
-const route = useRoute();
-const router = useRouter();
-const tabList = [
-	{
-		name: "充值",
-		path: "/wallet/recharge",
-	},
-	{
-		name: "提现",
-		path: "/wallet/withdraw",
-	},
-	{
-		name: "记录",
-		path: "/wallet/records",
-	},
-];
-
-const onClickLeft = () => {
-	// 发布事件
-	pubsub.publish("onCollapseMenu");
-};
 </script>
 
 <style scoped lang="scss">

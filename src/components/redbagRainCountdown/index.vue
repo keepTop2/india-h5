@@ -45,11 +45,7 @@ pubsub.subscribe("/activity/redBagRain", (data) => {
 
 // 点击红包进入详情页
 const handleClickCountdown = async () => {
-	await activityApi.getRedBagInfo().then((res: any) => {
-		if (res.code === 1000) {
-			router.push("/activity/RED_BAG_RAIN");
-		}
-	});
+	router.push("/activity/RED_BAG_RAIN");
 };
 // 关闭倒计时
 const closeRedbagRainCountdown = () => {

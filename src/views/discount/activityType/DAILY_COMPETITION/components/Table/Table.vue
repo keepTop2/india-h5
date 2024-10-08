@@ -3,6 +3,7 @@
 		<div v-for="(item, i) in columns" :key="i" class="table">
 			<div class="table-item">
 				<div class="table-top">{{ item.label }}</div>
+
 				<div v-for="(line, index) in tableData" :key="index" class="table-line">
 					<!-- 使用插槽来渲染自定义单元格内容 -->
 					<slot :name="`cell-${item.field}`" :data="line" :index="index">
@@ -37,7 +38,7 @@ interface TableData {
  */
 const props = defineProps({
 	columns: {
-		type: Array as () => Array<Column>,
+		type: Array as () => Array<any>,
 		required: true,
 	},
 	tableData: {

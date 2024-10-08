@@ -61,7 +61,7 @@
 		</div>
 
 		<redbagRainCountdown v-model="showCountdown" />
-		<rainPage v-if="showRedBagRain" />
+		<rainPage v-if="showRedBagRain" v-model="showRedBagRain" />
 	</div>
 </template>
 
@@ -162,7 +162,7 @@ onBeforeMount(async () => {
 	//建立ws连接
 	initializeWebSocket();
 });
-onMounted(() => {
+onActivated(() => {
 	if (activityStore.getIsShowRedBagRain) {
 		showRedBagRain.value = true;
 	}
