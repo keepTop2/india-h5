@@ -3,9 +3,6 @@ export const WalletRouter = {
 	name: "wallet",
 	redirect: "/wallet/recharge",
 	component: () => import("/@/views/wallet/wallet.vue"),
-	meta: {
-		title: "钱包",
-	},
 	children: [
 		{
 			path: "/wallet/recharge",
@@ -40,7 +37,7 @@ export const WalletSubRouter = {
 		{
 			path: "/wallet/rechargeDetails",
 			name: "rechargeDetails",
-			component: () => import("/@/views/wallet/rechargeDetails/rechargeDetails.vue"),
+			component: () => import("/@/views/wallet/rechargeDetails/index.vue"),
 			meta: {
 				title: "充值详情",
 			},

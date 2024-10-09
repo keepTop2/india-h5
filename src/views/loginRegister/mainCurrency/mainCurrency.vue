@@ -93,6 +93,7 @@ const onClickLeft = () => {
 				align-items: center;
 				justify-content: space-between;
 				padding: 18px 24px;
+				justify-content: space-between;
 				@include themeify {
 					color: themed("TB");
 				}

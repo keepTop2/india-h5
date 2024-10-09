@@ -1,5 +1,5 @@
 <template>
-	<div class="game-card">
+	<div class="game-card" @click="Common.goToGame(gameInfo)">
 		<div class="new-badge">
 			<SvgIcon iconName="venueHome/gameArena/new_game" />
 		</div>
@@ -20,6 +20,7 @@
  */
 import { GameInfoList, LobbyTopGame } from "/#/game";
 import GameApi from "/@/api/venueHome/games";
+import Common from "/@/utils/common";
 const props = defineProps({
 	gameInfo: {
 		type: Object as PropType<GameInfoList>,

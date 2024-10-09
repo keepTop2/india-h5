@@ -6,7 +6,7 @@
 				<SvgIcon class="collapse_icon color_TB" iconName="common/collapse_icon" @click="onClickLeft" />
 				<div class="nav_bar_input bg_BG3">
 					<SvgIcon iconName="venueHome/gameArena/search" />
-					<input @focus="router.push('/game/arena/search')" disabled :placeholder="$t(`game['输入游戏名称']`)" type="text" class="color_T2" />
+					<input @focus="router.push('/game/arena/search')" :placeholder="$t(`game['输入游戏名称']`)" type="text" class="color_T2" />
 				</div>
 			</div>
 			<div>
@@ -15,13 +15,13 @@
 				<div class="Game_Content">
 					<!-- <Tabs class="plr" v-model="tabsActiveKey" :list="tabList" /> -->
 					<!-- 热门游戏 -->
-					<h3 class="title">
+					<h3 class="title" v-if="gameList?.[0].length">
 						<!-- <SvgIcon iconName="home/fire" alt="" /> -->
 						<!-- :placeholder="$t(`game['输入游戏名称']`)" -->
 						{{ $t('game["热门游戏"]') }}
 						<span class="color_T1 fs_28 fw_400" @click="showMoreList($t(`game['热门游戏']`), 1)">{{ $t(`home["更多"]`) }}</span>
 					</h3>
-					<HotGame class="m24" :gameList="gameList?.[0]" />
+					<HotGame class="m24" :gameList="gameList?.[0]" v-if="gameList?.[0].length" />
 					<!-- 新游戏 -->
 					<h3 class="title" v-show="gameList?.[1]?.length">
 						<!-- <SvgIcon iconName="home/event_game" alt="" /> -->

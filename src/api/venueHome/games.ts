@@ -8,7 +8,9 @@ export default class GameApi {
 		return useAxiosApi(`/app/third/api/loginGame`, {
 			method: "POST",
 			data,
-			headers,
+			headers: {
+				showLoading: true,
+			},
 		});
 	};
 	// 获取游戏大厅热门游戏
@@ -40,7 +42,9 @@ export default class GameApi {
 		return useAxiosApi(`/app/game/api/collection`, {
 			method: "POST",
 			data,
-			headers,
+			headers: {
+				showLoading: true,
+			},
 		});
 	};
 	// /app/game_lobby/api/queryGameInfoByOneClassId
@@ -56,7 +60,9 @@ export default class GameApi {
 		return useAxiosApi(`/app/game_lobby/api/queryGameInfoByName`, {
 			method: "POST",
 			data,
-			// headers,
+			headers: {
+				showLoading: true,
+			},
 		});
 	};
 }

@@ -71,8 +71,8 @@ const sportTabPushActions = {
 			webToPushApi: WebToPushApi.todayContest,
 			params: {
 				query: `$filter=sportType in (${SportsCommonFn.getRequestSportsType()})`,
-				from: dayjs.utc().subtract(5, "hour").startOf("day").add(5, "hour").format("YYYY-MM-DDTHH:mm:ss"),
-				until: dayjs.utc().subtract(5, "hour").endOf("day").add(5, "hour").format("YYYY-MM-DDTHH:mm:ss"),
+				from: dayjs().startOf("day").toISOString(),
+				until: dayjs().endOf("day").toISOString(),
 			},
 		},
 
@@ -84,8 +84,8 @@ const sportTabPushActions = {
 			webToPushApi: WebToPushApi.eventsTodayContest,
 			params: {
 				query: `$filter=sportType in (${SportsCommonFn.getRequestSportsType()})&$orderby=globalShowTime asc `,
-				from: dayjs.utc().subtract(5, "hour").startOf("day").add(5, "hour").format("YYYY-MM-DDTHH:mm:ss"),
-				until: dayjs.utc().subtract(5, "hour").endOf("day").add(5, "hour").format("YYYY-MM-DDTHH:mm:ss"),
+				from: dayjs().startOf("day").toISOString(),
+				until: dayjs().endOf("day").toISOString(),
 			},
 			isMultiple: true,
 		},
@@ -104,8 +104,8 @@ const sportTabPushActions = {
 			webToPushApi: WebToPushApi.morningTrading,
 			params: {
 				query: `$filter=sportType in (${SportsCommonFn.getRequestSportsType()})`,
-				from: dayjs.utc().subtract(5, "hour").endOf("day").add(5, "hour").add(1, "second").format("YYYY-MM-DDTHH:mm:ss"),
-				until: dayjs.utc().add(15, "day").subtract(5, "hour").endOf("day").add(5, "hour").format("YYYY-MM-DDTHH:mm:ss"),
+				from: dayjs().add(1, "day").startOf("day").toISOString(),
+				until: dayjs().add(15, "day").endOf("day").toISOString(),
 			},
 		},
 
@@ -117,7 +117,7 @@ const sportTabPushActions = {
 			webToPushApi: WebToPushApi.eventsMorningTrading,
 			params: {
 				query: `$filter=sportType in (${SportsCommonFn.getRequestSportsType()})&$orderby=globalShowTime asc `,
-				from: dayjs.utc().subtract(5, "hour").endOf("day").add(5, "hour").format("YYYY-MM-DDTHH:mm:ss"),
+				from: dayjs().add(1, "day").startOf("day").toISOString(),
 			},
 			isMultiple: true,
 		},

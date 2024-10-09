@@ -1,38 +1,42 @@
 <template>
 	<!-- 活动 -->
-	<VantNavBar title="优惠活动" :leftArrow="false" />
-	<div v-loading="state.pageLoading" class="discount_container">
-		<!-- <Banner class="home_banner mb_35" /> -->
-
-		<NavBar class="mt_32 mb_24 discount_navbar" v-model:active="active" :tab-list="state.tabList" @on-change-nav-bar="onChangeNavBar" />
-
-		<div class="activityList_item bg_Tag1" @click="onToDeatils(item)" v-for="(item, index) in state.activityList" :key="index">
-			<div class="img_container">
-				<div class="activityGraph">
-					<VantLazyImg class="discount_img" :src="discount1" />
-				</div>
-				<div class="text_container">
-					<div class="date">
-						<div class="deadline">截止时间：{{ item.activityEndTime }}</div>
-						<div class="activity_name">{{ item.activityNameI18nCode }}</div>
+	<div>
+		<VantNavBar title="优惠活动" :leftArrow="false" />
+		<div class="discount_container">
+			<!-- <Banner class="home_banner mb_35" /> -->
+			<NavBar class="mt_32 mb_24 discount_navbar" v-model:active="active" :tab-list="state.tabList" @on-change-nav-bar="onChangeNavBar" />
+			<div class="activityList_item bg_Tag1 fade-in" @click="onToDeatils(item)" v-for="(item, index) in state.activityList" :key="index">
+				<div class="img_container">
+					<div class="activityGraph">
+						<VantLazyImg class="discount_img" :src="item.entrancePictureI18nCode" />
 					</div>
-					<Button class="mt_40"> {{ $t('discount["进行中"]') }}</Button>
+					<div class="text_container">
+						<div class="date">
+							<div class="deadline">截止时间：{{ Common.getInstance().dayFormat2(item.activityEndTime) }}</div>
+							<div class="activity_name">{{ item.activityNameI18nCode }}</div>
+						</div>
+						<Button class="mt_40"> {{ $t('discount["进行中"]') }}</Button>
+					</div>
 				</div>
+			</div>
+			<div v-if="state.activityList.length < 1" class="nodata">
+				<Nodata></Nodata>
 			</div>
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
-import discount1 from "./image/discount1.png";
 import { reactive } from "vue";
-import { onBeforeMount } from "vue";
-import Banner from "./Banner/banner.vue";
 import NavBar from "./components/Navbar.vue";
 import { useRouter } from "vue-router";
 import { i18n } from "/@/i18n/index";
 import { activityApi } from "/@/api/activity";
 import Common from "/@/utils/common";
+import { showToast } from "vant";
+defineOptions({
+	name: "discount",
+});
 const $: any = i18n.global;
 const router = useRouter();
 const state: any = reactive({
@@ -42,14 +46,19 @@ const state: any = reactive({
 });
 // const store = useUserStore();
 const active = ref<string | number>("");
-onBeforeMount(async () => {
+onMounted(async () => {
 	await getActivityTab();
 	await activityPageList();
 	// await getActivity();
 });
+
+onMounted(() => {
+	console.log(123123, "组件挂载了");
+});
+
 const params = reactive({
 	pageNumber: 1,
-	pageSize: 10,
+	pageSize: 1000,
 	labelId: "",
 });
 // 查活动页签
@@ -92,29 +101,24 @@ const activityPageList = async () => {
 };
 //跳转活动详情
 const onToDeatils = (item) => {
-	console.log(item);
-	router.push({
-		path: `/activity/${item.activityTemplate}`,
-		query: { data: encodeURIComponent(JSON.stringify(item)) },
-	});
-
-	// if (item.entrancePictureGrey) {
-	// 	Toast("活动已过期");
-	// 	return;
-	// }
-	// console.log(item);
-	// if (item.activityTemplate == 5 || item.activityTemplate == 6) {
-	// 	if (item.activityTemplate == 5) {
-	// 		router.push({ path: "/discountGift", query: { id: item.id } });
-	// 	} else {
-	// 		router.push({ path: "/inviteFriendsTripleGift", query: { id: item.id } });
-	// 	}
-	// } else {
-	// 	router.push({
-	// 		path: "/discountDetails",
-	// 		query: { data: encodeURIComponent(JSON.stringify(item)) },
-	// 	});
-	// }
+	// 长期活动
+	if (item.activityDeadline) {
+		router.push({
+			path: `/activity/${item.activityTemplate}`,
+			query: { data: encodeURIComponent(JSON.stringify(item)) },
+		});
+	} else if (item.entrancePictureGrey) {
+		showToast("活动已过期");
+		return;
+	} else if (!item.enable) {
+		showToast("活动未开启");
+		return;
+	} else {
+		router.push({
+			path: `/activity/${item.activityTemplate}`,
+			query: { data: encodeURIComponent(JSON.stringify(item)) },
+		});
+	}
 };
 
 // 根据活动页id查对应活动
@@ -135,7 +139,6 @@ const getActivity = async (): Promise<void> => {
 
 <style lang="scss" scoped>
 .discount_container {
-	padding-bottom: 160px;
 	.discount_navbar {
 		padding: 0 24px;
 	}
