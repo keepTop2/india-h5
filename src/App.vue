@@ -41,7 +41,6 @@ const autoLogin = async () => {
 	const params = {
 		userAccount: loginInfo.value?.userAccount,
 		password: loginInfo.value?.password,
-		deviceNo: common.getInstance().getDevice(), // 设备
 	};
 	// const res = await loginApi.submitUserLogin(params).catch((err) => err);
 	// if (res.code == common.getInstance().ResCode.SUCCESS) {

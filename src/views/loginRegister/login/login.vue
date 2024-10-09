@@ -74,7 +74,6 @@ const captchaBtn = ref(null);
 let state = reactive({
 	userAccount: "", // 邮箱或者手机号
 	password: "", // 密码
-	deviceNo: common.getInstance().getDevice(), // 设备
 });
 
 // 账号正则

@@ -134,7 +134,6 @@ let state = reactive({
 	confirmPassword: "", // 密码
 	mainCurrency: "", // 货币
 	inviteCode: "", // 推荐码
-	deviceNo: common.getInstance().getDevice(), // 设备
 });
 
 // 账号正则
