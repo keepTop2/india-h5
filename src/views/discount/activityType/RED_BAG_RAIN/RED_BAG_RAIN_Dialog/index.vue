@@ -3,9 +3,11 @@
 		<div class="dialog fade-in">
 			<div class="dialog-header">
 				<img src="./image/redbag.png" alt="" />
-				<div class="Text3 fs_34">{{ title }}</div>
 			</div>
-			<div class="dialog-content"><slot></slot></div>
+			<div class="dialog-content">
+				<div class="color_T4 fs_34">{{ title }}</div>
+				<slot></slot>
+			</div>
 			<div class="dialog-footer">
 				<button class="common_btn" @click="close">确认</button>
 			</div>
@@ -62,6 +64,7 @@ const close = () => {
 		margin: 0 auto;
 		width: 594px;
 		padding: 40px;
+
 		.dialog-header {
 			text-align: center;
 			background: url("./image/image.png") no-repeat;
@@ -74,16 +77,19 @@ const close = () => {
 				display: inline-block;
 			}
 		}
+
 		.dialog-content {
 			padding: 20px;
-			background: white;
+			background: #ffff;
+			margin-top: -2px;
 			text-align: center;
 			@include themeify {
 				color: themed("T2");
 			}
 		}
 		.dialog-footer {
-			background: white;
+			background: #ffff;
+			margin-top: -2px;
 			border-bottom-left-radius: 24px;
 			border-bottom-right-radius: 24px;
 

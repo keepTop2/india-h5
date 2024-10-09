@@ -12,7 +12,9 @@ const props = defineProps({
 		type: Function,
 		default: () => {},
 	},
+	modelValue: Boolean,
 });
+const emit = defineEmits(["update:modelValue"]);
 const captcha = ref(null);
 const isScriptLoaded = ref(false);
 const loadScript = () => {
@@ -20,27 +22,26 @@ const loadScript = () => {
 	script.src = "https://o.alicdn.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js"; // 替换为你需要的 CDN URL
 	script.onload = () => {
 		isScriptLoaded.value = true;
+		emit("update:modelValue", true);
 	};
 	document.head.appendChild(script);
 };
 loadScript();
 onMounted(async () => {
 	if (isScriptLoaded.value) {
-		AliyunCaptcha();
+		initAliyunCaptcha();
 	}
 });
 watch(
 	() => isScriptLoaded.value,
 	() => {
 		if (isScriptLoaded.value) {
-			AliyunCaptcha();
+			initAliyunCaptcha();
 		}
 	},
 	{ once: true }
 );
-const AliyunCaptcha = () => {
-	initAliyunCaptcha();
-};
+
 const initAliyunCaptcha = () => {
 	(window as any).initAliyunCaptcha({
 		SceneId: "qxye14r6d",

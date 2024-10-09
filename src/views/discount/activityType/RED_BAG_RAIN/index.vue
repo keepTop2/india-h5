@@ -31,16 +31,18 @@
 						</div>
 					</div>
 					<div class="detail-content">
-						<div class="sessions">
-							<div v-for="(item, index) in redBagInfo.sessionInfoList" class="session" :key="index">
-								<div class="color_T1">{{ Common.dayFormatHMS(item.startTime) }}</div>
-								<div class="sideBox">
-									<img src="./image/sessionCricle.svg" alt="" v-if="item.status == 0" />
-									<img src="./image/sessionCricle1.svg" alt="" v-if="item.status == 1" />
-									<img src="./image/sessionCricle2.svg" alt="" v-if="item.status == 2" />
+						<div class="sessionsBox">
+							<div class="sessions">
+								<div v-for="(item, index) in redBagInfo.sessionInfoList" class="session" :key="index">
+									<div class="color_T1">{{ Common.dayFormatHMS(item.startTime) }}</div>
+									<div class="sideBox">
+										<img src="./image/sessionCricle.svg" alt="" v-if="item.status == 0" />
+										<img src="./image/sessionCricle1.svg" alt="" v-if="item.status == 1" />
+										<img src="./image/sessionCricle2.svg" alt="" v-if="item.status == 2" />
+									</div>
+									<div :class="'status' + item.status">{{ item.status == 0 ? "未开始" : item.status == 1 ? "进行中" : "已结束" }}</div>
+									<span class="side" :class="'type' + item.status"></span>
 								</div>
-								<div :class="'status' + item.status">{{ item.status == 0 ? "未开始" : item.status == 1 ? "进行中" : "已结束" }}</div>
-								<span class="side" :class="'type' + item.status"></span>
 							</div>
 						</div>
 					</div>
@@ -90,6 +92,14 @@
 				</div>
 			</div>
 		</div>
+		<RED_BAG_RAIN_Dialog v-model="shwoDialog" title="温馨提示" :confirm="confirmDialog" class="redBagRainResult">
+			<div class="mt_20 mb_20">
+				{{ dialogInfo.message }}
+			</div>
+
+			<!-- <div class="Text3">您领取的红包太多啦，请下一场次再参与</div>
+			<img src="./image/pityIcon.png" alt="" /> -->
+		</RED_BAG_RAIN_Dialog>
 	</div>
 </template>
 
@@ -100,10 +110,14 @@ import { useRouter } from "vue-router";
 import { useActivityStore } from "/@/store/modules/activity";
 import Common from "/@/utils/common";
 import { useCountdown } from "/@/hooks/countdown";
+import RED_BAG_RAIN_Dialog from "./RED_BAG_RAIN_Dialog/index.vue";
 const { countdown, startCountdown, stopCountdown } = useCountdown();
 const activityStore = useActivityStore();
 const router = useRouter();
 const redBagInfo: any = ref({});
+const shwoDialog = ref(false);
+const dialogInfo: any = ref({});
+
 onMounted(() => {
 	getRedBagInfo();
 });
@@ -116,13 +130,14 @@ watch(
 		}
 	}
 );
-const getRedBagInfo = () => {
-	activityApi.getRedBagInfo().then((res: any) => {
+const getRedBagInfo = async () => {
+	stopCountdown();
+	await activityApi.getRedBagInfo().then((res: any) => {
 		if (res.code === 10000) {
 			redBagInfo.value = res.data;
 			activityStore.setActivityData(res.data);
 			// 判断活动在进行中
-			if (redBagInfo.value.clientStatus !== 2) {
+			if (redBagInfo.value.clientStatus === 1) {
 				// 进行中倒计时
 				startCountdown(redBagInfo.value.advanceTime);
 				// 判断活动已活动已全部结束
@@ -130,23 +145,41 @@ const getRedBagInfo = () => {
 				//  获取明天第一场的时间
 				const time = res.data.sessionInfoList[0].startTime + 1000 * 60 * 60 * 24 - new Date().getTime();
 				startCountdown(Math.floor(time / 1000));
+			} else if (redBagInfo.value.clientStatus === 0) {
+				//  获取下一场比赛的时间
+				const time = res.data.sessionInfoList.find((item) => item.redbagSessionId == res.data.redbagSessionId).startTime - new Date().getTime();
+				startCountdown(Math.floor(time / 1000));
 			}
+		} else {
+			router.back();
 		}
 	});
 };
 const getActivityReward = async () => {
-	// 活动不在进行中
-	if (redBagInfo.value.clientStatus !== 1) return;
-	// 校验参与资格
-	await activityApi.redBagParticipate({ redbagSessionId: redBagInfo.value.redbagSessionId }).then((res) => {
-		console.log(res);
-	});
-	// 保存活动信息
-	activityStore.setIsShowRedBagRain(true);
-	router.push("/");
+	if (redBagInfo.value.clientStatus == 1) {
+		await activityApi.redBagParticipate({ redbagSessionId: redBagInfo.value.redbagSessionId }).then((res: any) => {
+			if (res.code.status === 10000) {
+				activityStore.setIsShowRedBagRain(true);
+				router.push("/");
+			} else {
+				dialogInfo.value = res.data;
+				shwoDialog.value = true;
+			}
+		});
+	} else {
+		// 活动不在进行中
+		await getRedBagInfo();
+		if (redBagInfo.value.clientStatus == 1) {
+			getActivityReward();
+		}
+		// 校验参与资格
+	}
 };
 const onClickLeft = () => {
 	router.back();
+};
+const confirmDialog = () => {
+	shwoDialog.value = false;
 };
 </script>
 <style scoped lang="scss">
@@ -261,6 +294,7 @@ const onClickLeft = () => {
 	}
 	.apply-button.active {
 		background: url("./image/btn_active.png") no-repeat;
+		background-size: 100% 100%;
 	}
 }
 .main-image {
@@ -358,51 +392,56 @@ const onClickLeft = () => {
 				background: linear-gradient(180deg, rgba(255, 40, 75, 0.7) 0%, rgba(255, 40, 75, 0.4) 100%);
 			}
 		}
-		.sessions {
-			display: flex;
-			justify-content: center;
-			.session {
-				min-width: 115px;
-				text-align: center;
-				position: relative;
-				.sideBox {
-					margin: 20px 0;
+		.sessionsBox {
+			overflow-y: auto;
+			padding-left: 100px;
+			padding-bottom: 10px;
+			.sessions {
+				display: flex;
+				justify-content: center;
+				.session {
+					min-width: 115px;
+					text-align: center;
 					position: relative;
-					display: flex;
-					justify-content: center;
-				}
-				.side {
-					display: inline-block;
-					width: 68px;
-					height: 6px;
-					@include themeify {
-						background-color: themed("T1");
+					.sideBox {
+						margin: 20px 0;
+						position: relative;
+						display: flex;
+						justify-content: center;
 					}
-					position: absolute;
-					left: calc(50% + 22px);
-					top: 50%;
-					transform: translateY(-50%);
-				}
+					.side {
+						display: inline-block;
+						width: 68px;
+						height: 6px;
+						@include themeify {
+							background-color: themed("T1");
+						}
+						position: absolute;
+						left: calc(50% + 22px);
+						top: 50%;
+						transform: translateY(-50%);
+					}
 
-				.type2 {
-					@include themeify {
-						background-color: themed("Theme");
+					.type2 {
+						@include themeify {
+							background-color: themed("Theme");
+						}
+					}
+					.status2 {
+						@include themeify {
+							color: themed("Theme");
+						}
+					}
+					.status1 {
+						@include themeify {
+							color: themed("Hint");
+						}
 					}
 				}
-				.status2 {
-					@include themeify {
-						color: themed("Theme");
+				.session:last-child {
+					.side {
+						display: none;
 					}
-				}
-				.status1 {
-					@include themeify {
-						color: themed("Hint");
-					}
-				}
-			}
-			.session:last-child {
-				.side {
-					display: none;
 				}
 			}
 		}

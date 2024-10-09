@@ -30,12 +30,16 @@
 		</div>
 		<!-- 结算弹窗 -->
 		<RED_BAG_RAIN_Dialog v-model="showRedBagRainResult" :title="dialogTitle" :confirm="confirmDialog" class="redBagRainResult">
-			<div>
-				<div class="Text2">本轮共抢到5个红包</div>
-				<div class="result mt_20">共计 5.23BCD</div>
+			<div v-if="settlement.redbagCount > 0">
+				<div class="Text2">本轮共抢到{{ settlement.redbagCount }}个红包</div>
+				<div class="result mt_20">共计 {{ settlement.amount }}</div>
 			</div>
-			<div class="Text3">您领取的红包太多啦，请下一场次再参与</div>
-			<img src="./image/pityIcon.png" alt="" />
+			<div v-if="settlement.redbagCount < 1">
+				<div class="mt_20 mb_20">没有戳中有奖红包</div>
+				<div class="flex-center">
+					<img src="./image/pityIcon.png" alt="" />
+				</div>
+			</div>
 		</RED_BAG_RAIN_Dialog>
 	</div>
 </template>
@@ -66,6 +70,7 @@ const setp: any = ref(null);
 const showRedBagRainResult = ref(false);
 const getReadyCountdown = ref(3);
 const dialogTitle = ref("温馨提示");
+const settlement: any = ref({});
 let ctx: CanvasRenderingContext2D | null = null;
 let redBagInterval: ReturnType<typeof setInterval> | null = null;
 // 创建红包图片对象
@@ -151,7 +156,7 @@ const redBags: RedBag[] = [];
 watch(
 	() => countdown.value,
 	() => {
-		if (countdown.value === 3) {
+		if (countdown.value === 2) {
 			if (redBagInterval) {
 				clearInterval(redBagInterval);
 			}
@@ -277,7 +282,7 @@ const startRedbagRain = () => {
 				addNewRedBag();
 			}
 		}, 250);
-		startCountdown(100);
+		startCountdown(activityStore.getActivityData.dropTime);
 		clearTimeout(timer);
 	}, 3000);
 };
@@ -303,8 +308,6 @@ function exitGame() {
 				redbagSessionId: activityData.value.redbagSessionId,
 			});
 		activitySocket.send(parmas);
-		dialogTitle.value = "恭喜你";
-		showRedBagRainResult.value = true;
 	}
 }
 const confirmDialog = () => {
@@ -317,7 +320,16 @@ onMounted(async () => {
 	await redBagParticipate();
 	initReadyTime();
 	initRedbagRain();
-	emit("update:modelValue", true);
+	pubsub.subscribe("/activity/redBagRain/settlement", (data) => {
+		settlement.value = data.data;
+		if (data.data.redbagCount > 0) {
+			dialogTitle.value = "恭喜你";
+		} else {
+			dialogTitle.value = "很遗憾";
+		}
+
+		showRedBagRainResult.value = true;
+	});
 });
 
 const redBagParticipate = async () => {
@@ -451,8 +463,8 @@ onBeforeUnmount(() => {
 		border-radius: 5px;
 	}
 	img {
-		height: 108px;
-		width: 108px;
+		height: 160px;
+		width: 160px;
 	}
 }
 </style>

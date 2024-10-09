@@ -8,6 +8,8 @@ window.PLATFROM_CONFIG = {
 
 	// 本地开发地址(开发专用)
 	developmentBaseURL: "https://gw.playesoversea.store",
+	// 测试环境
+	// developmentBaseURL: "https://backend.bwsh.store",
 	// developmentBaseURL: "http://192.168.30.117:9999",
 
 	// developmentBaseURL: "http://192.168.30.117:9999", // 尔顿本地地址
