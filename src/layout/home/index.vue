@@ -19,18 +19,14 @@
 import NavBar from "/@/layout/home/components/navBar.vue";
 import TabBar from "/@/layout/home/components/tabBar.vue";
 import BackToTop from "/@/layout/home/components/BackToTop.vue";
-import { getIndexInfo } from "/@/views/venueHome/sports/utils/commonFn";
+
 import { useUserStore } from "/@/store/modules/user";
 const blacklist = ["/"];
 const route = useRoute();
 const isTabBar = computed(() => {
 	return !route.meta.hideTabBar;
 });
-onMounted(() => {
-	if (useUserStore().token) {
-		getIndexInfo();
-	}
-});
+
 // 监听路由变化
 </script>
 

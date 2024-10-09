@@ -16,7 +16,11 @@ export const getIndexInfo = async () => {
 	const res = await CommonApi.getIndexInfo().catch((err) => err);
 	if (res.code == Common.getInstance().ResCode.SUCCESS) {
 		sportsBetInfo.balance = res.data.totalBalance;
-		useUserStore().setInfo({ ...useUserStore().getUserInfo, ...res.data });
+		await useUserStore().setInfo({ ...useUserStore().getUserInfo, ...res.data });
+		const res2 = await CommonApi.getUserGlobalSetInfo().catch((err) => err);
+		if (res2.code == Common.getInstance().ResCode.SUCCESS) {
+			useUserStore().setInfo({ ...useUserStore().getUserInfo, ...res2.data });
+		}
 	}
 };
 

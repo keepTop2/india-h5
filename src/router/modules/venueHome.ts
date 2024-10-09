@@ -114,7 +114,6 @@ export const VenueHome = {
 			meta: {
 				title: "游戏列表",
 				hideTabBar: true,
-				KeepAlive: true,
 			},
 			component: () => import("/@/views/venueHome/GameArena/GameLists/GameLists.vue"),
 		},

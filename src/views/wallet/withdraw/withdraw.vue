@@ -128,9 +128,7 @@ const state = reactive({
 	amount: "",
 });
 const verification = ref(false);
-onActivated(() => {
-	console.log(123123, "recharge组件被激活了");
-});
+
 onMounted(() => {
 	// console.log(123123, "recharge组件挂载了");
 	walletApi.rechargeWayList().then((res) => {
