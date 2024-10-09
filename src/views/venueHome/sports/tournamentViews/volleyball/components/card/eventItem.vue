@@ -204,7 +204,9 @@ const filterMarkets = (markets: Market[], betTypes: number[]): Market[] => {
 
 // 跳转详情
 // 跳转详情
-const showDetail = (eventId, leagueId) => {};
+const showDetail = (eventId, leagueId) => {
+	router.push(`/venueHome/sports/event/detail/${eventId}/${leagueId}/${props.event.sportType}`);
+};
 </script>
 
 <style scoped lang="scss">

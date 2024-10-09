@@ -4,8 +4,8 @@
 			<swiper-slide v-for="(item, index) in gameList" :key="index">
 				<div @click="Common.goToGame(item)">
 					<div class="collect">
-						<VantLazyImg v-if="item.collect" :src="collectImg" @click="handleCollect(item, false)" alt="" width="100%" />
-						<VantLazyImg v-else :src="noCollectImg" alt="" @click="handleCollect(item, true)" width="100%" />
+						<VantLazyImg v-if="item.collect" :src="collectImg" @click.stop="handleCollect(item, false)" alt="" width="100%" />
+						<VantLazyImg v-else :src="noCollectImg" alt="" @click.stop="handleCollect(item, true)" width="100%" />
 					</div>
 					<VantLazyImg class="gameImg" :src="item.icon" :loadingSrc="loadingSrc" :errorSrc="loadingSrc" alt="" width="100%" />
 					<div class="gameInfo">
@@ -100,11 +100,12 @@ const getGameInfoDetail = () => {
  * @param {Boolean} collect - 收藏状态
  */
 const handleCollect = async (item, collect) => {
-	const res = await GameApi.gameCollection({
+	const res: any = await GameApi.gameCollection({
 		gameId: item.id,
 		type: collect,
 	});
 	if (res.ok) {
+		showToast(res.message);
 		item.collect = collect;
 		autoplay.value = {
 			delay: 2500,

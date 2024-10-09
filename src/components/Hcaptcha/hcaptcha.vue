@@ -14,7 +14,34 @@ const props = defineProps({
 	},
 });
 const captcha = ref(null);
-onMounted(() => {
+const isScriptLoaded = ref(false);
+const loadScript = () => {
+	const script = document.createElement("script");
+	script.src = "https://o.alicdn.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js"; // 替换为你需要的 CDN URL
+	script.onload = () => {
+		isScriptLoaded.value = true;
+	};
+	document.head.appendChild(script);
+};
+loadScript();
+onMounted(async () => {
+	if (isScriptLoaded.value) {
+		AliyunCaptcha();
+	}
+});
+watch(
+	() => isScriptLoaded.value,
+	() => {
+		if (isScriptLoaded.value) {
+			AliyunCaptcha();
+		}
+	},
+	{ once: true }
+);
+const AliyunCaptcha = () => {
+	initAliyunCaptcha();
+};
+const initAliyunCaptcha = () => {
 	(window as any).initAliyunCaptcha({
 		SceneId: "qxye14r6d",
 		prefix: "5zbecta",
@@ -31,8 +58,7 @@ onMounted(() => {
 		language: "cn",
 		region: "sgp",
 	});
-});
-
+};
 const getInstance = (instance: any) => {
 	captcha.value = instance;
 };

@@ -60,6 +60,7 @@ import NavBar from "/@/layout/loginRegister/components/navBar.vue";
 import { loginApi } from "/@/api/loginRegister";
 import common from "/@/utils/common";
 import HeaderBG from "/@/views/loginRegister/components/headerBG.vue";
+import { getIndexInfo } from "/@/views/venueHome/sports/utils/commonFn";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useUserStore } from "/@/store/modules/user";
@@ -114,7 +115,7 @@ const onSubmit = async () => {
 	const certifyId = refhcaptcha.value.certifyId;
 	const res = await loginApi.userLogin({ ...state, certifyId }).catch((err) => err);
 	if (res.code == common.getInstance().ResCode.SUCCESS) {
-		store.setInfo(res.data);
+		await store.setInfo(res.data);
 		if (userAgreement.value) {
 			// 记住密码
 			store.setLoginInfo({ userAccount: state.userAccount, password: state.password });
@@ -122,6 +123,8 @@ const onSubmit = async () => {
 		} else {
 			store.setLoginInfo();
 		}
+		await getIndexInfo();
+
 		router.replace({ path: "/" });
 	} else {
 		showToast(res.message);

@@ -7,7 +7,6 @@ let loadingCount = 0;
 
 export function useLoading() {
 	function startLoading() {
-		console.log("触发loadingCount", loadingCount);
 		if (loadingCount === 0) {
 			if (!loadingInstance) {
 				const app = createApp(Loading);
@@ -18,13 +17,11 @@ export function useLoading() {
 			}
 		}
 		loadingCount++;
-		console.log("loadingCount加1", loadingCount);
 	}
 
 	function stopLoading() {
 		loadingCount--;
 		loadingCount = Math.max(loadingCount, 0); //防止小于 0 的情况发生
-		console.log("关闭loadingCount1", loadingCount);
 		if (loadingCount === 0) {
 			// console.log("关闭事件判断");
 			// 关闭 loading
@@ -38,7 +35,6 @@ export function useLoading() {
 			}, 300);
 			debouncedStopLoading(); // 调用防抖函数
 		}
-		console.log("loadingCount减一", loadingCount);
 	}
 
 	function appendEl(parentEl: HTMLElement) {

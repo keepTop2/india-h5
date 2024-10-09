@@ -1,4 +1,9 @@
 export const activityRoutes = {
+	path: "/activity",
+	name: "activity",
+	meta: {
+		title: "activity",
+	},
 	children: [
 		{
 			path: "/activity/SECOND_DEPOSIT",
@@ -6,6 +11,22 @@ export const activityRoutes = {
 			component: () => import("/@/views/discount/activityType/SECOND_DEPOSIT.vue"),
 			meta: {
 				title: "SECOND_DEPOSIT",
+			},
+		},
+		{
+			path: "/activity/LOSS_IN_SPORTS",
+			name: "LOSS_IN_SPORTS",
+			component: () => import("/@/views/discount/activityType/LOSS_IN_SPORTS.vue"),
+			meta: {
+				title: "LOSS_IN_SPORTS",
+			},
+		},
+		{
+			path: "/activity/FIRST_DEPOSIT",
+			name: "FIRST_DEPOSIT",
+			component: () => import("/@/views/discount/activityType/FIRST_DEPOSIT.vue"),
+			meta: {
+				title: "FIRST_DEPOSIT",
 			},
 		},
 		{
@@ -19,7 +40,7 @@ export const activityRoutes = {
 		{
 			path: "/activity/DAILY_COMPETITION",
 			name: "DAILY_COMPETITION",
-			component: () => import("/@/views/discount/activityType/DAILY_COMPETITION.vue"),
+			component: () => import("/@/views/discount/activityType/DAILY_COMPETITION/index.vue"),
 			meta: {
 				title: "DAILY_COMPETITION",
 			},

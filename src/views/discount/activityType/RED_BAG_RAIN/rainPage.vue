@@ -1,9 +1,19 @@
 <template>
-	<div class="canvas-container" v-if="isVisible">
+	<div class="canvas-container" v-if="modelValue">
 		<div class="getReadyCountdown fade-in" v-if="setp == 0">
-			<img src="./image/getReadyCountdown3.png" alt="" v-if="getReadyCountdown == 3" />
-			<img src="./image/getReadyCountdown2.png" alt="" v-if="getReadyCountdown == 2" />
-			<img src="./image/getReadyCountdown1.png" alt="" v-if="getReadyCountdown == 1" @click="startRedbagRain" class="animate" />
+			<div><img src="./image/getReadyCountdownText.png" alt="" /></div>
+			<div class="getReadyCountdownNumber" :class="getReadyCountdown == 0 ? 'animate' : ''">
+				<img src="./image/getReadyCountdownBg.png" alt="" />
+				<div class="getReadyCountdownNumber">
+					<img src="./image/getReadyCountdown3.png" alt="" v-if="getReadyCountdown == 3" />
+					<img src="./image/getReadyCountdown2.png" alt="" v-if="getReadyCountdown == 2" />
+					<img src="./image/getReadyCountdown1.png" alt="" v-if="getReadyCountdown == 1" />
+					<img src="./image/getReadyCountdown0.png" alt="" v-if="getReadyCountdown == 0" @click="startRedbagRain" />
+				</div>
+			</div>
+			<div>
+				<img src="./image/close2.png" alt="" class="close2" @click="confirmDialog" />
+			</div>
 		</div>
 		<div class="redbag-rain-wrapper" v-show="setp == 1 || setp == 2">
 			<div class="redbag-rain-canvas">
@@ -36,32 +46,35 @@ import redBagImg from "./image/redbag.png";
 import openRedBagImg from "./image/opened_redbag.png";
 import { useCountdown } from "/@/hooks/countdown";
 import activitySocketService from "/@/utils/activitySocketService";
-import { computed } from "vue";
 import pubsub from "/@/pubSub/pubSub";
 import { activityApi } from "/@/api/activity";
 import readyGo from "./image/readyGo.png";
 import RED_BAG_RAIN_Dialog from "./RED_BAG_RAIN_Dialog/index.vue";
-import router from "/@/router";
 import { useActivityStore } from "/@/store/modules/activity";
+
+defineProps({
+	modelValue: Boolean,
+});
+
 const activityStore = useActivityStore();
 const activitySocket = activitySocketService.getInstance();
 const { countdown, startCountdown } = useCountdown();
 const canvas = ref<HTMLCanvasElement | null>(null);
-const isVisible = ref(true);
+const emit = defineEmits(["update:modelValue"]);
 const isPaused = ref(false);
 const setp: any = ref(null);
 const showRedBagRainResult = ref(false);
 const getReadyCountdown = ref(3);
 const dialogTitle = ref("温馨提示");
 let ctx: CanvasRenderingContext2D | null = null;
+let redBagInterval: ReturnType<typeof setInterval> | null = null;
 // 创建红包图片对象
-const activityData = ref({});
+const activityData: any = ref({});
 const img = new Image();
 img.src = redBagImg;
 const openedImg = new Image();
 openedImg.src = openRedBagImg;
 
-let redBagInterval: ReturnType<typeof setInterval> | null = null; // Declare interval variable
 // 红包对象接口
 interface RedBag {
 	x: number;
@@ -200,49 +213,15 @@ function drawCountdown() {
 		ctx.fillText(countdownValue, centerX + textWidth1, centerY);
 	}
 }
-// 鼠标移动监听器
-// function handleMouseMove(event: MouseEvent) {
-// 	if (isPaused.value)
-// 		return redBags.forEach((redBag) => {
-// 			redBag.isHovered = false; // 重置所有红包的悬停状态
-// 		});
-// 	const rect = canvas.value!.getBoundingClientRect();
-// 	const mouseX = event.clientX - rect.left;
-// 	const mouseY = event.clientY - rect.top;
-
-// 	let hoveredRedBag: RedBag | null = null;
-
-// 	// 倒序遍历，查找最上面的红包
-// 	for (let i = redBags.length - 1; i >= 0; i--) {
-// 		const redBag = redBags[i];
-// 		if (redBag.checkHover(mouseX, mouseY)) {
-// 			hoveredRedBag = redBag; // 记录最上面的红包
-// 			break; // 找到后停止遍历
-// 		}
-// 	}
-
-// 	// 更新红包状态
-// 	redBags.forEach((redBag) => {
-// 		redBag.isHovered = false; // 重置所有红包的悬停状态
-// 	});
-
-// 	// 仅更新最上面的红包
-// 	if (hoveredRedBag) {
-// 		hoveredRedBag.isHovered = true; // 设置为悬停
-// 	}
-// }
 
 // 鼠标点击监听
 function handleClick(event: MouseEvent) {
 	if (isPaused.value) return;
-
 	// 获取鼠标相对画布的位置
 	const rect = canvas.value!.getBoundingClientRect();
 	const mouseX = event.clientX - rect.left;
 	const mouseY = event.clientY - rect.top;
-
 	let clickedRedBag: RedBag | null = null;
-
 	// 倒序遍历，查找最上面的红包
 	for (let i = redBags.length - 1; i >= 0; i--) {
 		const redBag = redBags[i];
@@ -254,7 +233,7 @@ function handleClick(event: MouseEvent) {
 	// 如果找到被点击的红包，发送请求并标记为已点击
 	if (clickedRedBag) {
 		activitySocket.send(JSON.stringify({ redbagSessionId: activityData.value.redbagSessionId }));
-		clickedRedBag.isClicked = true; // 标记红包为已点击
+		clickedRedBag.isClicked = true;
 	}
 }
 
@@ -280,7 +259,7 @@ function addNewRedBag() {
 const initReadyTime = () => {
 	setp.value = 0;
 	const timer = setInterval(() => {
-		if (getReadyCountdown.value == 1) {
+		if (getReadyCountdown.value == 0) {
 			clearInterval(timer);
 		} else {
 			getReadyCountdown.value = getReadyCountdown.value - 1;
@@ -316,7 +295,7 @@ function exitGame() {
 	if (canvas.value) {
 		ctx!.clearRect(0, 0, canvas.value.width, canvas.value!.height); // 清空画布
 		redBags.length = 0; // 清空红包数组
-		pubsub.subscribe("/activity/redBagRain/settlement", (data) => {});
+		// pubsub.subscribe("/activity/redBagRain/settlement", (data) => {});
 		const parmas =
 			"/activity/redBagRain/settlement" +
 			":" +
@@ -329,22 +308,24 @@ function exitGame() {
 	}
 }
 const confirmDialog = () => {
-	isVisible.value = false;
+	emit("update:modelValue", false);
 	activityStore.setIsShowRedBagRain(false);
 };
 // 生命周期管理
 onMounted(async () => {
+	activityData.value = activityStore.getActivityData;
 	await redBagParticipate();
 	initReadyTime();
 	initRedbagRain();
+	emit("update:modelValue", true);
 });
+
 const redBagParticipate = async () => {
 	await activityApi.redBagParticipate({ redbagSessionId: activityData.value.redbagSessionId }).then((res) => {
 		console.log(res);
 	});
 };
 onBeforeUnmount(() => {
-	isVisible.value = false;
 	if (redBagInterval) {
 		clearInterval(redBagInterval);
 	}
@@ -365,14 +346,35 @@ onBeforeUnmount(() => {
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		flex-direction: column;
 		height: 100%;
-
 		img {
 			width: 500px;
 			cursor: pointer;
 		}
-		img.animate {
+
+		.getReadyCountdownNumber {
+			position: relative;
+			img {
+				width: 324px;
+			}
+			> div {
+				position: absolute;
+				left: 168px;
+				top: 160px;
+				transform: translate(-50%, -50%);
+				img {
+					width: auto;
+					height: 120px;
+				}
+			}
+		}
+		.animate {
 			animation: shake 1s ease infinite;
+		}
+		.close2 {
+			width: 72px;
+			margin-top: 40px;
 		}
 	}
 	.redbag-rain-wrapper {

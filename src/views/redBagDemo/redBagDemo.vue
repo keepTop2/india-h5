@@ -210,7 +210,6 @@ function handleClick(touchevent: TouchEvent) {
 function resizeCanvas() {
 	const canvasEl = canvas.value; // 获取 canvas 元素
 	if (!canvasEl) return;
-
 	canvasEl.width = window.innerWidth; // 将 canvas 宽度设置为窗口宽度
 	canvasEl.height = window.innerHeight; // 将 canvas 高度设置为窗口高度
 }

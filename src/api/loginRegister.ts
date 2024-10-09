@@ -7,7 +7,9 @@ export class loginApi {
 		return useAxiosApi(`/app/login/api/userLogin`, {
 			method: "POST",
 			data,
-			headers,
+			headers: {
+				showLoading: true,
+			},
 		});
 	};
 	// 登录检验
@@ -54,7 +56,9 @@ export class verifyCodeApi {
 		return useAxiosApi(`/app/login/api/verifyCode`, {
 			method: "POST",
 			data,
-			headers,
+			headers: {
+				showLoading: true,
+			},
 		});
 	};
 }

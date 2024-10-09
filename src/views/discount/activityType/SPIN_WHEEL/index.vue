@@ -10,16 +10,23 @@
 			</ul>
 		</div>
 		<div class="lottery">
-			<Spin @start-spinning-callback="spinStart" @end-spinning-callback="spinEnd" :reward="reward" :spinList="spinList" />
+			<Spin
+				@start-spinning-callback="spinStart"
+				@end-spinning-callback="spinEnd"
+				:reward="reward"
+				:spinList="currentTab == '1' ? activityData?.bronze : currentTab == '2' ? activityData?.silver : activityData?.gold"
+				:balanceCount="activityData?.balanceCount"
+			/>
+			<div class="vipLevel color_TB fw_600" :class="'vip' + currentTab">{{ activityData?.vipRankConfig?.[currentTab - 1]?.maxVipGradeName }}级或以上</div>
 		</div>
-		<div class="remaining_times_bg">{{ $t('home["剩余抽奖次数"]') }}：1</div>
+		<div class="remaining_times_bg">{{ $t('home["剩余抽奖次数"]') }}：{{ activityData?.balanceCount }}</div>
 		<div class="container">
 			<div class="box bonus_bg">
 				<div class="title fs_30 color_TB">转盘奖金总计</div>
-				<div class="amount fs_32 color_Theme">987,654,321.00</div>
+				<div class="amount fs_32 color_Theme">{{ activityData?.totalAmount || 0 }}</div>
 			</div>
 			<div class="box record_bg">
-				<div class="reward color_TB fs_30" @click="showRecord = true">我的抽奖记录<SvgIcon iconName="common/arrow" /></div>
+				<div class="reward color_TB fs_30" @click="handleShowRecord">我的抽奖记录<SvgIcon iconName="common/arrow" /></div>
 			</div>
 		</div>
 
@@ -28,25 +35,20 @@
 				<div class="details-header-title-left">
 					<img src="../../image/details-header-title-left.png" alt="" />
 				</div>
-				活动规则
+				<span class="color_TB">活动规则</span>
 				<div class="details-header-title-right">
 					<img src="../../image/details-header-title-right.png" alt="" />
 				</div>
 			</div>
 			<div class="detail-content">
-				<div>123</div>
-				<div>123</div>
-				<div>123</div>
-				<div>123</div>
-				<div>123</div>
-				<div>123</div>
+				<div v-html="activityData?.activityRuleI18nCode" class="color_TB"></div>
 			</div>
 			<div class="detail-footer"></div>
 		</div>
 	</div>
-
+	<!-- 弹窗1 -->
 	<div class="dialog" v-if="showResult">
-		<div class="dialog-content">
+		<div class="dialog-content2">
 			<div class="dialog-title color_Hint">恭喜</div>
 			<div class="dialog-title color_Hint mb_21">获得幸运大奖</div>
 			<div class="dialog-desc color_Theme mb_18">$ +0.01000 USD</div>
@@ -57,6 +59,30 @@
 		</div>
 	</div>
 
+	<!-- 弹窗2 -->
+	<div class="dialog" v-if="showResult2">
+		<div class="dialog-content2">
+			<div class="dialog-title color_TB fs_32">温馨提示</div>
+			<div class="dialog-text color_T1 mb_21">您的抽奖次数不足</div>
+			<Button @click="goToRecharge">去领取</Button>
+		</div>
+		<div class="close" @click="showResult2 = false">
+			<img src="./images/close.png" alt="" />
+		</div>
+	</div>
+	<!-- 弹窗3 -->
+	<div class="dialog" v-if="showResult3">
+		<div class="dialog-content2">
+			<div class="dialog-title color_TB fs_32">温馨提示</div>
+			<div class="dialog-text color_T1 mb_21">您的抽奖次数不足</div>
+			<Button @click="goToRecharge">去领取</Button>
+		</div>
+		<div class="close" @click="showResult3 = false">
+			<img src="./images/close.png" alt="" />
+		</div>
+	</div>
+
+	<!-- 抽奖记录 -->
 	<div class="dialog" v-if="showRecord">
 		<div class="dialog-wrapper">
 			<div class="header">抽奖记录</div>
@@ -67,48 +93,8 @@
 					<span>奖品价值</span>
 					<span>中奖时间</span>
 				</div>
-				<div v-for="(item, index) in recordList" :key="index" class="dialogTableItem">
-					<span>{{ item.rewardRankText }}</span>
-					<span>{{ item.prizeName }}</span>
-					<span>{{ item.activityAmount }}</span>
-					<span>{{ item.receiveTime }}</span>
-				</div>
-				<div v-for="(item, index) in recordList" :key="index" class="dialogTableItem">
-					<span>{{ item.rewardRankText }}</span>
-					<span>{{ item.prizeName }}</span>
-					<span>{{ item.activityAmount }}</span>
-					<span>{{ item.receiveTime }}</span>
-				</div>
-
-				<div v-for="(item, index) in recordList" :key="index" class="dialogTableItem">
-					<span>{{ item.rewardRankText }}</span>
-					<span>{{ item.prizeName }}</span>
-					<span>{{ item.activityAmount }}</span>
-					<span>{{ item.receiveTime }}</span>
-				</div>
-				<div v-for="(item, index) in recordList" :key="index" class="dialogTableItem">
-					<span>{{ item.rewardRankText }}</span>
-					<span>{{ item.prizeName }}</span>
-					<span>{{ item.activityAmount }}</span>
-					<span>{{ item.receiveTime }}</span>
-				</div>
-				<div v-for="(item, index) in recordList" :key="index" class="dialogTableItem">
-					<span>{{ item.rewardRankText }}</span>
-					<span>{{ item.prizeName }}</span>
-					<span>{{ item.activityAmount }}</span>
-					<span>{{ item.receiveTime }}</span>
-				</div>
-				<div v-for="(item, index) in recordList" :key="index" class="dialogTableItem">
-					<span>{{ item.rewardRankText }}</span>
-					<span>{{ item.prizeName }}</span>
-					<span>{{ item.activityAmount }}</span>
-					<span>{{ item.receiveTime }}</span>
-				</div>
-				<div v-for="(item, index) in recordList" :key="index" class="dialogTableItem">
-					<span>{{ item.rewardRankText }}</span>
-					<span>{{ item.prizeName }}</span>
-					<span>{{ item.activityAmount }}</span>
-					<span>{{ item.receiveTime }}</span>
+				<div v-if="recordList.length < 1">
+					<Nodata></Nodata>
 				</div>
 				<div v-for="(item, index) in recordList" :key="index" class="dialogTableItem">
 					<span>{{ item.rewardRankText }}</span>
@@ -127,18 +113,18 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import nodata from "./images/nodata.png";
 import Spin from "/@/components/Spin/Spin.vue";
-import { mockDoGetReward, mockGetSpinList } from "./api";
-import bronze from "./images/bronze_footer.png";
+import { activityApi } from "/@/api/activity";
 const showResult = ref(false);
+const showResult2 = ref(false);
+const showResult3 = ref(false);
 const showRecord = ref(false);
 // 奖项列表
 const spinList = ref();
 // 获得的奖励
 const reward = ref();
 // 当前选中的标签
-const currentTab = ref("1");
+const currentTab: any = ref("1");
 const router = useRouter();
 // 标签列表
 const tabs = ref([
@@ -151,36 +137,19 @@ const tabs = ref([
 		value: "2",
 	},
 	{
-		name: "黄金",
+		name: "黄金及以上",
 		value: "3",
 	},
 ]);
-const recordList = [
-	{
-		receiveTime: "2022-05-12 14:11:23",
-		rewardRankText: "青铜",
-		prizeName: "手机",
-		activityAmount: "9999",
-	},
-	{
-		receiveTime: "2022-05-12 14:11:23",
-		rewardRankText: "青铜",
-		prizeName: "手机",
-		activityAmount: "9999",
-	},
-	{
-		receiveTime: "2022-05-12 14:11:23",
-		rewardRankText: "青铜",
-		prizeName: "手机",
-		activityAmount: "9999",
-	},
-];
+const recordList: any = ref([]);
+
+const activityData: any = ref({});
 onMounted(() => {
 	/**
 	 * @description 获取奖项列表
 	 */
-	mockGetSpinList().then((res: { data: Array<object> }) => {
-		spinList.value = res.data;
+	activityApi.getSpinDetail().then((res) => {
+		activityData.value = res.data;
 	});
 });
 
@@ -212,8 +181,12 @@ const selectTab = (tabKey: string) => {
  * @description 抽奖开始
  */
 const spinStart = () => {
-	mockDoGetReward().then((res: { data: {} }) => {
-		reward.value = res.data;
+	const params = {
+		id: activityData.value.id,
+		vipRankCode: currentTab.value,
+	};
+	activityApi.getSpinPrizeResult(params).then((res) => {
+		reward.value = res;
 	});
 };
 
@@ -221,8 +194,27 @@ const spinStart = () => {
  * @description 处理转盘停止后的逻辑
  */
 const spinEnd = () => {
-	// 处理转盘停止后的逻辑
-	showResult.value = true;
+	// if (activityData.value.balanceCount < 1) {
+	// 	// 处理转盘停止后的逻辑
+	// 	showResult2.value = true;
+	// } else {
+	// 	// 处理转盘停止后的逻辑
+	// 	showResult.value = true;
+	// }
+	showResult3.value = true;
+};
+const goToRecharge = () => {
+	showResult2.value = false;
+	router.push("/wallet/recharge");
+};
+const handleShowRecord = () => {
+	showRecord.value = true;
+	querySpinWheelOrderRecord();
+};
+const querySpinWheelOrderRecord = () => {
+	activityApi.querySpinWheelOrderRecord().then((res) => {
+		recordList.value = res.data.records;
+	});
 };
 </script>
 
@@ -238,8 +230,31 @@ const spinEnd = () => {
 	justify-content: center;
 	height: 755px;
 	margin-bottom: 40px;
+	position: relative;
 	.lottery-footer_img {
 		width: 100%;
+	}
+	.vipLevel {
+		position: absolute;
+		right: 0;
+		top: 30px;
+		height: 48px;
+		width: 204px;
+
+		text-align: center;
+		line-height: 48px;
+	}
+	.vip1 {
+		background: url("./images/vip_level_0.png") no-repeat;
+		background-size: 204px 48px;
+	}
+	.vip2 {
+		background: url("./images/vip_level_1.png") no-repeat;
+		background-size: 204px 48px;
+	}
+	.vip3 {
+		background: url("./images/vip_level_2.png") no-repeat;
+		background-size: 204px 48px;
 	}
 }
 .flex_center {
@@ -446,14 +461,40 @@ const spinEnd = () => {
 		justify-content: flex-end;
 		padding: 40px;
 	}
+	.dialog-content2 {
+		background: url("./images/result_bg2.png") no-repeat;
+		background-size: 100% 100%;
+		width: 540px;
+		height: 625px;
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-end;
+		padding: 40px;
+		box-sizing: border-box;
+		text-align: center;
+		.dialog-title {
+			background: url("./images/title_bg.png") no-repeat;
+			background-size: 100% 100%;
+			height: 80px;
+
+			line-height: 80px;
+		}
+		.dialog-text {
+			margin: 80px 0;
+		}
+		button {
+			background: url("./images/btn_bg.png") no-repeat;
+			background-size: 100% 100%;
+		}
+	}
 	.dialog-wrapper {
 		background: url("./images/record_bg.png");
 		background-size: 100% 100%;
-		width: 100%;
+		width: calc(100% - 60px);
 		height: 972px;
-		margin: 32px;
 		border-radius: 24px;
 		text-align: center;
+		box-sizing: border-box;
 		@include themeify {
 			color: themed("TB1");
 		}
@@ -467,7 +508,7 @@ const spinEnd = () => {
 			font-size: 32px;
 			line-height: 92px;
 			@include themeify {
-				color: themed("TB1");
+				color: themed("TB");
 			}
 		}
 		img {
@@ -493,6 +534,9 @@ const spinEnd = () => {
 					display: flex;
 					justify-content: center;
 					align-items: center;
+					@include themeify {
+						border-right: 1px solid themed(BG1);
+					}
 				}
 				span:last-child {
 					border-right: none;
@@ -501,7 +545,7 @@ const spinEnd = () => {
 			.dialogTableHeader {
 				font-size: 26px;
 				@include themeify {
-					background: themed("BG1");
+					background: linear-gradient(180deg, #555657 0%, #444547 100%);
 				}
 			}
 			.dialogTableItem:nth-child(odd) {
