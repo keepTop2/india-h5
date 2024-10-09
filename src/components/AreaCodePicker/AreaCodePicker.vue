@@ -12,6 +12,7 @@
 					<input v-model="searchAreaCode" type="text" placeholder="搜索区号" />
 					<div v-if="searchAreaCode" class="icon"><SvgIcon class="clear_icon" iconName="common/close" @click="searchAreaCode = ''" /></div>
 				</div>
+				{{ Object.keys(props.areaCode).length }}
 				<template v-if="Object.keys(props.areaCode).length > 0">
 					<van-index-bar :index-list="props.indexList" :sticky="false">
 						<van-index-anchor :index="1" v-for="item in Object.keys(props.areaCode)">
@@ -29,7 +30,7 @@
 						</van-index-anchor>
 					</van-index-bar>
 				</template>
-				<div class="no_data">未搜索到相关区号</div>
+				<div v-else class="no_data">未搜索到相关区号</div>
 			</template>
 		</van-action-sheet>
 	</div>

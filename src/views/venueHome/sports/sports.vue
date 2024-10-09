@@ -42,7 +42,7 @@
 						&nbsp;<span :class="['fs_24', (activeSwitchingSort == 'time' && 'color_TB') || 'color_T3']" @click="switchingSort('time')">{{ $t('sports["时间"]') }}</span>
 					</div>
 				</template>
-				<div>
+				<div class="operation-right">
 					<SvgIcon class="sport_filter color_T3" v-if="isShowFilter" @click="filterLeague" iconName="venueHome/sports/svg/sport_filter" />
 					<SvgIcon class="sport_fold color_T3" v-show="isFold" iconName="venueHome/sports/svg/sport_fold2" @click="onExpandAngCollapse" />
 					<SvgIcon class="sport_fold color_T3" v-show="!isFold" iconName="venueHome/sports/svg/sport_fold" @click="onExpandAngCollapse" />
@@ -658,6 +658,12 @@ const handleStickyChange = (isSticky: boolean) => {
 		.sport_fold {
 			width: 26px;
 			height: 26px;
+		}
+
+		.operation-right {
+			flex: 1;
+			display: flex;
+			justify-content: end;
 		}
 
 		.attention {
