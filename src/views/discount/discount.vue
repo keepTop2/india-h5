@@ -5,7 +5,7 @@
 		<div class="discount_container">
 			<!-- <Banner class="home_banner mb_35" /> -->
 			<NavBar class="mt_32 mb_24 discount_navbar" v-model:active="active" :tab-list="state.tabList" @on-change-nav-bar="onChangeNavBar" />
-			<div class="activityList_item bg_Tag1" @click="onToDeatils(item)" v-for="(item, index) in state.activityList" :key="index">
+			<div class="activityList_item bg_Tag1 fade-in" @click="onToDeatils(item)" v-for="(item, index) in state.activityList" :key="index">
 				<div class="img_container">
 					<div class="activityGraph">
 						<VantLazyImg class="discount_img" :src="item.entrancePictureI18nCode" />
@@ -51,9 +51,7 @@ onMounted(async () => {
 	await activityPageList();
 	// await getActivity();
 });
-onActivated(() => {
-	console.log(123123, "组件被激活了");
-});
+
 onMounted(() => {
 	console.log(123123, "组件挂载了");
 });
@@ -66,7 +64,6 @@ const params = reactive({
 // 查活动页签
 const getActivityTab = async () => {
 	state.pageLoading = true;
-
 	const res: any = await activityApi.activityTabsList();
 	state.pageLoading = false;
 	if (res.code == Common.getInstance().ResCode.SUCCESS) {
@@ -142,7 +139,6 @@ const getActivity = async (): Promise<void> => {
 
 <style lang="scss" scoped>
 .discount_container {
-	padding-bottom: 160px;
 	.discount_navbar {
 		padding: 0 24px;
 	}

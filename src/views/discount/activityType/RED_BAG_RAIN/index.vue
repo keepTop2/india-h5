@@ -4,7 +4,7 @@
 
 		<div class="activityMain">
 			<div class="activityImg">
-				<img src="./image/redBagRainImg.png" alt="" />
+				<VantLazyImg :src="redBagInfo?.headPicturePcI18nCode" class="main-image" />
 				<div class="shadow"></div>
 			</div>
 			<div class="content">
@@ -111,7 +111,7 @@ watch(
 	() => countdown.value,
 	() => {
 		if (countdown.value == 0) {
-			startCountdown();
+			stopCountdown();
 			getRedBagInfo();
 		}
 	}
@@ -122,7 +122,7 @@ const getRedBagInfo = () => {
 			redBagInfo.value = res.data;
 			activityStore.setActivityData(res.data);
 			// 判断活动在进行中
-			if (redBagInfo.value.clientStatus === 1) {
+			if (redBagInfo.value.clientStatus !== 2) {
 				// 进行中倒计时
 				startCountdown(redBagInfo.value.advanceTime);
 				// 判断活动已活动已全部结束
@@ -263,7 +263,12 @@ const onClickLeft = () => {
 		background: url("./image/btn_active.png") no-repeat;
 	}
 }
-
+.main-image {
+	height: 580px;
+	width: 100%;
+	object-fit: cover;
+	margin-bottom: 20px;
+}
 .activity-details {
 	border-radius: 10px;
 	padding: 15px;

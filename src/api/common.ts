@@ -32,6 +32,13 @@ class CommonApi {
 			headers,
 		});
 	};
+	static getUserGlobalSetInfo = (data = {}, headers = {}) => {
+		return useAxiosApi(`/app/user-info/global/getUserGlobalSetInfo`, {
+			method: "POST",
+			data,
+			headers,
+		});
+	};
 
 	/**
 	 *@description 获取会员首页信息

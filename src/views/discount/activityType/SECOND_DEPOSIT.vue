@@ -1,29 +1,35 @@
 <template>
 	<div class="first-deposit-activity">
-		<VantNavBar title="次存活动" @onClickLeft="router.back()" />
+		<VantNavBar :title="activityData?.activityNameI18nCode" @onClickLeft="router.back()" />
+		<img :src="activityData?.headPicturePcI18nCode" class="main-image" />
 		<div class="content">
-			<img :src="activityData?.headPicturePcI18nCode" class="main-image" />
 			<div class="bonus-card">
 				<div class="bonus-header">红利赠送</div>
 				<div class="bonus-content">
 					<div class="bonus-row1">
 						<div class="bonus-row">
 							<span class="text">存款金额</span>
-							<span class="Amount"><span>$</span>{{ activityData?.depositAmount }}</span>
+							<span class="Amount"
+								>{{ activityData?.depositAmount }} <span>{{ activityData?.depositCurrencyCode }}</span></span
+							>
 						</div>
 						<div class="bonus-row1-line"></div>
 						<div class="bonus-row">
 							<span class="text">需打流水</span>
-							<span class="Amount"><span>$</span>{{ activityData?.runningWater }}</span>
+							<span class="Amount"
+								>{{ activityData?.runningWater }} <span>{{ activityData?.runningWaterCurrencyCode }}</span>
+							</span>
 						</div>
 					</div>
 					<div class="bonus-row-line"></div>
 					<div class="bonus-row2">
 						<span>可得金额:</span>
-						<span class="Amount highlight"><span>$</span>{{ activityData?.activityAmount }}</span>
+						<span class="Amount highlight"
+							>{{ activityData?.activityAmount }} <span>{{ activityData?.activityAmountCurrencyCode }}</span></span
+						>
 					</div>
 				</div>
-				<button class="apply-button" @click="apply">立即申请</button>
+				<button class="apply-button active" @click="apply">{{ activityData?.status == 10000 ? "立即申请" : "您已申请" }}</button>
 			</div>
 
 			<div class="activity-details">
@@ -90,6 +96,8 @@ import { ref } from "vue";
 import { activityApi } from "/@/api/activity";
 import activityDialog from "../components/Dialog.vue";
 import dayjs from "dayjs";
+import { useUserStore } from "/@/store/modules/user";
+import { showToast } from "vant";
 const router = useRouter();
 const route = useRoute();
 const showDialog = ref(false);
@@ -109,11 +117,22 @@ const getConfigDetail = () => {
 	});
 };
 const apply = () => {
+	if (!useUserStore().getUserInfo.phone && !useUserStore().getUserInfo.email) {
+		dialogInfo.value = {
+			message: "很抱歉，您不符合参与活动条件, 参与活动前需要验证绑定您的手机号和邮箱号码，请尽快完善资料",
+		};
+		showDialog.value = true;
+		return;
+	}
+
 	activityApi.toActivity({ id: activityInfo.id }).then((res: any) => {
 		if (res.code === 10000) {
 			if (res.data.status !== 10000) {
 				dialogInfo.value = res.data;
 				showDialog.value = true;
+			} else {
+				showToast("申请成功");
+				getConfigDetail();
 			}
 		}
 	});
@@ -136,6 +155,7 @@ const confirmDialog = () => {
 	@include themeify {
 		color: themed("TB");
 	}
+	padding: 0;
 	font-size: 24px;
 	:deep(.vantNavBar) {
 		box-shadow: none;
@@ -170,6 +190,7 @@ const confirmDialog = () => {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
+		padding: 0 24px;
 	}
 
 	.main-image {
@@ -178,7 +199,6 @@ const confirmDialog = () => {
 		object-fit: cover;
 		margin-bottom: 20px;
 	}
-
 	.bonus-card {
 		background: url("../image/bonus-card.png");
 		background-size: 100% 100%;
@@ -246,16 +266,21 @@ const confirmDialog = () => {
 		}
 
 		.apply-button {
-			background: linear-gradient(283deg, #ff284b 7.2%, #fd677f 97.93%);
+			background: url("../image/btnBg.png");
+			background-size: 100% 100%;
 			color: white;
 			border: none;
 			width: calc(100% - 95px);
-			padding: 20px;
+			padding: 20px 20px 30px;
 			margin: 20px 42.5px 42px;
 			border-radius: 10px;
 			box-sizing: border-box;
 			font-size: 26px;
 			cursor: pointer;
+		}
+		.apply-button.active {
+			background: url("../image/btnActiveBg.png");
+			background-size: 100% 100%;
 		}
 	}
 
@@ -295,7 +320,6 @@ const confirmDialog = () => {
 			padding: 0 62px;
 			background: url("../image/detail_content.png") no-repeat;
 			background-size: 100% 100%;
-
 			.detail-row {
 				.label {
 					height: 50px;
@@ -316,12 +340,8 @@ const confirmDialog = () => {
 					}
 				}
 			}
-
 			.rules-row {
 				margin: 0 24px 24px;
-			}
-			.rules-row:last-child {
-				margin: 0 24px;
 			}
 		}
 		.detail-footer {
