@@ -165,7 +165,7 @@
 					<div class="tabs">
 						<ul class="tab bg_BG1">
 							<li @click="changeTab('all')" key="all" :class="{ selected: activeTab == 'all' }">{{ $t('sports["所有投注"]') }}</li>
-							<li v-for="(i, index) in markets" :key="i.betTypeName" @click="changeTab(i.betTypeName)" :class="{ selected: activeTab == i.betTypeName }">{{ i.betTypeName }}</li>
+							<!-- <li v-for="(i, index) in markets" :key="i.betTypeName" @click="changeTab(i.betTypeName)" :class="{ selected: activeTab == i.betTypeName }">{{ i.betTypeName }}</li> -->
 						</ul>
 					</div>
 					<SvgIcon class="sport_fold color_T3" v-show="!isFold" iconName="venueHome/sports/svg/sport_fold" @click="onExpandAngCollapse(true)" />
