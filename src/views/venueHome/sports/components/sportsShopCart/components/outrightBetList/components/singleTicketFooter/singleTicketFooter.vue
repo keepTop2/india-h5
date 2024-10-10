@@ -24,6 +24,7 @@
 <script setup lang="ts">
 import { showToast } from "vant";
 import Radio from "../../../radio/index.vue";
+import BetNumber from "/@/views/venueHome/sports/components/Bet/BetNumber.vue";
 import shopCartChampionPubSub from "/@/views/venueHome/sports/hooks/shopCartChampionPubSub";
 import { useSportsBetInfoStore } from "/@/store/modules/sports/sportsBetInfo";
 import sportsApi from "/@/api/venueHome/sports";

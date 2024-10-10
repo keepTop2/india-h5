@@ -3,7 +3,6 @@ export const activityRoutes = {
 	name: "activity",
 	meta: {
 		title: "activity",
-		KeepAlive: true,
 	},
 	children: [
 		{
@@ -12,7 +11,6 @@ export const activityRoutes = {
 			component: () => import("/@/views/discount/activityType/SECOND_DEPOSIT.vue"),
 			meta: {
 				title: "SECOND_DEPOSIT",
-				KeepAlive: true,
 			},
 		},
 		{
@@ -21,7 +19,6 @@ export const activityRoutes = {
 			component: () => import("/@/views/discount/activityType/LOSS_IN_SPORTS.vue"),
 			meta: {
 				title: "LOSS_IN_SPORTS",
-				KeepAlive: true,
 			},
 		},
 		{
@@ -30,7 +27,6 @@ export const activityRoutes = {
 			component: () => import("/@/views/discount/activityType/FIRST_DEPOSIT.vue"),
 			meta: {
 				title: "FIRST_DEPOSIT",
-				KeepAlive: true,
 			},
 		},
 		{
@@ -47,7 +43,6 @@ export const activityRoutes = {
 			component: () => import("/@/views/discount/activityType/DAILY_COMPETITION/index.vue"),
 			meta: {
 				title: "DAILY_COMPETITION",
-				KeepAlive: true,
 			},
 		},
 		{

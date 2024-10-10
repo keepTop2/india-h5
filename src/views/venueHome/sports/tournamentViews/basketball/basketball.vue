@@ -38,6 +38,7 @@ onMounted(() => {
 <style scoped lang="scss">
 .list-content {
 	height: 100%;
+	padding-bottom: 100px;
 	@include themeify {
 		background-color: themed("BG1");
 	}

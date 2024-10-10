@@ -1,9 +1,9 @@
 <template>
 	<div class="first-deposit-activity">
 		<VantNavBar title="体育负盈利" @onClickLeft="router.back()" />
-		<div class="content">
-			<img :src="activityData?.headPicturePcI18nCode" class="main-image" />
+		<img :src="activityData?.headPicturePcI18nCode" class="main-image" />
 
+		<div class="content">
 			<div class="activity-details">
 				<div class="detail_icon">
 					<img src="../image/detail_icon.png" alt="" />
@@ -43,15 +43,16 @@
 			<div class="activity-details">
 				<div class="details-header">
 					<div class="details-header-title-left">
-						<img src="../../image/details-header-title-left.png" alt="" />
+						<img src="../image/details-header-title-left.png" alt="" />
 					</div>
 					<span>活动规则</span>
 					<div class="details-header-title-right">
-						<img src="../../image/details-header-title-right.png" alt="" />
+						<img src="../image/details-header-title-right.png" alt="" />
 					</div>
 				</div>
 				<div class="detail-content">
-					<div class="winnerListTable">
+					<div v-html="activityInfo?.activityRuleI18nCode"></div>
+					<!-- <div class="winnerListTable">
 						<div class="winnerListHeader">
 							<div>亏损金额</div>
 							<div>返还比例</div>
@@ -60,7 +61,7 @@
 							<div>{{ 1 }}</div>
 							<div>{{ 2 }}</div>
 						</div>
-					</div>
+					</div> -->
 				</div>
 				<div class="detail-footer"></div>
 			</div>
@@ -131,7 +132,9 @@ const confirmDialog = () => {
 	:deep(.vantNavBar) {
 		box-shadow: none;
 	}
-
+	.content {
+		padding: 0 24px;
+	}
 	header {
 		text-align: center;
 		margin-bottom: 20px;
@@ -286,7 +289,6 @@ const confirmDialog = () => {
 			padding: 0 62px;
 			background: url("../image/detail_content.png") no-repeat;
 			background-size: 100% 100%;
-			min-height: 300px;
 			.detail-row {
 				.label {
 					height: 50px;
@@ -354,11 +356,11 @@ const confirmDialog = () => {
 		}
 		div {
 			width: 561px;
-			height: 64px;
+			height: 74px;
 			background: url("../image/btnBg.png");
 			background-size: 100% 100%;
 			text-align: center;
-			line-height: 54px;
+			line-height: 64px;
 			font-size: 26px;
 		}
 		div.active {

@@ -212,37 +212,34 @@ const queryActivityDailyContestVenueCode = async () => {
 const queryActivityDailyContest = () => {
 	const params = {
 		id: currentVenueCode.value,
+		day: currentDay.value,
 	};
 	activityApi.queryActivityDailyContest(params).then((res) => {
 		currentData.value = res.data || [];
 	});
-	initPrizePool();
-};
-
-const initPrizePool = () => {
-	clearInterval(PrizePoolTimer.value);
-	const params = {
-		id: currentVenueCode.value,
-		day: currentDay.value,
-	};
-
 	activityApi.queryActivityDailyPrizePool(params).then((res) => {
 		PrizePool.value = res.data;
 	});
 	activityApi.queryActivityDailyRecord(params).then((res) => {
 		tableData.value = res.data.list;
 	});
-	PrizePoolTimer.value = setInterval(() => {
+	initPrizePool();
+};
+
+const initPrizePool = () => {
+	PrizePoolTimer.value = setTimeout(async () => {
 		const params = {
 			id: currentVenueCode.value,
 			day: currentDay.value,
 		};
-		activityApi.queryActivityDailyPrizePool(params).then((res) => {
+		await activityApi.queryActivityDailyPrizePool(params).then((res) => {
 			PrizePool.value = res.data;
 		});
-		activityApi.queryActivityDailyRecord(params).then((res) => {
+		await activityApi.queryActivityDailyRecord(params).then((res) => {
 			tableData.value = res.data.list;
 		});
+		clearTimeout(PrizePoolTimer.value);
+		initPrizePool();
 	}, 3000);
 };
 
@@ -264,8 +261,7 @@ const confirmPicker = (value) => {
 const cancelPicker = () => {
 	showPicker.value = false;
 };
-
-onActivated(async () => {
+onMounted(async () => {
 	await queryActivityDailyContestVenueCode();
 	queryActivityDailyContest();
 	initCountDownTime();
@@ -282,8 +278,8 @@ const initCountDownTime = () => {
 	}, 1000);
 };
 
-onDeactivated(() => {
-	clearInterval(PrizePoolTimer.value);
+onBeforeUnmount(() => {
+	clearTimeout(PrizePoolTimer.value);
 	clearInterval(countDownTimer.value);
 });
 </script>

@@ -10,15 +10,18 @@
 </template>
 
 <script setup lang="ts">
-import { loginApi } from "/@/api/loginRegister";
 import common from "/@/utils/common";
 import MenuPopup from "/@/layout/home/components/menuPopup.vue";
 import { useThemesStore } from "/@/store/modules/themes";
 import { useUserStore } from "/@/store/modules/user";
 import { useRouterStore } from "/@/store/modules/cacheRouter";
 import { LangEnum } from "/@/enum/appConfigEnum";
-
-let ws: WsUtil | null;
+import { getIndexInfo } from "/@/views/venueHome/sports/utils/commonFn";
+onMounted(() => {
+	if (useUserStore().token) {
+		getIndexInfo();
+	}
+});
 const { keepAliveComps } = storeToRefs(useRouterStore());
 const userStore = useUserStore();
 const ThemesStore = useThemesStore();
@@ -41,7 +44,6 @@ const autoLogin = async () => {
 	const params = {
 		userAccount: loginInfo.value?.userAccount,
 		password: loginInfo.value?.password,
-		deviceNo: common.getInstance().getDevice(), // 设备
 	};
 	// const res = await loginApi.submitUserLogin(params).catch((err) => err);
 	// if (res.code == common.getInstance().ResCode.SUCCESS) {

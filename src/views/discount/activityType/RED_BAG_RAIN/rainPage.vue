@@ -317,8 +317,6 @@ onMounted(async () => {
 	await redBagParticipate();
 	initReadyTime();
 	initRedbagRain();
-});
-onActivated(() => {
 	emit("update:modelValue", true);
 });
 
