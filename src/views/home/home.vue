@@ -105,6 +105,7 @@ import viewSportPubSubEventData from "../venueHome/sports/hooks/viewSportPubSubE
 import { GameInfoList, LobbyTopGame } from "/#/game";
 import activitySocketService from "/@/utils/activitySocketService";
 import { useActivityStore } from "/@/store/modules/activity";
+import { computed, onActivated, onDeactivated, ref, watch } from "vue";
 const websocketService = activitySocketService.getInstance();
 const router = useRouter();
 const UserStore = useUserStore();
@@ -306,6 +307,9 @@ const initializeWebSocket = async () => {
 		showCountdown.value = true;
 		redBagInfo.value = data;
 	});
+	pubsub.subscribe("/activity/redBagRain/end", (data) => {
+		showCountdown.value = false;
+	});
 	// ws连接
 	await websocketService.connect().then(() => {
 		websocketService.send("/activity/redBagRain");
@@ -313,6 +317,7 @@ const initializeWebSocket = async () => {
 };
 const destroyWS = () => {
 	pubsub.unsubscribe("/activity/redBagRain", () => {});
+	pubsub.unsubscribe("/activity/redBagRain/end", () => {});
 	websocketService.close();
 };
 </script>
