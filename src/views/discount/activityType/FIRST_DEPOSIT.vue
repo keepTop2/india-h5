@@ -3,7 +3,7 @@
 		<VantNavBar :title="activityData?.activityNameI18nCode" @onClickLeft="router.back()" />
 		<VantLazyImg :src="activityData?.headPicturePcI18nCode" class="main-image" />
 		<div class="content">
-			<div class="bonus-card">
+			<div class="bonus-card" v-if="activityData?.participationMode == 0">
 				<div class="bonus-header">红利赠送</div>
 				<div class="bonus-content">
 					<div class="bonus-row1">

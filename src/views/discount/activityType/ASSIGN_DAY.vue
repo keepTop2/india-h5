@@ -56,7 +56,7 @@
 				<div class="detail-footer"></div>
 			</div>
 		</div>
-		<div class="applyBtn" @click="apply">
+		<div class="applyBtn" @click="apply" v-if="activityData?.participationMode == 0">
 			<div class="" :class="activityData?.status == 10000 ? 'active' : ''">{{ activityData?.status == 30047 ? "您已申请" : "立即申请" }}</div>
 		</div>
 		<activityDialog v-model="showDialog" title="温馨提示" :confirm="confirmDialog">

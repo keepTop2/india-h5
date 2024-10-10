@@ -198,13 +198,6 @@ const playAgain = () => {
  * @description 处理转盘停止后的逻辑
  */
 const spinEnd = () => {
-	// if (activityData.value.balanceCount < 1) {
-	// 	// 处理转盘停止后的逻辑
-	// 	showResult2.value = true;
-	// } else {
-	// 	// 处理转盘停止后的逻辑
-	// 	showResult.value = true;
-	// }
 	showResult3.value = true;
 };
 const goToRecharge = () => {

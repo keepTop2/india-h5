@@ -49,7 +49,7 @@
 					<div class="detail-footer"></div>
 				</div>
 
-				<div class="activity-details">
+				<div class="activity-details" v-if="redBagInfo.winnerList?.length > 0">
 					<div class="details-header">
 						<div class="details-header-title-left">
 							<img src="../../image/details-header-title-left.png" alt="" />
@@ -156,6 +156,8 @@ const getRedBagInfo = async () => {
 	});
 };
 const getActivityReward = async () => {
+	activityStore.setIsShowRedBagRain(true);
+	router.push("/");
 	if (redBagInfo.value.clientStatus == 1) {
 		await activityApi.redBagParticipate({ redbagSessionId: redBagInfo.value.redbagSessionId }).then((res: any) => {
 			if (res.code.status === 10000) {
@@ -394,11 +396,9 @@ const confirmDialog = () => {
 		}
 		.sessionsBox {
 			overflow-y: auto;
-			padding-left: 100px;
 			padding-bottom: 10px;
 			.sessions {
 				display: flex;
-				justify-content: center;
 				.session {
 					min-width: 115px;
 					text-align: center;

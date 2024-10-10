@@ -237,7 +237,7 @@ function handleClick(event: MouseEvent) {
 	}
 	// 如果找到被点击的红包，发送请求并标记为已点击
 	if (clickedRedBag) {
-		activitySocket.send(JSON.stringify({ redbagSessionId: activityData.value.redbagSessionId }));
+		activitySocket.send("/activity/redBagRain/grab:" + JSON.stringify({ redbagSessionId: activityData.value.redbagSessionId }));
 		clickedRedBag.isClicked = true;
 	}
 }
