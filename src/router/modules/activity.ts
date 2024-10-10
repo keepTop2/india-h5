@@ -30,6 +30,22 @@ export const activityRoutes = {
 			},
 		},
 		{
+			path: "/activity/ASSIGN_DAY",
+			name: "ASSIGN_DAY",
+			component: () => import("/@/views/discount/activityType/ASSIGN_DAY.vue"),
+			meta: {
+				title: "ASSIGN_DAY",
+			},
+		},
+		{
+			path: "/activity/RECHARGE_BONUS",
+			name: "RECHARGE_BONUS",
+			component: () => import("/@/views/discount/activityType/RECHARGE_BONUS.vue"),
+			meta: {
+				title: "RECHARGE_BONUS",
+			},
+		},
+		{
 			path: "/activity/FREE_WHEEL",
 			name: "FREE_WHEEL",
 			component: () => import("/@/views/discount/activityType/FREE_WHEEL.vue"),

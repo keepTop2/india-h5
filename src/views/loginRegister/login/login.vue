@@ -36,8 +36,7 @@
 
 					<div class="forgot-password" @click="router.push('/forgetPassword')">{{ $t('login["忘记密码"]') }}</div>
 				</div>
-
-				<Button class="mt_40" :type="btnDisabled ? 'disabled' : 'default'" @click="onLogin">{{ $t('login["登录"]') }}</Button>
+				<Button class="mt_40" :type="btnDisabled || !isOnloadScript ? 'disabled' : 'default'" @click="onLogin">{{ $t('login["登录"]') }}</Button>
 
 				<div class="footer">
 					<div>
@@ -51,7 +50,7 @@
 			</form>
 		</div>
 		<div id="captcha-element" ref="captchaBtn"></div>
-		<Hcaptcha ref="refhcaptcha" :onSubmit="onSubmit" />
+		<Hcaptcha ref="refhcaptcha" :onSubmit="onSubmit" v-model="isOnloadScript" />
 	</div>
 </template>
 
@@ -72,6 +71,7 @@ const eyeShow = ref(true);
 const btnDisabled = ref(true);
 const userAgreement = ref(false);
 const captchaBtn = ref(null);
+const isOnloadScript = ref(false);
 let state = reactive({
 	userAccount: "", // 邮箱或者手机号
 	password: "", // 密码

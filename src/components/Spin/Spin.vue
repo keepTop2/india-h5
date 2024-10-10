@@ -5,7 +5,7 @@
 			<img class="spin-img" :src="spinBG" alt="" />
 			<div class="currency">
 				<div v-for="(i, index) in spinList" :key="index" class="spin-item" :style="getItemStyle(index)">
-					<span class="amount"><img :src="i.prizePictureUrl" alt="" /></span>
+					<span class="amount"><VantLazyImg :src="i.prizePictureUrl" alt="" /></span>
 					<!-- <img :src="getImg(i.currency)" /> -->
 				</div>
 			</div>
@@ -117,6 +117,9 @@ const handleStartSpin = async () => {
 		}
 	});
 };
+defineExpose({
+	handleStartSpin,
+});
 </script>
 
 <style lang="scss" scoped>
@@ -166,7 +169,7 @@ const handleStartSpin = async () => {
 		-webkit-filter: drop-shadow(2px 2px 0 #ca8619);
 		filter: drop-shadow(2px 2px 0 #ca8619);
 		-webkit-background-clip: text;
-		color: transparent;
+		// color: transparent;
 	}
 }
 .spin {
@@ -228,6 +231,7 @@ const handleStartSpin = async () => {
 				img {
 					width: 56px;
 					height: 56px;
+					transform: rotate(90deg); /* 旋转90度 */
 				}
 
 				.amount {
@@ -237,7 +241,7 @@ const handleStartSpin = async () => {
 					font-size: 32px;
 					// text-shadow: 0px 2px 0px rgba(0, 0, 0, 0.3);
 					color: #fff;
-					padding-left: 60px;
+					padding-left: 75px;
 					object-fit: cover;
 					font-family: "DIN Alternate";
 				}

@@ -106,6 +106,7 @@ export const VenueHome = {
 			component: () => import("/@/views/venueHome/GameArena/GameArena.vue"),
 			meta: {
 				title: "游戏大厅",
+				KeepAlive: false,
 			},
 		},
 		{

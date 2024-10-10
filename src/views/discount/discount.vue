@@ -12,10 +12,11 @@
 					</div>
 					<div class="text_container">
 						<div class="date">
-							<div class="deadline">截止时间：{{ Common.getInstance().dayFormat2(item.activityEndTime) }}</div>
+							<div class="deadline" v-if="item.activityDeadline == 0">{{ Common.getInstance().dayFormat1(item.activityStartTime) }} 至 {{ Common.getInstance().dayFormat1(item.activityEndTime) }}</div>
+							<div class="deadline" v-if="item.activityDeadline == 1">{{ Common.getInstance().dayFormat1(item.activityStartTime) }} 至 长期</div>
 							<div class="activity_name">{{ item.activityNameI18nCode }}</div>
 						</div>
-						<Button class="mt_40"> {{ $t('discount["进行中"]') }}</Button>
+						<div class="mt_40 button">{{ "查看详情" }}</div>
 					</div>
 				</div>
 			</div>
@@ -44,6 +45,7 @@ const state: any = reactive({
 	activityList: [],
 	pageLoading: false,
 });
+
 // const store = useUserStore();
 const active = ref<string | number>("");
 onMounted(async () => {
@@ -101,17 +103,17 @@ const activityPageList = async () => {
 };
 //跳转活动详情
 const onToDeatils = (item) => {
-	// 长期活动
-	if (item.activityDeadline) {
+	if (!item.enable && new Date().getTime() < item.activityStartTime && !item.activityDeadline) {
+		showToast("活动未开启");
+		return;
+		// 长期活动
+	} else if (item.activityDeadline) {
 		router.push({
 			path: `/activity/${item.activityTemplate}`,
 			query: { data: encodeURIComponent(JSON.stringify(item)) },
 		});
 	} else if (item.entrancePictureGrey) {
 		showToast("活动已过期");
-		return;
-	} else if (!item.enable) {
-		showToast("活动未开启");
 		return;
 	} else {
 		router.push({
@@ -213,13 +215,13 @@ const getActivity = async (): Promise<void> => {
 					margin: 0;
 					width: 148px;
 					height: 54px;
-					padding: 10px 24px;
 					flex-shrink: 0;
 					border-radius: 8px;
-					// line-height: 54px;
+					line-height: 54px;
 					box-sizing: border-box;
 					@include themeify {
-						color: themed("TB");
+						color: themed("Theme");
+						border: 1px solid themed("Theme");
 					}
 					text-align: center;
 

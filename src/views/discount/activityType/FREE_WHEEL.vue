@@ -1,31 +1,9 @@
 <template>
 	<div class="first-deposit-activity">
-		<VantNavBar title="免费旋转" @onClickLeft="router.back()" />
-		<div class="content">
-			<img src="../image/firstDeposit.png" class="main-image" />
-			<div class="bonus-card">
-				<div class="bonus-header">红利赠送</div>
-				<div class="bonus-content">
-					<div class="bonus-row1">
-						<div class="bonus-row">
-							<span class="text">存款金额</span>
-							<span class="Amount"><span>$</span>{{ activityData?.depositAmount }}</span>
-						</div>
-						<div class="bonus-row1-line"></div>
-						<div class="bonus-row">
-							<span class="text">需打流水</span>
-							<span class="Amount"><span>$</span>{{ activityData?.runningWater }}</span>
-						</div>
-					</div>
-					<div class="bonus-row-line"></div>
-					<div class="bonus-row2">
-						<span>可得金额:</span>
-						<span class="Amount highlight"><span>$</span>{{ activityData?.activityAmount }}</span>
-					</div>
-				</div>
-				<button class="apply-button" @click="apply">立即申请</button>
-			</div>
+		<VantNavBar :title="activityData?.activityNameI18nCode" @onClickLeft="router.back()" />
+		<VantLazyImg :src="activityData?.headPicturePcI18nCode" class="main-image" />
 
+		<div class="content">
 			<div class="activity-details">
 				<div class="detail_icon">
 					<img src="../image/detail_icon.png" alt="" />
@@ -44,7 +22,7 @@
 						<p class="label">
 							<span>活动对象</span>
 						</p>
-						<p class="value">{{ activityData?.userTypeName }}</p>
+						<p class="value">{{ activityData?.userTypeText }}</p>
 					</div>
 					<div class="detail-row">
 						<p class="label">
@@ -67,21 +45,19 @@
 					<div class="details-header-title-left">
 						<img src="../image/details-header-title-left.png" alt="" />
 					</div>
-					活动规则
+					<span>活动规则</span>
 					<div class="details-header-title-right">
 						<img src="../image/details-header-title-right.png" alt="" />
 					</div>
 				</div>
 				<div class="detail-content">
-					<div class="rules-row">
-						<p>1、这是活动内容活动内容活动内容这是活动内容活动内容活动内容这是活动内容活动内容活动内容这是</p>
-					</div>
-					<div class="rules-row">
-						<p>1、这是活动内容活动内容活动内容这是活动内容活动内容活动内容这是活动内容活动内容活动内容这是</p>
-					</div>
+					<div v-html="activityInfo?.activityRuleI18nCode"></div>
 				</div>
 				<div class="detail-footer"></div>
 			</div>
+		</div>
+		<div class="applyBtn" @click="apply" v-if="activityData?.participationMode == 0">
+			<div class="" :class="activityData?.status == 10000 ? 'active' : ''">{{ activityData?.status == 30047 ? "您已申请" : "立即申请" }}</div>
 		</div>
 		<activityDialog v-model="showDialog" title="温馨提示" :confirm="confirmDialog">
 			{{ dialogInfo.message }}
@@ -95,6 +71,7 @@ import { ref } from "vue";
 import { activityApi } from "/@/api/activity";
 import activityDialog from "../components/Dialog.vue";
 import dayjs from "dayjs";
+import { showToast } from "vant";
 const router = useRouter();
 const route = useRoute();
 const showDialog = ref(false);
@@ -119,7 +96,12 @@ const apply = () => {
 			if (res.data.status !== 10000) {
 				dialogInfo.value = res.data;
 				showDialog.value = true;
+			} else {
+				showToast("申请成功");
+				getConfigDetail();
 			}
+		} else {
+			showToast(res.message);
 		}
 	});
 };
@@ -141,12 +123,14 @@ const confirmDialog = () => {
 	@include themeify {
 		color: themed("TB");
 	}
-	padding: 0 22px;
+	padding: 0;
 	font-size: 24px;
 	:deep(.vantNavBar) {
 		box-shadow: none;
 	}
-
+	.content {
+		padding: 0 24px;
+	}
 	header {
 		text-align: center;
 		margin-bottom: 20px;
@@ -179,7 +163,9 @@ const confirmDialog = () => {
 	}
 
 	.main-image {
+		height: 580px;
 		width: 100%;
+		object-fit: cover;
 		margin-bottom: 20px;
 	}
 
@@ -299,7 +285,6 @@ const confirmDialog = () => {
 			padding: 0 62px;
 			background: url("../image/detail_content.png") no-repeat;
 			background-size: 100% 100%;
-			min-height: 300px;
 			.detail-row {
 				.label {
 					height: 50px;
@@ -324,13 +309,61 @@ const confirmDialog = () => {
 				margin: 0 24px 24px;
 			}
 		}
+		.winnerListTable {
+			border: 2px solid rgba(255, 40, 75, 0.4);
+			border-radius: 12px;
+			border-top: none;
+			.winnerListHeader,
+			.winnerListBody {
+				display: flex;
+				> div {
+					flex: 1;
+					height: 64px;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					text-align: center;
+					border-bottom: 2px solid rgba(255, 40, 75, 0.4);
+					border-right: 2px solid rgba(255, 40, 75, 0.4);
+				}
+				> div:last-child {
+					border-right: none;
+				}
+			}
+			.winnerListHeader {
+				border-radius: 12px 12px 0 0;
+				background: linear-gradient(180deg, rgba(255, 40, 75, 0.7) 0%, rgba(255, 40, 75, 0.4) 100%);
+			}
+		}
 		.detail-footer {
 			height: 66px;
 			background: url("../image/detail_footer.png");
 			background-size: 100% 100%;
 		}
 	}
-
+	.applyBtn {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 120px;
+		border-radius: 12px 12px 0 0;
+		@include themeify {
+			background: themed("BG2");
+		}
+		div {
+			width: 561px;
+			height: 74px;
+			background: url("../image/btnBg.png");
+			background-size: 100% 100%;
+			text-align: center;
+			line-height: 64px;
+			font-size: 26px;
+		}
+		div.active {
+			background: url("../image/btnActiveBg.png");
+			background-size: 100% 100%;
+		}
+	}
 	.activity-rules {
 		ol {
 			padding-left: 20px;
