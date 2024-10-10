@@ -1,7 +1,8 @@
 <template>
 	<div class="game-card" @click="Common.goToGame(gameInfo)">
 		<div class="new-badge">
-			<SvgIcon iconName="venueHome/gameArena/new_game" />
+			<SvgIcon iconName="venueHome/gameArena/new_game" v-if="gameInfo.cornerLabels == 1" />
+			<SvgIcon iconName="venueHome/gameArena/hot_game" v-if="gameInfo.cornerLabels == 2" />
 		</div>
 		<VantLazyImg :src="gameInfo.icon" class="game-image" alt="Game" />
 		<div class="favorite-icon">

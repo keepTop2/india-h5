@@ -3,7 +3,7 @@
 		<div class="GameArena bg_BG1">
 			<!-- 顶部搜索栏 -->
 			<div class="navBar bg_BG1">
-				<SvgIcon class="collapse_icon color_TB" iconName="common/collapse_icon" @click="onClickLeft" />
+				<SvgIcon class="collapse_icon mt_14" iconName="common/collapse_icon_on" @click="onClickLeft" size="40px" />
 				<div class="nav_bar_input bg_BG3">
 					<SvgIcon iconName="venueHome/gameArena/search" />
 					<input @focus="router.push('/game/arena/search')" :placeholder="$t(`game['输入游戏名称']`)" type="text" class="color_T2" />
@@ -15,20 +15,20 @@
 				<div class="Game_Content">
 					<!-- <Tabs class="plr" v-model="tabsActiveKey" :list="tabList" /> -->
 					<!-- 热门游戏 -->
-					<h3 class="title" v-if="gameList?.[0].length">
+					<h3 class="title" v-if="gameList.length > 0">
 						<!-- <SvgIcon iconName="home/fire" alt="" /> -->
 						<!-- :placeholder="$t(`game['输入游戏名称']`)" -->
 						{{ $t('game["热门游戏"]') }}
 						<span class="color_T1 fs_28 fw_400" @click="showMoreList($t(`game['热门游戏']`), 1)">{{ $t(`home["更多"]`) }}</span>
 					</h3>
-					<HotGame class="m24" :gameList="gameList?.[0]" v-if="gameList?.[0].length" />
+					<HotGame class="m24" :gameList="gameList?.[0]" v-if="gameList?.[0]" />
 					<!-- 新游戏 -->
-					<h3 class="title" v-show="gameList?.[1]?.length">
+					<h3 class="title" v-if="gameList?.length > 0">
 						<!-- <SvgIcon iconName="home/event_game" alt="" /> -->
 						{{ $t('game["新游戏"]') }}
 						<span class="color_T1 fs_28 fw_400" @click="showMoreList($t(`game['热门游戏']`), 2)">{{ $t(`home["更多"]`) }}</span>
 					</h3>
-					<NewGame class="m24" :gameList="gameList?.[1]" />
+					<NewGame class="m24" :gameList="gameList" />
 					<!-- 二级列表 -->
 					<GameChunk v-for="(game, index) in games" :key="index" class="m24" :showMore="true" :gameList="game" />
 				</div>
@@ -57,7 +57,7 @@ import { i18n } from "/@/i18n";
 const $: any = i18n.global;
 const route = useRoute();
 const router = useRouter();
-const gameList = ref();
+const gameList = ref([]);
 const { gameOneId } = route.query;
 // 初始化当前选中tab
 const tabsActiveKey = ref("all");
@@ -102,7 +102,7 @@ onBeforeMount(() => {
 const getGameList = () => {
 	GameApi.queryGameInfoByOneClassId({ gameOneId: gameOneId }).then((res) => {
 		console.log("获取游戏列表", res);
-		gameList.value = res.data;
+		gameList.value = res.data || [];
 	});
 };
 

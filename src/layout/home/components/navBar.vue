@@ -1,14 +1,16 @@
 <template>
 	<div class="navBar bg_BG1">
 		<!-- <CollapseIcon class="collapseIcon van-haptics-feedback" @click="onCollapse" /> -->
-		<SvgIcon class="collapseIcon van-haptics-feedback" iconName="common/collapse_icon" @click="onCollapse" size="64px" />
+		<SvgIcon class="collapseIcon van-haptics-feedback" iconName="common/collapse_icon_on" @click="onCollapse" size="44px" />
 		<div v-if="!store.token" class="noLogin">
 			<div class="register van-haptics-feedback" @click="router.push('/register')">{{ $t(`navBar["注册"]`) }}</div>
 			<div class="login van-haptics-feedback" @click="router.push('/login')">{{ $t(`navBar["登录"]`) }}</div>
 		</div>
 
 		<div v-else class="account_info">
-			<div class=""></div>
+			<div class="userIcon">
+				<img :src="userIcon" alt="" />
+			</div>
 			<div class="user">
 				<div class="userName">{{ store.userInfo.userAccount }}</div>
 				<div class="balance">${{ common.getInstance().formatFloat(store.userInfo.totalBalance) }}</div>
@@ -21,6 +23,7 @@
 <script setup lang="ts">
 import { useUserStore } from "/@/store/modules/user";
 import CollapseIcon from "/@/assets/zh-CN/default/common/collapse_icon.svg";
+import userIcon from "/@/assets/zh-CN/default/common/userIcon.png";
 import Notify from "/@/components/Notify/Notify.vue";
 import common from "/@/utils/common";
 import pubsub from "/@/pubSub/pubSub";
@@ -97,6 +100,12 @@ const onCollapse = () => {
 		align-items: center;
 		justify-content: space-between;
 		padding-right: 24px;
+		.userIcon {
+			img {
+				width: 64.729px;
+				padding-left: 20px;
+			}
+		}
 		.user {
 			flex: 1;
 			margin-left: 18px;

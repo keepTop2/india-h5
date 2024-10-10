@@ -1,5 +1,5 @@
 <template>
-	<VantNavBar :title="$t(`home['幸运转盘']`)" @onClickLeft="onClickLeft" />
+	<VantNavBar :title="$t(`home['幸运转盘']`)" @onClickLeft="router.back()" />
 	<div class="content">
 		<div class="tabs">
 			<ul>
@@ -16,6 +16,7 @@
 				:reward="reward"
 				:spinList="currentTab == '1' ? activityData?.bronze : currentTab == '2' ? activityData?.silver : activityData?.gold"
 				:balanceCount="activityData?.balanceCount"
+				ref="SpinRef"
 			/>
 			<div class="vipLevel color_TB fw_600" :class="'vip' + currentTab">{{ activityData?.vipRankConfig?.[currentTab - 1]?.maxVipGradeName }}级或以上</div>
 		</div>
@@ -47,12 +48,17 @@
 		</div>
 	</div>
 	<!-- 弹窗1 -->
-	<div class="dialog" v-if="showResult">
-		<div class="dialog-content2">
-			<div class="dialog-title color_Hint">恭喜</div>
-			<div class="dialog-title color_Hint mb_21">获得幸运大奖</div>
-			<div class="dialog-desc color_Theme mb_18">$ +0.01000 USD</div>
-			<Button @click="showResult = false">好的</Button>
+	<div class="dialog fade-in" v-if="showResult">
+		<div class="dialog-content">
+			<div class="resultImg">
+				<img src="./images/dialogResultImg.png" alt="" />
+			</div>
+			<div class="dialog-title color_Hint">恭喜您获得</div>
+			<div class="dialog-amount">${{ reward?.prizeAmount }}</div>
+			<div @click="playAgain" class="button">
+				<div>再抽一次</div>
+				<span class="remaining_times_btn">剩余次数:{{ activityData?.balanceCount }}</span>
+			</div>
 		</div>
 		<div class="close" @click="showResult = false">
 			<img src="./images/close.png" alt="" />
@@ -71,7 +77,7 @@
 		</div>
 	</div>
 	<!-- 弹窗3 -->
-	<div class="dialog" v-if="showResult3">
+	<div class="dialog fade-in" v-if="showResult3">
 		<div class="dialog-content2">
 			<div class="dialog-title color_TB fs_32">温馨提示</div>
 			<div class="dialog-text color_T1 mb_21">您的抽奖次数不足</div>
@@ -119,6 +125,7 @@ const showResult = ref(false);
 const showResult2 = ref(false);
 const showResult3 = ref(false);
 const showRecord = ref(false);
+const SpinRef: any = ref(null);
 // 奖项列表
 const spinList = ref();
 // 获得的奖励
@@ -163,13 +170,6 @@ const getImg = (val: string) => {
 };
 
 /**
- * @description 处理返回按钮点击事件
- */
-const onClickLeft = () => {
-	router.go(-1);
-};
-
-/**
  * @description 选择标签
  * @param {string} tabKey - 选中的标签值
  */
@@ -186,21 +186,18 @@ const spinStart = () => {
 		vipRankCode: currentTab.value,
 	};
 	activityApi.getSpinPrizeResult(params).then((res) => {
-		reward.value = res;
+		reward.value = res.data;
 	});
 };
 
+const playAgain = () => {
+	showResult.value = false;
+	SpinRef.value?.handleStartSpin();
+};
 /**
  * @description 处理转盘停止后的逻辑
  */
 const spinEnd = () => {
-	// if (activityData.value.balanceCount < 1) {
-	// 	// 处理转盘停止后的逻辑
-	// 	showResult2.value = true;
-	// } else {
-	// 	// 处理转盘停止后的逻辑
-	// 	showResult.value = true;
-	// }
 	showResult3.value = true;
 };
 const goToRecharge = () => {
@@ -404,7 +401,6 @@ const querySpinWheelOrderRecord = () => {
 		padding: 0 62px;
 		background: url("../../image/detail_content.png") no-repeat;
 		background-size: 100% 100%;
-		min-height: 300px;
 		.detail-row {
 			.label {
 				height: 50px;
@@ -460,6 +456,52 @@ const querySpinWheelOrderRecord = () => {
 		flex-direction: column;
 		justify-content: flex-end;
 		padding: 40px;
+		.resultImg {
+			display: flex;
+			justify-content: center;
+			margin-bottom: 60px;
+			img {
+				width: 160px;
+			}
+		}
+		.dialog-amount {
+			width: 376px;
+			height: 62px;
+			background: url("./images/amount_bg.png") no-repeat;
+			background-size: 100% 100%;
+			margin: 60px auto;
+			line-height: 60px;
+			@include themeify {
+				color: themed("Theme");
+			}
+		}
+		.button {
+			margin: 0 auto;
+			position: relative;
+			> div {
+				width: 408px;
+				height: 86px;
+				line-height: 86px;
+				font-size: 30px;
+				background: url("./images/btn_bg.png") no-repeat;
+				background-size: 100% 100%;
+				@include themeify {
+					color: themed("TB");
+				}
+			}
+			.remaining_times_btn {
+				position: absolute;
+				right: 0;
+				top: -35px;
+				padding: 5px 10px 15px 10px;
+				font-size: 22px;
+				background: url("./images/remaining_times_Icon.png") no-repeat;
+				background-size: 100% 100%;
+				@include themeify {
+					color: themed("TB");
+				}
+			}
+		}
 	}
 	.dialog-content2 {
 		background: url("./images/result_bg2.png") no-repeat;

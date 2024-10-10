@@ -7,8 +7,8 @@
 				</div>
 				<img class="CountdownImg" src="./image/redbagRainCountdown.png" alt="" @click="handleClickCountdown" />
 				<div class="countdown" @click="handleClickCountdown">
-					<p v-if="redBagInfo.advanceTime">倒计时</p>
-					<p>{{ redBagInfo.advanceTime ? Common.dayFormatHMS(redBagInfo.advanceTime) : "进行中" }}</p>
+					<p v-if="countdown > 0">倒计时</p>
+					<p>{{ countdown > 0 ? Common.convertMilliseconds(countdown * 1000) : "进行中" }}</p>
 				</div>
 			</div>
 		</div>
@@ -20,7 +20,10 @@ import { onMounted, ref, onBeforeUnmount } from "vue";
 import { useCountdown } from "../../hooks/countdown";
 import router from "/@/router";
 import Common from "/@/utils/common";
-const { countdown } = useCountdown();
+import pubsub from "/@/pubSub/pubSub";
+import { useActivityStore } from "/@/store/modules/activity";
+const { countdown, startCountdown, stopCountdown } = useCountdown();
+const activityStore = useActivityStore();
 const draggable = ref<HTMLElement | null>(null);
 const position = ref({ x: 0, y: 0 });
 const isDragging = ref(false);
@@ -92,13 +95,35 @@ const updatePosition = () => {
 		position.value.y = Math.max(64, Math.min(window.innerHeight - 100, position.value.y));
 	}
 };
-
+watch(
+	() => countdown.value,
+	() => {
+		if (countdown.value == 0) {
+			stopCountdown();
+			activityStore.setIsShowRedBagRain(true);
+		}
+	},
+	{ once: true }
+);
+watch(
+	() => props.redBagInfo,
+	() => {
+		if (props.redBagInfo.advanceTime) {
+			startCountdown(props.redBagInfo.advanceTime);
+		}
+	},
+	{ once: true }
+);
 // 初始化，设置定位
 onMounted(() => {
 	position.value.x = 0;
 	position.value.y = 500;
 	window.addEventListener("resize", updatePosition);
+	pubsub.subscribe("/activity/redBagRain/settlement", () => {
+		emit("update:modelValue", false);
+	});
 });
+
 // 卸载事件
 onBeforeUnmount(() => {
 	window.removeEventListener("touchmove", onTouchMove);
