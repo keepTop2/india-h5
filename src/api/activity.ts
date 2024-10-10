@@ -26,7 +26,9 @@ export const activityApi = {
 		return useAxiosApi(`/app/activityParticipate/api/getConfigDetail`, {
 			method: "POST",
 			data,
-			headers,
+			headers: {
+				showLoading: true,
+			},
 		});
 	},
 	// 参加活动校验
@@ -52,9 +54,6 @@ export const activityApi = {
 		return useAxiosApi(`/app/activityRedBag/api/clientInfo`, {
 			method: "POST",
 			data,
-			headers: {
-				showLoading: true,
-			},
 		});
 	},
 	// 红包雨校验
@@ -62,7 +61,9 @@ export const activityApi = {
 		return useAxiosApi(`/app/activityRedBag/api/participate`, {
 			method: "POST",
 			data,
-			headers,
+			headers: {
+				showLoading: true,
+			},
 		});
 	},
 	// 每日竞赛分类

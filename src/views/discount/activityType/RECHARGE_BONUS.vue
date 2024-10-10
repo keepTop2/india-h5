@@ -1,6 +1,6 @@
 <template>
 	<div class="first-deposit-activity">
-		<VantNavBar title="次存活动" @onClickLeft="onClickLeft" />
+		<VantNavBar title="充值赠送" @onClickLeft="router.back()" />
 
 		<div class="content">
 			<img src="../image/firstDeposit.png" class="main-image" />

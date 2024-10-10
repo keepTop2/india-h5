@@ -94,7 +94,7 @@
 						</i18n-t>
 					</span>
 				</div>
-				<Button class="mt_40" :type="btnDisabled ? 'disabled' : 'default'" @click="onRegister">{{ $t('register["注册"]') }}</Button>
+				<Button class="mt_40" :type="btnDisabled || !isOnloadScript ? 'disabled' : 'default'" @click="onRegister">{{ $t('register["注册"]') }}</Button>
 				<div class="footer">
 					<span class="text">{{ $t('register["已有账户？"]') }}</span>
 					<span class="create van-haptics-feedback" @click="router.push('/login')">{{ $t('register["登录"]') }}</span>
@@ -103,7 +103,7 @@
 		</div>
 
 		<div id="captcha-element" ref="captchaBtn"></div>
-		<Hcaptcha ref="refhcaptcha" :onSubmit="onSubmit" />
+		<Hcaptcha ref="refhcaptcha" :onSubmit="onSubmit" v-model="isOnloadScript" />
 	</div>
 </template>
 
@@ -128,6 +128,7 @@ const userAgreement = ref(false); // 用户协议认证
 const marketingPromotion = ref(true); // 营销促销信息 默认勾选
 const captchaBtn = ref(null);
 const showInviteCode = ref(false);
+const isOnloadScript = ref(false);
 let state = reactive({
 	userAccount: "", // 邮箱或者手机号
 	password: "", // 密码

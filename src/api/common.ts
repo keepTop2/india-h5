@@ -7,7 +7,9 @@ class CommonApi {
 		return useAxiosApi(`/app/game_lobby/api/queryLobbyLabelList`, {
 			method: "POST",
 			data,
-			headers,
+			headers: {
+				showLoading: true,
+			},
 		});
 	};
 

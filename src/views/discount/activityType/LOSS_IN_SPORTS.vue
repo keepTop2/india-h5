@@ -1,7 +1,7 @@
 <template>
 	<div class="first-deposit-activity">
-		<VantNavBar title="体育负盈利" @onClickLeft="router.back()" />
-		<img :src="activityData?.headPicturePcI18nCode" class="main-image" />
+		<VantNavBar :title="activityData?.activityNameI18nCode" @onClickLeft="router.back()" />
+		<VantLazyImg :src="activityData?.headPicturePcI18nCode" class="main-image" />
 
 		<div class="content">
 			<div class="activity-details">
@@ -22,7 +22,7 @@
 						<p class="label">
 							<span>活动对象</span>
 						</p>
-						<p class="value">{{ activityData?.userTypeName }}</p>
+						<p class="value">{{ activityData?.userTypeText }}</p>
 					</div>
 					<div class="detail-row">
 						<p class="label">
@@ -52,22 +52,12 @@
 				</div>
 				<div class="detail-content">
 					<div v-html="activityInfo?.activityRuleI18nCode"></div>
-					<!-- <div class="winnerListTable">
-						<div class="winnerListHeader">
-							<div>亏损金额</div>
-							<div>返还比例</div>
-						</div>
-						<div class="winnerListBody" v-for="(item, index) in 3" :key="index">
-							<div>{{ 1 }}</div>
-							<div>{{ 2 }}</div>
-						</div>
-					</div> -->
 				</div>
 				<div class="detail-footer"></div>
 			</div>
 		</div>
-		<div class="applyBtn">
-			<div class="active">立即申请</div>
+		<div class="applyBtn" @click="apply" v-if="activityData?.participationMode == 0">
+			<div class="" :class="activityData?.status == 10000 ? 'active' : ''">{{ activityData?.status == 30047 ? "您已申请" : "立即申请" }}</div>
 		</div>
 		<activityDialog v-model="showDialog" title="温馨提示" :confirm="confirmDialog">
 			{{ dialogInfo.message }}
@@ -81,6 +71,7 @@ import { ref } from "vue";
 import { activityApi } from "/@/api/activity";
 import activityDialog from "../components/Dialog.vue";
 import dayjs from "dayjs";
+import { showToast } from "vant";
 const router = useRouter();
 const route = useRoute();
 const showDialog = ref(false);
@@ -105,7 +96,12 @@ const apply = () => {
 			if (res.data.status !== 10000) {
 				dialogInfo.value = res.data;
 				showDialog.value = true;
+			} else {
+				showToast("申请成功");
+				getConfigDetail();
 			}
+		} else {
+			showToast(res.message);
 		}
 	});
 };

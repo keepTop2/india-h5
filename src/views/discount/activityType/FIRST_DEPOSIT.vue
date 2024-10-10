@@ -1,9 +1,9 @@
 <template>
 	<div class="first-deposit-activity">
 		<VantNavBar :title="activityData?.activityNameI18nCode" @onClickLeft="router.back()" />
-		<img :src="activityData?.headPicturePcI18nCode" class="main-image" />
+		<VantLazyImg :src="activityData?.headPicturePcI18nCode" class="main-image" />
 		<div class="content">
-			<div class="bonus-card">
+			<div class="bonus-card" v-if="activityData?.participationMode == 0">
 				<div class="bonus-header">红利赠送</div>
 				<div class="bonus-content">
 					<div class="bonus-row1">
@@ -29,7 +29,7 @@
 						>
 					</div>
 				</div>
-				<button class="apply-button active" @click="apply">{{ activityData?.status == 10000 ? "立即申请" : "您已申请" }}</button>
+				<button class="apply-button" @click="apply" :class="activityData?.status == 10000 ? 'active' : ''">{{ activityData?.status == 30047 ? "您已申请" : "立即申请" }}</button>
 			</div>
 
 			<div class="activity-details">
@@ -50,7 +50,7 @@
 						<p class="label">
 							<span>活动对象</span>
 						</p>
-						<p class="value">{{ activityData?.userTypeName }}</p>
+						<p class="value">{{ activityData?.userTypeText }}</p>
 					</div>
 					<div class="detail-row">
 						<p class="label">
@@ -117,22 +117,21 @@ const getConfigDetail = () => {
 	});
 };
 const apply = () => {
-	if (!useUserStore().getUserInfo.phone && !useUserStore().getUserInfo.email) {
-		dialogInfo.value = {
-			message: "很抱歉，您不符合参与活动条件, 参与活动前需要验证绑定您的手机号和邮箱号码，请尽快完善资料",
-		};
-		showDialog.value = true;
-		return;
-	}
-
 	activityApi.toActivity({ id: activityInfo.id }).then((res: any) => {
 		if (res.code === 10000) {
 			if (res.data.status !== 10000) {
 				dialogInfo.value = res.data;
 				showDialog.value = true;
 			} else {
-				showToast("申请成功");
-				getConfigDetail();
+				activityApi.getActivityReward().then((res: any) => {
+					if (res.code === 10000) {
+						showToast("申请成功");
+						getConfigDetail();
+					} else {
+						dialogInfo.value = res.data;
+						showDialog.value = true;
+					}
+				});
 			}
 		}
 	});
