@@ -57,7 +57,7 @@
 			<div class="dialog-amount">${{ reward?.prizeAmount }}</div>
 			<div @click="playAgain" class="button">
 				<div>再抽一次</div>
-				<span class="remaining_times_btn">剩余次数:5</span>
+				<span class="remaining_times_btn">剩余次数:{{ activityData?.balanceCount }}</span>
 			</div>
 		</div>
 		<div class="close" @click="showResult = false">
