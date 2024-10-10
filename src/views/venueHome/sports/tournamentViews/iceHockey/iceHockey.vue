@@ -1,10 +1,10 @@
 <template>
 	<div class="list-content">
-		<VirtualScrollVirtualList ref="VirtualScrollVirtualListRef" v-if="listData.length" :list-data="listData" :item-max-size="170" :item-min-size="20" :is-expand="true">
+		<virtualScrollVirtualList :disabledScroll="true" ref="VirtualScrollVirtualListRef" v-if="listData.length" :list-data="listData" :item-max-size="170" :item-min-size="20" :is-expand="true">
 			<template #default="{ item, index, isExpand }">
 				<Card :data="item" :isExpand="isExpand" :dataIndex="index" :sportType="props.sportType" @toggleDisplay="toggleDisplay" />
 			</template>
-		</VirtualScrollVirtualList>
+		</virtualScrollVirtualList>
 
 		<NoData v-else />
 	</div>
@@ -33,8 +33,11 @@ const toggleDisplay = (val?: number) => {
 </script>
 
 <style scoped lang="scss">
-@import "/@/views/venueHome/sports/common.scss";
 .list-content {
-	height: calc(100vh - 97px);
+	height: 100%;
+	padding-bottom: 100px;
+	@include themeify {
+		background-color: themed("BG1");
+	}
 }
 </style>

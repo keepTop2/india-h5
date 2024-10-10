@@ -2,12 +2,19 @@
 	<div class="content">
 		<DateSelector v-model="activeDate" :daysNumber="7" :other="false" :direction="false" />
 		<div class="list-content">
-			<VirtualScrollVirtualList ref="VirtualScrollVirtualListRef" v-if="eventResultData.length" :list-data="eventResultData" :item-max-size="170" :item-min-size="20" :is-expand="true">
+			<virtualScrollVirtualList
+				:disabledScroll="true"
+				ref="VirtualScrollVirtualListRef"
+				v-if="eventResultData.length"
+				:list-data="eventResultData"
+				:item-max-size="170"
+				:item-min-size="20"
+				:is-expand="true"
+			>
 				<template #default="{ item, index, isExpand }">
 					<Card v-if="item.events.length" :data="item" :isExpand="isExpand" :dataIndex="index" @toggleDisplay="toggleDisplay" />
 				</template>
-			</VirtualScrollVirtualList>
-
+			</virtualScrollVirtualList>
 			<NoData v-else />
 		</div>
 	</div>
@@ -120,8 +127,13 @@ const toggleDisplay = (val?: number) => {
 		}
 	}
 }
-
+.content {
+	height: 100%;
+}
 .list-content {
-	height: calc(100vh - 97px);
+	height: 100%;
+	@include themeify {
+		background-color: themed("BG1");
+	}
 }
 </style>

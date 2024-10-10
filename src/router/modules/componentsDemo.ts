@@ -29,6 +29,14 @@ const componentsDemo = {
 				title: "多项选择器使用示例",
 			},
 		},
+		{
+			path: "/redBagDemo",
+			name: "redBagDemo",
+			component: () => import("/@/views/redBagDemo/redBagDemo.vue"),
+			meta: {
+				title: "红包雨基础示例",
+			},
+		},
 	],
 };
 export default componentsDemo;

@@ -77,7 +77,8 @@ export default (function () {
 		/**
 		 * 处理数据
 		 */
-		public getSportData(sportType?:string) {
+		public getSportData(sportType?: string) {
+			console.log(sportType, "=========sportType");
 			const sportsBetEvent = useSportsBetEventStore();
 			const leagueSelect = sportsBetEvent.getLeagueSelect;
 			if (!sportType) {

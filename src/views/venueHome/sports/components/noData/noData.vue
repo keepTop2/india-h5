@@ -14,7 +14,7 @@ import noData from "/@/assets/zh-CN/default/venueHome/sports/noData.png";
 <style scoped lang="scss">
 .noData-content {
 	width: 100%;
-	height: 100%;
+	// height: 100%;
 	display: flex;
 	justify-content: center;
 	.noData-icon {
@@ -28,7 +28,7 @@ import noData from "/@/assets/zh-CN/default/venueHome/sports/noData.png";
 	.label {
 		margin-top: 24px;
 		@include themeify {
-			color: themed("T3-P");
+			color: themed("T3");
 		}
 		font-family: "PingFang SC";
 		font-size: 24px;

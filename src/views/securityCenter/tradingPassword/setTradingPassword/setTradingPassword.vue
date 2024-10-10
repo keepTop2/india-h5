@@ -13,8 +13,8 @@
 			>
 				<template v-slot:right>
 					<div class="right">
-						<SvgIcon v-if="state.password" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.password = ''" />
-						<SvgIcon class="icon" :iconName="eyeShow ? '/loginOrRegister/eye-off' : '/loginOrRegister/eye'" @click="eyeShow = !eyeShow" />
+						<SvgIcon v-if="state.password" class="clearIcon" iconName="loginOrRegister/clear" @click="state.password = ''" />
+						<SvgIcon class="icon" :iconName="eyeShow ? 'loginOrRegister/eye-off' : 'loginOrRegister/eye'" @click="eyeShow = !eyeShow" />
 					</div>
 				</template>
 			</FormInput>
@@ -32,8 +32,8 @@
 			>
 				<template v-slot:right>
 					<div class="right">
-						<SvgIcon v-if="state.confirmPassword" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.confirmPassword = ''" />
-						<SvgIcon class="icon" :iconName="eyeShow2 ? '/loginOrRegister/eye-off' : '/loginOrRegister/eye'" @click="eyeShow2 = !eyeShow2" />
+						<SvgIcon v-if="state.confirmPassword" class="clearIcon" iconName="loginOrRegister/clear" @click="state.confirmPassword = ''" />
+						<SvgIcon class="icon" :iconName="eyeShow2 ? 'loginOrRegister/eye-off' : 'loginOrRegister/eye'" @click="eyeShow2 = !eyeShow2" />
 					</div>
 				</template>
 			</FormInput>

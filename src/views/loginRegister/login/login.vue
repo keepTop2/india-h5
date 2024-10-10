@@ -2,48 +2,41 @@
 	<div class="login-container">
 		<NavBar />
 		<HeaderBG />
-		<div class="login-from">
+		<div class="login-form">
 			<div class="title">{{ $t('login["登录"]') }}</div>
-			<div class="from">
-				<FormInput v-model="state.userAccount" type="text" :placeholder="$t(`login['账户名']`)" :errorBorder="!isAccountValid && state.userAccount !== '' ? true : false">
+			<form class="form" autocomplete="off">
+				<FormInput v-model="state.userAccount" type="text" :placeholder="$t(`login['账户名']`)">
 					<template v-slot:right>
-						<SvgIcon v-if="state.userAccount" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.userAccount = ''" />
+						<SvgIcon v-if="state.userAccount" class="clearIcon" iconName="loginOrRegister/clear" @click="state.userAccount = ''" />
 					</template>
 				</FormInput>
-				<div class="error_text">
+				<!-- <div class="error_text">
 					<span v-if="!isAccountValid && state.userAccount !== ''" class="text">{{ $t('register["请输入4-11位字母+数字组成，首位必须是字母"]') }}</span>
-				</div>
+				</div> -->
 
-				<FormInput
-					v-model="state.password"
-					:type="eyeShow ? 'password' : 'text'"
-					:maxlength="16"
-					:placeholder="$t(`login['登录密码']`)"
-					:errorBorder="!isPasswordValid && state.password !== '' ? true : false"
-				>
+				<FormInput class="mt_20" v-model="state.password" :type="eyeShow ? 'password' : 'text'" :maxlength="16" :placeholder="$t(`login['登录密码']`)">
 					<template v-slot:right>
 						<div class="right">
-							<SvgIcon v-if="state.password" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.password = ''" />
-							<SvgIcon class="icon" :iconName="eyeShow ? '/loginOrRegister/eye-off' : '/loginOrRegister/eye'" @click="eyeShow = !eyeShow" />
+							<SvgIcon v-if="state.password" class="clearIcon" iconName="loginOrRegister/clear" @click="state.password = ''" />
+							<SvgIcon class="icon" :iconName="eyeShow ? 'loginOrRegister/eye-off' : 'loginOrRegister/eye'" @click="eyeShow = !eyeShow" />
 						</div>
 					</template>
 				</FormInput>
-				<div class="error_text">
+				<!-- <div class="error_text">
 					<span v-if="!isPasswordValid && state.password !== ''" class="text">{{ $t('register["密码为8-16位"]') }}</span>
-				</div>
+				</div> -->
 
-				<div class="password-operation">
+				<div class="password-operation mt_32">
 					<div class="remember-password" @click="userAgreement = !userAgreement">
 						<div class="check">
-							<SvgIcon class="check_icon" :iconName="userAgreement ? '/loginOrRegister/checkbox_active' : '/loginOrRegister/checkbox'" />
+							<SvgIcon class="check_icon" :iconName="userAgreement ? 'loginOrRegister/checkbox_active' : 'loginOrRegister/checkbox'" />
 						</div>
 						<span class="label">{{ $t('login["记住密码"]') }}</span>
 					</div>
 
 					<div class="forgot-password" @click="router.push('/forgetPassword')">{{ $t('login["忘记密码"]') }}</div>
 				</div>
-
-				<Button class="mt_40" :type="btnDisabled ? 'disabled' : 'default'" @click="onLogin">{{ $t('login["登录"]') }}</Button>
+				<Button class="mt_40" :type="btnDisabled || !isOnloadScript ? 'disabled' : 'default'" @click="onLogin">{{ $t('login["登录"]') }}</Button>
 
 				<div class="footer">
 					<div>
@@ -54,30 +47,34 @@
 						<span class="help">{{ $t('common["联系客服"]') }}</span>
 					</div>
 				</div>
-			</div>
+			</form>
 		</div>
-		<Hcaptcha ref="hcaptcha" @submit="onSubmit" />
+		<div id="captcha-element" ref="captchaBtn"></div>
+		<Hcaptcha ref="refhcaptcha" :onSubmit="onSubmit" v-model="isOnloadScript" />
 	</div>
 </template>
 
 <script setup lang="ts">
 import NavBar from "/@/layout/loginRegister/components/navBar.vue";
-import { loginApi, verifyCodeApi } from "/@/api/loginRegister";
+import { loginApi } from "/@/api/loginRegister";
+import common from "/@/utils/common";
 import HeaderBG from "/@/views/loginRegister/components/headerBG.vue";
+import { getIndexInfo } from "/@/views/venueHome/sports/utils/commonFn";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import common from "/@/utils/common";
 import { useUserStore } from "/@/store/modules/user";
+import { showToast } from "vant";
 const store = useUserStore();
-const hcaptcha: any = ref(null);
+const refhcaptcha: any = ref(null);
 const router = useRouter();
 const eyeShow = ref(true);
 const btnDisabled = ref(true);
 const userAgreement = ref(false);
-const state = reactive({
+const captchaBtn = ref(null);
+const isOnloadScript = ref(false);
+let state = reactive({
 	userAccount: "", // 邮箱或者手机号
 	password: "", // 密码
-	deviceNo: common.getInstance().getDevice(), // 设备
 });
 
 // 账号正则
@@ -110,36 +107,35 @@ watch(
 );
 
 const onLogin = async () => {
-	// submitUserLogin();
-	// return;
-	const res = await loginApi.userLogin(state).catch((err) => err);
-	if (res.code == common.getInstance().ResCode.SUCCESS) {
-		hcaptcha.value?.validate();
-	}
+	captchaBtn.value?.click();
 };
 
-const onSubmit = async (token: string) => {
-	const res = await verifyCodeApi.verifyCode({ verifyToken: token }).catch((err) => err);
+const onSubmit = async () => {
+	const certifyId = refhcaptcha.value.certifyId;
+	const res = await loginApi.userLogin({ ...state, certifyId }).catch((err) => err);
 	if (res.code == common.getInstance().ResCode.SUCCESS) {
-		submitUserLogin();
-	}
-};
-
-const submitUserLogin = async () => {
-	const res = await loginApi.submitUserLogin(state).catch((err) => err);
-	if (res.code == common.getInstance().ResCode.SUCCESS) {
-		store.setInfo(res.data);
+		await store.setInfo(res.data);
 		if (userAgreement.value) {
+			// 记住密码
 			store.setLoginInfo({ userAccount: state.userAccount, password: state.password });
+			store.setLoginStatus(true);
 		} else {
 			store.setLoginInfo();
 		}
-		router.replace({ path: "/home" });
+		await getIndexInfo();
+
+		router.replace({ path: "/" });
+	} else {
+		showToast(res.message);
 	}
 };
 
 onBeforeMount(() => {
-	userAgreement.value = !loginInfo.value ? false : true;
+	if (loginInfo.value) {
+		userAgreement.value = !loginInfo.value ? false : true;
+		state.userAccount = loginInfo.value.userAccount;
+		state.password = loginInfo.value.password;
+	}
 });
 </script>
 
@@ -152,7 +148,7 @@ onBeforeMount(() => {
 		background-color: themed("BG1");
 	}
 
-	.login-from {
+	.login-form {
 		padding: 0px 55px;
 		.title {
 			font-size: 36px;
@@ -161,7 +157,7 @@ onBeforeMount(() => {
 				color: themed("TB");
 			}
 		}
-		.from {
+		.form {
 			margin-top: 40px;
 
 			.right {
@@ -209,6 +205,7 @@ onBeforeMount(() => {
 						.check_icon {
 							width: 32px;
 							height: 32px;
+							color: themed("Theme");
 						}
 					}
 				}

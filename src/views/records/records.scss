@@ -1,0 +1,134 @@
+.bet-detail,
+.bet-detail2 {
+	@include themeify {
+		.label {
+			color: themed("T1");
+		}
+		.Settled {
+			color: themed("Wam-P1");
+		}
+		.win {
+			color: themed("Wam-P1");
+		}
+
+		.lose {
+			color: themed("Warn");
+		}
+		.PendingSettlement {
+			color: themed("Hint");
+		}
+		margin-bottom: 24px;
+		background-color: themed("BG3");
+		padding: 16px;
+		border-radius: 8px;
+		color: themed("TB");
+		font-family: "PingFang SC";
+		font-size: 26px;
+		line-height: 1.6;
+
+		.header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			margin-bottom: 8px;
+			border-bottom: 1px solid themed("Line");
+
+			.match-info {
+				display: flex;
+				align-items: center;
+				.flag {
+					width: 20px;
+					height: 20px;
+					margin-right: 8px;
+				}
+
+				.match-type {
+					color: themed("TB");
+				}
+			}
+		}
+
+		.teams {
+			font-weight: 400;
+			margin-bottom: 8px;
+		}
+
+		.order-info {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			margin-bottom: 8px;
+
+			.order-number {
+				display: flex;
+				align-items: center;
+				font-size: 24px;
+				svg {
+					width: 38px;
+					height: 38px;
+				}
+			}
+
+			.order-date {
+				color: themed("TB");
+			}
+		}
+
+		.bet-info {
+			.flex-between {
+				justify-content: space-between;
+			}
+			.bet-item {
+				display: flex;
+				margin-bottom: 4px;
+				// .bet-item-content {
+				// 	width: 320px;
+				// }
+				.label {
+					color: themed("T1");
+					font-size: 24px;
+				}
+
+				.value {
+					font-weight: 400;
+					font-size: 24px;
+
+					&.negative {
+						color: themed("Warn");
+					}
+				}
+			}
+		}
+	}
+}
+.bet-detail2 {
+	@include themeify {
+		.bet-amount {
+			margin-bottom: 8px;
+		}
+
+		.match-details {
+			margin-bottom: 8px;
+			padding-bottom: 8px;
+			border-bottom: 1px solid themed("Line");
+			display: flex;
+			justify-content: space-between;
+			&:last-child {
+				border-bottom: none;
+			}
+			.match-info {
+				margin-bottom: 4px;
+				span {
+					display: block;
+					margin-bottom: 16px;
+				}
+			}
+
+			.match-result {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+			}
+		}
+	}
+}

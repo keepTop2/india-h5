@@ -1,42 +1,42 @@
 <template>
 	<div class="container bg_BG3">
 		<div class="left-section">
-			<div class="item big" id="item-1">
-				<SvgIcon class="star" iconName="home/event_collect" />
-				<VantLazyImg v-if="gameInfoList?.[0]?.icon" :src="gameInfoList?.[0]?.icon" />
-				<NoGameImg v-else />
+			<div class="item big" id="item-1" @click="Common.goToGame(gameInfoList?.[0])">
+				<SvgIcon v-if="gameInfoList?.[0]?.collect" @click="onClickCollect(gameInfoList?.[0], false)" iconName="home/event_collect" />
+				<SvgIcon v-else @click="onClickCollect(gameInfoList?.[0], true)" iconName="home/event_collect_no" />
+				<VantLazyImg :src="gameInfoList?.[0]?.icon || ''" :loadingSrc="loadingSrc" :errorSrc="loadingSrc" />
+				<!-- <NoGameImg v-else /> -->
 			</div>
 			<div class="small-items">
-				<div class="item" id="item-5">
-					<SvgIcon class="star" iconName="home/event_collect" />
-					<VantLazyImg v-if="gameInfoList?.[1]?.icon" :src="gameInfoList?.[1]?.icon" />
-					<NoGameImg v-else />
+				<div class="item" id="item-5" @click="Common.goToGame(gameInfoList?.[1])">
+					<SvgIcon v-if="gameInfoList?.[1]?.collect" @click="onClickCollect(gameInfoList?.[1], false)" iconName="home/event_collect" />
+					<SvgIcon v-else @click="onClickCollect(gameInfoList?.[1], true)" iconName="home/event_collect_no" />
+					<VantLazyImg :src="gameInfoList?.[1]?.icon || ''" :loadingSrc="loadingSrc" :errorSrc="loadingSrc" />
 				</div>
-				<div class="item" id="item-6">
-					<SvgIcon class="star" iconName="home/event_collect" />
-					<VantLazyImg v-if="gameInfoList?.[2]?.icon" :src="gameInfoList?.[2]?.icon" />
-					<NoGameImg v-else />
+				<div class="item" id="item-6" @click="Common.goToGame(gameInfoList?.[2])">
+					<SvgIcon v-if="gameInfoList?.[2]?.collect" @click="onClickCollect(gameInfoList?.[2], false)" iconName="home/event_collect" />
+					<SvgIcon v-else @click="onClickCollect(gameInfoList?.[2], true)" iconName="home/event_collect_no" />
+					<VantLazyImg :src="gameInfoList?.[2]?.icon || ''" :loadingSrc="loadingSrc" :errorSrc="loadingSrc" />
 				</div>
 			</div>
 		</div>
 		<div class="right-section">
 			<div class="small-items">
-				<div class="item" id="item-3">
-					<SvgIcon class="star" iconName="home/event_collect" />
-					<!-- <VantLazyImg :src="img" /> -->
-					<VantLazyImg v-if="gameInfoList?.[3]?.icon" :src="gameInfoList?.[3]?.icon" />
-					<NoGameImg v-else />
+				<div class="item" id="item-3" @click="Common.goToGame(gameInfoList?.[3])">
+					<SvgIcon v-if="gameInfoList?.[3]?.collect" @click="onClickCollect(gameInfoList?.[3], false)" iconName="home/event_collect" />
+					<SvgIcon v-else @click="onClickCollect(gameInfoList?.[3], true)" iconName="home/event_collect_no" />
+					<VantLazyImg :src="gameInfoList?.[3]?.icon || ''" :loadingSrc="loadingSrc" :errorSrc="loadingSrc" />
 				</div>
-				<div class="item" id="item-4">
-					<SvgIcon class="star" iconName="home/event_collect" />
-					<VantLazyImg v-if="gameInfoList?.[4]?.icon" :src="gameInfoList?.[4]?.icon" />
-					<NoGameImg v-else />
+				<div class="item" id="item-4" @click="Common.goToGame(gameInfoList?.[4])">
+					<SvgIcon v-if="gameInfoList?.[4]?.collect" @click="onClickCollect(gameInfoList?.[4], false)" iconName="home/event_collect" />
+					<SvgIcon v-else @click="onClickCollect(gameInfoList?.[4], true)" iconName="home/event_collect_no" />
+					<VantLazyImg :src="gameInfoList?.[4]?.icon || ''" :loadingSrc="loadingSrc" :errorSrc="loadingSrc" />
 				</div>
 			</div>
-			<div class="item big" id="item-2">
-				<SvgIcon class="star" iconName="home/event_collect" />
-				<VantLazyImg v-if="gameInfoList?.[5]?.icon" :src="gameInfoList?.[5]?.icon" />
-				<NoGameImg v-else />
+			<div class="item big" id="item-2" @click="Common.goToGame(gameInfoList?.[5])">
+				<SvgIcon v-if="gameInfoList?.[5]?.collect" @click="onClickCollect(gameInfoList?.[5], false)" iconName="home/event_collect" />
+				<SvgIcon v-else @click="onClickCollect(gameInfoList?.[5], true)" iconName="home/event_collect_no" />
+				<VantLazyImg :src="gameInfoList?.[5]?.icon || ''" :loadingSrc="loadingSrc" :errorSrc="loadingSrc" />
 			</div>
 		</div>
 	</div>
@@ -44,10 +44,34 @@
 <script setup lang="ts">
 import img from "./image.png";
 import VantLazyImg from "/@/components/vant/VantLazyImg.vue";
-import { GameInfoList } from "HomeApiData";
+import loadingSrc from "../static/loading.png";
+import { GameInfoList } from "/#/game";
+import GameApi from "/@/api/venueHome/games";
+import pubsub from "/@/pubSub/pubSub";
+import Common from "/@/utils/common";
+/**
+ * @description 游戏6格基础布局组件的属性定义
+ * @param {GameInfoList[]} gameInfoList 游戏列表
+ */
 const props = defineProps<{
 	gameInfoList: GameInfoList[];
 }>();
+
+/**
+ * @description 处理游戏收藏/取消收藏的点击事件
+ * @param {Object} item 游戏信息对象
+ * @param {boolean} collect 是否收藏
+ */
+const onClickCollect = async (item, collect) => {
+	const res = await GameApi.gameCollection({
+		gameId: item.id,
+		type: collect,
+	});
+	if (res.ok) {
+		item.collect = collect;
+		pubsub.publish("getCollect");
+	}
+};
 </script>
 <style scoped lang="scss">
 .container {
@@ -62,6 +86,7 @@ const props = defineProps<{
 	img {
 		width: 100%;
 		height: 100%;
+		border-radius: 20px;
 	}
 	.left-section,
 	.right-section {
@@ -78,7 +103,7 @@ const props = defineProps<{
 
 	.item {
 		position: relative;
-		border-radius: 8px;
+		// border-radius: 20px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -86,14 +111,14 @@ const props = defineProps<{
 		width: 152px;
 		height: 152px;
 		@include themeify {
-			border: 1px solid themed("T3");
+			// border: 1px solid themed("T3");
 		}
 		&.big {
 			width: 320px;
 			height: 320px; // Adjust the height as needed
 		}
 
-		.star {
+		svg {
 			position: absolute;
 			top: 10px;
 			right: 10px;

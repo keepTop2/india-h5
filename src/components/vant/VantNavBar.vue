@@ -14,8 +14,10 @@
 		>
 			<template #left>
 				<span v-if="leftText">{{ leftText }}</span>
-				<slot v-else name="left">
-					<SvgIcon class="back" iconName="/vantNavBar/back" />
+				<slot v-else-if="leftArrow" name="left">
+					<div class="back">
+						<SvgIcon iconName="vantNavBar/back" />
+					</div>
 				</slot>
 			</template>
 			<template #title>
@@ -89,6 +91,17 @@ const onClickRight = () => {
 .back {
 	width: 36px;
 	height: 36px;
+	svg {
+		width: 100%;
+		height: 100%;
+	}
+	@include themeify {
+		color: themed("TB");
+	}
+	svg {
+		width: 100%;
+		height: 100%;
+	}
 }
 
 .service_icon {
@@ -139,6 +152,8 @@ const onClickRight = () => {
 
 :deep(.van-nav-bar__left) {
 	padding-left: 28px;
+
+	// align-items: end;
 }
 
 :deep(.van-nav-bar--fixed) {

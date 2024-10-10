@@ -4,7 +4,9 @@
 			<input
 				v-model="stake"
 				type="text"
-				:placeholder="`限额 ${common.getInstance().formatFloat(sportsBetInfo.singleTicketInfo.minBet)} ~ ${common.getInstance().formatFloat(sportsBetInfo.singleTicketInfo.maxBet)}`"
+				:placeholder="`${$t('sports[\'限额\']')} ${common.getInstance().formatFloat(sportsBetInfo.singleTicketInfo.minBet)} ~ ${common
+					.getInstance()
+					.formatFloat(sportsBetInfo.singleTicketInfo.maxBet)}`"
 				readonly
 			/>
 			<div class="unit">USD</div>
@@ -69,7 +71,7 @@ input {
 	width: 100%;
 	height: 30px;
 	@include themeify {
-		background-color: themed("BG2");
+		background-color: themed("BG3");
 		color: themed("Theme");
 	}
 	font-family: "PingFang SC";

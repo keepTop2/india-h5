@@ -1,13 +1,5 @@
-<!--
- * @Author: Hida
- * @Date: 2024-06-02 21:49:41
- * @LastEditors: hida
- * @LastEditTime: 2024-06-10 17:03:42
- * @Description: 
- * 
--->
 <template>
-	<div class="dateSelector">
+	<div class="dateSelector bg_BG1" :style="{ top: stickyHeight + 'px' }">
 		<div :class="['date_item', modelValue == item.date && 'active']" v-for="(item, index) in dateList" :key="index" @click="changeDate(item)">
 			<div class="date">{{ item.label }}</div>
 			<div class="date">{{ weekEnum[item.week] }}</div>
@@ -33,6 +25,10 @@ import { i18n } from "/@/i18n/index";
 import { useSportsBetEventStore } from "/@/store/modules/sports/sportsBetData";
 const sportsBetEvent = useSportsBetEventStore();
 const $: any = i18n.global;
+const stickyHeight = computed(() => {
+	const clientHeight = document.getElementsByClassName("sports-container")[0]?.clientHeight;
+	return Math.round(clientHeight);
+});
 
 const weekEnum = {
 	1: $.t("sports['星期一']"),
@@ -76,9 +72,12 @@ onMounted(() => {
 
 <style scoped lang="scss">
 .dateSelector {
+	position: sticky;
+	top: 240px;
 	width: 100%;
+	z-index: 2;
 	display: flex;
-	gap: 24px;
+	gap: 12px;
 	padding: 24px;
 	box-sizing: border-box;
 	overflow-x: auto;
@@ -91,28 +90,33 @@ onMounted(() => {
 	}
 	// scrollbar-width: none;
 	.date_item {
-		padding: 4px 36px;
+		min-width: 144px;
 		height: 84px;
+		display: inline-table;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: center;
+		padding: 4px 10px;
 		border-radius: 16px;
 		text-align: center;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
 		@include themeify {
 			border: 2px solid themed("Line");
 			color: themed("TB");
 		}
+		box-sizing: border-box;
 		.date {
 			white-space: nowrap;
-			font-size: 22px;
+			font-size: 24px;
 			font-weight: 400;
+			line-height: 38px;
 		}
 	}
 	.active {
 		@include themeify {
 			background-color: themed("Theme");
-			color: themed("TB-P");
-			border: 0;
+			color: themed("TB1");
+			border: 2px solid transparent;
 		}
 	}
 }

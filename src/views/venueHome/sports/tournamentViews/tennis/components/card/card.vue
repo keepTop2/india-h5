@@ -7,7 +7,7 @@
 				</div>
 				<div class="tournament-name">{{ data.leagueName }}</div>
 			</div>
-			<SvgIcon :class="{ sport_arrow: !displayContent }" iconName="/venueHome/sports/svg/sport_arrow" size="5.333333" />
+			<SvgIcon :class="{ sport_arrow: !displayContent }" iconName="venueHome/sports/svg/sport_arrow" size="5.333333" />
 		</div>
 		<template v-if="displayContent">
 			<eventItem v-for="(event, index) in data.events" :key="index" :event="event" :sportType="props.sportType" />
@@ -60,59 +60,5 @@ const toggleDisplay = () => {
 </script>
 
 <style scoped lang="scss">
-.card-item {
-	margin: 0px 24px 24px 24px;
-	border-radius: 16px;
-	overflow: hidden;
-	@include themeify {
-		background-color: themed("BG3");
-	}
-}
-.tournament-header {
-	height: 56px;
-	display: flex;
-	align-items: center;
-	padding: 8px 12px;
-	border-radius: 16px 16px 0px 0px;
-	@include themeify {
-		background: themed("--JBS-CARD");
-		box-shadow: 0px 1px 4px 0px themed("--JBS-CARD--shadow");
-	}
-	box-sizing: border-box;
-
-	.tournament-info {
-		flex: 1;
-		display: flex;
-		align-items: center;
-		margin-right: 18px;
-
-		.tournament-icon {
-			width: 30px;
-			height: 30px;
-			margin: 0 12px;
-			img {
-				width: 100%;
-				height: 100%;
-			}
-		}
-
-		.tournament-name {
-			width: 526px;
-			@include themeify {
-				color: themed("TB");
-			}
-			font-family: "PingFang SC";
-			font-size: 24px;
-			font-weight: 400;
-			line-height: 34px;
-			white-space: nowrap; /* 禁止换行 */
-			overflow: hidden; /* 隐藏超出部分 */
-			text-overflow: ellipsis; /* 显示省略号 */
-		}
-	}
-
-	.sport_arrow {
-		transform: rotate(-180deg);
-	}
-}
+@import "/@/views/venueHome/sports/common.scss";
 </style>

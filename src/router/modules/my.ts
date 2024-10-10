@@ -10,6 +10,22 @@ export const MySubRouter = {
 			},
 		},
 		{
+			path: "/feedbackRecords",
+			name: "feedbackRecords",
+			component: () => import("/@/views/subViews/my/feedbackRecords/feedbackRecords.vue"),
+			meta: {
+				title: "反馈记录",
+			},
+		},
+		{
+			path: "/feedbackDetails",
+			name: "feedbackDetails",
+			component: () => import("/@/views/subViews/my/feedbackDetails/feedbackDetails.vue"),
+			meta: {
+				title: "反馈详情",
+			},
+		},
+		{
 			path: "/medalCollection",
 			name: "medalCollection",
 			component: () => import("/@/views/subViews/my/medalCollection/medalCollection.vue"),
@@ -26,12 +42,16 @@ export const MySubRouter = {
 			},
 		},
 		{
-			path: "/betting/record",
-			name: "bettingRecord",
-			component: () => import("/@/views/BettingRecord/BettingRecord.vue"),
-			meta: {
-				title: "投注记录",
-			},
+			path: "/messageCenter",
+			name: "messageCenter",
+			component: () => import("/@/views/subViews/my/messageCenter/messageCenter.vue"),
+			meta: { title: "通知" },
+		},
+		{
+			path: "/language",
+			name: "language",
+			component: () => import("/@/views/subViews/my/language/language.vue"),
+			meta: { title: "语言" },
 		},
 	],
 };

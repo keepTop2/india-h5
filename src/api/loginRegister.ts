@@ -7,17 +7,27 @@ export class loginApi {
 		return useAxiosApi(`/app/login/api/userLogin`, {
 			method: "POST",
 			data,
-			headers,
+			headers: {
+				showLoading: true,
+			},
 		});
 	};
-	// 登录
-	static submitUserLogin = (data = {}, headers = {}) => {
-		return useAxiosApi(`/app/login/api/submitUserLogin`, {
+	// 登录检验
+	static logout = (data = {}, headers = {}) => {
+		return useAxiosApi(`/app/login/api/logout`, {
 			method: "POST",
 			data,
 			headers,
 		});
 	};
+	// 登录
+	// static submitUserLogin = (data = {}, headers = {}) => {
+	// 	return useAxiosApi(`/app/login/api/submitUserLogin`, {
+	// 		method: "POST",
+	// 		data,
+	// 		headers,
+	// 	});
+	// };
 }
 
 // 注册
@@ -30,14 +40,14 @@ export class registerApi {
 			headers,
 		});
 	};
-	// 注册
-	static submitRegister = (data = {}, headers = {}) => {
-		return useAxiosApi(`/app/login/api/submitRegister`, {
-			method: "POST",
-			data,
-			headers,
-		});
-	};
+	// // 注册
+	// static submitRegister = (data = {}, headers = {}) => {
+	// 	return useAxiosApi(`/app/login/api/submitRegister`, {
+	// 		method: "POST",
+	// 		data,
+	// 		headers,
+	// 	});
+	// };
 }
 
 // 验证码
@@ -46,7 +56,9 @@ export class verifyCodeApi {
 		return useAxiosApi(`/app/login/api/verifyCode`, {
 			method: "POST",
 			data,
-			headers,
+			headers: {
+				showLoading: true,
+			},
 		});
 	};
 }

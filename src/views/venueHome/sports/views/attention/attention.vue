@@ -1,14 +1,7 @@
-<!--
- * @Author: Hida
- * @Date: 2024-05-18 10:54:05
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-07-15 18:29:08
- * @Description: 
- * 
--->
 <template>
 	<div class="list-content">
 		<VirtualScrollVirtualList
+			:disabledScroll="true"
 			ref="VirtualScrollVirtualListRef"
 			:childrenKey="(attentionSwitch == 'outright' && 'teams') || 'events'"
 			v-if="listData.length"
@@ -32,7 +25,7 @@ import { computed, ref } from "vue";
 // import EventCard from "./components/event/eventCard.vue";
 // import OutRightCard from "./components/outRight/outRightItem.vue";
 import viewSportPubSubEventData from "/@/views/venueHome/sports/hooks/viewSportPubSubEventData";
-import { VirtualScrollVirtualList } from "/@/views/venueHome/sports/components/virtualScrollVirtualList/index";
+import VirtualScrollVirtualList from "/@/views/venueHome/sports/components/virtualScrollVirtualList/virtualScrollVirtualList.vue";
 import { useSportsBetEventStore } from "/@/store/modules/sports/sportsBetData";
 import NoData from "/@/views/venueHome/sports/components/noData/noData.vue";
 import sportApi from "/@/api/venueHome/sports";

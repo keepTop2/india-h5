@@ -9,8 +9,8 @@
 					</div>
 					<div class="bet_slip_type mt_2">
 						<div>
-							<span>[优胜冠军]</span>
-							<span class="ml_8">[欧洲盘]</span>
+							<span>{{ $t('sports["[优胜冠军]"]') }}</span>
+							<span class="ml_8">{{ $t('sports["[欧洲盘]"]') }}</span>
 						</div>
 					</div>
 					<div class="bet_slip_name mt_5">
@@ -21,18 +21,18 @@
 
 			<div class="bet-details">
 				<div class="bet-cell">
-					<span class="label">投注金额</span>
+					<span class="label">{{ $t('sports["投注金额"]') }}</span>
 					<span class="value">{{ common.getInstance().formatFloat(props.data.stake) }}</span>
 				</div>
 				<div class="bet-cell">
-					<span class="label">可赢金额</span>
+					<span class="label">{{ $t('sports["可赢金额"]') }}</span>
 					<span class="value">{{ singleTicketWinningAmount }}</span>
 				</div>
 				<div class="bet-cell">
-					<span class="label">注单号</span>
+					<span class="label">{{ $t('sports["注单号"]') }}</span>
 					<span class="order">{{ sportsBetInfo.vendorTransId }}</span>
 				</div>
-				<div class="button" @click="clearCart">确认</div>
+				<div class="button" @click="clearCart">{{ $t('sports["确认"]') }}</div>
 			</div>
 		</div>
 	</div>
@@ -175,7 +175,7 @@ const clearCart = () => {
 				border-radius: 8px;
 				@include themeify {
 					background-color: themed("Theme");
-					color: themed("TB-P");
+					color: themed("TB");
 				}
 				font-family: "PingFang SC";
 				font-size: 30px;

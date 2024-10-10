@@ -7,7 +7,7 @@
 			<div v-show="state.type == 'email'">
 				<FormInput v-model="state.email" type="text" :placeholder="$t(`forgetPassword['请输入电子邮箱']`)" :errorBorder="!isEmailValid && state.email !== '' ? true : false">
 					<template v-slot:right>
-						<SvgIcon v-if="state.email" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.email = ''" />
+						<SvgIcon v-if="state.email" class="clearIcon" iconName="loginOrRegister/clear" @click="state.email = ''" />
 					</template>
 				</FormInput>
 				<div class="error_text">
@@ -18,17 +18,17 @@
 			<!-- 手机号码 -->
 			<div v-show="state.type == 'phone'">
 				<div class="phone" :class="{ 'form-input-error': !isPhoneValid && state.phone !== '' ? true : false }">
-					<div class="area_code">
-						<span>+{{ state.areaCode }}</span> <SvgIcon class="down" iconName="/loginOrRegister/navBar/down" />
+					<div class="area_code" @click="showAreaCode = true">
+						<span>+{{ state.areaCode }}</span> <SvgIcon class="down" iconName="loginOrRegister/navBar/down" />
 					</div>
-					<FormInput v-model="state.phone" type="text" :placeholder="$t(`forgetPassword['请输入手机号']`)">
+					<FormInput v-model="state.phone" type="text" :placeholder="$t(`forgetPassword['请输入手机号']`)" :maxlength="areaCodeObj.maxLength">
 						<template v-slot:right>
-							<SvgIcon v-if="state.phone" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.phone = ''" />
+							<SvgIcon v-if="state.phone" class="clearIcon" iconName="loginOrRegister/clear" @click="state.phone = ''" />
 						</template>
 					</FormInput>
 				</div>
 				<div class="error_text">
-					<span v-if="!isPhoneValid && state.phone !== ''" class="text">{{ $t('forgetPassword["请输入8-12位数字"]') }}</span>
+					<span v-if="!isPhoneValid && state.phone !== ''" class="text">{{ $t(`forgetPassword["请输入8-12位数字"]`, { min: areaCodeObj.minLength, max: areaCodeObj.maxLength }) }}</span>
 				</div>
 			</div>
 
@@ -44,6 +44,14 @@
 
 			<Button class="mt_40" :type="btnDisabled ? 'disabled' : 'default'" @click="onStep">{{ $t('forgetPassword["下一步"]') }}</Button>
 		</div>
+		<AreaCodePicker
+			v-model:showAreaCode="showAreaCode"
+			v-model:searchAreaCode="searchAreaCode"
+			:currentAreaCodeIndex="currentAreaCodeIndex"
+			:indexList="indexList"
+			:areaCode="areaCode"
+			@selectAreaCode="selectAreaCode"
+		/>
 	</div>
 </template>
 
@@ -51,6 +59,8 @@
 import { forgetPasswordApi } from "/@/api/loginRegister";
 import CaptchaButton from "/@/views/loginRegister/forgetPassword/components/captchaButton/captchaButton.vue";
 import common from "/@/utils/common";
+import { showToast } from "vant";
+import CommonApi from "/@/api/common";
 
 const props = withDefaults(
 	defineProps<{
@@ -58,26 +68,67 @@ const props = withDefaults(
 	}>(),
 	{ data: {} }
 );
-
+interface CountryData {
+	areaCode: string;
+	countryName: string;
+	countryCode: string;
+	icon: string | null;
+	maxLength: number;
+	minLength: number;
+}
 const captchaButton = ref<{
 	startCountdown: () => void;
+	stopCountdown: () => void;
 } | null>(null);
 
 const emit = defineEmits(["onStep"]);
-
+const areaCode: any = ref([]);
+const indexList: any = ref([]);
+const showAreaCode = ref(true);
+const searchAreaCode = ref("");
+const areaCodeObj: any = ref({});
+const currentAreaCodeIndex: Ref<number | string> = ref("");
 const state = reactive({
-	type: "email" as "email" | "phone",
+	type: "phone" as "email" | "phone",
 	email: "",
 	phone: "",
 	verifyCode: "",
-	areaCode: "86",
+	areaCode: "",
 });
-
+onMounted(() => {
+	getAreaCodeDownBox();
+});
+watch(
+	() => searchAreaCode.value,
+	() => {
+		const filterData = countries.value.filter(
+			(item: CountryData) =>
+				item.areaCode.toLocaleLowerCase().includes(searchAreaCode.value.toLocaleLowerCase()) ||
+				item.countryCode.toLocaleLowerCase().includes(searchAreaCode.value.toLocaleLowerCase()) ||
+				item.countryName.toLocaleLowerCase().includes(searchAreaCode.value.toLocaleLowerCase())
+		);
+		areaCode.value = groupByFirstLetter(filterData || []);
+		indexList.value = Object.keys(areaCode.value);
+	}
+);
+const countries: Ref<CountryData[]> = ref([]);
+const getAreaCodeDownBox = () => {
+	CommonApi.getAreaCodeDownBox().then((res: any) => {
+		if (res.code == common.getInstance().ResCode.SUCCESS) {
+			countries.value = res.data;
+			areaCode.value = groupByFirstLetter(countries.value || []);
+			console.log("areaCode.value", areaCode.value);
+			indexList.value = Object.keys(areaCode.value);
+			state.areaCode = countries.value[0].areaCode;
+			areaCodeObj.value = countries.value[0];
+		}
+	});
+};
 // 邮箱正则
 const isEmailValid = computed(() => common.emailRG.test(state.email));
 
 // 手机号正则
-const isPhoneValid = computed(() => common.phoneRG.test(state.phone));
+const isPhoneValid = computed(() => new RegExp(`^\\d{${areaCodeObj.value.minLength},${areaCodeObj.value.maxLength}}$`).test(state.phone));
 
 // 验证码按钮禁用状态
 const captchaDisabled = computed(() => {
@@ -95,6 +146,7 @@ const btnDisabled = computed(() => {
 
 const onChange = () => {
 	state.type = state.type === "email" ? "phone" : "email";
+	captchaButton.value?.stopCountdown();
 };
 
 const onCaptcha = async () => {
@@ -109,6 +161,8 @@ const onCaptcha = async () => {
 	}
 	if (res.code === common.getInstance().ResCode.SUCCESS) {
 		captchaButton.value?.startCountdown();
+	} else {
+		showToast(res.message);
 	}
 };
 
@@ -122,7 +176,26 @@ const onStep = async () => {
 	const res = await forgetPasswordApi.checkVerifyCode(params).catch((err) => err);
 	if (res.code == common.getInstance().ResCode.SUCCESS) {
 		emit("onStep", state);
+	} else {
+		showToast(res.message);
 	}
+};
+const groupByFirstLetter = (countries: CountryData[]) => {
+	return countries.reduce((acc, country) => {
+		const firstLetter = country.countryCode[0].toUpperCase(); // 获取首字母并大写处理
+		if (!acc[firstLetter]) {
+			acc[firstLetter] = [];
+		}
+		acc[firstLetter].push(country); // 将国家添加到相应字母组
+		return acc;
+	}, {} as Record<string, CountryData[]>);
+};
+
+const selectAreaCode = (item, i: CountryData) => {
+	currentAreaCodeIndex.value = item;
+	areaCodeObj.value = i;
+	state.areaCode = i.areaCode;
+	showAreaCode.value = false;
 };
 </script>
 
@@ -248,6 +321,20 @@ const onStep = async () => {
 				}
 			}
 		}
+	}
+	.areaCodeBox {
+		.itemAreacodeCell {
+			display: flex;
+			justify-content: space-between;
+		}
+		.p
+		.icon {
+			width: 32px;
+			height: 32px;
+		}
+	}
+	.activeCode {
+		color: themed("Theme");
 	}
 }
 </style>

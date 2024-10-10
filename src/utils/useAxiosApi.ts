@@ -6,8 +6,8 @@ import { useLoading } from "/@/directives/loading/hooks";
 import { useUserStore } from "/@/store/modules/user";
 // import router from "/@/router";
 import { useRequestError } from "/@/hooks/requestError";
+import router from "../router";
 const { startLoading, stopLoading } = useLoading();
-const { handleRequestError } = useRequestError();
 
 // 获取 config 配置请求 api
 function getUrl() {
@@ -32,7 +32,7 @@ const instance = axios.create({
 instance.interceptors.request.use(
 	(config) => {
 		//判断当前请求头是否设置了不显示 Loading，没有设置则默认加载
-		if (config.headers.showLoading !== false) {
+		if (config.headers.showLoading) {
 			startLoading();
 		}
 		config["headers"]["Sign"] = EncryptionFn.encryption();
@@ -47,7 +47,7 @@ instance.interceptors.request.use(
 	(error) => {
 		// console.log(error, "做一些请求错误的事情");
 		//判断当前请求是否设置了不显示Loading
-		if (error.headers.showLoading !== false) {
+		if (error.headers.showLoading) {
 			stopLoading();
 		}
 		return Promise.reject(error);
@@ -64,16 +64,22 @@ instance.interceptors.response.use(
 			stopLoading();
 		}
 		const res = response.data;
+
 		// 如果自定义代码不是 200，则判断为错误。
 		if (res.code !== ResCode.SUCCESS) {
 			if (res.type == "image/png") {
 				return res;
 			}
-			handleRequestError({
-				name: "mainApp",
-				res,
-			});
-			return Promise.reject("ERR" || "Error");
+			switch (res.code) {
+				case 10008:
+					useUserStore().logOut();
+					return router.push("/");
+				case 10007:
+					useUserStore().logOut();
+			}
+
+			showToast(res.message);
+			return res;
 		} else {
 			return res;
 		}

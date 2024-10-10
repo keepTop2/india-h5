@@ -1,51 +1,52 @@
 <!-- 体育入口 -->
 <template>
-	<div class="Sports">
-		<!-- 滚球 今日 早盘 冠军 关注 -->
-		<div class="tabs">
-			<div class="tab" :class="{ 'tab-active': tabActive == key }" v-for="(value, key) of sportTabPushActions" :key="key" @click="onTab(key)">
-				{{ value.name }}
+	<div class="Sports" ref="sportsContainer" @scroll="onScroll">
+		<Banner class="Home_Banner" />
+		<div class="sports-container" ref="stickyContainer">
+			<!-- 滚球 今日 早盘 冠军 关注 -->
+			<div class="tabs">
+				<div class="tab" :class="{ 'tab-active': tabActive == key }" v-for="(value, key) of sportTabPushActions" :key="key" @click="onTab(key)">
+					{{ value.name }}
+				</div>
 			</div>
-		</div>
 
-		<!-- 球类 -->
-		<div class="list">
-			<div class="type-list" v-show="tabActive != 'attention'">
-				<div class="type-item" v-for="(item, index) in sportList" v-show="item.count" :key="index" @click="onSportsType(item)">
-					<div class="icon" :class="{ 'icon-active': sportState.sportTypeActive == item?.sportType }">
-						<div class="value">{{ item.count }}</div>
-						<SvgIcon :iconName="sportState.sportTypeActive == item?.sportType ? item.activeIcon : item.icon" size="5.333333" />
+			<!-- 球类 -->
+			<div class="list">
+				<div class="type-list" v-show="tabActive != 'attention'">
+					<div class="type-item" v-for="(item, index) in sportList" v-show="item.count" :key="index" @click="onSportsType(item)">
+						<div class="value" :class="{ 'label-active': sportState.sportTypeActive == item?.sportType }">{{ item.count }}</div>
+						<div class="icon" :class="{ 'icon-active': sportState.sportTypeActive == item?.sportType }">
+							<SvgIcon :iconName="sportState.sportTypeActive == item?.sportType ? item.activeIcon : item.icon" size="5.333333" />
+						</div>
+						<div class="label" :class="{ 'label-active': sportState.sportTypeActive == item?.sportType }">{{ item.sportName }}</div>
 					</div>
-					<div class="label" :class="{ 'label-active': sportState.sportTypeActive == item?.sportType }">{{ item.sportName }}</div>
 				</div>
 			</div>
-			<!-- 遮罩 -->
-			<div class="left-mask"></div>
-			<div class="right-mask"></div>
-		</div>
 
-		<div class="operation" v-if="tabActive != 'matchResult'">
-			<!-- 冠军显示 -->
-			<div v-if="tabActive == 'champion'">
-				<span class="fs_24 color_TB">冠军</span>
-			</div>
-			<!-- 关注显示 -->
-			<div v-if="tabActive == 'attention'" class="bg_BG3 attention">
-				<span :class="[attentionSwitch == 'event' && 'active', 'fs_24']" @click="handleAttentionSwitch('event')">赛事收藏</span>
-				<span :class="[attentionSwitch == 'outright' && 'active', 'fs_24']" @click="handleAttentionSwitch('outright')">冠军盘口</span>
-			</div>
-			<!-- 赛事列表显示 -->
-			<div v-if="isShowFilter">
-				<div v-if="isShowHot">
-					<span :class="['fs_24', (activeSwitchingSort == 'hot' && 'color_TB') || 'color_T3']" @click="switchingSort('hot')">热门</span>&nbsp;
-					<SvgIcon class="sport_switch" :iconName="(activeSwitchingSort == 'time' && '/venueHome/sports/svg/sport_switch2') || '/venueHome/sports/svg/sport_switch'" />
-					&nbsp;<span :class="['fs_24', (activeSwitchingSort == 'time' && 'color_TB') || 'color_T3']" @click="switchingSort('time')">时间</span>
+			<div class="operation" :class="{ pt_zero: tabActive == 'attention' }" v-if="tabActive != 'matchResult'">
+				<!-- 冠军显示 -->
+				<template v-if="tabActive == 'champion'">
+					<span class="fs_24 color_TB">{{ $t('sports["冠军"]') }}</span>
+				</template>
+				<!-- 关注显示 -->
+				<div v-if="tabActive == 'attention'" class="bg_BG3 attention">
+					<span :class="[attentionSwitch == 'event' && 'active', 'fs_22']" @click="handleAttentionSwitch('event')">{{ $t('sports["赛事收藏"]') }}</span>
+					<span :class="[attentionSwitch == 'outright' && 'active', 'fs_22']" @click="handleAttentionSwitch('outright')">{{ $t('sports["冠军盘口"]') }}</span>
 				</div>
-			</div>
-			<div>
-				<SvgIcon class="sport_filter color_T3" v-if="isShowFilter" @click="filterLeague" iconName="/venueHome/sports/svg/sport_filter" />
-				<SvgIcon class="sport_fold color_T3" v-show="isFold" iconName="/venueHome/sports/svg/sport_fold2" @click="onExpandAngCollapse" />
-				<SvgIcon class="sport_fold color_T3" v-show="!isFold"  iconName="/venueHome/sports/svg/sport_fold" @click="onExpandAngCollapse" />
+				<!-- 赛事列表显示 -->
+				<template v-if="isShowFilter">
+					<div v-if="isShowHot">
+						<span :class="['fs_24', (activeSwitchingSort == 'hot' && 'color_TB') || 'color_T3']" @click="switchingSort('hot')">{{ $t('sports["热门"]') }}</span
+						>&nbsp;
+						<SvgIcon class="sport_switch" :iconName="(activeSwitchingSort == 'time' && 'venueHome/sports/svg/sport_switch2') || 'venueHome/sports/svg/sport_switch'" />
+						&nbsp;<span :class="['fs_24', (activeSwitchingSort == 'time' && 'color_TB') || 'color_T3']" @click="switchingSort('time')">{{ $t('sports["时间"]') }}</span>
+					</div>
+				</template>
+				<div class="operation-right">
+					<SvgIcon class="sport_filter color_T3" v-if="isShowFilter" @click="filterLeague" iconName="venueHome/sports/svg/sport_filter" />
+					<SvgIcon class="sport_fold color_T3" v-show="isFold" iconName="venueHome/sports/svg/sport_fold2" @click="onExpandAngCollapse" />
+					<SvgIcon class="sport_fold color_T3" v-show="!isFold" iconName="venueHome/sports/svg/sport_fold" @click="onExpandAngCollapse" />
+				</div>
 			</div>
 		</div>
 		<!-- 赛事列表出口 -->
@@ -59,7 +60,7 @@
 import _ from "lodash";
 import dayjs from "dayjs";
 import { useRoute, useRouter } from "vue-router";
-
+import Banner from "./components/banner/banner.vue";
 import pubsub from "/@/pubSub/pubSub";
 import { useLoading } from "/@/directives/loading/hooks";
 import { useToLogin } from "/@/hooks/toLogin";
@@ -91,6 +92,14 @@ const activeSwitchingSort = ref("time");
 const isFold = computed(() => sportsBetEvent.isFold);
 const attentionSwitch = computed(() => sportsBetEvent.attentionType);
 const store = useUserStore();
+const stickyContainer = ref();
+const isSticky = ref(false);
+
+watch(isSticky, (newValue) => {
+	console.log("Sticky state changed:", newValue);
+	// 这里可以添加其他需要在sticky状态变化时执行的逻辑
+	handleStickyChange(newValue);
+});
 
 const isShowBet = computed(() => {
 	if (tabActive.value != "champion" && sportsBetEvent.attentionType == "event") {
@@ -105,6 +114,7 @@ const isShowBet = computed(() => {
  * @description 球类列表
  */
 const sportList = computed(() => viewSportPubSubEventData.viewSportData.sports);
+
 /**
  * @description 是否显示过滤  冠军与关注不展示 时间热门切换与联赛筛选
  */
@@ -134,7 +144,7 @@ const sportState = reactive({ sportTypeActive: null as number | null });
 const filterLeague = () => {
 	// const leagueList = formatEvent2League(viewSportPubSubEventData.viewSportData.childrenViewData[Number(route.params.sportType)]);
 	// sportsBetEvent.setSelectLeaguesList(leagueList);
-	router.push(`/sports/league/select/${sportState.sportTypeActive}`);
+	router.push(`/venueHome/sports/league/select/${sportState.sportTypeActive}`);
 };
 
 const handleAttentionSwitch = async (val) => {
@@ -162,25 +172,36 @@ onBeforeUnmount(() => {
 	// 关闭登录接口轮询
 	stopPolling();
 	// 清除体育数据缓存
-	clearStoreInfo();
+	// clearStoreInfo();
 });
 
+// 清楚购物车数据内存
 const clearStoreInfo = () => {
-	// 清楚购物车数据内存
+	// 清空购物车数据状态
 	sportsBetEvent.clearShopCart();
+	// 清空冠军购物车数据状态
 	sportsBetChampion.clearChampionShopCart();
+	// 清空体育状态信息
 	sportsInfoStore.clearStoreInfo();
 };
 
 // 判断是否进入体育子路由 不是则清空购物车数据
 onBeforeRouteLeave((to, from) => {
+	console.log(to.name);
 	if (to.name == "sportsLeagueSelect" || to.name == "sportsMatchResultDetail" || to.name == "sportsEventDetail") {
-		console.log();
+		console.log("不做任何操作");
 	} else {
-		clearStoreInfo();
+		console.log("触发清空操作");
+		// clearStoreInfo();
 	}
 });
 
+const onScroll = () => {
+	// 监听 ref stickyContainer 是否到顶部了
+	if (stickyContainer.value) {
+		isSticky.value = stickyContainer.value.getBoundingClientRect().top <= 0;
+	}
+};
 //初始化体育
 const initSport = async () => {
 	tabActive.value = route.meta.name as TabOptions;
@@ -221,7 +242,7 @@ const openSportPush = async () => {
 	};
 	// console.warn("第二步 准备发送指令到线程管理器");
 	//如果当前激活的tab是 滚球
-	console.log("tabActive.value", tabActive.value);
+	// console.log("tabActive.value", tabActive.value);
 	if (tabActive.value == "rollingBall") {
 		startLoading();
 		//清空参数
@@ -271,10 +292,10 @@ const openSportPush = async () => {
 		startLoading();
 		const sportsParams = {
 			query: `$filter=sportType in (${SportsCommonFn.getRequestSportsType()})`,
-			from: dayjs.utc().subtract(5, "hour").endOf("day").add(5, "hour").format("YYYY-MM-DDTHH:mm:ss"),
-			until: dayjs.utc().add(14, "day").subtract(5, "hour").endOf("day").add(5, "hour").format("YYYY-MM-DDTHH:mm:ss"),
+			from: dayjs().endOf("day").toISOString(),
+			until: dayjs().add(14, "day").endOf("day").toISOString(),
 		};
-		const date = dayjs.utc().add(1, "day").subtract(5, "hour").format("YYYY-MM-DD");
+		const date = dayjs.utc().add(1, "day").format("YYYY-MM-DD");
 		const { startDate, endDate } = SportsCommonFn.getResultDateRange(date);
 		const queryParams = {
 			params: {
@@ -436,7 +457,7 @@ watch(
 const initRouter = () => {
 	// 首次加载 sportState.sportTypeActive 没有值时，设置默认值为第一位球类列表
 	if (sportList.value.length) {
-		const firstSportTypePath = "/sports/" + tabActive.value + "/" + sportList.value[0]?.sportType;
+		const firstSportTypePath = "/venueHome/sports/" + tabActive.value + "/" + sportList.value[0]?.sportType;
 		if (route.params.sportType) {
 			const sport = sportList.value.find((item) => item?.sportType === Number(route.params.sportType));
 			if (sport && sport.count > 0) {
@@ -446,7 +467,7 @@ const initRouter = () => {
 		}
 		sportState.sportTypeActive = sportList.value[0]?.sportType;
 		sportsBetEvent.clearLeagueSelect();
-		console.log("firstSportTypePath", firstSportTypePath);
+		// console.log("firstSportTypePath", firstSportTypePath);
 
 		router.push({ path: firstSportTypePath });
 	}
@@ -454,6 +475,7 @@ const initRouter = () => {
 
 // 切换tab时 根据path处理对应的获取数据逻辑
 const onTab = async (path) => {
+	console.log(path, "====path");
 	activeSwitchingSort.value = "time";
 	if (tabActive.value == path) {
 		return;
@@ -474,9 +496,9 @@ const onTab = async (path) => {
 		clearFilter();
 	}
 	if (path != "attention") {
-		router.push({ path: `/sports/${path}/${route.params.sportType}` });
+		router.push({ path: `/venueHome/sports/${path}/${route.params.sportType}` });
 	} else {
-		router.push({ path: `/sports/${path}` });
+		router.push({ path: `/venueHome/sports/${path}` });
 		await getAttention();
 	}
 	initSportPubsub();
@@ -509,7 +531,7 @@ const onSportsType = (item: Sports) => {
 	sportsBetEvent.clearHotLeagueList();
 	activeSwitchingSort.value = "time";
 	sportState.sportTypeActive = item?.sportType;
-	router.push({ path: "/sports/" + tabActive.value + "/" + item?.sportType });
+	router.push({ path: "/venueHome/sports/" + tabActive.value + "/" + item?.sportType });
 };
 
 /**
@@ -549,6 +571,7 @@ const getAttention = () => {
 /**
  * @description 调用获取赛果赛事数量接口
  */
+//  dayjs().add(1, "day").startOf("day").toISOString()
 const getMatchResult = async () => {
 	// 获取当前日期
 	const today = SportsCommonFn.todayDate();
@@ -556,8 +579,8 @@ const getMatchResult = async () => {
 	const sevenDays = dayjs(today).subtract(6, "day");
 	const params = {
 		language: "zhcn",
-		from: `${sevenDays.add(5, "hour").format("YYYY-MM-DDTHH:mm:ss")}`,
-		until: `${dayjs(today).endOf("day").add(5, "hour").format("YYYY-MM-DDTHH:mm:ss")}`,
+		from: `${sevenDays.toISOString()}`,
+		until: `${dayjs(today).endOf("day").toISOString()}`,
 	};
 	const res = await sportsApi.GetSportResults(params).catch((err) => err);
 	//获取赛果数量后 添加到sports中
@@ -594,35 +617,93 @@ const unSport = () => {
 	handleAttentionSwitch("event");
 	workerManage.stopWorker(workerManage.WorkerMap.sportViewProcessWorker.workerName);
 };
+const sportsContainer = ref<HTMLElement | null>(null);
+const handleStickyChange = (isSticky: boolean) => {
+	// 当 sticky 状态改变时，触发滚动开关
+	nextTick(() => {
+		pubsub.publish("virtualScrollDisabled", !isSticky);
+	});
+};
 </script>
 
 <style lang="scss" scoped>
 .Sports {
-	height: 100%;
+	height: 100vh;
+	overflow-y: auto;
 	box-sizing: border-box;
+	.sports-container {
+		position: sticky;
+		top: 0;
+		z-index: 2;
+	}
 	.operation {
+		max-height: 74px;
 		display: flex;
+		align-items: center;
 		justify-content: space-between;
-		padding: 17px 24px;
+		padding: 24px;
+		@include themeify {
+			background-color: themed("BG1");
+		}
+		box-sizing: border-box;
+
+		.sport_switch {
+			width: 18px;
+			height: 16px;
+		}
+		.sport_filter {
+			margin-right: 40px;
+		}
+		.sport_filter,
+		.sport_fold {
+			width: 26px;
+			height: 26px;
+		}
+
+		.operation-right {
+			flex: 1;
+			display: flex;
+			justify-content: end;
+		}
+
+		.attention {
+			display: flex;
+			gap: 8px;
+			min-width: 288px;
+			height: 48px;
+			padding: 4px 8px;
+			border-radius: 12px;
+			box-sizing: border-box;
+			span {
+				display: block;
+				min-width: 136px;
+				height: 40px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				padding: 0px 10px;
+				@include themeify {
+					color: themed("T1");
+				}
+			}
+			.active {
+				@include themeify {
+					color: themed("TB");
+					background-color: themed("Theme");
+					border-radius: 10px;
+				}
+			}
+		}
 	}
-	.sport_switch {
-		width: 18px;
-		height: 16px;
+	.pt_zero {
+		padding-top: 0px;
 	}
-	.sport_filter {
-		margin-right: 40px;
-	}
-	.sport_filter,
-	.sport_fold {
-		width: 26px;
-		height: 26px;
-	}
+
 	.tabs {
 		width: 100%;
-		height: 52px;
 		display: flex;
-		padding: 0px 24px;
-		margin-bottom: 15px;
+		gap: 12px;
+		padding: 36px 24px;
 		overflow-x: auto; /* 允许横向滚动 */
 		white-space: nowrap; /* 禁止内容换行折行 */
 		box-sizing: border-box;
@@ -632,13 +713,14 @@ const unSport = () => {
 			width: 0; /* 隐藏垂直滚动条 */
 			height: 0; /* 隐藏水平滚动条 */
 		}
-		// scrollbar-width: none; /* 隐藏滚动条宽度 */
+		@include themeify {
+			background-color: themed("BG1");
+		}
 
 		.tab {
-			min-width: 108px;
 			flex: 1;
+			min-width: 108px;
 			height: 52px;
-			margin-left: 11px;
 			padding: 8px 15px;
 			border-radius: 12px;
 			@include themeify {
@@ -652,9 +734,7 @@ const unSport = () => {
 			line-height: 36px;
 			display: inline-table;
 			box-sizing: border-box;
-			&:first-child {
-				margin-left: 0px;
-			}
+			cursor: pointer;
 		}
 		.tab-active {
 			@include themeify {
@@ -666,12 +746,13 @@ const unSport = () => {
 
 	.list {
 		position: relative;
-
+		@include themeify {
+			background-color: themed("BG1");
+		}
 		.type-list {
 			display: flex;
 			align-items: center;
 			height: 118px;
-			padding: 0px 24px;
 			@include themeify {
 				// background-color: themed("BG3");
 			}
@@ -687,52 +768,47 @@ const unSport = () => {
 			scrollbar-width: none; /* 隐藏滚动条宽度 */
 
 			.type-item {
-				margin-right: 53px;
-				&:last-child {
-					margin-right: 0px;
+				position: relative;
+				min-width: 140px;
+				text-align: center;
+				.value {
+					position: absolute;
+					top: 0px;
+					right: 15px;
+					font-family: "PingFang SC";
+					@include themeify {
+						color: themed("T1");
+					}
+					font-size: 20px;
+					font-weight: 400;
 				}
 				.icon {
-					position: relative;
-					width: 40px;
-					height: 40px;
-					margin: 0 auto;
-					margin-top: 20px;
+					width: 44px;
+					height: 44px;
+					margin: 20px auto 0px;
 					@include themeify {
 						color: themed("T3");
-					}
-					.value {
-						position: absolute;
-						top: -20px;
-						left: calc(100% + 4px);
-						font-family: "PingFang SC";
-						@include themeify {
-							color: themed("T1");
-						}
-						font-size: 20px;
-						font-weight: 400;
 					}
 				}
 				.icon-active {
 					@include themeify {
 						color: themed("T3");
 					}
-					.value {
-						@include themeify {
-							color: themed("Theme");
-						}
-					}
 				}
 				.label {
 					margin-top: 8px;
+					padding: 0px 5px;
 					@include themeify {
 						color: themed("T1");
 					}
 					font-family: "PingFang SC";
-					font-size: 24px;
+					font-size: 22px;
 					font-weight: 400;
 					line-height: 36px;
+					white-space: nowrap; /* 禁止文本换行 */
+					overflow: hidden; /* 隐藏超出容器的内容 */
+					text-overflow: ellipsis; /* 超出部分显示省略号 */
 				}
-
 				.label-active {
 					@include themeify {
 						color: themed("Theme");
@@ -740,53 +816,10 @@ const unSport = () => {
 				}
 			}
 		}
-
-		.left-mask {
-			position: absolute;
-			top: 0;
-			left: 0;
-			width: 40px;
-			height: 100%;
-			@include themeify {
-				background: themed("tab-left-mask");
-			}
-		}
-
-		.right-mask {
-			position: absolute;
-			top: 0;
-			right: 0;
-			width: 40px;
-			height: 100%;
-			@include themeify {
-				background: themed("tab-right-mask");
-			}
-		}
 	}
 }
 .card {
 	padding: 0px 24px;
 	text-align: center;
-}
-.attention {
-	width: 312px;
-	height: 52px;
-	border-radius: 25px;
-	line-height: 52px;
-	span {
-		width: 96px;
-		padding: 0 30px;
-		display: inline-block;
-		@include themeify {
-			color: themed("T1");
-		}
-	}
-	.active {
-		@include themeify {
-			color: themed("TB-P");
-			background-color: themed("Theme");
-			border-radius: 25px;
-		}
-	}
 }
 </style>

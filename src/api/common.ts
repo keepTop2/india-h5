@@ -1,40 +1,52 @@
 import useAxiosApi from "/@/utils/useAxiosApi";
 class CommonApi {
 	/**
-	 *@description 手机验证码请求
+	 *@description POST 侧边栏
 	 */
-	static sendSms = (data = {}, headers = {}) => {
-		return useAxiosApi(`/app-foreign/login/api/sendSms`, {
+	static queryLobbyLabelList = (data = {}, headers = {}) => {
+		return useAxiosApi(`/app/game_lobby/api/queryLobbyLabelList`, {
 			method: "POST",
 			data,
-			headers,
+			headers: {
+				showLoading: true,
+			},
 		});
 	};
+
 	/**
-	 *@description 邮箱验证码请求
+	 *@description 下拉框-语言、币种
 	 */
-	static sendMail = (data = {}, headers = {}) => {
-		return useAxiosApi(`/app-foreign/login/api/sendMail`, {
+	static getCommonBusinessDownBox = (data = {}, headers = {}) => {
+		return useAxiosApi(`/app/common/getCommonBusinessDownBox`, {
 			method: "POST",
 			data,
 			headers,
 		});
 	};
-	/**
-	 *@description 根据 ip 获取语言
-	 */
-	static getLanguage = (data = {}, headers = {}) => {
-		return useAxiosApi(`/app-foreign/lang/api/getLang`, {
-			method: "POST",
-			data,
-			headers,
-		});
-	};
+
 	/**
 	 *@description 获取会员首页信息
 	 */
 	static getIndexInfo = (data = {}, headers = {}) => {
-		return useAxiosApi(`/app-foreign/user-info/api/getIndexInfo`, {
+		return useAxiosApi(`/app/user-info/api/getIndexInfo`, {
+			method: "POST",
+			data,
+			headers,
+		});
+	};
+	static getUserGlobalSetInfo = (data = {}, headers = {}) => {
+		return useAxiosApi(`/app/user-info/global/getUserGlobalSetInfo`, {
+			method: "POST",
+			data,
+			headers,
+		});
+	};
+
+	/**
+	 *@description 获取会员首页信息
+	 */
+	static getAreaCodeDownBox = (data = {}, headers = {}) => {
+		return useAxiosApi(`/app/common/getAreaCodeDownBox`, {
 			method: "POST",
 			data,
 			headers,

@@ -7,11 +7,11 @@
 			<div class="from">
 				<FormInput v-model="state.userAccount" type="text" :placeholder="$t(`register['输入账号']`)" :errorBorder="!isAccountValid && state.userAccount !== '' ? true : false">
 					<template v-slot:right>
-						<SvgIcon v-if="state.userAccount" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.userAccount = ''" />
+						<SvgIcon v-if="state.userAccount" class="clearIcon" iconName="loginOrRegister/clear" @click="state.userAccount = ''" />
 					</template>
 				</FormInput>
 				<div class="error_text">
-					<span v-if="!isAccountValid && state.userAccount !== ''" class="text">{{ $t('register["请输入4-11位字母+数字组成，首位必须是字母"]') }}</span>
+					<span v-if="!isAccountValid && state.userAccount !== ''" class="text">{{ $t('register["4-11位，字母、数字组成 ，首位必须是字母"]') }}</span>
 				</div>
 
 				<FormInput
@@ -23,8 +23,8 @@
 				>
 					<template v-slot:right>
 						<div class="right">
-							<SvgIcon v-if="state.password" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.password = ''" />
-							<SvgIcon class="icon" :iconName="eyeShow ? '/loginOrRegister/eye-off' : '/loginOrRegister/eye'" @click="eyeShow = !eyeShow" />
+							<SvgIcon v-if="state.password" class="clearIcon" iconName="loginOrRegister/clear" @click="state.password = ''" />
+							<SvgIcon class="icon" :iconName="eyeShow ? 'loginOrRegister/eye-off' : 'loginOrRegister/eye'" @click="eyeShow = !eyeShow" />
 						</div>
 					</template>
 				</FormInput>
@@ -41,8 +41,8 @@
 				>
 					<template v-slot:right>
 						<div class="right">
-							<SvgIcon v-if="state.confirmPassword" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.confirmPassword = ''" />
-							<SvgIcon class="icon" :iconName="eyeShow ? '/loginOrRegister/eye-off' : '/loginOrRegister/eye'" @click="eyeShow = !eyeShow" />
+							<SvgIcon v-if="state.confirmPassword" class="clearIcon" iconName="loginOrRegister/clear" @click="state.confirmPassword = ''" />
+							<SvgIcon class="icon" :iconName="eyeShow ? 'loginOrRegister/eye-off' : 'loginOrRegister/eye'" @click="eyeShow = !eyeShow" />
 						</div>
 					</template>
 				</FormInput>
@@ -50,44 +50,51 @@
 					<span v-if="!isConfirmPasswordValid" class="text">{{ $t('register["两次输入密码不一致"]') }}</span>
 				</div>
 
-				<FormInput v-model="state.mainCurrency" :placeholder="$t(`register['选择主货币']`)" readonly :errorBorder="mainCurrencyRG ? true : false" @click="router.push('/mainCurrency')">
+				<FormInput v-model="state.mainCurrency" :placeholder="$t(`register['选择主货币']`)" readonly :errorBorder="mainCurrencyRG ? true : false" @click="goTomainCurrency">
 					<template v-slot:right>
-						<SvgIcon class="icon" iconName="/loginOrRegister/arrow" />
+						<SvgIcon class="icon" iconName="loginOrRegister/arrow" />
 					</template>
 				</FormInput>
 				<div class="error_text">
 					<span v-if="mainCurrencyRG" class="text">{{ $t('register["请选择"]') }}</span>
 				</div>
 
-				<FormInput v-model="state.inviteCode" type="text" :placeholder="$t(`register['推荐码(非必填)']`)">
-					<template v-slot:right>
-						<SvgIcon v-if="state.inviteCode" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.inviteCode = ''" />
-					</template>
-				</FormInput>
+				<div class="invite-code-wrapper">
+					<div class="invite-code-toggle" @click="toggleInviteCode">
+						{{ $t('register["输入推荐码"]') }}
+						<SvgIcon :class="['toggle-icon', { rotate: showInviteCode }]" iconName="loginOrRegister/arrow" />
+					</div>
+					<transition name="slide-fade">
+						<FormInput v-if="showInviteCode" v-model="state.inviteCode" type="text" :placeholder="$t(`register['推荐码(非必填)']`)">
+							<template v-slot:right>
+								<SvgIcon v-if="state.inviteCode" class="clearIcon" iconName="loginOrRegister/clear" @click="state.inviteCode = ''" />
+							</template>
+						</FormInput>
+					</transition>
+				</div>
 
 				<div class="checkbox" @click="userAgreement = !userAgreement">
-					<SvgIcon v-show="!userAgreement" class="check" iconName="/loginOrRegister/checkbox" />
-					<SvgIcon v-show="userAgreement" class="check" iconName="/loginOrRegister/checkbox_active" />
+					<SvgIcon v-show="!userAgreement" class="check" iconName="loginOrRegister/checkbox" />
+					<SvgIcon v-show="userAgreement" class="check" iconName="loginOrRegister/checkbox_active" />
 					<p :class="userAgreement ? 'text' : 'text3'">
 						<i18n-t keypath="register['我同意用户协议并确认我已年满18岁']" :tag="'span'">
 							<template v-slot:text
-								><span class="text2" @click="router.push('/userAgreement')"> {{ $t('register["用户协议"]') }} </span></template
+								><span class="text2" @click=""> {{ $t('register["用户协议"]') }} </span></template
 							>
 						</i18n-t>
 					</p>
 				</div>
 
-				<div class="checkbox">
-					<SvgIcon class="check" iconName="/loginOrRegister/checkbox_active" />
-					<span class="text">
+				<div class="checkbox" @click="marketingPromotion = !marketingPromotion">
+					<SvgIcon v-show="!marketingPromotion" class="check" iconName="loginOrRegister/checkbox" />
+					<SvgIcon v-show="marketingPromotion" class="check" iconName="loginOrRegister/checkbox_active" />
+					<span :class="marketingPromotion ? 'text' : 'text3'">
 						<i18n-t keypath="register['我同意接收[平台名称]的营销促销信息']" :tag="'span'">
 							<template v-slot:text>OKsport</template>
 						</i18n-t>
 					</span>
 				</div>
-
-				<Button class="mt_40" :type="btnDisabled ? 'disabled' : 'default'" @click="onRegister">{{ $t('register["注册"]') }}</Button>
-
+				<Button class="mt_40" :type="btnDisabled || !isOnloadScript ? 'disabled' : 'default'" @click="onRegister">{{ $t('register["注册"]') }}</Button>
 				<div class="footer">
 					<span class="text">{{ $t('register["已有账户？"]') }}</span>
 					<span class="create van-haptics-feedback" @click="router.push('/login')">{{ $t('register["登录"]') }}</span>
@@ -95,7 +102,8 @@
 			</div>
 		</div>
 
-		<Hcaptcha ref="hcaptcha" @submit="onSubmit" />
+		<div id="captcha-element" ref="captchaBtn"></div>
+		<Hcaptcha ref="refhcaptcha" :onSubmit="onSubmit" v-model="isOnloadScript" />
 	</div>
 </template>
 
@@ -104,26 +112,29 @@ import NavBar from "/@/layout/loginRegister/components/navBar.vue";
 import { registerApi, verifyCodeApi } from "/@/api/loginRegister";
 import HeaderBG from "/@/views/loginRegister/components/headerBG.vue";
 import { showToast } from "vant";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { i18n } from "/@/i18n/index";
 import common from "/@/utils/common";
 import { useUserStore } from "/@/store/modules/user";
 const store = useUserStore();
 const $: any = i18n.global;
+const route = useRoute();
 const router = useRouter();
-const hcaptcha: any = ref(null);
+const refhcaptcha: any = ref(null);
 const eyeShow = ref(true);
 const btnDisabled = ref(true);
 const mainCurrencyRG = ref(false);
 const userAgreement = ref(false); // 用户协议认证
-
-const state = reactive({
+const marketingPromotion = ref(true); // 营销促销信息 默认勾选
+const captchaBtn = ref(null);
+const showInviteCode = ref(false);
+const isOnloadScript = ref(false);
+let state = reactive({
 	userAccount: "", // 邮箱或者手机号
 	password: "", // 密码
 	confirmPassword: "", // 密码
-	mainCurrency: "CNY", // 货币
+	mainCurrency: "", // 货币
 	inviteCode: "", // 推荐码
-	deviceNo: common.getInstance().getDevice(), // 设备
 });
 
 // 账号正则
@@ -143,9 +154,9 @@ const isConfirmPasswordValid = computed(() => {
 
 // 监听用户状态
 watch(
-	[() => isAccountValid.value, () => isPasswordValid.value, () => isConfirmPasswordValid.value],
-	([isAccountValid, isPasswordValid, isConfirmPasswordValid]) => {
-		if (isAccountValid && isPasswordValid && isConfirmPasswordValid) {
+	[() => isAccountValid.value, () => isPasswordValid.value, () => isConfirmPasswordValid.value, () => state.mainCurrency, () => userAgreement.value],
+	([isAccountValid, isPasswordValid, isConfirmPasswordValid, mainCurrency, userAgreement]) => {
+		if (isAccountValid && isPasswordValid && isConfirmPasswordValid && mainCurrency && userAgreement) {
 			btnDisabled.value = false;
 		} else {
 			btnDisabled.value = true;
@@ -162,6 +173,13 @@ watch(
 		if (newValue) {
 			mainCurrencyRG.value = false;
 		}
+	}
+);
+
+watch(
+	() => route.query.currency,
+	(newValue) => {
+		state.mainCurrency = newValue as string;
 	}
 );
 
@@ -182,30 +200,29 @@ const onRegister = async () => {
 		mainCurrencyRG.value = true;
 		return;
 	}
-	// 校验注册账号
-	const res = await registerApi.userRegister(state).catch((err) => err);
-	if (res.code == common.getInstance().ResCode.SUCCESS) {
-		// 图形验证
-		hcaptcha.value?.validate();
-	}
-};
-
-// 图形验证
-const onSubmit = async (token: string) => {
-	const res = await verifyCodeApi.verifyCode({ verifyToken: token }).catch((err) => err);
-	if (res.code == common.getInstance().ResCode.SUCCESS) {
-		submitRegister();
-	}
+	// 图形验证
+	captchaBtn.value?.click();
 };
 
 // 注册
-const submitRegister = async () => {
-	const res = await registerApi.submitRegister(state).catch((err) => err);
+const onSubmit = async () => {
+	const certifyId = refhcaptcha.value.certifyId;
+	const res = await registerApi.userRegister({ ...state, certifyId }).catch((err) => err);
 	if (res.code == common.getInstance().ResCode.SUCCESS) {
 		showToast(res.message);
 		store.setInfo(res.data);
-		router.replace({ path: "/home" });
+		router.replace({ path: "/" });
+	} else {
+		showToast(res.message);
 	}
+};
+const goTomainCurrency = () => {
+	// store.setregisterInfo(state);
+	router.push({ path: "/mainCurrency", query: { currency: state.mainCurrency } });
+};
+
+const toggleInviteCode = () => {
+	showInviteCode.value = !showInviteCode.value;
 };
 </script>
 
@@ -259,6 +276,43 @@ const submitRegister = async () => {
 				}
 			}
 
+			.invite-code-wrapper {
+				// margin-top: 10px;
+
+				.invite-code-toggle {
+					display: flex;
+					align-items: center;
+					justify-content: flex-start;
+					padding: 10px 0;
+					font-size: 24px;
+					cursor: pointer;
+					@include themeify {
+						color: themed("T1");
+					}
+
+					.toggle-icon {
+						width: 24px;
+						height: 24px;
+						transition: transform 0.3s ease;
+
+						&.rotate {
+							transform: rotate(90deg);
+						}
+					}
+				}
+
+				.slide-fade-enter-active,
+				.slide-fade-leave-active {
+					transition: all 0.3s ease;
+				}
+
+				.slide-fade-enter-from,
+				.slide-fade-leave-to {
+					transform: translateY(-20px);
+					opacity: 0;
+				}
+			}
+
 			.checkbox {
 				display: flex;
 				align-items: center;
@@ -267,6 +321,9 @@ const submitRegister = async () => {
 				.check {
 					width: 32px;
 					height: 32px;
+					@include themeify {
+						color: themed("Theme");
+					}
 				}
 				.text,
 				.text3 {

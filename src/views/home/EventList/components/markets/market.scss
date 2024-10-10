@@ -11,35 +11,75 @@
 	justify-content: space-between;
 	margin-bottom: 10px;
 	gap: 16px;
+
 	.handicap-item {
+		width: 319px;
+		height: 68px;
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		width: 319px;
-		height: 68px;
-		padding: 17px 24px;
-		box-sizing: border-box;
-		font-size: 28px;
+		border-radius: 12px;
 		@include themeify {
 			background: themed("BG4");
-			span {
-				display: block;
-				color: themed("T1");
+		}
+		.item {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			width: 319px;
+			height: 68px;
+			padding: 17px 24px;
+			box-sizing: border-box;
+			font-size: 28px;
+			border-radius: 12px;
+			@include themeify {
+				background: themed("BG4");
+				span {
+					display: block;
+					color: themed("T1");
+				}
+				.value {
+					font-weight: bold;
+				}
+				.green {
+					color: themed("Wam-P1");
+				}
+				.red {
+					color: themed("Theme");
+				}
 			}
-			.value {
-				font-weight: bold;
-			}
-			.green {
-				color: themed("Wam-P1");
-			}
-			.red {
-				color: themed("Theme");
+		}
+		.isBright {
+			@include themeify {
+				background-color: themed("Theme");
+				span {
+					color: themed("TB1");
+				}
+				.value {
+					color: themed("TB1");
+				}
 			}
 		}
 	}
-	.lock-container {
-		display: flex;
-		justify-content: center;
+}
+
+.lock {
+	flex: 1;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.noData {
+	display: inline-block;
+	width: 14px;
+	height: 1px;
+	margin: 0 auto;
+	border-radius: 2px;
+	@include themeify {
+		background-color: themed("T1");
 	}
 }
 
@@ -49,25 +89,47 @@
 	margin-bottom: 10px;
 	gap: 16px;
 	.odds-item {
-		width: 159px;
-		height: 39px;
-		padding: 15px 24px;
+		// width: 159px;
+		flex: 1;
 		border-radius: 12px;
 		display: flex;
 		align-items: center;
-		flex-direction: row;
 		justify-content: space-evenly;
 		@include themeify {
 			background: themed("BG4");
-			span {
-				display: block;
-				font-size: 28px;
-				color: themed("T1");
-			}
+		}
+		.item {
+			flex: 1;
+			height: 39px;
+			padding: 15px 24px;
+			border-radius: 12px;
+			display: flex;
+			align-items: center;
+			flex-direction: row;
+			justify-content: space-evenly;
+			@include themeify {
+				background: themed("BG4");
+				span {
+					display: block;
+					font-size: 28px;
+					color: themed("T1");
+				}
 
-			.value {
-				font-size: 28px;
-				color: themed("TB");
+				.value {
+					font-size: 28px;
+					color: themed("TB");
+				}
+			}
+		}
+		.isBright {
+			@include themeify {
+				background-color: themed("Theme");
+				span {
+					color: themed("TB1");
+				}
+				.value {
+					color: themed("TB1");
+				}
 			}
 		}
 	}

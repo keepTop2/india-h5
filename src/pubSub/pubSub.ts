@@ -42,7 +42,7 @@ class PubSub {
 			// 将回调函数加入订阅者数组
 			this.subscribers[event] = [];
 		}
-
+		console.log(this.subscribers, event, 88888888);
 		this.subscribers[event].push(handler);
 	}
 
@@ -73,6 +73,7 @@ class PubSub {
 		// 获取特定事件的订阅者数组
 		const handlers = this.subscribers[event];
 		if (!handlers) return;
+		console.log(this.subscribers, event, 88888888);
 
 		handlers.forEach((handler) => {
 			// 对每个订阅者执行回调函数

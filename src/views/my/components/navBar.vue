@@ -3,13 +3,15 @@
 		<div class="logo">
 			<VantLazyImg :src="logo" />
 		</div>
-		<Notify />
+		<Notify v-if="store.token" />
 	</div>
 </template>
 
 <script setup lang="ts">
+import { useUserStore } from "/@/store/modules/user";
 import Notify from "/@/components/Notify/Notify.vue";
 import logo from "/@/assets/zh-CN/default/my/my_logo.png";
+const store = useUserStore();
 </script>
 
 <style scoped lang="scss">

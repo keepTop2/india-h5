@@ -2,14 +2,14 @@
 	<div class="vip_progress">
 		<div class="vip_icon">
 			<VantLazyImg class="vip_bg" :src="vip_icon_1" />
-			<span class="vip_level">LV0</span>
+			<span class="vip_level">LV{{ props.userVipInfo.vipGradeCode }}</span>
 		</div>
 		<div class="progress_bar">
-			<div class="progress" :style="{ width: `${props.percentage}%` }">
+			<div class="progress" :style="{ width: `${progressPercentage}%` }">
 				<div class="percentage_info">
 					<div v-if="props.percentageShow" class="percentage">
-						<div class="value">{{ props.percentage }}%</div>
-						<SvgIcon class="arrow" iconName="/vip/progress_bar_percent_arrow" />
+						<div class="value">{{ progressPercentage }}%</div>
+						<SvgIcon class="arrow" iconName="vip/progress_bar_percent_arrow" />
 					</div>
 					<VantLazyImg class="vip_jdt" :src="vip_jdt" />
 				</div>
@@ -17,7 +17,7 @@
 		</div>
 		<div class="vip_icon">
 			<VantLazyImg class="vip_bg" :src="vip_icon_1" />
-			<span class="vip_level">LV99</span>
+			<span class="vip_level">LV{{ props.userVipInfo.vipGradeUp }}</span>
 		</div>
 	</div>
 </template>
@@ -25,17 +25,32 @@
 <script setup lang="ts">
 import vip_icon_1 from "/@/assets/zh-CN/default/vip/vip_icon_1.png";
 import vip_jdt from "/@/assets/zh-CN/default/my/vip_jdt.png";
+import { VIP } from "/@/views/vip/interface";
 
 const props = withDefaults(
 	defineProps<{
+		userVipInfo: VIP;
 		percentageShow?: boolean;
-		percentage?: number;
 	}>(),
 	{
+		userVipInfo: {} as VIP,
 		percentageShow: false,
-		percentage: 0,
 	}
 );
+
+// 计算百分比
+const progressPercentage = computed(() => {
+	const { currentExp, upgradeVipExp } = props.userVipInfo;
+	// 防止NaN：确保 upgradeVipExp 不为0，并且 currentExp 和 upgradeVipExp 都是有效数字
+	if (isNaN(currentExp) || isNaN(upgradeVipExp) || upgradeVipExp === 0) {
+		return 0;
+	}
+
+	// 计算百分比并取整
+	return Math.floor((currentExp / upgradeVipExp) * 100);
+});
+
+console.log("progressPercentage", progressPercentage);
 </script>
 
 <style scoped lang="scss">
@@ -60,9 +75,7 @@ const props = withDefaults(
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			@include themeify {
-				color: themed("TB");
-			}
+			color: #fff;
 			font-family: "112-SS Yi Fang Ti";
 			font-size: 16px;
 			font-weight: 400;

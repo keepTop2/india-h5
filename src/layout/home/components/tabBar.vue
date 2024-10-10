@@ -2,12 +2,12 @@
 	<div class="tabList">
 		<!-- 边框区域 -->
 		<div class="border">
-			<img :src="tab_border" />
+			<img :src="theme === ThemeEnum.default ? tab_border : tab_border_light" />
 		</div>
 		<!-- 遍历 tabData 渲染每个 tab 项 -->
-		<div v-for="(item, index) in tabData" :key="index" :class="{ item: item.path !== '/home', 'home-item': item.path === '/home' }" @click="toPath(item)">
+		<div v-for="(item, index) in tabData" :key="index" :class="{ item: item.path !== '/', 'home-item': item.path === '/' }" @click="toPath(item)">
 			<!-- 非首页的 tab 项 -->
-			<div v-if="item.path !== '/home'" class="content" :class="getHighlightBG(item)">
+			<div v-if="item.path !== '/'" class="content" :class="getHighlightBG(item)">
 				<!-- 显示高亮的分隔线 -->
 				<div v-if="getHighlightLine(item)" class="line">
 					<img :src="line" />
@@ -23,7 +23,7 @@
 			</div>
 
 			<!-- 首页的 tab 项 -->
-			<div v-else class="content" :class="{ active: item.path === route.path }">
+			<div v-else class="content" :class="{ active: item.path === route.path, [theme]: true }">
 				<!-- 显示首页的图标 -->
 				<div class="home-icon">
 					<img :src="item.path !== route.path ? item.icon : item.active_icon" />
@@ -38,6 +38,7 @@
 </template>
 
 <script setup lang="ts">
+import { ThemeEnum } from "/@/enum/appConfigEnum";
 import discount from "/@/assets/zh-CN/default/layout/discount.png";
 import discount_active from "/@/assets/zh-CN/default/layout/discount_active.png";
 import records from "/@/assets/zh-CN/default/layout/records.png";
@@ -49,13 +50,16 @@ import wallet_active from "/@/assets/zh-CN/default/layout/wallet_active.png";
 import my from "/@/assets/zh-CN/default/layout/my.png";
 import my_active from "/@/assets/zh-CN/default/layout/my_active.png";
 import tab_border from "/@/assets/zh-CN/default/layout/tab_border.png";
+import tab_border_light from "/@/assets/zh-CN/light/layout/tab_border_light.png";
 import line from "/@/assets/zh-CN/default/layout/line.png";
+import { useThemesStore } from "/@/store/modules/themes";
 import { useRoute, useRouter } from "vue-router";
 import { i18n } from "/@/i18n/index";
-
+const themesStore = useThemesStore();
 const route = useRoute();
 const router = useRouter();
 const $: any = i18n.global;
+const theme = computed(() => themesStore.themeName);
 
 // 钱包二级页
 const walletPaths = ["/wallet/recharge", "/wallet/withdraw", "/wallet/records"];
@@ -78,13 +82,13 @@ const getHighlightStatus = (item) => {
 // 获取 tab 项的背景色
 const getHighlightBG = (item) => {
 	// 如果 tab 项活跃，则返回 "active" 类，否则返回空字符串
-	if (isActivePath(item.path)) return "active";
+	if (isActivePath(item.path)) return `active ${theme.value}`;
 };
 
 // 获取 tab 项的标签样式
 const getHighlightClass = (item) => {
 	// 如果 tab 项活跃，则返回 "label_active" 类，否则返回空字符串
-	if (isActivePath(item.path)) return "label_active";
+	if (isActivePath(item.path)) return "label_active ";
 };
 
 // 判断是否显示高亮分隔线
@@ -117,7 +121,7 @@ const tabData = [
 		icon: home,
 		active_icon: home_active,
 		label: $.t('layout["首页"]'),
-		path: "/home",
+		path: "/",
 	},
 	{
 		icon: wallet,
@@ -146,7 +150,7 @@ const tabData = [
 
 	.border {
 		position: absolute;
-		top: -35px;
+		bottom: 0px;
 		width: 100%;
 		z-index: -1;
 	}
@@ -166,12 +170,16 @@ const tabData = [
 		}
 
 		.active {
-			background: url("/@/assets/zh-CN/default/layout/item_bg.png") center center no-repeat;
+			@include theme-bg("/layout/item_bg.png");
+			background-position-x: center;
+			background-position-y: center;
+			background-repeat: no-repeat;
 			background-size: 100% 100%;
 		}
 
 		.line {
 			position: absolute;
+			top: 0px;
 			width: 50px;
 			height: 3px;
 		}
@@ -199,8 +207,12 @@ const tabData = [
 		}
 
 		.active {
-			background: url("/@/assets/zh-CN/default/layout/home_item_bg.png") center center no-repeat;
-			background-size: 100% 100%;
+			@include theme-bg("/layout/home_item_bg.png");
+			background-position-x: center;
+			background-position-y: bottom;
+			background-repeat: no-repeat;
+			background-size: cover;
+			background-clip: border-box;
 		}
 		.home-icon {
 			position: absolute;

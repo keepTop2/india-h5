@@ -8,19 +8,19 @@
 			<div class="btn1">
 				<!-- 可下注 -->
 				<div v-if="[0, 1].includes(sportsBetEvent.bettingStatus)" :class="[1].includes(sportsBetEvent.bettingStatus) ? 'disabled_container' : 'container van-haptics-feedback'" @click="onBet">
-					<div class="label">投注</div>
+					<div class="label">{{ $t('sports["投注"]') }}</div>
 					<div class="valuation">
-						<span>最高可赢</span>
+						<span>{{ $t('sports["最高可赢"]') }}</span>
 						<span class="ml_6">{{ singleTicketWinningAmount }}</span>
 					</div>
 				</div>
 				<!-- 赔率变化 -->
-				<div v-else-if="sportsBetEvent.bettingStatus == 4" class="container van-haptics-feedback" @click="oddsChanges">接受赔率变化</div>
+				<div v-else-if="sportsBetEvent.bettingStatus == 4" class="container van-haptics-feedback" @click="oddsChanges">{{ $t("sports['接受赔率变化']") }}</div>
 			</div>
 
 			<div class="btn2 van-haptics-feedback" @click="closePopup">
-				<SvgIcon iconName="/venueHome/sports/svg/sports_plus" size="3.466667" />
-				<span class="label">串</span>
+				<SvgIcon iconName="venueHome/sports/svg/sports_plus" size="3.466667" />
+				<span class="label">{{ $t('sports["串"]') }}</span>
 			</div>
 		</div>
 	</div>
@@ -29,6 +29,7 @@
 <script setup lang="ts">
 import { showToast } from "vant";
 import Radio from "../../../radio/index.vue";
+import BetNumber from "/@/views/venueHome/sports/components/Bet/BetNumber.vue";
 import shopCartPubSub from "/@/views/venueHome/sports/hooks/shopCartPubSub";
 import { useSportsBetEventStore } from "/@/store/modules/sports/sportsBetData";
 import { useSportsBetInfoStore } from "/@/store/modules/sports/sportsBetInfo";
@@ -37,6 +38,8 @@ import sportsApi from "/@/api/venueHome/sports";
 const sportsBetEvent = useSportsBetEventStore();
 const sportsBetInfo = useSportsBetInfoStore();
 const betNumberShow = computed(() => shopCartPubSub.getBetNumberShow());
+console.log("betNumberShow", betNumberShow);
+
 const singleTicketWinningAmount = computed(() => shopCartPubSub.getSingleTicketWinningAmount());
 const stake = computed(() => shopCartPubSub.getSingleTicketBetValue());
 
@@ -131,7 +134,7 @@ const onkeyPress = (value) => {
 		display: flex;
 		justify-content: space-between;
 		@include themeify {
-			color: themed("TB-P");
+			color: themed("TB1");
 		}
 		.btn1 {
 			width: 503px;
@@ -181,12 +184,15 @@ const onkeyPress = (value) => {
 			display: flex;
 			align-items: center;
 			justify-content: center;
+			gap: 6px;
+			padding: 0px 10px;
 			border-radius: 8px;
 			@include themeify {
 				background-color: themed("Theme");
 			}
+			box-sizing: border-box;
 			.label {
-				margin-left: 6px;
+				text-align: center;
 			}
 		}
 	}

@@ -6,7 +6,7 @@
 		</div>
 		<div class="btns">
 			<div class="delete_btn" @click="onDelete">
-				<SvgIcon iconName="/venueHome/sports/svg/sports_delete" size="3.8" />
+				<SvgIcon iconName="venueHome/sports/svg/sports_delete" size="3.8" />
 			</div>
 
 			<div class="btn1">
@@ -15,21 +15,21 @@
 					:class="[1, 2, 5].includes(sportsBetEvent.bettingStatus) ? 'disabled_container' : 'container van-haptics-feedback'"
 					@click="onBet"
 				>
-					<div class="label">投注</div>
+					<div class="label">{{ $t('sports["投注"]') }}</div>
 					<div class="valuation">
-						<span>最高可赢</span>
+						<span>{{ $t('sports["最高可赢"]') }}</span>
 						<span>{{ getParlayTicketsWinningAmount }}</span>
 					</div>
 				</div>
 				<!-- 串关数量没达到要求 -->
-				<div v-else-if="sportsBetEvent.bettingStatus == 3" class="container disabled_container">至少选择{{ combo }}场比赛</div>
+				<div v-else-if="sportsBetEvent.bettingStatus == 3" class="container disabled_container">{{ $t('sports["至少选择场比赛"]', { value: combo }) }}</div>
 				<!-- 赔率变化 -->
-				<div v-else-if="sportsBetEvent.bettingStatus == 4" class="container van-haptics-feedback" @click="oddsChanges">接受赔率变化</div>
+				<div v-else-if="sportsBetEvent.bettingStatus == 4" class="container van-haptics-feedback" @click="oddsChanges">{{ $t('sports["接受赔率变化"]') }}</div>
 			</div>
 
 			<div class="btn2 van-haptics-feedback" @click="closePopup">
-				<SvgIcon iconName="/venueHome/sports/svg/sports_plus" size="3.466667" />
-				<span class="label">串</span>
+				<SvgIcon iconName="venueHome/sports/svg/sports_plus" size="3.466667" />
+				<span class="label">{{ $t('sports["串"]') }}</span>
 			</div>
 		</div>
 	</div>
@@ -38,6 +38,7 @@
 <script setup lang="ts">
 import { showToast } from "vant";
 import Radio from "../../../radio/index.vue";
+import BetNumber from "/@/views/venueHome/sports/components/Bet/BetNumber.vue";
 import shopCartPubSub from "/@/views/venueHome/sports/hooks/shopCartPubSub";
 import { useSportsBetEventStore } from "/@/store/modules/sports/sportsBetData";
 import { useSportsBetInfoStore } from "/@/store/modules/sports/sportsBetInfo";
@@ -195,7 +196,7 @@ const closePopup = () => {
 		justify-content: space-between;
 		gap: 4px;
 		@include themeify {
-			color: themed("TB-P");
+			color: themed("TB1");
 		}
 		.btn1 {
 			flex: 1;
@@ -203,6 +204,8 @@ const closePopup = () => {
 			display: flex;
 			align-items: center;
 			justify-content: center;
+			text-align: center;
+
 			border-radius: 8px;
 			@include themeify {
 				background-color: themed("Theme");
@@ -217,6 +220,8 @@ const closePopup = () => {
 				align-items: center;
 				justify-content: center;
 				flex-direction: column;
+				padding: 0px 10px;
+				box-sizing: border-box;
 				.label {
 					font-family: "PingFang SC";
 					font-size: 30px;
@@ -247,12 +252,15 @@ const closePopup = () => {
 			display: flex;
 			align-items: center;
 			justify-content: center;
+			gap: 6px;
+			padding: 0px 10px;
 			border-radius: 8px;
 			@include themeify {
 				background-color: themed("Theme");
 			}
+			box-sizing: border-box;
 			.label {
-				margin-left: 6px;
+				text-align: center;
 			}
 		}
 	}

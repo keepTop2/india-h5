@@ -4,7 +4,9 @@
 			<input
 				v-model="stake"
 				type="text"
-				:placeholder="`限额 ${common.getInstance().formatFloat(sportsBetInfo.championSingleTicketInfo.minBet)} ~ ${common.getInstance().formatFloat(sportsBetInfo.championSingleTicketInfo.maxBet)}`"
+				:placeholder="`${$t(`sports['限额']`)}${common.getInstance().formatFloat(sportsBetInfo.championSingleTicketInfo.minBet)} ~ ${common
+					.getInstance()
+					.formatFloat(sportsBetInfo.championSingleTicketInfo.maxBet)}`"
 				readonly
 			/>
 			<div class="unit">USD</div>
@@ -42,7 +44,7 @@ const onBetNumber = () => {
 		border: 1px solid;
 		@include themeify {
 			border-color: themed("Theme");
-			background-color: themed("BG2");
+			background-color: themed("BG4");
 		}
 		box-sizing: border-box;
 
@@ -61,7 +63,7 @@ input {
 	width: 100%;
 	height: 30px;
 	@include themeify {
-		background-color: themed("BG2");
+		background-color: themed("BG4");
 		color: themed("Theme");
 	}
 	font-family: "PingFang SC";

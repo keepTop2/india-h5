@@ -5,7 +5,7 @@ class sportsApi {
 	/**
 	 *@description 体育登录
 	 */
-	static sportsLogin = (data = {}, headers = {}) => {
+	static sportsLogin = (data, headers = {}) => {
 		return useAxiosApi(`/app/third/api/loginGame`, {
 			method: "POST",
 			data,

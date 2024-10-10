@@ -1,10 +1,3 @@
-<!--
- * @Author: HiDa
- * @Date: 2024-06-07 14:40:39
- * @LastEditors: HiDa
- * @LastEditTime: 2024-06-14 22:58:34
- * @Description:  盘口信息组件
--->
 <template>
 	<div class="columns">
 		<div class="item" v-for="(item, index) in market.selections" :key="index">
@@ -25,7 +18,7 @@
 				</div>
 				<template v-else>
 					<div>
-						<SvgIcon iconName="/venueHome/sports/svg/sport_lock" size="4.6" />
+						<SvgIcon iconName="venueHome/sports/svg/sport_lock" size="4.6" />
 					</div>
 				</template>
 			</div>

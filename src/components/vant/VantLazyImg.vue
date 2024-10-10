@@ -16,6 +16,7 @@
 </template>
 
 <script setup>
+import defaultImg from "/@/assets/zh-CN/default/home/default.png";
 /**
  * @param {String} src 图片地址
  * @param {String} alt 图片描述
@@ -46,13 +47,17 @@ const props = defineProps({
 	},
 	loadingSrc: {
 		type: String,
-		default: "",
+		default: defaultImg,
 	},
 	errorSrc: {
 		type: String,
-		default: "",
+		default: defaultImg,
 	},
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+img {
+	object-fit: cover;
+}
+</style>

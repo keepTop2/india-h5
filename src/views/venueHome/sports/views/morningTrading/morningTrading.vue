@@ -1,17 +1,7 @@
-<!--
- * @Author: Hida
- * @Date: 2024-06-06 20:55:25
- * @LastEditors: hida
- * @LastEditTime: 2024-06-17 15:44:16
- * @Description: 
- * 
--->
 <template>
-	<div>
-		<DateSelector v-model="activeDate" :daysNumber="7" :other="true" :direction="true" />
-		<component v-if="leagues" :is="sportsMap[Number(route.params.sportType)]" :listData="leagues" :sportType:string="route.params.sportType" />
-		<NoData v-else />
-	</div>
+	<DateSelector v-model="activeDate" :daysNumber="7" :other="true" :direction="true" />
+	<component v-if="leagues" :is="sportsMap[Number(route.params.sportType)]" :listData="leagues" :sportType:string="route.params.sportType" />
+	<NoData v-else />
 </template>
 
 <script setup lang="ts">
@@ -113,8 +103,8 @@ const openSportPush = () => {
 	} else {
 		queryParams["params"] = {
 			query: `$filter=sportType in (${SportsCommonFn.getRequestSportsType()})&$orderby=globalShowTime asc `,
-			from: common.getResultDateRange(dayjs.utc().add(8, "day").subtract(5, "hour")).startDate,
-			until: common.getResultDateRange(dayjs.utc().add(15, "day").subtract(5, "hour")).endDate,
+			from: dayjs().add(8, "day").startOf("day").toISOString(),
+			until: dayjs().add(15, "day").endOf("day").toISOString(),
 		};
 	}
 	console.log("----------?这里？");

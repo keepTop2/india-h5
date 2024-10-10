@@ -3,14 +3,24 @@
 	height: $height;
 	background-repeat: no-repeat;
 	background-size: 100% 100%;
-	@include loop-lang-bg($preUrl, $posUrl);
+	@include theme-lang-bg($preUrl, $posUrl);
 }
 // 背景图多语言
-@mixin loop-lang-bg($preUrl, $posUrl) {
+@mixin theme-lang-bg($preUrl, $posUrl) {
 	$list: zh, en;
 	@each $i in $list {
 		&.#{$i} {
 			background-image: url("#{$preUrl}/#{$i}/#{$posUrl}");
+		}
+	}
+}
+
+// 背景图主题
+@mixin theme-bg($posUrl) {
+	$themes: default, light;
+	@each $i in $themes {
+		&.#{$i} {
+			background-image: url("/@/assets/zh-CN/#{$i}/#{$posUrl}");
 		}
 	}
 }

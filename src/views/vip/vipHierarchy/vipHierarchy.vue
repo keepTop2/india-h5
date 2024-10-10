@@ -2,15 +2,15 @@
 	<VantNavBar :title="$t(`VantNavBar['VIP等级制度']`)" @onClickLeft="onClickLeft"></VantNavBar>
 
 	<div class="content">
-		<Collapse v-for="(item, index) in vipHierarchyData" :key="index">
+		<Collapse v-for="(item, index) in state.vipHierarchyData.siteVIPSystemRankVOList" :key="index">
 			<template #header>
-				<div class="header">
+				<div class="header" :class="getClass(item)">
 					<div>
-						<span>{{ item.title }}</span>
+						<span>{{ item.vipRankNameI18nCode }}</span>
 						<span>VIP</span>
-						<span>{{ item.level }}</span>
+						<span>{{ item.minVipGrade }}-{{ item.maxVipGrade }}</span>
 					</div>
-					<SvgIcon class="arrow" iconName="/vip/vipRewards/arrow" />
+					<SvgIcon class="arrow" iconName="vip/vipRewards/arrow" />
 				</div>
 			</template>
 			<template #content>
@@ -20,13 +20,13 @@
 					<span>{{ $t('vipHierarchy["升级奖金"]') }}$</span>
 				</div>
 
-				<div class="content_cell" v-for="(i, index) in item.list" :key="idx">
+				<div class="content_cell" v-for="(i, idx) in item.siteVIPGradeVOList" :key="idx">
 					<div>
-						<img class="icon" :src="i.icon" alt="" />
-						<span>{{ i.level }}</span>
+						<img class="icon" :src="i.picIcon" alt="" />
+						<span>{{ i.vipGradeName }}</span>
 					</div>
-					<div>{{ i.experience }}</div>
-					<div>{{ i.bonus }}</div>
+					<div>{{ i.upgradeXp }}</div>
+					<div>{{ i.upgradeBonus }}</div>
 				</div>
 			</template>
 		</Collapse>
@@ -34,6 +34,8 @@
 </template>
 
 <script setup lang="ts">
+import { vipApi } from "/@/api/vip";
+import common from "/@/utils/common";
 import icon_bronze from "/@/assets/zh-CN/default/vip/icon_bronze.png";
 import icon_silver from "/@/assets/zh-CN/default/vip/icon_silver.png";
 import icon_gold from "/@/assets/zh-CN/default/vip/icon_gold.png";
@@ -44,86 +46,38 @@ import Collapse from "./Collapse/index.vue";
 import { useRouter } from "vue-router";
 const router = useRouter();
 
-const vipHierarchyData = [
-	{
-		title: "青铜",
-		level: "2-7",
-		list: [
-			{
-				level: "VIP2",
-				experience: 100,
-				bonus: 0.5,
-				icon: icon_bronze,
-			},
-			{
-				level: "VIP2",
-				experience: 100,
-				bonus: 0.5,
-				icon: icon_bronze,
-			},
-			{
-				level: "VIP2",
-				experience: 100,
-				bonus: 0.5,
-				icon: icon_bronze,
-			},
-			{
-				level: "VIP2",
-				experience: 100,
-				bonus: 0.5,
-				icon: icon_bronze,
-			},
-		],
-	},
-	{
-		title: "白银",
-		level: "8-21",
-		list: [
-			{
-				level: "VIP2",
-				experience: 100,
-				bonus: 0.5,
-				icon: icon_silver,
-			},
-		],
-	},
-	{
-		title: "黄金",
-		level: "2-7",
-		list: [
-			{
-				level: "VIP2",
-				experience: 100,
-				bonus: 0.5,
-				icon: icon_gold,
-			},
-		],
-	},
-	{
-		title: "铂金",
-		level: "2-7",
-		list: [
-			{
-				level: "VIP2",
-				experience: 100,
-				bonus: 0.5,
-				icon: icon_platinium,
-			},
-		],
-	},
-	{
-		title: "钻石",
-		level: "2-7",
-		list: [
-			{
-				level: "VIP2",
-				experience: 100,
-				bonus: 0.5,
-				icon: icon_diamond,
-			},
-		],
-	},
-];
+const state = reactive({
+	vipHierarchyData: {},
+});
+
+const getUserVipBenefitDetail = async () => {
+	const res = await vipApi.getUserVipBenefitDetail().catch((err) => err);
+	if (res.code === common.getInstance().ResCode.SUCCESS) {
+		state.vipHierarchyData = res.data;
+	}
+};
+
+const getClass = (item) => {
+	if (item.vipRankCode === 0) {
+		return "icon_0";
+	} else if (item.vipRankCode === 1) {
+		return "icon_1";
+	} else if (item.vipRankCode === 2) {
+		return "icon_2";
+	} else if (item.vipRankCode === 3) {
+		return "icon_3";
+	} else if (item.vipRankCode === 4) {
+		return "icon_3";
+	} else if (item.vipRankCode === 5) {
+		return "icon_4";
+	} else if (item.vipRankCode === 6) {
+		return "icon_4";
+	} else if (item.vipRankCode === 7) {
+		return "icon_4";
+	}
+};
+
+getUserVipBenefitDetail();
 
 const onClickLeft = () => {
 	router.go(-1);
@@ -157,18 +111,10 @@ const onClickLeft = () => {
 	justify-content: space-between;
 	padding: 0px 24px;
 	border-radius: 20px 20px 0px 0px;
-	background: linear-gradient(90deg, #353a3e 0%, #2c2d2e 100%);
-	box-sizing: border-box;
-
-	&::after {
-		content: "";
-		position: absolute;
-		left: 0px;
-		width: 6px;
-		height: 48px;
-		border-radius: 0px 4px 4px 0px;
-		background: #ddae96;
+	@include themeify {
+		background: themed("vip_bg2");
 	}
+	box-sizing: border-box;
 
 	div {
 		flex: 1;
@@ -177,7 +123,7 @@ const onClickLeft = () => {
 		gap: 12px;
 		span {
 			@include themeify {
-				color: themed("TB1");
+				color: themed("TB");
 			}
 			font-family: "PingFang SC";
 			font-size: 28px;
@@ -188,15 +134,63 @@ const onClickLeft = () => {
 	.arrow {
 		width: 24px;
 		height: 24px;
+		@include themeify {
+			color: themed("TB");
+		}
+		svg {
+			width: 100%;
+			height: 100%;
+		}
+	}
+}
+
+.icon_0,
+.icon_1,
+.icon_2,
+.icon_3,
+.icon_4 {
+	&::after {
+		content: "";
+		position: absolute;
+		left: 0px;
+		width: 6px;
+		height: 48px;
+		border-radius: 0px 4px 4px 0px;
+	}
+}
+.icon_0 {
+	&::after {
+		background: #ddae96;
+	}
+}
+.icon_1 {
+	&::after {
+		background: #abe3ff;
+	}
+}
+.icon_2 {
+	&::after {
+		background: #fcab1c;
+	}
+}
+.icon_3 {
+	&::after {
+		background: #83f0f6;
+	}
+}
+.icon_4 {
+	&::after {
+		background: #dbb4f5;
 	}
 }
 
 .content_header {
+	height: 76px;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
 	gap: 22px;
-	padding: 20px 24px;
+	padding: 0px 24px;
 	box-sizing: border-box;
 
 	span {

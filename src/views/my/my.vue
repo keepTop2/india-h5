@@ -7,24 +7,27 @@
 		<template v-else>
 			<div class="user">
 				<div class="avatar">
-					<VantLazyImg :src="avatar" />
+					<VantLazyImg :src="theme === ThemeEnum.default ? avatar : avatar_light" />
 				</div>
 				<span class="user_name">{{ store.userInfo.userAccount }}</span>
 				<div class="user_id">
-					<span>ID: 455454</span>
+					<span>ID: {{ store.userInfo.userId }}</span>
+					<div class="icon" @click="common.getInstance().copy(store.userInfo.userId)"><SvgIcon iconName="common/copy" /></div>
 				</div>
 			</div>
 
 			<!-- vip -->
 			<div class="vip_container">
-				<VantLazyImg class="vip_big" :src="vip_big" />
-				<span class="vip_level">VIP0</span>
+				<!-- <VantLazyImg class="vip_big" :src="vip_big" /> -->
+				<span class="vip_level">VIP{{ state.userVipInfo.vipGradeCode }}</span>
 				<div class="vip_info">
-					<span class="vip_experience">升级所需经验: <span class="warn">200</span> / <span>500</span></span>
-					<SvgIcon class="arrow" iconName="/my/arrow" @click="toPath('/vip')" />
+					<span class="vip_experience"
+						>升级所需经验: <span class="color_Warn">{{ state.userVipInfo.currentExp }}</span> / <span>{{ state.userVipInfo.upgradeVipExp }}</span></span
+					>
+					<SvgIcon class="arrow" iconName="my/arrow" @click="toPath('/vip')" />
 				</div>
 				<!-- VIP进度条 -->
-				<Progress class="vip_progress" />
+				<Progress class="vip_progress" :userVipInfo="state.userVipInfo" />
 			</div>
 
 			<div class="my-content">
@@ -34,7 +37,7 @@
 						<VantLazyImg class="line" :src="line" />
 						<div class="label">勋章</div>
 						<div class="badge" v-if="state.medalQuantity > 0">{{ state.medalQuantity }}</div>
-						<SvgIcon class="arrow" iconName="/common/arrow" />
+						<SvgIcon class="arrow" iconName="common/arrow" />
 					</div>
 					<div class="medal_content">
 						<div class="item" :class="{ item_bg: item.lockStatus == 1 }" v-for="(item, index) in state.medalListData" :key="index">
@@ -63,7 +66,7 @@
 						<SvgIcon class="icon" :iconName="item.icon" />
 						<div class="label">{{ item.name }}</div>
 						<div class="value">{{ item.value }}</div>
-						<SvgIcon class="arrow" iconName="/common/arrow" />
+						<SvgIcon class="arrow" iconName="common/arrow" />
 					</div>
 				</div>
 
@@ -72,12 +75,12 @@
 						<SvgIcon class="icon" :iconName="item.icon" />
 						<div class="label">{{ item.name }}</div>
 						<div class="value">{{ item.value }}</div>
-						<SvgIcon class="arrow" iconName="/common/arrow" />
+						<SvgIcon v-if="item.arrow" class="arrow" iconName="common/arrow" />
 					</div>
 					<div class="cell">
-						<SvgIcon class="icon" iconName="/my/theme" />
+						<SvgIcon class="icon" iconName="my/theme" />
 						<div class="label">{{ $t('my["主题"]') }}</div>
-						<SvgIcon class="themeChange_icon" iconName="/my/themeChange" />
+						<SvgIcon class="themeChange_icon" :iconName="theme === ThemeEnum.default ? '/my/themeChange' : '/my/themeChange_light'" @click="changeTheme" />
 					</div>
 				</div>
 
@@ -93,7 +96,7 @@
 		<van-popup v-model:show="loginOutShow" position="bottom">
 			<header>
 				<span class="label">登出</span>
-				<SvgIcon class="close_icon" iconName="/common/close" @click="loginOutShow = false" />
+				<SvgIcon class="close_icon" iconName="common/close" @click="loginOutShow = false" />
 			</header>
 			<div class="content">您确定要退出登录吗?</div>
 			<div class="btns">
@@ -106,7 +109,11 @@
 
 <script setup lang="ts">
 import { myApi, medalApi } from "/@/api/my";
+import { vipApi } from "/@/api/vip";
+import { useThemesStore } from "/@/store/modules/themes";
 import { UserCenterMedalDetailRespVoList } from "./interface";
+import { VIP } from "/@/views/vip/interface";
+import { ThemeEnum } from "/@/enum/appConfigEnum";
 import common from "/@/utils/common";
 import NavBar from "/@/views/my/components/navBar.vue";
 import NoLogin from "/@/views/my/components/noLogin.vue";
@@ -116,34 +123,39 @@ import pubsub from "/@/pubSub/pubSub";
 import { useRouter } from "vue-router";
 import { useUserStore } from "/@/store/modules/user";
 import avatar from "/@/assets/zh-CN/default/my/avatar.png";
+import avatar_light from "/@/assets/zh-CN/light/my/avatar.png";
 import vip_big from "/@/assets/zh-CN/default/vip/vip_big.png";
 import line from "/@/assets/zh-CN/default/common/line.png";
 import balance_operation_ck from "/@/assets/zh-CN/default/my/balance_operation_ck.png";
 import balance_operation_tx from "/@/assets/zh-CN/default/my/balance_operation_tx.png";
 import balance_operation_jy from "/@/assets/zh-CN/default/my/balance_operation_jy.png";
 import balance_operation_tz from "/@/assets/zh-CN/default/my/balance_operation_tz.png";
-
+import { i18n } from "/@/i18n/index";
+import { loginApi } from "/@/api/loginRegister";
+const $: any = i18n.global;
 const router = useRouter();
 const store = useUserStore();
-
+const themesStore = useThemesStore();
+const theme = computed(() => themesStore.themeName);
+const loginOutShow = ref(false);
 const balanceOperationList = [
 	{
-		name: "存款",
+		name: $.t("my['存款']"),
 		icon: balance_operation_ck,
 		path: "/wallet/recharge",
 	},
 	{
-		name: "提现",
+		name: $.t("my['提现']"),
 		icon: balance_operation_tx,
 		path: "/wallet/withdraw",
 	},
 	{
-		name: "交易",
+		name: $.t("my['交易']"),
 		icon: balance_operation_jy,
 		path: "",
 	},
 	{
-		name: "投注记录",
+		name: $.t("my['投注记录']"),
 		icon: balance_operation_tz,
 		path: "",
 	},
@@ -152,19 +164,19 @@ const balanceOperationList = [
 const menuData = {
 	group1: [
 		{
-			name: "安全中心",
+			name: $.t("my['安全中心']"),
 			icon: "/my/aqzx",
 			value: "",
 			path: "/securityCenter",
 		},
 		{
-			name: "邀请好友",
+			name: $.t("my['邀请好友']"),
 			icon: "/my/yqhy",
 			value: "",
 			path: "/inviteFriends",
 		},
 		{
-			name: "代理联盟",
+			name: $.t("my['代理联盟']"),
 			icon: "/my/dllm",
 			value: "",
 			path: "",
@@ -172,45 +184,58 @@ const menuData = {
 	],
 	group2: [
 		{
-			name: "意见反馈",
+			name: $.t("my['意见反馈']"),
 			icon: "/my/yjfk",
 			value: "",
 			path: "/feedback",
+			arrow: true,
 		},
 		{
-			name: "主货币",
+			name: $.t("my['主货币']"),
 			icon: "/my/zhb",
-			value: "",
+			value: store.userInfo.mainCurrency,
 			path: "",
+			arrow: false,
 		},
 		{
-			name: "语言",
+			name: $.t("my['语言']"),
 			icon: "/my/lang",
-			value: "",
-			path: "",
+			value: store.langName,
+			path: "/language",
+			arrow: true,
 		},
 		{
-			name: "版本号",
+			name: $.t("my['版本号']"),
 			icon: "/my/beh",
-			value: "",
+			value: "v 1.00",
 			path: "",
+			arrow: false,
 		},
 	],
 };
 
 let state = reactive({
+	userVipInfo: {} as VIP,
 	medalQuantity: 0 as number,
 	medalListData: [] as UserCenterMedalDetailRespVoList[],
 });
 
-const loginOutShow = ref(false);
+onMounted(() => {
+	if (store.token) {
+		topNList();
+		getUserVipInfo();
+	}
+});
 
-const getIndexInfo = async () => {
-	const res = await myApi.getIndexInfo().catch((err) => err);
+// 获取VIP信息
+const getUserVipInfo = async () => {
+	const res = await vipApi.getUserVipInfo().catch((err) => err);
 	if (res.code == common.getInstance().ResCode.SUCCESS) {
+		state.userVipInfo = res.data;
 	}
 };
 
+// 获取勋章信息
 const topNList = async () => {
 	const res = await medalApi.topNList().catch((err) => err);
 	if (res.code == common.getInstance().ResCode.SUCCESS) {
@@ -218,8 +243,6 @@ const topNList = async () => {
 		state.medalListData = res.data.userCenterMedalDetailRespVoList;
 	}
 };
-
-topNList();
 
 const onClickCell = (item) => {
 	if (item.path == "/inviteFriends") {
@@ -233,14 +256,22 @@ const onClickCell = (item) => {
 	}
 };
 
+const changeTheme = () => {
+	themesStore.setTheme(theme.value === ThemeEnum.light ? ThemeEnum.default : ThemeEnum.light);
+};
+
 const toPath = (path) => {
-	console.log("path", path);
 	router.push(path);
 };
 
 const onLoginOut = () => {
-	store.clearInfo();
-	router.push("/login");
+	loginApi
+		.logout()
+		.then(() => {})
+		.finally(() => {
+			store.clearInfo();
+			router.push("/login");
+		});
 };
 
 const loginOut = () => {
@@ -271,7 +302,7 @@ const loginOut = () => {
 		@include themeify {
 			color: themed("TB");
 		}
-		font-family: Inter;
+		font-family: "PingFang SC";
 		font-size: 32px;
 		font-weight: 500;
 	}
@@ -280,6 +311,7 @@ const loginOut = () => {
 		height: 40px;
 		padding: 0px 20px;
 		display: flex;
+		column-gap: 10px;
 		align-items: center;
 		align-self: center;
 		border-radius: 20px;
@@ -293,6 +325,17 @@ const loginOut = () => {
 		font-size: 24px;
 		font-weight: 400;
 		box-sizing: border-box;
+
+		.icon {
+			width: 28px;
+			height: 28px;
+			display: flex;
+			align-items: center;
+			svg {
+				width: 24px;
+				height: 24px;
+			}
+		}
 	}
 }
 
@@ -340,8 +383,14 @@ const loginOut = () => {
 			font-weight: 400;
 		}
 		.arrow {
-			width: 12px;
-			height: 20px;
+			width: 24px;
+			height: 24px;
+			@include themeify {
+				color: themed("T1");
+			}
+			svg {
+				vertical-align: top;
+			}
 		}
 	}
 
@@ -378,7 +427,9 @@ const loginOut = () => {
 			justify-content: space-between;
 			padding: 0px 19px 0px 24px;
 			border-radius: 20px 20px 0px 0px;
-			background: linear-gradient(90deg, rgba(73, 86, 100, 0.4) 0%, rgba(44, 45, 46, 0.4) 100%);
+			@include themeify {
+				background: themed("my-header");
+			}
 
 			.line {
 				position: absolute;
@@ -392,7 +443,7 @@ const loginOut = () => {
 			.label {
 				flex: 1;
 				@include themeify {
-					color: themed("TB1");
+					color: themed("TB");
 				}
 				font-family: "PingFang SC";
 				font-size: 28px;
@@ -421,7 +472,7 @@ const loginOut = () => {
 
 			.value {
 				@include themeify {
-					color: themed("T1");
+					color: themed("T3");
 				}
 				font-family: "PingFang SC";
 				font-size: 24px;
@@ -431,6 +482,9 @@ const loginOut = () => {
 			.arrow {
 				width: 24px;
 				height: 24px;
+				@include themeify {
+					color: themed("T1");
+				}
 			}
 		}
 		.medal_content {
@@ -555,12 +609,15 @@ const loginOut = () => {
 					color: themed("T1");
 				}
 				font-family: "PingFang SC";
-				font-size: 24px;
+				font-size: 28px;
 				font-weight: 400;
 			}
 			.arrow {
 				width: 24px;
 				height: 24px;
+				@include themeify {
+					color: themed("T1");
+				}
 			}
 			.themeChange_icon {
 				width: 99px;

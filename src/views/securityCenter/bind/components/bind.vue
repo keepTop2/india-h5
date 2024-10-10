@@ -5,7 +5,7 @@
 			<span class="title">{{ $t('bindPhone["邮箱账号"]') }}</span>
 			<FormInput v-model="state.email" type="text" :placeholder="$t(`forgetPassword['请输入电子邮箱']`)" :errorBorder="!isEmailValid && state.email !== '' ? true : false">
 				<template v-slot:right>
-					<SvgIcon v-if="state.email" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.email = ''" />
+					<SvgIcon v-if="state.email" class="clearIcon" iconName="loginOrRegister/clear" @click="state.email = ''" />
 				</template>
 			</FormInput>
 			<div class="error_text">
@@ -20,11 +20,11 @@
 			<div class="phone" :class="{ 'form-input-error': !isPhoneValid && state.phone !== '' ? true : false }">
 				<div class="area_code">
 					<span>+{{ state.areaCode }}</span
-					><SvgIcon class="down" iconName="/loginOrRegister/navBar/down" />
+					><SvgIcon class="down" iconName="loginOrRegister/navBar/down" />
 				</div>
 				<FormInput v-model="state.phone" type="text" :placeholder="$t(`forgetPassword['请输入手机号']`)">
 					<template v-slot:right>
-						<SvgIcon v-if="state.phone" class="clearIcon" iconName="/loginOrRegister/clear" @click="state.phone = ''" />
+						<SvgIcon v-if="state.phone" class="clearIcon" iconName="loginOrRegister/clear" @click="state.phone = ''" />
 					</template>
 				</FormInput>
 			</div>

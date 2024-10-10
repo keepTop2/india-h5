@@ -5,14 +5,14 @@
 				<!-- 导航栏 -->
 				<div class="navBar" :class="{ showDropDown }">
 					<div class="goback" @click="onClickLeft">
-						<SvgIcon class="color_T3" iconName="/common/arrowLeft" alt="" />
+						<SvgIcon class="color_T3" iconName="common/arrowLeft" alt="" />
 					</div>
 					<div class="teamList" v-show="eventsList">
 						<DropDownEvent @changeEvent="handleChangeEvent" :eventsList="eventsList" @handleClose="handleClose" @handleOpen="handleOpen" />
-						<SvgIcon iconName="/venueHome/sports/svg/sport_down" alt="" />
+						<SvgIcon iconName="venueHome/sports/svg/sport_down" alt="" />
 					</div>
 					<div class="refresh">
-						<!-- <SvgIcon class="color_T3" iconName="/venueHome/sports/svg/sports_refresh" alt="" /> -->
+						<!-- <SvgIcon class="color_T3" iconName="venueHome/sports/svg/sports_refresh" alt="" /> -->
 					</div>
 				</div>
 				<!-- 头部内容 队伍信息 比分 -->
@@ -24,50 +24,50 @@
 									<div class="teamLogo">
 										<img v-if="eventDetail?.teamInfo?.homeIconUrl" :src="eventDetail?.teamInfo?.homeIconUrl" alt="" />
 									</div>
-									<div class="teamName fs_26 color_TB-P fw_400">{{ eventDetail?.teamInfo?.homeName }}</div>
+									<div class="teamName fs_26 color_TB1 fw_400">{{ eventDetail?.teamInfo?.homeName }}</div>
 								</div>
 								<div class="time">
 									<div v-if="eventDetail?.isLive && isEventRunning">
-										<div class="date fs_24 color_TB-P fw_600">
+										<div class="date fs_24 color_TB1 fw_600">
 											{{ eventDetail && SportsCommon.getEventsTitle(eventDetail) }} <span>{{ formattedGameTime }}</span>
 										</div>
-										<div class="time fs_50 color_TB-P fw_700">{{ eventDetail?.gameInfo.liveHomeScore }}-{{ eventDetail?.gameInfo.liveAwayScore }}</div>
+										<div class="time fs_50 color_TB1 fw_700">{{ eventDetail?.gameInfo.liveHomeScore }}-{{ eventDetail?.gameInfo.liveAwayScore }}</div>
 									</div>
 									<div v-if="eventDetail?.isLive && eventDetail?.eventStatus == 'closed'">
-										<div class="time fs_50 color_TB-P fw_700">{{ eventDetail?.gameInfo.liveHomeScore }}-{{ eventDetail?.gameInfo.liveAwayScore }}</div>
+										<div class="time fs_50 color_TB1 fw_700">{{ eventDetail?.gameInfo.liveHomeScore }}-{{ eventDetail?.gameInfo.liveAwayScore }}</div>
 									</div>
 									<div v-if="!eventDetail?.isLive || !isEventRunning">
-										<div class="date fs_24 color_TB-P fw_600">{{ timeFormate(eventDetail?.globalShowTime).date }}</div>
-										<div class="time fs_50 color_TB-P fw_700">{{ timeFormate(eventDetail?.globalShowTime).time }}</div>
+										<div class="date fs_24 color_TB1 fw_600">{{ timeFormate(eventDetail?.globalShowTime).date }}</div>
+										<div class="time fs_50 color_TB1 fw_700">{{ timeFormate(eventDetail?.globalShowTime).time }}</div>
 									</div>
 								</div>
 								<div class="team2">
 									<div class="teamLogo">
 										<img v-if="eventDetail?.teamInfo?.awayIconUrl" :src="eventDetail?.teamInfo?.awayIconUrl" alt="" />
 									</div>
-									<div class="teamName fs_26 color_TB-P fw_400">{{ eventDetail?.teamInfo?.awayName }}</div>
+									<div class="teamName fs_26 color_TB1 fw_400">{{ eventDetail?.teamInfo?.awayName }}</div>
 								</div>
 							</div>
 						</div>
 						<div class="card">
 							<ul v-if="isEventRunning && eventDetail">
-								<li class="color_TB-P fs_26" v-if="eventDetail?.channelCode" @click="getStreaming">
-									<SvgIcon iconName="/venueHome/sports/svg/sport_live_2" />
-									视频
+								<li class="color_TB1 fs_26" v-if="eventDetail?.channelCode" @click="getStreaming">
+									<SvgIcon iconName="venueHome/sports/svg/sport_live_2" />
+									{{ $t('sports["视频"]') }}
 								</li>
 								<li class="line bg_T3" v-if="eventDetail?.channelCode"></li>
-								<li @click="attentionEvent()" :class="[(isAttention && 'color_TB-P') || 'color_T3', 'fs_26']">
-									<!-- <SvgIcon class="color_T3" iconName="/venueHome/sports/svg/sport_start" size="6" /> -->
-									<SvgIcon v-if="isAttention" iconName="/venueHome/sports/svg/collection2" size="6" />
-									<SvgIcon v-else iconName="/venueHome/sports/svg/collection" size="6" />
-									{{ (isAttention && "已关注") || "关注" }}
+								<li @click="attentionEvent()" :class="[(isAttention && 'color_TB1') || 'color_T3', 'fs_26']">
+									<!-- <SvgIcon class="color_T3" iconName="venueHome/sports/svg/sport_start" size="6" /> -->
+									<SvgIcon v-if="isAttention" iconName="venueHome/sports/svg/collection2" size="6" />
+									<SvgIcon v-else iconName="venueHome/sports/svg/collection" size="6" />
+									{{ (isAttention && $t('sports["已关注"]')) || $t('sports["关注"]') }}
 								</li>
 							</ul>
 							<ul v-if="!isEventRunning && eventsList">
-								<li class="color_T3">{{ eventsList ? (eventDetail ? gameStatus(eventDetail?.eventStatus) : "比赛已结束") : "-" }}</li>
+								<li class="color_T3">{{ eventsList ? (eventDetail ? gameStatus(eventDetail?.eventStatus) : $t('sports["比赛已结束"]')) : "-" }}</li>
 							</ul>
 						</div>
-						<div class="pl_40 pr_40 fs_20 color_TB-P fw_700" v-if="Number(routeData.sportType) == 1 && eventDetail?.isLive && eventDetail?.gameInfo?.inPlayTime">
+						<div class="pl_40 pr_40 fs_20 color_TB1 fw_700" v-if="Number(routeData.sportType) == 1 && eventDetail?.isLive && eventDetail?.gameInfo?.inPlayTime">
 							<span>HT </span>
 							<span>{{ `${eventDetail?.gameInfo?.liveHomeScore}-${eventDetail.gameInfo?.liveAwayScore}` }}</span>
 						</div>
@@ -104,8 +104,8 @@
 								</div>
 								<div v-if="eventDetail?.soccerInfo" class="fs_26 color_TB fw_400">
 									<ul>
-										<li class="fs_22 color_T1 fw_700"><SvgIcon iconName="/venueHome/sports/svg/redCard" size="6" />{{ eventDetail.soccerInfo.homeRedCard }}</li>
-										<li class="fs_22 color_T1 fw_700"><SvgIcon iconName="/venueHome/sports/svg/yellowCard" size="6" />{{ eventDetail.soccerInfo.homeYellowCard }}</li>
+										<li class="fs_22 color_T1 fw_700"><SvgIcon iconName="venueHome/sports/svg/redCard" size="6" />{{ eventDetail.soccerInfo.homeRedCard }}</li>
+										<li class="fs_22 color_T1 fw_700"><SvgIcon iconName="venueHome/sports/svg/yellowCard" size="6" />{{ eventDetail.soccerInfo.homeYellowCard }}</li>
 									</ul>
 								</div>
 							</div>
@@ -129,8 +129,8 @@
 								<div class="teamName fs_26 color_TB fw_400">{{ eventDetail?.teamInfo?.awayName }}</div>
 								<div v-if="eventDetail?.soccerInfo" class="fs_26 color_TB fw_400">
 									<ul>
-										<li class="fs_22 color_T1 fw_700"><SvgIcon iconName="/venueHome/sports/svg/redCard" size="6" />{{ eventDetail.soccerInfo.awayRedCard }}</li>
-										<li class="fs_22 color_T1 fw_700"><SvgIcon iconName="/venueHome/sports/svg/yellowCard" size="6" />{{ eventDetail.soccerInfo.awayYellowCard }}</li>
+										<li class="fs_22 color_T1 fw_700"><SvgIcon iconName="venueHome/sports/svg/redCard" size="6" />{{ eventDetail.soccerInfo.awayRedCard }}</li>
+										<li class="fs_22 color_T1 fw_700"><SvgIcon iconName="venueHome/sports/svg/yellowCard" size="6" />{{ eventDetail.soccerInfo.awayYellowCard }}</li>
 									</ul>
 								</div>
 							</div>
@@ -139,21 +139,21 @@
 				</div>
 			</div>
 			<!-- 滑动到指定位置队伍信息及比分固定在顶部 -->
-			<div class="smallHeader color_TB-P" :class="{ fixed: isFixed }">
+			<div class="smallHeader color_TB1" :class="{ fixed: isFixed }">
 				<div class="goback" @click="onClickLeft">
-					<SvgIcon class="color_T3" iconName="/common/arrowLeft" alt="" />
+					<SvgIcon class="color_T3" iconName="common/arrowLeft" alt="" />
 				</div>
-				<div class="teamName fs_26 color_TB-P fw_400">
+				<div class="teamName fs_26 color_TB1 fw_400">
 					<span class="w_123">{{ eventDetail?.teamInfo?.homeName }}</span
 					>&nbsp;&nbsp;
 					<span class="w_20" v-show="eventDetail?.isLive">{{ eventDetail?.gameInfo.liveHomeScore }}</span>
 				</div>
-				<div class="date fs_22 color_TB-P fw_400">
+				<div class="date fs_22 color_TB1 fw_400">
 					<span
 						>{{ eventDetail && SportsCommon.getEventsTitle(eventDetail) }} <span>{{ formattedGameTime }}</span></span
 					>
 				</div>
-				<div class="teamName fs_26 color_TB-P fw_400">
+				<div class="teamName fs_26 color_TB1 fw_400">
 					<span class="w_20" v-show="eventDetail?.isLive">{{ eventDetail?.gameInfo.liveAwayScore }}</span>
 					&nbsp;&nbsp;
 					<span class="w_123">{{ eventDetail?.teamInfo?.awayName }}</span>
@@ -164,23 +164,23 @@
 				<div class="tabBox bg_BG1" :class="{ 'fixed-tab': isFixed }">
 					<div class="tabs">
 						<ul class="tab bg_BG1">
-							<li @click="changeTab('all')" key="all" :class="{ selected: activeTab == 'all' }">所有投注</li>
+							<li @click="changeTab('all')" key="all" :class="{ selected: activeTab == 'all' }">{{ $t('sports["所有投注"]') }}</li>
 							<li v-for="(i, index) in markets" :key="i.betTypeName" @click="changeTab(i.betTypeName)" :class="{ selected: activeTab == i.betTypeName }">{{ i.betTypeName }}</li>
 						</ul>
 					</div>
-					<SvgIcon class="sport_fold color_T3" v-show="!isFold" iconName="/venueHome/sports/svg/sport_fold" @click="onExpandAngCollapse(true)" />
-					<SvgIcon class="sport_fold color_T3" v-show="isFold" iconName="/venueHome/sports/svg/sport_fold2" @click="onExpandAngCollapse(false)" />
+					<SvgIcon class="sport_fold color_T3" v-show="!isFold" iconName="venueHome/sports/svg/sport_fold" @click="onExpandAngCollapse(true)" />
+					<SvgIcon class="sport_fold color_T3" v-show="isFold" iconName="venueHome/sports/svg/sport_fold2" @click="onExpandAngCollapse(false)" />
 				</div>
 				<div class="selections_list" v-if="markets.length">
 					<Collapse v-model="activeSelection" :accordion="false">
 						<CollapseItem class="selection_item" v-for="i in markets" v-show="activeTab == 'all' || activeTab == i.betTypeName" :key="i.betTypeName" :name="i.betTypeName">
 							<template #title>
 								<div class="tournament-header">
-									<!-- <SvgIcon iconName="/venueHome/sports/svg/collection" size="5.333333" /> -->
+									<!-- <SvgIcon iconName="venueHome/sports/svg/collection" size="5.333333" /> -->
 									<div class="tournament-info">
 										<div class="tournament-name">{{ i.betTypeName }}</div>
 									</div>
-									<SvgIcon :class="{ sport_arrow: activeSelection.includes(i.betTypeName) }" iconName="/venueHome/sports/svg/sport_arrow" size="5.333333" />
+									<SvgIcon :class="{ sport_arrow: activeSelection.includes(i.betTypeName) }" iconName="venueHome/sports/svg/sport_arrow" size="5.333333" />
 								</div>
 							</template>
 							<template #default>
@@ -205,7 +205,7 @@
 												</span>
 											</div>
 											<div v-else>
-												<SvgIcon iconName="/venueHome/sports/svg/sport_lock" size="4.6" />
+												<SvgIcon iconName="venueHome/sports/svg/sport_lock" size="4.6" />
 											</div>
 										</div>
 									</li>
@@ -215,8 +215,8 @@
 					</Collapse>
 				</div>
 				<div v-if="!markets.length" class="noData color_T3">
-					<div class="fs_24">盘口已关闭</div>
-					<div class="fs_24">当前无法进行投注</div>
+					<div class="fs_24">{{ $t('sports["盘口已关闭"]') }}</div>
+					<div class="fs_24">{{ $t('sports["当前无法进行投注"]') }}</div>
 				</div>
 			</div>
 		</div>
@@ -227,6 +227,7 @@
 
 <script setup lang="ts">
 import RiseOrFall from "/@/views/venueHome/sports/components/riseOrFall/riseOrFall.vue";
+import { i18n } from "/@/i18n/index";
 import { onMounted, onUnmounted, ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import DropDownEvent from "./components/dropDownEvent.vue";
@@ -262,7 +263,7 @@ const videoPlayer = ref();
 const myPlayer = ref();
 const route = useRoute();
 let routeData: Ref<{ eventId?: number; leagueId?: number; sportType?: number } | undefined> = ref({});
-
+const $ = i18n.global;
 const router = useRouter();
 //获取token
 const sportsInfoStore = useSportsInfoStore();
@@ -471,7 +472,7 @@ const handleChangeEvent = async (eventId) => {
 	iframeLoaded.value = false;
 	router.push({
 		query: {
-			path: "/sports/event/detail",
+			path: "/venueHome/sports/event/detail",
 			data: JSON.stringify({
 				eventId,
 				leagueId,
@@ -492,11 +493,11 @@ const filterSelections = (data) => {
 const gameStatus = (eventStatus) => {
 	switch (eventStatus) {
 		case "postponed":
-			return "比赛已推迟";
+			return $.t('sports["比赛已推迟"]');
 		case "closed":
-			return "比赛已结束";
+			return $.t('sports["比赛已结束"]');
 		case "deleted":
-			return "比赛已取消";
+			return $.t('sports["比赛已取消"]');
 		default:
 			return "";
 	}
@@ -567,16 +568,18 @@ const animationEnd = (marketId, selection) => {
 };
 
 //回退至上一个路由
-const onClickLeft = () => {};
+const onClickLeft = () => {
+	router.back();
+};
 
 // 注册一个钩子，在组件被挂载之前被调用。
 onBeforeMount(async () => {
 	// if (route.query.data) {
 	routeData.value = route.params;
-		// //获取关注列表
-		// getAttention();
-		// //初始化体育
-		initSport();
+	// //获取关注列表
+	// getAttention();
+	// //初始化体育
+	initSport();
 	// }
 });
 

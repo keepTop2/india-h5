@@ -3,7 +3,8 @@ import SportsCommonFn from "/@/views/venueHome/sports/utils/common";
 import dayjs from "dayjs";
 import { WebToPushApi, SportPushApi } from "/@/views/venueHome/sports/enum/sportEventSourceEnum";
 import { OpenSportEventSourceParams } from "/@/views/venueHome/sports/models/sportEventSourceModel";
-
+import { i18n } from "/@/i18n/index";
+const $: any = i18n.global;
 interface SportPushAction {
 	name?: string;
 
@@ -31,7 +32,7 @@ const sportTabPushActions = {
 	 * @description 滚球SSE字典
 	 */
 	rollingBall: {
-		name: "滚球",
+		name: $.t(`sports['滚球']`),
 		/**
 		 * @description 滚球 获取体育项目及赛事数量推送 开启SSE sports推送
 		 */
@@ -61,7 +62,7 @@ const sportTabPushActions = {
 	 * @description 今日SSE字典
 	 */
 	todayContest: {
-		name: "今日",
+		name: $.t(`sports['今日']`),
 		/**
 		 * @description 今日获取体育项目及赛事数量推送 开启 SSE sports推送
 		 */
@@ -70,8 +71,8 @@ const sportTabPushActions = {
 			webToPushApi: WebToPushApi.todayContest,
 			params: {
 				query: `$filter=sportType in (${SportsCommonFn.getRequestSportsType()})`,
-				from: dayjs.utc().subtract(5, "hour").startOf("day").add(5, "hour").format("YYYY-MM-DDTHH:mm:ss"),
-				until: dayjs.utc().subtract(5, "hour").endOf("day").add(5, "hour").format("YYYY-MM-DDTHH:mm:ss"),
+				from: dayjs().startOf("day").toISOString(),
+				until: dayjs().endOf("day").toISOString(),
 			},
 		},
 
@@ -83,8 +84,8 @@ const sportTabPushActions = {
 			webToPushApi: WebToPushApi.eventsTodayContest,
 			params: {
 				query: `$filter=sportType in (${SportsCommonFn.getRequestSportsType()})&$orderby=globalShowTime asc `,
-				from: dayjs.utc().subtract(5, "hour").startOf("day").add(5, "hour").format("YYYY-MM-DDTHH:mm:ss"),
-				until: dayjs.utc().subtract(5, "hour").endOf("day").add(5, "hour").format("YYYY-MM-DDTHH:mm:ss"),
+				from: dayjs().startOf("day").toISOString(),
+				until: dayjs().endOf("day").toISOString(),
 			},
 			isMultiple: true,
 		},
@@ -94,7 +95,7 @@ const sportTabPushActions = {
 	 * @description 早盘SSE字典
 	 */
 	morningTrading: {
-		name: "早盘",
+		name: $.t(`sports['早盘']`),
 		/**
 		 * @description 早盘获取体育项目及赛事数量推送 开启SSE sports推送
 		 */
@@ -103,8 +104,8 @@ const sportTabPushActions = {
 			webToPushApi: WebToPushApi.morningTrading,
 			params: {
 				query: `$filter=sportType in (${SportsCommonFn.getRequestSportsType()})`,
-				from: dayjs.utc().subtract(5, "hour").endOf("day").add(5, "hour").add(1, "second").format("YYYY-MM-DDTHH:mm:ss"),
-				until: dayjs.utc().add(15, "day").subtract(5, "hour").endOf("day").add(5, "hour").format("YYYY-MM-DDTHH:mm:ss"),
+				from: dayjs().add(1, "day").startOf("day").toISOString(),
+				until: dayjs().add(15, "day").endOf("day").toISOString(),
 			},
 		},
 
@@ -116,7 +117,7 @@ const sportTabPushActions = {
 			webToPushApi: WebToPushApi.eventsMorningTrading,
 			params: {
 				query: `$filter=sportType in (${SportsCommonFn.getRequestSportsType()})&$orderby=globalShowTime asc `,
-				from: dayjs.utc().subtract(5, "hour").endOf("day").add(5, "hour").format("YYYY-MM-DDTHH:mm:ss"),
+				from: dayjs().add(1, "day").startOf("day").toISOString(),
 			},
 			isMultiple: true,
 		},
@@ -126,7 +127,7 @@ const sportTabPushActions = {
 	 * @description 冠军SSE字典
 	 */
 	champion: {
-		name: "冠军",
+		name: $.t(`sports['冠军']`),
 
 		/**
 		 * @description 开启冠军获取体育项目及赛事数量推送 开启SSE sports推送
@@ -154,7 +155,7 @@ const sportTabPushActions = {
 	 * @description 关注
 	 */
 	attention: {
-		name: "关注",
+		name: $.t(`sports['关注']`),
 		openEvents: {
 			sportPushApi: SportPushApi.GetEvents_push,
 			webToPushApi: WebToPushApi.eventsAttention,
@@ -176,7 +177,7 @@ const sportTabPushActions = {
 	 * @description 赛果
 	 */
 	matchResult: {
-		name: "赛果",
+		name: $.t(`sports['赛果']`),
 	},
 };
 

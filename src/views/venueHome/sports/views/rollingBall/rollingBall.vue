@@ -1,16 +1,6 @@
-<!--
- * @Author: Hida
- * @Date: 2024-06-06 20:55:25
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-07-09 18:30:18
- * @Description: 
- * 
--->
 <template>
-	<div>
-		<component v-if="leagues" :is="sportsMap[Number(route.params.sportType)]" :listData="leagues" :sportType:string="route.params.sportType" />
-		<NoData v-else />
-	</div>
+	<component v-if="leagues" :is="sportsMap[Number(route.params.sportType)]" :listData="leagues" :sportType:string="route.params.sportType" />
+	<NoData v-else />
 </template>
 
 <script setup lang="ts">

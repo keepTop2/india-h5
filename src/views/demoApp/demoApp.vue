@@ -14,7 +14,7 @@
 
 		<br />
 		<br />
-		<div class="lang_btn">{{ $t(`common["你好世界"]`) }}</div>
+		<div class="lang_btn">{{ $t(`common["你好"]`) }}</div>
 
 		<br />
 		<br />

@@ -1,6 +1,6 @@
 <template>
 	<van-popup v-model:show="show" position="left">
-		<VantLazyImg class="close" :src="close" />
+		<VantLazyImg class="close" :src="theme === ThemeEnum.default ? close : close_light" @click="show = false" />
 		<div class="menu_header">
 			<div class="logo">
 				<img :src="logo" alt="" />
@@ -8,35 +8,48 @@
 		</div>
 		<div class="menu_content">
 			<div class="menu_content_header">
-				<div class="task van-haptics-feedback">
+				<div class="task van-haptics-feedback" @click="toPath('/activity/SPIN_WHEEL')">
 					<div class="icon"><img :src="task_icon" alt="" /></div>
 					<div class="label">{{ $t(`menuPopup["任务"]`) }}</div>
 				</div>
-				<div class="wheel van-haptics-feedback">
+				<div class="wheel van-haptics-feedback" @click="toPath('/activity/SPIN_WHEEL')">
 					<div class="icon"><img :src="wheel_icon" alt="" /></div>
 					<div class="label">{{ $t(`menuPopup["转盘"]`) }}</div>
 				</div>
 			</div>
 
 			<div class="menu_list">
-				<div class="menu van-haptics-feedback" v-for="(item, index) in 10" :key="index">
+				<div class="menu van-haptics-feedback" @click="toPath('/activity/DAILY_COMPETITION')">
 					<div class="icon">
-						<Contest />
+						<img :src="mrjs" />
 					</div>
-					<div class="label">目录{{ item }}</div>
+					<div class="label">{{ $t(`menuPopup["每日竞赛"]`) }}</div>
+				</div>
+				<div class="menu van-haptics-feedback">
+					<div class="icon">
+						<img :src="home" />
+					</div>
+					<div class="label">{{ $t(`menuPopup["首页"]`) }}</div>
+				</div>
+
+				<div class="menu van-haptics-feedback" v-for="(item, index) in state.menuList" @click="handleMenuClick(item)" :key="index">
+					<div class="icon">
+						<img :src="item.icon" alt="" />
+					</div>
+					<div class="label">{{ item.homeName }}</div>
 				</div>
 			</div>
 		</div>
 		<div class="menu_footer">
-			<div class="menu van-haptics-feedback">
+			<div class="menu van-haptics-feedback" @click="toPath('/language')">
 				<div class="icon">
-					<Contest />
+					<img :src="userStore.langIcon" />
 				</div>
-				<div class="label">{{ $t(`menuPopup["中文"]`) }}</div>
+				<div class="label">{{ userStore.langName }}</div>
 			</div>
 			<div class="menu van-haptics-feedback">
 				<div class="icon">
-					<helpIcon />
+					<img :src="kefu" />
 				</div>
 				<div class="label">{{ $t(`menuPopup["客服"]`) }}</div>
 			</div>
@@ -45,28 +58,86 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from "vue";
 import logo from "/@/assets/zh-CN/default/menuPopup/logo.png";
 import task_icon from "/@/assets/zh-CN/default/menuPopup/task_icon.png";
 import wheel_icon from "/@/assets/zh-CN/default/menuPopup/wheel_icon.png";
-import Contest from "/@/assets/zh-CN/default/menuPopup/contest.svg";
-import helpIcon from "/@/assets/zh-CN/default/menuPopup/helpIcon.svg";
 import close from "/@/assets/zh-CN/default/menuPopup/close.png";
+import close_light from "/@/assets/zh-CN/light/menuPopup/close.png";
+import mrjs from "/@/assets/zh-CN/default/menuPopup/mrjs.png";
+import home from "/@/assets/zh-CN/default/menuPopup/home.png";
+import kefu from "/@/assets/zh-CN/default/menuPopup/kefu.png";
 import pubsub from "/@/pubSub/pubSub";
-import { ref } from "vue";
+import CommonApi from "/@/api/common";
+import common from "/@/utils/common";
+import { ThemeEnum } from "/@/enum/appConfigEnum";
+import { useThemesStore } from "/@/store/modules/themes";
+import { useRouter } from "vue-router";
+import { useUserStore } from "/@/store/modules/user";
+import { activityApi } from "/@/api/activity";
+const userStore = useUserStore();
+const router = useRouter();
 const show = ref(false);
+const themesStore = useThemesStore();
+const theme = computed(() => themesStore.themeName);
+
+let state: any = reactive({
+	menuList: [],
+});
 
 const onCollapseMenu = () => {
 	show.value = true;
+	queryLobbyLabelList();
+};
+const handleMenuClick = (item) => {
+	show.value = false;
+	console.log(item, "===item");
+	if (item.modelCode === "PE") {
+		router.push("/venueHome/sports");
+	} else {
+		router.push({
+			name: "GameArena",
+			query: {
+				title: item.homeName,
+				gameOneId: item.gameOneClassId,
+			},
+		});
+	}
+};
+const queryLobbyLabelList = async () => {
+	const res = await CommonApi.queryLobbyLabelList().catch((err) => err);
+	if (res.code == common.getInstance().ResCode.SUCCESS) {
+		state.menuList = res.data;
+	}
 };
 
 pubsub.subscribe("onCollapseMenu", onCollapseMenu);
+
+const toPath = (path) => {
+	if (useUserStore().token) {
+		if (path === "/activity/SPIN_WHEEL") {
+			activityApi.toSpinActivity().then((res: any) => {
+				if (res.code == 10000) {
+					router.push(path);
+				}
+			});
+		} else {
+			router.push(path);
+		}
+	} else {
+		router.push("/login");
+	}
+	show.value = false;
+};
 </script>
 
 <style scoped lang="scss">
 .van-popup {
 	width: 530px;
 	height: 100%;
-	background: var(--BG1-N, #222324);
+	@include themeify {
+		background: themed("BG1");
+	}
 	overflow-y: unset;
 
 	.close {
@@ -98,7 +169,9 @@ pubsub.subscribe("onCollapseMenu", onCollapseMenu);
 
 	.menu_content {
 		border-bottom: 1px solid;
-		border-color: var(--TB-D, #333);
+		@include themeify {
+			border-color: themed("Line");
+		}
 		.menu_content_header {
 			display: flex;
 			gap: 20px;
@@ -124,7 +197,7 @@ pubsub.subscribe("onCollapseMenu", onCollapseMenu);
 				}
 				.label {
 					margin-left: 16px;
-					color: var(--Text_a, #fff);
+					color: #fff;
 					font-family: "PingFang SC";
 					font-size: 28px;
 					font-weight: 500;
@@ -152,10 +225,16 @@ pubsub.subscribe("onCollapseMenu", onCollapseMenu);
 				.icon {
 					width: 32px;
 					height: 32px;
+					img {
+						width: 100%;
+						height: 100%;
+					}
 				}
 				.label {
 					margin-left: 16px;
-					color: var(--Tag1-D, #eaecf2);
+					@include themeify {
+						color: themed("T1");
+					}
 					font-family: Inter;
 					font-size: 28px;
 					font-weight: 400;
@@ -176,10 +255,16 @@ pubsub.subscribe("onCollapseMenu", onCollapseMenu);
 			.icon {
 				width: 32px;
 				height: 32px;
+				img {
+					width: 100%;
+					height: 100%;
+				}
 			}
 			.label {
 				margin-left: 16px;
-				color: var(--Tag1-D, #eaecf2);
+				@include themeify {
+					color: themed("T1");
+				}
 				font-family: Inter;
 				font-size: 28px;
 				font-weight: 400;

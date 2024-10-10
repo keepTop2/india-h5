@@ -9,11 +9,11 @@
 				<div class="bet_slip_cell_input" :class="{ input_active: inputActive == item.comboType }" @click="focusInput(item)">
 					<div class="input">
 						<span v-if="betValueState[item.comboType]">{{ betValueState[item.comboType] }}</span>
-						<span v-else class="placeholder">{{ `限额 ${common.getInstance().formatFloat(item.minBet)} ~ ${common.getInstance().formatFloat(item.maxBet)}` }}</span>
+						<span v-else class="placeholder">{{ $t('sports["限额"]') }}{{ `${common.getInstance().formatFloat(item.minBet)} ~ ${common.getInstance().formatFloat(item.maxBet)}` }}</span>
 					</div>
 				</div>
 			</div>
-			<div v-if="betValueState[item.comboType]" class="subtotal">小计：{{ common.getInstance().mul(betValueState[item.comboType], item.betCount) }} USD</div>
+			<div v-if="betValueState[item.comboType]" class="subtotal">{{ $t('sports["小计"]') }}{{ common.getInstance().mul(betValueState[item.comboType], item.betCount) }} USD</div>
 		</div>
 	</div>
 </template>
@@ -66,8 +66,9 @@ const focusInput = (item) => {
 		align-items: center;
 		padding: 15px 10px;
 		border-radius: 8px;
-		border: 1px solid transparent;
+		border: 1px solid;
 		@include themeify {
+			border-color: themed("T2");
 			background-color: themed("BG2");
 		}
 		box-sizing: border-box;
@@ -107,8 +108,11 @@ const focusInput = (item) => {
 	.placeholder {
 		display: flex;
 		align-items: center;
+		white-space: nowrap; /* 禁止换行 */
+		overflow: hidden; /* 隐藏超出容器的部分 */
+		text-overflow: ellipsis; /* 用省略号代替被隐藏的文本 */
 		@include themeify {
-			color: themed("T2-P");
+			color: themed("T2");
 		}
 		font-family: "PingFang SC";
 		font-size: 22px;

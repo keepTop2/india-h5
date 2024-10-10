@@ -1,17 +1,19 @@
 <template>
 	<div class="navBar bg_BG1">
-		<CollapseIcon class="collapseIcon van-haptics-feedback" @click="onCollapse" />
-
+		<!-- <CollapseIcon class="collapseIcon van-haptics-feedback" @click="onCollapse" /> -->
+		<SvgIcon class="collapseIcon van-haptics-feedback" iconName="common/collapse_icon_on" @click="onCollapse" size="44px" />
 		<div v-if="!store.token" class="noLogin">
 			<div class="register van-haptics-feedback" @click="router.push('/register')">{{ $t(`navBar["注册"]`) }}</div>
 			<div class="login van-haptics-feedback" @click="router.push('/login')">{{ $t(`navBar["登录"]`) }}</div>
 		</div>
 
 		<div v-else class="account_info">
-			<div class=""></div>
+			<div class="userIcon">
+				<img :src="userIcon" alt="" />
+			</div>
 			<div class="user">
 				<div class="userName">{{ store.userInfo.userAccount }}</div>
-				<div class="balance">${{ common.getInstance().formatFloat(6000) }}</div>
+				<div class="balance">${{ common.getInstance().formatFloat(store.userInfo.totalBalance) }}</div>
 			</div>
 			<Notify />
 		</div>
@@ -21,6 +23,7 @@
 <script setup lang="ts">
 import { useUserStore } from "/@/store/modules/user";
 import CollapseIcon from "/@/assets/zh-CN/default/common/collapse_icon.svg";
+import userIcon from "/@/assets/zh-CN/default/common/userIcon.png";
 import Notify from "/@/components/Notify/Notify.vue";
 import common from "/@/utils/common";
 import pubsub from "/@/pubSub/pubSub";
@@ -49,6 +52,10 @@ const onCollapse = () => {
 		width: 64px;
 		height: 64px;
 		margin-left: 28px;
+		@include themeify {
+			color: themed("TB");
+			stroke: themed("TB");
+		}
 	}
 
 	.noLogin {
@@ -61,18 +68,25 @@ const onCollapse = () => {
 			margin-right: 16px;
 			padding: 8px 28px;
 			border-radius: 12px;
-			border: 2px solid var(--T3-P, #6d727a);
+			border: 2px solid;
+			@include themeify {
+				border-color: themed("T3");
+				color: themed("TB");
+			}
 		}
 		.login {
 			margin-right: 24px;
 			padding: 8px 28px;
 			border-radius: 12px;
-			border: 2px solid #ff4588;
-			background: var(--Theme, #ff284b);
+			border: 2px solid;
+			@include themeify {
+				border-color: themed("Theme");
+				background: themed("Theme");
+				color: themed("TB1");
+			}
 		}
 		.register,
 		.login {
-			color: var(--TB-P, #fdfdfd);
 			text-align: center;
 			font-family: "PingFang SC";
 			font-size: 28px;
@@ -86,21 +100,30 @@ const onCollapse = () => {
 		align-items: center;
 		justify-content: space-between;
 		padding-right: 24px;
+		.userIcon {
+			img {
+				width: 64.729px;
+				padding-left: 20px;
+			}
+		}
 		.user {
 			flex: 1;
 			margin-left: 18px;
 			.userName {
-				color: var(--TB-P, #fdfdfd);
-				font-family: Inter;
+				@include themeify {
+					color: themed("TB");
+				}
+				font-family: "PingFang SC";
 				font-size: 24px;
 				font-weight: 500;
 			}
 			.balance {
-				margin-top: 1px;
-				color: var(--TB-P, #fdfdfd);
-				font-family: Inter;
+				@include themeify {
+					color: themed("TB");
+				}
+				font-family: "PingFang SC";
 				font-size: 28px;
-				font-weight: 700;
+				font-weight: 600;
 			}
 		}
 	}

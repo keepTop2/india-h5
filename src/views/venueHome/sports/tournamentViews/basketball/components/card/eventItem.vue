@@ -5,10 +5,12 @@
 		<div class="content-header">
 			<!-- 上下半场及时间 -->
 			<div class="left">
-				<!-- 关注 -->
-				<SvgIcon v-if="isAttention" iconName="/venueHome/sports/svg/collection2" size="5.333333" @click="attentionEvent(true)" />
-				<!-- 取消关注 -->
-				<SvgIcon v-else iconName="/venueHome/sports/svg/collection" size="5.333333" @click="attentionEvent(false)" />
+				<div class="icon">
+					<!-- 关注 -->
+					<SvgIcon class="icon" v-if="isAttention" iconName="venueHome/sports/svg/collection2" @click="attentionEvent(true)" />
+					<!-- 取消关注 -->
+					<SvgIcon class="icon" v-else iconName="venueHome/sports/svg/collection" @click="attentionEvent(false)" />
+				</div>
 				<div class="label" :class="{ 'color_Theme-P': event.isLive, color_TB: !event.isLive }">
 					<span class="mr_6">{{ SportsCommonFn.getEventsTitle(event) }}</span>
 					<span v-if="[1, 2, 3, 4, 99].includes(event.gameInfo.livePeriod) && !event.gameInfo.delayLive && !event.gameInfo.isHt">{{ formattedGameTime }}</span>
@@ -51,21 +53,20 @@
 					<!-- 上半场比分 下半场不显示 -->
 
 					<div v-if="event.streamingOption != 0 && event.channelCode" class="other3">
-						<SvgIcon iconName="/venueHome/sports/svg/sport_live" size="4.266667" />
+						<SvgIcon iconName="venueHome/sports/svg/sport_live" />
 					</div>
 					<!-- <div class="other4">
-						<SvgIcon iconName="/venueHome/sports/svg/sport_match_status" size="4.266667" />
+						<SvgIcon iconName="venueHome/sports/svg/sport_match_status" size="4.266667" />
 					</div> -->
 					<div class="other5">{{ event.marketCount }}</div>
 				</div>
 			</div>
 			<!-- 全场 半场 swiper  -->
 			<div class="content-right">
-				<div class="content">
+				<div class="content" style="padding-bottom: 0px">
 					<marketItem v-for="market in filterMarkets(event.markets, [20, 1, 3])" :key="`${event.eventId}-${market.betType}`" :event="event" :market="market" />
 				</div>
 
-				<!-- <div class="score-list" v-if="SportsCommonFn.isStartMatch(event.globalShowTime)"> -->
 				<div class="score-list" v-if="event.basketballInfo">
 					<!-- 节数比分 -->
 					<template v-if="event.basketballInfo?.latestLivePeriod <= 4">
@@ -150,49 +151,6 @@ const filterMarkets = (markets: Market[], betTypes: number[]): Market[] => {
 	return results;
 };
 
-// 使用safeAccess函数来安全地访问深层属性 防止多级访问出现undefined报错
-// function safeAccess(obj, path) {
-// 	return path.reduce((xs, x) => (xs && xs[x] != null ? xs[x] : null), obj);
-// }
-
-// 计算是上半场还是下半场 根据 livePeriod 判断当前是第几节
-// const livePeriod = computed(() => {
-// 	const gameInfo = safeAccess(props.event, ["gameInfo"]);
-// 	const eventStatus = safeAccess(props.event, ["eventStatus"]);
-// 	const globalShowTime = safeAccess(props.event, ["globalShowTime"]);
-// 	const { livePeriod, delayLive, isHt } = gameInfo;
-// 	if (eventStatus == "closed") {
-// 		return $.t("sports['比赛已关闭']");
-// 	}
-// 	if (eventStatus == "postponed") {
-// 		return $.t("sports['比赛已推迟']");
-// 	}
-// 	if (SportsCommonFn.isStartMatch(globalShowTime)) {
-// 		if (livePeriod == 0 && !delayLive && isHt) {
-// 			return $.t("sports['中场休息']");
-// 		}
-// 		if (livePeriod == 0 && delayLive && !isHt) {
-// 			return $.t("sports['延迟开赛']");
-// 		}
-// 		if (livePeriod == 1 && !delayLive && !isHt) {
-// 			return $.t("sports['第一节']");
-// 		}
-// 		if (livePeriod == 2 && !delayLive && !isHt) {
-// 			return $.t("sports['第二节']");
-// 		}
-// 		if (livePeriod == 3 && !delayLive && !isHt) {
-// 			return $.t("sports['第三节']");
-// 		}
-// 		if (livePeriod == 4 && !delayLive && !isHt) {
-// 			return $.t("sports['第四节']");
-// 		}
-// 		if (livePeriod == 99 && !delayLive && !isHt) {
-// 			return $.t("sports['加时赛']");
-// 		}
-// 	}
-// 	return convertUtcToUtc5AndFormatMD(globalShowTime);
-// });
-
 // 定义计算属性 格式化比赛开始时间
 const formattedGameTime = computed(() => {
 	const minutes = Math.floor(props.event.gameInfo.seconds / 60);
@@ -201,258 +159,32 @@ const formattedGameTime = computed(() => {
 });
 
 // 跳转详情
-const showDetail = (eventId, leagueId) => {};
+const showDetail = (eventId, leagueId) => {
+	router.push(`/venueHome/sports/event/detail/${eventId}/${leagueId}/${props.event.sportType}`);
+};
 </script>
 
 <style scoped lang="scss">
-.content {
-	.content-header {
-		height: 60px;
-		display: flex;
-		padding: 10px 18px 10px 12px;
-		@include themeify {
-			background-color: themed("Line");
-		}
+@import "/@/views/venueHome/sports/common.scss";
 
-		box-sizing: border-box;
-		.left {
-			width: 304px;
-		}
-		.right {
-			width: 368px;
-			gap: 4px;
-		}
-		.left,
-		.right {
-			display: flex;
-			align-items: center;
-			.label {
-				margin-left: 12px;
-				@include themeify {
-					color: themed("Theme");
-				}
-				font-family: "PingFang SC";
-				font-size: 22px;
-				font-weight: 500;
-				line-height: 34px;
-			}
-
-			.title {
-				@include themeify {
-					color: themed("T1");
-				}
-				text-align: center;
-				font-family: "PingFang SC";
-				font-size: 20px;
-				font-style: normal;
-				font-weight: 400;
-				line-height: 34px;
-
-				&:nth-child(1) {
-					width: 136px;
-				}
-				&:nth-child(2) {
-					width: 112px;
-				}
-				&:nth-child(3) {
-					width: 112px;
-				}
-			}
-		}
+.score-list {
+	display: flex;
+	align-items: center;
+	justify-content: end;
+	gap: 20px;
+	margin-top: 10px;
+	padding: 0px 5px;
+	@include themeify {
+		color: themed("T1");
 	}
-
-	.content-info {
-		height: 276px;
-		display: flex;
-		padding: 0px 18px 0px 12px;
-		.content-left {
-			width: 304px;
-			padding-right: 10px;
-			padding-bottom: 20px;
-			.team-tournament-info {
-				height: 32px;
-				display: flex;
-				align-items: center;
-				.icon {
-					width: 32px;
-					height: 32px;
-					margin-right: 14px;
-					img {
-						width: 100%;
-						height: 100%;
-					}
-				}
-				.name {
-					width: 178px;
-					height: 100%;
-					display: flex;
-					align-items: center;
-					@include themeify {
-						color: themed("TB");
-					}
-					font-family: "PingFang SC";
-					font-size: 22px;
-					font-weight: 400;
-					line-height: 26px;
-					white-space: nowrap; /* 禁止换行 */
-					overflow: hidden; /* 隐藏超出部分 */
-					text-overflow: ellipsis; /* 显示省略号 */
-				}
-			}
-
-			.score-info {
-				display: flex;
-				align-items: center;
-				margin-top: 31px;
-				margin-left: 46px;
-				.icon {
-					width: 27px;
-					height: 4px;
-					margin: 0px 6px;
-					@include themeify {
-						background-color: themed("Line");
-					}
-					border-radius: 2px;
-				}
-				span {
-					display: block;
-					width: 50px;
-					height: 50px;
-					display: flex;
-					align-items: center;
-					justify-content: center;
-					border-radius: 8px;
-					@include themeify {
-						background-color: themed("Line");
-						color: themed("TB");
-					}
-					font-family: "DIN Alternate";
-					font-size: 32px;
-					font-weight: 700;
-					line-height: 34px;
-				}
-			}
-
-			.others {
-				height: 32px;
-				display: flex;
-				align-items: center;
-				margin-top: 32px;
-
-				.other2 {
-					margin-left: 8px;
-					font-family: "DIN Alternate";
-					font-size: 18px;
-					font-weight: 700;
-					span {
-						&:nth-child(1) {
-							@include themeify {
-								color: themed("T1");
-							}
-						}
-						&:nth-child(2) {
-							margin-left: 4px;
-							@include themeify {
-								color: themed("Theme");
-							}
-						}
-					}
-				}
-				.other3 {
-					margin-left: 14px;
-					color: #798d9f;
-					display: flex;
-					align-items: center;
-					justify-content: center;
-					svg {
-						fill: none;
-					}
-				}
-				.other4 {
-					margin-left: 14px;
-				}
-				.other5 {
-					width: 56px;
-					height: 26px;
-					display: flex;
-					align-items: center;
-					justify-content: center;
-					margin-left: 18px;
-					border-radius: 4px;
-					@include themeify {
-						background-color: themed("T3");
-						color: themed("TB1");
-					}
-					font-family: "PingFang SC";
-					font-size: 20px;
-					font-weight: 400;
-				}
-			}
-		}
-		.content-right {
-			width: 368px;
-			margin-top: 4px;
-
-			.content {
-				display: flex;
-				gap: 4px;
-			}
-
-			.score-list {
-				display: flex;
-				align-items: center;
-				justify-content: end;
-				gap: 20px;
-				margin-top: 10px;
-				padding: 0px 5px;
-				@include themeify {
-					color: themed("T1");
-				}
-				font-family: "DIN Alternate";
-				font-size: 20px;
-				font-weight: 700;
-				line-height: 32px;
-			}
-			.theme {
-				@include themeify {
-					color: themed("Theme");
-				}
-			}
-		}
-
-		:deep(.swiper) {
-			.arrow {
-				position: absolute;
-				top: 118px;
-				right: 0;
-				z-index: 10;
-				img {
-					width: 30px;
-					height: 20px;
-				}
-			}
-
-			.swiper-pagination {
-				bottom: 4px;
-
-				.swiper-pagination-bullet {
-					width: 8px;
-					height: 4px;
-					border-radius: 2px;
-					@include themeify {
-						background-color: themed("T3");
-					}
-				}
-				.swiper-pagination-bullet-active {
-					width: 14px;
-					height: 4px;
-					border-radius: 2px;
-					@include themeify {
-						background-color: themed("Theme");
-					}
-				}
-			}
-		}
+	font-family: "DIN Alternate";
+	font-size: 20px;
+	font-weight: 700;
+	line-height: 32px;
+}
+.theme {
+	@include themeify {
+		color: themed("Theme-P");
 	}
 }
 </style>

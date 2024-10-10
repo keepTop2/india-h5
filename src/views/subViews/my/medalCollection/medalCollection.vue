@@ -4,43 +4,45 @@
 
 	<!-- 宝藏卡片区域 -->
 	<div class="treasure_card">
-		<!-- 宝藏勋章列表 -->
-		<div class="treasure_list">
-			<!-- 遍历展示每个勋章项目 -->
-			<div class="treasure_item" v-for="(item, index) in state.medalRewardRespVOS" :key="index">
-				<!-- 勋章图标 -->
-				<div class="icon" @click="onOpenMedalReward(item)">
-					<VantLazyImg :src="item.icon" />
-				</div>
-				<!-- 解锁勋章数量 -->
-				<div class="value">{{ item.unlockMedalNum }}</div>
-				<!-- 箭头图标，根据是否解锁显示不同的箭头 -->
-				<div class="arrow">
-					<VantLazyImg :src="state.canLightNum >= item.unlockMedalNum ? arrow : arrow2" />
+		<template v-if="state.medalRewardRespVOS.length > 0">
+			<!-- 宝藏勋章列表 -->
+			<div class="treasure_list">
+				<!-- 遍历展示每个勋章项目 -->
+				<div class="treasure_item" v-for="(item, index) in state.medalRewardRespVOS" :key="index">
+					<!-- 勋章图标 -->
+					<div class="icon" @click="onOpenMedalReward(item)">
+						<VantLazyImg :src="item.icon" />
+					</div>
+					<!-- 解锁勋章数量 -->
+					<div class="value">{{ item.unlockMedalNum }}</div>
+					<!-- 箭头图标，根据是否解锁显示不同的箭头 -->
+					<div class="arrow">
+						<VantLazyImg :src="state.canLightNum >= item.unlockMedalNum ? arrow : theme === ThemeEnum.default ? arrow2 : arrow3" />
+					</div>
 				</div>
 			</div>
-		</div>
 
-		<!-- 进度条区域 -->
-		<div class="progress">
-			<div class="value" :style="{ width: totalProgress + '%' }"></div>
-		</div>
-
-		<!-- 文本提示列表 -->
-		<div class="text_list">
-			<!-- 提示图标 -->
-			<div class="tooltip">
-				<VantLazyImg class="icon" :src="tips_icon" />
-				<div class="tooltipText">{{ $t('medalCollection["宝箱奖励流水倍数为8倍"]') }}</div>
+			<!-- 进度条区域 -->
+			<div class="progress">
+				<div class="value" :style="{ width: totalProgress + '%' }"></div>
 			</div>
-			<!-- 遍历展示解锁勋章的提示信息 -->
-			<i18n-t v-for="(item, index) in state.medalRewardRespVOS" :key="index" keypath="medalCollection.解锁勋章" :tag="'p'">
-				<template v-slot:value>
-					<span class="text">{{ $t("medalCollection.枚", { value: item.unlockMedalNum }) }}</span>
-				</template>
-				<template v-slot:num>{{ item.rewardAmount }} </template>
-			</i18n-t>
-		</div>
+
+			<!-- 文本提示列表 -->
+			<div class="text_list">
+				<!-- 提示图标 -->
+				<div class="tooltip">
+					<VantLazyImg class="icon" :src="theme === ThemeEnum.default ? tips_icon : tips_icon_light" />
+					<div class="tooltipText">{{ $t('medalCollection["宝箱奖励流水倍数为8倍"]') }}</div>
+				</div>
+				<!-- 遍历展示解锁勋章的提示信息 -->
+				<i18n-t v-for="(item, index) in state.medalRewardRespVOS" :key="index" keypath="medalCollection.解锁勋章" :tag="'p'">
+					<template v-slot:value>
+						<span class="text">{{ $t("medalCollection.枚", { value: item.unlockMedalNum }) }}</span>
+					</template>
+					<template v-slot:num>{{ item.rewardAmount }} </template>
+				</i18n-t>
+			</div>
+		</template>
 	</div>
 
 	<!-- 已解锁勋章内容区域 -->
@@ -52,7 +54,7 @@
 		</div>
 		<!-- 已解锁勋章列表 -->
 		<div class="medal_list" v-if="state.hasUnlockList.length > 0">
-			<div class="medal_item" v-for="(item, index) in state.hasUnlockList" :key="index" @click="toPath(item)">
+			<div class="medal_item" :class="theme" v-for="(item, index) in state.hasUnlockList" :key="index" @click="toPath(item)">
 				<div class="icon">
 					<VantLazyImg :src="item.activatedPicUrl" />
 				</div>
@@ -70,12 +72,12 @@
 		</div>
 		<!-- 未解锁勋章列表 -->
 		<div class="medal_list">
-			<div class="medal_item" v-for="(item, index) in state.notUnlockList" :key="index" @click="onLightUpMedal(item)">
+			<div class="medal_item" :class="theme" v-for="(item, index) in state.notUnlockList" :key="index" @click="onLightUpMedal(item)">
 				<template v-if="item.lockStatus === 0">
 					<i></i>
 					<div class="bg"></div>
 				</template>
-				<div class="icon" :class="{ animation: item.lockStatus === 0 }">
+				<div class="icon" :class="{ animation: item.lockStatus === 0, theme }">
 					<VantLazyImg :src="item.lockStatus == 0 || item.lockStatus == 2 ? item.inactivatedPicUrl : item.activatedPicUrl" />
 				</div>
 				<div class="name">{{ item.medalName }}</div>
@@ -90,7 +92,9 @@ import { MedalRewardRespVOS, NotUnlockList } from "./interface";
 import common from "/@/utils/common";
 import arrow from "/@/assets/zh-CN/default/my/medalCollection/arrow.png";
 import arrow2 from "/@/assets/zh-CN/default/my/medalCollection/arrow2.png";
+import arrow3 from "/@/assets/zh-CN/default/my/medalCollection/arrow3.png";
 import tips_icon from "/@/assets/zh-CN/default/my/medalCollection/tips_icon.png";
+import tips_icon_light from "/@/assets/zh-CN/light/my/medalCollection/tips_icon.png";
 import treasure_box_1 from "/@/assets/zh-CN/default/my/medalCollection/treasure_box_1.png";
 import treasure_box_1_open from "/@/assets/zh-CN/default/my/medalCollection/treasure_box_1_open.png";
 import treasure_box_1_receive from "/@/assets/zh-CN/default/my/medalCollection/treasure_box_1_receive.png";
@@ -106,8 +110,12 @@ import treasure_box_4_receive from "/@/assets/zh-CN/default/my/medalCollection/t
 import treasure_box_5 from "/@/assets/zh-CN/default/my/medalCollection/treasure_box_5.png";
 import treasure_box_5_open from "/@/assets/zh-CN/default/my/medalCollection/treasure_box_5_open.png";
 import treasure_box_5_receive from "/@/assets/zh-CN/default/my/medalCollection/treasure_box_5_receive.png";
+import { ThemeEnum } from "/@/enum/appConfigEnum";
+import { useThemesStore } from "/@/store/modules/themes";
 import { useRouter } from "vue-router";
 const router = useRouter();
+const themesStore = useThemesStore();
+const theme = computed(() => themesStore.themeName);
 
 const state = reactive({
 	canLightNum: 0 as number,
@@ -240,7 +248,10 @@ const onClickLeft = () => {
 	margin: 36px 24px 0px;
 	padding: 23px 0px 24px;
 	border-radius: 18px;
-	background-image: linear-gradient(180deg, #2c2d2e 0%, #353a3e 100%);
+	// background-image: linear-gradient(180deg, #2c2d2e 0%, #353a3e 100%);
+	@include themeify {
+		background: themed("vip_bg2");
+	}
 	.treasure_list {
 		min-height: 180px;
 		padding: 0px 21px 0px 111px;
@@ -378,6 +389,9 @@ const onClickLeft = () => {
 		font-family: "PingFang SC";
 		font-size: 28px;
 		font-weight: 500;
+		.title {
+			// width: min-content;
+		}
 		.tips {
 			font-size: 24px;
 			font-weight: 400;
@@ -406,7 +420,10 @@ const onClickLeft = () => {
 			position: relative;
 			width: 160px;
 			height: 196px;
-			background: url("/@/assets/zh-CN/default/my/medalCollection/highlight_bg.png") no-repeat center bottom;
+			@include theme-bg("/my/medalCollection/highlight_bg.png");
+			background-position-x: center;
+			background-position-y: bottom;
+			background-repeat: no-repeat;
 			background-size: 160px 160px;
 
 			.bg {
@@ -419,7 +436,10 @@ const onClickLeft = () => {
 				display: flex;
 				align-items: center;
 				justify-content: center;
-				background: url("/@/assets/zh-CN/default/my/medalCollection/highlight.png") no-repeat center bottom;
+				@include theme-bg("/my/medalCollection/highlight.png");
+				background-position-x: center;
+				background-position-y: bottom;
+				background-repeat: no-repeat;
 				background-size: 162px 162px;
 				/* 添加旋转和缩放动画 */
 				animation: rotateIcon 4s linear infinite;

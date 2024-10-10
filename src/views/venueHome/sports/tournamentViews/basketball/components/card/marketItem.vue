@@ -1,17 +1,12 @@
-<!--
- * @Author: HiDa
- * @Date: 2024-06-07 14:40:39
- * @LastEditors: HiDa
- * @LastEditTime: 2024-06-14 22:58:34
- * @Description:  盘口信息组件
--->
 <template>
 	<div class="columns">
 		<div class="item" v-for="(item, index) in market.selections" :key="index">
 			<div class="data_item" v-if="item">
 				<div v-if="market.marketStatus === 'running'" :class="{ isBright: isBright(item) }" @click="onSetSportsEventData(item)">
 					<div class="label">
-						<span v-if="market.betType == 20"> <template v-if="item?.key == 'h'">主胜</template> <template v-if="item?.key == 'a'">客胜</template></span>
+						<span v-if="market.betType == 20">
+							<template v-if="item?.key == 'h'">{{ $t(`sports["主胜"]`) }}</template> <template v-if="item?.key == 'a'">{{ $t(`sports["客胜"]`) }}</template></span
+						>
 						<span v-if="market.betType == 1">{{ SportsCommon.formatPoint({ betType: market.betType, point: item?.point, key: item?.key }) }}</span>
 						<span v-if="market.betType == 3">
 							{{ item?.keyName }}
@@ -25,7 +20,7 @@
 				</div>
 				<template v-else>
 					<div>
-						<SvgIcon iconName="/venueHome/sports/svg/sport_lock" size="4.6" />
+						<SvgIcon iconName="venueHome/sports/svg/sport_lock" size="4.6" />
 					</div>
 				</template>
 			</div>
@@ -69,6 +64,8 @@ const isBright = (selection) => {
  * @description 处理盘口高亮状态，拼接 marketid 与 selection key 作为唯一标识，存储值pinia中
  */
 const onSetSportsEventData = (selection) => {
+	console.log("props", props);
+	console.log("selection", selection);
 	const { market, event } = props;
 	//存储盘口唯一标识
 	if (isBright(selection)) {

@@ -7,11 +7,18 @@
 </template>
 
 <script setup lang="ts">
+// 定义ListItem类型
 type ListItem = {
 	name: string;
 	value: string | number;
 };
 
+/**
+ * @description 定义组件的props
+ * @param modelValue 当前选中的tab的值
+ * @param list tab列表
+ * @param bg 背景颜色类名
+ */
 const props = defineProps({
 	modelValue: {
 		type: [String, Number],
@@ -27,8 +34,15 @@ const props = defineProps({
 	},
 });
 
+/**
+ * @description 定义组件的emit事件
+ */
 const emit = defineEmits(["update:modelValue", "change"]);
 
+/**
+ * @description 处理tab点击事件
+ * @param item 被点击的tab项
+ */
 const handleClick = (item) => {
 	emit("update:modelValue", item.value);
 	emit("change", item);

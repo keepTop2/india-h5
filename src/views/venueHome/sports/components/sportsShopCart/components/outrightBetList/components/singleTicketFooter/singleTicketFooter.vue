@@ -6,13 +6,13 @@
 		</div>
 		<div class="btns">
 			<div v-if="sportsBetChampion.championBetData.length > 1" class="delete_btn" @click="onDelete">
-				<SvgIcon iconName="/venueHome/sports/svg/sports_delete" size="3.8" />
+				<SvgIcon iconName="venueHome/sports/svg/sports_delete" size="3.8" />
 			</div>
 			<div class="btn1">
 				<div :class="![0].includes(sportsBetChampion.bettingStatus) ? 'disabled_container' : 'container van-haptics-feedback'" @click="onBet">
-					<div class="label">投注</div>
+					<div class="label">{{ $t('sports["投注"]') }}</div>
 					<div class="valuation">
-						<span>最高可赢</span>
+						<span>{{ $t('sports["最高可赢"]') }}</span>
 						<span class="ml_6">{{ singleTicketWinningAmount }}</span>
 					</div>
 				</div>
@@ -24,12 +24,14 @@
 <script setup lang="ts">
 import { showToast } from "vant";
 import Radio from "../../../radio/index.vue";
+import BetNumber from "/@/views/venueHome/sports/components/Bet/BetNumber.vue";
 import shopCartChampionPubSub from "/@/views/venueHome/sports/hooks/shopCartChampionPubSub";
 import { useSportsBetInfoStore } from "/@/store/modules/sports/sportsBetInfo";
 import sportsApi from "/@/api/venueHome/sports";
 import { useSportsBetChampionStore } from "/@/store/modules/sports/sportsBetChampionData";
+import { i18n } from "/@/i18n/index";
+const $: any = i18n.global;
 const sportsBetChampion = useSportsBetChampionStore();
-
 const sportsBetInfo = useSportsBetInfoStore();
 const betNumberShow = computed(() => shopCartChampionPubSub.getBetNumberShow());
 const singleTicketWinningAmount = computed(() => shopCartChampionPubSub.getSingleTicketWinningAmount());
@@ -39,15 +41,15 @@ const emit = defineEmits(["singleTicketSuccess"]);
 
 const onBet = () => {
 	if (stake.value == "") {
-		showToast("请输入投注金额");
+		showToast($.t(`sports['请输入投注金额']`));
 		return;
 	}
 	if (stake.value < sportsBetInfo.championSingleTicketInfo.minBet) {
-		showToast("投注金额未达到最低限额");
+		showToast($.t(`sports['投注金额未达到最低限额']`));
 		return;
 	}
 	if (stake.value > sportsBetInfo.balance) {
-		showToast("余额不足，请先充值");
+		showToast($.t(`sports['余额不足，请先充值']`));
 		return;
 	}
 	// 单关投注
@@ -114,7 +116,7 @@ const onkeyPress = (value) => {
 		display: flex;
 		justify-content: space-between;
 		@include themeify {
-			color: themed("TB-P");
+			color: themed("TB");
 		}
 		.btn1 {
 			width: 100%;

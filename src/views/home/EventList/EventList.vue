@@ -15,41 +15,49 @@
 		</div>
 		<div class="match-info mb_24">
 			<div class="team">
-				<img :src="event.teamInfo?.homeIconUrl" alt="France" />
+				<VantLazyImg :src="event.teamInfo?.homeIconUrl" alt="France" />
 				<span class="color_TB">{{ event.teamInfo?.homeName }}</span>
 			</div>
 			<div class="score color_TB bg_BG4">{{ event.gameInfo?.liveHomeScore }}</div>
 		</div>
 		<div class="match-info">
 			<div class="team">
-				<img :src="event.teamInfo?.awayIconUrl" alt="" />
+				<VantLazyImg :src="event.teamInfo?.awayIconUrl" alt="" />
 				<span class="color_TB">{{ event.teamInfo?.awayName }}</span>
 			</div>
 			<div class="score color_TB bg_BG4">{{ event.gameInfo?.liveAwayScore }}</div>
 		</div>
 		<div class="line bg_Line"></div>
-		<Markets :markets="event.markets" />
+		<Markets :event="event" :markets="event.markets" :sportType="event.sportType" />
 		<div class="more-bets">
-			<span class="fs_28 color_T1">更多投注</span>
+			<span class="fs_28 color_T1" @click="showDetail()">{{ $t('home["更多投注"]') }}</span>
 			<SvgIcon iconName="home/right_arrow" />
 		</div>
 	</div>
 </template>
 <script lang="ts" setup>
-import common from "/@/utils/common";
 import Markets from "./components/markets/markets.vue";
 import sportsApi from "/@/api/venueHome/sports";
 import pubsub from "/@/pubSub/pubSub";
 import SportsCommonFn from "/@/views/venueHome/sports/utils/common";
 import { useSportsBetEventStore } from "/@/store/modules/sports/sportsBetData";
-const commonFunc = common.getInstance();
+import VantLazyImg from "/@/components/vant/VantLazyImg.vue";
+
 const sportsBetData = useSportsBetEventStore();
+const router = useRouter();
+
+/**
+ * @description 接受入参event 赛事详细信息
+ * @param {Object} event - 赛事详细信息对象
+ */
 const props = defineProps({
 	event: {
 		type: Object,
 		required: true,
 	},
 });
+
+// 判断赛事是否关注
 const isAttention = computed(() => {
 	return sportsBetData.attentionEventIdList.includes(props.event.eventId);
 });
@@ -61,19 +69,30 @@ const formattedGameTime = computed(() => {
 	return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
 });
 
-// 点击关注按钮
+/**
+ * @description 点击关注按钮
+ * @param {boolean} isActive - 是否激活关注
+ */
 const attentionEvent = async (isActive: boolean) => {
 	if (isActive) {
 		await sportsApi.unFollow({
 			thirdId: [props.event.eventId],
 		});
 	} else {
+		console.log(props.event, "==event info");
 		await sportsApi.saveFollow({
 			thirdId: props.event.eventId,
 			type: 2,
 		});
 	}
 	pubsub.publish(pubsub.PubSubEvents.SportEvents.attentionChange.eventName, {});
+};
+
+/**
+ * @description 跳转体育详情页
+ */
+const showDetail = () => {
+	router.push(`/venueHome/sports/event/detail/${props.event.eventId}/${props.event.leagueId}/${props.event.sportType}`);
 };
 </script>
 <style scoped lang="scss">

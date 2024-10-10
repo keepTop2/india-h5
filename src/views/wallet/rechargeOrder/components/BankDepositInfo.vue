@@ -54,7 +54,7 @@
 		</div>
 
 		<div class="order-card">
-			<SvgIcon class="card-tag" iconName="/wallet/line" :size="0.8" :height="5.333333" />
+			<SvgIcon class="card-tag" iconName="wallet/line" :size="0.8" :height="5.333333" />
 			<div class="herder mb_10">
 				<span class="title">{{ $t('rechargeOrder["订单信息"]') }}</span>
 			</div>
@@ -218,7 +218,7 @@ const confirm = () => {
 					border-radius: 29px;
 					@include themeify {
 						background: themed("Theme");
-						color: themed("TB-P");
+						color: themed("TB");
 					}
 					font-size: 28px;
 					font-weight: 500;
@@ -297,7 +297,7 @@ const confirm = () => {
 					border-radius: 29px;
 					@include themeify {
 						background: themed("Tag2-P");
-						color: themed("TB-P");
+						color: themed("TB");
 					}
 					font-size: 28px;
 					font-weight: 500;
@@ -434,7 +434,7 @@ const confirm = () => {
 			@include themeify {
 				border-color: themed("Theme");
 				background-color: themed("Theme");
-				color: themed("TB-P");
+				color: themed("TB");
 			}
 		}
 	}

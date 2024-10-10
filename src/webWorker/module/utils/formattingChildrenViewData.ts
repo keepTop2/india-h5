@@ -1,11 +1,3 @@
-/*
- * @Author: Hida
- * @Date: 2024-06-07 17:40:18
- * @LastEditors: hida
- * @LastEditTime: 2024-06-15 11:30:48
- * @Description:
- *
- */
 // 体育静态文件
 import sportsMap from "/@/views/venueHome/sports/sportsMap/sportsMap";
 import dayjs from "dayjs";
@@ -92,12 +84,12 @@ export const formatDateToTimeStamp = (date: string): number => {
 	return dayjs(date).valueOf();
 };
 
-// 格式化沙巴日期为utc-5
+// 将UTC时间转换为用户当前时区的时间
 export const convertUtcToUtc5AndFormat = (date) => {
-	return dayjs(date).subtract(5, "hour").format("YYYY-MM-DD HH:mm:ss");
+	return dayjs.utc(date).local().format("YYYY-MM-DD HH:mm:ss");
 };
 
-// 格式化沙巴日期为utc-5
+// 将UTC时间转换为用户当前时区的时间，并格式化为MM-DD HH:mm
 export const convertUtcToUtc5AndFormatMD = (date) => {
-	return dayjs(date).subtract(5, "hour").format("MM-DD HH:mm");
+	return dayjs.utc(date).local().format("MM-DD HH:mm");
 };

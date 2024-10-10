@@ -20,6 +20,10 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, defineEmits, PropType } from "vue";
 
+/**
+ * @description 定义组件的属性
+ * @param defaultTime 默认倒计时时间，单位为秒
+ */
 const props = defineProps({
 	defaultTime: {
 		type: Number as PropType<number>,
@@ -27,6 +31,9 @@ const props = defineProps({
 	},
 });
 
+/**
+ * @description 定义组件的事件
+ */
 const emit = defineEmits(["countdownFinished"]);
 
 // 使用 ref 来保存倒计时剩余的总秒数
@@ -40,7 +47,9 @@ const hours = computed(() => String(Math.floor(totalSeconds.value / 3600)).padSt
 const minutes = computed(() => String(Math.floor((totalSeconds.value % 3600) / 60)).padStart(2, "0"));
 const seconds = computed(() => String(totalSeconds.value % 60).padStart(2, "0"));
 
-// 开始倒计时
+/**
+ * @description 开始倒计时
+ */
 const startCountdown = () => {
 	intervalId = window.setInterval(() => {
 		if (totalSeconds.value > 0) {
@@ -54,7 +63,9 @@ const startCountdown = () => {
 	}, 1000);
 };
 
-// 停止倒计时
+/**
+ * @description 停止倒计时
+ */
 const stopCountdown = () => {
 	if (intervalId !== null) {
 		clearInterval(intervalId);
@@ -62,7 +73,10 @@ const stopCountdown = () => {
 	}
 };
 
-// 重置倒计时
+/**
+ * @description 重置倒计时
+ * @param newTime 新的倒计时时间，单位为秒
+ */
 const resetCountdown = (newTime?: number) => {
 	totalSeconds.value = newTime !== undefined ? newTime : props.defaultTime;
 	stopCountdown();

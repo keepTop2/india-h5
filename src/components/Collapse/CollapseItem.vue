@@ -38,12 +38,5 @@ function onToggle() {
 <style lang="scss" scope>
 .x-collapse-item {
 	box-sizing: border-box;
-
-	&_header {
-	}
-	&_title {
-	}
-	&_content {
-	}
 }
 </style>
