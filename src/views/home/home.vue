@@ -163,13 +163,12 @@ onActivated(() => {
 	showRedBagRain.value = activityStore.isShowRedBagRain;
 });
 onDeactivated(() => {
-	// 卸载体育
-	unSport();
 	// 关闭登录接口轮询
 	stopPolling();
 	// 清除体育数据缓存
 	clearStoreInfo();
-
+	// 卸载体育
+	unSport();
 	//关闭ws连接
 	destroyWS();
 });
