@@ -305,6 +305,7 @@ const confirmDialog = () => {
 	object-fit: cover;
 	margin-bottom: 20px;
 }
+
 .activity-details {
 	border-radius: 10px;
 	padding: 15px;
@@ -339,7 +340,8 @@ const confirmDialog = () => {
 	}
 	.detail-content {
 		padding: 0 62px;
-		background: url("../../image/detail_content.png");
+
+		background: url("../../image/detail_content.png") no-repeat;
 		background-size: 100% 100%;
 		font-size: 24px;
 		.detail-row {
@@ -395,12 +397,14 @@ const confirmDialog = () => {
 			}
 		}
 		.sessionsBox {
-			overflow-y: auto;
 			padding-bottom: 10px;
+
+			overflow-y: auto;
 			.sessions {
 				display: flex;
+				justify-content: space-around;
 				.session {
-					min-width: 115px;
+					min-width: 130px;
 					text-align: center;
 					position: relative;
 					.sideBox {
@@ -417,7 +421,7 @@ const confirmDialog = () => {
 							background-color: themed("T1");
 						}
 						position: absolute;
-						left: calc(50% + 22px);
+						left: calc(50% + 31px);
 						top: 50%;
 						transform: translateY(-50%);
 					}

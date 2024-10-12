@@ -21,7 +21,7 @@
 			/>
 			<div class="vipLevel color_TB fw_600" :class="'vip' + currentTab">{{ activityData?.vipRankConfig?.[currentTab - 1]?.maxVipGradeName }}级或以上</div>
 		</div>
-		<div class="remaining_times_bg">{{ $t('home["剩余抽奖次数"]') }}：{{ activityData?.balanceCount }}</div>
+		<div class="remaining_times_bg">{{ $t('home["剩余抽奖次数"]') }}：{{ activityData?.balanceCount || 0 }}</div>
 		<div class="container">
 			<div class="box bonus_bg">
 				<div class="title fs_30 color_TB">转盘奖金总计</div>

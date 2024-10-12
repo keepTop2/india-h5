@@ -78,6 +78,7 @@
 					</div>
 					活动规则
 					<div class="details-header-title-right">
+						v
 						<img src="../image/details-header-title-right.png" alt="" />
 					</div>
 				</div>

@@ -8,7 +8,7 @@
 		</div>
 		<div class="menu_content">
 			<div class="menu_content_header">
-				<div class="task van-haptics-feedback" @click="toPath('/activity/SPIN_WHEEL')">
+				<div class="task van-haptics-feedback" @click="toPath('/activity/TASK')">
 					<div class="icon"><img :src="task_icon" alt="" /></div>
 					<div class="label">{{ $t(`menuPopup["任务"]`) }}</div>
 				</div>
@@ -116,24 +116,21 @@ const queryLobbyLabelList = async () => {
 	}
 };
 
-pubsub.subscribe("onCollapseMenu", onCollapseMenu);
-
 const toPath = (path) => {
-	if (useUserStore().token) {
-		if (path === "/activity/SPIN_WHEEL") {
-			activityApi.toSpinActivity().then((res: any) => {
-				if (res.code == 10000) {
-					router.push(path);
-				}
-			});
-		} else {
+	if (path === "/activity/DAILY_COMPETITION" || path === "/activity/TASK") {
+		if (useUserStore().token) {
 			router.push(path);
+		} else {
+			showDialog.value = true;
 		}
 	} else {
-		showDialog.value = true;
+		router.push(path);
 	}
 	show.value = false;
 };
+onMounted(() => {
+	pubsub.subscribe("onCollapseMenu", onCollapseMenu);
+});
 </script>
 
 <style scoped lang="scss">

@@ -113,24 +113,10 @@ const onToDeatils = (item) => {
 		}
 	}
 
-	if (!item.enable && new Date().getTime() < item.activityStartTime && !item.activityDeadline) {
-		showToast("活动未开启");
-		return;
-		// 长期活动
-	} else if (item.activityDeadline) {
-		router.push({
-			path: `/activity/${item.activityTemplate}`,
-			query: { data: encodeURIComponent(JSON.stringify(item)) },
-		});
-	} else if (item.entrancePictureGrey) {
-		showToast("活动已过期");
-		return;
-	} else {
-		router.push({
-			path: `/activity/${item.activityTemplate}`,
-			query: { data: encodeURIComponent(JSON.stringify(item)) },
-		});
-	}
+	router.push({
+		path: `/activity/${item.activityTemplate}`,
+		query: { data: encodeURIComponent(JSON.stringify(item)) },
+	});
 };
 
 // 根据活动页id查对应活动
