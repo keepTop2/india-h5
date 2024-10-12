@@ -4,9 +4,10 @@
 	<div class="group">
 		<div class="cell" :class="{ 'van-haptics-feedback': !item.edit }" v-for="(item, index) in menuList" :key="index" @click.stop="onClickCell(item)">
 			<div class="label">{{ item.name }}</div>
+			<div v-if="item.edit" class="color_T1">{{ item.editText }}</div>
 			<div v-if="item.edit" class="value van-haptics-feedback" @click.stop="toPath(item.editPath)">{{ item.value }}</div>
 			<div v-else class="arrow">
-				<SvgIcon iconName="common/arrow" />
+				<SvgIcon iconName="common/arrow" size="24px" />
 			</div>
 		</div>
 	</div>
@@ -17,6 +18,7 @@ import { securityCenterApi } from "/@/api/securityCenter";
 import common from "/@/utils/common";
 import { useRouter } from "vue-router";
 import { i18n } from "/@/i18n/index";
+import Common from "/@/utils/common";
 const router = useRouter();
 const $: any = i18n.global;
 
@@ -38,6 +40,7 @@ const menuList = ref([
 		value: "",
 		path: "/loginPassword",
 		edit: false,
+		editText: "",
 	},
 	{
 		name: $.t("securityCenter['手机号']"),
@@ -45,6 +48,7 @@ const menuList = ref([
 		path: "/bind/phone",
 		editPath: "/editContactDetails/phone",
 		edit: false,
+		editText: "",
 	},
 	{
 		name: $.t("securityCenter['邮箱']"),
@@ -52,6 +56,7 @@ const menuList = ref([
 		path: "/bind/email",
 		editPath: "/editContactDetails/email",
 		edit: false,
+		editText: "",
 	},
 	{
 		name: $.t("securityCenter['交易密码']"),
@@ -59,6 +64,7 @@ const menuList = ref([
 		path: "/setTradingPassword",
 		editPath: "/editTradingPassword",
 		edit: false,
+		editText: "",
 	},
 ]);
 
@@ -70,9 +76,9 @@ const getUserGlobalSetInfo = async () => {
 		// 更新 menuList 中的 edit 值
 		menuList.value = menuList.value.map((item) => {
 			if (item.path === "/bind/phone") {
-				return { ...item, edit: !!state.phone };
+				return { ...item, edit: !!state.phone, editText: state.phone ? "+" + state.areaCode + " " + Common.maskString(state.phone as string) : "" };
 			} else if (item.path === "/bind/email") {
-				return { ...item, edit: !!state.email };
+				return { ...item, edit: !!state.email, editText: state.email ? Common.maskEmail(state.email as string) : "" };
 			} else if (item.path === "/setTradingPassword") {
 				return { ...item, edit: !!state.isSetPwd };
 			} else {

@@ -204,13 +204,6 @@ const menuData = {
 			path: "/language",
 			arrow: true,
 		},
-		{
-			name: $.t("my['版本号']"),
-			icon: "/my/beh",
-			value: "v 1.00",
-			path: "",
-			arrow: false,
-		},
 	],
 };
 

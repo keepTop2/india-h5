@@ -12,12 +12,12 @@
 					<input v-model="searchAreaCode" type="text" placeholder="搜索区号" />
 					<div v-if="searchAreaCode" class="icon"><SvgIcon class="clear_icon" iconName="common/close" @click="searchAreaCode = ''" /></div>
 				</div>
-				{{ Object.keys(props.areaCode).length }}
+
 				<template v-if="Object.keys(props.areaCode).length > 0">
-					<van-index-bar :index-list="props.indexList" :sticky="false">
-						<van-index-anchor :index="1" v-for="item in Object.keys(props.areaCode)">
-							<div class="cell_header">{{ item }}</div>
-							<div class="cell_item" :class="{ cell_item_active: currentAreaCodeIndex == item }" v-for="(i, idx) in areaCode[item]" :key="idx" @click="selectAreaCode(item, i)">
+					<van-index-bar :index-list="props.indexList" :sticky="false" @change="selectAreaCodeIndex">
+						<van-index-anchor :index="item" v-for="item in Object.keys(props.areaCode)">
+							<div class="cell_header" :class="currentAreaCodeIndex === item ? 'active' : ''">{{ item }}</div>
+							<div class="cell_item" :class="{ cell_item_active: i.areaCode == stateAreaCode }" v-for="(i, idx) in areaCode[item]" :key="idx" @click="selectAreaCode(item, i)">
 								<div class="label">
 									<img :src="i.icon" class="icon" />
 									<span>{{ i.countryCode }}</span>
@@ -40,12 +40,8 @@
 function defineModel<T>(name: string, defaultValue: T) {
 	return ref<T>(defaultValue);
 }
-
+const currentAreaCodeIndex: Ref<number | string> = ref("");
 const props = defineProps({
-	currentAreaCodeIndex: {
-		type: String,
-		default: ",",
-	},
 	indexList: {
 		type: Array,
 		default: () => [] as any,
@@ -54,15 +50,19 @@ const props = defineProps({
 		type: Object,
 		default: () => {},
 	},
+	stateAreaCode: String,
 });
 
 const showAreaCode = defineModel<boolean>("showAreaCode", false);
 const searchAreaCode = defineModel<string>("searchAreaCode", "");
 
-const emit = defineEmits(["selectAreaCode", "selectAreaCodeIndex"]);
+const emit = defineEmits(["selectAreaCode"]);
 
 const selectAreaCode = (item, i) => {
 	emit("selectAreaCode", item, i);
+};
+const selectAreaCodeIndex = (index: number | string) => {
+	currentAreaCodeIndex.value = index;
 };
 </script>
 
@@ -174,6 +174,11 @@ const selectAreaCode = (item, i) => {
 	font-size: 28px;
 	font-weight: 400;
 }
+.cell_header.active {
+	@include themeify {
+		color: themed("Theme");
+	}
+}
 
 :deep(.van-index-bar) {
 	padding: 0px 48px;
@@ -196,6 +201,9 @@ const selectAreaCode = (item, i) => {
 		font-family: "PingFang SC";
 		font-size: 20px;
 		font-weight: 400;
+	}
+	.van-index-bar__index--active {
+		color: #ff284b;
 	}
 }
 
