@@ -14,16 +14,10 @@ export const VenueHome = {
 			},
 			children: [
 				{
-					path: "/venueHome/sports/rollingBall",
+					path: "/venueHome/sports/rollingBall/:sportType",
 					name: "rollingBallList",
 					meta: { title: "滚球", name: "rollingBall" },
 					component: () => import("/@/views/venueHome/sports/views/rollingBall/rollingBall.vue"),
-					children: [
-						{
-							path: ":sportType", // 动态路由参数，匹配球类
-							component: () => import("/@/views/venueHome/sports/views/rollingBall/rollingBall.vue"),
-						},
-					],
 				},
 				{
 					path: "/venueHome/sports/todayContest",

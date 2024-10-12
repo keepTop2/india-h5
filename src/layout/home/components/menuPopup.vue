@@ -98,7 +98,7 @@ const handleMenuClick = (item) => {
 	show.value = false;
 	console.log(item, "===item");
 	if (item.modelCode === "PE") {
-		router.push("/venueHome/sports");
+		router.push({ name: "rollingBallList", params: { sportType: 1 } });
 	} else {
 		router.push({
 			name: "GameArena",

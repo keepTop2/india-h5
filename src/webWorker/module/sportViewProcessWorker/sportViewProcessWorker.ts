@@ -21,7 +21,7 @@ export default (function () {
 
 		const jsonData: WorkerTransfer<Data, CommandType> = JSON.parse(strData);
 
-		// console.warn("第四步 体育线程收到了数据 到对应controller", jsonData);
+		console.warn("第四步 体育线程收到了数据 到对应controller", jsonData);
 		//收到体育sportEventSource 指令
 		if (jsonData.commandType == SportViewProcessWorkerCommandType.sportEventSource) {
 			const data: WorkerTransfer<OpenSportEventSourceParams, SportViewProcessWorkerCommandType> = jsonData as WorkerTransfer<OpenSportEventSourceParams, SportViewProcessWorkerCommandType>;
