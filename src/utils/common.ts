@@ -11,6 +11,7 @@ import GameApi from "/@/api/venueHome/games";
 import mitt from "mitt";
 import qs from "qs";
 import router from "../router";
+import { useUserStore } from "../store/modules/user";
 dayjs.extend(utc);
 dayjs.extend(tz);
 dayjs.locale("en");
@@ -411,7 +412,32 @@ class Common {
 			return visibleChars;
 		}
 	}
+	// 电话号码转换*
+	static maskString(str: string) {
+		const length = str.length;
+		// 对于长度大于等于8的情况
+		if (length >= 8) {
+			const prefix = str.slice(0, 3); // 前3位
+			const suffix = str.slice(-3); // 后3位
+			const masked = "*".repeat(length - 6); // 中间字符替换为*
+			return prefix + masked + suffix;
+		}
 
+		// 对于长度小于8的情况
+		else if (length < 8) {
+			const prefix = str.slice(0, 2); // 前2位
+			const suffix = str.slice(-2); // 后2位
+			const masked = "*".repeat(length - 4); // 中间字符替换为*
+			return prefix + masked + suffix;
+		}
+	}
+	// 邮箱转换*
+	static maskEmail(email: string) {
+		const [localPart, domain] = email.split("@"); // 将email按@分割
+		const prefix = localPart.slice(0, 2); // 前2位
+		const masked = "**"; // 中间字符为*
+		return prefix + masked + "@" + domain; // 重新组合
+	}
 	/**
 	 *  @describe 金额三位数分割逗号
 	 */
@@ -557,6 +583,9 @@ class Common {
 		}
 	}
 	static goToGame(gameinfo: any) {
+		if (!useUserStore().token) {
+			return router.push("/login");
+		}
 		const params = {
 			venueCode: gameinfo.venueCode,
 			gameCode: gameinfo.gameCode,

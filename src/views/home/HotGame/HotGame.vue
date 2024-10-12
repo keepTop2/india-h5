@@ -33,6 +33,8 @@ import GameApi from "/@/api/venueHome/games";
 import pubsub from "/@/pubSub/pubSub";
 import { showToast } from "vant";
 import Common from "/@/utils/common";
+import { useUserStore } from "/@/store/modules/user";
+import router from "/@/router";
 
 // 自动播放配置
 const autoplay = ref({
@@ -98,6 +100,9 @@ const getGameInfoDetail = () => {
  * @param {Boolean} collect - 收藏状态
  */
 const handleCollect = async (item, collect) => {
+	if (!useUserStore().token) {
+		return router.push("/login");
+	}
 	const res: any = await GameApi.gameCollection({
 		gameId: item.id,
 		type: collect,
