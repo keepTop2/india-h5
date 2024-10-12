@@ -16,7 +16,7 @@
 			<div v-if="route.params.type == 'phone'">
 				<span class="title">{{ $t('editContactDetails["手机号验证"]') }}</span>
 				<p>
-					{{ $t('editContactDetails["验证码将发送至手机号："]') }}<span v-if="userInfo.areaCode">+{{ userInfo.areaCode }} </span> <span>{{ userInfo.phone }}</span>
+					{{ $t('editContactDetails["验证码将发送至手机号："]') }}<span v-if="userInfo.areaCode">+{{ userInfo.areaCode }} </span> <span>{{ Common.maskString(userInfo.phone as string) }}</span>
 				</p>
 				<p>{{ $t('editContactDetails["有效时间："]') }}</p>
 			</div>
@@ -43,6 +43,7 @@ import { securityCenterApi, bindApi } from "/@/api/securityCenter";
 import common from "/@/utils/common";
 import { useRoute, useRouter } from "vue-router";
 import { i18n } from "/@/i18n/index";
+import Common from "/@/utils/common";
 const router = useRouter();
 const route = useRoute();
 const $: any = i18n.global;

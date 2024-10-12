@@ -5,7 +5,7 @@
 		<div class="register-from">
 			<div class="title">{{ $t('register["注册"]') }}</div>
 			<div class="from">
-				<FormInput v-model="state.userAccount" type="text" :placeholder="$t(`register['输入账号']`)" :errorBorder="!isAccountValid && state.userAccount !== '' ? true : false">
+				<FormInput v-model="state.userAccount" type="text" :placeholder="$t(`register['输入账号']`)" :errorBorder="!isAccountValid && state.userAccount !== '' ? true : false" :maxlength="11">
 					<template v-slot:right>
 						<SvgIcon v-if="state.userAccount" class="clearIcon" iconName="loginOrRegister/clear" @click="state.userAccount = ''" />
 					</template>
@@ -209,7 +209,6 @@ const onSubmit = async () => {
 	const certifyId = refhcaptcha.value.certifyId;
 	const res = await registerApi.userRegister({ ...state, certifyId }).catch((err) => err);
 	if (res.code == common.getInstance().ResCode.SUCCESS) {
-		showToast(res.message);
 		store.setInfo(res.data);
 		router.replace({ path: "/" });
 	} else {

@@ -4,6 +4,7 @@
 
 		<form class="form">
 			<span class="title">{{ $t('loginPassword["旧密码"]') }}</span>
+
 			<FormInput
 				v-model="state.oldPassword"
 				:type="eyeShow ? 'oldPassword' : 'text'"
@@ -114,7 +115,7 @@ watch(
 );
 
 const onSubmit = async () => {
-	const res = await loginPasswordApi.changePassword().catch((err) => err);
+	const res = await loginPasswordApi.changePassword(state).catch((err) => err);
 	if (res.code == common.getInstance().ResCode.SUCCESS) {
 		showToast($.t("common['修改成功']"));
 		// 返回上一个页面

@@ -42,6 +42,7 @@ import pubsub from "/@/pubSub/pubSub";
 import SportsCommonFn from "/@/views/venueHome/sports/utils/common";
 import { useSportsBetEventStore } from "/@/store/modules/sports/sportsBetData";
 import VantLazyImg from "/@/components/vant/VantLazyImg.vue";
+import { useUserStore } from "/@/store/modules/user";
 
 const sportsBetData = useSportsBetEventStore();
 const router = useRouter();
@@ -74,6 +75,9 @@ const formattedGameTime = computed(() => {
  * @param {boolean} isActive - 是否激活关注
  */
 const attentionEvent = async (isActive: boolean) => {
+	if (!useUserStore().token) {
+		return router.push("/login");
+	}
 	if (isActive) {
 		await sportsApi.unFollow({
 			thirdId: [props.event.eventId],

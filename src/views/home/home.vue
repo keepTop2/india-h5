@@ -12,7 +12,7 @@
 			<!-- 收藏游戏 -->
 			<h3 class="title" v-show="isShowCollect">
 				<SvgIcon iconName="home/star" alt="" />
-				{{ $t('home["收藏游戏"]') }}
+				{{ $t('home["收藏的游戏"]') }}
 			</h3>
 			<CollectGames v-show="isShowCollect" @queryCollection="queryCollection" :collectList="collectList" class="m24" />
 			<h3 class="title_more" v-show="eventList?.length">

@@ -327,8 +327,7 @@ const selectAreaCode = (item, i: CountryData) => {
 			display: flex;
 			justify-content: space-between;
 		}
-		.p
-		.icon {
+		.p .icon {
 			width: 32px;
 			height: 32px;
 		}

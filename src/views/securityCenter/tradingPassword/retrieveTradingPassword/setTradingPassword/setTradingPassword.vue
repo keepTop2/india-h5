@@ -11,8 +11,8 @@
 		>
 			<template v-slot:right>
 				<div class="right">
-					<SvgIcon v-if="state.newPassword" class="clearIcon" iconName="loginOrRegister/clear" @click="state.newPassword = ''" />
-					<SvgIcon class="icon" :iconName="eyeShow ? 'loginOrRegister/eye-off' : 'loginOrRegister/eye'" @click="eyeShow = !eyeShow" />
+					<SvgIcon v-if="state.newPassword" class="clearIcon mr_20" iconName="loginOrRegister/clear" @click="state.newPassword = ''" size="30px" />
+					<SvgIcon class="icon" :iconName="eyeShow ? 'loginOrRegister/eye-off' : 'loginOrRegister/eye'" @click="eyeShow = !eyeShow" size="30px" />
 				</div>
 			</template>
 		</FormInput>
@@ -31,8 +31,8 @@
 		>
 			<template v-slot:right>
 				<div class="right">
-					<SvgIcon v-if="state.confirmPassword" class="clearIcon" iconName="loginOrRegister/clear" @click="state.confirmPassword = ''" />
-					<SvgIcon class="icon" :iconName="eyeShow ? 'loginOrRegister/eye-off' : 'loginOrRegister/eye'" @click="eyeShow = !eyeShow" />
+					<SvgIcon v-if="state.confirmPassword" class="clearIcon mr_20" iconName="loginOrRegister/clear" @click="state.confirmPassword = ''" size="30px" />
+					<SvgIcon class="icon" :iconName="eyeShow2 ? 'loginOrRegister/eye-off' : 'loginOrRegister/eye'" @click="eyeShow2 = !eyeShow2" size="30px" />
 				</div>
 			</template>
 		</FormInput>
@@ -44,7 +44,7 @@
 		<div v-if="route.params.type == 'email'">
 			<span class="label">{{ $t('editContactDetails["邮箱验证"]') }}</span>
 			<p>
-				{{ $t('editContactDetails["验证码将发送至邮箱账号："]') }}<span>{{ userInfo.email }}</span>
+				{{ $t('editContactDetails["验证码将发送至邮箱账号："]') }}<span>{{ Common.maskEmail(userInfo.email as string) }}</span>
 			</p>
 			<p>{{ $t('editContactDetails["有效时间："]') }}</p>
 		</div>
@@ -53,7 +53,7 @@
 		<div v-if="route.params.type == 'phone'">
 			<span class="title">{{ $t('editContactDetails["手机号验证"]') }}</span>
 			<p>
-				{{ $t('editContactDetails["验证码将发送至手机号："]') }}<span v-if="userInfo.areaCode">+{{ userInfo.areaCode }} </span> <span>{{ userInfo.phone }}</span>
+				{{ $t('editContactDetails["验证码将发送至手机号："]') }}<span v-if="userInfo.areaCode">+{{ userInfo.areaCode }} </span> <span>{{ Common.maskString(userInfo.phone as string) }}</span>
 			</p>
 			<p>{{ $t('editContactDetails["有效时间："]') }}</p>
 		</div>
@@ -79,9 +79,11 @@ import { securityCenterApi, bindApi, tradingPasswordApi } from "/@/api/securityC
 import common from "/@/utils/common";
 import { useRoute, useRouter } from "vue-router";
 import { showToast } from "vant";
+import Common from "/@/utils/common";
 const router = useRouter();
 const route = useRoute();
 const eyeShow = ref(true);
+const eyeShow2 = ref(true);
 const btnDisabled = ref(true);
 
 const captchaButton = ref<{
@@ -125,9 +127,9 @@ const isConfirmPasswordValid = computed(() => {
 
 // 监听用户状态
 watch(
-	[() => isPasswordValid.value, () => isConfirmPasswordValid.value],
+	[() => isPasswordValid.value, () => isConfirmPasswordValid.value, () => state.verifyCode],
 	([isPasswordValid, isConfirmPasswordValid]) => {
-		if (isPasswordValid && isConfirmPasswordValid) {
+		if (isPasswordValid && isConfirmPasswordValid && state.verifyCode) {
 			btnDisabled.value = false;
 		} else {
 			btnDisabled.value = true;
