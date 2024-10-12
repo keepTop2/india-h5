@@ -5,7 +5,7 @@ window.PLATFROM_CONFIG = {
 	productionFileUrl: "/files/",
 	// 体育打包编译后请求域名地址(运维专用)
 	productionSportUrl: "https://apistaging.wx7777.com",
-
+	productionWsURL: "wss://gw.playesoversea.store/ws",
 	// 本地开发地址(开发专用)
 	developmentBaseURL: "https://gw.playesoversea.store", // 开发环境
 	// developmentBaseURL: "https://backend.bwsh.store", // 测试环境
