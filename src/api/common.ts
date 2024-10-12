@@ -52,6 +52,16 @@ class CommonApi {
 			headers,
 		});
 	};
+	/**
+	 *@description 获取会员首页信息
+	 */
+	static getCurrentBasicInfo = (data = {}, headers = {}) => {
+		return useAxiosApi(`/app/common/getCurrentBasicInfo`, {
+			method: "POST",
+			data,
+			headers,
+		});
+	};
 }
 
 export default CommonApi;

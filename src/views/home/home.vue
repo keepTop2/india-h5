@@ -9,10 +9,10 @@
 				{{ $t('home["热门游戏"]') }}
 			</h3>
 			<HotGame class="m24" @queryCollection="queryCollection" :gameInfoList="hotGames" />
-			<!-- 收藏游戏 -->
+			<!-- 喜欢的游戏 -->
 			<h3 class="title" v-show="isShowCollect">
 				<SvgIcon iconName="home/star" alt="" />
-				{{ $t('home["收藏游戏"]') }}
+				{{ $t('home["喜欢的游戏"]') }}
 			</h3>
 			<CollectGames v-show="isShowCollect" @queryCollection="queryCollection" :collectList="collectList" class="m24" />
 			<h3 class="title_more" v-show="eventList?.length">
@@ -20,7 +20,7 @@
 					<SvgIcon iconName="home/event_game" alt="" />
 					{{ $t('home["我们的游戏"]') }}
 				</span>
-				<span class="more fw_400 fs_28 color_T1" @click="router.push('/venueHome/sports')">{{ $t(`home["更多"]`) }}</span>
+				<span class="more fw_400 fs_28 color_T1" @click="router.push({ name: 'rollingBallList', params: { sportType: 1 } })">{{ $t(`home["更多"]`) }}</span>
 			</h3>
 			<EventList v-show="eventList?.length" v-for="(event, index) in eventList" class="m24" :event="event" :key="index" />
 			<!-- 体育购物车 -->

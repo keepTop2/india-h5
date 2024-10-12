@@ -321,14 +321,15 @@ onMounted(async () => {
 	initReadyTime();
 	initRedbagRain();
 	pubsub.subscribe("/activity/redBagRain/settlement", (data) => {
-		settlement.value = data.data;
-		if (data.data.redbagCount > 0) {
-			dialogTitle.value = "恭喜你";
-		} else {
-			dialogTitle.value = "很遗憾";
+		if (data.data.code === 10000) {
+			settlement.value = data.data;
+			if (data.data.redbagCount > 0) {
+				dialogTitle.value = "恭喜你";
+			} else {
+				dialogTitle.value = "很遗憾";
+			}
+			showRedBagRainResult.value = true;
 		}
-
-		showRedBagRainResult.value = true;
 	});
 });
 

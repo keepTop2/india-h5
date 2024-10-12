@@ -28,7 +28,10 @@
 						<p class="label">
 							<span>活动时间</span>
 						</p>
-						<p class="value">{{ dayjs(activityData?.activityStartTime).format("YYYY-MM-DD HH:mm:ss") }}~{{ dayjs(activityData?.activityEndTime).format("YYYY-MM-DD HH:mm:ss") }}</p>
+						<p class="value" v-if="activityData.activityDeadline == 0">
+							{{ dayjs(activityData?.activityStartTime).format("YYYY-MM-DD HH:mm:ss") }}~{{ dayjs(activityData?.activityEndTime).format("YYYY-MM-DD HH:mm:ss") }}
+						</p>
+						<p class="value" v-if="activityData.activityDeadline == 1">长期活动</p>
 					</div>
 					<div class="detail-row">
 						<p class="label">
@@ -63,6 +66,7 @@
 			{{ dialogInfo.message }}
 			<template v-slot:footer v-if="dialogInfo.status === 30049"> 去存款 </template>
 		</activityDialog>
+		<activityDialog v-model="showDialog2" title="温馨提示" :confirm="confirmDialog" :goToLogin="true"> 您的账号暂未登录无法参与活动， 如已有账号请登录，如还未有账号 请前往注册 </activityDialog>
 	</div>
 </template>
 
@@ -72,9 +76,12 @@ import { activityApi } from "/@/api/activity";
 import activityDialog from "../components/Dialog.vue";
 import dayjs from "dayjs";
 import { showToast } from "vant";
+import { useUserStore } from "/@/store/modules/user";
+const userStore = useUserStore();
 const router = useRouter();
 const route = useRoute();
 const showDialog = ref(false);
+const showDialog2 = ref(false);
 const dialogInfo: any = ref({});
 const activityInfo = JSON.parse(decodeURIComponent(route.query.data as string));
 const activityData = ref();
@@ -91,6 +98,10 @@ const getConfigDetail = () => {
 	});
 };
 const apply = () => {
+	if (!userStore.token) {
+		showDialog2.value = true;
+		return;
+	}
 	activityApi.toActivity({ id: activityInfo.id }).then((res: any) => {
 		if (res.code === 10000) {
 			if (res.data.status !== 10000) {
@@ -110,6 +121,7 @@ const confirmDialog = () => {
 		router.push("/wallet/recharge");
 	}
 	showDialog.value = false;
+	showDialog2.value = false;
 };
 </script>
 

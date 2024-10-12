@@ -8,7 +8,7 @@
 		</div>
 		<div class="menu_content">
 			<div class="menu_content_header">
-				<div class="task van-haptics-feedback" @click="toPath('/activity/SPIN_WHEEL')">
+				<div class="task van-haptics-feedback" @click="toPath('/activity/TASK')">
 					<div class="icon"><img :src="task_icon" alt="" /></div>
 					<div class="label">{{ $t(`menuPopup["任务"]`) }}</div>
 				</div>
@@ -55,10 +55,12 @@
 			</div>
 		</div>
 	</van-popup>
+	<activityDialog v-model="showDialog" title="温馨提示" :confirm="confirmDialog" :goToLogin="true"> 您的账号暂未登录无法参与活动， 如已有账号请登录，如还未有账号 请前往注册 </activityDialog>
 </template>
 
 <script setup lang="ts">
 import { ref } from "vue";
+import activityDialog from "../../../views/discount/components/Dialog.vue";
 import logo from "/@/assets/zh-CN/default/menuPopup/logo.png";
 import task_icon from "/@/assets/zh-CN/default/menuPopup/task_icon.png";
 import wheel_icon from "/@/assets/zh-CN/default/menuPopup/wheel_icon.png";
@@ -78,13 +80,16 @@ import { activityApi } from "/@/api/activity";
 const userStore = useUserStore();
 const router = useRouter();
 const show = ref(false);
+const showDialog = ref(false);
 const themesStore = useThemesStore();
 const theme = computed(() => themesStore.themeName);
 
 let state: any = reactive({
 	menuList: [],
 });
-
+const confirmDialog = () => {
+	showDialog.value = false;
+};
 const onCollapseMenu = () => {
 	show.value = true;
 	queryLobbyLabelList();
@@ -111,24 +116,21 @@ const queryLobbyLabelList = async () => {
 	}
 };
 
-pubsub.subscribe("onCollapseMenu", onCollapseMenu);
-
 const toPath = (path) => {
-	if (useUserStore().token) {
-		if (path === "/activity/SPIN_WHEEL") {
-			activityApi.toSpinActivity().then((res: any) => {
-				if (res.code == 10000) {
-					router.push(path);
-				}
-			});
-		} else {
+	if (path === "/activity/DAILY_COMPETITION" || path === "/activity/TASK") {
+		if (useUserStore().token) {
 			router.push(path);
+		} else {
+			showDialog.value = true;
 		}
 	} else {
-		router.push("/login");
+		router.push(path);
 	}
 	show.value = false;
 };
+onMounted(() => {
+	pubsub.subscribe("onCollapseMenu", onCollapseMenu);
+});
 </script>
 
 <style scoped lang="scss">

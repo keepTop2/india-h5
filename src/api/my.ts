@@ -34,7 +34,9 @@ export class medalApi {
 		return useAxiosApi(`/app/user-info/api/getUserMedalInfo`, {
 			method: "POST",
 			data,
-			headers,
+			headers: {
+				showLoading: true,
+			},
 		});
 	};
 	// 打开宝箱
