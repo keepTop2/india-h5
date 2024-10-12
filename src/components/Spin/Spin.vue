@@ -32,7 +32,8 @@ import crypto_point from "./img/crypto_point.png";
 import crypto_btn from "./img/crypto_btn.png";
 import spinBG from "./img/spin_bg.png";
 import { activityApi } from "/@/api/activity";
-
+import { useUserStore } from "/@/store/modules/user";
+const userStore = useUserStore();
 const spinning = ref(false);
 const spinOver = ref(false);
 const spinRotate = ref("0deg");
@@ -64,7 +65,7 @@ const props = withDefaults(defineProps<Spin>(), {
 });
 
 // startSpinningCallback 开始旋转的回掉函数
-const emit = defineEmits(["startSpinningCallback", "endSpinningCallback"]);
+const emit = defineEmits(["startSpinningCallback", "endSpinningCallback", "needLogin"]);
 
 // 监听props中的reward变化，以触发停止旋转
 watch(
@@ -105,6 +106,10 @@ const clearSpin = () => {
 };
 // 处理开始旋转的逻辑
 const handleStartSpin = async () => {
+	if (!userStore.token) {
+		return emit("needLogin");
+	}
+
 	if (props.balanceCount < 1) {
 		return emit("endSpinningCallback");
 	}

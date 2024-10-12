@@ -13,7 +13,7 @@
 					<div class="text_container">
 						<div class="date">
 							<div class="deadline" v-if="item.activityDeadline == 0">{{ Common.getInstance().dayFormat1(item.activityStartTime) }} 至 {{ Common.getInstance().dayFormat1(item.activityEndTime) }}</div>
-							<div class="deadline" v-if="item.activityDeadline == 1">{{ Common.getInstance().dayFormat1(item.activityStartTime) }} 至 长期</div>
+							<div class="deadline" v-if="item.activityDeadline == 1">长期活动</div>
 							<div class="activity_name">{{ item.activityNameI18nCode }}</div>
 						</div>
 						<div class="mt_40 button">{{ "查看详情" }}</div>
@@ -24,17 +24,22 @@
 				<Nodata></Nodata>
 			</div>
 		</div>
+		<activityDialog v-model="showDialog" title="温馨提示" :confirm="confirmDialog" :goToLogin="true"> 您的账号暂未登录无法参与活动， 如已有账号请登录，如还未有账号 请前往注册 </activityDialog>
 	</div>
 </template>
 
 <script setup lang="ts">
-import { reactive } from "vue";
+import { onMounted, reactive, ref } from "vue";
+import activityDialog from "./components/Dialog.vue";
 import NavBar from "./components/Navbar.vue";
 import { useRouter } from "vue-router";
 import { i18n } from "/@/i18n/index";
 import { activityApi } from "/@/api/activity";
 import Common from "/@/utils/common";
 import { showToast } from "vant";
+import { useUserStore } from "/@/store/modules/user";
+const userStore = useUserStore();
+const showDialog = ref(false);
 defineOptions({
 	name: "discount",
 });
@@ -54,10 +59,7 @@ onMounted(async () => {
 	// await getActivity();
 });
 
-onMounted(() => {
-	console.log(123123, "组件挂载了");
-});
-
+const confirmDialog = () => {};
 const params = reactive({
 	pageNumber: 1,
 	pageSize: 1000,
@@ -103,6 +105,14 @@ const activityPageList = async () => {
 };
 //跳转活动详情
 const onToDeatils = (item) => {
+	const needLoginList = ["RED_BAG_RAIN", "DAILY_COMPETITION"];
+	if (needLoginList.includes(item.activityTemplate)) {
+		if (!userStore.token) {
+			showDialog.value = true;
+			return;
+		}
+	}
+
 	if (!item.enable && new Date().getTime() < item.activityStartTime && !item.activityDeadline) {
 		showToast("活动未开启");
 		return;

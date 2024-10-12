@@ -1,19 +1,17 @@
 <template>
 	<div class="GameSwiper">
-		<Swiper slidesPerView="auto" :loop="true" :autoplay="autoplay" :modules="modules" class="mySwiper">
-			<swiper-slide v-for="(item, index) in gameList" :key="index">
-				<div @click="Common.goToGame(item)">
-					<div class="collect">
-						<VantLazyImg v-if="item.collect" :src="collectImg" @click.stop="handleCollect(item, false)" alt="" width="100%" />
-						<VantLazyImg v-else :src="noCollectImg" alt="" @click.stop="handleCollect(item, true)" width="100%" />
-					</div>
-					<VantLazyImg class="gameImg" :src="item.icon" :loadingSrc="loadingSrc" :errorSrc="loadingSrc" alt="" width="100%" />
-					<div class="gameInfo">
-						<p class="color_T1 bg_BG3 color_T1 fs_24">{{ item.name }}</p>
-					</div>
+		<div v-for="(item, index) in gameList" :key="index">
+			<div @click="Common.goToGame(item)">
+				<div class="collect">
+					<VantLazyImg v-if="item.collect" :src="collectImg" @click.stop="handleCollect(item, false)" alt="" width="100%" />
+					<VantLazyImg v-else :src="noCollectImg" alt="" @click.stop="handleCollect(item, true)" width="100%" />
 				</div>
-			</swiper-slide>
-		</Swiper>
+				<VantLazyImg class="gameImg" :src="item.icon" :loadingSrc="loadingSrc" :errorSrc="loadingSrc" alt="" width="100%" />
+				<div class="gameInfo">
+					<p class="color_T1 bg_BG3 color_T1 fs_24">{{ item.name }}</p>
+				</div>
+			</div>
+		</div>
 	</div>
 </template>
 

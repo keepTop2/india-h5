@@ -55,10 +55,12 @@
 			</div>
 		</div>
 	</van-popup>
+	<activityDialog v-model="showDialog" title="温馨提示" :confirm="confirmDialog" :goToLogin="true"> 您的账号暂未登录无法参与活动， 如已有账号请登录，如还未有账号 请前往注册 </activityDialog>
 </template>
 
 <script setup lang="ts">
 import { ref } from "vue";
+import activityDialog from "../../../views/discount/components/Dialog.vue";
 import logo from "/@/assets/zh-CN/default/menuPopup/logo.png";
 import task_icon from "/@/assets/zh-CN/default/menuPopup/task_icon.png";
 import wheel_icon from "/@/assets/zh-CN/default/menuPopup/wheel_icon.png";
@@ -78,13 +80,16 @@ import { activityApi } from "/@/api/activity";
 const userStore = useUserStore();
 const router = useRouter();
 const show = ref(false);
+const showDialog = ref(false);
 const themesStore = useThemesStore();
 const theme = computed(() => themesStore.themeName);
 
 let state: any = reactive({
 	menuList: [],
 });
-
+const confirmDialog = () => {
+	showDialog.value = false;
+};
 const onCollapseMenu = () => {
 	show.value = true;
 	queryLobbyLabelList();
@@ -125,7 +130,7 @@ const toPath = (path) => {
 			router.push(path);
 		}
 	} else {
-		router.push("/login");
+		showDialog.value = true;
 	}
 	show.value = false;
 };

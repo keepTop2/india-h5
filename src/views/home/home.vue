@@ -9,10 +9,10 @@
 				{{ $t('home["热门游戏"]') }}
 			</h3>
 			<HotGame class="m24" @queryCollection="queryCollection" :gameInfoList="hotGames" />
-			<!-- 收藏游戏 -->
+			<!-- 喜欢的游戏 -->
 			<h3 class="title" v-show="isShowCollect">
 				<SvgIcon iconName="home/star" alt="" />
-				{{ $t('home["收藏游戏"]') }}
+				{{ $t('home["喜欢的游戏"]') }}
 			</h3>
 			<CollectGames v-show="isShowCollect" @queryCollection="queryCollection" :collectList="collectList" class="m24" />
 			<h3 class="title_more" v-show="eventList?.length">

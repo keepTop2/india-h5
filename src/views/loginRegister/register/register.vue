@@ -103,7 +103,7 @@
 		</div>
 
 		<div id="captcha-element" ref="captchaBtn"></div>
-		<Hcaptcha ref="refhcaptcha" :onSubmit="onSubmit" v-model="isOnloadScript" />
+		<Hcaptcha ref="refhcaptcha" :onSubmit="onSubmit" v-model="isOnloadScript" v-if="HcaptchaMounted" />
 	</div>
 </template>
 
@@ -116,11 +116,13 @@ import { useRoute, useRouter } from "vue-router";
 import { i18n } from "/@/i18n/index";
 import common from "/@/utils/common";
 import { useUserStore } from "/@/store/modules/user";
+import Common from "/@/utils/common";
 const store = useUserStore();
 const $: any = i18n.global;
 const route = useRoute();
 const router = useRouter();
 const refhcaptcha: any = ref(null);
+const HcaptchaMounted = ref(false);
 const eyeShow = ref(true);
 const btnDisabled = ref(true);
 const mainCurrencyRG = ref(false);
@@ -179,7 +181,7 @@ watch(
 watch(
 	() => route.query.currency,
 	(newValue) => {
-		state.mainCurrency = newValue as string;
+		state.mainCurrency = (newValue + `(${route.query.value})`) as string;
 	}
 );
 
@@ -203,11 +205,15 @@ const onRegister = async () => {
 	// 图形验证
 	captchaBtn.value?.click();
 };
-
+onMounted(() => {
+	Common.loadScript("https://o.alicdn.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js").then(() => {
+		HcaptchaMounted.value = true;
+	});
+});
 // 注册
 const onSubmit = async () => {
 	const certifyId = refhcaptcha.value.certifyId;
-	const res = await registerApi.userRegister({ ...state, certifyId }).catch((err) => err);
+	const res = await registerApi.userRegister({ ...state, certifyId, mainCurrency: route.query.currency }).catch((err) => err);
 	if (res.code == common.getInstance().ResCode.SUCCESS) {
 		showToast(res.message);
 		store.setInfo(res.data);

@@ -37,7 +37,9 @@ export class registerApi {
 		return useAxiosApi(`/app/login/api/userRegister`, {
 			method: "POST",
 			data,
-			headers,
+			headers: {
+				showLoading: true,
+			},
 		});
 	};
 	// // 注册

@@ -56,7 +56,10 @@
 						<p class="label">
 							<span>活动时间</span>
 						</p>
-						<p class="value">{{ dayjs(activityData?.activityStartTime).format("YYYY-MM-DD HH:mm:ss") }}~{{ dayjs(activityData?.activityEndTime).format("YYYY-MM-DD HH:mm:ss") }}</p>
+						<p class="value" v-if="activityData.activityDeadline == 0">
+							{{ dayjs(activityData?.activityStartTime).format("YYYY-MM-DD HH:mm:ss") }}~{{ dayjs(activityData?.activityEndTime).format("YYYY-MM-DD HH:mm:ss") }}
+						</p>
+						<p class="value" v-if="activityData.activityDeadline == 1">长期活动</p>
 					</div>
 					<div class="detail-row">
 						<p class="label">
