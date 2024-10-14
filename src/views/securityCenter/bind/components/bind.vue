@@ -14,7 +14,6 @@
 		</div>
 
 		<!-- 手机号码 -->
-
 		<div v-if="route.params.type == 'phone'">
 			<span class="title">{{ $t('bindPhone["手机号"]') }}</span>
 			<div class="phone" :class="{ 'form-input-error': !isPhoneValid && state.phone !== '' ? true : false }">
@@ -101,168 +100,6 @@ const getAreaCodeDownBox = () => {
 	CommonApi.getAreaCodeDownBox().then((res: any) => {
 		if (res.code == common.getInstance().ResCode.SUCCESS) {
 			countries.value = res.data;
-			countries.value = [
-				{
-					areaCode: "44",
-					countryName: "英国",
-					countryCode: "GB",
-					icon: "https://oss.example.com/flags/uk.jpg",
-					maxLength: 10,
-					minLength: 10,
-				},
-				{
-					areaCode: "91",
-					countryName: "印度",
-					countryCode: "IN",
-					icon: "https://oss.example.com/flags/india.jpg",
-					maxLength: 10,
-					minLength: 10,
-				},
-				{
-					areaCode: "81",
-					countryName: "日本",
-					countryCode: "JP",
-					icon: "https://oss.example.com/flags/japan.jpg",
-					maxLength: 11,
-					minLength: 10,
-				},
-				{
-					areaCode: "49",
-					countryName: "德国",
-					countryCode: "DE",
-					icon: "https://oss.example.com/flags/germany.jpg",
-					maxLength: 11,
-					minLength: 10,
-				},
-				{
-					areaCode: "86",
-					countryName: "中国",
-					countryCode: "CN",
-					icon: "https://oss.example.com/flags/china.jpg",
-					maxLength: 11,
-					minLength: 11,
-				},
-				{
-					areaCode: "33",
-					countryName: "法国",
-					countryCode: "FR",
-					icon: "https://oss.example.com/flags/france.jpg",
-					maxLength: 9,
-					minLength: 9,
-				},
-				{
-					areaCode: "61",
-					countryName: "澳大利亚",
-					countryCode: "AU",
-					icon: "https://oss.example.com/flags/australia.jpg",
-					maxLength: 9,
-					minLength: 9,
-				},
-				{
-					areaCode: "7",
-					countryName: "俄罗斯",
-					countryCode: "RU",
-					icon: "https://oss.example.com/flags/russia.jpg",
-					maxLength: 10,
-					minLength: 10,
-				},
-				{
-					areaCode: "39",
-					countryName: "意大利",
-					countryCode: "IT",
-					icon: "https://oss.example.com/flags/italy.jpg",
-					maxLength: 10,
-					minLength: 9,
-				},
-				{
-					areaCode: "34",
-					countryName: "西班牙",
-					countryCode: "ES",
-					icon: "https://oss.example.com/flags/spain.jpg",
-					maxLength: 9,
-					minLength: 9,
-				},
-				{
-					areaCode: "27",
-					countryName: "南非",
-					countryCode: "ZA",
-					icon: "https://oss.example.com/flags/south_africa.jpg",
-					maxLength: 9,
-					minLength: 9,
-				},
-				{
-					areaCode: "55",
-					countryName: "巴西",
-					countryCode: "BR",
-					icon: "https://oss.example.com/flags/brazil.jpg",
-					maxLength: 11,
-					minLength: 10,
-				},
-				{
-					areaCode: "64",
-					countryName: "新西兰",
-					countryCode: "NZ",
-					icon: "https://oss.example.com/flags/new_zealand.jpg",
-					maxLength: 9,
-					minLength: 9,
-				},
-				{
-					areaCode: "46",
-					countryName: "瑞典",
-					countryCode: "SE",
-					icon: "https://oss.example.com/flags/sweden.jpg",
-					maxLength: 10,
-					minLength: 7,
-				},
-				{
-					areaCode: "41",
-					countryName: "瑞士",
-					countryCode: "CH",
-					icon: "https://oss.example.com/flags/switzerland.jpg",
-					maxLength: 9,
-					minLength: 9,
-				},
-				{
-					areaCode: "32",
-					countryName: "比利时",
-					countryCode: "BE",
-					icon: "https://oss.example.com/flags/belgium.jpg",
-					maxLength: 9,
-					minLength: 9,
-				},
-				{
-					areaCode: "31",
-					countryName: "荷兰",
-					countryCode: "NL",
-					icon: "https://oss.example.com/flags/netherlands.jpg",
-					maxLength: 9,
-					minLength: 9,
-				},
-				{
-					areaCode: "66",
-					countryName: "泰国",
-					countryCode: "TH",
-					icon: "https://oss.example.com/flags/thailand.jpg",
-					maxLength: 10,
-					minLength: 9,
-				},
-				{
-					areaCode: "82",
-					countryName: "韩国",
-					countryCode: "KR",
-					icon: "https://oss.example.com/flags/south_korea.jpg",
-					maxLength: 11,
-					minLength: 10,
-				},
-				{
-					areaCode: "90",
-					countryName: "土耳其",
-					countryCode: "TR",
-					icon: "https://oss.example.com/flags/turkey.jpg",
-					maxLength: 10,
-					minLength: 10,
-				},
-			];
 			areaCode.value = groupByFirstLetter(countries.value || []);
 			indexList.value = Object.keys(areaCode.value);
 			state.areaCode = countries.value[0].areaCode;
@@ -329,6 +166,8 @@ const onSubmit = async () => {
 	}
 };
 const selectAreaCode = (item, i) => {
+	console.log(item, i);
+
 	areaCodeObj.value = i;
 	state.areaCode = i.areaCode;
 	showAreaCode.value = false;

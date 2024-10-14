@@ -24,7 +24,7 @@
 		<span class="title">{{ $t('setTradingPassword["确认交易密码"]') }}</span>
 		<FormInput
 			v-model="state.confirmPassword"
-			:type="eyeShow ? 'password' : 'text'"
+			:type="eyeShow2 ? 'password' : 'text'"
 			:maxlength="16"
 			:placeholder="$t(`setTradingPassword['确认交易密码']`)"
 			:errorBorder="!isConfirmPasswordValid && state.confirmPassword !== ''"
@@ -117,7 +117,7 @@ const captchaDisabled = computed(() => {
 
 // 密码正则
 const isPasswordValid = computed(() => {
-	return common.tradingPasswordRG.test(state.newPassword);
+	return common.passwordRG.test(state.newPassword);
 });
 
 // 密码正则

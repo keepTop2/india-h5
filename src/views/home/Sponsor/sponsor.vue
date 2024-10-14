@@ -1,7 +1,7 @@
 <template>
 	<div class="sponsor">
 		<div class="mb20">
-			<h3 class="zanzhu">{{ $t('home["赞助与博彩责任"]') }}</h3>
+			<h3 class="zanzhu">{{ $t('home["合作商"]') }}</h3>
 			<div class="image-container sponsor_list">
 				<div v-for="(item, index) in data" :key="index" class="card bg_BG3">
 					<VantLazyImg :src="item.icon" alt="平台赞助图片" />
