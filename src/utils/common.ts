@@ -227,6 +227,15 @@ class Common {
 	/**
 	 * 时间戳转化为年月日
 	 */
+	static dayFormatHM(date: any): string {
+		if (date) {
+			return dayjs(date).format("HH:mm");
+		}
+		return "";
+	}
+	/**
+	 * 时间戳转化为年月日
+	 */
 	public dayFormat1(date: number | string | null): string {
 		if (date) {
 			return dayjs(date).tz("Asia/Shanghai").format("YYYY-MM-DD");
