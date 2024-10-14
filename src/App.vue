@@ -17,6 +17,7 @@ import { useUserStore } from "/@/store/modules/user";
 import { useRouterStore } from "/@/store/modules/cacheRouter";
 import { LangEnum } from "/@/enum/appConfigEnum";
 import { getIndexInfo } from "/@/views/venueHome/sports/utils/commonFn";
+import CommonApi from "./api/common";
 onMounted(() => {
 	if (useUserStore().token) {
 		getIndexInfo();

@@ -11,6 +11,7 @@ import GameApi from "/@/api/venueHome/games";
 import mitt from "mitt";
 import qs from "qs";
 import router from "../router";
+import { useUserStore } from "../store/modules/user";
 dayjs.extend(utc);
 dayjs.extend(tz);
 dayjs.locale("en");
@@ -41,7 +42,7 @@ class Common {
 	public static accountRG = /^[a-zA-Z][a-zA-Z0-9]{3,10}$/;
 
 	// 8-16位，必须包含字母，数字非必须
-	public static passwordRG = /^(?=.*[a-zA-Z])[A-Za-z\d]{8,16}$/;
+	public static passwordRG = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,16}$/;
 
 	// 邮箱正则
 	public static emailRG = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -220,6 +221,15 @@ class Common {
 	static dayFormatHMS(date: any): string {
 		if (date) {
 			return dayjs(date).format("HH:mm:ss");
+		}
+		return "";
+	}
+	/**
+	 * 时间戳转化为年月日
+	 */
+	static dayFormatHM(date: any): string {
+		if (date) {
+			return dayjs(date).format("HH:mm");
 		}
 		return "";
 	}
@@ -411,7 +421,34 @@ class Common {
 			return visibleChars;
 		}
 	}
+	// 电话号码转换*
+	static maskString(str: string) {
+		if (!str) return "";
+		const length = str.length;
+		// 对于长度大于等于8的情况
+		if (length >= 8) {
+			const prefix = str.slice(0, 3); // 前3位
+			const suffix = str.slice(-3); // 后3位
+			const masked = "*".repeat(length - 6); // 中间字符替换为*
+			return prefix + masked + suffix;
+		}
 
+		// 对于长度小于8的情况
+		else if (length < 8) {
+			const prefix = str.slice(0, 2); // 前2位
+			const suffix = str.slice(-2); // 后2位
+			const masked = "*".repeat(length - 4); // 中间字符替换为*
+			return prefix + masked + suffix;
+		}
+	}
+	// 邮箱转换*
+	static maskEmail(email: string) {
+		if (!email) return "";
+		const [localPart, domain] = email.split("@"); // 将email按@分割
+		const prefix = localPart.slice(0, 2); // 前2位
+		const masked = "**"; // 中间字符为*
+		return prefix + masked + "@" + domain; // 重新组合
+	}
 	/**
 	 *  @describe 金额三位数分割逗号
 	 */
@@ -557,6 +594,9 @@ class Common {
 		}
 	}
 	static goToGame(gameinfo: any) {
+		if (!useUserStore().token) {
+			return router.push("/login");
+		}
 		const params = {
 			venueCode: gameinfo.venueCode,
 			gameCode: gameinfo.gameCode,
@@ -671,6 +711,35 @@ class Common {
 			columns: columns,
 			defaultIndex: [String(currentYear), String(currentMonth), String(currentDay)],
 		};
+	}
+
+	static loadScript(url: string): Promise<void> {
+		return new Promise((resolve, reject) => {
+			// 检查脚本是否已存在，防止重复加载
+			const existingScript = document.querySelector(`script[src="${url}"]`);
+			if (existingScript) {
+				resolve();
+				return;
+			}
+
+			// 创建一个新的脚本元素
+			const script = document.createElement("script");
+			script.src = url;
+			script.async = true;
+
+			// 当脚本加载成功时
+			script.onload = () => {
+				resolve();
+			};
+
+			// 当脚本加载失败时
+			script.onerror = (error) => {
+				reject(new Error(`Failed to load script: ${url}`));
+			};
+
+			// 将脚本添加到文档中
+			document.head.appendChild(script);
+		});
 	}
 }
 

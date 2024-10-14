@@ -1,19 +1,17 @@
 <template>
 	<div class="GameSwiper">
-		<Swiper slidesPerView="auto" :loop="true" :autoplay="autoplay" :modules="modules" class="mySwiper">
-			<swiper-slide v-for="(item, index) in gameList" :key="index">
-				<div @click="Common.goToGame(item)">
-					<div class="collect">
-						<VantLazyImg v-if="item.collect" :src="collectImg" @click.stop="handleCollect(item, false)" alt="" width="100%" />
-						<VantLazyImg v-else :src="noCollectImg" alt="" @click.stop="handleCollect(item, true)" width="100%" />
-					</div>
-					<VantLazyImg class="gameImg" :src="item.icon" :loadingSrc="loadingSrc" :errorSrc="loadingSrc" alt="" width="100%" />
-					<div class="gameInfo">
-						<p class="color_T1 bg_BG3 color_T1 fs_24">{{ item.name }}</p>
-					</div>
+		<div v-for="(item, index) in gameInfoList" :key="index">
+			<div @click="Common.goToGame(item)">
+				<div class="collect">
+					<VantLazyImg v-if="item.collect" :src="collectImg" @click.stop="handleCollect(item, false)" alt="" width="100%" />
+					<VantLazyImg v-else :src="noCollectImg" alt="" @click.stop="handleCollect(item, true)" width="100%" />
 				</div>
-			</swiper-slide>
-		</Swiper>
+				<VantLazyImg class="gameImg" :src="item.icon" :loadingSrc="loadingSrc" :errorSrc="loadingSrc" alt="" width="100%" />
+				<div class="gameInfo">
+					<p class="color_T1 bg_BG3 color_T1 fs_24">{{ item.name }}</p>
+				</div>
+			</div>
+		</div>
 	</div>
 </template>
 
@@ -35,6 +33,8 @@ import GameApi from "/@/api/venueHome/games";
 import pubsub from "/@/pubSub/pubSub";
 import { showToast } from "vant";
 import Common from "/@/utils/common";
+import { useUserStore } from "/@/store/modules/user";
+import router from "/@/router";
 
 // 自动播放配置
 const autoplay = ref({
@@ -74,25 +74,15 @@ const props = defineProps({
 		type: Number,
 		default: 10,
 	},
+	gameInfoList: {
+		type: Array as any,
+		default: [],
+	},
 });
 
 onBeforeMount(() => {
 	// 获取热门游戏
-	getGameInfoDetail();
 });
-
-/**
- * @description 获取热门游戏详情
- */
-const getGameInfoDetail = () => {
-	GameApi.queryGameInfoDetail({
-		label: 1,
-		pageSize: -1,
-	}).then((res) => {
-		console.log(res, "==queryGameInfoDetail");
-		gameList.value = res.data.records;
-	});
-};
 
 /**
  * @description 处理游戏收藏
@@ -100,6 +90,9 @@ const getGameInfoDetail = () => {
  * @param {Boolean} collect - 收藏状态
  */
 const handleCollect = async (item, collect) => {
+	if (!useUserStore().token) {
+		return router.push("/login");
+	}
 	const res: any = await GameApi.gameCollection({
 		gameId: item.id,
 		type: collect,

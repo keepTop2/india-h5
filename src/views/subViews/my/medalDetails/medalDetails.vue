@@ -9,9 +9,9 @@
 		</div>
 		<div class="header">
 			<span>{{ data.unlockTime }}</span>
-			<span>{{ $t('medalDetails["获奖"]') }}</span>
+			<span v-if="data.lockStatus == 1">{{ $t('medalDetails["获奖"]') }}</span>
 		</div>
-		<div class="describe">{{ data.medalDescI18 }}</div>
+		<div class="describe" v-html="data.medalDescI18"></div>
 
 		<div class="cell_list">
 			<div class="cell">

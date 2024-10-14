@@ -470,7 +470,7 @@ const handleChangeEvent = async (eventId) => {
 	videoSrc.value = "";
 	myPlayer.value = "";
 	iframeLoaded.value = false;
-	router.push({
+	router.replace({
 		query: {
 			path: "/venueHome/sports/event/detail",
 			data: JSON.stringify({
@@ -574,8 +574,11 @@ const onClickLeft = () => {
 
 // 注册一个钩子，在组件被挂载之前被调用。
 onBeforeMount(async () => {
-	// if (route.query.data) {
-	routeData.value = route.params;
+	if (route.query.data) {
+		routeData.value = JSON.parse(route.query.data as string);
+	} else {
+		routeData.value = route.params;
+	}
 	// //获取关注列表
 	// getAttention();
 	// //初始化体育

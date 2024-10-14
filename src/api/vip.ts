@@ -7,7 +7,9 @@ export class vipApi {
 		return useAxiosApi(`/app/user-vip/api/getUserVipInfo`, {
 			method: "GET",
 			params,
-			headers,
+			headers: {
+				showLoading: true,
+			},
 		});
 	};
 
@@ -16,7 +18,9 @@ export class vipApi {
 		return useAxiosApi(`/app/user-vip/api/getUserVipBenefitDetail`, {
 			method: "GET",
 			params,
-			headers,
+			headers: {
+				showLoading: true,
+			},
 		});
 	};
 }

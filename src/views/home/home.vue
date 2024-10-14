@@ -9,10 +9,10 @@
 				{{ $t('home["热门游戏"]') }}
 			</h3>
 			<HotGame class="m24" @queryCollection="queryCollection" :gameInfoList="hotGames" />
-			<!-- 收藏游戏 -->
+			<!-- 喜欢的游戏 -->
 			<h3 class="title" v-show="isShowCollect">
 				<SvgIcon iconName="home/star" alt="" />
-				{{ $t('home["收藏游戏"]') }}
+				{{ $t('home["喜欢的游戏"]') }}
 			</h3>
 			<CollectGames v-show="isShowCollect" @queryCollection="queryCollection" :collectList="collectList" class="m24" />
 			<h3 class="title_more" v-show="eventList?.length">
@@ -20,7 +20,7 @@
 					<SvgIcon iconName="home/event_game" alt="" />
 					{{ $t('home["我们的游戏"]') }}
 				</span>
-				<span class="more fw_400 fs_28 color_T1" @click="router.push('/venueHome/sports')">{{ $t(`home["更多"]`) }}</span>
+				<span class="more fw_400 fs_28 color_T1" @click="router.push({ name: 'rollingBallList', params: { sportType: 1 } })">{{ $t(`home["更多"]`) }}</span>
 			</h3>
 			<EventList v-show="eventList?.length" v-for="(event, index) in eventList" class="m24" :event="event" :key="index" />
 			<!-- 体育购物车 -->
@@ -52,9 +52,9 @@
 			</h3>
 			<GameBigPic class="m24" />
 			<!-- 赞助 -->
-			<Sponsor />
+			<Sponsor :data="PartnerList" />
 			<!-- 转账方式 -->
-			<Currency />
+			<Currency :data="PaymentVendorList" />
 			<!-- 负责任游戏 -->
 			<Footer />
 		</div>
@@ -119,6 +119,8 @@ const collectList = ref([]);
 const hotGames = ref<GameInfoList[]>([]);
 const lobbyTopGame = ref<LobbyTopGame[]>();
 const showRedBagRain = ref(false);
+const PaymentVendorList = ref([]);
+const PartnerList = ref([]);
 //判断是否收藏
 const isShowCollect = computed(() => {
 	return collectList.value.length > 0 && UserStore.token;
@@ -155,6 +157,11 @@ onActivated(() => {
 	getSportEventsRecommend();
 	//获取收藏的游戏列表
 	queryCollection();
+	// 获取支付商
+	queryPaymentVendorList();
+	// 获取赞助商
+	queryPartnerList();
+	getGameInfoDetail();
 	//初始化体育
 	initSport();
 	pubsub.subscribe("getCollect", queryCollection);
@@ -163,13 +170,12 @@ onActivated(() => {
 	showRedBagRain.value = activityStore.isShowRedBagRain;
 });
 onDeactivated(() => {
-	// 卸载体育
-	unSport();
 	// 关闭登录接口轮询
 	stopPolling();
 	// 清除体育数据缓存
 	clearStoreInfo();
-
+	// 卸载体育
+	unSport();
 	//关闭ws连接
 	destroyWS();
 });
@@ -180,6 +186,33 @@ const queryCollection = () => {
 			collectList.value = res.data.records || [];
 		});
 	}
+};
+/**
+ * @description 获取热门游戏详情
+ */
+const getGameInfoDetail = () => {
+	GameApi.queryGameInfoDetail({
+		label: 1,
+		pageSize: -1,
+	}).then((res) => {
+		console.log(res, "==queryGameInfoDetail");
+		hotGames.value = res.data.records;
+	});
+};
+
+// 获取支付商
+const queryPaymentVendorList = () => {
+	HomeApi.queryPaymentVendorList().then((res) => {
+		console.log(res);
+		PaymentVendorList.value = res.data || [];
+	});
+};
+//获取站点赞助商
+const queryPartnerList = () => {
+	HomeApi.queryPartnerList().then((res) => {
+		console.log(res);
+		PartnerList.value = res.data || [];
+	});
 };
 //获取推荐赛事列表
 const getSportEventsRecommend = () => {

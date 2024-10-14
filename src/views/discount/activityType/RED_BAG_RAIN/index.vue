@@ -36,9 +36,9 @@
 								<div v-for="(item, index) in redBagInfo.sessionInfoList" class="session" :key="index">
 									<div class="color_T1">{{ Common.dayFormatHMS(item.startTime) }}</div>
 									<div class="sideBox">
-										<img src="./image/sessionCricle.svg" alt="" v-if="item.status == 0" />
-										<img src="./image/sessionCricle1.svg" alt="" v-if="item.status == 1" />
-										<img src="./image/sessionCricle2.svg" alt="" v-if="item.status == 2" />
+										<img src="./image/sessionCricle.png" alt="" v-if="item.status == 0" />
+										<img src="./image/sessionCricle1.png" alt="" v-if="item.status == 1" />
+										<img src="./image/sessionCricle2.png" alt="" v-if="item.status == 2" />
 									</div>
 									<div :class="'status' + item.status">{{ item.status == 0 ? "未开始" : item.status == 1 ? "进行中" : "已结束" }}</div>
 									<span class="side" :class="'type' + item.status"></span>
@@ -156,11 +156,9 @@ const getRedBagInfo = async () => {
 	});
 };
 const getActivityReward = async () => {
-	activityStore.setIsShowRedBagRain(true);
-	router.push("/");
 	if (redBagInfo.value.clientStatus == 1) {
 		await activityApi.redBagParticipate({ redbagSessionId: redBagInfo.value.redbagSessionId }).then((res: any) => {
-			if (res.code.status === 10000) {
+			if (res.data.status === 10000) {
 				activityStore.setIsShowRedBagRain(true);
 				router.push("/");
 			} else {
@@ -305,6 +303,7 @@ const confirmDialog = () => {
 	object-fit: cover;
 	margin-bottom: 20px;
 }
+
 .activity-details {
 	border-radius: 10px;
 	padding: 15px;
@@ -339,7 +338,8 @@ const confirmDialog = () => {
 	}
 	.detail-content {
 		padding: 0 62px;
-		background: url("../../image/detail_content.png");
+
+		background: url("../../image/detail_content.png") no-repeat;
 		background-size: 100% 100%;
 		font-size: 24px;
 		.detail-row {
@@ -395,12 +395,14 @@ const confirmDialog = () => {
 			}
 		}
 		.sessionsBox {
-			overflow-y: auto;
 			padding-bottom: 10px;
+
+			overflow-y: auto;
 			.sessions {
 				display: flex;
+				justify-content: space-around;
 				.session {
-					min-width: 115px;
+					min-width: 130px;
 					text-align: center;
 					position: relative;
 					.sideBox {
@@ -408,6 +410,9 @@ const confirmDialog = () => {
 						position: relative;
 						display: flex;
 						justify-content: center;
+					}
+					img {
+						height: 30px;
 					}
 					.side {
 						display: inline-block;
@@ -417,7 +422,7 @@ const confirmDialog = () => {
 							background-color: themed("T1");
 						}
 						position: absolute;
-						left: calc(50% + 22px);
+						left: calc(50% + 31px);
 						top: 50%;
 						transform: translateY(-50%);
 					}

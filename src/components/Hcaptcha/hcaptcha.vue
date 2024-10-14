@@ -16,34 +16,13 @@ const props = defineProps({
 });
 const emit = defineEmits(["update:modelValue"]);
 const captcha = ref(null);
-const isScriptLoaded = ref(false);
-const loadScript = () => {
-	const script = document.createElement("script");
-	script.src = "https://o.alicdn.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js"; // 替换为你需要的 CDN URL
-	script.onload = () => {
-		isScriptLoaded.value = true;
-		emit("update:modelValue", true);
-	};
-	document.head.appendChild(script);
-};
-loadScript();
-onMounted(async () => {
-	if (isScriptLoaded.value) {
-		initAliyunCaptcha();
-	}
-});
-watch(
-	() => isScriptLoaded.value,
-	() => {
-		if (isScriptLoaded.value) {
-			initAliyunCaptcha();
-		}
-	},
-	{ once: true }
-);
 
-const initAliyunCaptcha = () => {
-	(window as any).initAliyunCaptcha({
+onMounted(async () => {
+	initAliyunCaptcha();
+});
+
+const initAliyunCaptcha = async () => {
+	await (window as any).initAliyunCaptcha({
 		SceneId: "qxye14r6d",
 		prefix: "5zbecta",
 		mode: "popup",
@@ -59,6 +38,7 @@ const initAliyunCaptcha = () => {
 		language: "cn",
 		region: "sgp",
 	});
+	emit("update:modelValue", true);
 };
 const getInstance = (instance: any) => {
 	captcha.value = instance;

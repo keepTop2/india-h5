@@ -13,6 +13,7 @@
 			<Spin
 				@start-spinning-callback="spinStart"
 				@end-spinning-callback="spinEnd"
+				@needLogin="needLogin"
 				:reward="reward"
 				:spinList="currentTab == '1' ? activityData?.bronze : currentTab == '2' ? activityData?.silver : activityData?.gold"
 				:balanceCount="activityData?.balanceCount"
@@ -20,7 +21,7 @@
 			/>
 			<div class="vipLevel color_TB fw_600" :class="'vip' + currentTab">{{ activityData?.vipRankConfig?.[currentTab - 1]?.maxVipGradeName }}级或以上</div>
 		</div>
-		<div class="remaining_times_bg">{{ $t('home["剩余抽奖次数"]') }}：{{ activityData?.balanceCount }}</div>
+		<div class="remaining_times_bg">{{ $t('home["剩余抽奖次数"]') }}：{{ activityData?.balanceCount || 0 }}</div>
 		<div class="container">
 			<div class="box bonus_bg">
 				<div class="title fs_30 color_TB">转盘奖金总计</div>
@@ -114,6 +115,7 @@
 			</div>
 		</div>
 	</div>
+	<activityDialog v-model="showDialog2" title="温馨提示" :confirm="confirmDialog" :goToLogin="true"> 您的账号暂未登录无法参与活动， 如已有账号请登录，如还未有账号 请前往注册 </activityDialog>
 </template>
 
 <script setup lang="ts">
@@ -121,10 +123,14 @@ import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import Spin from "/@/components/Spin/Spin.vue";
 import { activityApi } from "/@/api/activity";
+import activityDialog from "../../components/Dialog.vue";
+import { useUserStore } from "/@/store/modules/user";
+const userStore = useUserStore();
 const showResult = ref(false);
 const showResult2 = ref(false);
 const showResult3 = ref(false);
 const showRecord = ref(false);
+const showDialog2 = ref(false);
 const SpinRef: any = ref(null);
 // 奖项列表
 const spinList = ref();
@@ -200,11 +206,21 @@ const playAgain = () => {
 const spinEnd = () => {
 	showResult3.value = true;
 };
+const needLogin = () => {
+	showDialog2.value = true;
+};
+const confirmDialog = () => {
+	showDialog2.value = false;
+};
 const goToRecharge = () => {
 	showResult2.value = false;
 	router.push("/wallet/recharge");
 };
 const handleShowRecord = () => {
+	if (!userStore.token) {
+		needLogin();
+		return;
+	}
 	showRecord.value = true;
 	querySpinWheelOrderRecord();
 };

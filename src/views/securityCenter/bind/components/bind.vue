@@ -14,22 +14,21 @@
 		</div>
 
 		<!-- 手机号码 -->
-
 		<div v-if="route.params.type == 'phone'">
 			<span class="title">{{ $t('bindPhone["手机号"]') }}</span>
 			<div class="phone" :class="{ 'form-input-error': !isPhoneValid && state.phone !== '' ? true : false }">
-				<div class="area_code">
+				<div class="area_code" @click="showAreaCode = true">
 					<span>+{{ state.areaCode }}</span
 					><SvgIcon class="down" iconName="loginOrRegister/navBar/down" />
 				</div>
-				<FormInput v-model="state.phone" type="text" :placeholder="$t(`forgetPassword['请输入手机号']`)">
+				<FormInput v-model="state.phone" type="text" :placeholder="$t(`forgetPassword['请输入手机号']`)" :maxlength="areaCodeObj.maxLength">
 					<template v-slot:right>
 						<SvgIcon v-if="state.phone" class="clearIcon" iconName="loginOrRegister/clear" @click="state.phone = ''" />
 					</template>
 				</FormInput>
 			</div>
 			<div class="error_text">
-				<span v-if="!isPhoneValid && state.phone !== ''" class="text">{{ $t('forgetPassword["请输入8-12位数字"]') }}</span>
+				<span v-if="!isPhoneValid && state.phone !== ''" class="text">{{ $t('forgetPassword["请输入8-12位数字"]', { min: areaCodeObj.minLength, max: areaCodeObj.maxLength }) }}</span>
 			</div>
 		</div>
 
@@ -46,6 +45,14 @@
 
 		<Button class="mt_40" :type="btnDisabled ? 'disabled' : 'default'" @click="onSubmit">{{ $t('bindPhone["确定"]') }}</Button>
 	</form>
+	<AreaCodePicker
+		v-model:showAreaCode="showAreaCode"
+		v-model:searchAreaCode="searchAreaCode"
+		:indexList="indexList"
+		:areaCode="areaCode"
+		:stateAreaCode="state.areaCode"
+		@selectAreaCode="selectAreaCode"
+	/>
 </template>
 
 <script setup lang="ts">
@@ -54,25 +61,67 @@ import { bindApi } from "/@/api/securityCenter";
 import common from "/@/utils/common";
 import { useRoute, useRouter } from "vue-router";
 import { showToast } from "vant";
+import CommonApi from "/@/api/common";
+const showAreaCode = ref(false);
 const route = useRoute();
+const indexList: any = ref([]);
 const router = useRouter();
+const searchAreaCode = ref("");
+const areaCode: any = ref([]);
+const areaCodeObj: any = ref({});
 
 const captchaButton = ref<{
 	startCountdown: () => void;
 } | null>(null);
-
+const countries: any = ref([]);
 const state = reactive({
 	email: "",
 	phone: "",
 	verifyCode: "",
-	areaCode: "86",
+	areaCode: "",
 });
-
+onMounted(() => {
+	getAreaCodeDownBox();
+});
+watch(
+	() => searchAreaCode.value,
+	() => {
+		const filterData = countries.value.filter(
+			(item: any) =>
+				item.areaCode.toLocaleLowerCase().includes(searchAreaCode.value.toLocaleLowerCase()) ||
+				item.countryCode.toLocaleLowerCase().includes(searchAreaCode.value.toLocaleLowerCase()) ||
+				item.countryName.toLocaleLowerCase().includes(searchAreaCode.value.toLocaleLowerCase())
+		);
+		areaCode.value = groupByFirstLetter(filterData || []);
+		indexList.value = Object.keys(areaCode.value);
+	}
+);
+const getAreaCodeDownBox = () => {
+	CommonApi.getAreaCodeDownBox().then((res: any) => {
+		if (res.code == common.getInstance().ResCode.SUCCESS) {
+			countries.value = res.data;
+			areaCode.value = groupByFirstLetter(countries.value || []);
+			indexList.value = Object.keys(areaCode.value);
+			state.areaCode = countries.value[0].areaCode;
+			areaCodeObj.value = countries.value[0];
+		}
+	});
+};
+const groupByFirstLetter = (countries) => {
+	return countries.reduce((acc, country) => {
+		const firstLetter = country.countryCode[0].toUpperCase(); // 获取首字母并大写处理
+		if (!acc[firstLetter]) {
+			acc[firstLetter] = [];
+		}
+		acc[firstLetter].push(country); // 将国家添加到相应字母组
+		return acc;
+	}, {} as any);
+};
 // 邮箱正则
 const isEmailValid = computed(() => common.emailRG.test(state.email));
-
+const isPhoneValid = computed(() => new RegExp(`^\\d{${areaCodeObj.value.minLength},${areaCodeObj.value.maxLength}}$`).test(state.phone));
 // 手机号正则
-const isPhoneValid = computed(() => common.phoneRG.test(state.phone));
+// const isPhoneValid = computed(() => common.phoneRG.test(state.phone));
 
 // 验证码按钮禁用状态
 const captchaDisabled = computed(() => {
@@ -113,8 +162,15 @@ const onSubmit = async () => {
 	const res = await bindApi.bindAccount(params).catch((err) => err);
 	if (res.code == common.getInstance().ResCode.SUCCESS) {
 		showToast(res.message);
-		router.go(-1);
+		router.push("/securityCenter");
 	}
+};
+const selectAreaCode = (item, i) => {
+	console.log(item, i);
+
+	areaCodeObj.value = i;
+	state.areaCode = i.areaCode;
+	showAreaCode.value = false;
 };
 </script>
 

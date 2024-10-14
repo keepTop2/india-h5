@@ -3,13 +3,13 @@
 }
 
 @include themeify {
-	background-color: themed("Bg3");
 	.Line {
 		height: 1px;
 		background: themed("Line");
 		margin-bottom: 20px;
 		margin-top: 20px;
 	}
+
 	.bold {
 		font-weight: bold;
 	}
@@ -57,10 +57,10 @@
 		-webkit-box-align: center;
 		align-items: center;
 		-webkit-box-pack: justify;
-		justify-content: space-between;
 		margin-bottom: 2.5rem;
 		gap: 22px;
 		margin-bottom: 22px;
+		flex-wrap: wrap;
 	}
 	.guanyuwomen {
 		display: flex;

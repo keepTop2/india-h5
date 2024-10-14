@@ -15,20 +15,20 @@
 				<div class="Game_Content">
 					<!-- <Tabs class="plr" v-model="tabsActiveKey" :list="tabList" /> -->
 					<!-- 热门游戏 -->
-					<h3 class="title" v-if="gameList.length > 0">
+					<h3 class="title" v-if="hotGameList?.gameInfoList?.length > 0">
 						<!-- <SvgIcon iconName="home/fire" alt="" /> -->
 						<!-- :placeholder="$t(`game['输入游戏名称']`)" -->
 						{{ $t('game["热门游戏"]') }}
 						<span class="color_T1 fs_28 fw_400" @click="showMoreList($t(`game['热门游戏']`), 1)">{{ $t(`home["更多"]`) }}</span>
 					</h3>
-					<HotGame class="m24" :gameList="gameList?.[0]" v-if="gameList?.[0]" />
+					<HotGame class="m24" :gameList="hotGameList" v-if="hotGameList?.gameInfoList?.length > 0" />
 					<!-- 新游戏 -->
-					<h3 class="title" v-if="gameList?.length > 0">
+					<h3 class="title" v-if="newGameList?.gameInfoList?.length > 0">
 						<!-- <SvgIcon iconName="home/event_game" alt="" /> -->
 						{{ $t('game["新游戏"]') }}
-						<span class="color_T1 fs_28 fw_400" @click="showMoreList($t(`game['热门游戏']`), 2)">{{ $t(`home["更多"]`) }}</span>
+						<span class="color_T1 fs_28 fw_400" @click="showMoreList($t(`game['新游戏']`), 2)">{{ $t(`home["更多"]`) }}</span>
 					</h3>
-					<NewGame class="m24" :gameList="gameList" />
+					<NewGame class="m24" :gameList="newGameList" />
 					<!-- 二级列表 -->
 					<GameChunk v-for="(game, index) in games" :key="index" class="m24" :showMore="true" :gameList="game" />
 				</div>
@@ -58,33 +58,11 @@ const $: any = i18n.global;
 const route = useRoute();
 const router = useRouter();
 const gameList = ref([]);
+const hotGameList: any = ref([]);
+const newGameList: any = ref([]);
 const { gameOneId } = route.query;
 // 初始化当前选中tab
 const tabsActiveKey = ref("all");
-
-// tabs 切换选项
-const tabList = [
-	{
-		name: $.t("game['全部']"),
-		value: "all",
-	},
-	{
-		name: $.t("game['新游戏']"),
-		value: "1",
-	},
-	{
-		name: $.t("game['百家乐']"),
-		value: "2",
-	},
-	{
-		name: "牛牛",
-		value: "3",
-	},
-	{
-		name: $.t("game['其他']"),
-		value: "4",
-	},
-];
 
 // 计算属性：过滤出label为0的游戏列表
 const games = computed(() => {
@@ -101,8 +79,9 @@ onBeforeMount(() => {
  */
 const getGameList = () => {
 	GameApi.queryGameInfoByOneClassId({ gameOneId: gameOneId }).then((res) => {
-		console.log("获取游戏列表", res);
 		gameList.value = res.data || [];
+		hotGameList.value = res.data.filter((item: any) => item.label === 1)[0];
+		newGameList.value = res.data.filter((item: any) => item.label === 2)[0];
 	});
 };
 

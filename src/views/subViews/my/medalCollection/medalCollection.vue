@@ -31,8 +31,12 @@
 			<div class="text_list">
 				<!-- 提示图标 -->
 				<div class="tooltip">
-					<VantLazyImg class="icon" :src="theme === ThemeEnum.default ? tips_icon : tips_icon_light" />
-					<div class="tooltipText">{{ $t('medalCollection["宝箱奖励流水倍数为8倍"]') }}</div>
+					<van-popover v-model:show="showPopover" theme="dark" :show-arrow="false">
+						<div class="p_10 popup">{{ $t('medalCollection["宝箱奖励流水倍数为8倍"]') }}</div>
+						<template #reference>
+							<VantLazyImg class="icon" :src="theme === ThemeEnum.default ? tips_icon : tips_icon_light" />
+						</template>
+					</van-popover>
 				</div>
 				<!-- 遍历展示解锁勋章的提示信息 -->
 				<i18n-t v-for="(item, index) in state.medalRewardRespVOS" :key="index" keypath="medalCollection.解锁勋章" :tag="'p'">
@@ -116,7 +120,7 @@ import { useRouter } from "vue-router";
 const router = useRouter();
 const themesStore = useThemesStore();
 const theme = computed(() => themesStore.themeName);
-
+const showPopover = ref(false);
 const state = reactive({
 	canLightNum: 0 as number,
 	hasUnlockList: [] as NotUnlockList[],
@@ -426,24 +430,24 @@ const onClickLeft = () => {
 			background-repeat: no-repeat;
 			background-size: 160px 160px;
 
-			.bg {
-				position: absolute;
-				top: -17px;
-				left: 50%;
-				transform: translate(-50%, 0%);
-				width: 162px;
-				height: 162px;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				@include theme-bg("/my/medalCollection/highlight.png");
-				background-position-x: center;
-				background-position-y: bottom;
-				background-repeat: no-repeat;
-				background-size: 162px 162px;
-				/* 添加旋转和缩放动画 */
-				animation: rotateIcon 4s linear infinite;
-			}
+			// .bg {
+			// 	position: absolute;
+			// 	top: -17px;
+			// 	left: 50%;
+			// 	transform: translate(-50%, 0%);
+			// 	width: 162px;
+			// 	height: 162px;
+			// 	display: flex;
+			// 	align-items: center;
+			// 	justify-content: center;
+			// 	@include theme-bg("/my/medalCollection/highlight.png");
+			// 	background-position-x: center;
+			// 	background-position-y: bottom;
+			// 	background-repeat: no-repeat;
+			// 	background-size: 162px 162px;
+			// 	/* 添加旋转和缩放动画 */
+			// 	animation: rotateIcon 4s linear infinite;
+			// }
 			.icon {
 				position: absolute;
 				top: -17px;
@@ -544,5 +548,9 @@ const onClickLeft = () => {
 	50% {
 		transform: translate(-50%, 0%) scale(1.13);
 	}
+}
+:deep(.van-popover__content) {
+	background: rgba(0, 0, 0, 0.7) !important;
+	margin-right: 20px !important;
 }
 </style>

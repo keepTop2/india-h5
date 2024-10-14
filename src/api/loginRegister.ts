@@ -37,7 +37,9 @@ export class registerApi {
 		return useAxiosApi(`/app/login/api/userRegister`, {
 			method: "POST",
 			data,
-			headers,
+			headers: {
+				showLoading: true,
+			},
 		});
 	};
 	// // 注册
@@ -94,7 +96,9 @@ export class forgetPasswordApi {
 		return useAxiosApi(`/app/login/api/checkVerifyCode`, {
 			method: "POST",
 			data,
-			headers,
+			headers: {
+				showLoading: true,
+			},
 		});
 	};
 	// 重置密码

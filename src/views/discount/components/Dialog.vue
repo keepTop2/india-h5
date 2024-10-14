@@ -8,7 +8,15 @@
 			<div class="dialog-content fs_30">
 				<slot></slot>
 			</div>
-			<div class="dialog-footer">
+			<div class="dialog-footer2" v-if="goToLogin">
+				<button class="common_btn" @click="toRegister">
+					<slot name="footer"> 去注册 </slot>
+				</button>
+				<button class="common_btn" @click="toLogin">
+					<slot name="footer"> 去登陆 </slot>
+				</button>
+			</div>
+			<div class="dialog-footer" v-else>
 				<footer>
 					<button class="common_btn" @click="confirm">
 						<slot name="footer"> 确认 </slot>
@@ -25,11 +33,16 @@
 <script lang="ts" setup>
 import { ref, onMounted } from "vue";
 import { defineProps, defineEmits } from "vue";
+import router from "/@/router";
 const props = defineProps({
 	modelValue: Boolean,
 	title: {
 		type: String,
 		default: "",
+	},
+	goToLogin: {
+		type: Boolean,
+		default: false,
 	},
 	confirm: {
 		type: Function,
@@ -47,6 +60,12 @@ const confirm = () => {
 };
 const close = () => {
 	emit("update:modelValue", false);
+};
+const toRegister = () => {
+	router.push("/register");
+};
+const toLogin = () => {
+	router.push("/login");
 };
 </script>
 
@@ -82,7 +101,7 @@ const close = () => {
 			}
 		}
 		.dialog-content {
-			padding: 20px;
+			padding: 20px 42px;
 			background-color: #ffffff;
 			text-align: center;
 			min-height: 100px;
@@ -98,6 +117,7 @@ const close = () => {
 			border-bottom-right-radius: 24px;
 			background-color: #ffffff;
 			margin-top: -2px;
+
 			text-align: center;
 			.common_btn {
 				width: 224px;
@@ -106,6 +126,34 @@ const close = () => {
 				border-radius: 10px;
 				background: linear-gradient(278deg, #ff284b 4.74%, #fd677f 92.73%);
 				border: none;
+			}
+		}
+		.dialog-footer2 {
+			border-bottom-left-radius: 24px;
+			border-bottom-right-radius: 24px;
+			background-color: #ffffff;
+			margin-top: -2px;
+			text-align: center;
+			gap: 36px;
+
+			.common_btn {
+				display: inline-block;
+				width: 224px;
+				height: 64px;
+				margin: 36px 18px;
+				border-radius: 10px;
+				background: linear-gradient(278deg, #ff284b 4.74%, #fd677f 92.73%);
+				border: none;
+				@include themeify {
+					color: themed("TB");
+				}
+			}
+			.common_btn:first-child {
+				background: transparent;
+				border: 1px solid #ff284b;
+				@include themeify {
+					color: themed("Theme");
+				}
 			}
 		}
 	}
