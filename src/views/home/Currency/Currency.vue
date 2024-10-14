@@ -5,14 +5,8 @@
 			<h3 class="zanzhu">{{ $t('home["转账方式"]') }}</h3>
 			<!-- 第一组转账方式图标 -->
 			<div class="image-container sponsor_list mb_44">
-				<div v-for="item in new Array(6)" :key="item" class="card bg_BG3">
-					<SvgIcon iconName="home/bi_btc" />
-				</div>
-			</div>
-			<!-- 第二组转账方式图标 -->
-			<div class="image-container sponsor_list">
-				<div v-for="item in new Array(6)" :key="item" class="card bg_BG3">
-					<SvgIcon iconName="home/bi_btc" />
+				<div v-for="item in data" :key="item" class="card">
+					<VantLazyImg :src="item.icon" alt="平台赞助图片" />
 				</div>
 			</div>
 		</div>
@@ -21,7 +15,9 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-
+const props = defineProps({
+	data: [] as any,
+});
 /**
  * @description 此组件用于显示转账方式
  */
@@ -33,13 +29,17 @@ import { ref } from "vue";
 	margin-top: 32px;
 
 	.card {
-		width: 80px;
-		height: 80px;
-		svg {
+		width: 14%;
+		display: flex;
+		justify-content: center;
+		img {
 			width: 80px;
 			height: 80px;
+			border-radius: 50%;
+			object-fit: cover;
 		}
 	}
+
 	@import "./Currency.scss";
 }
 </style>

@@ -96,7 +96,9 @@ export class forgetPasswordApi {
 		return useAxiosApi(`/app/login/api/checkVerifyCode`, {
 			method: "POST",
 			data,
-			headers,
+			headers: {
+				showLoading: true,
+			},
 		});
 	};
 	// 重置密码

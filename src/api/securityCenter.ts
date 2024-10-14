@@ -64,7 +64,9 @@ export class bindApi {
 		return useAxiosApi(`/app/user-info/global/checkVerifyCode`, {
 			method: "POST",
 			data,
-			headers,
+			headers: {
+				showLoading: true,
+			},
 		});
 	};
 }

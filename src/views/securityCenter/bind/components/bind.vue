@@ -22,7 +22,7 @@
 					<span>+{{ state.areaCode }}</span
 					><SvgIcon class="down" iconName="loginOrRegister/navBar/down" />
 				</div>
-				<FormInput v-model="state.phone" type="text" :placeholder="$t(`forgetPassword['请输入手机号']`)">
+				<FormInput v-model="state.phone" type="text" :placeholder="$t(`forgetPassword['请输入手机号']`)" :maxlength="areaCodeObj.maxLength">
 					<template v-slot:right>
 						<SvgIcon v-if="state.phone" class="clearIcon" iconName="loginOrRegister/clear" @click="state.phone = ''" />
 					</template>
@@ -325,7 +325,7 @@ const onSubmit = async () => {
 	const res = await bindApi.bindAccount(params).catch((err) => err);
 	if (res.code == common.getInstance().ResCode.SUCCESS) {
 		showToast(res.message);
-		router.go(-1);
+		router.push("/securityCenter");
 	}
 };
 const selectAreaCode = (item, i) => {

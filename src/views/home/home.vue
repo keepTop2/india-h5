@@ -52,9 +52,9 @@
 			</h3>
 			<GameBigPic class="m24" />
 			<!-- 赞助 -->
-			<Sponsor />
+			<Sponsor :data="PartnerList" />
 			<!-- 转账方式 -->
-			<Currency />
+			<Currency :data="PartnerList" />
 			<!-- 负责任游戏 -->
 			<Footer />
 		</div>
@@ -119,6 +119,8 @@ const collectList = ref([]);
 const hotGames = ref<GameInfoList[]>([]);
 const lobbyTopGame = ref<LobbyTopGame[]>();
 const showRedBagRain = ref(false);
+const PaymentVendorList = ref([]);
+const PartnerList = ref([]);
 //判断是否收藏
 const isShowCollect = computed(() => {
 	return collectList.value.length > 0 && UserStore.token;
@@ -155,6 +157,10 @@ onActivated(() => {
 	getSportEventsRecommend();
 	//获取收藏的游戏列表
 	queryCollection();
+	// 获取支付商
+	queryPaymentVendorList();
+	// 获取赞助商
+	queryPartnerList();
 	//初始化体育
 	initSport();
 	pubsub.subscribe("getCollect", queryCollection);
@@ -179,6 +185,21 @@ const queryCollection = () => {
 			collectList.value = res.data.records || [];
 		});
 	}
+};
+
+// 获取支付商
+const queryPaymentVendorList = () => {
+	HomeApi.queryPaymentVendorList().then((res) => {
+		console.log(res);
+		PaymentVendorList.value = res.data || [];
+	});
+};
+//获取站点赞助商
+const queryPartnerList = () => {
+	HomeApi.queryPartnerList().then((res) => {
+		console.log(res);
+		PartnerList.value = res.data || [];
+	});
 };
 //获取推荐赛事列表
 const getSportEventsRecommend = () => {

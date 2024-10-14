@@ -23,12 +23,12 @@
 				<span v-if="!isOldPasswordValid && state.oldPassword !== ''" class="text">{{ $t('register["密码为8-16位"]') }}</span>
 			</div>
 
-			<span class="title">{{ $t('loginPassword["登录密码"]') }}</span>
+			<span class="title">{{ $t('loginPassword["新密码"]') }}</span>
 			<FormInput
 				v-model="state.newPassword"
 				:type="eyeShow ? 'password' : 'text'"
 				:maxlength="16"
-				:placeholder="$t(`loginPassword['登录密码']`)"
+				:placeholder="$t(`loginPassword['新密码']`)"
 				:errorBorder="!isPasswordValid && state.newPassword !== '' ? true : false"
 			>
 				<template v-slot:right>
