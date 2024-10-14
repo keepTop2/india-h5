@@ -18,11 +18,7 @@ import { useRouterStore } from "/@/store/modules/cacheRouter";
 import { LangEnum } from "/@/enum/appConfigEnum";
 import { getIndexInfo } from "/@/views/venueHome/sports/utils/commonFn";
 import CommonApi from "./api/common";
-onMounted(() => {
-	if (useUserStore().token) {
-		getIndexInfo();
-	}
-});
+
 const { keepAliveComps } = storeToRefs(useRouterStore());
 const userStore = useUserStore();
 const ThemesStore = useThemesStore();
@@ -35,6 +31,9 @@ onBeforeMount(() => {
 	initTheme();
 	initLang();
 	autoLogin();
+	if (userStore.token) {
+		userStore.initUserInfo();
+	}
 });
 
 // 自动登录
