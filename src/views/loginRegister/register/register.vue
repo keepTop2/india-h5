@@ -73,9 +73,9 @@
 					</transition>
 				</div>
 
-				<div class="checkbox" @click="userAgreement = !userAgreement">
-					<SvgIcon v-show="!userAgreement" class="check" iconName="loginOrRegister/checkbox" />
-					<SvgIcon v-show="userAgreement" class="check" iconName="loginOrRegister/checkbox_active" />
+				<div class="checkbox">
+					<SvgIcon v-show="!userAgreement" class="check" iconName="loginOrRegister/checkbox" @click="userAgreement = !userAgreement" />
+					<SvgIcon v-show="userAgreement" class="check" iconName="loginOrRegister/checkbox_active" @click="userAgreement = !userAgreement" />
 					<p :class="userAgreement ? 'text' : 'text3'">
 						<i18n-t keypath="register['我同意用户协议并确认我已年满18岁']" :tag="'span'">
 							<template v-slot:text
