@@ -21,9 +21,6 @@ import CommonApi from "./api/common";
 onMounted(() => {
 	if (useUserStore().token) {
 		getIndexInfo();
-		CommonApi.getCurrentBasicInfo().then((res) => {
-			console.log(res);
-		});
 	}
 });
 const { keepAliveComps } = storeToRefs(useRouterStore());

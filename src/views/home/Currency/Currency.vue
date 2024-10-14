@@ -2,7 +2,7 @@
 	<div class="Currency mb_36">
 		<div class="mb20">
 			<!-- 显示转账方式标题 -->
-			<h3 class="zanzhu">{{ $t('home["转账方式"]') }}</h3>
+			<h3 class="zanzhu">{{ $t('home["支付方式"]') }}</h3>
 			<!-- 第一组转账方式图标 -->
 			<div class="image-container sponsor_list mb_44">
 				<div v-for="item in data" :key="item" class="card">

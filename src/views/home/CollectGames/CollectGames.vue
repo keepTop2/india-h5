@@ -5,6 +5,9 @@
 				<SvgIcon v-if="item.collect" iconName="home/event_collect" @click.stop="handleCollect(item, false)" alt="" />
 				<SvgIcon v-else iconName="home/event_collect_no" @click.stop="handleCollect(item, true)" />
 				<VantLazyImg :src="item.icon" :loadingSrc="loadingSrc" :errorSrc="loadingSrc" />
+				<div class="nameBox">
+					<div class="name">{{ item.name }}</div>
+				</div>
 			</li>
 		</ul>
 	</div>
@@ -63,16 +66,34 @@ const handleCollect = async (item, collect) => {
 	}
 }
 .gameCard {
-	width: 100%;
-	height: 100%;
 	border-radius: 20px;
 	box-sizing: border-box;
 	position: relative;
 	@include themeify {
-		border: 2px solid themed("T3");
+		background: themed("BG3");
+		color: themed("T1");
+		.nameBox {
+			display: flex;
+			align-items: center; /* 垂直居中 */
+			justify-content: center; /* 水平居中 */
+			height: 72px;
+			overflow: hidden;
+		}
+		.name {
+			width: 164px;
+			font-size: 24px;
+			word-break: break-all;
+			text-overflow: ellipsis;
+			display: -webkit-box;
+			-webkit-box-orient: vertical;
+			-webkit-line-clamp: 2; /* 这里是超出几行省略 */
+			overflow: hidden;
+			padding: 0 12px;
+			box-sizing: border-box;
+		}
 		img {
-			width: 100%;
-			height: 100%;
+			width: 164px;
+			height: 164px;
 		}
 		svg {
 			position: absolute;

@@ -166,6 +166,8 @@ const onSubmit = async () => {
 	}
 };
 const selectAreaCode = (item, i) => {
+	console.log(item, i);
+
 	areaCodeObj.value = i;
 	state.areaCode = i.areaCode;
 	showAreaCode.value = false;

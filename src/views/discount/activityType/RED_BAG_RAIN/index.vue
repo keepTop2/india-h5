@@ -411,6 +411,9 @@ const confirmDialog = () => {
 						display: flex;
 						justify-content: center;
 					}
+					img {
+						height: 30px;
+					}
 					.side {
 						display: inline-block;
 						width: 68px;

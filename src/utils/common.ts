@@ -42,7 +42,7 @@ class Common {
 	public static accountRG = /^[a-zA-Z][a-zA-Z0-9]{3,10}$/;
 
 	// 8-16位，必须包含字母，数字非必须
-	public static passwordRG = /^(?=.*[a-zA-Z])[A-Za-z\d]{8,16}$/;
+	public static passwordRG = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,16}$/;
 
 	// 邮箱正则
 	public static emailRG = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -443,6 +443,7 @@ class Common {
 	}
 	// 邮箱转换*
 	static maskEmail(email: string) {
+		if (!email) return "";
 		const [localPart, domain] = email.split("@"); // 将email按@分割
 		const prefix = localPart.slice(0, 2); // 前2位
 		const masked = "**"; // 中间字符为*

@@ -1,6 +1,6 @@
 <template>
 	<div class="GameSwiper">
-		<div v-for="(item, index) in gameList" :key="index">
+		<div v-for="(item, index) in gameInfoList" :key="index">
 			<div @click="Common.goToGame(item)">
 				<div class="collect">
 					<VantLazyImg v-if="item.collect" :src="collectImg" @click.stop="handleCollect(item, false)" alt="" width="100%" />
@@ -74,25 +74,15 @@ const props = defineProps({
 		type: Number,
 		default: 10,
 	},
+	gameInfoList: {
+		type: Array as any,
+		default: [],
+	},
 });
 
 onBeforeMount(() => {
 	// 获取热门游戏
-	getGameInfoDetail();
 });
-
-/**
- * @description 获取热门游戏详情
- */
-const getGameInfoDetail = () => {
-	GameApi.queryGameInfoDetail({
-		label: 1,
-		pageSize: -1,
-	}).then((res) => {
-		console.log(res, "==queryGameInfoDetail");
-		gameList.value = res.data.records;
-	});
-};
 
 /**
  * @description 处理游戏收藏
