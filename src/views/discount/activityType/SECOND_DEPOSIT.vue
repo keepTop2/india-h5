@@ -126,15 +126,8 @@ const apply = () => {
 				dialogInfo.value = res.data;
 				showDialog.value = true;
 			} else {
-				activityApi.getActivityReward().then((res: any) => {
-					if (res.code === 10000) {
-						showToast("申请成功");
-						getConfigDetail();
-					} else {
-						dialogInfo.value = res.data;
-						showDialog.value = true;
-					}
-				});
+				showToast("申请成功");
+				getConfigDetail();
 			}
 		}
 	});

@@ -157,7 +157,6 @@ const getRedBagInfo = async () => {
 };
 const getActivityReward = async () => {
 	activityStore.setIsShowRedBagRain(true);
-	router.push("/");
 	if (redBagInfo.value.clientStatus == 1) {
 		await activityApi.redBagParticipate({ redbagSessionId: redBagInfo.value.redbagSessionId }).then((res: any) => {
 			if (res.code.status === 10000) {
@@ -398,7 +397,6 @@ const confirmDialog = () => {
 		}
 		.sessionsBox {
 			padding-bottom: 10px;
-
 			overflow-y: auto;
 			.sessions {
 				display: flex;
@@ -412,6 +410,9 @@ const confirmDialog = () => {
 						position: relative;
 						display: flex;
 						justify-content: center;
+					}
+					img {
+						height: 30px;
 					}
 					.side {
 						display: inline-block;
