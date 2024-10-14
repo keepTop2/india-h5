@@ -1,8 +1,5 @@
 <template>
-	<div>
-		<div class="mt_30 mb_28 Text1 fs_14 curp">赌场>游戏供应商><span class="Text_s">供应商名称</span></div>
-		<iframe class="ifrmeContainerRef" ref="videoFrame" :src="state.source" frameborder="0" scrolling="no" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
-	</div>
+	<iframe class="ifrmeContainerRef" ref="videoFrame" :src="state.source" frameborder="0" scrolling="no" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
 </template>
 
 <script setup lang="ts">

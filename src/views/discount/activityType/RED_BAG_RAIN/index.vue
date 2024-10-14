@@ -36,9 +36,9 @@
 								<div v-for="(item, index) in redBagInfo.sessionInfoList" class="session" :key="index">
 									<div class="color_T1">{{ Common.dayFormatHMS(item.startTime) }}</div>
 									<div class="sideBox">
-										<img src="./image/sessionCricle.svg" alt="" v-if="item.status == 0" />
-										<img src="./image/sessionCricle1.svg" alt="" v-if="item.status == 1" />
-										<img src="./image/sessionCricle2.svg" alt="" v-if="item.status == 2" />
+										<img src="./image/sessionCricle.png" alt="" v-if="item.status == 0" />
+										<img src="./image/sessionCricle1.png" alt="" v-if="item.status == 1" />
+										<img src="./image/sessionCricle2.png" alt="" v-if="item.status == 2" />
 									</div>
 									<div :class="'status' + item.status">{{ item.status == 0 ? "未开始" : item.status == 1 ? "进行中" : "已结束" }}</div>
 									<span class="side" :class="'type' + item.status"></span>

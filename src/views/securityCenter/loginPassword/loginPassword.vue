@@ -4,6 +4,7 @@
 
 		<form class="form">
 			<span class="title">{{ $t('loginPassword["旧密码"]') }}</span>
+
 			<FormInput
 				v-model="state.oldPassword"
 				:type="eyeShow ? 'oldPassword' : 'text'"
@@ -22,12 +23,12 @@
 				<span v-if="!isOldPasswordValid && state.oldPassword !== ''" class="text">{{ $t('register["密码为8-16位"]') }}</span>
 			</div>
 
-			<span class="title">{{ $t('loginPassword["登录密码"]') }}</span>
+			<span class="title">{{ $t('loginPassword["新密码"]') }}</span>
 			<FormInput
 				v-model="state.newPassword"
 				:type="eyeShow ? 'password' : 'text'"
 				:maxlength="16"
-				:placeholder="$t(`loginPassword['登录密码']`)"
+				:placeholder="$t(`loginPassword['新密码']`)"
 				:errorBorder="!isPasswordValid && state.newPassword !== '' ? true : false"
 			>
 				<template v-slot:right>
@@ -114,7 +115,7 @@ watch(
 );
 
 const onSubmit = async () => {
-	const res = await loginPasswordApi.changePassword().catch((err) => err);
+	const res = await loginPasswordApi.changePassword(state).catch((err) => err);
 	if (res.code == common.getInstance().ResCode.SUCCESS) {
 		showToast($.t("common['修改成功']"));
 		// 返回上一个页面

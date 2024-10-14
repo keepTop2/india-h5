@@ -41,9 +41,9 @@ const state = reactive({
 
 const onChange = () => {
 	if (route.params.type === "email") {
-		router.push(`/retrieveTradingPassword/phone`);
+		router.replace(`/retrieveTradingPassword/phone`);
 	} else {
-		router.push(`/retrieveTradingPassword/email`);
+		router.replace(`/retrieveTradingPassword/email`);
 	}
 };
 
