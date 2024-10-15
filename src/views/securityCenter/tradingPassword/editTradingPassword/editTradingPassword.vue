@@ -70,7 +70,7 @@
 			<!-- 忘记旧密码提示 -->
 			<div class="tips">
 				{{ $t('editTradingPassword["忘记了旧交易密码？"]') }}
-				<span @click="$router.push('/retrieveTradingPassword/email')">{{ $t('editTradingPassword["找回交易密码"]') }}</span>
+				<span @click="$router.push('/retrieveTradingPassword/phone')">{{ $t('editTradingPassword["找回交易密码"]') }}</span>
 			</div>
 		</form>
 	</div>

@@ -118,9 +118,9 @@ const eventList = ref();
 const collectList = ref([]);
 const hotGames = ref<GameInfoList[]>([]);
 const lobbyTopGame = ref<LobbyTopGame[]>();
-const showRedBagRain = ref(false);
 const PaymentVendorList = ref([]);
 const PartnerList = ref([]);
+const showRedBagRain = ref(false);
 //判断是否收藏
 const isShowCollect = computed(() => {
 	return collectList.value.length > 0 && UserStore.token;
@@ -167,7 +167,9 @@ onActivated(() => {
 	pubsub.subscribe("getCollect", queryCollection);
 	// 初始化活动ws连接
 	initializeWebSocket();
-	showRedBagRain.value = activityStore.isShowRedBagRain;
+	pubsub.subscribe("ShowRedBagRain", (data) => {
+		showRedBagRain.value = data;
+	});
 });
 onDeactivated(() => {
 	// 关闭登录接口轮询

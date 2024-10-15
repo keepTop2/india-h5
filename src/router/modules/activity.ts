@@ -85,5 +85,13 @@ export const activityRoutes = {
 				title: "rainPage",
 			},
 		},
+		{
+			path: "/activity/TASK",
+			name: "TASK",
+			component: () => import("/@/views/discount/activityType/TASK/index.vue"),
+			meta: {
+				title: "TASK",
+			},
+		},
 	],
 };
