@@ -16,12 +16,25 @@
 					<div v-if="field.code === 'userPhone'" class="area_code" @click="showAreaCode = true">
 						<span>+{{ state.areaCode }}</span> <SvgIcon class="down" iconName="loginOrRegister/navBar/down" />
 					</div>
-					<input v-model="state[field.model]" :type="field.type" :placeholder="$t(`withdraw['${field.placeholder}']`)" :readonly="field.readonly" />
+					<input
+						v-model="state[field.model]"
+						:type="field.type"
+						:placeholder="$t(`withdraw['${field.placeholder}']`)"
+						:readonly="field.readonly"
+						@focus="onFocus(field.model)"
+						@blur="onBlur(field.model)"
+					/>
 					<SvgIcon v-if="field.code === 'bankName'" class="arrow" iconName="wallet/arrow" />
 					<!-- 如果是手机号码且不合法，则显示错误信息 -->
 				</div>
 				<div v-if="field.code === 'userPhone' && !isPhoneValid && state.userPhone" class="error_text">
 					{{ $t(`withdraw['请输入位数字']`, { min: areaCodeObj.minLength, max: areaCodeObj.maxLength }) }}
+				</div>
+				<div v-if="field.code === 'bankCard' && withdrawWayConfig.lastWithdrawInfoVO.bankCard && lastWithdrawInfoShow && !state.bankCard" class="last_info">
+					<div class="last_cell" @mousedown="onGetLastWithdrawInfo">
+						<SvgIcon class="icon" iconName="wallet/history_Icon" />
+						<div class="value">{{ common.getInstance().bankCardHiding(withdrawWayConfig.lastWithdrawInfoVO.bankCard) }}</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -101,6 +114,7 @@ const captchaButton = ref<{
 
 const backShow = ref(false); // 控制银行卡选择器的显示
 const showAreaCode = ref(false); // 控制区号选择器的显示
+const lastWithdrawInfoShow = ref(false); // 控制区号选择器的显示
 const indexList: any = ref([]); // 存储区号索引列表
 const searchAreaCode = ref(""); // 存储搜索的区号
 const areaCode: any = ref([]); // 存储区号数据
@@ -204,6 +218,29 @@ const selectAreaCode = (item, i) => {
 	areaCodeObj.value = i; // 更新区号对象
 	state.areaCode = i.areaCode; // 更新选中的区号
 	showAreaCode.value = false; // 关闭区号选择器
+};
+
+// 选择上一次提款信息
+const onGetLastWithdrawInfo = () => {
+	Object.assign(state, props.withdrawWayConfig.lastWithdrawInfoVO);
+	console.log("state", state);
+	lastWithdrawInfoShow.value = false;
+};
+
+// 银行卡号输入框聚焦
+const onFocus = (code) => {
+	if (code === "bankCard") {
+		if (props.withdrawWayConfig.lastWithdrawInfoVO.bankCard) {
+			lastWithdrawInfoShow.value = true;
+		}
+	}
+};
+
+// 银行卡号输入框失去焦点
+const onBlur = (code) => {
+	if (code === "bankCard") {
+		lastWithdrawInfoShow.value = false;
+	}
 };
 
 // 清空表单参数
