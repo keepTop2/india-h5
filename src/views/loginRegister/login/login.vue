@@ -125,7 +125,7 @@ const onSubmit = async () => {
 			store.setLoginInfo();
 		}
 		await getIndexInfo();
-
+		await store.initUserInfo();
 		router.replace({ path: "/" });
 	} else {
 		showToast(res.message);

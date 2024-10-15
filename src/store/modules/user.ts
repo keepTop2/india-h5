@@ -2,6 +2,9 @@ import { defineStore } from "pinia";
 import { i18nSetLang } from "/@/i18n/index";
 import { LangEnum } from "/@/enum/appConfigEnum";
 import EncryptionFn from "/@/utils/encryption";
+import CommonApi from "/@/api/common";
+import Common from "/@/utils/common";
+import { useSportsBetInfoStore } from "./sports/sportsBetInfo";
 export interface StoreUser {
 	token: string;
 	userInfo: Record<any, any>;
@@ -77,6 +80,14 @@ export const useUserStore = defineStore("User", {
 		setregisterInfo(data) {
 			this.registerInfo = data;
 		},
+
+		async initUserInfo() {
+			console.log(999999);
+			await this.setIndexInfo();
+			await this.setBasicInfo();
+			const sportsBetInfo = useSportsBetInfoStore();
+			sportsBetInfo.balance = this.getUserInfo.totalBalance;
+		},
 		// 获取用户信息
 		setInfo(data: any) {
 			this.token = data.token;
@@ -95,6 +106,21 @@ export const useUserStore = defineStore("User", {
 			// 将 loginInfo 对象加密后转换为字符串
 			this.loginInfo = EncryptionFn.encryption(JSON.stringify(loginInfoObj));
 		},
+
+		async setIndexInfo() {
+			const res = await CommonApi.getIndexInfo().catch((err) => err);
+			if (res.code == Common.getInstance().ResCode.SUCCESS) {
+				this.setInfo({ ...this.getUserInfo, ...res.data });
+			}
+		},
+		async setBasicInfo() {
+			CommonApi.getCurrentBasicInfo().then((res: any) => {
+				if (res.code == Common.getInstance().ResCode.SUCCESS) {
+					this.setInfo({ ...this.getUserInfo, ...res.data });
+				}
+			});
+		},
+
 		// 记住密码状态
 		setLoginStatus(data: boolean) {
 			this.loginStatus = data;
