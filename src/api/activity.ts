@@ -140,4 +140,11 @@ export const activityApi = {
 			data,
 		});
 	},
+	// 任务详情
+	getTaskDetail: (data = {}) => {
+		return useAxiosApi(`/app/task/api/detail`, {
+			method: "POST",
+			data,
+		});
+	},
 };

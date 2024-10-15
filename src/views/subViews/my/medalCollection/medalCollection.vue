@@ -337,31 +337,6 @@ const onClickLeft = () => {
 				display: none;
 			}
 		}
-		.tooltip:hover {
-			.tooltipText {
-				position: absolute;
-				top: calc(100% + 10px);
-				right: -40px;
-				width: max-content;
-				min-width: 244px;
-				max-width: 370px;
-				min-height: 50px;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				padding: 5px 15px;
-				border-radius: 20px;
-				@include themeify {
-					color: themed("T3");
-					background: rgba(0, 0, 0, 0.77);
-				}
-				font-family: "PingFang SC";
-				font-size: 20px;
-				font-weight: 400;
-				text-align: center;
-				box-sizing: border-box;
-			}
-		}
 
 		p {
 			@include themeify {
@@ -552,6 +527,6 @@ const onClickLeft = () => {
 }
 :deep(.van-popover__content) {
 	background: rgba(0, 0, 0, 0.7) !important;
-	margin-right: 20px !important;
+	margin-right: 60px !important;
 }
 </style>
