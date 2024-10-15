@@ -43,7 +43,7 @@
 					<template v-slot:value>
 						<span class="text">{{ $t("medalCollection.枚", { value: item.unlockMedalNum }) }}</span>
 					</template>
-					<template v-slot:num>{{ item.rewardAmount }} </template>
+					<template v-slot:num>{{ item.rewardAmount }}{{ useUserStore().getUserInfo.platCurrencyName }} </template>
 				</i18n-t>
 			</div>
 		</template>
@@ -117,6 +117,7 @@ import treasure_box_5_receive from "/@/assets/zh-CN/default/my/medalCollection/t
 import { ThemeEnum } from "/@/enum/appConfigEnum";
 import { useThemesStore } from "/@/store/modules/themes";
 import { useRouter } from "vue-router";
+import { useUserStore } from "/@/store/modules/user";
 const router = useRouter();
 const themesStore = useThemesStore();
 const theme = computed(() => themesStore.themeName);

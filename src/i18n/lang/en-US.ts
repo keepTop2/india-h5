@@ -358,7 +358,7 @@ export const lang = {
 		登录密码: "Login password",
 	},
 	medalCollection: {
-		解锁勋章: "Unlock {value} medals: Earn {num}$",
+		解锁勋章: "Unlock {value} medals: Earn {num}",
 		枚: "{value} pieces",
 		已解锁: "Unlocked",
 		"(您还未获得任何勋章，积极玩游戏获得更多勋章)": "(You have not earned any medals yet, actively play games to earn more medals)",

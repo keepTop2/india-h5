@@ -54,6 +54,9 @@ export const activityApi = {
 		return useAxiosApi(`/app/activityRedBag/api/clientInfo`, {
 			method: "POST",
 			data,
+			headers: {
+				showLoading: true,
+			},
 		});
 	},
 	// 红包雨校验
