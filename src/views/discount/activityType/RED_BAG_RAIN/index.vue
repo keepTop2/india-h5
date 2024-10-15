@@ -12,8 +12,8 @@
 					<div class="bonus-card">
 						<div class="bonus-header">红包雨</div>
 						<div class="bonus-content">
-							<div class="bonus-row1 color_Theme">{{ redBagInfo.clientStatus == 1 ? "距离本场红包雨结束" : "距离下一场红包雨还有" }}</div>
-							<div class="countdown">
+							<div class="bonus-row1 color_Theme">{{ redBagInfo.clientStatus == 1 ? "距离本场红包雨结束" : redBagInfo.clientStatus == 2 ? "本期红包雨已结束" : "距离下一场红包雨还有" }}</div>
+							<div class="countdown" :class="redBagInfo.clientStatus == 2 ? 'isOver' : ''">
 								<span class="">{{ Common.convertMilliseconds(countdown * 1000) }}</span>
 							</div>
 						</div>
@@ -142,9 +142,8 @@ const getRedBagInfo = async () => {
 				startCountdown(redBagInfo.value.advanceTime);
 				// 判断活动已活动已全部结束
 			} else if (redBagInfo.value.clientStatus === 2) {
-				//  获取明天第一场的时间
-				const time = res.data.sessionInfoList[0].startTime + 1000 * 60 * 60 * 24 - new Date().getTime();
-				startCountdown(Math.floor(time / 1000));
+				//  获取明天第一场的时间z
+				// startCountdown();
 			} else if (redBagInfo.value.clientStatus === 0) {
 				//  获取下一场比赛的时间
 				const time = res.data.sessionInfoList.find((item) => item.redbagSessionId == res.data.redbagSessionId).startTime - new Date().getTime();
@@ -228,6 +227,19 @@ const confirmDialog = () => {
 		}
 		.countdown {
 			background: url("./image/countdownBg.png") no-repeat;
+			width: 320px;
+			background-size: 100% 100%;
+			text-align: center;
+			margin: 0 auto;
+			height: 68px;
+			line-height: 68px;
+			font-weight: 600;
+			@include themeify {
+				color: themed("Theme");
+			}
+		}
+		.isOver {
+			background: url("./image/overCountdownBg.png") no-repeat;
 			width: 320px;
 			background-size: 100% 100%;
 			text-align: center;

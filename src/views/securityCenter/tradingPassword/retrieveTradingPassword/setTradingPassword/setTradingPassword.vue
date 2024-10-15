@@ -117,7 +117,7 @@ const captchaDisabled = computed(() => {
 
 // 密码正则
 const isPasswordValid = computed(() => {
-	return common.passwordRG.test(state.newPassword);
+	return common.tradingPasswordRG.test(state.newPassword);
 });
 
 // 密码正则

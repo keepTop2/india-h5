@@ -100,15 +100,16 @@ watch(
 	() => {
 		if (countdown.value == 0) {
 			stopCountdown();
-			activityStore.setIsShowRedBagRain(true);
 		}
-	},
-	{ once: true }
+		if (countdown.value == 3) {
+			pubsub.publish("ShowRedBagRain", true);
+		}
+	}
 );
 watch(
 	() => props.redBagInfo,
 	() => {
-		if (props.redBagInfo.advanceTime) {
+		if (props.redBagInfo?.advanceTime) {
 			startCountdown(props.redBagInfo.advanceTime);
 		}
 	},

@@ -18,7 +18,7 @@
 		<div class="redbag-rain-wrapper" v-show="setp == 1 || setp == 2">
 			<div class="redbag-rain-canvas">
 				<div v-if="setp == 1" class="redayGo">
-					<img :src="readyGo" alt="" />
+					<img src="./image/readyGo.png" alt="" />
 				</div>
 				<div v-show="setp == 2">
 					<canvas ref="canvas"></canvas>
@@ -32,7 +32,7 @@
 		<RED_BAG_RAIN_Dialog v-model="showRedBagRainResult" :title="dialogTitle" :confirm="confirmDialog" class="redBagRainResult">
 			<div v-if="settlement.redbagCount > 0">
 				<div class="Text2">本轮共抢到{{ settlement.redbagCount }}个红包</div>
-				<div class="result mt_20">共计 {{ settlement.amount }}</div>
+				<div class="result mt_20">共计 {{ settlement.amount }}{{ useUserStore().getUserInfo.platCurrencyName }}</div>
 			</div>
 			<div v-if="settlement.redbagCount < 1">
 				<div class="mt_20 mb_20">没有戳中有奖红包</div>
@@ -55,6 +55,7 @@ import { activityApi } from "/@/api/activity";
 import readyGo from "./image/readyGo.png";
 import RED_BAG_RAIN_Dialog from "./RED_BAG_RAIN_Dialog/index.vue";
 import { useActivityStore } from "/@/store/modules/activity";
+import { useUserStore } from "/@/store/modules/user";
 
 defineProps({
 	modelValue: Boolean,
@@ -321,7 +322,9 @@ onMounted(async () => {
 	initReadyTime();
 	initRedbagRain();
 	pubsub.subscribe("/activity/redBagRain/settlement", (data) => {
-		if (data.data.code === 10000) {
+		console.log(123123123123123, data);
+
+		if (data.code === 10000) {
 			settlement.value = data.data;
 			if (data.data.redbagCount > 0) {
 				dialogTitle.value = "恭喜你";
@@ -460,8 +463,11 @@ onBeforeUnmount(() => {
 		height: 46px;
 		line-height: 46px;
 		background-color: rgba(255, 40, 75, 0.2);
-		color: var(--Theme);
+
 		border-radius: 5px;
+		@include themeify {
+			color: themed("Theme");
+		}
 	}
 	img {
 		height: 160px;

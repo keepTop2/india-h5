@@ -54,6 +54,9 @@ export const activityApi = {
 		return useAxiosApi(`/app/activityRedBag/api/clientInfo`, {
 			method: "POST",
 			data,
+			headers: {
+				showLoading: true,
+			},
 		});
 	},
 	// 红包雨校验
@@ -133,6 +136,13 @@ export const activityApi = {
 	// 转盘中奖记录
 	querySpinWheelOrderRecord: (data = {}) => {
 		return useAxiosApi(`/app/activityParticipate/api/querySpinWheelOrderRecord`, {
+			method: "POST",
+			data,
+		});
+	},
+	// 任务详情
+	getTaskDetail: (data = {}) => {
+		return useAxiosApi(`/app/task/api/detail`, {
 			method: "POST",
 			data,
 		});
