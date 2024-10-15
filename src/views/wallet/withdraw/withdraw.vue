@@ -1,390 +1,664 @@
 <template>
-	<VantNavBar title="提款" @onClickLeft="router.back()" />
-	<div class="walletCenter">
-		<div class="top">
-			<div class="title mb_10">
-				<p>{{ $t('recharge["中心钱包"]') }}</p>
-				<p>$ 9.9999.00</p>
+	<VantNavBar :title="$t(`VantNavBar['提款']`)" @onClickLeft="onClickLeft" />
+
+	<div class="withdraw">
+		<!-- 中心钱包 -->
+		<div class="wallet_center">
+			<div class="tutorial">{{ $t(`withdraw['提款教程']`) }}</div>
+			<div class="wallet_center_container">
+				<div class="label">{{ $t(`withdraw['中心钱包']`) }}</div>
+				<div class="value">
+					<span>{{ common.getInstance().formatFloat(UserStore.userInfo.totalBalance) }}</span>
+					<span>&nbsp;</span>
+					<span>{{ UserStore.userInfo.mainCurrency }}</span>
+				</div>
 			</div>
-			<div>提款教程</div>
-		</div>
-		<div class="bottom">
-			<div>冻结金额</div>
-			<div>$99999.00</div>
-		</div>
-	</div>
-	<div class="container">
-		<div class="card">
-			<SvgIcon class="card-tag" iconName="wallet/line" :size="0.8" :height="5.333333" />
-			<div class="title mb_10">{{ $t('recharge["提款方式"]') }}</div>
-			<div class="items">
-				<div class="item" v-for="(item, index) in dataList" :key="index" @click="onCheck(item, index)" :class="currentMethodsIndex === index ? 'active' : ''">
-					<div class="mark" v-if="item.recommendFlag">{{ $t('recharge["推荐"]') }}</div>
-					<VantLazyImg class="picture" :src="item.wayIconUrl" />
-					<div class="label">{{ item.rechargeWay }}</div>
+			<div class="wallet_center_footer">
+				<div class="label">
+					<SvgIcon class="icon" iconName="wallet/frozen_amount_icon" />
+					<span>{{ $t(`withdraw['冻结金额']`) }}</span>
+				</div>
+				<div class="value">
+					<span>{{ common.getInstance().formatFloat(UserStore.userInfo.totalBalance) }}</span>
+					<span>&nbsp;</span>
+					<span>{{ UserStore.userInfo.mainCurrency }}</span>
 				</div>
 			</div>
 		</div>
 
-		<div class="form" v-if="currentMethods.rechargeTypeCode === 'bank_card'">
-			<div class="cell">
-				<h5>{{ $t('recharge["提款金额"]') }}</h5>
-				<van-field
-					class="field mt_12 cell-field"
-					v-model="state.amount"
-					:placeholder="`${currentMethods?.rechargeMin || 0} - ${currentMethods?.rechargeMax || 100} `"
-					@update:modelValue="onInputAmount"
-				/>
+		<!-- 提款方式 -->
+		<div class="card">
+			<div class="header">
+				<SvgIcon class="icon" iconName="wallet/line" />
+				<span>{{ $t(`withdraw['提款方式']`) }}</span>
 			</div>
-		</div>
-		<div class="form" v-if="currentMethods.rechargeTypeCode === 'bank_card'">
-			<h5>{{ $t('recharge["收款信息"]') }}</h5>
-			<div class="cell">
-				<van-field class="field mt_12 cell-field" v-model="state.amount" :placeholder="`请输入银行卡号`" @update:modelValue="onInputAmount" />
-			</div>
-			<div class="cell">
-				<van-field class="field mt_12 cell-field" v-model="state.amount" :placeholder="`请选择银行名称`" @update:modelValue="onInputAmount" />
-			</div>
-			<div class="cell">
-				<van-field class="field mt_12 cell-field" v-model="state.amount" :placeholder="`请输入银行代码`" @update:modelValue="onInputAmount" />
-			</div>
-			<div class="cell">
-				<van-field class="field mt_12 cell-field" v-model="state.amount" :placeholder="`请输入名`" @update:modelValue="onInputAmount" />
-			</div>
-			<div class="cell">
-				<van-field class="field mt_12 cell-field" v-model="state.amount" :placeholder="`请输入姓`" @update:modelValue="onInputAmount" />
-			</div>
-			<div class="cell">
-				<van-field class="field mt_12 cell-field" v-model="state.amount" :placeholder="`请输入省`" @update:modelValue="onInputAmount" />
-			</div>
-			<div class="cell">
-				<van-field class="field mt_12 cell-field" v-model="state.amount" :placeholder="`请输入城市`" @update:modelValue="onInputAmount" />
-			</div>
-			<div class="cell">
-				<van-field class="field mt_12 cell-field" v-model="state.amount" :placeholder="`请输入详细地址`" @update:modelValue="onInputAmount" />
-			</div>
-			<div class="cell">
-				<van-field class="field mt_12 cell-field" v-model="state.amount" :placeholder="`请输入邮箱地址`" @update:modelValue="onInputAmount" />
-			</div>
-			<div class="cell">
-				<van-field class="field mt_12 cell-field" v-model="state.amount" :placeholder="`请输入手机号`" @update:modelValue="onInputAmount" />
-			</div>
-		</div>
-		<div class="form" v-if="currentMethods.rechargeTypeCode === 'electronic_wallet'">
-			<div class="cell">
-				<h5>{{ $t('recharge["存款金额"]') }}</h5>
-				<van-field
-					class="field mt_12 cell-field"
-					v-model="state.amount"
-					:placeholder="`${currentMethods?.rechargeMin || 0} - ${currentMethods?.rechargeMax || 100} `"
-					@update:modelValue="onInputAmount"
-				/>
-			</div>
-			<div class="quickAmount">
-				<div v-for="(item, index) in currentMethods?.quickAmount?.split(',')" class="amount color_TB" :class="currentQuickAmount === index ? 'active' : ''" @click="selectQuickAmount(item, index)">
-					{{ item }}
+			<div class="list">
+				<!-- 遍历支付方式列表 -->
+				<div class="item" :class="{ pay_active: item.withdrawTypeCode == withdrawWayData?.withdrawTypeCode }" v-for="(item, index) in withdrawWayList" @click="onRechargeWay(item)">
+					<div class="tag" v-if="item.recommendFlag == 1">{{ $t(`withdraw['推荐']`) }}</div>
+					<div class="logo">
+						<VantLazyImg class="logo" :src="item.wayIcon" />
+					</div>
+					<div class="label">{{ item.withdrawWay }}</div>
 				</div>
 			</div>
 		</div>
-		<div class="form" v-if="currentMethods.rechargeTypeCode === 'electronic_wallet'">
+
+		<!-- 提款金额 -->
+		<div class="card">
+			<div class="header">
+				<SvgIcon class="icon" iconName="wallet/line" />
+				<span>{{ $t(`withdraw['提款金额']`) }}</span>
+			</div>
+
 			<div class="cell">
-				<h5>{{ $t('recharge["手机号码"]') }}</h5>
-				<van-field
-					class="field mt_12 cell-field"
-					v-model="state.amount"
-					:placeholder="`${currentMethods?.rechargeMin || 0} - ${currentMethods?.rechargeMax || 100} `"
-					@update:modelValue="onInputAmount"
-				/>
+				<div class="cell_input operate">
+					<input
+						v-model="state.amount"
+						type="number"
+						:placeholder="`${withdrawWayConfig.withdrawMinAmount} ${UserStore.userInfo.mainCurrency} ~ ${withdrawWayConfig.withdrawMaxAmount} ${UserStore.userInfo.mainCurrency} `"
+						@input="calculateFeeAndEstimatedAmount"
+					/>
+					<div class="operate_content">
+						<span @click="state.amount = UserStore.userInfo.totalBalance">{{ $t(`withdraw['全部金额']`) }}</span>
+					</div>
+				</div>
+				<div v-if="errorMessage" class="error_text">{{ errorMessage }}</div>
+				<div v-else class="amount_info">
+					<div class="item">
+						<span class="label">{{ $t(`withdraw['预计到账']`) }}</span>
+						<span class="value">&nbsp;{{ common.getInstance().formatFloat(estimatedAmount) }}</span>
+						<span class="sign">&nbsp;{{ UserStore.userInfo.mainCurrency }}</span>
+					</div>
+					<div class="item">
+						<span class="label">{{ $t(`withdraw['手续费']`) }}({{ withdrawWayConfig.feeRate }}%):</span>
+						<span class="value">&nbsp;{{ common.getInstance().formatFloat(feeAmount) }}</span>
+						<span class="sign">&nbsp;{{ UserStore.userInfo.mainCurrency }}</span>
+					</div>
+				</div>
 			</div>
 		</div>
-		<div class="form" v-if="currentMethods.rechargeTypeCode === 'crypto_currency'">
-			<div class="cell">
-				<h5>{{ $t('recharge["存款信息"]') }}</h5>
-				<div>扫描或者复制获得地址进行转账</div>
-				<div>qrcode</div>
-			</div>
+
+		<!-- 动态组件根据支付方式渲染 -->
+		<component ref="childRef" :is="componentsMapsName[withdrawWayData?.withdrawTypeCode]" :withdrawWayData="withdrawWayData" :withdrawWayConfig="withdrawWayConfig" />
+
+		<div class="footer">
+			<!-- 提示1 -->
+			<p class="tips">
+				<span class="theme">{{ $t(`withdraw['注意']`) }}</span>
+				<span>{{ $t(`withdraw['请确保填写真实有效信息，信息不正确导致提现失败或无法到账，平台不承担任何责任，若出现充值异常']`) }}</span>
+				<span class="theme">{{ $t(`withdraw['请联系客服']`) }}</span>
+			</p>
+			<!-- 提交按钮 -->
+			<Button class="mt_44" :type="buttonType" @click="onWithdrawApply">{{ $t('recharge["立即存款"]') }}</Button>
+			<!-- 提示2 -->
+			<i18n-t class="tips" keypath="withdraw['提示']" :tag="'p'">
+				<template v-slot:value>
+					<span class="theme"> {{ withdrawWayConfig.singleDayRemindWithdrawCount }} </span>
+				</template>
+				<template v-slot:amount>
+					<span class="theme"> {{ withdrawWayConfig.singleDayRemindMaxWithdrawAmount }} </span>
+				</template>
+			</i18n-t>
 		</div>
-		<div v-if="currentMethods.rechargeTypeCode === 'crypto_currency'" class="mt_20 color_T3">
-			<p>1.向该地址充值后，资金直接入账站点名称用户：dadadadad</p>
-			<p>2.请勿向上述地址充值任何非USDT-TRC20的货币，否则将无法找回。</p>
-			<p>3.当前汇率：7.15CNY/USDT（仅供参考，以实际上分为准）</p>
-			<p>4.具体到账金额以实际到账金额为准，少于10usdt无法上分。</p>
-		</div>
-		<div class="submitBtn" :class="verification ? 'active' : ''" @click="submit" v-if="currentMethods.rechargeTypeCode !== 'crypto_currency'">{{ $t('recharge["立即提款"]') }}</div>
-		<p class="fs_22 color_T1">提示：您今日剩余免费提款次数为3次，免费提款额度为200,000USD</p>
 	</div>
+
+	<PassWordInput v-model:modelValue="state.withdrawPassWord" :passWordShow="passWordShow" @onClose="onTransactionPasswordEntered" @onOverlay="passWordShow = false" />
 </template>
 
 <script setup lang="ts">
+import common from "/@/utils/common";
+import { useUserStore } from "/@/store/modules/user";
 import { useRouter } from "vue-router";
 import { walletApi } from "/@/api/wallet";
+
+// 引入支付方式对应的组件
+import bankCard from "/@/views/wallet/withdraw/components/bankCard/bankCard.vue";
+import Ewallet from "/@/views/wallet/withdraw/components/Ewallet/Ewallet.vue";
+import USDTTRC20 from "/@/views/wallet/withdraw/components/USDTTRC20/USDTTRC20.vue";
+
+import PassWordInput from "../components/passWordInput.vue";
+import { i18n } from "/@/i18n/index";
+import { showToast } from "vant";
 const router = useRouter();
-const dataList: any = ref([]);
-defineOptions({
-	name: "recharge",
-});
+const UserStore = useUserStore();
+const $: any = i18n.global;
+// 定义组件映射
+const componentsMapsName = {
+	bank_card: bankCard,
+	electronic_wallet: Ewallet,
+	crypto_currency: USDTTRC20, // 修复: 应该是 'usdt_trc20' 而不是 'rechargeTypeCode'
+};
+
+interface withdrawWayDataRootObject {
+	withdrawTypeCode: string;
+	id: string;
+	withdrawWay: string;
+	wayIcon: string;
+	wayFee: number;
+	quickAmount: string;
+	recommendFlag: number;
+	networkType: string;
+	currencyCode: string;
+}
+
+// 定义响应式变量
+const withdrawWayData = ref({} as withdrawWayDataRootObject); // 当前选择的支付方式
+const withdrawWayList = ref([] as withdrawWayDataRootObject[]); // 支付方式列表
+const withdrawWayConfig = ref({
+	withdrawMinAmount: 0,
+	withdrawMaxAmount: 1000,
+} as any); // 支付方式列表
+const childRef = ref(null);
 const state = reactive({
-	depositName: "",
-	amount: "",
-});
-const verification = ref(false);
-
-onMounted(() => {
-	// console.log(123123, "recharge组件挂载了");
-	walletApi.rechargeWayList().then((res) => {
-		dataList.value = res.data;
-		currentMethods.value = res.data[0];
-	});
+	withdrawPassWord: "" as string | number,
+	amount: "" as string | number,
 });
 
-const selectQuickAmount = (item, index) => {
-	state.amount = item;
-	currentQuickAmount.value = index;
-	verifyBtn();
+const feeAmount = ref(0); // 手续费
+const estimatedAmount = ref(0); // 预计到账金额
+
+const passWordShow = ref(false);
+
+const errorMessage = computed(() => {
+	const amount = parseFloat(state.amount as string);
+	// 检查是否为有效数字
+	if (isNaN(amount)) {
+		return "";
+	}
+	// 获取账户余额
+	const totalBalance = UserStore.userInfo.totalBalance;
+	// 判断输入的金额
+	if (amount > totalBalance || !totalBalance) {
+		return $.t(`withdraw["余额不足"]`);
+	} else if (amount < withdrawWayConfig.value.withdrawMinAmount) {
+		return `${$.t('withdraw["单次最低提款"]')}: ${withdrawWayConfig.value.withdrawMinAmount} ${UserStore.userInfo.mainCurrency}`;
+	} else if (amount > withdrawWayConfig.value.withdrawMaxAmount) {
+		return `${$.t('withdraw["单次最高提款"]')}: ${withdrawWayConfig.value.withdrawMaxAmount} ${UserStore.userInfo.mainCurrency}`;
+	}
+	return "";
+});
+
+watch(
+	() => childRef.value,
+	(newValue) => {
+		console.log("newValue", newValue);
+	},
+	{
+		deep: true,
+	}
+);
+
+const buttonType = computed(() => {
+	// 检查手机号是否有效
+	const isPhoneValid = childRef.value?.isPhoneValid;
+
+	// 安全解构，避免属性缺失导致的错误
+	const {
+		bankCard = "",
+		bankName = "",
+		bankCode = "",
+		userName = "",
+		surname = "",
+		provinceName = "",
+		cityName = "",
+		detailAddress = "",
+		userEmail = "",
+		userPhone = "",
+	} = childRef.value?.state || {};
+
+	// 新增逻辑：检查 UserStore 中的 isSetPwd 和 phone
+	let smsCode = ""; // 默认情况下为空
+	if (!UserStore.getUserInfo.isSetPwd && UserStore.getUserInfo.phone) {
+		// 绑定了手机但未设置交易密码时，需要额外解构 smsCode
+		smsCode = childRef.value?.state?.smsCode || "";
+	}
+
+	// 打印属性检查
+	console.log("bankCard:", bankCard);
+	console.log("bankName:", bankName);
+	console.log("bankCode:", bankCode);
+	console.log("userName:", userName);
+	console.log("surname:", surname);
+	console.log("provinceName:", provinceName);
+	console.log("cityName:", cityName);
+	console.log("detailAddress:", detailAddress);
+	console.log("userEmail:", userEmail);
+	console.log("userPhone:", userPhone);
+	console.log("smsCode:", smsCode);
+
+	// 检查所有属性是否有值
+	const requiredFields = [bankCard, bankName, bankCode, userName, surname, provinceName, cityName, detailAddress, userEmail, userPhone];
+
+	// 如果需要，加入 smsCode 的检查
+	if (!UserStore.getUserInfo.isSetPwd && UserStore.getUserInfo.phone) {
+		requiredFields.push(smsCode);
+	}
+
+	const allFieldsHaveValue = requiredFields.every((field) => field);
+
+	// 按钮状态判断
+	if (errorMessage.value || !state.amount || !allFieldsHaveValue || !isPhoneValid) {
+		return "disabled"; // 如果有错误信息、金额为空，或者任何一个必填字段为空，则按钮禁用
+	} else {
+		return "default"; // 否则按钮为默认状态
+	}
+});
+
+// 计算手续费和预计到账金额
+const calculateFeeAndEstimatedAmount = () => {
+	// 将输入的 amount 转换为数字
+	let amount = Number(state.amount);
+	// 检查是否满足免费提款条件
+	if (isNaN(amount) || (withdrawWayConfig.value.singleDayRemindWithdrawCount > 0 && amount <= withdrawWayConfig.value.singleDayRemindMaxWithdrawAmount)) {
+		// 免费提款条件下手续费为0
+		feeAmount.value = 0;
+	} else {
+		// 计算手续费
+		feeAmount.value = (amount * withdrawWayConfig.value.feeRate) / 100;
+	}
+	// 预计到账金额 = 输入金额 - 手续费
+	estimatedAmount.value = amount - feeAmount.value;
 };
-const currentMethods: any = ref({});
-const currentMethodsIndex = ref(0);
-const currentQuickAmount = ref(null);
-const onCheck = (item, index) => {
-	currentMethodsIndex.value = index;
-	currentMethods.value = item;
-};
-const submit = () => {
+
+// 交易密码输入完成
+const onTransactionPasswordEntered = () => {
+	passWordShow.value = false;
 	const params = {
 		amount: state.amount,
-		depositWayId: currentMethods.value.rechargeTypeCode,
-		depositName: state.depositName,
+		withdrawWayId: withdrawWayData.value.id,
+		withdrawPassWord: state.withdrawPassWord,
+		...childRef.value?.state,
 	};
-	walletApi.userRecharge(params).then((res) => {
-		console.log(res);
-	});
-	router.push("/rechargeDetails");
-};
-const onInputDepositName = () => {
-	verifyBtn();
-};
-const onInputAmount = () => {
-	verifyBtn();
+	getWithdrawApply(params);
 };
 
-const verifyBtn = () => {
-	switch (currentMethodsIndex.value) {
-		case 0:
-			if (currentMethods.value.quickAmount.split(",").indexOf(state.amount) !== -1) {
-				currentQuickAmount.value = currentMethods.value.quickAmount.split(",").indexOf(state.amount);
-			} else {
-				currentQuickAmount.value = null;
-			}
-			if (state.amount && state.depositName) {
-				if (state.amount >= currentMethods.value.rechargeMin && state.amount <= currentMethods.value.rechargeMax) {
-					verification.value = true;
-				}
-			} else {
-				verification.value = false;
-			}
-			break;
+// 会员提款申请
+const onWithdrawApply = async () => {
+	if (UserStore.getUserInfo.isSetPwd) {
+		passWordShow.value = true;
+	} else if (UserStore.getUserInfo.phone) {
+		const params = {
+			amount: state.amount,
+			withdrawWayId: withdrawWayData.value.id,
+			...childRef.value?.state,
+		};
+		getWithdrawApply(params);
 	}
+};
+
+const getWithdrawApply = async (params) => {
+	const res = await walletApi.withdrawApply(params).catch((err) => err);
+	if (res.code === common.getInstance().ResCode.SUCCESS) {
+		showToast($.t('withdraw["申请成功"]'))
+		clearParams();
+	}
+};
+
+// 选择支付方式时的处理
+const onRechargeWay = (item) => {
+	withdrawWayData.value = item;
+	getWithdrawConfig(); // 获取通道配置
+};
+
+// 获取支付方式列表
+const getRechargeWayList = async () => {
+	const res = await walletApi.withdrawWayList().catch((err) => err);
+	if (res.code === common.getInstance().ResCode.SUCCESS) {
+		withdrawWayList.value = res.data; // 存储支付方式列表
+		withdrawWayData.value = res.data[0]; // 默认选择第一个支付方式
+		getWithdrawConfig(); // 获取通道配置
+	}
+};
+
+// 获取通道配置
+const getWithdrawConfig = async () => {
+	const params = {
+		withdrawWayId: withdrawWayData.value.id,
+	};
+	const res = await walletApi.getWithdrawConfig(params).catch((err) => err);
+	if (res.code === common.getInstance().ResCode.SUCCESS) {
+		withdrawWayConfig.value = res.data;
+	}
+};
+
+// 初始化数据
+getRechargeWayList();
+
+// 清空表单参数
+const clearParams = () => {
+	Object.keys(state).forEach((key) => {
+		state[key] = ""; // 将每个属性设置为空字符串
+	});
+	feeAmount.value = 0;
+	estimatedAmount.value = 0;
+	childRef.value?.clearParams();
+};
+
+// 返回上一页的处理
+const onClickLeft = () => {
+	router.go(-1);
 };
 </script>
 
 <style scoped lang="scss">
-.container {
-	padding: 20px;
-	position: relative;
-}
-.container::before {
-	content: "";
-	position: absolute;
-	left: 20px;
-	top: 25px;
-	display: inline-block;
-
-	width: 6px;
-	height: 40px;
-	background-color: red;
-	z-index: 10;
-	border-radius: 0 20px 20px 0;
-}
-.card {
-	position: relative;
+.withdraw {
 	padding: 24px;
-	border-radius: 16px;
-	@include themeify {
-		background: themed("BG3");
-	}
-
-	.card-tag {
+}
+.wallet_center {
+	position: relative;
+	width: 100%;
+	height: 202px;
+	border-radius: 18px;
+	overflow: hidden;
+	background: url("../../../assets/zh-CN/default/wallet/wallet_center_bg.png") center center / 100% 100% no-repeat;
+	.tutorial {
 		position: absolute;
-		left: 0;
-	}
-
-	.title {
+		top: 40px;
+		right: 0px;
+		padding: 6px 15px 6px 30px;
+		border-radius: 24px 0px 0px 24px;
+		background: rgba(255, 255, 255, 0.3);
 		@include themeify {
 			color: themed("TB");
 		}
+		font-family: "PingFang SC";
+		font-size: 22px;
+	}
+	.wallet_center_container {
+		width: 100%;
+		height: 140px;
+		padding: 23px 140px 23px 50px;
+		box-sizing: border-box;
+		.label {
+			@include themeify {
+				color: themed("T1");
+			}
+			font-family: "PingFang SC";
+			font-size: 28px;
+			font-weight: 400;
+			line-height: 40px;
+		}
+		.value {
+			margin-top: 10px;
+			@include themeify {
+				color: themed("TB");
+			}
+			font-family: "PingFang SC";
+			font-size: 36px;
+			font-weight: 500;
+		}
+	}
+	.wallet_center_footer {
+		width: 100%;
+		height: 62px;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 0px 50px;
+		box-sizing: border-box;
+		.label {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			@include themeify {
+				color: themed("T1");
+			}
+			font-family: "PingFang SC";
+			font-size: 24px;
+			font-weight: 400;
+			.icon {
+				width: 23px;
+				height: 29px;
+				svg {
+					width: 100%;
+					height: 100%;
+				}
+			}
+		}
+		.value {
+			@include themeify {
+				color: themed("TB");
+			}
+			font-family: "PingFang SC";
+			font-size: 24px;
+			font-weight: 400;
+		}
+	}
+}
+
+.card {
+	margin-top: 24px;
+	padding: 24px;
+	border-radius: 16px;
+	@include themeify {
+		background-color: themed("BG3");
+	}
+	.header {
+		position: relative;
+		@include themeify {
+			color: themed("TB");
+		}
+		font-family: "PingFang SC";
 		font-size: 30px;
 		font-weight: 500;
+
+		.icon {
+			position: absolute;
+			top: 0px;
+			left: -24px;
+			width: 6px;
+			height: 40px;
+		}
 	}
 
-	.items {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 20px 12px;
-
+	.list {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr); /* 每行三个项目 */
+		row-gap: 22px; /* 行间距 */
+		column-gap: 12px; /* 列间距 */
+		margin-top: 16px;
 		.item {
 			position: relative;
-			width: 210px;
+			flex: 1;
 			border-radius: 20px;
 			border: 2px solid rgba(98, 102, 106, 0.5);
-			@include themeify {
-				border-color: themed("Line");
-			}
-			overflow: hidden;
-			box-sizing: border-box;
 
-			.mark {
+			.tag {
 				position: absolute;
-				top: 0px;
-				right: -20px;
-				padding: 5px 35px 5px 15px;
+				top: -2px;
+				right: -2px;
+				min-width: 76px;
+				max-width: 80%;
 				height: 33px;
 				display: flex;
-
 				align-items: center;
 				justify-content: center;
-				border-bottom-left-radius: 20px;
+				padding: 0px 20px;
 				border-top-right-radius: 20px;
-
+				border-bottom-left-radius: 20px;
 				@include themeify {
-					background-color: themed("Theme");
 					color: themed("TB");
+					background-color: themed("Theme");
 				}
+				font-family: "PingFang SC";
 				font-size: 22px;
 				font-weight: 400;
-				z-index: 1;
+				white-space: nowrap; /* 不换行 */
+				overflow: hidden; /* 隐藏超出部分 */
+				text-overflow: ellipsis; /* 显示省略号 */
+				box-sizing: border-box;
 			}
 
-			.picture {
-				width: 210px;
+			.logo {
+				width: 100%;
 				height: 100px;
+				border-top-left-radius: 20px;
+				border-top-right-radius: 20px;
+				overflow: hidden;
+
+				.logo {
+					width: 100%;
+					height: 100%;
+				}
 			}
 
 			.label {
-				padding: 6px 0px;
+				width: 100%;
+				height: 46px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
 				@include themeify {
 					color: themed("TB");
 				}
-
-				text-align: center;
-				font-size: 26px;
+				font-family: "PingFang SC";
+				font-size: 24px;
+				font-weight: 400;
 			}
 		}
-		@include themeify {
-			.item.active {
-				border: 2px solid themed("Theme");
-				.label {
+
+		.pay_active {
+			border: 2px solid;
+			@include themeify {
+				border-color: themed("Theme");
+			}
+			transition: all 0.2s;
+
+			.label {
+				@include themeify {
 					color: themed("Theme");
 				}
 			}
 		}
 	}
+
+	.cell {
+		margin-top: 16px;
+
+		.cell_input {
+			width: 100%;
+			height: 80px;
+			display: flex;
+			align-items: center;
+			padding: 0px 24px;
+			border-radius: 12px;
+			border: 1px solid;
+			@include themeify {
+				border-color: themed("Line");
+				background-color: themed("BG1");
+			}
+			box-sizing: border-box;
+			input {
+				flex: 1;
+				border: 0;
+				background-color: transparent;
+				@include themeify {
+					color: themed("TB");
+				}
+				font-family: "PingFang SC";
+				font-size: 28px;
+				font-style: normal;
+				font-weight: 400;
+				&::placeholder {
+					@include themeify {
+						color: themed("T3");
+					}
+				}
+			}
+		}
+		.operate {
+			padding: 0px 0px 0px 24px;
+			.operate_content {
+				position: relative;
+				height: 100%;
+				display: flex;
+				align-items: center;
+				padding: 0px 24px;
+				span {
+					@include themeify {
+						color: themed("Theme");
+					}
+					font-family: "PingFang SC";
+					font-size: 24px;
+					font-weight: 400;
+				}
+
+				&::after {
+					position: absolute;
+					content: "";
+					left: 0px;
+					top: 50%;
+					transform: translateY(-50%);
+					width: 2px;
+					height: 52px;
+					@include themeify {
+						background: themed("Line");
+					}
+				}
+			}
+		}
+		.amount_info {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			margin-top: 10px;
+			.item {
+				display: flex;
+				align-items: center;
+			}
+
+			.label {
+				@include themeify {
+					color: themed("T1");
+				}
+				font-family: "PingFang SC";
+				font-size: 22px;
+				font-weight: 400;
+			}
+			.value {
+				@include themeify {
+					color: themed("Theme");
+				}
+				font-family: "DIN Alternate";
+				font-size: 24px;
+				font-weight: 700;
+			}
+			.sign {
+				@include themeify {
+					color: themed("TB");
+				}
+				font-family: "DIN Alternate";
+				font-size: 24px;
+				font-weight: 700;
+			}
+		}
+		.error_text {
+			margin-top: 10px;
+			@include themeify {
+				color: themed("Warn");
+			}
+			font-family: "PingFang SC";
+			font-size: 22px;
+			font-weight: 400;
+		}
+	}
 }
-.form {
-	margin-top: 24px;
-	@include themeify {
-		background: themed("BG3");
-	}
-	border-radius: 16px;
-	padding: 24px;
-	:deep(.van-cell) {
-		@include themeify {
-			background: themed("BG1");
-		}
-		border-radius: 12px;
-		margin-bottom: 16px;
-	}
 
-	h5 {
-		@include themeify {
-			color: themed("TB");
-		}
-		font-size: 30px;
-	}
-	:deep(.van-field__control) {
-		@include themeify {
-			color: themed("T3");
-		}
-		font-family: "DIN Alternate";
-		font-size: 28px;
-		font-weight: 700;
-		line-height: 38px;
-		color: #fff;
-	}
-
-	:deep(.van-field__control::-webkit-input-placeholder) {
+.footer {
+	.tips {
+		margin-top: 24px;
 		@include themeify {
 			color: themed("T3");
 		}
 		font-family: "PingFang SC";
-		font-size: 28px;
+		font-size: 24px;
 		font-weight: 400;
 	}
-	.quickAmount {
-		display: flex;
-		gap: 15px;
-		flex-wrap: wrap;
-		.amount {
-			height: 66px;
-			line-height: 66px;
-			text-align: center;
-			width: calc(25% - 15px);
-			border: 1px solid #7d808680;
-			border-radius: 8px;
+	.theme {
+		@include themeify {
+			color: themed("Theme");
 		}
-		.amount.active {
-			@include themeify {
-				color: themed("Theme");
-				border: 1px solid themed("Theme");
-			}
-		}
-	}
-}
-.submitBtn {
-	height: 86px;
-	text-align: center;
-	line-height: 86px;
-	width: 620px;
-	border-radius: 12px;
-	margin: 36px auto;
-	@include themeify {
-		color: themed("T3");
-		background: themed("BG3");
-	}
-}
-.submitBtn.active {
-	@include themeify {
-		color: themed("TB");
-		background: themed("Theme");
-	}
-}
-
-.walletCenter {
-	margin: 0 20px;
-	background: url("./image/walletCenterBg.png");
-	background-size: 100% 100%;
-	height: 202px;
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	> div {
-		display: flex;
-	}
-	.top {
-		height: 140px;
-	}
-	.bottom {
-		height: 62px;
-		line-height: 62px;
 	}
 }
 </style>

@@ -3,6 +3,7 @@ import { i18nSetLang } from "/@/i18n/index";
 import { LangEnum } from "/@/enum/appConfigEnum";
 import EncryptionFn from "/@/utils/encryption";
 import CommonApi from "/@/api/common";
+import { securityCenterApi } from "/@/api/securityCenter";
 import Common from "/@/utils/common";
 import { useSportsBetInfoStore } from "./sports/sportsBetInfo";
 export interface StoreUser {
@@ -85,6 +86,7 @@ export const useUserStore = defineStore("User", {
 			console.log(999999);
 			await this.setIndexInfo();
 			await this.setBasicInfo();
+			await this.setUserGlobalSetInfo();
 			const sportsBetInfo = useSportsBetInfoStore();
 			sportsBetInfo.balance = this.getUserInfo.totalBalance;
 		},
@@ -115,6 +117,13 @@ export const useUserStore = defineStore("User", {
 		},
 		async setBasicInfo() {
 			CommonApi.getCurrentBasicInfo().then((res: any) => {
+				if (res.code == Common.getInstance().ResCode.SUCCESS) {
+					this.setInfo({ ...this.getUserInfo, ...res.data });
+				}
+			});
+		},
+		async setUserGlobalSetInfo() {
+			securityCenterApi.getUserGlobalSetInfo().then((res: any) => {
 				if (res.code == Common.getInstance().ResCode.SUCCESS) {
 					this.setInfo({ ...this.getUserInfo, ...res.data });
 				}
