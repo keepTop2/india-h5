@@ -190,55 +190,68 @@ watch(
 );
 
 const buttonType = computed(() => {
-	// 检查手机号是否有效
-	const isPhoneValid = childRef.value?.isPhoneValid;
+	// 检查手机号是否有效（仅在银行卡和电子钱包表单中使用）
+	const isPhoneValid = withdrawWayData.value.withdrawTypeCode !== "crypto_currency" && childRef.value?.isPhoneValid;
+	// 获取当前的提现类型
+	const withdrawTypeCode: string = withdrawWayData.value.withdrawTypeCode;
 
-	// 安全解构，避免属性缺失导致的错误
-	const {
-		bankCard = "",
-		bankName = "",
-		bankCode = "",
-		userName = "",
-		surname = "",
-		provinceName = "",
-		cityName = "",
-		detailAddress = "",
-		userEmail = "",
-		userPhone = "",
-	} = childRef.value?.state || {};
+	// 根据提现类型解构对应的表单字段
+	let requiredFields: string[] = []; // 定义 requiredFields 为字符串数组类型
+	let smsCode: string = ""; // 定义 smsCode 为字符串类型
 
-	// 新增逻辑：检查 UserStore 中的 isSetPwd 和 phone
-	let smsCode = ""; // 默认情况下为空
-	if (!UserStore.getUserInfo.isSetPwd && UserStore.getUserInfo.phone) {
-		// 绑定了手机但未设置交易密码时，需要额外解构 smsCode
-		smsCode = childRef.value?.state?.smsCode || "";
+	// 银行卡表单
+	if (withdrawTypeCode === "bank_card") {
+		const {
+			bankCard = "",
+			bankName = "",
+			bankCode = "",
+			userName = "",
+			surname = "",
+			provinceName = "",
+			cityName = "",
+			detailAddress = "",
+			userEmail = "",
+			userPhone = "",
+		} = childRef.value?.state || {};
+
+		// 检查 UserStore 中的 isSetPwd 和 phone
+		if (!UserStore.getUserInfo.isSetPwd && UserStore.getUserInfo.phone) {
+			// 绑定了手机但未设置交易密码时，需要额外解构 smsCode
+			smsCode = childRef.value?.state?.smsCode || "";
+		}
+		// 需要校验的必填字段
+		requiredFields = [bankCard, bankName, bankCode, userName, surname, provinceName, cityName, detailAddress, userEmail, userPhone];
+		// 如果需要，加入 smsCode 的检查
+		if (!UserStore.getUserInfo.isSetPwd && UserStore.getUserInfo.phone) {
+			requiredFields.push(smsCode);
+		}
 	}
-
-	// 打印属性检查
-	console.log("bankCard:", bankCard);
-	console.log("bankName:", bankName);
-	console.log("bankCode:", bankCode);
-	console.log("userName:", userName);
-	console.log("surname:", surname);
-	console.log("provinceName:", provinceName);
-	console.log("cityName:", cityName);
-	console.log("detailAddress:", detailAddress);
-	console.log("userEmail:", userEmail);
-	console.log("userPhone:", userPhone);
-	console.log("smsCode:", smsCode);
-
+	// 电子钱包表单
+	else if (withdrawTypeCode === "electronic_wallet") {
+		const { userAccount = "", userPhone = "", userName = "", surname = "" } = childRef.value?.state || {};
+		// 检查 UserStore 中的 isSetPwd 和 phone
+		if (!UserStore.getUserInfo.isSetPwd && UserStore.getUserInfo.phone) {
+			// 绑定了手机但未设置交易密码时，需要额外解构 smsCode
+			smsCode = childRef.value?.state?.smsCode || "";
+		}
+		// 需要校验的必填字段
+		requiredFields = [userAccount, userPhone, userName, surname];
+		// 如果需要，加入 smsCode 的检查
+		if (!UserStore.getUserInfo.isSetPwd && UserStore.getUserInfo.phone) {
+			requiredFields.push(smsCode);
+		}
+	}
+	// 虚拟币表单
+	else if (withdrawTypeCode === "crypto_currency") {
+		const { networkType = "", addressNo = "" } = childRef.value?.state || {};
+		// 需要校验的必填字段（不需要 smsCode）
+		requiredFields = [networkType, addressNo];
+	}
 	// 检查所有属性是否有值
-	const requiredFields = [bankCard, bankName, bankCode, userName, surname, provinceName, cityName, detailAddress, userEmail, userPhone];
-
-	// 如果需要，加入 smsCode 的检查
-	if (!UserStore.getUserInfo.isSetPwd && UserStore.getUserInfo.phone) {
-		requiredFields.push(smsCode);
-	}
-
-	const allFieldsHaveValue = requiredFields.every((field) => field);
+	const allFieldsHaveValue: boolean = requiredFields.every((field) => field);
 
 	// 按钮状态判断
-	if (errorMessage.value || !state.amount || !allFieldsHaveValue || !isPhoneValid) {
+	if (errorMessage.value || !state.amount || !allFieldsHaveValue || (!isPhoneValid && withdrawTypeCode !== "crypto_currency")) {
 		return "disabled"; // 如果有错误信息、金额为空，或者任何一个必填字段为空，则按钮禁用
 	} else {
 		return "default"; // 否则按钮为默认状态
@@ -290,7 +303,7 @@ const onWithdrawApply = async () => {
 const getWithdrawApply = async (params) => {
 	const res = await walletApi.withdrawApply(params).catch((err) => err);
 	if (res.code === common.getInstance().ResCode.SUCCESS) {
-		showToast($.t('withdraw["申请成功"]'))
+		showToast($.t('withdraw["申请成功"]'));
 		clearParams();
 	}
 };
