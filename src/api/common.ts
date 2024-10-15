@@ -1,5 +1,15 @@
 import useAxiosApi from "/@/utils/useAxiosApi";
+import useAxiosUploadApi from "/@/utils/useAxiosUploadApi";
 class CommonApi {
+	/**
+	 *@description 上传
+	 */
+	static uploadFile = (data = {}) => {
+		return useAxiosUploadApi(`/app/file/api/upload/baowang`, {
+			method: "POST",
+			data,
+		});
+	};
 	/**
 	 *@description POST 侧边栏
 	 */

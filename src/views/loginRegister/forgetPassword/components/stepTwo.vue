@@ -44,6 +44,7 @@
 
 			<Button class="mt_40" :type="btnDisabled ? 'disabled' : 'default'" @click="onStep">{{ $t('forgetPassword["下一步"]') }}</Button>
 		</div>
+		<!-- 手机区号选择器 -->
 		<AreaCodePicker
 			v-model:showAreaCode="showAreaCode"
 			v-model:searchAreaCode="searchAreaCode"
