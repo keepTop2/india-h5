@@ -203,6 +203,8 @@ import Model from "../components/model.vue";
 import uploader_icon from "/@/assets/zh-CN/default/my/feedback/uploader_icon.png";
 import uploader_close from "/@/assets/zh-CN/default/my/feedback/uploader_close.png";
 import UrgeOrder_success from "/@/assets/zh-CN/default/wallet/UrgeOrder_success.png";
+import activitySocketService from "/@/utils/activitySocketService";
+const websocketService = activitySocketService.getInstance();
 const route = useRoute();
 const router = useRouter();
 const UserStore = useUserStore();
@@ -238,6 +240,12 @@ const isUrgeModalVisible = ref(false); // 订单加速弹窗
 const fileList = ref([]); // 组件库上传文件
 const cashFlowFileList = ref([] as any); // 服务器上传文件
 const cashFlowRemark = ref(""); // 留言
+
+onMounted(() => {
+	getDepositOrderDetail();
+	// 订阅充值/失败
+	websocketService.send("/wallet/rechargeSuccessFail");
+});
 
 // 获取订单详情
 const getDepositOrderDetail = async () => {
@@ -334,8 +342,6 @@ function startCountdown() {
 		}
 	}, 1000);
 }
-
-getDepositOrderDetail();
 
 // 上传行为结束
 const afterRead = async (file) => {
