@@ -41,8 +41,11 @@
 					</div>
 					<div class="medal_content">
 						<div class="item" :class="{ item_bg: item.lockStatus == 1 }" v-for="(item, index) in state.medalListData" :key="index" @click="onLightUpMedal(item)">
-							<i v-if="item.lockStatus == 0"></i>
-							<VantLazyImg class="medal_icon" :src="item.lockStatus == 0 || item.lockStatus == 2 ? item.inactivatedPicUrl : item.activatedPicUrl" />
+							<template v-if="item.lockStatus === 0">
+								<div class="bg"></div>
+								<VantLazyImg class="medal_icon" :src="item.lockStatus == 0 || item.lockStatus == 2 ? item.inactivatedPicUrl : item.activatedPicUrl" />
+							</template>
+							<VantLazyImg class="medal_icon" :src="item.lockStatus == 0 || item.lockStatus == 2 ? item.inactivatedPicUrl : item.activatedPicUrl" v-else />
 						</div>
 					</div>
 				</div>
@@ -553,10 +556,20 @@ const loginOut = () => {
 					z-index: 1;
 					box-sizing: border-box;
 				}
-
+				.bg {
+					position: absolute;
+					top: -15px;
+					left: -15px;
+					width: 120px;
+					height: 120px;
+					background: url("./image.png") no-repeat;
+					background-size: 100% 100%;
+					/* 添加旋转和缩放动画 */
+				}
 				.medal_icon {
 					width: 72px;
 					height: 78px;
+					z-index: 20;
 				}
 			}
 

@@ -13,7 +13,10 @@
 			</div>
 			<div class="user">
 				<div class="userName">{{ store.userInfo.userAccount }}</div>
-				<div class="balance">{{ store.userInfo.currencySymbol }}{{ common.getInstance().formatFloat(store.userInfo.totalBalance) }}</div>
+				<div class="balance">
+					{{ store.userInfo.currencySymbol }}{{ common.getInstance().formatFloat(store.userInfo.totalBalance) }}
+					<img src="./arrow_bottom.png" alt="" />
+				</div>
 			</div>
 			<Notify />
 		</div>
@@ -22,7 +25,6 @@
 
 <script setup lang="ts">
 import { useUserStore } from "/@/store/modules/user";
-import CollapseIcon from "/@/assets/zh-CN/default/common/collapse_icon.svg";
 import userIcon from "/@/assets/zh-CN/default/common/userIcon.png";
 import Notify from "/@/components/Notify/Notify.vue";
 import common from "/@/utils/common";
@@ -121,9 +123,13 @@ const onCollapse = () => {
 				@include themeify {
 					color: themed("TB");
 				}
+				display: flex;
 				font-family: "PingFang SC";
 				font-size: 28px;
 				font-weight: 600;
+				img {
+					height: 36px;
+				}
 			}
 		}
 	}

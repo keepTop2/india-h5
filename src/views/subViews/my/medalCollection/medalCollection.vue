@@ -406,24 +406,24 @@ const onClickLeft = () => {
 			background-repeat: no-repeat;
 			background-size: 160px 160px;
 
-			// .bg {
-			// 	position: absolute;
-			// 	top: -17px;
-			// 	left: 50%;
-			// 	transform: translate(-50%, 0%);
-			// 	width: 162px;
-			// 	height: 162px;
-			// 	display: flex;
-			// 	align-items: center;
-			// 	justify-content: center;
-			// 	@include theme-bg("/my/medalCollection/highlight.png");
-			// 	background-position-x: center;
-			// 	background-position-y: bottom;
-			// 	background-repeat: no-repeat;
-			// 	background-size: 162px 162px;
-			// 	/* 添加旋转和缩放动画 */
-			// 	animation: rotateIcon 4s linear infinite;
-			// }
+			.bg {
+				position: absolute;
+				top: -17px;
+				left: 50%;
+				transform: translate(-50%, 0%);
+				width: 162px;
+				height: 162px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				background: url("./image.png");
+				background-position-x: center;
+				background-position-y: bottom;
+				background-repeat: no-repeat;
+				background-size: 162px 162px;
+				/* 添加旋转和缩放动画 */
+				animation: rotateIcon 4s linear infinite;
+			}
 			.icon {
 				position: absolute;
 				top: -17px;
