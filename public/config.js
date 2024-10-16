@@ -13,7 +13,7 @@ window.PLATFROM_CONFIG = {
 
 	//本地开发websocket地址
 	developmentWsURL: "wss://gw.playesoversea.store/ws",
-	// developmentWsURL: "wss://backend.bwsh.store/ws", // 开发环境
+	// developmentWsURL: "ws://192.168.30.130:9999/ws", // 王伟ws本地
 	// 本地开发传文件(开发专用)
 	developmentFileUrl: "http://192.168.30.72:7900",
 	developS128Url: "https://digmaantest.cm3645.com",
