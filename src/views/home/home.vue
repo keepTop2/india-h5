@@ -61,7 +61,7 @@
 		<!-- 红包雨倒计时 -->
 		<redbagRainCountdown v-model="showCountdown" :redBagInfo="redBagInfo" />
 		<!-- 红包雨页面 -->
-		<rainPage v-if="showRedBagRain" v-model="showRedBagRain" />
+		<rainPage v-if="showRedBagRain" v-model="showRedBagRain" :redBagInfo="redBagInfo" />
 	</div>
 </template>
 
@@ -336,6 +336,7 @@ const handleMore = (gameOneId) => {
 };
 
 const initializeWebSocket = async () => {
+	websocketService.send("/activity/redBagRain");
 	// 订阅红包雨推送消息
 	pubsub.subscribe("/activity/redBagRain", (data) => {
 		showCountdown.value = true;

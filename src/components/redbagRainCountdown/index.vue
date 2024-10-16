@@ -21,9 +21,8 @@ import { useCountdown } from "../../hooks/countdown";
 import router from "/@/router";
 import Common from "/@/utils/common";
 import pubsub from "/@/pubSub/pubSub";
-import { useActivityStore } from "/@/store/modules/activity";
 const { countdown, startCountdown, stopCountdown } = useCountdown();
-const activityStore = useActivityStore();
+
 const draggable = ref<HTMLElement | null>(null);
 const position = ref({ x: 0, y: 0 });
 const isDragging = ref(false);
@@ -34,7 +33,7 @@ const props = defineProps({
 	redBagInfo: {} as any,
 });
 const emit = defineEmits(["update:modelValue"]);
-
+const confirmDialog = () => {};
 // 点击红包进入详情页
 const handleClickCountdown = async () => {
 	router.push("/activity/RED_BAG_RAIN");

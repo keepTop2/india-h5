@@ -41,6 +41,15 @@
 				</div>
 			</div>
 		</RED_BAG_RAIN_Dialog>
+		// 提示弹窗
+		<RED_BAG_RAIN_Dialog v-model="shwoDialog" title="温馨提示" :confirm="confirmDialog" class="redBagRainResult">
+			<div class="mt_20 mb_20">
+				{{ dialogInfo.message }}
+			</div>
+			<template v-slot:footer v-if="[30045, 30053].includes(dialogInfo.status)"> 去绑定 </template>
+			<!-- <div class="Text3">您领取的红包太多啦，请下一场次再参与</div>
+			<img src="./image/pityIcon.png" alt="" /> -->
+		</RED_BAG_RAIN_Dialog>
 	</div>
 </template>
 
@@ -56,9 +65,12 @@ import readyGo from "./image/readyGo.png";
 import RED_BAG_RAIN_Dialog from "./RED_BAG_RAIN_Dialog/index.vue";
 import { useActivityStore } from "/@/store/modules/activity";
 import { useUserStore } from "/@/store/modules/user";
-
-defineProps({
+import { useLoading } from "/@/directives/loading/hooks";
+import router from "/@/router";
+const { startLoading, stopLoading } = useLoading();
+const props = defineProps({
 	modelValue: Boolean,
+	redBagInfo: {} as any,
 });
 
 const activityStore = useActivityStore();
@@ -66,11 +78,14 @@ const activitySocket = activitySocketService.getInstance();
 const { countdown, startCountdown } = useCountdown();
 const canvas = ref<HTMLCanvasElement | null>(null);
 const emit = defineEmits(["update:modelValue"]);
+
 const isPaused = ref(false);
 const setp: any = ref(null);
 const showRedBagRainResult = ref(false);
+const shwoDialog = ref(false);
 const getReadyCountdown = ref(3);
 const dialogTitle = ref("温馨提示");
+const dialogInfo: any = ref({});
 const settlement: any = ref({});
 let ctx: CanvasRenderingContext2D | null = null;
 let redBagInterval: ReturnType<typeof setInterval> | null = null;
@@ -274,18 +289,34 @@ const initReadyTime = () => {
 };
 
 const startRedbagRain = () => {
-	setp.value = 1;
-	const timer = setTimeout(() => {
-		setp.value = 2;
-		animate(); // 启动动画
-		redBagInterval = setInterval(() => {
-			if (!isPaused.value) {
-				addNewRedBag();
+	startLoading();
+	activityApi
+		.redBagParticipate({ redbagSessionId: props.redBagInfo?.redbagSessionId })
+		.then((res: any) => {
+			if (res.data?.status !== 10000) {
+				dialogInfo.value = res.data;
+				shwoDialog.value = true;
+				// emit("update:modelValue", false);
+			} else {
+				console.log(123123123);
+
+				setp.value = 1;
+				const timer = setTimeout(() => {
+					setp.value = 2;
+					animate(); // 启动动画
+					redBagInterval = setInterval(() => {
+						if (!isPaused.value) {
+							addNewRedBag();
+						}
+					}, 250);
+					startCountdown(props.redBagInfo?.dropTime);
+					clearTimeout(timer);
+				}, 3000);
 			}
-		}, 250);
-		startCountdown(activityStore.getActivityData.dropTime);
-		clearTimeout(timer);
-	}, 3000);
+		})
+		.finally(() => {
+			stopLoading();
+		});
 };
 
 const initRedbagRain = () => {
@@ -306,24 +337,23 @@ function exitGame() {
 			"/activity/redBagRain/settlement" +
 			":" +
 			JSON.stringify({
-				redbagSessionId: activityData.value.redbagSessionId,
+				redbagSessionId: props.redBagInfo?.redbagSessionId,
 			});
 		activitySocket.send(parmas);
 	}
 }
 const confirmDialog = () => {
+	if ([30045, 30053].includes(dialogInfo.value.status)) {
+		router.push("/securityCenter");
+	}
 	emit("update:modelValue", false);
 	activityStore.setIsShowRedBagRain(false);
 };
 // 生命周期管理
 onMounted(async () => {
-	activityData.value = activityStore.getActivityData;
-	await redBagParticipate();
 	initReadyTime();
 	initRedbagRain();
 	pubsub.subscribe("/activity/redBagRain/settlement", (data) => {
-		console.log(123123123123123, data);
-
 		if (data.code === 10000) {
 			settlement.value = data.data;
 			if (data.data.redbagCount > 0) {
@@ -336,11 +366,6 @@ onMounted(async () => {
 	});
 });
 
-const redBagParticipate = async () => {
-	await activityApi.redBagParticipate({ redbagSessionId: activityData.value.redbagSessionId }).then((res) => {
-		console.log(res);
-	});
-};
 onBeforeUnmount(() => {
 	if (redBagInterval) {
 		clearInterval(redBagInterval);

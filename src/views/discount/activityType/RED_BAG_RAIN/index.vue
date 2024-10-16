@@ -96,7 +96,7 @@
 			<div class="mt_20 mb_20">
 				{{ dialogInfo.message }}
 			</div>
-
+			<template v-slot:footer v-if="[30045, 30053].includes(dialogInfo.status)"> 去绑定 </template>
 			<!-- <div class="Text3">您领取的红包太多啦，请下一场次再参与</div>
 			<img src="./image/pityIcon.png" alt="" /> -->
 		</RED_BAG_RAIN_Dialog>
@@ -178,6 +178,9 @@ const onClickLeft = () => {
 	router.back();
 };
 const confirmDialog = () => {
+	if ([30045, 30053].includes(dialogInfo.value.status)) {
+		router.push("/securityCenter");
+	}
 	shwoDialog.value = false;
 };
 </script>

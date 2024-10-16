@@ -162,7 +162,7 @@ const confirmDialog = () => {
 	showDialog2.value = false;
 };
 const calculatePercentage = (part, whole) => {
-	return (part / whole) * 100;
+	return (part / whole) * 100 || 0;
 };
 </script>
 
