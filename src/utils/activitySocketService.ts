@@ -45,12 +45,14 @@ class activitySocketService {
 			this.socket.onopen = () => {
 				this.reconnectAttempts = 0; // 重置重连次数
 				this.startHeartbeat(); // 启动心跳
+				pubsub.publish("websocket_reconnected"); // 连接成功后发布事件
 				resolve(); // 连接成功
 			};
 
 			// 收到消息时根据消息类型推送出去
 			this.socket.onmessage = (event) => {
 				const data = JSON.parse(event.data);
+				console.log("data", data);
 				switch (data.msgTopic) {
 					case "/activity/redBagRain":
 						if (data.data.code !== 10000) return;
@@ -61,6 +63,9 @@ class activitySocketService {
 						break;
 					case "/activity/redBagRain/end":
 						pubsub.publish("/activity/redBagRain/end"); // 红包雨结算消息
+						break;
+					case "/wallet/rechargeSuccessFail":
+						pubsub.publish("/wallet/rechargeSuccessFail", data.data.data); // 充值成功/失败
 						break;
 				}
 			};
@@ -87,6 +92,29 @@ class activitySocketService {
 	// 发送消息
 	send(message: any): Promise<void> {
 		return new Promise((resolve, reject) => {
+			// 检查 WebSocket 连接状态，如果未连接则尝试重新连接
+			if (!this.socket || this.socket.readyState !== WebSocket.OPEN) {
+				console.warn("WebSocket未连接，尝试重新连接...");
+				this.connect()
+					.then(() => {
+						// 重新连接成功后，发送消息
+						if (this.socket && this.socket.readyState === WebSocket.OPEN) {
+							this.socket.send(message);
+							resolve();
+						} else {
+							reject(new Error("WebSocket重新连接后仍未能打开"));
+						}
+					})
+					.catch(reject);
+			} else {
+				// WebSocket连接打开时发送消息
+				this.socket.send(message);
+				resolve();
+			}
+		});
+	}
+	/*	send(message: any): Promise<void> {
+		return new Promise((resolve, reject) => {
 			// WebSocket连接打开时发送消息
 			if (this.socket && this.socket.readyState === WebSocket.OPEN) {
 				this.socket.send(message); // 发送消息
@@ -96,7 +124,7 @@ class activitySocketService {
 				reject(new Error("WebSocket未连接，无法发送消息")); // 拒绝Promise
 			}
 		});
-	}
+	}*/
 
 	// 关闭WebSocket连接
 	close(): void {
