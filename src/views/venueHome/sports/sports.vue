@@ -160,7 +160,7 @@ const onExpandAngCollapse = () => {
 };
 
 // 注册一个钩子，在组件被挂载之前被调用。
-onBeforeMount(() => {
+onMounted(() => {
 	//初始化体育
 	initSport();
 });
@@ -205,7 +205,7 @@ const onScroll = () => {
 //初始化体育
 const initSport = async () => {
 	tabActive.value = route.meta.name as TabOptions;
-	// console.warn("第一步主备开启线程");
+	console.warn("第一步主备开启线程");
 	//开启体育线程
 	workerManage.startWorker(workerManage.WorkerMap.sportViewProcessWorker.workerName);
 	//体育登录
@@ -240,7 +240,7 @@ const openSportPush = async () => {
 		token: sportsInfoStore.getSportsToken,
 		language: SportsCommonFn.getSportLanguage(),
 	};
-	// console.warn("第二步 准备发送指令到线程管理器");
+	console.warn("第二步 准备发送指令到线程管理器");
 	//如果当前激活的tab是 滚球
 	// console.log("tabActive.value", tabActive.value);
 	if (tabActive.value == "rollingBall") {
@@ -455,6 +455,8 @@ watch(
 
 // 每次数据变化初识路由
 const initRouter = () => {
+	console.log(234, sportList.value);
+
 	// 首次加载 sportState.sportTypeActive 没有值时，设置默认值为第一位球类列表
 	if (sportList.value.length) {
 		const firstSportTypePath = "/venueHome/sports/" + tabActive.value + "/" + sportList.value[0]?.sportType;
@@ -586,6 +588,8 @@ const getMatchResult = async () => {
 	//获取赛果数量后 添加到sports中
 	if (res.data) {
 		const sportList = res.data.sportList;
+		console.log(res.data.sportList, "res.data.sportList");
+
 		viewSportPubSubEventData.setSportData({
 			...viewSportPubSubEventData.viewSportData,
 			sports: formattingResultViewData(sportList),

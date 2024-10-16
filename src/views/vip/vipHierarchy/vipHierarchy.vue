@@ -2,7 +2,7 @@
 	<VantNavBar :title="$t(`VantNavBar['VIP等级制度']`)" @onClickLeft="onClickLeft"></VantNavBar>
 
 	<div class="content">
-		<Collapse v-for="(item, index) in state.vipHierarchyData.siteVIPSystemRankVOList" :key="index">
+		<Collapse v-for="(item, index) in state.vipHierarchyData.siteVIPSystemRankVOList" :key="index" :is-open="index == 0 ? true : false">
 			<template #header>
 				<div class="header" :class="getClass(item)">
 					<div>
@@ -22,7 +22,7 @@
 
 				<div class="content_cell" v-for="(i, idx) in item.siteVIPGradeVOList" :key="idx">
 					<div>
-						<img class="icon" :src="i.picIcon" alt="" />
+						<VantLazyImg class="icon" :src="i.picIcon" alt="" />
 						<span>{{ i.vipGradeName }}</span>
 					</div>
 					<div>{{ i.upgradeXp }}</div>
@@ -46,7 +46,7 @@ import Collapse from "./Collapse/index.vue";
 import { useRouter } from "vue-router";
 const router = useRouter();
 
-const state = reactive({
+const state: any = reactive({
 	vipHierarchyData: {},
 });
 

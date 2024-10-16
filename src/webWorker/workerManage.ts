@@ -50,7 +50,7 @@ class WorkerManage {
 	public async startWorker(workerName: WorkerName) {
 		// return new Promise((resolve, reject) => {
 		const resPonsedata: WebResponse = {};
-
+		console.log("即将启动线程");
 		if (this.workerList.length < this.maxWorkerCount) {
 			const idx = this.workerList.findIndex((item) => item.workerName == workerName);
 			if (idx != -1) {
@@ -115,7 +115,7 @@ class WorkerManage {
 	 * @description 收到视图数据
 	 */
 	private viewToWorker<T1, T2>(receiverData: WorkerTransfer<T1, T2>) {
-		// console.warn("第三步 线程管理器收到了视图数据 准备发送到对应线程", receiverData);
+		console.warn("第三步 线程管理器收到了视图数据 准备发送到对应线程", receiverData);
 		//体育视图处理线程
 		// if (receiverData.workerName == WorkerName.sportViewProcessWorker) {
 		//找到线程实例
@@ -142,7 +142,7 @@ class WorkerManage {
 
 		// 	//处理好的数据 赋值给视图
 		pubsub.PubSubEvents.WorkerEvents.workerToView.params = workerToViewData;
-		// console.warn("第八步  线程管理器收到处理好的数据准备发送到视图");
+		console.warn("第八步  线程管理器收到处理好的数据准备发送到视图");
 		pubsub.publish(pubsub.PubSubEvents.WorkerEvents.workerToView.eventName, pubsub.PubSubEvents.WorkerEvents.workerToView.params);
 	}
 }

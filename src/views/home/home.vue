@@ -9,10 +9,10 @@
 				{{ $t('home["热门游戏"]') }}
 			</h3>
 			<HotGame class="m24" @queryCollection="queryCollection" :gameInfoList="hotGames" />
-			<!-- 收藏游戏 -->
+			<!-- 喜欢的游戏 -->
 			<h3 class="title" v-show="isShowCollect">
 				<SvgIcon iconName="home/star" alt="" />
-				{{ $t('home["收藏游戏"]') }}
+				{{ $t('home["喜欢的游戏"]') }}
 			</h3>
 			<CollectGames v-show="isShowCollect" @queryCollection="queryCollection" :collectList="collectList" class="m24" />
 			<h3 class="title_more" v-show="eventList?.length">
@@ -20,7 +20,7 @@
 					<SvgIcon iconName="home/event_game" alt="" />
 					{{ $t('home["我们的游戏"]') }}
 				</span>
-				<span class="more fw_400 fs_28 color_T1" @click="router.push('/venueHome/sports')">{{ $t(`home["更多"]`) }}</span>
+				<span class="more fw_400 fs_28 color_T1" @click="router.push({ name: 'rollingBallList', params: { sportType: 1 } })">{{ $t(`home["更多"]`) }}</span>
 			</h3>
 			<EventList v-show="eventList?.length" v-for="(event, index) in eventList" class="m24" :event="event" :key="index" />
 			<!-- 体育购物车 -->
@@ -52,16 +52,16 @@
 			</h3>
 			<GameBigPic class="m24" />
 			<!-- 赞助 -->
-			<Sponsor />
+			<Sponsor :data="PartnerList" />
 			<!-- 转账方式 -->
-			<Currency />
+			<Currency :data="PaymentVendorList" />
 			<!-- 负责任游戏 -->
 			<Footer />
 		</div>
 		<!-- 红包雨倒计时 -->
 		<redbagRainCountdown v-model="showCountdown" :redBagInfo="redBagInfo" />
 		<!-- 红包雨页面 -->
-		<rainPage v-if="showRedBagRain" v-model="showRedBagRain" />
+		<rainPage v-if="showRedBagRain" v-model="showRedBagRain" :redBagInfo="redBagInfo" />
 	</div>
 </template>
 
@@ -105,10 +105,10 @@ import viewSportPubSubEventData from "../venueHome/sports/hooks/viewSportPubSubE
 import { GameInfoList, LobbyTopGame } from "/#/game";
 import activitySocketService from "/@/utils/activitySocketService";
 import { useActivityStore } from "/@/store/modules/activity";
+import { computed, onActivated, onDeactivated, ref, watch } from "vue";
 const websocketService = activitySocketService.getInstance();
 const router = useRouter();
 const UserStore = useUserStore();
-const activityStore = useActivityStore();
 const sportsInfoStore = useSportsInfoStore();
 const sportsBetEvent = useSportsBetEventStore();
 const { startPolling, stopPolling, initSportPubsub, unSubSport, sportsLogin, clearState } = useSportPubSubEvents();
@@ -117,6 +117,8 @@ const eventList = ref();
 const collectList = ref([]);
 const hotGames = ref<GameInfoList[]>([]);
 const lobbyTopGame = ref<LobbyTopGame[]>();
+const PaymentVendorList = ref([]);
+const PartnerList = ref([]);
 const showRedBagRain = ref(false);
 //判断是否收藏
 const isShowCollect = computed(() => {
@@ -154,21 +156,27 @@ onActivated(() => {
 	getSportEventsRecommend();
 	//获取收藏的游戏列表
 	queryCollection();
+	// 获取支付商
+	queryPaymentVendorList();
+	// 获取赞助商
+	queryPartnerList();
+	getGameInfoDetail();
 	//初始化体育
 	initSport();
 	pubsub.subscribe("getCollect", queryCollection);
 	// 初始化活动ws连接
 	initializeWebSocket();
-	showRedBagRain.value = activityStore.isShowRedBagRain;
+	pubsub.subscribe("ShowRedBagRain", (data) => {
+		showRedBagRain.value = data;
+	});
 });
 onDeactivated(() => {
-	// 卸载体育
-	unSport();
 	// 关闭登录接口轮询
 	stopPolling();
 	// 清除体育数据缓存
 	clearStoreInfo();
-
+	// 卸载体育
+	unSport();
 	//关闭ws连接
 	destroyWS();
 });
@@ -179,6 +187,33 @@ const queryCollection = () => {
 			collectList.value = res.data.records || [];
 		});
 	}
+};
+/**
+ * @description 获取热门游戏详情
+ */
+const getGameInfoDetail = () => {
+	GameApi.queryGameInfoDetail({
+		label: 1,
+		pageSize: -1,
+	}).then((res) => {
+		console.log(res, "==queryGameInfoDetail");
+		hotGames.value = res.data.records;
+	});
+};
+
+// 获取支付商
+const queryPaymentVendorList = () => {
+	HomeApi.queryPaymentVendorList().then((res) => {
+		console.log(res);
+		PaymentVendorList.value = res.data || [];
+	});
+};
+//获取站点赞助商
+const queryPartnerList = () => {
+	HomeApi.queryPartnerList().then((res) => {
+		console.log(res);
+		PartnerList.value = res.data || [];
+	});
 };
 //获取推荐赛事列表
 const getSportEventsRecommend = () => {
@@ -301,19 +336,19 @@ const handleMore = (gameOneId) => {
 };
 
 const initializeWebSocket = async () => {
+	websocketService.send("/activity/redBagRain");
 	// 订阅红包雨推送消息
 	pubsub.subscribe("/activity/redBagRain", (data) => {
 		showCountdown.value = true;
 		redBagInfo.value = data;
 	});
-	// ws连接
-	await websocketService.connect().then(() => {
-		websocketService.send("/activity/redBagRain");
+	pubsub.subscribe("/activity/redBagRain/end", (data) => {
+		showCountdown.value = false;
 	});
 };
 const destroyWS = () => {
 	pubsub.unsubscribe("/activity/redBagRain", () => {});
-	websocketService.close();
+	pubsub.unsubscribe("/activity/redBagRain/end", () => {});
 };
 </script>
 

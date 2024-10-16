@@ -53,6 +53,7 @@
 	}
 	.sponsor_list {
 		display: flex;
+		flex-wrap: wrap;
 		width: 100%;
 		-webkit-box-align: center;
 		align-items: center;
@@ -65,7 +66,7 @@
 			width: 218px;
 			height: 218px;
 			box-sizing: border-box;
-			padding: 40px;
+			padding: 25px;
 			display: flex;
 			justify-content: center;
 			align-items: center;

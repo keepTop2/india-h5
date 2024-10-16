@@ -56,7 +56,10 @@
 						<p class="label">
 							<span>活动时间</span>
 						</p>
-						<p class="value">{{ dayjs(activityData?.activityStartTime).format("YYYY-MM-DD HH:mm:ss") }}~{{ dayjs(activityData?.activityEndTime).format("YYYY-MM-DD HH:mm:ss") }}</p>
+						<p class="value" v-if="activityData.activityDeadline == 0">
+							{{ dayjs(activityData?.activityStartTime).format("YYYY-MM-DD HH:mm:ss") }}~{{ dayjs(activityData?.activityEndTime).format("YYYY-MM-DD HH:mm:ss") }}
+						</p>
+						<p class="value" v-if="activityData.activityDeadline == 1">长期活动</p>
 					</div>
 					<div class="detail-row">
 						<p class="label">
@@ -123,15 +126,8 @@ const apply = () => {
 				dialogInfo.value = res.data;
 				showDialog.value = true;
 			} else {
-				activityApi.getActivityReward().then((res: any) => {
-					if (res.code === 10000) {
-						showToast("申请成功");
-						getConfigDetail();
-					} else {
-						dialogInfo.value = res.data;
-						showDialog.value = true;
-					}
-				});
+				showToast("申请成功");
+				getConfigDetail();
 			}
 		}
 	});

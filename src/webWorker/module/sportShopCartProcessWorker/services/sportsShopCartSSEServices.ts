@@ -21,7 +21,7 @@ export default (function () {
 		 * @description 购物车sse 消息处理业务
 		 */
 		public startSEEProcess(data: SportEventSourceResponse) {
-			// console.log("第六步 对应service处理对应业务");
+			console.log("第六步 购物车sse对应service处理对应业务");
 			const workerToViewData: WorkerTransfer<WorkerToViewSportsShopCart<any>, SportShopCartProcessWorkerCommandType> = {
 				workerName: WorkerName.sportShopCartProcessWorker,
 				commandType: SportShopCartProcessWorkerCommandType.sportsShopCartViewChanges,
@@ -38,7 +38,7 @@ export default (function () {
 		 * @description 冠军购物车sse 消息处理业务
 		 */
 		public startOutrightSEEProcess(data: SportEventSourceResponse) {
-			// console.log("第六步 对应service处理对应业务");
+			console.log("第六步 冠军购物车对应service处理对应业务");
 
 			const workerToViewData: WorkerTransfer<WorkerToViewSportsShopCart<any>, SportShopCartProcessWorkerCommandType> = {
 				workerName: WorkerName.sportShopCartProcessWorker,

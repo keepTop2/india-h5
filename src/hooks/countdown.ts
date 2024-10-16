@@ -1,4 +1,4 @@
-import { ref, onUnmounted } from 'vue';
+import { ref, onUnmounted } from "vue";
 
 export function useCountdown() {
 	const countdown = ref(0); // 倒计时时长
@@ -10,6 +10,8 @@ export function useCountdown() {
 	 * @annotation 倒计时启动函数
 	 */
 	const startCountdown = (duration?: number) => {
+		console.log("duration", duration);
+
 		countdown.value = duration || 60;
 		isCountingDown.value = true;
 

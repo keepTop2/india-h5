@@ -44,6 +44,7 @@
 
 			<Button class="mt_40" :type="btnDisabled ? 'disabled' : 'default'" @click="onStep">{{ $t('forgetPassword["下一步"]') }}</Button>
 		</div>
+		<!-- 手机区号选择器 -->
 		<AreaCodePicker
 			v-model:showAreaCode="showAreaCode"
 			v-model:searchAreaCode="searchAreaCode"
@@ -84,12 +85,12 @@ const captchaButton = ref<{
 const emit = defineEmits(["onStep"]);
 const areaCode: any = ref([]);
 const indexList: any = ref([]);
-const showAreaCode = ref(true);
+const showAreaCode = ref(false);
 const searchAreaCode = ref("");
 const areaCodeObj: any = ref({});
 const currentAreaCodeIndex: Ref<number | string> = ref("");
 const state = reactive({
-	type: "phone" as "email" | "phone",
+	type: "email" as "email" | "phone",
 	email: "",
 	phone: "",
 	verifyCode: "",
@@ -327,8 +328,7 @@ const selectAreaCode = (item, i: CountryData) => {
 			display: flex;
 			justify-content: space-between;
 		}
-		.p
-		.icon {
+		.p .icon {
 			width: 32px;
 			height: 32px;
 		}

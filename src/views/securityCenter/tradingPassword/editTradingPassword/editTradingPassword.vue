@@ -8,7 +8,7 @@
 			<FormInput
 				v-model="state.oldPassword"
 				:type="eyeShow ? 'password' : 'text'"
-				:maxlength="16"
+				:maxlength="6"
 				:placeholder="$t(`editTradingPassword['原交易密码']`)"
 				:errorBorder="!isOldPasswordValid && state.oldPassword !== ''"
 			>
@@ -28,7 +28,7 @@
 			<FormInput
 				v-model="state.newPassword"
 				:type="eyeShow2 ? 'password' : 'text'"
-				:maxlength="16"
+				:maxlength="6"
 				:placeholder="$t(`editTradingPassword['新交易密码']`)"
 				:errorBorder="(!isNewPasswordValid || isSameAsOldPassword) && state.newPassword !== ''"
 			>
@@ -49,7 +49,7 @@
 			<FormInput
 				v-model="state.confirmPassword"
 				:type="eyeShow3 ? 'password' : 'text'"
-				:maxlength="16"
+				:maxlength="6"
 				:placeholder="$t(`editTradingPassword['确认交易密码']`)"
 				:errorBorder="!isConfirmPasswordValid && state.confirmPassword !== ''"
 			>
@@ -70,7 +70,7 @@
 			<!-- 忘记旧密码提示 -->
 			<div class="tips">
 				{{ $t('editTradingPassword["忘记了旧交易密码？"]') }}
-				<span @click="$router.push('/retrieveTradingPassword/email')">{{ $t('editTradingPassword["找回交易密码"]') }}</span>
+				<span @click="$router.push('/retrieveTradingPassword/phone')">{{ $t('editTradingPassword["找回交易密码"]') }}</span>
 			</div>
 		</form>
 	</div>
@@ -133,6 +133,7 @@ const onSubmit = async () => {
 	if (res.code == common.getInstance().ResCode.SUCCESS) {
 		showToast(res.message);
 		clear();
+		onClickLeft();
 	}
 };
 

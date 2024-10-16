@@ -9,14 +9,14 @@
 		</div>
 		<div class="header">
 			<span>{{ data.unlockTime }}</span>
-			<span>{{ $t('medalDetails["获奖"]') }}</span>
+			<span v-if="data.lockStatus == 1">{{ $t('medalDetails["获奖"]') }}</span>
 		</div>
-		<div class="describe">{{ data.medalDescI18 }}</div>
+		<div class="describe" v-html="data.medalDescI18"></div>
 
 		<div class="cell_list">
 			<div class="cell">
 				<div class="label">{{ $t('medalDetails["奖励"]') }}</div>
-				<div class="value">{{ data.rewardAmount }} $</div>
+				<div class="value">{{ data.rewardAmount }} {{ useUserStore().getUserInfo.platCurrencyName }}</div>
 			</div>
 			<div class="cell">
 				<div class="label">{{ $t('medalDetails["流水倍数"]') }}</div>
@@ -31,6 +31,7 @@
 import { useThemesStore } from "/@/store/modules/themes";
 import { NotUnlockList } from "../medalCollection/interface";
 import { useRoute, useRouter } from "vue-router";
+import { useUserStore } from "/@/store/modules/user";
 const route = useRoute();
 const router = useRouter();
 const themesStore = useThemesStore();
@@ -93,9 +94,11 @@ const onClickLeft = () => {
 	}
 	.describe {
 		margin-top: 24px;
+		word-wrap: break-word;
 		@include themeify {
 			color: themed("TB");
 		}
+		padding: 0 24px;
 		text-align: center;
 		font-family: "PingFang SC";
 		font-size: 26px;

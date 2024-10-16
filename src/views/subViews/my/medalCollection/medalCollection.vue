@@ -31,15 +31,19 @@
 			<div class="text_list">
 				<!-- 提示图标 -->
 				<div class="tooltip">
-					<VantLazyImg class="icon" :src="theme === ThemeEnum.default ? tips_icon : tips_icon_light" />
-					<div class="tooltipText">{{ $t('medalCollection["宝箱奖励流水倍数为8倍"]') }}</div>
+					<van-popover v-model:show="showPopover" theme="dark" :show-arrow="false">
+						<div class="p_10 popup">{{ $t('medalCollection["宝箱奖励流水倍数为8倍"]') }}</div>
+						<template #reference>
+							<VantLazyImg class="icon" :src="theme === ThemeEnum.default ? tips_icon : tips_icon_light" />
+						</template>
+					</van-popover>
 				</div>
 				<!-- 遍历展示解锁勋章的提示信息 -->
 				<i18n-t v-for="(item, index) in state.medalRewardRespVOS" :key="index" keypath="medalCollection.解锁勋章" :tag="'p'">
 					<template v-slot:value>
 						<span class="text">{{ $t("medalCollection.枚", { value: item.unlockMedalNum }) }}</span>
 					</template>
-					<template v-slot:num>{{ item.rewardAmount }} </template>
+					<template v-slot:num>{{ item.rewardAmount }}{{ useUserStore().getUserInfo.platCurrencyName }} </template>
 				</i18n-t>
 			</div>
 		</template>
@@ -113,10 +117,11 @@ import treasure_box_5_receive from "/@/assets/zh-CN/default/my/medalCollection/t
 import { ThemeEnum } from "/@/enum/appConfigEnum";
 import { useThemesStore } from "/@/store/modules/themes";
 import { useRouter } from "vue-router";
+import { useUserStore } from "/@/store/modules/user";
 const router = useRouter();
 const themesStore = useThemesStore();
 const theme = computed(() => themesStore.themeName);
-
+const showPopover = ref(false);
 const state = reactive({
 	canLightNum: 0 as number,
 	hasUnlockList: [] as NotUnlockList[],
@@ -332,31 +337,6 @@ const onClickLeft = () => {
 				display: none;
 			}
 		}
-		.tooltip:hover {
-			.tooltipText {
-				position: absolute;
-				top: calc(100% + 10px);
-				right: -40px;
-				width: max-content;
-				min-width: 244px;
-				max-width: 370px;
-				min-height: 50px;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				padding: 5px 15px;
-				border-radius: 20px;
-				@include themeify {
-					color: themed("T3");
-					background: rgba(0, 0, 0, 0.77);
-				}
-				font-family: "PingFang SC";
-				font-size: 20px;
-				font-weight: 400;
-				text-align: center;
-				box-sizing: border-box;
-			}
-		}
 
 		p {
 			@include themeify {
@@ -426,24 +406,24 @@ const onClickLeft = () => {
 			background-repeat: no-repeat;
 			background-size: 160px 160px;
 
-			.bg {
-				position: absolute;
-				top: -17px;
-				left: 50%;
-				transform: translate(-50%, 0%);
-				width: 162px;
-				height: 162px;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				@include theme-bg("/my/medalCollection/highlight.png");
-				background-position-x: center;
-				background-position-y: bottom;
-				background-repeat: no-repeat;
-				background-size: 162px 162px;
-				/* 添加旋转和缩放动画 */
-				animation: rotateIcon 4s linear infinite;
-			}
+			// .bg {
+			// 	position: absolute;
+			// 	top: -17px;
+			// 	left: 50%;
+			// 	transform: translate(-50%, 0%);
+			// 	width: 162px;
+			// 	height: 162px;
+			// 	display: flex;
+			// 	align-items: center;
+			// 	justify-content: center;
+			// 	@include theme-bg("/my/medalCollection/highlight.png");
+			// 	background-position-x: center;
+			// 	background-position-y: bottom;
+			// 	background-repeat: no-repeat;
+			// 	background-size: 162px 162px;
+			// 	/* 添加旋转和缩放动画 */
+			// 	animation: rotateIcon 4s linear infinite;
+			// }
 			.icon {
 				position: absolute;
 				top: -17px;
@@ -544,5 +524,9 @@ const onClickLeft = () => {
 	50% {
 		transform: translate(-50%, 0%) scale(1.13);
 	}
+}
+:deep(.van-popover__content) {
+	background: rgba(0, 0, 0, 0.7) !important;
+	margin-right: 60px !important;
 }
 </style>

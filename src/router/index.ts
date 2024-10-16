@@ -143,15 +143,15 @@ const router: Router = createRouter({
 	routes: routes,
 } as any);
 
-router.beforeEach((to, from, next) => {
-	if (to.fullPath.indexOf("activity") !== -1) {
-		if (useUserStore().token) {
-			next();
-		} else {
-			router.push("/login");
-		}
-	} else {
-		next();
-	}
-});
+// router.beforeEach((to, from, next) => {
+// 	if (to.fullPath.indexOf("activity") !== -1) {
+// 		if (useUserStore().token) {
+// 			next();
+// 		} else {
+// 			router.push("/login");
+// 		}
+// 	} else {
+// 		next();
+// 	}
+// });
 export default router;

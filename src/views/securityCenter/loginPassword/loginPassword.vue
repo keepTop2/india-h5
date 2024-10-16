@@ -4,9 +4,10 @@
 
 		<form class="form">
 			<span class="title">{{ $t('loginPassword["旧密码"]') }}</span>
+
 			<FormInput
 				v-model="state.oldPassword"
-				:type="eyeShow ? 'oldPassword' : 'text'"
+				:type="eyeShow ? 'password' : 'text'"
 				:maxlength="16"
 				:placeholder="$t(`loginPassword['旧密码']`)"
 				:errorBorder="!isOldPasswordValid && state.oldPassword !== '' ? true : false"
@@ -22,18 +23,18 @@
 				<span v-if="!isOldPasswordValid && state.oldPassword !== ''" class="text">{{ $t('register["密码为8-16位"]') }}</span>
 			</div>
 
-			<span class="title">{{ $t('loginPassword["登录密码"]') }}</span>
+			<span class="title">{{ $t('loginPassword["新密码"]') }}</span>
 			<FormInput
 				v-model="state.newPassword"
-				:type="eyeShow ? 'password' : 'text'"
+				:type="eyeShow1 ? 'password' : 'text'"
 				:maxlength="16"
-				:placeholder="$t(`loginPassword['登录密码']`)"
+				:placeholder="$t(`loginPassword['新密码']`)"
 				:errorBorder="!isPasswordValid && state.newPassword !== '' ? true : false"
 			>
 				<template v-slot:right>
 					<div class="right">
 						<SvgIcon v-if="state.newPassword" class="clearIcon" iconName="loginOrRegister/clear" @click="state.newPassword = ''" />
-						<SvgIcon class="icon" :iconName="eyeShow ? 'loginOrRegister/eye-off' : 'loginOrRegister/eye'" @click="eyeShow = !eyeShow" />
+						<SvgIcon class="icon" :iconName="eyeShow1 ? 'loginOrRegister/eye-off' : 'loginOrRegister/eye'" @click="eyeShow1 = !eyeShow1" />
 					</div>
 				</template>
 			</FormInput>
@@ -44,7 +45,7 @@
 			<span class="title">{{ $t('loginPassword["确认密码"]') }}</span>
 			<FormInput
 				v-model="state.confirmPassword"
-				:type="eyeShow ? 'password' : 'text'"
+				:type="eyeShow2 ? 'password' : 'text'"
 				:maxlength="16"
 				:placeholder="$t(`loginPassword['确认密码']`)"
 				:errorBorder="!isConfirmPasswordValid ? true : false"
@@ -52,7 +53,7 @@
 				<template v-slot:right>
 					<div class="right">
 						<SvgIcon v-if="state.confirmPassword" class="clearIcon" iconName="loginOrRegister/clear" @click="state.confirmPassword = ''" />
-						<SvgIcon class="icon" :iconName="eyeShow ? 'loginOrRegister/eye-off' : 'loginOrRegister/eye'" @click="eyeShow = !eyeShow" />
+						<SvgIcon class="icon" :iconName="eyeShow2 ? 'loginOrRegister/eye-off' : 'loginOrRegister/eye'" @click="eyeShow2 = !eyeShow2" />
 					</div>
 				</template>
 			</FormInput>
@@ -75,6 +76,8 @@ const router = useRouter();
 const $: any = i18n.global;
 
 const eyeShow = ref(true);
+const eyeShow1 = ref(true);
+const eyeShow2 = ref(true);
 const btnDisabled = ref(true);
 
 const state = reactive({
@@ -114,7 +117,7 @@ watch(
 );
 
 const onSubmit = async () => {
-	const res = await loginPasswordApi.changePassword().catch((err) => err);
+	const res = await loginPasswordApi.changePassword(state).catch((err) => err);
 	if (res.code == common.getInstance().ResCode.SUCCESS) {
 		showToast($.t("common['修改成功']"));
 		// 返回上一个页面

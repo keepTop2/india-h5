@@ -12,8 +12,8 @@
 					<div class="bonus-card">
 						<div class="bonus-header">红包雨</div>
 						<div class="bonus-content">
-							<div class="bonus-row1 color_Theme">{{ redBagInfo.clientStatus == 1 ? "距离本场红包雨结束" : "距离下一场红包雨还有" }}</div>
-							<div class="countdown">
+							<div class="bonus-row1 color_Theme">{{ redBagInfo.clientStatus == 1 ? "距离本场红包雨结束" : redBagInfo.clientStatus == 2 ? "本期红包雨已结束" : "距离下一场红包雨还有" }}</div>
+							<div class="countdown" :class="redBagInfo.clientStatus == 2 ? 'isOver' : ''">
 								<span class="">{{ Common.convertMilliseconds(countdown * 1000) }}</span>
 							</div>
 						</div>
@@ -34,11 +34,11 @@
 						<div class="sessionsBox">
 							<div class="sessions">
 								<div v-for="(item, index) in redBagInfo.sessionInfoList" class="session" :key="index">
-									<div class="color_T1">{{ Common.dayFormatHMS(item.startTime) }}</div>
+									<div class="color_T1">{{ Common.dayFormatHM(item.startTime) }}</div>
 									<div class="sideBox">
-										<img src="./image/sessionCricle.svg" alt="" v-if="item.status == 0" />
-										<img src="./image/sessionCricle1.svg" alt="" v-if="item.status == 1" />
-										<img src="./image/sessionCricle2.svg" alt="" v-if="item.status == 2" />
+										<img src="./image/sessionCricle.png" alt="" v-if="item.status == 0" />
+										<img src="./image/sessionCricle1.png" alt="" v-if="item.status == 1" />
+										<img src="./image/sessionCricle2.png" alt="" v-if="item.status == 2" />
 									</div>
 									<div :class="'status' + item.status">{{ item.status == 0 ? "未开始" : item.status == 1 ? "进行中" : "已结束" }}</div>
 									<span class="side" :class="'type' + item.status"></span>
@@ -96,7 +96,7 @@
 			<div class="mt_20 mb_20">
 				{{ dialogInfo.message }}
 			</div>
-
+			<template v-slot:footer v-if="[30045, 30053].includes(dialogInfo.status)"> 去绑定 </template>
 			<!-- <div class="Text3">您领取的红包太多啦，请下一场次再参与</div>
 			<img src="./image/pityIcon.png" alt="" /> -->
 		</RED_BAG_RAIN_Dialog>
@@ -142,9 +142,8 @@ const getRedBagInfo = async () => {
 				startCountdown(redBagInfo.value.advanceTime);
 				// 判断活动已活动已全部结束
 			} else if (redBagInfo.value.clientStatus === 2) {
-				//  获取明天第一场的时间
-				const time = res.data.sessionInfoList[0].startTime + 1000 * 60 * 60 * 24 - new Date().getTime();
-				startCountdown(Math.floor(time / 1000));
+				//  获取明天第一场的时间z
+				// startCountdown();
 			} else if (redBagInfo.value.clientStatus === 0) {
 				//  获取下一场比赛的时间
 				const time = res.data.sessionInfoList.find((item) => item.redbagSessionId == res.data.redbagSessionId).startTime - new Date().getTime();
@@ -156,11 +155,9 @@ const getRedBagInfo = async () => {
 	});
 };
 const getActivityReward = async () => {
-	activityStore.setIsShowRedBagRain(true);
-	router.push("/");
 	if (redBagInfo.value.clientStatus == 1) {
 		await activityApi.redBagParticipate({ redbagSessionId: redBagInfo.value.redbagSessionId }).then((res: any) => {
-			if (res.code.status === 10000) {
+			if (res.data.status === 10000) {
 				activityStore.setIsShowRedBagRain(true);
 				router.push("/");
 			} else {
@@ -181,6 +178,9 @@ const onClickLeft = () => {
 	router.back();
 };
 const confirmDialog = () => {
+	if ([30045, 30053].includes(dialogInfo.value.status)) {
+		router.push("/securityCenter");
+	}
 	shwoDialog.value = false;
 };
 </script>
@@ -230,6 +230,19 @@ const confirmDialog = () => {
 		}
 		.countdown {
 			background: url("./image/countdownBg.png") no-repeat;
+			width: 320px;
+			background-size: 100% 100%;
+			text-align: center;
+			margin: 0 auto;
+			height: 68px;
+			line-height: 68px;
+			font-weight: 600;
+			@include themeify {
+				color: themed("Theme");
+			}
+		}
+		.isOver {
+			background: url("./image/overCountdownBg.png") no-repeat;
 			width: 320px;
 			background-size: 100% 100%;
 			text-align: center;
@@ -305,6 +318,7 @@ const confirmDialog = () => {
 	object-fit: cover;
 	margin-bottom: 20px;
 }
+
 .activity-details {
 	border-radius: 10px;
 	padding: 15px;
@@ -339,7 +353,8 @@ const confirmDialog = () => {
 	}
 	.detail-content {
 		padding: 0 62px;
-		background: url("../../image/detail_content.png");
+
+		background: url("../../image/detail_content.png") no-repeat;
 		background-size: 100% 100%;
 		font-size: 24px;
 		.detail-row {
@@ -395,12 +410,14 @@ const confirmDialog = () => {
 			}
 		}
 		.sessionsBox {
-			overflow-y: auto;
 			padding-bottom: 10px;
+
+			overflow-y: auto;
 			.sessions {
 				display: flex;
+				justify-content: space-around;
 				.session {
-					min-width: 115px;
+					min-width: 130px;
 					text-align: center;
 					position: relative;
 					.sideBox {
@@ -408,6 +425,9 @@ const confirmDialog = () => {
 						position: relative;
 						display: flex;
 						justify-content: center;
+					}
+					img {
+						height: 30px;
 					}
 					.side {
 						display: inline-block;
@@ -417,7 +437,7 @@ const confirmDialog = () => {
 							background-color: themed("T1");
 						}
 						position: absolute;
-						left: calc(50% + 22px);
+						left: calc(50% + 31px);
 						top: 50%;
 						transform: translateY(-50%);
 					}

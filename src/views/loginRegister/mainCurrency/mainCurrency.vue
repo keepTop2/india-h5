@@ -51,7 +51,7 @@ getCommonBusinessDownBox();
 
 //  选择币种
 const onSelectCurrency = (item: CurrencyEnums) => {
-	router.push({ path: "/register", query: { currency: item.code } });
+	router.push({ path: "/register", query: { currency: item.code, value: item.value } });
 };
 
 // 创建一个计算属性 filteredCurrencyList，用于根据输入的搜索值动态过滤 currencyList 中的对象

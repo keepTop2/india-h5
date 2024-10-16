@@ -20,7 +20,12 @@
 			<div class="vip_level_progress">
 				<span>{{ $t(`vip["升级所需经验"]`) }}</span>
 				<span>{{ state.userVipInfo.currentExp }} / {{ state.userVipInfo.upgradeVipExp }}</span>
-				<SvgIcon class="warning_icon" iconName="vip/warning" />
+				<van-popover v-model:show="showPopover" theme="dark" :show-arrow="false">
+					<div class="p_10 popup">体育/电竞场馆投注1 $ = 2积分，其他场馆投注 1$=1积分， 所有投注 均按当前汇率兑换为美元结算</div>
+					<template #reference>
+						<SvgIcon class="warning_icon" iconName="vip/warning" />
+					</template>
+				</van-popover>
 			</div>
 			<!-- VIP进度条 -->
 			<Progress class="vip_progress" :userVipInfo="state.userVipInfo" :percentageShow="true" />
@@ -29,7 +34,13 @@
 		<div class="notify">
 			<SvgIcon class="lock" iconName="vip/lock" />
 			<span class="text">{{ $t(`vip["通过VIP升级获得专属定制化服务"]`) }}</span>
-			<SvgIcon class="warning_icon" iconName="vip/warning" />
+
+			<van-popover v-model:show="showPopover2" theme="dark" :show-arrow="false">
+				<div class="p_10 popup">VIP专属客服可以给你提供帮助，欢迎随时联系我们</div>
+				<template #reference>
+					<SvgIcon class="warning_icon" iconName="vip/warning" />
+				</template>
+			</van-popover>
 		</div>
 
 		<div class="vip_rewards">
@@ -51,9 +62,17 @@
 			</div>
 			<div class="reward_list">
 				<div class="reward_list_header">
-					<span>{{ levelData[0].label }}</span>
-					<span>VIP</span>
-					<span>2-7</span>
+					<div>
+						<span>{{ levelData[state.vipRank].label }}</span>
+						<span>VIP</span>
+						<span>{{ levelData[state.vipRank]?.minVipGrade }}-{{ levelData[state.vipRank]?.maxVipGrade }}</span>
+					</div>
+					<van-popover v-model:show="showPopover3" theme="dark" :show-arrow="false">
+						<div class="p_10 popup">包含之前等级的所有福利</div>
+						<template #reference>
+							<SvgIcon class="warning_icon" iconName="vip/warning" />
+						</template>
+					</van-popover>
 				</div>
 
 				<!-- 段位奖励列表 -->
@@ -68,7 +87,26 @@
 								</div>
 							</div>
 						</div>
-						<div class="label">{{ item.label }}</div>
+						<div class="label">
+							{{ item.label }}
+
+							<van-popover v-model:show="showPopover4" theme="dark" :show-arrow="false" v-if="item.weekSportFlag == 2">
+								<div class="p_10 popup">
+									<p>7天体育赌注：</p>
+									<p>-投注$500至$2499 = 5$</p>
+									<p>-投注$2500至＄4999 = 30＄</p>
+									<p>-投注$5000 至＄9999 =70＄</p>
+									<p>-投注$10,000 或以上=150＄</p>
+									<p>-投注＄50,000或以上 =500＄</p>
+									<p>-投注$250,000或以上=1,000$</p>
+									<p>-流水统计时间：周六00:00时～周五 23:59时（7天）</p>
+									<p>礼金发放时间：每周六</p>
+								</div>
+								<template #reference>
+									<SvgIcon class="warning_icon" iconName="vip/warning" />
+								</template>
+							</van-popover>
+						</div>
 
 						<template v-if="item.upgradeFlag">
 							<div class="value">
@@ -83,10 +121,10 @@
 							<div class="value">
 								<i18n-t keypath="vip['会员根据每周投注额度获得周流水的礼金奖励']" :tag="'span'">
 									<template v-slot:value>
-										<span class="num"> {{ item.weekAmountProp1 }}</span>
+										<span class="num">*{{ item.weekAmountProp1 }}%</span>
 									</template>
 									<template v-slot:value2>
-										<span class="num"> {{ item.weekAmountProp2 }}</span>
+										<span class="num">*{{ item.weekAmountProp2 }}%</span>
 									</template>
 								</i18n-t>
 							</div>
@@ -95,10 +133,10 @@
 							<div class="value">
 								<i18n-t keypath="vip['会员根据每月投注额度获得月流水的礼金奖励']" :tag="'span'">
 									<template v-slot:value>
-										<span class="num"> {{ item.monthAmountProp1 }}</span>
+										<span class="num">*{{ item.monthAmountProp1 }}%</span>
 									</template>
 									<template v-slot:value2>
-										<span class="num"> {{ item.monthAmountProp2 }}</span>
+										<span class="num">*{{ item.monthAmountProp2 }}%</span>
 									</template>
 								</i18n-t>
 							</div>
@@ -139,7 +177,10 @@ const router = useRouter();
 const $: any = i18n.global;
 const themesStore = useThemesStore();
 const theme = computed(() => themesStore.themeName);
-
+const showPopover = ref(false);
+const showPopover2 = ref(false);
+const showPopover3 = ref(false);
+const showPopover4 = ref(false);
 let state = reactive({
 	vipRank: 0,
 	userVipInfo: {
@@ -197,7 +238,7 @@ let state = reactive({
 	],
 });
 
-const levelData = [
+const levelData: any = [
 	{
 		vipRankCode: 0,
 		label: $.t(`vip['青铜']`),
@@ -294,6 +335,8 @@ const matchTierRewardListData = () => {
 
 // 判断对应奖励是否存在
 const shouldDisplayReward = (item) => {
+	console.log(item);
+
 	return item.upgradeFlag || item.weekAmountFlag || item.monthAmountFlag || item.weekSportFlag || item.svipWelfareFlag || item.luxuriousGiftsFlag || item.luckFlag;
 };
 
@@ -603,6 +646,7 @@ const onClickLeft = () => {
 			.reward_list_header {
 				position: relative;
 				display: flex;
+				justify-content: space-between;
 				gap: 10px;
 				padding: 18px 24px;
 				border-radius: 20px;
@@ -627,6 +671,13 @@ const onClickLeft = () => {
 					height: 48px;
 					border-radius: 0px 4px 4px 0px;
 					background: #ddae96;
+				}
+				:deep(.van-popover__wrapper) {
+					.warning_icon {
+						width: 30px;
+						height: 30px;
+						padding-left: 8px;
+					}
 				}
 			}
 
@@ -784,6 +835,22 @@ const onClickLeft = () => {
 			text-align: center;
 			box-sizing: border-box;
 		}
+	}
+}
+:deep(.van-popover__content) {
+	background: rgba(0, 0, 0, 0.7) !important;
+	margin-right: 20px !important;
+}
+
+.popup {
+	max-width: 500px !important;
+	word-wrap: break-word;
+}
+:deep(.van-popover__wrapper) {
+	.warning_icon {
+		width: 30px;
+		height: 30px;
+		padding-left: 8px;
 	}
 }
 </style>

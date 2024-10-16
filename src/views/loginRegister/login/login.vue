@@ -5,7 +5,7 @@
 		<div class="login-form">
 			<div class="title">{{ $t('login["登录"]') }}</div>
 			<form class="form" autocomplete="off">
-				<FormInput v-model="state.userAccount" type="text" :placeholder="$t(`login['账户名']`)">
+				<FormInput v-model="state.userAccount" type="text" :placeholder="$t(`login['账户名']`)" :maxlength="11">
 					<template v-slot:right>
 						<SvgIcon v-if="state.userAccount" class="clearIcon" iconName="loginOrRegister/clear" @click="state.userAccount = ''" />
 					</template>
@@ -37,7 +37,6 @@
 					<div class="forgot-password" @click="router.push('/forgetPassword')">{{ $t('login["忘记密码"]') }}</div>
 				</div>
 				<Button class="mt_40" :type="btnDisabled || !isOnloadScript ? 'disabled' : 'default'" @click="onLogin">{{ $t('login["登录"]') }}</Button>
-
 				<div class="footer">
 					<div>
 						<span class="text">{{ $t('login["新用户"]') }}</span>
@@ -50,7 +49,7 @@
 			</form>
 		</div>
 		<div id="captcha-element" ref="captchaBtn"></div>
-		<Hcaptcha ref="refhcaptcha" :onSubmit="onSubmit" v-model="isOnloadScript" />
+		<Hcaptcha ref="refhcaptcha" :onSubmit="onSubmit" v-model="isOnloadScript" v-if="HcaptchaMounted" />
 	</div>
 </template>
 
@@ -64,14 +63,17 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useUserStore } from "/@/store/modules/user";
 import { showToast } from "vant";
+import Common from "/@/utils/common";
 const store = useUserStore();
 const refhcaptcha: any = ref(null);
+const HcaptchaMounted = ref(false);
 const router = useRouter();
 const eyeShow = ref(true);
 const btnDisabled = ref(true);
 const userAgreement = ref(false);
 const captchaBtn = ref(null);
 const isOnloadScript = ref(false);
+
 let state = reactive({
 	userAccount: "", // 邮箱或者手机号
 	password: "", // 密码
@@ -123,7 +125,7 @@ const onSubmit = async () => {
 			store.setLoginInfo();
 		}
 		await getIndexInfo();
-
+		await store.initUserInfo();
 		router.replace({ path: "/" });
 	} else {
 		showToast(res.message);
@@ -131,6 +133,10 @@ const onSubmit = async () => {
 };
 
 onBeforeMount(() => {
+	// 挂载完毕，执行初始化
+	Common.loadScript("https://o.alicdn.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js").then(() => {
+		HcaptchaMounted.value = true;
+	});
 	if (loginInfo.value) {
 		userAgreement.value = !loginInfo.value ? false : true;
 		state.userAccount = loginInfo.value.userAccount;

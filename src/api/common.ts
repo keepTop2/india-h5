@@ -1,5 +1,15 @@
 import useAxiosApi from "/@/utils/useAxiosApi";
+import useAxiosUploadApi from "/@/utils/useAxiosUploadApi";
 class CommonApi {
+	/**
+	 *@description 上传
+	 */
+	static uploadFile = (data = {}) => {
+		return useAxiosUploadApi(`/app/file/api/upload/baowang`, {
+			method: "POST",
+			data,
+		});
+	};
 	/**
 	 *@description POST 侧边栏
 	 */
@@ -47,6 +57,16 @@ class CommonApi {
 	 */
 	static getAreaCodeDownBox = (data = {}, headers = {}) => {
 		return useAxiosApi(`/app/common/getAreaCodeDownBox`, {
+			method: "POST",
+			data,
+			headers,
+		});
+	};
+	/**
+	 *@description 获取会员首页信息
+	 */
+	static getCurrentBasicInfo = (data = {}, headers = {}) => {
+		return useAxiosApi(`/app/common/getCurrentBasicInfo`, {
 			method: "POST",
 			data,
 			headers,

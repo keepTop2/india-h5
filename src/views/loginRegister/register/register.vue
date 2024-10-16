@@ -5,7 +5,7 @@
 		<div class="register-from">
 			<div class="title">{{ $t('register["注册"]') }}</div>
 			<div class="from">
-				<FormInput v-model="state.userAccount" type="text" :placeholder="$t(`register['输入账号']`)" :errorBorder="!isAccountValid && state.userAccount !== '' ? true : false">
+				<FormInput v-model="state.userAccount" type="text" :placeholder="$t(`register['输入账号']`)" :errorBorder="!isAccountValid && state.userAccount !== '' ? true : false" :maxlength="11">
 					<template v-slot:right>
 						<SvgIcon v-if="state.userAccount" class="clearIcon" iconName="loginOrRegister/clear" @click="state.userAccount = ''" />
 					</template>
@@ -73,9 +73,9 @@
 					</transition>
 				</div>
 
-				<div class="checkbox" @click="userAgreement = !userAgreement">
-					<SvgIcon v-show="!userAgreement" class="check" iconName="loginOrRegister/checkbox" />
-					<SvgIcon v-show="userAgreement" class="check" iconName="loginOrRegister/checkbox_active" />
+				<div class="checkbox">
+					<SvgIcon v-show="!userAgreement" class="check" iconName="loginOrRegister/checkbox" @click="userAgreement = !userAgreement" />
+					<SvgIcon v-show="userAgreement" class="check" iconName="loginOrRegister/checkbox_active" @click="userAgreement = !userAgreement" />
 					<p :class="userAgreement ? 'text' : 'text3'">
 						<i18n-t keypath="register['我同意用户协议并确认我已年满18岁']" :tag="'span'">
 							<template v-slot:text
@@ -103,7 +103,7 @@
 		</div>
 
 		<div id="captcha-element" ref="captchaBtn"></div>
-		<Hcaptcha ref="refhcaptcha" :onSubmit="onSubmit" v-model="isOnloadScript" />
+		<Hcaptcha ref="refhcaptcha" :onSubmit="onSubmit" v-model="isOnloadScript" v-if="HcaptchaMounted" />
 	</div>
 </template>
 
@@ -116,11 +116,13 @@ import { useRoute, useRouter } from "vue-router";
 import { i18n } from "/@/i18n/index";
 import common from "/@/utils/common";
 import { useUserStore } from "/@/store/modules/user";
+import Common from "/@/utils/common";
 const store = useUserStore();
 const $: any = i18n.global;
 const route = useRoute();
 const router = useRouter();
 const refhcaptcha: any = ref(null);
+const HcaptchaMounted = ref(false);
 const eyeShow = ref(true);
 const btnDisabled = ref(true);
 const mainCurrencyRG = ref(false);
@@ -179,7 +181,7 @@ watch(
 watch(
 	() => route.query.currency,
 	(newValue) => {
-		state.mainCurrency = newValue as string;
+		state.mainCurrency = (newValue + `(${route.query.value})`) as string;
 	}
 );
 
@@ -203,14 +205,18 @@ const onRegister = async () => {
 	// 图形验证
 	captchaBtn.value?.click();
 };
-
+onMounted(() => {
+	Common.loadScript("https://o.alicdn.com/captcha-frontend/aliyunCaptcha/AliyunCaptcha.js").then(() => {
+		HcaptchaMounted.value = true;
+	});
+});
 // 注册
 const onSubmit = async () => {
 	const certifyId = refhcaptcha.value.certifyId;
-	const res = await registerApi.userRegister({ ...state, certifyId }).catch((err) => err);
+	const res = await registerApi.userRegister({ ...state, certifyId, mainCurrency: route.query.currency }).catch((err) => err);
 	if (res.code == common.getInstance().ResCode.SUCCESS) {
-		showToast(res.message);
 		store.setInfo(res.data);
+		store.initUserInfo();
 		router.replace({ path: "/" });
 	} else {
 		showToast(res.message);

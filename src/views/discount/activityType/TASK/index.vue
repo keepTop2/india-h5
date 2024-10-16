@@ -1,0 +1,301 @@
+<template>
+	<div class="wrapper">
+		<VantNavBar title="任务" @onClickLeft="router.back()" />
+		<VantLazyImg :src="image" class="main-image" />
+		<div class="content">
+			<div class="rewardbg">
+				<div class="color_TB fs_28">累计奖励:</div>
+				<div class="color_Hint">{{ detailData?.totalAmount }}</div>
+			</div>
+
+			<div class="tabs">
+				<div class="tab" @click="changeTab(item.value)" v-for="(item, index) in tasktype" :key="index" :class="item.value == currentTab ? 'active' : ''">{{ item.label }}</div>
+			</div>
+		</div>
+		<div class="taskList">
+			<div v-if="currentTab == 0">
+				<div v-for="item in detailData?.dailyTask" class="card">
+					<div>
+						<VantLazyImg :src="item.taskPictureI18nCode" alt="" />
+					</div>
+					<div>
+						<div class="fs_24 color_TB fw_500">{{ item.taskNameI18nCode }}</div>
+						<div class="progress">
+							<div class="value" :style="{ width: calculatePercentage(item.achieveAmount, item.minBetAmount) + '%' }"></div>
+						</div>
+						<div class="fs_18 color_TB bottom">
+							<span
+								>奖励：<span>{{ item.rewardAmount }}</span></span
+							>
+							<span
+								><span class="color_Theme">{{ calculatePercentage(item.achieveAmount, item.minBetAmount) }}</span
+								>/100</span
+							>
+						</div>
+					</div>
+					<div>
+						<div :class="'btnType btnType' + item.taskStatus" @click="HandleBtn(item)">{{ taskStatus[item.taskStatus] }}</div>
+					</div>
+				</div>
+			</div>
+			<div v-if="currentTab == 1">
+				<div v-for="item in detailData?.weeklyTask" class="card">
+					<div>
+						<VantLazyImg :src="item.taskPictureI18nCode" alt="" />
+					</div>
+					<div>
+						<div class="fs_24 color_TB fw_500">{{ item.taskNameI18nCode }}</div>
+						<div class="progress">
+							<div class="value" :style="{ width: calculatePercentage(item.achieveAmount, item.minBetAmount) + '%' }"></div>
+						</div>
+						<div class="fs_18 color_TB bottom">
+							<span
+								>奖励：<span>{{ item.rewardAmount }}</span></span
+							>
+							<span
+								><span class="color_Theme">{{ calculatePercentage(item.achieveAmount, item.minBetAmount) }}</span
+								>/100</span
+							>
+						</div>
+					</div>
+					<div>
+						<div :class="'btnType btnType' + item.taskStatus" @click="HandleBtn(item)">{{ taskStatus[item.taskStatus] }}</div>
+					</div>
+				</div>
+			</div>
+			<div v-if="currentTab == 2">
+				<div v-for="item in detailData?.noviceTask" class="card">
+					<div>
+						<VantLazyImg :src="item.taskPictureI18nCode" alt="" />
+					</div>
+					<div>
+						<div class="fs_24 color_TB fw_500">{{ item.taskNameI18nCode }}</div>
+						<div class="progress">
+							<div class="value" :style="{ width: calculatePercentage(item.achieveAmount, item.minBetAmount) + '%' }"></div>
+						</div>
+						<div class="fs_18 color_TB bottom">
+							<span
+								>奖励：<span>{{ item.rewardAmount }}</span></span
+							>
+							<span
+								><span class="color_Theme">{{ calculatePercentage(item.achieveAmount, item.minBetAmount) }}</span
+								>/100</span
+							>
+						</div>
+					</div>
+					<div>
+						<div :class="'btnType btnType' + item.taskStatus" @click="HandleBtn(item)">{{ taskStatus[item.taskStatus] }}</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<activityDialog v-model="showDialog" title="温馨提示" :confirm="confirmDialog">
+			<div>恭喜你获得</div>
+			<div class="result">${{ 5 }}</div>
+		</activityDialog>
+	</div>
+</template>
+
+<script lang="ts" setup>
+import { ref } from "vue";
+import { activityApi } from "/@/api/activity";
+import activityDialog from "./dialog.vue";
+import dayjs from "dayjs";
+import { showToast } from "vant";
+import image from "./image/image.png";
+import { useUserStore } from "/@/store/modules/user";
+const userStore = useUserStore();
+const router = useRouter();
+const route = useRoute();
+const showDialog = ref(false);
+const showDialog2 = ref(false);
+const dialogInfo: any = ref({});
+const activityData = ref();
+const detailData: any = ref({});
+const currentTab = ref(0);
+const taskStatus = {
+	0: "未完成",
+	1: "已完成",
+	2: "已领取",
+	3: "已经过期",
+};
+const tasktype = [
+	{
+		label: "每日任务",
+		value: 0,
+	},
+	{
+		label: "每周任务",
+		value: 1,
+	},
+	{
+		label: "新人任务",
+		value: 2,
+	},
+];
+const changeTab = (value) => {
+	currentTab.value = value;
+};
+onMounted(() => {
+	getTaskDetail();
+});
+const getTaskDetail = () => {
+	activityApi.getTaskDetail().then((res) => {
+		detailData.value = res.data;
+		console.log(detailData.value);
+	});
+};
+const HandleBtn = () => {
+	showDialog.value = true;
+};
+const apply = () => {
+	if (!userStore.token) {
+		showDialog2.value = true;
+		return;
+	}
+};
+const confirmDialog = () => {
+	if (dialogInfo.value.status === 30049) {
+		router.push("/wallet/recharge");
+	}
+	showDialog.value = false;
+	showDialog2.value = false;
+};
+const calculatePercentage = (part, whole) => {
+	return (part / whole) * 100 || 0;
+};
+</script>
+
+<style lang="scss" scoped>
+.wrapper {
+	background: url("./image/bg.png") no-repeat;
+	background-size: 100% 100%;
+
+	.main-image {
+		height: 640px;
+		width: 100%;
+		object-fit: cover;
+		margin-bottom: 20px;
+	}
+	.content {
+		padding: 0 24px;
+		.rewardbg {
+			height: 174px;
+			background: url("./image/rewardbg.png") no-repeat;
+			background-size: 100% 100%;
+			display: flex;
+
+			padding: 0 40px;
+			flex-direction: column;
+			justify-content: center;
+			gap: 20px;
+		}
+		.tabs {
+			display: flex;
+			margin-top: 24px;
+			gap: 20px;
+			justify-content: space-around;
+			line-height: 72px;
+			@include themeify {
+				color: themed("TB");
+			}
+			.tab {
+				width: 33%;
+				text-align: center;
+				background: url("./image/tabBg.png") no-repeat;
+				height: 72px;
+				background-size: 100% 100%;
+			}
+			.tab.active {
+				height: 80px;
+				margin-bottom: -12px;
+				background: url("./image/tabActive.png") no-repeat;
+				background-size: 100% 100%;
+			}
+		}
+	}
+	.taskList {
+		border-radius: 24px 24px 0px 0px;
+		padding: 14px 24px;
+		margin-top: -1px;
+		@include themeify {
+			background: themed("BG1");
+		}
+		.card {
+			background: url("./image/cardBg.png") no-repeat;
+			background-size: 100% 100%;
+			height: 148px;
+			margin: 10px 4px 24px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			padding: 0 40px 0 20px;
+			gap: 30px;
+			> div:first-child {
+				width: 80px;
+				img {
+					width: 80px;
+					height: 80px;
+				}
+			}
+			> div:nth-child(2) {
+				flex: 1;
+				display: flex;
+				flex-direction: column;
+				gap: 12px;
+				.progress {
+					background: url("./image/progress.png") no-repeat;
+					background-size: 100% 100%;
+					height: 12px;
+					width: 100%;
+					.value {
+						height: 12px;
+						border-radius: 10px;
+						background-color: Wam-P1;
+						@include themeify {
+							background-color: themed("Wam-P1");
+						}
+					}
+				}
+			}
+			.bottom {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+			}
+			.btnType {
+				width: 120px;
+				padding: 10px;
+				height: 42px;
+				line-height: 42px;
+				text-align: center;
+				font-size: 20px;
+				@include themeify {
+					color: themed("TB");
+				}
+				border-radius: 6px 6px 5px 5px;
+			}
+			.btnType0 {
+				background: linear-gradient(270deg, #ebb360 0%, #eb7933 100%);
+			}
+			.btnType1 {
+				background: linear-gradient(270deg, #fd6780 0%, #ff405e 100%);
+			}
+			.btnType2 {
+				background: linear-gradient(270deg, #afafb3 0%, #87878b 100%);
+			}
+		}
+	}
+}
+.result {
+	margin-top: 20px;
+	height: 66px;
+	line-height: 66px;
+	background-color: rgba(255, 40, 75, 0.2);
+
+	border-radius: 5px;
+	@include themeify {
+		color: themed("Theme");
+	}
+}
+</style>

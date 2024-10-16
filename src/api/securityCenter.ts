@@ -19,7 +19,9 @@ export class loginPasswordApi {
 		return useAxiosApi(`/app/user-info/global/changePassword`, {
 			method: "POST",
 			data,
-			headers,
+			headers: {
+				showLoading: true,
+			},
 		});
 	};
 }
@@ -31,7 +33,9 @@ export class bindApi {
 		return useAxiosApi(`/app/user-info/global/sendSms`, {
 			method: "POST",
 			data,
-			headers,
+			headers: {
+				showLoading: true,
+			},
 		});
 	};
 
@@ -49,7 +53,9 @@ export class bindApi {
 		return useAxiosApi(`/app/user-info/global/bindAccount`, {
 			method: "POST",
 			data,
-			headers,
+			headers: {
+				showLoading: true,
+			},
 		});
 	};
 
@@ -58,7 +64,9 @@ export class bindApi {
 		return useAxiosApi(`/app/user-info/global/checkVerifyCode`, {
 			method: "POST",
 			data,
-			headers,
+			headers: {
+				showLoading: true,
+			},
 		});
 	};
 }
@@ -70,7 +78,9 @@ export class tradingPasswordApi {
 		return useAxiosApi(`/app/user-info/global/setWithdrawPwd`, {
 			method: "POST",
 			data,
-			headers,
+			headers: {
+				showLoading: true,
+			},
 		});
 	};
 	// 修改交易密码
@@ -78,7 +88,9 @@ export class tradingPasswordApi {
 		return useAxiosApi(`/app/user-info/global/changeWithdrawPwd`, {
 			method: "POST",
 			data,
-			headers,
+			headers: {
+				showLoading: true,
+			},
 		});
 	};
 	// 找回交易密码验证账号
@@ -86,7 +98,9 @@ export class tradingPasswordApi {
 		return useAxiosApi(`/app/user-info/global/reFindWithdrawPwd`, {
 			method: "POST",
 			data,
-			headers,
+			headers: {
+				showLoading: true,
+			},
 		});
 	};
 	// 找回交易密码-重置交易密码
@@ -94,7 +108,9 @@ export class tradingPasswordApi {
 		return useAxiosApi(`/app/user-info/global/reSetWithdrawPwd`, {
 			method: "POST",
 			data,
-			headers,
+			headers: {
+				showLoading: true,
+			},
 		});
 	};
 }

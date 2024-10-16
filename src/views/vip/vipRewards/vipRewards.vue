@@ -7,8 +7,8 @@
 			<p class="text">{{ $t(`vipRewards["加入我们"]`) }}</p>
 
 			<div class="btns">
-				<div class="btn1">{{ $t(`vipRewards["去玩游戏"]`) }}</div>
-				<!-- <div class="btn2">{{ $t(`vipRewards["查看福利"]`) }}</div> -->
+				<div class="btn1" @click="router.push('/')">{{ $t(`vipRewards["去玩游戏"]`) }}</div>
+				<div class="btn2" @click="router.push('/vipHierarchy')">{{ $t(`vipRewards["查看详情"]`) }}</div>
 			</div>
 		</div>
 
@@ -154,21 +154,22 @@ const onClickLeft = () => {
 			font-size: 30px;
 			font-weight: 400;
 		}
-		// .btn2 {
-		// 	display: flex;
-		// 	align-items: center;
-		// 	justify-content: center;
-		// 	width: 295px;
-		// 	height: 86px;
-		// 	border-radius: 12px;
-		// 	@include themeify {
-		// 		background: themed("BG3");
-		// 		color: themed("T3");
-		// 	}
-		// 	font-family: "PingFang SC";
-		// 	font-size: 30px;
-		// 	font-weight: 400;
-		// }
+		.btn2 {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 295px;
+			height: 86px;
+			border-radius: 12px;
+			@include themeify {
+				background: transparent;
+				color: themed("Theme");
+				border: 1px solid themed("Theme");
+			}
+			font-family: "PingFang SC";
+			font-size: 30px;
+			font-weight: 400;
+		}
 	}
 }
 

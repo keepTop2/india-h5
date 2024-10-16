@@ -9,8 +9,11 @@
 				<slot></slot>
 			</div>
 			<div class="dialog-footer">
-				<button class="common_btn" @click="close">确认</button>
+				<button class="common_btn" @click="confirm"><slot name="footer">确认</slot></button>
 			</div>
+		</div>
+		<div class="closeDialog" @click="close">
+			<img src="../../../image/close.png" alt="" />
 		</div>
 	</div>
 </template>
@@ -42,10 +45,11 @@ onMounted(() => {
 	// Increment the zIndex based on the number of open dialogs
 	currentZIndex.value += document.getElementsByClassName("dialog-backdrop").length + 1;
 });
-
-const close = () => {
-	// emit("update:modelValue", false);
+const confirm = () => {
 	props.confirm();
+};
+const close = () => {
+	emit("update:modelValue", false);
 };
 </script>
 
@@ -59,6 +63,8 @@ const close = () => {
 	background: rgba(0, 0, 0, 0.5);
 	display: flex;
 	align-items: center;
+	flex-direction: column;
+	justify-content: center;
 	.dialog {
 		position: relative;
 		margin: 0 auto;
@@ -107,6 +113,13 @@ const close = () => {
 				background: linear-gradient(277.78deg, #ff284b 4.74%, #fd677f 92.73%);
 			}
 		}
+	}
+}
+.closeDialog {
+	img {
+		width: 64px;
+		height: 64px;
+		cursor: pointer;
 	}
 }
 </style>

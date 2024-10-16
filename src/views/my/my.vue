@@ -54,7 +54,7 @@
 						<div class="value">100.00</div>
 					</div>
 					<div class="balance_content">
-						<div class="balance_item" v-for="item in balanceOperationList" @click="toPath(item.path)">
+						<div class="balance_item" v-for="item in balanceOperationList" @click="onClickCell(item)">
 							<VantLazyImg class="balance_icon" :src="item.icon" />
 							<div class="label">{{ item.name }}</div>
 						</div>
@@ -104,6 +104,24 @@
 				<div class="btn2" @click="onLoginOut">登出</div>
 			</div>
 		</van-popup>
+
+		<!-- 交易密码弹窗提示 -->
+		<Model v-model:modelValue="isPasswordModal">
+			<template #header>
+				<div class="header">{{ $t('withdraw["温馨提示"]') }}</div>
+			</template>
+			<template #default>
+				<div class="content">
+					<p class="text">{{ $t('withdraw["您还未设置交易密码，请先设置交易密码"]') }}</p>
+				</div>
+			</template>
+			<template #footer>
+				<div class="footer">
+					<div class="cancel" @click="isPasswordModal = false">{{ $t('withdraw["取消"]') }}</div>
+					<div class="confirm" @click="toPath('/setTradingPassword')">{{ $t('withdraw["去设置"]') }}</div>
+				</div>
+			</template>
+		</Model>
 	</div>
 </template>
 
@@ -132,12 +150,15 @@ import balance_operation_jy from "/@/assets/zh-CN/default/my/balance_operation_j
 import balance_operation_tz from "/@/assets/zh-CN/default/my/balance_operation_tz.png";
 import { i18n } from "/@/i18n/index";
 import { loginApi } from "/@/api/loginRegister";
+import { securityCenterApi } from "/@/api/securityCenter";
+import Model from "/@/views/wallet/components/model.vue";
 const $: any = i18n.global;
 const router = useRouter();
 const store = useUserStore();
 const themesStore = useThemesStore();
 const theme = computed(() => themesStore.themeName);
 const loginOutShow = ref(false);
+const isPasswordModal = ref(false);
 const balanceOperationList = [
 	{
 		name: $.t("my['存款']"),
@@ -148,6 +169,7 @@ const balanceOperationList = [
 		name: $.t("my['提现']"),
 		icon: balance_operation_tx,
 		path: "/wallet/withdraw",
+		verify: true,
 	},
 	{
 		name: $.t("my['交易']"),
@@ -204,13 +226,6 @@ const menuData = {
 			path: "/language",
 			arrow: true,
 		},
-		{
-			name: $.t("my['版本号']"),
-			icon: "/my/beh",
-			value: "v 1.00",
-			path: "",
-			arrow: false,
-		},
 	],
 };
 
@@ -218,12 +233,14 @@ let state = reactive({
 	userVipInfo: {} as VIP,
 	medalQuantity: 0 as number,
 	medalListData: [] as UserCenterMedalDetailRespVoList[],
+	securityCenter: {},
 });
 
 onMounted(() => {
 	if (store.token) {
 		topNList();
 		getUserVipInfo();
+		store.setUserGlobalSetInfo();
 	}
 });
 
@@ -252,7 +269,15 @@ const onClickCell = (item) => {
 		if (!item.path) {
 			return;
 		}
-		toPath(item.path);
+		if (item.verify) {
+			if (store.getUserInfo.isSetPwd || store.getUserInfo.phone) {
+				toPath(item.path);
+			} else {
+				isPasswordModal.value = true;
+			}
+		} else {
+			toPath(item.path);
+		}
 	}
 };
 
@@ -715,6 +740,91 @@ const loginOut = () => {
 			font-family: "PingFang SC";
 			font-size: 30px;
 			font-weight: 400;
+		}
+	}
+}
+
+.my_container {
+	// 交易密码弹窗样式
+	:deep(.modal-container) {
+		width: 448px;
+
+		.header {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			padding: 20px;
+			border-bottom: 1px solid;
+			@include themeify {
+				color: themed("TB");
+				border-color: themed("Line");
+			}
+			/* Title1-标题1 */
+			font-family: "PingFang SC";
+			font-size: 32px;
+			font-weight: 400;
+			box-sizing: border-box;
+		}
+
+		.content {
+			min-height: 190px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			padding: 0px 46px;
+			box-sizing: border-box;
+			.text {
+				@include themeify {
+					color: themed("T1");
+				}
+				text-align: center;
+				font-family: "PingFang SC";
+				font-size: 28px;
+				font-weight: 400;
+			}
+		}
+
+		.footer {
+			position: relative;
+			width: 100%;
+			height: 76px;
+			display: flex;
+			gap: 1px;
+			align-items: center;
+			justify-content: space-between;
+			border-top: 1px solid;
+			@include themeify {
+				border-color: themed("Line");
+			}
+			&::after {
+				position: absolute;
+				content: "";
+				top: 0px;
+				left: 50%;
+				width: 1px;
+				height: 100%;
+				@include themeify {
+					background-color: themed("Line");
+				}
+			}
+			.cancel,
+			.confirm {
+				flex: 1;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				@include themeify {
+					color: themed("T1");
+				}
+				font-family: "PingFang SC";
+				font-size: 32px;
+				font-weight: 400;
+			}
+			.confirm {
+				@include themeify {
+					color: themed("Theme");
+				}
+			}
 		}
 	}
 }
