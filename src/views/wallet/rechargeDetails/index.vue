@@ -76,11 +76,11 @@
 					<div class="content">
 						<div class="title">{{ $t(`rechargeDetails['第三方商户处理中']`) }}</div>
 						<div class="description">
-							<p class="text">{{ $t(`rechargeDetails['此过程可能需要1小时，更新于']`, { value: common.getInstance().dayFormat2(depositOrderDetail.createdTime) }) }}</p>
+							<p class="text">{{ $t(`rechargeDetails['此过程可能需要1小时，更新于']`, { value: common.getInstance().dayFormat2(depositOrderDetail.updatedTime) }) }}</p>
 							<p v-if="depositOrderDetail.voucherFlag == 0">
 								<span class="a" @click="isModalVisible = true">{{ $t(`rechargeDetails['提供转账凭证']`) }}</span>
 							</p>
-							<p class="text">
+							<p v-if="depositOrderDetail.customerStatus == 0" class="text">
 								<i18n-t keypath="rechargeDetails['超时']" :tag="'p'">
 									<template v-slot:value>
 										<span class="text_2"> {{ formattedTime }} </span>
@@ -198,15 +198,17 @@ import { useRoute, useRouter } from "vue-router";
 import { walletApi } from "/@/api/wallet";
 import CommonApi from "/@/api/common";
 import common from "/@/utils/common";
+import pubsub from "/@/pubSub/pubSub";
 import { useUserStore } from "/@/store/modules/user";
 import Model from "../components/model.vue";
 import uploader_icon from "/@/assets/zh-CN/default/my/feedback/uploader_icon.png";
 import uploader_close from "/@/assets/zh-CN/default/my/feedback/uploader_close.png";
 import UrgeOrder_success from "/@/assets/zh-CN/default/wallet/UrgeOrder_success.png";
+import activitySocketService from "/@/utils/activitySocketService";
+const websocketService = activitySocketService.getInstance();
 const route = useRoute();
 const router = useRouter();
 const UserStore = useUserStore();
-
 interface depositOrderDetailRootObject {
 	orderNo: string;
 	depositWithdrawWay: string;
@@ -239,6 +241,26 @@ const fileList = ref([]); // 组件库上传文件
 const cashFlowFileList = ref([] as any); // 服务器上传文件
 const cashFlowRemark = ref(""); // 留言
 
+onMounted(() => {
+	getDepositOrderDetail();
+	console.log("开始推送数据");
+	// websocketService.connect().then(() => {
+	// 	websocketService.send("/wallet/rechargeSuccessFail");
+	// });
+	// 监听 WebSocket 重连事件，以便局部组件可以重新订阅消息
+	// pubsub.subscribe("websocket_reconnected", () => {
+	// 	websocketService.send("/wallet/rechargeSuccessFail");
+	// });
+	pubsub.subscribe("/wallet/rechargeSuccessFail", rechargeSuccessFail);
+});
+
+// 收到订单推送订阅
+const rechargeSuccessFail = (data) => {
+	console.log("收到订单更新通知", data, depositOrderDetail);
+	Object.assign(depositOrderDetail.value, data);
+	console.log("depositOrderDetail.value", depositOrderDetail.value);
+};
+
 // 获取订单详情
 const getDepositOrderDetail = async () => {
 	const params = {
@@ -253,7 +275,6 @@ const getDepositOrderDetail = async () => {
 
 // 提交上传凭证
 const onSubmitProof = async () => {
-	console.log("cashFlowFileList", cashFlowFileList.value);
 	const urlString = cashFlowFileList.value.map((file) => file.fileKey).join(",");
 	console.log(urlString);
 	const params = {
@@ -334,8 +355,6 @@ function startCountdown() {
 		}
 	}, 1000);
 }
-
-getDepositOrderDetail();
 
 // 上传行为结束
 const afterRead = async (file) => {
