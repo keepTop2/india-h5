@@ -67,9 +67,9 @@
 								<div>时间</div>
 							</div>
 							<div class="winnerListBody" v-for="(item, index) in redBagInfo.winnerList" :key="index">
-								<div>{{ item.userId }}</div>
-								<div>{{ item.redBagAmount }}</div>
-								<div>{{ item.hitTime }}</div>
+								<div>{{ item.userAccount }}</div>
+								<div>{{ item.redBagAmount }} {{ item.platCurrencySymbol }}</div>
+								<div>{{ Common.getInstance().dayFormat2(item.hitTime) }}</div>
 							</div>
 						</div>
 					</div>
