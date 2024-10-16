@@ -40,7 +40,7 @@
 						<SvgIcon class="arrow" iconName="common/arrow" />
 					</div>
 					<div class="medal_content">
-						<div class="item" :class="{ item_bg: item.lockStatus == 1 }" v-for="(item, index) in state.medalListData" :key="index" @click="toPath('/medalCollection')">
+						<div class="item" :class="{ item_bg: item.lockStatus == 1 }" v-for="(item, index) in state.medalListData" :key="index" @click="onLightUpMedal(item)">
 							<i v-if="item.lockStatus == 0"></i>
 							<VantLazyImg class="medal_icon" :src="item.lockStatus == 0 || item.lockStatus == 2 ? item.inactivatedPicUrl : item.activatedPicUrl" />
 						</div>
@@ -299,6 +299,19 @@ const onLoginOut = () => {
 		});
 };
 
+// 点亮勋章
+const onLightUpMedal = async (item) => {
+	if (item.lockStatus !== 0) {
+	} else {
+		const params = {
+			medalCode: item.medalCode,
+		};
+		const res = await medalApi.lightUpMedal(params).catch((err) => err);
+		if (res.code == common.getInstance().ResCode.SUCCESS) {
+			topNList();
+		}
+	}
+};
 const loginOut = () => {
 	loginOutShow.value = true;
 };
