@@ -64,16 +64,27 @@
 					</div>
 				</div>
 				<div v-if="errorMessage" class="error_text">{{ errorMessage }}</div>
-				<div v-else class="amount_info">
+				<div v-else class="amount_info mt_10">
 					<div class="item">
 						<span class="label">{{ $t(`withdraw['预计到账']`) }}</span>
 						<span class="value">&nbsp;{{ common.getInstance().formatFloat(estimatedAmount) }}</span>
-						<span class="sign">&nbsp;{{ UserStore.userInfo.mainCurrency }}</span>
+						<span class="sign" v-if="withdrawWayData.withdrawTypeCode !== 'crypto_currency'">&nbsp;{{ UserStore.userInfo.mainCurrency }}</span>
+						<span class="sign" v-else>&nbsp;USDT</span>
 					</div>
 					<div class="item">
 						<span class="label">{{ $t(`withdraw['手续费']`) }}({{ withdrawWayConfig.feeRate }}%):</span>
 						<span class="value">&nbsp;{{ common.getInstance().formatFloat(feeAmount) }}</span>
 						<span class="sign">&nbsp;{{ UserStore.userInfo.mainCurrency }}</span>
+					</div>
+				</div>
+				<div v-if="withdrawWayData.withdrawTypeCode === 'crypto_currency'" class="amount_info mt_4">
+					<div class="item">
+						<span class="value">≈{{ common.getInstance().formatFloat(estimatedAmount * exchangeRate) }}</span>
+						<span class="sign">&nbsp;{{ UserStore.userInfo.mainCurrency }}</span>
+					</div>
+					<div class="item">
+						<span class="label">{{ $t(`withdraw['当前汇率']`, { value: exchangeRate }) }}</span>
+						<SvgIcon class="icon ml_6" iconName="wallet/refresh" @click="getWithdrawExchange" />
 					</div>
 				</div>
 			</div>
@@ -142,13 +153,13 @@ interface withdrawWayDataRootObject {
 	currencyCode: string;
 }
 
-// 定义响应式变量
 const withdrawWayData = ref({} as withdrawWayDataRootObject); // 当前选择的支付方式
 const withdrawWayList = ref([] as withdrawWayDataRootObject[]); // 支付方式列表
 const withdrawWayConfig = ref({
 	withdrawMinAmount: 0,
 	withdrawMaxAmount: 1000,
 } as any); // 支付方式列表
+
 const childRef = ref(null);
 const state = reactive({
 	withdrawPassWord: "" as string | number,
@@ -157,6 +168,7 @@ const state = reactive({
 
 const feeAmount = ref(0); // 手续费
 const estimatedAmount = ref(0); // 预计到账金额
+const exchangeRate = ref(0); // 预计到账金额
 
 const passWordShow = ref(false);
 
@@ -312,6 +324,10 @@ const getWithdrawApply = async (params) => {
 const onRechargeWay = (item) => {
 	withdrawWayData.value = item;
 	getWithdrawConfig(); // 获取通道配置
+
+	if (item.withdrawTypeCode == "crypto_currency") {
+		getWithdrawExchange();
+	}
 };
 
 // 获取支付方式列表
@@ -332,6 +348,14 @@ const getWithdrawConfig = async () => {
 	const res = await walletApi.getWithdrawConfig(params).catch((err) => err);
 	if (res.code === common.getInstance().ResCode.SUCCESS) {
 		withdrawWayConfig.value = res.data;
+	}
+};
+
+// 获取提款汇率
+const getWithdrawExchange = async () => {
+	const res = await walletApi.getWithdrawExchange().catch((err) => err);
+	if (res.code === common.getInstance().ResCode.SUCCESS) {
+		exchangeRate.value = res.data;
 	}
 };
 
@@ -615,7 +639,6 @@ const onClickLeft = () => {
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
-			margin-top: 10px;
 			.item {
 				display: flex;
 				align-items: center;
@@ -644,6 +667,10 @@ const onClickLeft = () => {
 				font-family: "DIN Alternate";
 				font-size: 24px;
 				font-weight: 700;
+			}
+			.icon {
+				width: 30px;
+				height: 30px;
 			}
 		}
 		.error_text {

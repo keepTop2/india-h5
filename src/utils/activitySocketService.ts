@@ -62,6 +62,9 @@ class activitySocketService {
 					case "/activity/redBagRain/end":
 						pubsub.publish("/activity/redBagRain/end"); // 红包雨结算消息
 						break;
+					case "/wallet/rechargeSuccessFail":
+						pubsub.publish("/wallet/rechargeSuccessFail"); // 充值成功/失败
+						break;
 				}
 			};
 
