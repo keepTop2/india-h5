@@ -60,8 +60,7 @@
 			<div class="cell_input operate">
 				<input v-model="state.smsCode" :placeholder="$t(`withdraw['验证码']`)" />
 				<div class="operate_content">
-					<!-- <span>{{ $t(`withdraw['获取验证码']`) }}</span> -->
-					<CaptchaButton ref="captchaButton" @onCaptcha="onCaptcha" />
+					<CaptchaButton ref="captchaButton" type="text" :text="$t('withdraw.获取验证码')" @onCaptcha="onCaptcha" />
 				</div>
 			</div>
 		</div>

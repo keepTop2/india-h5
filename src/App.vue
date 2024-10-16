@@ -11,6 +11,7 @@
 
 <script setup lang="ts">
 import common from "/@/utils/common";
+import pubsub from "/@/pubSub/pubSub";
 import MenuPopup from "/@/layout/home/components/menuPopup.vue";
 import { useThemesStore } from "/@/store/modules/themes";
 import { useUserStore } from "/@/store/modules/user";
@@ -35,8 +36,10 @@ onBeforeMount(() => {
 	if (userStore.token) {
 		userStore.initUserInfo();
 	}
-	websocketService.connect().then(() => {
-		// 订阅红包雨
+	console.log("初始化");
+	websocketService.connect().then(() => {});
+	// 监听 WebSocket 重连事件，以便局部组件可以重新订阅消息
+	pubsub.subscribe("websocket_reconnected", () => {
 		websocketService.send("/activity/redBagRain");
 	});
 });

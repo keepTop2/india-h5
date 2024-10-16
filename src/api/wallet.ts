@@ -114,4 +114,13 @@ export const walletApi = {
 			},
 		});
 	},
+
+	// 获取提款汇率
+	getWithdrawExchange: (data = {}, headers = { showLoading: true }) => {
+		return useAxiosApi(`/app/userWithdraw/api/getWithdrawExchange`, {
+			method: "POST",
+			data,
+			headers,
+		});
+	},
 };
