@@ -109,7 +109,6 @@ import { computed, onActivated, onDeactivated, ref, watch } from "vue";
 const websocketService = activitySocketService.getInstance();
 const router = useRouter();
 const UserStore = useUserStore();
-const activityStore = useActivityStore();
 const sportsInfoStore = useSportsInfoStore();
 const sportsBetEvent = useSportsBetEventStore();
 const { startPolling, stopPolling, initSportPubsub, unSubSport, sportsLogin, clearState } = useSportPubSubEvents();
@@ -345,15 +344,10 @@ const initializeWebSocket = async () => {
 	pubsub.subscribe("/activity/redBagRain/end", (data) => {
 		showCountdown.value = false;
 	});
-	// ws连接
-	await websocketService.connect().then(() => {
-		websocketService.send("/activity/redBagRain");
-	});
 };
 const destroyWS = () => {
 	pubsub.unsubscribe("/activity/redBagRain", () => {});
 	pubsub.unsubscribe("/activity/redBagRain/end", () => {});
-	websocketService.close();
 };
 </script>
 

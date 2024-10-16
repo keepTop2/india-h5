@@ -34,7 +34,7 @@
 						<div class="sessionsBox">
 							<div class="sessions">
 								<div v-for="(item, index) in redBagInfo.sessionInfoList" class="session" :key="index">
-									<div class="color_T1">{{ Common.dayFormatHMS(item.startTime) }}</div>
+									<div class="color_T1">{{ Common.dayFormatHM(item.startTime) }}</div>
 									<div class="sideBox">
 										<img src="./image/sessionCricle.png" alt="" v-if="item.status == 0" />
 										<img src="./image/sessionCricle1.png" alt="" v-if="item.status == 1" />
