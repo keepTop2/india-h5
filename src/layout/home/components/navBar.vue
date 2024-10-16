@@ -13,7 +13,7 @@
 			</div>
 			<div class="user">
 				<div class="userName">{{ store.userInfo.userAccount }}</div>
-				<div class="balance">{{ store.userInfo.platCurrencySymbol }}{{ common.getInstance().formatFloat(store.userInfo.totalBalance) }}</div>
+				<div class="balance">{{ store.userInfo.currencySymbol }}{{ common.getInstance().formatFloat(store.userInfo.totalBalance) }}</div>
 			</div>
 			<Notify />
 		</div>

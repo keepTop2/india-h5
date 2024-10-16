@@ -18,7 +18,8 @@ import { useRouterStore } from "/@/store/modules/cacheRouter";
 import { LangEnum } from "/@/enum/appConfigEnum";
 import { getIndexInfo } from "/@/views/venueHome/sports/utils/commonFn";
 import CommonApi from "./api/common";
-
+import activitySocketService from "/@/utils/activitySocketService";
+const websocketService = activitySocketService.getInstance();
 const { keepAliveComps } = storeToRefs(useRouterStore());
 const userStore = useUserStore();
 const ThemesStore = useThemesStore();
@@ -34,6 +35,10 @@ onBeforeMount(() => {
 	if (userStore.token) {
 		userStore.initUserInfo();
 	}
+	websocketService.connect().then(() => {
+		// 订阅红包雨
+		websocketService.send("/activity/redBagRain");
+	});
 });
 
 // 自动登录
