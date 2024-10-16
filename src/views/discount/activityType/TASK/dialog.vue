@@ -1,6 +1,17 @@
 <template>
 	<div v-if="modelValue" class="dialog-backdrop" :style="{ zIndex: currentZIndex }">
-		<div class="dialog fade-in">
+		<div class="dialog2 fade-in" v-if="dialog2">
+			<div class="dialog-header">
+				<div class="title color_TB fs_34">{{ title }}</div>
+			</div>
+			<div class="dialog-content fs_30 color_T1">
+				<slot></slot>
+			</div>
+			<div class="dialog-footer">
+				<div class="common_btn" @click="close">关闭</div>
+			</div>
+		</div>
+		<div class="dialog fade-in" v-else>
 			<div class="dialog-header">
 				<img src="./image/dialogImage.png" alt="" />
 				<div class="title color_T4 fs_34">{{ title }}</div>
@@ -12,8 +23,8 @@
 				<button class="common_btn" @click="confirm">关闭</button>
 			</div>
 		</div>
-		<div class="closeDialog" @click="close">
-			<img src="../image/close.png" alt="" />
+		<div class="closeDialog" @click="close" v-if="!dialog2">
+			<img src="../../image/close.png" alt="" />
 		</div>
 	</div>
 </template>
@@ -29,6 +40,10 @@ const props = defineProps({
 		default: "",
 	},
 	goToLogin: {
+		type: Boolean,
+		default: false,
+	},
+	dialog2: {
 		type: Boolean,
 		default: false,
 	},
@@ -69,6 +84,42 @@ const toLogin = () => {
 	align-items: center;
 	flex-direction: column;
 	justify-content: center;
+	.dialog2 {
+		width: 540px;
+		border-radius: 20px;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		@include themeify {
+			background: themed("BG1");
+		}
+		.dialog-header {
+			padding: 20px 0;
+			text-align: center;
+
+			@include themeify {
+				color: themed("TB");
+				border-bottom: 1px solid themed("Line");
+			}
+		}
+		.dialog-content {
+			min-height: 100px;
+			width: 448px;
+			margin: 0 auto;
+			padding: 16px 0;
+		}
+		.dialog-footer {
+			margin: 0 auto;
+			height: 75px;
+			width: 100%;
+			text-align: center;
+			line-height: 75px;
+			@include themeify {
+				color: themed("Theme");
+				border-top: 1px solid themed("Line");
+			}
+		}
+	}
 	.dialog {
 		position: relative;
 		width: 594px;

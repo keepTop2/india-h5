@@ -11,7 +11,8 @@
 						<div class="value">{{ progressPercentage }}%</div>
 						<SvgIcon class="arrow" iconName="vip/progress_bar_percent_arrow" />
 					</div>
-					<VantLazyImg class="vip_jdt" :src="vip_jdt" />
+
+					<VantLazyImg class="vip_jdt" :src="vip_jdt" v-if="progressPercentage > 0" />
 				</div>
 			</div>
 		</div>
@@ -90,8 +91,8 @@ console.log("progressPercentage", progressPercentage);
 		background: url("/@/assets/zh-CN/default/my/progressBar_bg.png") center center / 100% 100% no-repeat;
 
 		.progress {
-			min-width: 40px;
-			max-width: calc(100% - 4px);
+			min-width: 0;
+			max-width: calc(100% - 24px);
 			height: 12px;
 			margin: 0px 2px;
 			border-radius: 8px;
@@ -106,7 +107,7 @@ console.log("progressPercentage", progressPercentage);
 				.percentage {
 					position: absolute;
 					top: -160%;
-					right: 0px;
+					right: -20px;
 					width: min-content;
 					display: flex;
 					flex-wrap: wrap;

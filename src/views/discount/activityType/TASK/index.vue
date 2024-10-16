@@ -5,7 +5,7 @@
 		<div class="content">
 			<div class="rewardbg">
 				<div class="color_TB fs_28">累计奖励:</div>
-				<div class="color_Hint">{{ detailData?.totalAmount }}</div>
+				<div class="color_Hint">{{ detailData?.platCurrencySymbol }} {{ detailData?.totalAmount }}</div>
 			</div>
 
 			<div class="tabs">
@@ -25,7 +25,7 @@
 						</div>
 						<div class="fs_18 color_TB bottom">
 							<span
-								>奖励：<span>{{ item.rewardAmount }}</span></span
+								>奖励：<span class="color_Hint"> {{ item.platCurrencySymbol }}{{ item.rewardAmount }}</span></span
 							>
 							<span
 								><span class="color_Theme">{{ calculatePercentage(item.achieveAmount, item.minBetAmount) }}</span
@@ -35,6 +35,9 @@
 					</div>
 					<div>
 						<div :class="'btnType btnType' + item.taskStatus" @click="HandleBtn(item)">{{ taskStatus[item.taskStatus] }}</div>
+					</div>
+					<div class="help_icon" @click="openDialog(item)">
+						<img src="./image/help_icon.png" />
 					</div>
 				</div>
 			</div>
@@ -50,7 +53,7 @@
 						</div>
 						<div class="fs_18 color_TB bottom">
 							<span
-								>奖励：<span>{{ item.rewardAmount }}</span></span
+								>奖励：<span class="color_Hint"> {{ item.platCurrencySymbol }} {{ item.rewardAmount }}</span></span
 							>
 							<span
 								><span class="color_Theme">{{ calculatePercentage(item.achieveAmount, item.minBetAmount) }}</span
@@ -60,6 +63,9 @@
 					</div>
 					<div>
 						<div :class="'btnType btnType' + item.taskStatus" @click="HandleBtn(item)">{{ taskStatus[item.taskStatus] }}</div>
+					</div>
+					<div class="help_icon">
+						<img src="./image/help_icon.png" />
 					</div>
 				</div>
 			</div>
@@ -75,7 +81,7 @@
 						</div>
 						<div class="fs_18 color_TB bottom">
 							<span
-								>奖励：<span>{{ item.rewardAmount }}</span></span
+								>奖励：<span class="color_Hint"> {{ item.platCurrencySymbol }} {{ item.rewardAmount }}</span></span
 							>
 							<span
 								><span class="color_Theme">{{ calculatePercentage(item.achieveAmount, item.minBetAmount) }}</span
@@ -86,12 +92,18 @@
 					<div>
 						<div :class="'btnType btnType' + item.taskStatus" @click="HandleBtn(item)">{{ taskStatus[item.taskStatus] }}</div>
 					</div>
+					<div class="help_icon" @click="openDialog(item)">
+						<img src="./image/help_icon.png" />
+					</div>
 				</div>
 			</div>
 		</div>
 		<activityDialog v-model="showDialog" title="温馨提示" :confirm="confirmDialog">
 			<div>恭喜你获得</div>
-			<div class="result">${{ 5 }}</div>
+			<div class="result">{{ dialogInfo.platCurrencySymbol }}{{ dialogInfo.rewardAmount }}</div>
+		</activityDialog>
+		<activityDialog v-model="showRule" title="任务说明" :confirm="confirmDialog" :dialog2="true">
+			<div v-html="rule"></div>
 		</activityDialog>
 	</div>
 </template>
@@ -108,18 +120,19 @@ const userStore = useUserStore();
 const router = useRouter();
 const route = useRoute();
 const showDialog = ref(false);
-const showDialog2 = ref(false);
+const showRule = ref(false);
+const rule = ref("");
 const dialogInfo: any = ref({});
 const activityData = ref();
 const detailData: any = ref({});
 const currentTab = ref(0);
 const taskStatus = {
 	0: "未完成",
-	1: "已完成",
+	1: "领取",
 	2: "已领取",
 	3: "已经过期",
 };
-const tasktype = [
+const tasktype = ref([
 	{
 		label: "每日任务",
 		value: 0,
@@ -128,13 +141,13 @@ const tasktype = [
 		label: "每周任务",
 		value: 1,
 	},
-	{
-		label: "新人任务",
-		value: 2,
-	},
-];
+]);
 const changeTab = (value) => {
 	currentTab.value = value;
+};
+const openDialog = (item) => {
+	showRule.value = true;
+	rule.value = item.taskDescI18nCode;
 };
 onMounted(() => {
 	getTaskDetail();
@@ -142,24 +155,36 @@ onMounted(() => {
 const getTaskDetail = () => {
 	activityApi.getTaskDetail().then((res) => {
 		detailData.value = res.data;
-		console.log(detailData.value);
+		if (detailData.value.noviceTask) {
+			tasktype.value.push({
+				label: "新手任务",
+				value: 2,
+			});
+		}
 	});
 };
-const HandleBtn = () => {
-	showDialog.value = true;
-};
-const apply = () => {
-	if (!userStore.token) {
-		showDialog2.value = true;
-		return;
+const HandleBtn = (item) => {
+	if (item.taskStatus == 1) {
+		activityApi
+			.Taskreceive({
+				id: item.id,
+				subTaskType: item.subTaskType,
+			})
+			.then((res: any) => {
+				if (res.code === 10000) {
+					showDialog.value = true;
+					dialogInfo.value = res.data;
+					dialogInfo.value.platCurrencySymbol = item.platCurrencySymbol;
+				}
+			});
 	}
 };
+
 const confirmDialog = () => {
 	if (dialogInfo.value.status === 30049) {
 		router.push("/wallet/recharge");
 	}
 	showDialog.value = false;
-	showDialog2.value = false;
 };
 const calculatePercentage = (part, whole) => {
 	return (part / whole) * 100 || 0;
@@ -200,7 +225,7 @@ const calculatePercentage = (part, whole) => {
 				color: themed("TB");
 			}
 			.tab {
-				width: 33%;
+				flex: 1;
 				text-align: center;
 				background: url("./image/tabBg.png") no-repeat;
 				height: 72px;
@@ -231,11 +256,21 @@ const calculatePercentage = (part, whole) => {
 			justify-content: space-between;
 			padding: 0 40px 0 20px;
 			gap: 30px;
+			position: relative;
 			> div:first-child {
 				width: 80px;
 				img {
 					width: 80px;
 					height: 80px;
+				}
+			}
+			.help_icon {
+				position: absolute;
+				right: 12px;
+				top: 12px;
+				img {
+					width: 22px;
+					height: 22px;
 				}
 			}
 			> div:nth-child(2) {

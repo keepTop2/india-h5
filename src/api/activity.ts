@@ -145,6 +145,18 @@ export const activityApi = {
 		return useAxiosApi(`/app/task/api/detail`, {
 			method: "POST",
 			data,
+			headers: {
+				showLoading: true,
+			},
+		});
+	},
+	Taskreceive: (data = {}) => {
+		return useAxiosApi(`/app/task/api/receive`, {
+			method: "POST",
+			data,
+			headers: {
+				showLoading: true,
+			},
 		});
 	},
 };
