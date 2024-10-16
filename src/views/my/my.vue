@@ -40,7 +40,7 @@
 						<SvgIcon class="arrow" iconName="common/arrow" />
 					</div>
 					<div class="medal_content">
-						<div class="item" :class="{ item_bg: item.lockStatus == 1 }" v-for="(item, index) in state.medalListData" :key="index">
+						<div class="item" :class="{ item_bg: item.lockStatus == 1 }" v-for="(item, index) in state.medalListData" :key="index" @click="toPath('/medalCollection')">
 							<i v-if="item.lockStatus == 0"></i>
 							<VantLazyImg class="medal_icon" :src="item.lockStatus == 0 || item.lockStatus == 2 ? item.inactivatedPicUrl : item.activatedPicUrl" />
 						</div>
