@@ -1,6 +1,6 @@
 <template>
 	<div class="activityWrapper">
-		<VantNavBar title="红包雨" @onClickLeft="onClickLeft" />
+		<VantNavBar :title="redBagInfo?.activityNameI18nCode || '红包雨'" @onClickLeft="onClickLeft" />
 
 		<div class="activityMain">
 			<div class="activityImg">
@@ -14,7 +14,7 @@
 						<div class="bonus-content">
 							<div class="bonus-row1 color_Theme">{{ redBagInfo.clientStatus == 1 ? "距离本场红包雨结束" : redBagInfo.clientStatus == 2 ? "本期红包雨已结束" : "距离下一场红包雨还有" }}</div>
 							<div class="countdown" :class="redBagInfo.clientStatus == 2 ? 'isOver' : ''">
-								<span class="">{{ Common.convertMilliseconds(countdown * 1000) }}</span>
+								<span class="">{{ Common.convertMilliseconds((countdown + 2) * 1000) }}</span>
 							</div>
 						</div>
 						<button class="apply-button" @click="getActivityReward" :class="redBagInfo.clientStatus == 1 ? 'active' : ''">抢</button>
@@ -142,7 +142,6 @@ const getRedBagInfo = async () => {
 				startCountdown(redBagInfo.value.advanceTime);
 				// 判断活动已活动已全部结束
 			} else if (redBagInfo.value.clientStatus === 2) {
-				//  获取明天第一场的时间z
 				// startCountdown();
 			} else if (redBagInfo.value.clientStatus === 0) {
 				//  获取下一场比赛的时间
