@@ -120,7 +120,7 @@ onMounted(() => {
 	position.value.y = 500;
 	window.addEventListener("resize", updatePosition);
 	pubsub.subscribe("/activity/redBagRain/settlement", () => {
-		emit("update:modelValue", false);
+		emit("update:modelValue", true);
 	});
 });
 

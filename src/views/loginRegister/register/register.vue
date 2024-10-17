@@ -79,7 +79,7 @@
 					<p :class="userAgreement ? 'text' : 'text3'">
 						<i18n-t keypath="register['我同意用户协议并确认我已年满18岁']" :tag="'span'">
 							<template v-slot:text
-								><span class="text2" @click=""> {{ $t('register["用户协议"]') }} </span></template
+								><span class="text2" @click="router.push('/userAgreement')"> {{ $t('register["用户协议"]') }} </span></template
 							>
 						</i18n-t>
 					</p>

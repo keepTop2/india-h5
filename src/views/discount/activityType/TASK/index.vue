@@ -70,22 +70,19 @@
 				</div>
 			</div>
 			<div v-if="currentTab == 2">
-				<div v-for="item in detailData?.noviceTask" class="card">
+				<div class="daojishiBg fs_24">
+					<span class="color_TB">剩余时间：</span><span class="color_Theme">{{ Common.convertMilliseconds(countdown * 1000) }}</span>
+				</div>
+				<div v-for="item in detailData?.noviceTask" class="card" :class="item.subTaskType">
 					<div>
 						<VantLazyImg :src="item.taskPictureI18nCode" alt="" />
 					</div>
 					<div>
 						<div class="fs_24 color_TB fw_500">{{ item.taskNameI18nCode }}</div>
-						<div class="progress">
-							<div class="value" :style="{ width: calculatePercentage(item.achieveAmount, item.minBetAmount) + '%' }"></div>
-						</div>
+						<!-- <div class="fs_18 color_TB htmlDesc" v-html="item.taskDescI18nCode"></div> -->
 						<div class="fs_18 color_TB bottom">
 							<span
 								>奖励：<span class="color_Hint"> {{ item.platCurrencySymbol }} {{ item.rewardAmount }}</span></span
-							>
-							<span
-								><span class="color_Theme">{{ calculatePercentage(item.achieveAmount, item.minBetAmount) }}</span
-								>/100</span
 							>
 						</div>
 					</div>
@@ -100,10 +97,10 @@
 		</div>
 		<activityDialog v-model="showDialog" title="温馨提示" :confirm="confirmDialog">
 			<div>恭喜你获得</div>
-			<div class="result">{{ dialogInfo.platCurrencySymbol }}{{ dialogInfo.rewardAmount }}</div>
+			<div class="result">{{ dialogInfo.platCurrencySymbol }} {{ dialogInfo.rewardAmount }}</div>
 		</activityDialog>
 		<activityDialog v-model="showRule" title="任务说明" :confirm="confirmDialog" :dialog2="true">
-			<div v-html="rule"></div>
+			<div v-html="rule" class="RuleDialog"></div>
 		</activityDialog>
 	</div>
 </template>
@@ -116,18 +113,18 @@ import dayjs from "dayjs";
 import { showToast } from "vant";
 import image from "./image/image.png";
 import { useUserStore } from "/@/store/modules/user";
-const userStore = useUserStore();
+import Common from "/@/utils/common";
+import { useCountdown } from "/@/hooks/countdown";
+const { countdown, startCountdown, stopCountdown } = useCountdown();
 const router = useRouter();
-const route = useRoute();
 const showDialog = ref(false);
 const showRule = ref(false);
 const rule = ref("");
 const dialogInfo: any = ref({});
-const activityData = ref();
 const detailData: any = ref({});
 const currentTab = ref(0);
 const taskStatus = {
-	0: "未完成",
+	0: "去完成",
 	1: "领取",
 	2: "已领取",
 	3: "已经过期",
@@ -156,6 +153,7 @@ const getTaskDetail = () => {
 	activityApi.getTaskDetail().then((res) => {
 		detailData.value = res.data;
 		if (detailData.value.noviceTask) {
+			startCountdown(detailData.value?.noviceTask[0].expireTime);
 			tasktype.value.push({
 				label: "新手任务",
 				value: 2,
@@ -175,6 +173,7 @@ const HandleBtn = (item) => {
 					showDialog.value = true;
 					dialogInfo.value = res.data;
 					dialogInfo.value.platCurrencySymbol = item.platCurrencySymbol;
+					getTaskDetail();
 				}
 			});
 	}
@@ -319,6 +318,36 @@ const calculatePercentage = (part, whole) => {
 			.btnType2 {
 				background: linear-gradient(270deg, #afafb3 0%, #87878b 100%);
 			}
+			.daojishiBg {
+				height: 45px;
+				width: 100%;
+				background: url("./image/daojishiBg.png") no-repeat;
+			}
+		}
+		.card.welcome {
+			background: url("./image/cardBg2.png") no-repeat;
+			background-size: 100% 100%;
+		}
+		.card.currency {
+			background: url("./image/cardBg3.png") no-repeat;
+			background-size: 100% 100%;
+		}
+		.card.email {
+			background: url("./image/cardBg3.png") no-repeat;
+			background-size: 100% 100%;
+		}
+		.card.phone {
+			background: url("./image/cardBg4.png") no-repeat;
+			background-size: 100% 100%;
+		}
+		.daojishiBg {
+			height: 45px;
+			width: 100%;
+			background: url("./image/daojishiBg.png") no-repeat;
+			background-size: auto 100%;
+			padding-left: 60px;
+			line-height: 45px;
+			margin: 24px 0;
 		}
 	}
 }

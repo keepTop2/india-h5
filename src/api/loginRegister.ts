@@ -20,14 +20,16 @@ export class loginApi {
 			headers,
 		});
 	};
-	// 登录
-	// static submitUserLogin = (data = {}, headers = {}) => {
-	// 	return useAxiosApi(`/app/login/api/submitUserLogin`, {
-	// 		method: "POST",
-	// 		data,
-	// 		headers,
-	// 	});
-	// };
+	// 获取用户协议
+	static getAgreement = (data = {}, headers = {}) => {
+		return useAxiosApi(`/app/login/api/getAgreement`, {
+			method: "POST",
+			data,
+			headers: {
+				showLoading: true,
+			},
+		});
+	};
 }
 
 // 注册

@@ -81,6 +81,9 @@ const toLogin = () => {
 	align-items: center;
 	flex-direction: column;
 	justify-content: center;
+	:deep(img) {
+		max-width: 100% !important;
+	}
 	.dialog {
 		position: relative;
 		width: 594px;
