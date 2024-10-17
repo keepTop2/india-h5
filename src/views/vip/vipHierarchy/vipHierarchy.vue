@@ -17,12 +17,11 @@
 				<div class="content_header">
 					<span>{{ $t('vipHierarchy["等级"]') }}</span>
 					<span>{{ $t('vipHierarchy["所需经验"]') }}</span>
-					<span>{{ $t('vipHierarchy["升级奖金"]') }}$</span>
+					<span>{{ $t('vipHierarchy["升级奖金"]') }} {{ useUserStore().getUserInfo.platCurrencySymbol }}</span>
 				</div>
-
 				<div class="content_cell" v-for="(i, idx) in item.siteVIPGradeVOList" :key="idx">
 					<div>
-						<VantLazyImg class="icon" :src="i.picIcon" alt="" />
+						<VantLazyImg class="icon" :src="getRankImg(index)" alt="" />
 						<span>{{ i.vipGradeName }}</span>
 					</div>
 					<div>{{ i.upgradeXp }}</div>
@@ -36,20 +35,24 @@
 <script setup lang="ts">
 import { vipApi } from "/@/api/vip";
 import common from "/@/utils/common";
-import icon_bronze from "/@/assets/zh-CN/default/vip/icon_bronze.png";
-import icon_silver from "/@/assets/zh-CN/default/vip/icon_silver.png";
-import icon_gold from "/@/assets/zh-CN/default/vip/icon_gold.png";
-import icon_platinium from "/@/assets/zh-CN/default/vip/icon_platinium.png";
-import icon_diamond from "/@/assets/zh-CN/default/vip/icon_diamond.png";
+import rank0Img from "../vipClub/image/rank0.png";
+import rank1Img from "../vipClub/image/rank1.png";
+import rank2Img from "../vipClub/image/rank2.png";
+import rank3Img from "../vipClub/image/rank3.png";
+import rank4Img from "../vipClub/image/rank4.png";
+import rank5Img from "../vipClub/image/rank5.png";
 import Collapse from "./Collapse/index.vue";
 
 import { useRouter } from "vue-router";
+import { useUserStore } from "/@/store/modules/user";
 const router = useRouter();
 
 const state: any = reactive({
 	vipHierarchyData: {},
 });
-
+const getRankImg = (rank) => {
+	return rank == 0 ? rank0Img : rank == 1 ? rank1Img : rank == 2 ? rank2Img : rank == 3 ? rank3Img : rank == 4 ? rank4Img : rank == 5 ? rank4Img : rank5Img;
+};
 const getUserVipBenefitDetail = async () => {
 	const res = await vipApi.getUserVipBenefitDetail().catch((err) => err);
 	if (res.code === common.getInstance().ResCode.SUCCESS) {

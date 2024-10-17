@@ -291,7 +291,7 @@ const initReadyTime = () => {
 const startRedbagRain = () => {
 	startLoading();
 	activityApi
-		.redBagParticipate({ redbagSessionId: props.redBagInfo?.redbagSessionId })
+		.redBagParticipate({ redbagSessionId: props.redBagInfo?.redbagSessionId || activityData.value.redbagSessionId })
 		.then((res: any) => {
 			if (res.data?.status !== 10000) {
 				dialogInfo.value = res.data;

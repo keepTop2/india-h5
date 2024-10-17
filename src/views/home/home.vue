@@ -106,7 +106,7 @@ import { GameInfoList, LobbyTopGame } from "/#/game";
 import activitySocketService from "/@/utils/activitySocketService";
 import { useActivityStore } from "/@/store/modules/activity";
 import { computed, onActivated, onDeactivated, ref, watch } from "vue";
-const websocketService = activitySocketService.getInstance();
+const websocketService: any = activitySocketService.getInstance();
 const router = useRouter();
 const UserStore = useUserStore();
 const sportsInfoStore = useSportsInfoStore();
@@ -119,7 +119,7 @@ const hotGames = ref<GameInfoList[]>([]);
 const lobbyTopGame = ref<LobbyTopGame[]>();
 const PaymentVendorList = ref([]);
 const PartnerList = ref([]);
-const showRedBagRain = ref(false);
+const showRedBagRain = computed(() => useActivityStore().getIsShowRedBagRain);
 //判断是否收藏
 const isShowCollect = computed(() => {
 	return collectList.value.length > 0 && UserStore.token;
@@ -336,7 +336,6 @@ const handleMore = (gameOneId) => {
 };
 
 const initializeWebSocket = async () => {
-	websocketService.send("/activity/redBagRain");
 	// 订阅红包雨推送消息
 	pubsub.subscribe("/activity/redBagRain", (data) => {
 		showCountdown.value = true;

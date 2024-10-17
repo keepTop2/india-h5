@@ -23,9 +23,6 @@
 				<button class="common_btn" @click="confirm">关闭</button>
 			</div>
 		</div>
-		<div class="closeDialog" @click="close" v-if="!dialog2">
-			<img src="../../image/close.png" alt="" />
-		</div>
 	</div>
 </template>
 
@@ -84,6 +81,10 @@ const toLogin = () => {
 	align-items: center;
 	flex-direction: column;
 	justify-content: center;
+	:deep(img) {
+		max-width: 100% !important;
+	}
+
 	.dialog2 {
 		width: 540px;
 		border-radius: 20px;

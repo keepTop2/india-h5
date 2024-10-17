@@ -29,7 +29,9 @@
 						>
 					</div>
 				</div>
-				<button class="apply-button" @click="apply" :class="activityData?.status == 10000 ? 'active' : ''">{{ activityData?.status == 30047 ? "您已申请" : "立即申请" }}</button>
+				<button class="apply-button" @click="apply" :class="activityData?.activityCondition ? 'active' : ''">
+					{{ activityData?.status == 30047 ? "您已申请" : "立即申请" }}
+				</button>
 			</div>
 
 			<div class="activity-details">

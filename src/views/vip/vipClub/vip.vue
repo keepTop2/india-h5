@@ -9,7 +9,7 @@
 		<div class="welfare_btn" @click="toPath('./vipHierarchy')">{{ $t(`vip["查看VIP等级制度"]`) }}</div>
 
 		<div class="vip_card">
-			<VantLazyImg class="vip_big" :src="vip_big" />
+			<img class="vip_big" :src="currentRankImage" />
 
 			<div class="head">
 				<div class="label">{{ $t(`vip["当前等级"]`) }}</div>
@@ -112,7 +112,7 @@
 							<div class="value">
 								<i18n-t keypath="vip['总奖金']" :tag="'span'">
 									<template v-slot:value>
-										<span class="num"> {{ item.upgrade }}$ </span>
+										<span class="num"> {{ item.upgrade }} {{ useUserStore().getUserInfo.platCurrencySymbol }}</span>
 									</template>
 								</i18n-t>
 							</div>
@@ -166,6 +166,12 @@ import vip_big from "/@/assets/zh-CN/default/vip/vip_big.png";
 import vip_line_left from "/@/assets/zh-CN/default/vip/vip_line_left.png";
 import vip_line_right from "/@/assets/zh-CN/default/vip/vip_line_right.png";
 import reward_icon1 from "/@/assets/zh-CN/default/vip/reward_icon1.png";
+import rank0Img from "./image/rank0.png";
+import rank1Img from "./image/rank1.png";
+import rank2Img from "./image/rank2.png";
+import rank3Img from "./image/rank3.png";
+import rank4Img from "./image/rank4.png";
+import rank5Img from "./image/rank5.png";
 import { ThemeEnum } from "/@/enum/appConfigEnum";
 import { useThemesStore } from "/@/store/modules/themes";
 import { useRouter } from "vue-router";
@@ -173,6 +179,22 @@ import { VIP } from "/@/views/vip/interface";
 import { vipApi } from "/@/api/vip";
 import common from "/@/utils/common";
 import { i18n } from "/@/i18n/index";
+import { useUserStore } from "/@/store/modules/user";
+const currentRankImage = computed(() => {
+	return vipRank.value == 0
+		? rank0Img
+		: vipRank.value == 1
+		? rank1Img
+		: vipRank.value == 2
+		? rank2Img
+		: vipRank.value == 3
+		? rank3Img
+		: vipRank.value == 4
+		? rank4Img
+		: vipRank.value == 5
+		? rank4Img
+		: rank5Img;
+});
 const router = useRouter();
 const $: any = i18n.global;
 const themesStore = useThemesStore();
@@ -181,6 +203,7 @@ const showPopover = ref(false);
 const showPopover2 = ref(false);
 const showPopover3 = ref(false);
 const showPopover4 = ref(false);
+const vipRank = ref(0);
 let state = reactive({
 	vipRank: 0,
 	userVipInfo: {
@@ -296,6 +319,7 @@ const getUserVipInfo = async () => {
 	if (res.code === common.getInstance().ResCode.SUCCESS) {
 		// 更新状态中的VIP等级和用户VIP信息
 		state.vipRank = res.data.vipRank;
+		vipRank.value = res.data.vipRank;
 		state.userVipInfo = res.data;
 		// 更新 levelData 中的数据
 		levelData.forEach((item) => {
@@ -310,7 +334,6 @@ const getUserVipInfo = async () => {
 		matchTierRewardListData();
 	}
 };
-
 // 匹配奖励列表数据
 const matchTierRewardListData = () => {
 	// 创建一个以 vipRankCode 为键的映射，便于快速查找
@@ -335,8 +358,6 @@ const matchTierRewardListData = () => {
 
 // 判断对应奖励是否存在
 const shouldDisplayReward = (item) => {
-	console.log(item);
-
 	return item.upgradeFlag || item.weekAmountFlag || item.monthAmountFlag || item.weekSportFlag || item.svipWelfareFlag || item.luxuriousGiftsFlag || item.luckFlag;
 };
 
@@ -347,7 +368,9 @@ const isUnlocked = (item) => {
 	);
 };
 
-getUserVipInfo();
+onMounted(() => {
+	getUserVipInfo();
+});
 
 const toPath = (path) => {
 	router.push(path);

@@ -45,7 +45,7 @@ class activitySocketService {
 			this.socket.onopen = () => {
 				this.reconnectAttempts = 0; // 重置重连次数
 				this.startHeartbeat(); // 启动心跳
-				pubsub.publish("websocket_reconnected"); // 连接成功后发布事件
+				// 连接成功后发布事件
 				resolve(); // 连接成功
 			};
 
