@@ -181,7 +181,9 @@ watch(
 watch(
 	() => route.query.currency,
 	(newValue) => {
-		state.mainCurrency = (newValue + `(${route.query.value})`) as string;
+		if (newValue) {
+			state.mainCurrency = (newValue + `(${route.query.value})`) as string;
+		}
 	}
 );
 

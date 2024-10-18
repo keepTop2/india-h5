@@ -22,7 +22,6 @@ import router from "/@/router";
 import Common from "/@/utils/common";
 import pubsub from "/@/pubSub/pubSub";
 const { countdown, startCountdown, stopCountdown } = useCountdown();
-
 const draggable = ref<HTMLElement | null>(null);
 const position = ref({ x: 0, y: 0 });
 const isDragging = ref(false);

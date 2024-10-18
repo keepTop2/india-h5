@@ -7,6 +7,7 @@ import { securityCenterApi } from "/@/api/securityCenter";
 import Common from "/@/utils/common";
 import { useSportsBetInfoStore } from "./sports/sportsBetInfo";
 import activitySocketService from "/@/utils/activitySocketService";
+import pubsub from "/@/pubSub/pubSub";
 
 export interface StoreUser {
 	token: string;
@@ -85,12 +86,15 @@ export const useUserStore = defineStore("User", {
 		},
 
 		async initUserInfo() {
-			console.log(999999);
 			await this.setIndexInfo();
 			await this.setBasicInfo();
 			await this.setUserGlobalSetInfo();
 			const sportsBetInfo = useSportsBetInfoStore();
 			sportsBetInfo.balance = this.getUserInfo.totalBalance;
+			const websocketService = activitySocketService.getInstance();
+			websocketService.connect().then(() => {
+				pubsub.publish("websocket_reconnected");
+			});
 		},
 		// 获取用户信息
 		setInfo(data: any) {
@@ -140,11 +144,11 @@ export const useUserStore = defineStore("User", {
 			this.token = "";
 			this.userInfo = {};
 			this.loginStatus = false;
+			const websocketService = activitySocketService.getInstance();
+			websocketService.close;
 			localStorage.clear();
 		},
 		logOut() {
-			const websocketService = activitySocketService.getInstance();
-			websocketService.close();
 			this.clearInfo();
 		},
 	},

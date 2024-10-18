@@ -7,8 +7,8 @@ window.PLATFROM_CONFIG = {
 	productionSportUrl: "https://apistaging.wx7777.com",
 
 	// 本地开发地址(开发专用)
-	developmentBaseURL: "https://gw.playesoversea.store", // 开发环境
-	// developmentBaseURL: "https://backend.bwsh.store", // 测试环境
+	// developmentBaseURL: "https://gw.playesoversea.store", // 开发环境
+	developmentBaseURL: "https://backend.bwsh.store", // 测试环境
 	// developmentBaseURL: "http://192.168.30.117:9999", // 尔顿本地地址
 
 	//本地开发websocket地址

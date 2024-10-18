@@ -41,7 +41,7 @@
 				</div>
 			</div>
 		</RED_BAG_RAIN_Dialog>
-		// 提示弹窗
+
 		<RED_BAG_RAIN_Dialog v-model="shwoDialog" title="温馨提示" :confirm="confirmDialog" class="redBagRainResult">
 			<div class="mt_20 mb_20">
 				{{ dialogInfo.message }}
@@ -90,7 +90,7 @@ const settlement: any = ref({});
 let ctx: CanvasRenderingContext2D | null = null;
 let redBagInterval: ReturnType<typeof setInterval> | null = null;
 // 创建红包图片对象
-const activityData: any = ref({});
+const activityData: any = computed(() => activityStore.getActivityData);
 const img = new Image();
 img.src = redBagImg;
 const openedImg = new Image();
@@ -290,6 +290,8 @@ const initReadyTime = () => {
 
 const startRedbagRain = () => {
 	startLoading();
+	console.log(props.redBagInfo?.redbagSessionId, activityData.value.redbagSessionId);
+
 	activityApi
 		.redBagParticipate({ redbagSessionId: props.redBagInfo?.redbagSessionId || activityData.value.redbagSessionId })
 		.then((res: any) => {
@@ -298,8 +300,6 @@ const startRedbagRain = () => {
 				shwoDialog.value = true;
 				// emit("update:modelValue", false);
 			} else {
-				console.log(123123123);
-
 				setp.value = 1;
 				const timer = setTimeout(() => {
 					setp.value = 2;
@@ -337,7 +337,7 @@ function exitGame() {
 			"/activity/redBagRain/settlement" +
 			":" +
 			JSON.stringify({
-				redbagSessionId: props.redBagInfo?.redbagSessionId,
+				redbagSessionId: activityData.value.redbagSessionId,
 			});
 		activitySocket.send(parmas);
 	}

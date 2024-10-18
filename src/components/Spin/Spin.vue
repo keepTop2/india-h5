@@ -75,13 +75,15 @@ watch(
 		spinOver.value = true;
 		const { id } = props.reward;
 		const findIndex = props.spinList.findIndex((i: any) => i.id === id);
+		console.log(findIndex);
+
 		if (findIndex === -1) {
 			// 错误处理
 			console.error("奖品信息错误");
 			clearSpin();
 			return;
 		}
-		spinRotate.value = `${(360 / 16) * (16 - findIndex) + 90}deg`;
+		spinRotate.value = `${360 - (360 / 16) * findIndex}deg`;
 		await nextTick();
 		rewardAni.value = true;
 		const timer = setTimeout(() => {
@@ -96,7 +98,7 @@ watch(
 // 计算每个奖品项的样式
 const getItemStyle = (index: number) => ({
 	opacity: "1",
-	transform: `rotate(${(360 / 16) * index}deg)`,
+	transform: `rotate(${(360 / 16) * index - 90}deg)`,
 });
 // 重置旋转动画状态
 const clearSpin = () => {
