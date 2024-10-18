@@ -40,9 +40,12 @@
 						<SvgIcon class="arrow" iconName="common/arrow" />
 					</div>
 					<div class="medal_content">
-						<div class="item" :class="{ item_bg: item.lockStatus == 1 }" v-for="(item, index) in state.medalListData" :key="index">
-							<i v-if="item.lockStatus == 0"></i>
-							<VantLazyImg class="medal_icon" :src="item.lockStatus == 0 || item.lockStatus == 2 ? item.inactivatedPicUrl : item.activatedPicUrl" />
+						<div class="item" :class="{ item_bg: item.lockStatus == 1 }" v-for="(item, index) in state.medalListData" :key="index" @click="onLightUpMedal(item)">
+							<template v-if="item.lockStatus === 0">
+								<div class="bg"></div>
+								<VantLazyImg class="medal_icon" :src="item.lockStatus == 0 || item.lockStatus == 2 ? item.inactivatedPicUrl : item.activatedPicUrl" />
+							</template>
+							<VantLazyImg class="medal_icon" :src="item.lockStatus == 0 || item.lockStatus == 2 ? item.inactivatedPicUrl : item.activatedPicUrl" v-else />
 						</div>
 					</div>
 				</div>
@@ -348,6 +351,19 @@ const onLoginOut = () => {
 		});
 };
 
+// 点亮勋章
+const onLightUpMedal = async (item) => {
+	if (item.lockStatus !== 0) {
+	} else {
+		const params = {
+			medalCode: item.medalCode,
+		};
+		const res = await medalApi.lightUpMedal(params).catch((err) => err);
+		if (res.code == common.getInstance().ResCode.SUCCESS) {
+			topNList();
+		}
+	}
+};
 const loginOut = () => {
 	loginOutShow.value = true;
 };
@@ -589,10 +605,20 @@ const loginOut = () => {
 					z-index: 1;
 					box-sizing: border-box;
 				}
-
+				.bg {
+					position: absolute;
+					top: -15px;
+					left: -15px;
+					width: 120px;
+					height: 120px;
+					background: url("./image.png") no-repeat;
+					background-size: 100% 100%;
+					/* 添加旋转和缩放动画 */
+				}
 				.medal_icon {
 					width: 72px;
 					height: 78px;
+					z-index: 20;
 				}
 			}
 

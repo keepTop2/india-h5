@@ -1,15 +1,23 @@
 <template>
 	<div class="protocol-container">
-		<VantNavBar :title="$t(`VantNavBar['用户协议']`)" @onClickLeft="onClickLeft" />
+		<VantNavBar :title="$t(`VantNavBar['用户协议']`)" @onClickLeft="router.back()" />
 		<div class="container">
-			<div class="text">为了让您每一天都能尽情享受[平台名称]娱乐提供的最佳服务与体验。</div>
+			<div class="text" v-html="AgreementContent?.agreement"></div>
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
-const onClickLeft = () => {
-	window.history.back();
+import { loginApi } from "/@/api/loginRegister";
+import router from "/@/router";
+const AgreementContent: any = ref({});
+onMounted(() => {
+	getAgreement();
+});
+const getAgreement = () => {
+	loginApi.getAgreement().then((res) => {
+		AgreementContent.value = res.data;
+	});
 };
 </script>
 

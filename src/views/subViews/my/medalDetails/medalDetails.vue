@@ -94,9 +94,11 @@ const onClickLeft = () => {
 	}
 	.describe {
 		margin-top: 24px;
+		word-wrap: break-word;
 		@include themeify {
 			color: themed("TB");
 		}
+		padding: 0 24px;
 		text-align: center;
 		font-family: "PingFang SC";
 		font-size: 26px;

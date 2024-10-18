@@ -1,6 +1,6 @@
 <template>
 	<div class="activityWrapper">
-		<VantNavBar title="红包雨" @onClickLeft="onClickLeft" />
+		<VantNavBar :title="redBagInfo?.activityNameI18nCode || '红包雨'" @onClickLeft="onClickLeft" />
 
 		<div class="activityMain">
 			<div class="activityImg">
@@ -67,9 +67,9 @@
 								<div>时间</div>
 							</div>
 							<div class="winnerListBody" v-for="(item, index) in redBagInfo.winnerList" :key="index">
-								<div>{{ item.userId }}</div>
-								<div>{{ item.redBagAmount }}</div>
-								<div>{{ item.hitTime }}</div>
+								<div>{{ item.userAccount }}</div>
+								<div>{{ item.redBagAmount }} {{ item.platCurrencySymbol }}</div>
+								<div>{{ Common.getInstance().dayFormat2(item.hitTime) }}</div>
 							</div>
 						</div>
 					</div>
@@ -96,7 +96,7 @@
 			<div class="mt_20 mb_20">
 				{{ dialogInfo.message }}
 			</div>
-
+			<template v-slot:footer v-if="[30045, 30053].includes(dialogInfo.status)"> 去绑定 </template>
 			<!-- <div class="Text3">您领取的红包太多啦，请下一场次再参与</div>
 			<img src="./image/pityIcon.png" alt="" /> -->
 		</RED_BAG_RAIN_Dialog>
@@ -142,7 +142,6 @@ const getRedBagInfo = async () => {
 				startCountdown(redBagInfo.value.advanceTime);
 				// 判断活动已活动已全部结束
 			} else if (redBagInfo.value.clientStatus === 2) {
-				//  获取明天第一场的时间z
 				// startCountdown();
 			} else if (redBagInfo.value.clientStatus === 0) {
 				//  获取下一场比赛的时间
@@ -178,6 +177,9 @@ const onClickLeft = () => {
 	router.back();
 };
 const confirmDialog = () => {
+	if ([30045, 30053].includes(dialogInfo.value.status)) {
+		router.push("/securityCenter");
+	}
 	shwoDialog.value = false;
 };
 </script>

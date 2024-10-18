@@ -1,7 +1,7 @@
 <template>
 	<div class="vip_progress">
 		<div class="vip_icon">
-			<VantLazyImg class="vip_bg" :src="vip_icon_1" />
+			<VantLazyImg class="vip_bg" :src="currentRankImage" />
 			<span class="vip_level">LV{{ props.userVipInfo.vipGradeCode }}</span>
 		</div>
 		<div class="progress_bar">
@@ -11,12 +11,13 @@
 						<div class="value">{{ progressPercentage }}%</div>
 						<SvgIcon class="arrow" iconName="vip/progress_bar_percent_arrow" />
 					</div>
-					<VantLazyImg class="vip_jdt" :src="vip_jdt" />
+
+					<VantLazyImg class="vip_jdt" :src="vip_jdt" v-if="progressPercentage > 0" />
 				</div>
 			</div>
 		</div>
 		<div class="vip_icon">
-			<VantLazyImg class="vip_bg" :src="vip_icon_1" />
+			<VantLazyImg class="vip_bg" :src="currentRankImage" />
 			<span class="vip_level">LV{{ props.userVipInfo.vipGradeUp }}</span>
 		</div>
 	</div>
@@ -26,7 +27,12 @@
 import vip_icon_1 from "/@/assets/zh-CN/default/vip/vip_icon_1.png";
 import vip_jdt from "/@/assets/zh-CN/default/my/vip_jdt.png";
 import { VIP } from "/@/views/vip/interface";
-
+import rank0Img from "./image/rank0.png";
+import rank1Img from "./image/rank1.png";
+import rank2Img from "./image/rank2.png";
+import rank3Img from "./image/rank3.png";
+import rank4Img from "./image/rank4.png";
+import rank5Img from "./image/rank5.png";
 const props = withDefaults(
 	defineProps<{
 		userVipInfo: VIP;
@@ -37,7 +43,21 @@ const props = withDefaults(
 		percentageShow: false,
 	}
 );
-
+const currentRankImage = computed(() => {
+	return props.userVipInfo.vipRank == 0
+		? rank0Img
+		: props.userVipInfo.vipRank == 1
+		? rank1Img
+		: props.userVipInfo.vipRank == 2
+		? rank2Img
+		: props.userVipInfo.vipRank == 3
+		? rank3Img
+		: props.userVipInfo.vipRank == 4
+		? rank4Img
+		: props.userVipInfo.vipRank == 5
+		? rank4Img
+		: rank5Img;
+});
 // 计算百分比
 const progressPercentage = computed(() => {
 	const { currentExp, upgradeVipExp } = props.userVipInfo;
@@ -90,8 +110,8 @@ console.log("progressPercentage", progressPercentage);
 		background: url("/@/assets/zh-CN/default/my/progressBar_bg.png") center center / 100% 100% no-repeat;
 
 		.progress {
-			min-width: 40px;
-			max-width: calc(100% - 4px);
+			min-width: 0;
+			max-width: calc(100% - 24px);
 			height: 12px;
 			margin: 0px 2px;
 			border-radius: 8px;
@@ -106,7 +126,7 @@ console.log("progressPercentage", progressPercentage);
 				.percentage {
 					position: absolute;
 					top: -160%;
-					right: 0px;
+					right: -20px;
 					width: min-content;
 					display: flex;
 					flex-wrap: wrap;

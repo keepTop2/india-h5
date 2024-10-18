@@ -61,7 +61,7 @@
 		<!-- 红包雨倒计时 -->
 		<redbagRainCountdown v-model="showCountdown" :redBagInfo="redBagInfo" />
 		<!-- 红包雨页面 -->
-		<rainPage v-if="showRedBagRain" v-model="showRedBagRain" />
+		<rainPage v-if="showRedBagRain" v-model="showRedBagRain" :redBagInfo="redBagInfo" />
 	</div>
 </template>
 
@@ -106,7 +106,7 @@ import { GameInfoList, LobbyTopGame } from "/#/game";
 import activitySocketService from "/@/utils/activitySocketService";
 import { useActivityStore } from "/@/store/modules/activity";
 import { computed, onActivated, onDeactivated, ref, watch } from "vue";
-const websocketService = activitySocketService.getInstance();
+const websocketService: any = activitySocketService.getInstance();
 const router = useRouter();
 const UserStore = useUserStore();
 const sportsInfoStore = useSportsInfoStore();
@@ -119,7 +119,7 @@ const hotGames = ref<GameInfoList[]>([]);
 const lobbyTopGame = ref<LobbyTopGame[]>();
 const PaymentVendorList = ref([]);
 const PartnerList = ref([]);
-const showRedBagRain = ref(false);
+const showRedBagRain = computed(() => useActivityStore().getIsShowRedBagRain);
 //判断是否收藏
 const isShowCollect = computed(() => {
 	return collectList.value.length > 0 && UserStore.token;
