@@ -6,6 +6,8 @@ import CommonApi from "/@/api/common";
 import { securityCenterApi } from "/@/api/securityCenter";
 import Common from "/@/utils/common";
 import { useSportsBetInfoStore } from "./sports/sportsBetInfo";
+import activitySocketService from "/@/utils/activitySocketService";
+
 export interface StoreUser {
 	token: string;
 	userInfo: Record<any, any>;
@@ -141,6 +143,8 @@ export const useUserStore = defineStore("User", {
 			localStorage.clear();
 		},
 		logOut() {
+			const websocketService = activitySocketService.getInstance();
+			websocketService.close();
 			this.clearInfo();
 		},
 	},
