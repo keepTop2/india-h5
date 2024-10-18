@@ -49,7 +49,6 @@
 				<span class="label">{{ $t(`vip["VIP福利"]`) }}</span>
 				<img :src="vip_line_right" alt="" />
 			</div>
-			<div class="tips">{{ $t(`vip["通过OKSPORT专属VIP福利体系探索最佳游戏体验"]`) }}</div>
 			<div class="level_grid">
 				<div class="item" v-for="(item, index) in levelData" :key="index" @click="onSwitchRank(item)">
 					<div class="value" :class="{ value_active: state.vipRank == index }" @click="state.vipRank = index">
@@ -64,8 +63,8 @@
 				<div class="reward_list_header">
 					<div>
 						<span>{{ levelData[state.vipRank].label }}</span>
-						<span>VIP</span>
-						<span>{{ levelData[state.vipRank]?.minVipGrade }}-{{ levelData[state.vipRank]?.maxVipGrade }}</span>
+						<span> VIP </span>
+						<span>{{ levelData[state.vipRank]?.minVipGrade }} - {{ levelData[state.vipRank]?.maxVipGrade }}</span>
 					</div>
 					<van-popover v-model:show="showPopover3" theme="dark" :show-arrow="false">
 						<div class="p_10 popup">包含之前等级的所有福利</div>
@@ -112,7 +111,7 @@
 							<div class="value">
 								<i18n-t keypath="vip['总奖金']" :tag="'span'">
 									<template v-slot:value>
-										<span class="num"> {{ item.upgrade }} {{ useUserStore().getUserInfo.platCurrencySymbol }}</span>
+										<span class="num"> {{ item.upgrade }} {{ useUserStore().getUserInfo.platCurrencyName }}</span>
 									</template>
 								</i18n-t>
 							</div>
