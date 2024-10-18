@@ -166,9 +166,6 @@ onActivated(() => {
 	pubsub.subscribe("getCollect", queryCollection);
 	// 初始化活动ws连接
 	initializeWebSocket();
-	pubsub.subscribe("ShowRedBagRain", (data) => {
-		showRedBagRain.value = data;
-	});
 });
 onDeactivated(() => {
 	// 关闭登录接口轮询

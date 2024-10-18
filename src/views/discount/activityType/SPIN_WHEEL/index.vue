@@ -15,7 +15,7 @@
 				@end-spinning-callback="spinEnd"
 				@needLogin="needLogin"
 				:reward="reward"
-				:spinList="currentTab == '1' ? activityData?.bronze : currentTab == '2' ? activityData?.silver : activityData?.gold"
+				:spinList="currentTab == '0' ? activityData?.bronze : currentTab == '1' ? activityData?.silver : activityData?.gold"
 				:balanceCount="activityData?.balanceCount"
 				ref="SpinRef"
 			/>
@@ -48,14 +48,14 @@
 			<div class="detail-footer"></div>
 		</div>
 	</div>
-	<!-- 弹窗1 -->
+	<!-- 弹窗-->
 	<div class="dialog fade-in" v-if="showResult">
 		<div class="dialog-content">
 			<div class="resultImg">
-				<img src="./images/dialogResultImg.png" alt="" />
+				<img :src="reward?.prizePictureUrl" alt="" />
 			</div>
 			<div class="dialog-title color_Hint">恭喜您获得</div>
-			<div class="dialog-amount">${{ reward?.prizeAmount }}</div>
+			<div class="dialog-amount">${{ reward?.prizeAmount }} {{ useUserStore().getUserInfo.platCurrencyName }}</div>
 			<div @click="playAgain" class="button">
 				<div>再抽一次</div>
 				<span class="remaining_times_btn">剩余次数:{{ activityData?.balanceCount }}</span>
@@ -66,17 +66,6 @@
 		</div>
 	</div>
 
-	<!-- 弹窗2 -->
-	<div class="dialog" v-if="showResult2">
-		<div class="dialog-content2">
-			<div class="dialog-title color_TB fs_32">温馨提示</div>
-			<div class="dialog-text color_T1 mb_21">您的抽奖次数不足</div>
-			<Button @click="goToRecharge">去领取</Button>
-		</div>
-		<div class="close" @click="showResult2 = false">
-			<img src="./images/close.png" alt="" />
-		</div>
-	</div>
 	<!-- 弹窗3 -->
 	<div class="dialog fade-in" v-if="showResult3">
 		<div class="dialog-content2">
@@ -93,16 +82,14 @@
 	<div class="dialog" v-if="showRecord">
 		<div class="dialog-wrapper">
 			<div class="header">抽奖记录</div>
-			<div class="dialogTableBody">
+			<div class="dialogTableBody" v-if="recordList.length > 0">
 				<div class="dialogTableHeader">
 					<span>转盘</span>
 					<span>奖品名称</span>
 					<span>奖品价值</span>
 					<span>中奖时间</span>
 				</div>
-				<div v-if="recordList.length < 1">
-					<Nodata></Nodata>
-				</div>
+
 				<div v-for="(item, index) in recordList" :key="index" class="dialogTableItem">
 					<span>{{ item.rewardRankText }}</span>
 					<span>{{ item.prizeName }}</span>
@@ -110,9 +97,12 @@
 					<span>{{ item.receiveTime }}</span>
 				</div>
 			</div>
-			<div class="close" @click="showRecord = false">
-				<img src="./images/close.png" alt="" />
+			<div v-else>
+				<Nodata class="mt_100"></Nodata>
 			</div>
+		</div>
+		<div class="close" @click="showRecord = false">
+			<img src="./images/close.png" alt="" />
 		</div>
 	</div>
 	<activityDialog v-model="showDialog2" title="温馨提示" :confirm="confirmDialog" :goToLogin="true"> 您的账号暂未登录无法参与活动， 如已有账号请登录，如还未有账号 请前往注册 </activityDialog>
@@ -125,6 +115,7 @@ import Spin from "/@/components/Spin/Spin.vue";
 import { activityApi } from "/@/api/activity";
 import activityDialog from "../../components/Dialog.vue";
 import { useUserStore } from "/@/store/modules/user";
+import { showToast } from "vant";
 const userStore = useUserStore();
 const showResult = ref(false);
 const showResult2 = ref(false);
@@ -137,21 +128,21 @@ const spinList = ref();
 // 获得的奖励
 const reward = ref();
 // 当前选中的标签
-const currentTab: any = ref("1");
+const currentTab: any = ref("0");
 const router = useRouter();
 // 标签列表
 const tabs = ref([
 	{
 		name: "青铜",
-		value: "1",
+		value: "0",
 	},
 	{
 		name: "白银",
-		value: "2",
+		value: "1",
 	},
 	{
 		name: "黄金及以上",
-		value: "3",
+		value: "2",
 	},
 ]);
 const recordList: any = ref([]);
@@ -186,16 +177,28 @@ const selectTab = (tabKey: string) => {
 /**
  * @description 抽奖开始
  */
-const spinStart = () => {
+const spinStart = async () => {
+	activityData.value.balanceCount--;
+	const startTime = Date.now();
 	const params = {
 		id: activityData.value.id,
 		vipRankCode: currentTab.value,
 	};
-	activityApi.getSpinPrizeResult(params).then((res) => {
-		reward.value = res.data;
-	});
+	const res: any = await activityApi.getSpinPrizeResult(params);
+	if (res.code !== 10000) {
+		showToast(res.data);
+		SpinRef.value?.endSpinningCallback();
+	}
+	const elapsedTime = Date.now() - startTime;
+	const remainingTime = 3000 - elapsedTime;
+	if (remainingTime > 0) {
+		await delay(remainingTime);
+	}
+	reward.value = res.data;
 };
-
+const delay = (ms) => {
+	return new Promise((resolve) => setTimeout(resolve, ms));
+};
 const playAgain = () => {
 	showResult.value = false;
 	SpinRef.value?.handleStartSpin();
@@ -204,7 +207,7 @@ const playAgain = () => {
  * @description 处理转盘停止后的逻辑
  */
 const spinEnd = () => {
-	showResult3.value = true;
+	showResult.value = true;
 };
 const needLogin = () => {
 	showDialog2.value = true;
