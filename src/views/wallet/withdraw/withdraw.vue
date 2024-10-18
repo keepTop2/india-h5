@@ -56,7 +56,7 @@
 					<input
 						v-model="state.amount"
 						type="number"
-						:placeholder="`${withdrawWayConfig.withdrawMinAmount} ${UserStore.userInfo.mainCurrency} ~ ${withdrawWayConfig.withdrawMaxAmount} ${UserStore.userInfo.mainCurrency} `"
+						:placeholder="`${withdrawWayConfig.withdrawMinAmount ?? 0} ${UserStore.userInfo.mainCurrency} ~ ${withdrawWayConfig.withdrawMaxAmount ?? 0} ${UserStore.userInfo.mainCurrency} `"
 						@input="calculateFeeAndEstimatedAmount"
 					/>
 					<div class="operate_content">
@@ -105,10 +105,13 @@
 			<!-- 提示2 -->
 			<i18n-t class="tips" keypath="withdraw['提示']" :tag="'p'">
 				<template v-slot:value>
-					<span class="theme"> {{ withdrawWayConfig.singleDayRemindWithdrawCount }} </span>
+					<span class="theme"> {{ withdrawWayConfig.singleDayRemindWithdrawCount ?? 0 }} </span>
 				</template>
 				<template v-slot:amount>
-					<span class="theme"> {{ withdrawWayConfig.singleDayRemindMaxWithdrawAmount }} </span>
+					<span class="theme"> {{ withdrawWayConfig.singleDayRemindMaxWithdrawAmount ?? 0 }} </span>
+				</template>
+				<template v-slot:currency>
+					<span> {{ UserStore.userInfo.mainCurrency }} </span>
 				</template>
 			</i18n-t>
 		</div>
