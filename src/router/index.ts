@@ -4,13 +4,12 @@ import Layout from "/@/layout/home/index.vue";
 import componentsDemo from "/@/router/modules/componentsDemo";
 import { LoginRegisterRouter, RegisterSubPage } from "/@/router/modules/loginRegister";
 import { VenueHome } from "/@/router/modules/venueHome";
-import { WalletSubRouter } from "/@/router/modules/wallet";
+import { WalletRouter, WalletSubRouter } from "/@/router/modules/wallet";
 import { MySubRouter } from "/@/router/modules/my";
 import { VipRouter } from "/@/router/modules/vip";
 import { activityRoutes } from "/@/router/modules/activity";
 import { SecurityCenterRouter } from "/@/router/modules/securityCenter";
 import { ErrorRouter } from "/@/router/modules/error";
-import { WalletRouter } from "./modules/wallet";
 import { useUserStore } from "../store/modules/user";
 /**
  * @description idx大小判断路由左切动画还是右切动画

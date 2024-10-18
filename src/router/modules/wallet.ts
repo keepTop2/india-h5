@@ -17,7 +17,7 @@ export const WalletRouter = {
 			name: "withdraw",
 			component: () => import("/@/views/wallet/withdraw/withdraw.vue"),
 			meta: {
-				title: "提现",
+				title: "提款",
 			},
 		},
 		{

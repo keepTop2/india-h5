@@ -13,15 +13,19 @@
 			</div>
 			<div class="info-item">
 				<span class="label">{{ $t(`rechargeDetails['充值金额']`) }}</span>
-				<span class="value">{{ depositOrderDetail.applyAmount }} {{ UserStore.userInfo.mainCurrency }}</span>
+				<span class="value">{{ common.getInstance().formatFloat(depositOrderDetail.applyAmount) }} {{ UserStore.userInfo.mainCurrency }}</span>
 			</div>
 			<div class="info-item">
 				<span class="label">{{ $t(`rechargeDetails['手续费']`) }}</span>
-				<span class="value">-{{ depositOrderDetail.feeAmount }} {{ UserStore.userInfo.mainCurrency }}</span>
+				<span class="value">
+					<span v-if="depositOrderDetail.feeAmount > 0">-</span>
+					<span>{{ common.getInstance().formatFloat(depositOrderDetail.feeAmount) }}</span>
+					<span>{{ UserStore.userInfo.mainCurrency }}</span>
+				</span>
 			</div>
 			<div class="info-item">
 				<span class="label">{{ $t(`rechargeDetails['到账金额']`) }}</span>
-				<span class="value">{{ depositOrderDetail.tradeCurrencyAmount }} {{ UserStore.userInfo.mainCurrency }}</span>
+				<span class="value">{{ common.getInstance().formatFloat(depositOrderDetail.tradeCurrencyAmount) }} {{ UserStore.userInfo.mainCurrency }}</span>
 			</div>
 		</div>
 
@@ -104,7 +108,7 @@
 		</div>
 
 		<div class="proof_list" v-if="depositOrderDetail.voucherFlag === 1">
-			<VantLazyImg v-for="(item, index) in cashFlowFileList" :key="index" class="proof_item" :src="item" />
+			<VantLazyImg v-for="(item, index) in depositOrderDetail.cashFlowFileList" :key="index" class="proof_item" :src="item" />
 		</div>
 	</div>
 	<div class="footer">
@@ -151,7 +155,7 @@
 						<div class="form-info">
 							<div class="info-item">
 								<span class="label">{{ $t(`rechargeDetails['金额']`) }}</span>
-								<span class="value fw_700">{{ depositOrderDetail.applyAmount }} {{ UserStore.userInfo.mainCurrency }}</span>
+								<span class="value fw_700">{{ common.getInstance().formatFloat(depositOrderDetail.applyAmount) }} {{ UserStore.userInfo.mainCurrency }}</span>
 							</div>
 							<div class="info-item">
 								<span class="label">{{ $t(`rechargeDetails['状态']`) }}</span>
@@ -159,7 +163,7 @@
 							</div>
 							<div class="info-item">
 								<span class="label">{{ $t(`rechargeDetails['时间']`) }}</span>
-								<span class="value">{{ depositOrderDetail.createdTime }}</span>
+								<span class="value">{{ common.getInstance().dayFormat2(depositOrderDetail.createdTime) }}</span>
 							</div>
 						</div>
 					</div>
@@ -168,7 +172,7 @@
 						<div class="label">{{ $t(`rechargeDetails['留言(最多0/500个字符)']`, { value: cashFlowRemark.length }) }}</div>
 						<van-cell-group class="van-cell-group" inset>
 							<div class="field_container">
-								<van-field ref="feedbackContent" v-model="cashFlowRemark" class="van-field" autosize type="textarea" :placeholder="$t(`feedback['请在此留言']`)" maxlength="500" />
+								<van-field ref="feedbackContent" v-model="cashFlowRemark" class="van-field" autosize type="textarea" :placeholder="$t(`rechargeDetails['请输入']`)" maxlength="500" />
 							</div>
 						</van-cell-group>
 					</div>
@@ -300,7 +304,7 @@ const onUrgeOrder = async () => {
 		channelType: depositOrderDetail.value.depositWithdrawChannelType,
 		thirdPayUrl: depositOrderDetail.value.thirdPayUrl,
 	};
-	const res = await walletApi.uploadVoucher(params).catch((err) => err);
+	const res = await walletApi.urgeOrder(params).catch((err) => err);
 	if (res.code === common.getInstance().ResCode.SUCCESS) {
 		isUrgeModalVisible.value = true;
 		// 重新获取订单状态
@@ -635,6 +639,11 @@ onUnmounted(() => {
 	.proof_item {
 		width: 160px;
 		height: 160px;
+		border-radius: 14px;
+		// border: 1px solid;
+		// @include themeify {
+		// 	border-color: themed("Theme");
+		// }
 	}
 }
 

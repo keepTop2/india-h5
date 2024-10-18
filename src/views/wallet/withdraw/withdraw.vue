@@ -56,7 +56,7 @@
 					<input
 						v-model="state.amount"
 						type="number"
-						:placeholder="`${withdrawWayConfig.withdrawMinAmount} ${UserStore.userInfo.mainCurrency} ~ ${withdrawWayConfig.withdrawMaxAmount} ${UserStore.userInfo.mainCurrency} `"
+						:placeholder="`${withdrawWayConfig.withdrawMinAmount ?? 0} ${UserStore.userInfo.mainCurrency} ~ ${withdrawWayConfig.withdrawMaxAmount ?? 0} ${UserStore.userInfo.mainCurrency} `"
 						@input="calculateFeeAndEstimatedAmount"
 					/>
 					<div class="operate_content">
@@ -105,10 +105,13 @@
 			<!-- 提示2 -->
 			<i18n-t class="tips" keypath="withdraw['提示']" :tag="'p'">
 				<template v-slot:value>
-					<span class="theme"> {{ withdrawWayConfig.singleDayRemindWithdrawCount }} </span>
+					<span class="theme"> {{ withdrawWayConfig.singleDayRemindWithdrawCount ?? 0 }} </span>
 				</template>
 				<template v-slot:amount>
-					<span class="theme"> {{ withdrawWayConfig.singleDayRemindMaxWithdrawAmount }} </span>
+					<span class="theme"> {{ withdrawWayConfig.singleDayRemindMaxWithdrawAmount ?? 0 }} </span>
+				</template>
+				<template v-slot:currency>
+					<span> {{ UserStore.userInfo.mainCurrency }} </span>
 				</template>
 			</i18n-t>
 		</div>
@@ -162,7 +165,7 @@ const withdrawWayConfig = ref({
 
 const childRef = ref(null);
 const state = reactive({
-	withdrawPassWord: "" as string | number,
+	withdrawPassWord: "" as string,
 	amount: "" as string | number,
 });
 
@@ -193,9 +196,7 @@ const errorMessage = computed(() => {
 
 watch(
 	() => childRef.value,
-	(newValue) => {
-		console.log("newValue", newValue);
-	},
+	(newValue) => {},
 	{
 		deep: true,
 	}
@@ -289,13 +290,16 @@ const calculateFeeAndEstimatedAmount = () => {
 // 交易密码输入完成
 const onTransactionPasswordEntered = () => {
 	passWordShow.value = false;
-	const params = {
-		amount: state.amount,
-		withdrawWayId: withdrawWayData.value.id,
-		withdrawPassWord: state.withdrawPassWord,
-		...childRef.value?.state,
-	};
-	getWithdrawApply(params);
+	console.log("state.withdrawPassWord.length", state.withdrawPassWord.length);
+	if (state.withdrawPassWord.length === 6) {
+		const params = {
+			amount: state.amount,
+			withdrawWayId: withdrawWayData.value.id,
+			withdrawPassWord: state.withdrawPassWord,
+			...childRef.value?.state,
+		};
+		getWithdrawApply(params);
+	}
 };
 
 // 会员提款申请
@@ -323,6 +327,7 @@ const getWithdrawApply = async (params) => {
 // 选择支付方式时的处理
 const onRechargeWay = (item) => {
 	withdrawWayData.value = item;
+	clearParams();
 	getWithdrawConfig(); // 获取通道配置
 
 	if (item.withdrawTypeCode == "crypto_currency") {

@@ -78,6 +78,7 @@ const getRechargeWayList = async () => {
 };
 
 // 初始化数据
+console.log("不请求？");
 getRechargeWayList();
 
 // 返回上一页的处理
