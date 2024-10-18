@@ -67,7 +67,7 @@ const amountItemActive = ref(null) as unknown as null | number;
 
 // 计算属性，判断按钮类型
 const buttonType = computed(() => {
-	return state.depositName && state.amount ? "default" : "disabled";
+	return state.depositName && Number.isFinite(state.amount) ? "default" : "disabled";
 });
 
 // 点击充值

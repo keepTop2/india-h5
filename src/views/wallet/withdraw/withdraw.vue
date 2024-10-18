@@ -165,7 +165,7 @@ const withdrawWayConfig = ref({
 
 const childRef = ref(null);
 const state = reactive({
-	withdrawPassWord: "" as string | number,
+	withdrawPassWord: "" as string,
 	amount: "" as string | number,
 });
 
@@ -196,9 +196,7 @@ const errorMessage = computed(() => {
 
 watch(
 	() => childRef.value,
-	(newValue) => {
-		console.log("newValue", newValue);
-	},
+	(newValue) => {},
 	{
 		deep: true,
 	}
@@ -292,13 +290,16 @@ const calculateFeeAndEstimatedAmount = () => {
 // 交易密码输入完成
 const onTransactionPasswordEntered = () => {
 	passWordShow.value = false;
-	const params = {
-		amount: state.amount,
-		withdrawWayId: withdrawWayData.value.id,
-		withdrawPassWord: state.withdrawPassWord,
-		...childRef.value?.state,
-	};
-	getWithdrawApply(params);
+	console.log("state.withdrawPassWord.length", state.withdrawPassWord.length);
+	if (state.withdrawPassWord.length === 6) {
+		const params = {
+			amount: state.amount,
+			withdrawWayId: withdrawWayData.value.id,
+			withdrawPassWord: state.withdrawPassWord,
+			...childRef.value?.state,
+		};
+		getWithdrawApply(params);
+	}
 };
 
 // 会员提款申请
@@ -326,6 +327,7 @@ const getWithdrawApply = async (params) => {
 // 选择支付方式时的处理
 const onRechargeWay = (item) => {
 	withdrawWayData.value = item;
+	clearParams();
 	getWithdrawConfig(); // 获取通道配置
 
 	if (item.withdrawTypeCode == "crypto_currency") {

@@ -31,20 +31,20 @@
 	</div>
 
 	<!-- 手机号码输入区域 -->
-	<div class="main mt_24">
+	<!--	<div class="main mt_24">
 		<div class="cell">
 			<div class="label">{{ $t(`recharge['手机号码']`) }}</div>
 			<div class="cell_input phone">
-				<!-- 区号选择 -->
+				<!~~ 区号选择 ~~>
 				<div class="area_code" @click="showAreaCode = true">
 					<span>+{{ state.areaCode }}</span>
 					<SvgIcon class="down" iconName="loginOrRegister/navBar/down" />
 				</div>
-				<!-- 手机号码输入框 -->
+				<!~~ 手机号码输入框 ~~>
 				<input v-model="state.telephone" type="number" :placeholder="$t(`recharge['请输入手机号码']`)" />
 			</div>
 		</div>
-	</div>
+	</div>-->
 
 	<!-- 提交按钮 -->
 	<div class="footer">
@@ -115,7 +115,8 @@ const amountItemActive = ref(null) as unknown as null | number;
 
 // 计算属性，判断按钮类型
 const buttonType = computed(() => {
-	return state.amount && state.areaCode && state.telephone ? "default" : "disabled";
+	// return Number.isFinite(state.amount) && state.areaCode && state.telephone ? "default" : "disabled";
+	return Number.isFinite(state.amount) ? "default" : "disabled";
 });
 
 // 监听搜索区号的变化

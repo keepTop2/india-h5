@@ -1,11 +1,10 @@
 <template>
 	<!-- 密码弹窗 -->
-	<van-overlay :show="passWordShow" @click="onOverlay" z-index="100">
-		<div class="wrapper" @click.stop>
+	<Model v-model:modelValue="props.passWordShow" @closeModal="onClose">
+		<div class="wrapper">
 			<div class="input_box">
 				<div class="content">
 					<div class="title">输入密码</div>
-
 					<ul class="input_list">
 						<li v-for="(item, index) in state.numList" :key="index" :class="getClass(item)" @click="onEnter">
 							<div v-if="item.cursor" class="cursor"></div>
@@ -14,18 +13,20 @@
 						</li>
 					</ul>
 					<!-- 隐藏的真实输入框 -->
-					<input ref="passwordInput" type="password" inputmode="numeric" maxlength="6" v-model="modelValue" @input="onInput" @blur="onClose" style="opacity: 0; position: absolute; top: -9999px" />
-					<div class="des" @click="goto">忘记密码？</div>
+					<input ref="passwordInput" type="password" inputmode="numeric" maxlength="6" v-model="modelValue" @input="onInput" style="opacity: 0; position: absolute; top: -9999px" />
+					<div class="des">
+						<span @click="goto">忘记密码？</span>
+					</div>
 				</div>
 			</div>
 		</div>
-	</van-overlay>
+	</Model>
 </template>
 
 <script setup lang="ts">
 import { useRouter } from "vue-router";
 import { ref, reactive, watch, computed, defineEmits, defineProps, withDefaults } from "vue";
-
+import Model from "/@/views/wallet/components/model.vue";
 const router = useRouter();
 const emit = defineEmits(["onClose", "onOverlay", "update:modelValue"]);
 const props = withDefaults(
@@ -62,6 +63,19 @@ const state = reactive({
 });
 
 const passwordInput = ref<HTMLInputElement | null>(null);
+
+watch(
+	() => props.passWordShow,
+	(newValue) => {
+		if (newValue) {
+			nextTick(() => {
+				if (passwordInput.value) {
+					passwordInput.value.focus();
+				}
+			});
+		}
+	}
+);
 
 watch(
 	() => modelValue.value,
@@ -123,15 +137,10 @@ const onEnter = () => {
 	}
 };
 
-// 点击遮罩
-const onOverlay = () => {
-	emit("onOverlay", {});
-	clearPassWord();
-};
-
 // 关闭弹窗
 const onClose = () => {
 	emit("onClose", {});
+	clearPassWord();
 };
 </script>
 
