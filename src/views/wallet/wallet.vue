@@ -4,9 +4,7 @@
 			<div :class="item.path != route.path ? 'tab' : 'tab_active'" v-for="(item, index) in tabList" :key="index" @click="router.push(item.path)">{{ item.name }}</div>
 		</div> -->
 		<router-view v-slot="{ Component }">
-			<keep-alive :max="10">
-				<component :is="Component" />
-			</keep-alive>
+			<component :is="Component" />
 		</router-view>
 	</div>
 </template>

@@ -117,8 +117,26 @@
 			</template>
 			<template #footer>
 				<div class="footer">
-					<div class="cancel" @click="isPasswordModal = false">{{ $t('withdraw["取消"]') }}</div>
+					<div class="cancel" @click="onCancelPassWord">{{ $t('withdraw["取消"]') }}</div>
 					<div class="confirm" @click="toPath('/setTradingPassword')">{{ $t('withdraw["去设置"]') }}</div>
+				</div>
+			</template>
+		</Model>
+
+		<!-- 手机号弹窗提示 -->
+		<Model v-model:modelValue="isPhoneModal">
+			<template #header>
+				<div class="header">{{ $t('withdraw["温馨提示"]') }}</div>
+			</template>
+			<template #default>
+				<div class="content">
+					<p class="text">{{ $t('withdraw["您还未绑定手机号，请先绑定手机号"]') }}</p>
+				</div>
+			</template>
+			<template #footer>
+				<div class="footer">
+					<div class="cancel" @click="isPhoneModal = false">{{ $t('withdraw["取消"]') }}</div>
+					<div class="confirm" @click="toPath('/bind/phone')">{{ $t('withdraw["去设置"]') }}</div>
 				</div>
 			</template>
 		</Model>
@@ -126,7 +144,8 @@
 </template>
 
 <script setup lang="ts">
-import { myApi, medalApi } from "/@/api/my";
+import { medalApi } from "/@/api/my";
+import { walletApi } from "/@/api/wallet";
 import { vipApi } from "/@/api/vip";
 import { useThemesStore } from "/@/store/modules/themes";
 import { UserCenterMedalDetailRespVoList } from "./interface";
@@ -142,7 +161,6 @@ import { useRouter } from "vue-router";
 import { useUserStore } from "/@/store/modules/user";
 import avatar from "/@/assets/zh-CN/default/my/avatar.png";
 import avatar_light from "/@/assets/zh-CN/light/my/avatar.png";
-import vip_big from "/@/assets/zh-CN/default/vip/vip_big.png";
 import line from "/@/assets/zh-CN/default/common/line.png";
 import balance_operation_ck from "/@/assets/zh-CN/default/my/balance_operation_ck.png";
 import balance_operation_tx from "/@/assets/zh-CN/default/my/balance_operation_tx.png";
@@ -150,8 +168,8 @@ import balance_operation_jy from "/@/assets/zh-CN/default/my/balance_operation_j
 import balance_operation_tz from "/@/assets/zh-CN/default/my/balance_operation_tz.png";
 import { i18n } from "/@/i18n/index";
 import { loginApi } from "/@/api/loginRegister";
-import { securityCenterApi } from "/@/api/securityCenter";
 import Model from "/@/views/wallet/components/model.vue";
+import { showToast } from "vant";
 const $: any = i18n.global;
 const router = useRouter();
 const store = useUserStore();
@@ -159,14 +177,16 @@ const themesStore = useThemesStore();
 const theme = computed(() => themesStore.themeName);
 const loginOutShow = ref(false);
 const isPasswordModal = ref(false);
+const isPhoneModal = ref(false);
 const balanceOperationList = [
 	{
 		name: $.t("my['存款']"),
 		icon: balance_operation_ck,
 		path: "/wallet/recharge",
+		verify: true,
 	},
 	{
-		name: $.t("my['提现']"),
+		name: $.t("my['提款']"),
 		icon: balance_operation_tx,
 		path: "/wallet/withdraw",
 		verify: true,
@@ -261,23 +281,52 @@ const topNList = async () => {
 	}
 };
 
-const onClickCell = (item) => {
-	if (item.path == "/inviteFriends") {
+const onClickCell = async (item) => {
+	if (!item.path) return;
+	if (item.path === "/inviteFriends") {
 		pubsub.publish("onOpenInviteFriend");
 		return;
-	} else {
-		if (!item.path) {
+	}
+	// 如果 item 不需要验证，直接跳转
+	if (!item.verify) {
+		toPath(item.path);
+		return;
+	}
+	// 处理提款路径的逻辑
+	if (item.path === "/wallet/withdraw") {
+		const { isSetPwd, phone } = store.getUserInfo;
+		if (isSetPwd || phone) {
+			const res = await walletApi.withdrawWayList().catch((err) => err);
+			if (res.code === common.getInstance().ResCode.SUCCESS && (!res.data || res.data.length === 0)) {
+				showToast($.t("my['暂无提款方式']"));
+				return;
+			}
+			toPath(item.path);
+		} else {
+			isPasswordModal.value = true;
+		}
+		return;
+	}
+	// 处理充值路径的逻辑
+	if (item.path === "/wallet/recharge") {
+		const res = await walletApi.rechargeWayList().catch((err) => err);
+		if (res.code === common.getInstance().ResCode.SUCCESS && (!res.data || res.data.length === 0)) {
+			showToast($.t("my['暂无存款方式']"));
 			return;
 		}
-		if (item.verify) {
-			if (store.getUserInfo.isSetPwd || store.getUserInfo.phone) {
-				toPath(item.path);
-			} else {
-				isPasswordModal.value = true;
-			}
-		} else {
-			toPath(item.path);
-		}
+		toPath(item.path);
+		return;
+	}
+	// 如果是其他路径，直接跳转
+	toPath(item.path);
+};
+
+// 取消设置交易密码
+const onCancelPassWord = () => {
+	isPasswordModal.value = false;
+	const { phone } = store.getUserInfo;
+	if (!phone) {
+		isPhoneModal.value = true;
 	}
 };
 

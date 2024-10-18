@@ -9,7 +9,7 @@
 		<div class="cell">
 			<div class="label">{{ $t(`recharge['存款金额']`) }}</div>
 			<div class="cell_input">
-				<input v-model="state.amount" type="number" :placeholder="`${rechargeConfig.rechargeMinAmount} - ${rechargeConfig.rechargeMaxAmount}`" @input="amountItemActive = null" />
+				<input v-model="state.amount" type="number" :placeholder="`${rechargeConfig.rechargeMinAmount ?? 0} - ${rechargeConfig.rechargeMaxAmount ?? 0}`" @input="amountItemActive = null" />
 				<div class="input_label">{{ rechargeConfig.currencyCode }}</div>
 			</div>
 		</div>
@@ -80,6 +80,7 @@ const onRecharge = async () => {
 				orderNo: res.data.orderNo,
 			},
 		});
+		window.open(res.data.thirdPayUrl, "_blank");
 	}
 };
 

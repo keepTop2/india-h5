@@ -5,7 +5,7 @@
 			<div class="label">{{ $t(`recharge['存款金额']`) }}</div>
 			<div class="cell_input">
 				<!-- 输入框，显示最小和最大存款金额 -->
-				<input v-model="state.amount" type="number" :placeholder="`${rechargeConfig.rechargeMinAmount} - ${rechargeConfig.rechargeMaxAmount}`" @input="amountItemActive = null" />
+				<input v-model="state.amount" type="number" :placeholder="`${rechargeConfig.rechargeMinAmount ?? 0} - ${rechargeConfig.rechargeMaxAmount ?? 0}`" @input="amountItemActive = null" />
 				<!-- 显示货币单位 -->
 				<div class="input_label">{{ rechargeConfig.currencyCode }}</div>
 			</div>
@@ -138,15 +138,15 @@ const countries = ref<CountryData[]>([]); // 国家数据
 // 点击充值
 const onRecharge = async () => {
 	const res = await walletApi.userRecharge(state).catch((err) => err);
-	router.push({
-		path: "/wallet/rechargeDetails",
-		query: {
-			orderNo: res.data.orderNo,
-		},
-	});
-	// if (res.code === common.getInstance().ResCode.SUCCESS) {
-
-	// }
+	if (res.code === common.getInstance().ResCode.SUCCESS) {
+		router.push({
+			path: "/wallet/rechargeDetails",
+			query: {
+				orderNo: res.data.orderNo,
+			},
+		});
+		window.open(res.data.thirdPayUrl, "_blank");
+	}
 };
 
 // 获取区号下拉框数据
