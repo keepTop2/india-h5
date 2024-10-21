@@ -1,32 +1,38 @@
 <template>
-	<VantNavBar :title="$t(`VantNavBar['反馈记录']`)" @onClickLeft="onClickLeft" />
-
-	<div class="cellList">
-		<div class="cell" v-for="item in 10">
-			<div class="header">
-				<div class="left">2020-05-04 10:10:10</div>
-				<div class="right">
-					<span>ID:{{ 123123123123 }}</span>
-					<div class="icon" @click="common.getInstance().copy(123123123123)"><SvgIcon iconName="common/copy2" /></div>
-				</div>
-			</div>
-			<div class="content">
-				<p class="text">回复内容回复内容回复内容回复内容回复内容回复内容回复内容回复内容回复内容回复内容回复内容回复内容回复内容回复内容回复内容回复内容</p>
-				<span @click="toPath('/feedbackDetails')">详情</span>
-			</div>
-		</div>
-	</div>
+	<VantNavBar :title="$t(`VantNavBar['我的反馈']`)" @onClickLeft="onClickLeft" />
+	<cardList :data="FeedbackList" class="mt_24" @handleDelete="handleDelete"></cardList>
 </template>
 
 <script setup lang="ts">
-import common from "/@/utils/common";
 import { useRouter } from "vue-router";
+import cardList from "./cardList.vue";
 const router = useRouter();
+import { medalApi } from "/@/api/my";
 
-const toPath = (path) => {
-	router.push(path);
+const FeedbackList = ref([]);
+onMounted(() => {
+	getFeedbackList();
+});
+const getFeedbackList = () => {
+	medalApi
+		.FeedbackList({
+			pageNumber: 1,
+			pageSize: 10,
+		})
+		.then((res) => {
+			FeedbackList.value = res.data.records;
+		});
 };
-
+// 删除按钮点击处理逻辑
+const handleDelete = (item) => {
+	medalApi
+		.delFeedback({
+			id: item.id,
+		})
+		.then((res) => {
+			getFeedbackList();
+		});
+};
 const onClickLeft = () => {
 	router.go(-1);
 };

@@ -11,6 +11,11 @@
 		justify-content: center;
 		gap: 20px;
 	}
+	.ellipsis {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
 	@include themeify {
 	}
 	ul {

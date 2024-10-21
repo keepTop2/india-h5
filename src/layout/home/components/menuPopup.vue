@@ -98,7 +98,7 @@ const onCollapseMenu = () => {
 const handleMenuClick = (item) => {
 	show.value = false;
 	console.log(item, "===item");
-	if (item.modelCode === "PE") {
+	if (item.modelCode === "SBA") {
 		router.push({ name: "rollingBallList", params: { sportType: 1 } });
 	} else {
 		router.push({

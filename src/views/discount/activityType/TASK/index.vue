@@ -64,7 +64,7 @@
 					<div>
 						<div :class="'btnType btnType' + item.taskStatus" @click="HandleBtn(item)">{{ taskStatus[item.taskStatus] }}</div>
 					</div>
-					<div class="help_icon">
+					<div class="help_icon" @click="openDialog(item)">
 						<img src="./image/help_icon.png" />
 					</div>
 				</div>
