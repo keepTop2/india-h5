@@ -25,11 +25,11 @@
 						</div>
 						<div class="fs_18 color_TB bottom">
 							<span
-								>奖励：<span class="color_Hint"> {{ item.platCurrencySymbol }}{{ item.rewardAmount }}</span></span
+								>奖励：<span class="color_Hint"> {{ item.platCurrencySymbol }} {{ item.rewardAmount }}</span></span
 							>
 							<span
-								><span class="color_Theme">{{ calculatePercentage(item.achieveAmount, item.minBetAmount) }}</span
-								>/100</span
+								><span class="color_Theme">{{ item.achieveAmount }}</span
+								>/{{ item.minBetAmount }}</span
 							>
 						</div>
 					</div>
@@ -57,7 +57,7 @@
 							>
 							<span
 								><span class="color_Theme">{{ calculatePercentage(item.achieveAmount, item.minBetAmount) }}</span
-								>/100</span
+								>/{{ item.minBetAmount }}</span
 							>
 						</div>
 					</div>
@@ -79,7 +79,7 @@
 					</div>
 					<div>
 						<div class="fs_24 color_TB fw_500">{{ item.taskNameI18nCode }}</div>
-						<!-- <div class="fs_18 color_TB htmlDesc" v-html="item.taskDescI18nCode"></div> -->
+						<div class="fs_18 color_TB htmlDesc ellipsis" v-html="item.taskDescriptionI18nCode"></div>
 						<div class="fs_18 color_TB bottom">
 							<span
 								>奖励：<span class="color_Hint"> {{ item.platCurrencySymbol }} {{ item.rewardAmount }}</span></span
@@ -109,10 +109,7 @@
 import { ref } from "vue";
 import { activityApi } from "/@/api/activity";
 import activityDialog from "./dialog.vue";
-import dayjs from "dayjs";
-import { showToast } from "vant";
 import image from "./image/image.png";
-import { useUserStore } from "/@/store/modules/user";
 import Common from "/@/utils/common";
 import { useCountdown } from "/@/hooks/countdown";
 const { countdown, startCountdown, stopCountdown } = useCountdown();
@@ -176,6 +173,8 @@ const HandleBtn = (item) => {
 					getTaskDetail();
 				}
 			});
+	} else if (item.taskStatus == 0) {
+		router.push("/");
 	}
 };
 
@@ -226,21 +225,41 @@ const calculatePercentage = (part, whole) => {
 			.tab {
 				flex: 1;
 				text-align: center;
-				background: url("./image/tabBg.png") no-repeat;
 				height: 72px;
 				background-size: 100% 100%;
+				@include themeify {
+					border-radius: 24px 24px 0px 0px;
+					background: themed("BG3");
+				}
 			}
 			.tab.active {
-				height: 80px;
-				margin-bottom: -12px;
-				background: url("./image/tabActive.png") no-repeat;
+				position: relative;
+				height: 72px;
 				background-size: 100% 100%;
+				@include themeify {
+					border-radius: 24px 24px 0px 0px;
+					background: themed("Theme");
+				}
+			}
+			.tab.active::after {
+				content: ""; /* 必须设置内容为 "" */
+				position: absolute; /* 绝对定位 */
+				left: 50%; /* 水平居中 */
+				bottom: -12px; /* 距离容器底部 */
+				transform: translateX(-50%); /* 水平居中 */
+				width: 0;
+				height: 0;
+				border-left: 12px solid transparent; /* 左边框透明 */
+				border-right: 12px solid transparent; /* 右边框透明 */
+				@include themeify {
+					border-top: 12px solid themed("Theme"); /* 顶部边框为黑色 */
+				}
 			}
 		}
 	}
 	.taskList {
 		border-radius: 24px 24px 0px 0px;
-		padding: 14px 24px;
+		padding: 24px 24px;
 		margin-top: -1px;
 		@include themeify {
 			background: themed("BG1");
@@ -276,7 +295,7 @@ const calculatePercentage = (part, whole) => {
 				flex: 1;
 				display: flex;
 				flex-direction: column;
-				gap: 12px;
+				gap: 8px;
 				.progress {
 					background: url("./image/progress.png") no-repeat;
 					background-size: 100% 100%;
@@ -322,6 +341,9 @@ const calculatePercentage = (part, whole) => {
 				height: 45px;
 				width: 100%;
 				background: url("./image/daojishiBg.png") no-repeat;
+			}
+			.htmlDesc {
+				width: 350px;
 			}
 		}
 		.card.welcome {

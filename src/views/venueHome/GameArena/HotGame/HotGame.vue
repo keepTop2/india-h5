@@ -1,16 +1,6 @@
 <template>
 	<div class="GameSwiper">
-		<Swiper
-			slidesPerView="auto"
-			:loop="true"
-			:autoplay="{
-				delay: 2500,
-				disableOnInteraction: false,
-				pauseOnMouseEnter: true,
-			}"
-			:modules="modules"
-			class="mySwiper"
-		>
+		<Swiper slidesPerView="auto" :modules="modules" class="mySwiper">
 			<swiper-slide v-for="(item, index) in gameList?.gameInfoList" :key="index">
 				<div class="card" @click="handleClickCard(item)">
 					<div class="collect">

@@ -52,7 +52,9 @@ export default class GameApi {
 		return useAxiosApi(`/app/game_lobby/api/queryGameInfoByOneClassId`, {
 			method: "POST",
 			data,
-			// headers,
+			headers: {
+				showLoading: true,
+			},
 		});
 	};
 	//搜索游戏接口

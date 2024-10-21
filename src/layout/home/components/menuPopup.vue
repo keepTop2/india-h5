@@ -19,7 +19,7 @@
 			</div>
 
 			<div class="menu_list">
-				<div class="menu van-haptics-feedback" @click="toPath('/activity/DAILY_COMPETITION')">
+				<div class="menu van-haptics-feedback" @click="toPath('/activity/DAILY_COMPETITION')" v-if="showDAILY_COMPETITION">
 					<div class="icon">
 						<img :src="mrjs" />
 					</div>
@@ -78,6 +78,7 @@ import { useRouter } from "vue-router";
 import { useUserStore } from "/@/store/modules/user";
 import { activityApi } from "/@/api/activity";
 import { showToast } from "vant";
+const showDAILY_COMPETITION = ref(false);
 const userStore = useUserStore();
 const router = useRouter();
 const show = ref(false);
@@ -94,6 +95,7 @@ const confirmDialog = () => {
 const onCollapseMenu = () => {
 	show.value = true;
 	queryLobbyLabelList();
+	queryActivityCheck();
 };
 const handleMenuClick = (item) => {
 	show.value = false;
@@ -116,7 +118,13 @@ const queryLobbyLabelList = async () => {
 		state.menuList = res.data;
 	}
 };
-
+const queryActivityCheck = () => {
+	activityApi.queryActivityCheck({ activityTemplate: "DAILY_COMPETITION" }).then((res) => {
+		if (res.code === 10000) {
+			showDAILY_COMPETITION.value = true;
+		}
+	});
+};
 const toPath = (path) => {
 	if ("/activity/SPIN_WHEEL" === path) {
 		activityApi.getSpinDetail().then((res: any) => {

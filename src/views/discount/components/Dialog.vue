@@ -13,7 +13,7 @@
 					<slot name="footer"> 去注册 </slot>
 				</button>
 				<button class="common_btn" @click="toLogin">
-					<slot name="footer"> 去登陆 </slot>
+					<slot name="footer"> 去登录 </slot>
 				</button>
 			</div>
 			<div class="dialog-footer" v-else>

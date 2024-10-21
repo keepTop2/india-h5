@@ -22,7 +22,7 @@
 				<span class="vip_level">VIP{{ state.userVipInfo.vipGradeCode }}</span>
 				<div class="vip_info">
 					<span class="vip_experience"
-						>升级所需经验: <span class="color_Warn">{{ state.userVipInfo.currentExp }}</span> / <span>{{ state.userVipInfo.upgradeVipExp }}</span></span
+						>升级所需经验: <span class="color_Warn">{{ state.userVipInfo.currentVipExp }}</span> / <span>{{ state.userVipInfo.upgradeVipExp }}</span></span
 					>
 					<SvgIcon class="arrow" iconName="my/arrow" @click="toPath('/vip')" />
 				</div>
@@ -42,8 +42,9 @@
 					<div class="medal_content">
 						<div class="item" :class="{ item_bg: item.lockStatus == 1 }" v-for="(item, index) in state.medalListData" :key="index" @click="onLightUpMedal(item)">
 							<template v-if="item.lockStatus === 0">
+								<i></i>
 								<div class="bg"></div>
-								<VantLazyImg class="medal_icon" :src="item.lockStatus == 0 || item.lockStatus == 2 ? item.inactivatedPicUrl : item.activatedPicUrl" />
+								<VantLazyImg class="medal_icon1" :src="item.lockStatus == 0 || item.lockStatus == 2 ? item.inactivatedPicUrl : item.activatedPicUrl" :class="{ animation: item.lockStatus === 0 }" />
 							</template>
 							<VantLazyImg class="medal_icon" :src="item.lockStatus == 0 || item.lockStatus == 2 ? item.inactivatedPicUrl : item.activatedPicUrl" v-else />
 						</div>
@@ -607,21 +608,38 @@ const loginOut = () => {
 				}
 				.bg {
 					position: absolute;
-					top: -15px;
-					left: -15px;
-					width: 120px;
-					height: 120px;
-					background: url("./image.png") no-repeat;
-					background-size: 100% 100%;
+					top: -17px;
+					left: 50%;
+					transform: translate(-50%, 0%);
+					width: 132px;
+					height: 132px;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					background: url("./image.png");
+					background-position-x: center;
+					background-position-y: bottom;
+					background-repeat: no-repeat;
+					background-size: 132px 132px;
 					/* 添加旋转和缩放动画 */
+					animation: rotateIcon 4s linear infinite;
 				}
 				.medal_icon {
 					width: 72px;
 					height: 78px;
 					z-index: 20;
 				}
-			}
+				.medal_icon1 {
+					position: absolute;
 
+					width: 72px;
+					height: 78px;
+					text-align: center;
+				}
+			}
+			.animation {
+				animation: scaleIcon 1.5s ease-in-out infinite;
+			}
 			.item_bg {
 				width: 92px;
 				height: 92px;
@@ -902,5 +920,29 @@ const loginOut = () => {
 			}
 		}
 	}
+}
+/* 旋转动画 */
+@keyframes rotateIcon {
+	0% {
+		transform: translate(-50%, 0%) rotate(0deg);
+	}
+	100% {
+		transform: translate(-50%, 0%) rotate(180deg);
+	}
+}
+
+/* 缩放动画 */
+@keyframes scaleIcon {
+	0%,
+	100% {
+		transform: translate(0%, 0%) scale(1);
+	}
+	50% {
+		transform: translate(0%, 0%) scale(1.13);
+	}
+}
+:deep(.van-popover__content) {
+	background: rgba(0, 0, 0, 0.7) !important;
+	margin-right: 60px !important;
 }
 </style>
