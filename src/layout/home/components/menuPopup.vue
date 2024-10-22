@@ -127,7 +127,7 @@ const queryLobbyLabelList = async () => {
 };
 const queryActivityCheck = () => {
 	activityApi.queryActivityCheck({ activityTemplate: "DAILY_COMPETITION" }).then((res: any) => {
-		if (res.code === 10000) {
+		if (res.code?.status === 10000) {
 			showDAILY_COMPETITION.value = true;
 		}
 	});

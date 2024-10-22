@@ -112,9 +112,26 @@ const routes = [
 	},
 	{
 		path: "/helpCenter",
-		name: "helpCenter",
-		component: () => import("/@/views/helpCenter/index.vue"),
-		meta: { title: "helpCenter" },
+		children: [
+			{
+				path: "/helpCenter",
+				name: "helpCenter",
+				component: () => import("/@/views/helpCenter/index.vue"),
+				meta: {
+					title: "details",
+					keepAlive: false,
+				},
+			},
+			{
+				path: "/helpCenter/details",
+				name: "details",
+				component: () => import("/@/views/helpCenter/details.vue"),
+				meta: {
+					title: "details",
+					keepAlive: false,
+				},
+			},
+		],
 	},
 	{
 		path: "/demo",
