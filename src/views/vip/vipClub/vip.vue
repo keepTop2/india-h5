@@ -49,10 +49,9 @@
 				<span class="label">{{ $t(`vip["VIP福利"]`) }}</span>
 				<img :src="vip_line_right" alt="" />
 			</div>
-			<div class="tips">{{ $t(`vip["通过OKSPORT专属VIP福利体系探索最佳游戏体验"]`) }}</div>
 			<div class="level_grid">
 				<div class="item" v-for="(item, index) in levelData" :key="index" @click="onSwitchRank(item)">
-					<div class="value" :class="{ value_active: state.vipRank == index }" @click="state.vipRank = index">
+					<div class="value" :class="{ value_active: state.vipRank == item.vipRankCode }" @click="state.vipRank = item.vipRankCode">
 						<div class="icon">
 							<img :src="item.rankIcon" />
 						</div>
@@ -64,8 +63,8 @@
 				<div class="reward_list_header">
 					<div>
 						<span>{{ levelData[state.vipRank].label }}</span>
-						<span>VIP</span>
-						<span>{{ levelData[state.vipRank]?.minVipGrade }}-{{ levelData[state.vipRank]?.maxVipGrade }}</span>
+						<span> VIP </span>
+						<span>{{ levelData[state.vipRank]?.minVipGrade }} - {{ levelData[state.vipRank]?.maxVipGrade }}</span>
 					</div>
 					<van-popover v-model:show="showPopover3" theme="dark" :show-arrow="false">
 						<div class="p_10 popup">包含之前等级的所有福利</div>
@@ -112,7 +111,7 @@
 							<div class="value">
 								<i18n-t keypath="vip['总奖金']" :tag="'span'">
 									<template v-slot:value>
-										<span class="num"> {{ item.upgrade }} {{ useUserStore().getUserInfo.platCurrencySymbol }}</span>
+										<span class="num"> {{ item.upgrade }} {{ useUserStore().getUserInfo.platCurrencyName }}</span>
 									</template>
 								</i18n-t>
 							</div>
@@ -181,17 +180,17 @@ import common from "/@/utils/common";
 import { i18n } from "/@/i18n/index";
 import { useUserStore } from "/@/store/modules/user";
 const currentRankImage = computed(() => {
-	return vipRank.value == 0
+	return vipRank.value == 1
 		? rank0Img
-		: vipRank.value == 1
-		? rank1Img
 		: vipRank.value == 2
-		? rank2Img
+		? rank1Img
 		: vipRank.value == 3
-		? rank3Img
+		? rank2Img
 		: vipRank.value == 4
-		? rank4Img
+		? rank3Img
 		: vipRank.value == 5
+		? rank4Img
+		: vipRank.value == 6
 		? rank4Img
 		: rank5Img;
 });
@@ -263,42 +262,42 @@ let state = reactive({
 
 const levelData: any = [
 	{
-		vipRankCode: 0,
+		vipRankCode: 1,
 		label: $.t(`vip['青铜']`),
 		rankIcon: icon_bronze,
 	},
 	{
-		vipRankCode: 1,
+		vipRankCode: 2,
 		label: $.t(`vip['白银']`),
 		rankIcon: icon_silver,
 	},
 	{
-		vipRankCode: 2,
+		vipRankCode: 3,
 		label: $.t(`vip['黄金']`),
 		rankIcon: icon_gold,
 	},
 	{
-		vipRankCode: 3,
+		vipRankCode: 4,
 		label: $.t(`vip['白金I']`),
 		rankIcon: icon_platinium,
 	},
 	{
-		vipRankCode: 4,
+		vipRankCode: 5,
 		label: $.t(`vip['白金II']`),
 		rankIcon: icon_platinium,
 	},
 	{
-		vipRankCode: 5,
+		vipRankCode: 6,
 		label: $.t(`vip['钻石I']`),
 		rankIcon: icon_diamond,
 	},
 	{
-		vipRankCode: 6,
+		vipRankCode: 7,
 		label: $.t(`vip['钻石II']`),
 		rankIcon: icon_diamond,
 	},
 	{
-		vipRankCode: 7,
+		vipRankCode: 8,
 		label: $.t(`vip['钻石III']`),
 		rankIcon: icon_diamond,
 	},

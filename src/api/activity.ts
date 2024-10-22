@@ -106,6 +106,14 @@ export const activityApi = {
 			headers,
 		});
 	},
+	// 活动校验
+	queryActivityCheck: (data = {}, headers = {}) => {
+		return useAxiosApi(`/app/activityParticipate/api/queryActivityCheck`, {
+			method: "POST",
+			data,
+			headers,
+		});
+	},
 	// 转盘详情
 	getSpinDetail: (data = {}, headers = {}) => {
 		return useAxiosApi(`/app/activity/spin/api/detail`, {

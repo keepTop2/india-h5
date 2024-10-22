@@ -2,7 +2,7 @@
 	<VantNavBar :title="$t(`VantNavBar['VIP等级制度']`)" @onClickLeft="onClickLeft"></VantNavBar>
 
 	<div class="content">
-		<Collapse v-for="(item, index) in state.vipHierarchyData.siteVIPSystemRankVOList" :key="index" :is-open="index == 0 ? true : false">
+		<Collapse v-for="(item, index) in state.vipHierarchyData?.siteVIPSystemRankVOList?.filter((item) => item.vipRankCode > 0)" :key="index" :is-open="index == 0 ? true : false">
 			<template #header>
 				<div class="header" :class="getClass(item)">
 					<div>
@@ -17,7 +17,7 @@
 				<div class="content_header">
 					<span>{{ $t('vipHierarchy["等级"]') }}</span>
 					<span>{{ $t('vipHierarchy["所需经验"]') }}</span>
-					<span>{{ $t('vipHierarchy["升级奖金"]') }} {{ useUserStore().getUserInfo.platCurrencySymbol }}</span>
+					<span>{{ $t('vipHierarchy["升级奖金"]') }} {{ useUserStore().getUserInfo.platCurrencyName }}</span>
 				</div>
 				<div class="content_cell" v-for="(i, idx) in item.siteVIPGradeVOList" :key="idx">
 					<div>

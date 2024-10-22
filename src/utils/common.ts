@@ -238,7 +238,7 @@ class Common {
 	 */
 	public dayFormat1(date: number | string | null): string {
 		if (date) {
-			return dayjs(date).tz("Asia/Shanghai").format("YYYY-MM-DD");
+			return dayjs(date).format("YYYY-MM-DD");
 		}
 		return "";
 	}

@@ -1,7 +1,7 @@
 <template>
 	<div class="BettingMatch">
 		<!-- 导航栏 -->
-		<VantNavBar title="每日竞赛" @onClickLeft="onClickLeft" />
+		<VantNavBar :title="title" @onClickLeft="onClickLeft" />
 		<div class="content">
 			<!-- 标签页 -->
 			<!-- <Tabs class="plr" v-model="tabsActiveKey" :list="tabList" /> -->
@@ -172,7 +172,7 @@ const showPicker = ref(false);
 const participation = ref(false);
 const defaultDate = ref(Common.getLast30Days().defaultIndex);
 // 表格数据和列定义
-
+const title = ref("");
 const columns = [
 	{ field: "name", label: "排行" },
 	{ field: "userAccount", label: "玩家" },
@@ -199,8 +199,11 @@ const onClickLeft = () => {
 
 const queryActivityDailyContestVenueCode = async () => {
 	await activityApi.queryActivityDailyContestVenueCode().then((res) => {
-		currentVenueCode.value = res.data[0].id;
-		tabList.value = res.data.map((item, index) => {
+		currentVenueCode.value = res.data.list[0].id;
+		title.value = res.data.activityNameI18nCode;
+		console.log(title);
+
+		tabList.value = res.data.list.map((item, index) => {
 			return {
 				value: item.activityName,
 				code: index,

@@ -26,13 +26,13 @@
 			<div class="progress">
 				<div class="value" :style="{ width: totalProgress + '%' }"></div>
 			</div>
-
+			{{}}
 			<!-- 文本提示列表 -->
 			<div class="text_list">
 				<!-- 提示图标 -->
 				<div class="tooltip">
 					<van-popover v-model:show="showPopover" theme="dark" :show-arrow="false">
-						<div class="p_10 popup">{{ $t('medalCollection["宝箱奖励流水倍数为8倍"]') }}</div>
+						<div class="p_10 popup">{{ $t('medalCollection["宝箱奖励流水倍数为8倍"]', { num: state.medalRewardRespVOS[state.canLightNum].typingMultiple }) }}</div>
 						<template #reference>
 							<VantLazyImg class="icon" :src="theme === ThemeEnum.default ? tips_icon : tips_icon_light" />
 						</template>
@@ -118,6 +118,7 @@ import { ThemeEnum } from "/@/enum/appConfigEnum";
 import { useThemesStore } from "/@/store/modules/themes";
 import { useRouter } from "vue-router";
 import { useUserStore } from "/@/store/modules/user";
+import { showToast } from "vant";
 const router = useRouter();
 const themesStore = useThemesStore();
 const theme = computed(() => themesStore.themeName);
@@ -208,6 +209,7 @@ const getUserMedalInfo = async () => {
 // 领取宝箱
 const onOpenMedalReward = async (item) => {
 	// 确保勋章数量达到要求且宝箱状态为未领取
+
 	if (state.canLightNum >= item.unlockMedalNum && item.openStatus === 0) {
 		const params = {
 			condNum: item.unlockMedalNum,
@@ -216,6 +218,9 @@ const onOpenMedalReward = async (item) => {
 
 		if (res.code == common.getInstance().ResCode.SUCCESS) {
 			// 成功领取后更新用户的勋章信息
+
+			showToast(`恭喜你获得${res.data.unlockMedalNum}个宝箱，奖励${res.dat.rewardAmount}${useUserStore().getUserInfo.platCurrencySymbol}，已发送到您的账户`);
+
 			await getUserMedalInfo();
 		}
 	}
