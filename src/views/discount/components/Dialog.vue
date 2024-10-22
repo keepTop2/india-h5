@@ -131,6 +131,9 @@ const toLogin = () => {
 				border-radius: 10px;
 				background: linear-gradient(278deg, #ff284b 4.74%, #fd677f 92.73%);
 				border: none;
+				@include themeify {
+					color: themed("TB");
+				}
 			}
 		}
 		.dialog-footer2 {

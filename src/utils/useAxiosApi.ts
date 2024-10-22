@@ -78,7 +78,6 @@ instance.interceptors.response.use(
 					useUserStore().logOut();
 			}
 
-			showToast(res.message);
 			return res;
 		} else {
 			return res;
