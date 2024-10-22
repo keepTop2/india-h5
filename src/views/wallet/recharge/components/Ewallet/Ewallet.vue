@@ -92,10 +92,9 @@ const searchAreaCode = ref(""); // 区号搜索内容
 const currentAreaCodeIndex = ref<number | string>(""); // 当前选中的区号索引
 const indexList = ref<string[]>([]); // 区号索引列表
 const areaCodeObj = ref<CountryData | null>(null); // 当前区号对象
-const state = reactive<{ areaCode: string; amount: number | string; telephone: number | string }>({
+const state = reactive<{ areaCode: string }>({
 	amount: "",
-	areaCode: "", // 存储区域代码
-	telephone: "", // 存储区域代码
+	depositWayId: props.rechargeWayData.id,
 });
 
 // 通道配置信息

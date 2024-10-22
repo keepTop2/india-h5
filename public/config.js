@@ -7,12 +7,11 @@ window.PLATFROM_CONFIG = {
 	productionSportUrl: "https://apistaging.wx7777.com",
 
 	// 本地开发地址(开发专用)
-	developmentBaseURL: "https://gw.playesoversea.store", // 开发环境
-	// developmentBaseURL: "https://backend.bwsh.store", // 测试环境
+	// developmentBaseURL: "https://gw.playesoversea.store", // 开发环境
+	developmentBaseURL: "https://backend.bwsh.store", // 测试环境
 	// developmentBaseURL: "http://192.168.30.117:9999", // 尔顿本地地址
 
-	//本地开发websocket地址
-	developmentWsURL: "wss://gw.playesoversea.store/ws",
+	developmentWsURL: "wss://gw.playesoversea.store/ws", //本地开发websocket地址
 	developmentWsURL: "wss://backend.bwsh.store/ws", // 测试环境
 	// 本地开发传文件(开发专用)
 	developmentFileUrl: "http://192.168.30.72:7900",
