@@ -185,7 +185,7 @@ const spinStart = async () => {
 	const startTime = Date.now();
 	const params = {
 		id: activityData.value.id,
-		vipRankCode: currentTab.value,
+		vipRankCode: Number(currentTab.value) + 1,
 	};
 	const res: any = await activityApi.getSpinPrizeResult(params);
 	if (res.code !== 10000) {

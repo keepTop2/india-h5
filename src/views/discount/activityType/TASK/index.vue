@@ -159,6 +159,12 @@ const getTaskDetail = () => {
 	});
 };
 const HandleBtn = (item) => {
+	if (item.subTaskType === "phone") {
+		return router.push("/bind/phone");
+	} else if (item.subTaskType === "email") {
+		return router.push("/bind/email");
+	}
+
 	if (item.taskStatus == 1) {
 		activityApi
 			.Taskreceive({
@@ -305,6 +311,7 @@ const calculatePercentage = (part, whole) => {
 						height: 12px;
 						border-radius: 10px;
 						background-color: Wam-P1;
+						max-width: 100%;
 						@include themeify {
 							background-color: themed("Wam-P1");
 						}
