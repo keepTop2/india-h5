@@ -103,15 +103,22 @@ const routes = [
 			},
 		],
 	},
-	{
-		path: "/demo",
-		component: () => import("/@/views/demoApp/demoApp.vue"),
-	},
+
 	{
 		path: "/gamePage",
 		name: "gamePage",
 		component: () => import("/@/views/game/index.vue"),
 		meta: { title: "gamePage" },
+	},
+	{
+		path: "/helpCenter",
+		name: "helpCenter",
+		component: () => import("/@/views/helpCenter/index.vue"),
+		meta: { title: "helpCenter" },
+	},
+	{
+		path: "/demo",
+		component: () => import("/@/views/demoApp/demoApp.vue"),
 	},
 	// 一级页路由
 

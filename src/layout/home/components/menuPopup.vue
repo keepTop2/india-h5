@@ -53,6 +53,12 @@
 				</div>
 				<div class="label">{{ $t(`menuPopup["客服"]`) }}</div>
 			</div>
+			<div class="menu van-haptics-feedback">
+				<div class="icon">
+					<img :src="helpCenter" />
+				</div>
+				<div class="label" @click="toPath('/helpCenter')">{{ $t(`menuPopup["帮助中心"]`) }}</div>
+			</div>
 		</div>
 	</van-popup>
 	<activityDialog v-model="showDialog" title="温馨提示" :confirm="confirmDialog" :goToLogin="true"> 您的账号暂未登录无法参与活动， 如已有账号请登录，如还未有账号 请前往注册 </activityDialog>
@@ -69,6 +75,7 @@ import close_light from "/@/assets/zh-CN/light/menuPopup/close.png";
 import mrjs from "/@/assets/zh-CN/default/menuPopup/mrjs.png";
 import home from "/@/assets/zh-CN/default/menuPopup/home.png";
 import kefu from "/@/assets/zh-CN/default/menuPopup/kefu.png";
+import helpCenter from "/@/assets/zh-CN/default/menuPopup/helpCenter.png";
 import pubsub from "/@/pubSub/pubSub";
 import CommonApi from "/@/api/common";
 import common from "/@/utils/common";
@@ -119,7 +126,7 @@ const queryLobbyLabelList = async () => {
 	}
 };
 const queryActivityCheck = () => {
-	activityApi.queryActivityCheck({ activityTemplate: "DAILY_COMPETITION" }).then((res) => {
+	activityApi.queryActivityCheck({ activityTemplate: "DAILY_COMPETITION" }).then((res: any) => {
 		if (res.code === 10000) {
 			showDAILY_COMPETITION.value = true;
 		}
@@ -145,6 +152,7 @@ const toPath = (path) => {
 		}
 	} else {
 		router.push(path);
+		show.value = false;
 	}
 };
 onMounted(() => {

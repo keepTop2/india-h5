@@ -15,7 +15,7 @@
 				<div class="label">{{ $t(`vip["当前等级"]`) }}</div>
 			</div>
 
-			<div class="vip_level">VIP{{ state.userVipInfo.vipGradeCode }}</div>
+			<div class="vip_level">{{ state.userVipInfo.vipGradeName }}</div>
 
 			<div class="vip_level_progress">
 				<span>{{ $t(`vip["升级所需经验"]`) }}</span>
@@ -62,9 +62,8 @@
 			<div class="reward_list">
 				<div class="reward_list_header">
 					<div>
-						<span>{{ levelData[state.vipRank].label }}</span>
-						<span> VIP </span>
-						<span>{{ levelData[state.vipRank]?.minVipGrade }} - {{ levelData[state.vipRank]?.maxVipGrade }}</span>
+						<span>{{ levelData[state.vipRank - 1]?.label }} </span>&nbsp;
+						<span> {{ levelData[state.vipRank - 1]?.minVipGradeName }} - {{ levelData[state.vipRank - 1]?.maxVipGradeName }}</span>
 					</div>
 					<van-popover v-model:show="showPopover3" theme="dark" :show-arrow="false">
 						<div class="p_10 popup">包含之前等级的所有福利</div>
@@ -203,7 +202,7 @@ const showPopover2 = ref(false);
 const showPopover3 = ref(false);
 const showPopover4 = ref(false);
 const vipRank = ref(0);
-let state = reactive({
+const state: any = reactive({
 	vipRank: 0,
 	userVipInfo: {
 		vipRank: 0,
@@ -294,11 +293,6 @@ const levelData: any = [
 	{
 		vipRankCode: 7,
 		label: $.t(`vip['钻石II']`),
-		rankIcon: icon_diamond,
-	},
-	{
-		vipRankCode: 8,
-		label: $.t(`vip['钻石III']`),
 		rankIcon: icon_diamond,
 	},
 ];
@@ -591,14 +585,17 @@ const onClickLeft = () => {
 		.level_grid {
 			display: flex;
 			flex-wrap: wrap;
-			row-gap: 24px;
-			column-gap: 70px;
 			padding: 24px 22px;
 
 			.item {
-				flex: 1;
-				min-width: 112px;
+				width: 25%;
 
+				min-width: 112px;
+				text-align: center;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
 				.value_active {
 					position: relative;
 					box-sizing: border-box;
@@ -642,6 +639,7 @@ const onClickLeft = () => {
 				}
 
 				.label {
+					width: 106px;
 					display: flex;
 					justify-content: center;
 					margin-top: 10px;

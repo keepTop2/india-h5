@@ -2,7 +2,7 @@
 	<div class="vip_progress">
 		<div class="vip_icon">
 			<VantLazyImg class="vip_bg" :src="currentRankImage" />
-			<span class="vip_level">LV{{ props.userVipInfo.vipGradeCode }}</span>
+			<span class="vip_level">{{ props.userVipInfo.vipGradeName }}</span>
 		</div>
 		<div class="progress_bar">
 			<div class="progress" :style="{ width: `${progressPercentage}%` }">
@@ -18,7 +18,7 @@
 		</div>
 		<div class="vip_icon">
 			<VantLazyImg class="vip_bg" :src="currentRankImage" />
-			<span class="vip_level">LV{{ props.userVipInfo.vipGradeUp }}</span>
+			<span class="vip_level">{{ props.userVipInfo.vipGradeUpName }}</span>
 		</div>
 	</div>
 </template>
@@ -39,7 +39,7 @@ const props = withDefaults(
 		percentageShow?: boolean;
 	}>(),
 	{
-		userVipInfo: {} as VIP,
+		userVipInfo: {} as any,
 		percentageShow: false,
 	}
 );
@@ -83,22 +83,24 @@ console.log("progressPercentage", progressPercentage);
 		width: 92px;
 		height: 40px;
 		.vip_bg {
-			width: 92px;
+			width: 102px;
 			height: 40px;
 		}
 		.vip_level {
 			position: absolute;
 			bottom: 2px;
-			right: 0px;
-			width: 50px;
+			text-align: center;
+			width: 100%;
+			padding-left: 25px;
 			height: 24px;
 			display: flex;
 			align-items: center;
 			justify-content: center;
+			text-align: center;
 			color: #fff;
 			font-family: "112-SS Yi Fang Ti";
 			font-size: 16px;
-			font-weight: 400;
+			font-weight: 300;
 		}
 	}
 	.progress_bar {
