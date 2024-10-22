@@ -63,9 +63,11 @@ const close = () => {
 };
 const toRegister = () => {
 	router.push("/register");
+	close();
 };
 const toLogin = () => {
 	router.push("/login");
+	close();
 };
 </script>
 

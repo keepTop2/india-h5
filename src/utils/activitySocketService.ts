@@ -131,6 +131,8 @@ class activitySocketService {
 	close(): void {
 		this.isManuallyClosed = true; // 设置手动关闭标志
 		if (this.socket) {
+			console.log(123123123);
+
 			this.socket.close(); // 关闭连接
 			this.stopHeartbeat(); // 停止心跳
 		}

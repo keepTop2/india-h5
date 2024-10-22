@@ -77,6 +77,7 @@ import { useThemesStore } from "/@/store/modules/themes";
 import { useRouter } from "vue-router";
 import { useUserStore } from "/@/store/modules/user";
 import { activityApi } from "/@/api/activity";
+import { showToast } from "vant";
 const userStore = useUserStore();
 const router = useRouter();
 const show = ref(false);
@@ -117,16 +118,26 @@ const queryLobbyLabelList = async () => {
 };
 
 const toPath = (path) => {
-	if (path === "/activity/DAILY_COMPETITION" || path === "/activity/TASK") {
+	if ("/activity/SPIN_WHEEL" === path) {
+		activityApi.getSpinDetail().then((res: any) => {
+			if (res.code === 10000 && res.data) {
+				router.push(path);
+				show.value = false;
+			} else {
+				showToast("敬请期待");
+			}
+		});
+	} else if (path === "/activity/DAILY_COMPETITION" || path === "/activity/TASK") {
 		if (useUserStore().token) {
 			router.push(path);
+			show.value = false;
 		} else {
 			showDialog.value = true;
+			show.value = false;
 		}
 	} else {
 		router.push(path);
 	}
-	show.value = false;
 };
 onMounted(() => {
 	pubsub.subscribe("onCollapseMenu", onCollapseMenu);
