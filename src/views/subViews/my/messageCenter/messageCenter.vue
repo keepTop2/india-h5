@@ -149,9 +149,11 @@ const onClickLeft = () => {
 .content {
 	width: 100%;
 	height: 100vh;
+
 	@include themeify {
 		background-color: themed("BG1");
 	}
+
 	display: grid;
 	grid-template-rows: 1fr auto;
 }
@@ -174,6 +176,7 @@ const onClickLeft = () => {
 					color: themed("TB");
 					background-color: themed("BG3");
 				}
+
 				font-size: 30px;
 				font-weight: 400;
 				border: none;
@@ -206,9 +209,11 @@ const onClickLeft = () => {
 						gap: 10px;
 						height: 30px;
 						border-radius: 57px;
+
 						@include themeify {
 							color: themed("TB");
 						}
+
 						background: var(--, #f00);
 						text-align: center;
 						/* Remark1-备注1 */
@@ -216,7 +221,8 @@ const onClickLeft = () => {
 						font-size: 20px;
 						font-style: normal;
 						font-weight: 400;
-						line-height: 30px; /* 150% */
+						line-height: 30px;
+						/* 150% */
 					}
 				}
 			}
@@ -224,6 +230,7 @@ const onClickLeft = () => {
 			.van-tab--active {
 				font-size: 30px;
 				font-weight: 400;
+
 				@include themeify {
 					background-color: themed("Theme") !important;
 				}
@@ -234,6 +241,7 @@ const onClickLeft = () => {
 				gap: 16px;
 				height: 100%;
 				margin: 0;
+
 				@include themeify {
 					background-color: themed("BG1") !important;
 				}
@@ -245,21 +253,26 @@ const onClickLeft = () => {
 .info {
 	margin: 24px 24px 0px;
 	border-radius: 16px;
+
 	@include themeify {
 		background: themed("BG3");
 	}
+
 	padding: 24px;
 
 	.time {
-    margin-top: 12px;
-    margin-bottom: 16px;
-    @include themeify {
-      color: themed("T3");
-    }
+		margin-top: 12px;
+		margin-bottom: 16px;
+
+		@include themeify {
+			color: themed("T3");
+		}
+
 		.label {
 			@include themeify {
 				color: themed("T3");
 			}
+
 			font-family: "PingFang SC";
 			font-size: 24px;
 			font-weight: 400;
@@ -268,8 +281,9 @@ const onClickLeft = () => {
 
 	.text_title {
 		@include themeify {
-      color: themed("T3");
+			color: themed("T3");
 		}
+
 		font-family: "PingFang SC";
 		font-size: 28px;
 		//font-weight: 600;
@@ -279,9 +293,11 @@ const onClickLeft = () => {
 	.text_content {
 		width: 100%;
 		max-height: 108px;
+
 		@include themeify {
 			color: themed("T3");
 		}
+
 		font-family: "PingFang SC";
 		font-size: 26px;
 		font-style: normal;
@@ -290,16 +306,19 @@ const onClickLeft = () => {
 		display: -webkit-box;
 		-webkit-box-orient: vertical;
 		overflow: hidden;
-		-webkit-line-clamp: 3; /* 默认显示三行 */
+		-webkit-line-clamp: 3;
+		/* 默认显示三行 */
 		transition: max-height 0.3s ease;
 
 		&.collapsed {
-			-webkit-line-clamp: 3; /* 收起状态显示三行 */
+			-webkit-line-clamp: 3;
+			/* 收起状态显示三行 */
 			max-height: 108px;
 		}
 
 		&:not(.collapsed) {
-			-webkit-line-clamp: unset; /* 展开时取消行限制 */
+			-webkit-line-clamp: unset;
+			/* 展开时取消行限制 */
 			max-height: none;
 		}
 	}
@@ -308,16 +327,19 @@ const onClickLeft = () => {
 		display: flex;
 		justify-content: flex-end;
 		align-items: center;
+
 		//gap: 10px;
 		@include themeify {
 			color: themed("Theme");
 		}
+
 		text-align: right;
 		font-family: "PingFang SC";
 		font-size: 26px;
 		font-style: normal;
 		font-weight: 400;
-		line-height: 36px; /* 138.462% */
+		line-height: 36px;
+		/* 138.462% */
 		text-transform: uppercase;
 		text-decoration: underline;
 		text-underline-offset: 6px;
@@ -349,6 +371,7 @@ const onClickLeft = () => {
 		width: 98px;
 		height: 98px;
 		border-radius: 50%;
+
 		@include themeify {
 			background: themed("Theme");
 		}
