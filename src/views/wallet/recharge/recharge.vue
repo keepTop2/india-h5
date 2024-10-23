@@ -8,7 +8,12 @@
 			</div>
 			<div class="pay_list">
 				<!-- 遍历支付方式列表 -->
-				<div class="pay_item" :class="{ pay_active: item.rechargeTypeCode == rechargeWayData?.rechargeTypeCode }" v-for="(item, index) in rechargeWayList" @click="onRechargeWay(item)">
+				<div
+					class="pay_item"
+					:class="{ pay_active: item.rechargeTypeCode == rechargeWayData?.rechargeTypeCode && item.networkType == rechargeWayData?.networkType }"
+					v-for="(item, index) in rechargeWayList"
+					@click="onRechargeWay(item)"
+				>
 					<div class="tag" v-if="item.recommendFlag == 1">{{ $t(`recharge['推荐']`) }}</div>
 					<div class="pay_logo">
 						<VantLazyImg class="logo" :src="item.wayIconUrl" />

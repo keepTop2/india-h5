@@ -40,6 +40,7 @@ class activitySocketService {
 			const userStore = useUserStore(); // 获取用户信息
 			// 如果没有token则不建立连接
 			if (!userStore.token) return;
+			console.log("this.url", this.url);
 			this.socket = new WebSocket(`${this.url}?p=${userStore.token}`); // 使用token建立WebSocket连接
 			// WebSocket连接打开时
 			this.socket.onopen = () => {

@@ -516,6 +516,7 @@ export const lang = {
 		单号: "单号",
 		局号: "局号",
 		结果: "结果",
+		投注时间:"投注时间"
 	},
 	sports: {
 		冠军: "Champion",
