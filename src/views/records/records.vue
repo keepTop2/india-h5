@@ -72,6 +72,7 @@
 				<Chuanguan :list="matches" />
 				<Qipai />
 				<Zhenren />
+				<Dianzi />
 			</div>
 		</div>
 	</div>
@@ -88,6 +89,7 @@ import Sports from "./components/Tiyu.vue";
 import Chuanguan from "./components/Chuanguan.vue";
 import Qipai from "./components/Qipai.vue";
 import Zhenren from "./components/Zhenren.vue";
+import Dianzi from "./components/Dianzi.vue";
 const onClickLeft = () => {
 	// 发布事件
 	pubsub.publish("onCollapseMenu");
@@ -157,9 +159,9 @@ const dateRangeSelectDemoState = reactive({
 });
 
 const matches = ref([
-	{ teams: "荷兰 VS 英格兰", betContent: "荷兰全场独赢", result: "赢", odds: "2.98" },
-	{ teams: "荷兰 VS 英格兰", betContent: "荷兰全场独赢", result: "输", odds: "2.98" },
-	{ teams: "荷兰 VS 英格兰", betContent: "荷兰全场独赢", result: "-", odds: "2.98" },
+	{ team1: "荷兰",team2:"英格兰", betContent: "荷兰全场独赢", result: "赢", odds: "2.98" },
+	{ team1: "ColorasddColorasddColorasdd",team2:"BetContentbetContent", betContent: "荷兰全场独赢", result: "输", odds: "2.98" },
+	{ team1: "荷兰",team2:"英格兰", betContent: "荷兰全场独赢", result: "-", odds: "2.98" },
 ]);
 
 /**
@@ -216,12 +218,13 @@ const onConfirmDate = () => {
 				flex-direction: row;
 				// gap: 3.2vw;
 				flex-wrap: wrap;
-				gap: 10px;
+				gap: 24px;
 
 				.stat-item {
-					// display: flex;
-					// align-items: center;
-					width: 320px;
+					width: 100%;
+					display: flex;
+					align-items: center;
+					justify-content: space-between;
 					.label {
 						flex-shrink: 0;
 					}
@@ -251,6 +254,7 @@ const onConfirmDate = () => {
 	border-radius: 12px;
 	@include themeify {
 		border: 1px solid themed("Line");
+		background-color: themed("BG3");
 	}
 	svg {
 		width: 24px;
