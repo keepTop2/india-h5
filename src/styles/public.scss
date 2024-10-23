@@ -11,6 +11,14 @@
 		justify-content: center;
 		gap: 20px;
 	}
+	.flex-start {
+		display: flex;
+		align-items: center;
+		gap: 20px;
+	}
+	.text-center {
+		text-align: center;
+	}
 	.ellipsis {
 		overflow: hidden;
 		text-overflow: ellipsis;

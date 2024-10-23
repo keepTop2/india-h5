@@ -111,6 +111,29 @@ const routes = [
 		meta: { title: "gamePage" },
 	},
 	{
+		path: "/welfareCenter",
+		children: [
+			{
+				path: "/welfareCenter",
+				name: "welfareCenter",
+				component: () => import("/@/views/welfareCenter/index.vue"),
+				meta: {
+					title: "welfareCenter",
+					keepAlive: false,
+				},
+			},
+			{
+				path: "/welfareCenter/details",
+				name: "/welfareCenter/details",
+				component: () => import("/@/views/welfareCenter/details.vue"),
+				meta: {
+					title: "details",
+					keepAlive: false,
+				},
+			},
+		],
+	},
+	{
 		path: "/helpCenter",
 		children: [
 			{
@@ -118,13 +141,13 @@ const routes = [
 				name: "helpCenter",
 				component: () => import("/@/views/helpCenter/index.vue"),
 				meta: {
-					title: "details",
+					title: "helpCenter",
 					keepAlive: false,
 				},
 			},
 			{
 				path: "/helpCenter/details",
-				name: "details",
+				name: "/helpCenter/details",
 				component: () => import("/@/views/helpCenter/details.vue"),
 				meta: {
 					title: "details",

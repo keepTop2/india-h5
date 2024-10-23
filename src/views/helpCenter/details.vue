@@ -1,18 +1,18 @@
 <template>
 	<!-- 活动 -->
 	<div>
-		<VantNavBar :title="'帮助中心2'" @onClickLeft="router.back()" />
+		<VantNavBar :title="useRoute().query?.className" @onClickLeft="router.back()" />
 	</div>
 
 	<div class="wrapper p_24">
 		<div class="tabs mb_20">
-			<span v-for="item in 20" class="tab color_T1" :class="activeTab === item ? 'active' : ''" @click="changeTab(item)"> {{ item }}test </span>
+			<span v-for="(item, index) in dataList" class="tab color_T1" :class="activeTab === index ? 'active' : ''" @click="changeTab(index)"> {{ item.name }} </span>
 		</div>
 		<div class="content">
-			<div class="card">
-				<div class="title color_TB">1231231231212312</div>
+			<div class="card mb_24" v-for="item in dataList[activeTab]?.subset">
+				<div class="title color_TB">{{ item.name }}</div>
 				<div class="text color_T1">
-					<div class="value">12312312312123121231231231212312123123123121231212312312312123121231231231212312123123123121231212312312312123121231231231212312</div>
+					<div class="value" v-html="item.value"></div>
 				</div>
 			</div>
 		</div>
@@ -22,10 +22,20 @@
 <script setup lang="ts">
 import router from "/@/router";
 import { TutorialApi } from "/@/api/helpCenter";
-const currentOpenIndex = ref(0);
-const activeTab = ref(1);
-const changeTab = (item) => {
-	activeTab.value = item;
+import { useRoute } from "vue-router";
+const activeTab = ref(0);
+const changeTab = (index) => {
+	activeTab.value = index;
+};
+const dataList: any = ref([]);
+onMounted(() => {
+	getList();
+});
+const getList = () => {
+	const params = useRoute().query;
+	TutorialApi.showTutorialTurnLayer(params).then((res) => {
+		dataList.value = res.data;
+	});
 };
 </script>
 

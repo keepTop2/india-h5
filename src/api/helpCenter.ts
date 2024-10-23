@@ -3,10 +3,10 @@ import useAxiosApi from "/@/utils/useAxiosApi";
 // 获取会员VIP信息
 export class TutorialApi {
 	// 获取一层信息
-	static showTutorialPreLayer = (params = {}, headers = {}) => {
+	static showTutorialPreLayer = (data = {}, headers = {}) => {
 		return useAxiosApi(`/app/tutorial-display/api/showTutorialPreLayer`, {
 			method: "POST",
-			params,
+			data,
 			headers: {
 				showLoading: true,
 			},
@@ -14,10 +14,10 @@ export class TutorialApi {
 	};
 
 	// 获取二层信息
-	static showTutorialTurnLayer = (params = {}, headers = {}) => {
+	static showTutorialTurnLayer = (data = {}, headers = {}) => {
 		return useAxiosApi(`/app/tutorial-display/api/showTutorialTurnLayer`, {
 			method: "POST",
-			params,
+			data,
 			headers: {
 				showLoading: true,
 			},
