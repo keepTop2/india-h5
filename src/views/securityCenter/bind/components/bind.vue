@@ -62,6 +62,7 @@ import common from "/@/utils/common";
 import { useRoute, useRouter } from "vue-router";
 import { showToast } from "vant";
 import CommonApi from "/@/api/common";
+import { useUserStore } from "/@/store/modules/user";
 const showAreaCode = ref(false);
 const route = useRoute();
 const indexList: any = ref([]);
@@ -161,6 +162,7 @@ const onSubmit = async () => {
 	};
 	const res = await bindApi.bindAccount(params).catch((err) => err);
 	if (res.code == common.getInstance().ResCode.SUCCESS) {
+		useUserStore().setUserGlobalSetInfo;
 		showToast(res.message);
 		router.push("/securityCenter");
 	}

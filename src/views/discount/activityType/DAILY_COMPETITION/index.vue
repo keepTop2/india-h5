@@ -121,7 +121,7 @@
 					<div class="title fs_30 color_TB">规则说明</div>
 				</template>
 				<div class="color_T1">
-					{{ currentData.activityRule }}
+					<div v-html="currentData.activityRule" class="htmlDesc"></div>
 				</div>
 				<!-- <RulePage /> -->
 			</Dialog>

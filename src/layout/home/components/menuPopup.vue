@@ -102,7 +102,7 @@ const confirmDialog = () => {
 const onCollapseMenu = () => {
 	show.value = true;
 	queryLobbyLabelList();
-	queryActivityCheck();
+	queryLobbyLabelActivitySwitch();
 };
 const handleMenuClick = (item) => {
 	show.value = false;
@@ -125,9 +125,9 @@ const queryLobbyLabelList = async () => {
 		state.menuList = res.data;
 	}
 };
-const queryActivityCheck = () => {
-	activityApi.queryActivityCheck({ activityTemplate: "DAILY_COMPETITION" }).then((res: any) => {
-		if (res.code?.status === 10000) {
+const queryLobbyLabelActivitySwitch = () => {
+	activityApi.queryLobbyLabelActivitySwitch({ activityTemplate: "DAILY_COMPETITION" }).then((res: any) => {
+		if (res.code === 10000 && res.data.activityTemplate.includes("DAILY_COMPETITION")) {
 			showDAILY_COMPETITION.value = true;
 		}
 	});
@@ -135,7 +135,7 @@ const queryActivityCheck = () => {
 const toPath = (path) => {
 	if ("/activity/SPIN_WHEEL" === path) {
 		activityApi.getSpinDetail().then((res: any) => {
-			if (res.code === 10000 && res.data) {
+			if (res.code === 10000 && res.data.enable) {
 				router.push(path);
 				show.value = false;
 			} else {

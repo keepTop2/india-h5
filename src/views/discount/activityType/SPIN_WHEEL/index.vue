@@ -15,6 +15,7 @@
 				@end-spinning-callback="spinEnd"
 				@needLogin="needLogin"
 				@noMorebalanceCount="noMorebalanceCount"
+				:enable="activityData?.enable"
 				:reward="reward"
 				:spinList="currentTab == '0' ? activityData?.bronze : currentTab == '1' ? activityData?.silver : activityData?.gold"
 				:balanceCount="activityData?.balanceCount"
@@ -45,7 +46,7 @@
 				</div>
 			</div>
 			<div class="detail-content">
-				<div v-html="activityData?.activityRuleI18nCode" class="color_TB"></div>
+				<div v-html="activityData?.activityRuleI18nCode" class="color_TB htmlDesc"></div>
 			</div>
 			<div class="detail-footer"></div>
 		</div>
@@ -96,7 +97,7 @@
 					<span>{{ item.rewardRankText }}</span>
 					<span>{{ item.prizeName }}</span>
 					<span>{{ item.activityAmount }}</span>
-					<span>{{ item.receiveTime }}</span>
+					<span>{{ dayjs(item.receiveTime).format("YYYY-MM-DD hh:mm:ss") }}</span>
 				</div>
 			</div>
 			<div v-else>
@@ -120,6 +121,7 @@ import Spin from "/@/components/Spin/Spin.vue";
 import { activityApi } from "/@/api/activity";
 import activityDialog from "../../components/Dialog.vue";
 import { useUserStore } from "/@/store/modules/user";
+import dayjs from "dayjs";
 const userStore = useUserStore();
 const showResult = ref(false);
 const showResult3 = ref(false);
