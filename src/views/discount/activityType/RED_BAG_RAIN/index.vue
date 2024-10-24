@@ -86,7 +86,7 @@
 						</div>
 					</div>
 					<div class="detail-content">
-						<div v-html="redBagInfo.ruleDesc"></div>
+						<div v-html="redBagInfo.ruleDesc" class="htmlDesc"></div>
 					</div>
 					<div class="detail-footer"></div>
 				</div>

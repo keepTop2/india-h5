@@ -25,9 +25,17 @@ const props = defineProps({
 		type: String,
 		required: false,
 	},
+	index: {
+		type: Number,
+		required: true,
+	},
 	isOpen: {
 		type: Boolean,
 		default: false,
+	},
+	hasOneOpen: {
+		type: Function,
+		default: () => {},
 	},
 });
 
@@ -35,7 +43,11 @@ const isOpen = ref(props.isOpen);
 const bodyRef = ref(null);
 
 const toggle = () => {
-	isOpen.value = !isOpen.value;
+	if (props.hasOneOpen) {
+		props.hasOneOpen(props.index);
+	} else {
+		isOpen.value = !isOpen.value;
+	}
 };
 
 const beforeEnter = (el) => {

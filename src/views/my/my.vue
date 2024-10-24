@@ -5,6 +5,7 @@
 
 		<!-- 用户信息 -->
 		<template v-else>
+			<button @click="router.push('/welfareCenter')">福利中心（dev）</button>
 			<div class="user">
 				<div class="avatar">
 					<VantLazyImg :src="theme === ThemeEnum.default ? avatar : avatar_light" />

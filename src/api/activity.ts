@@ -107,8 +107,8 @@ export const activityApi = {
 		});
 	},
 	// 活动校验
-	queryActivityCheck: (data = {}, headers = {}) => {
-		return useAxiosApi(`/app/activityParticipate/api/queryActivityCheck`, {
+	queryLobbyLabelActivitySwitch: (data = {}, headers = {}) => {
+		return useAxiosApi(`/app/game_lobby/api/queryLobbyLabelActivitySwitch`, {
 			method: "POST",
 			data,
 			headers,
@@ -146,6 +146,9 @@ export const activityApi = {
 		return useAxiosApi(`/app/activityParticipate/api/querySpinWheelOrderRecord`, {
 			method: "POST",
 			data,
+			headers: {
+				showLoading: true,
+			},
 		});
 	},
 	// 任务详情

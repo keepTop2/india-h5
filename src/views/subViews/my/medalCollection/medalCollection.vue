@@ -26,13 +26,12 @@
 			<div class="progress">
 				<div class="value" :style="{ width: totalProgress + '%' }"></div>
 			</div>
-			{{}}
 			<!-- 文本提示列表 -->
 			<div class="text_list">
 				<!-- 提示图标 -->
 				<div class="tooltip">
 					<van-popover v-model:show="showPopover" theme="dark" :show-arrow="false">
-						<div class="p_10 popup">{{ $t('medalCollection["宝箱奖励流水倍数为8倍"]', { num: state.medalRewardRespVOS[state.canLightNum].typingMultiple }) }}</div>
+						<div class="p_10 popup">{{ $t('medalCollection["宝箱奖励流水倍数为8倍"]', { num: state.medalRewardRespVOS?.find((item) => item.openStatus == 0).typingMultiple }) }}</div>
 						<template #reference>
 							<VantLazyImg class="icon" :src="theme === ThemeEnum.default ? tips_icon : tips_icon_light" />
 						</template>
@@ -43,7 +42,7 @@
 					<template v-slot:value>
 						<span class="text">{{ $t("medalCollection.枚", { value: item.unlockMedalNum }) }}</span>
 					</template>
-					<template v-slot:num>{{ item.rewardAmount }}{{ useUserStore().getUserInfo.platCurrencyName }} </template>
+					<template v-slot:num> {{ item.rewardAmount }} {{ useUserStore().getUserInfo.platCurrencyName }} </template>
 				</i18n-t>
 			</div>
 		</template>
@@ -126,7 +125,7 @@ const showPopover = ref(false);
 const state = reactive({
 	canLightNum: 0 as number,
 	hasUnlockList: [] as NotUnlockList[],
-	medalRewardRespVOS: [] as MedalRewardRespVOS[],
+	medalRewardRespVOS: [] as any,
 	notUnlockList: [] as NotUnlockList[],
 	rewardRemarkList: [],
 });
@@ -212,14 +211,14 @@ const onOpenMedalReward = async (item) => {
 
 	if (state.canLightNum >= item.unlockMedalNum && item.openStatus === 0) {
 		const params = {
-			condNum: item.unlockMedalNum,
+			rewardNo: item.rewardNo,
 		};
 		const res = await medalApi.openMedalReward(params).catch((err) => err);
 
 		if (res.code == common.getInstance().ResCode.SUCCESS) {
 			// 成功领取后更新用户的勋章信息
 
-			showToast(`恭喜你获得${res.data.unlockMedalNum}个宝箱，奖励${res.dat.rewardAmount}${useUserStore().getUserInfo.platCurrencySymbol}，已发送到您的账户`);
+			showToast(`恭喜你获得${res.data.unlockMedalNum}个宝箱，奖励${res.data.rewardAmount}${useUserStore().getUserInfo.platCurrencySymbol}，已发送到您的账户`);
 
 			await getUserMedalInfo();
 		}
