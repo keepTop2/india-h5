@@ -23,7 +23,8 @@
 				<span class="vip_level">{{ state.userVipInfo.vipGradeName }}</span>
 				<div class="vip_info">
 					<span class="vip_experience"
-						>升级所需经验: <span class="color_Warn">{{ state.userVipInfo.currentVipExp }}</span> / <span>{{ state.userVipInfo.upgradeVipExp }}</span></span
+						>升级所需经验: <span class="color_Warn">{{ state.userVipInfo.vipGradeCode === state.userVipInfo.vipGradeUp ? state.userVipInfo.currentVipExp : state.userVipInfo.currentExp }}</span> /
+						<span>{{ state.userVipInfo.currentVipExp }}</span></span
 					>
 					<SvgIcon class="arrow" iconName="my/arrow" @click="toPath('/vip')" />
 				</div>

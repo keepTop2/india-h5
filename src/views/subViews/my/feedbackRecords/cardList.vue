@@ -17,7 +17,7 @@
 				<div class="right">
 					<div class="flex mb_10">
 						<div class="fs_28 color_TB">{{ item.typeText }}</div>
-						<div class="fs_24 color_T2">{{ dayjs(item.createdTime).format("YYYY/MM/DD hh:mm:ss") }}</div>
+						<div class="fs_24 color_T2">{{ dayjs(item.createdTime).format("YYYY/MM/DD HH:mm:ss") }}</div>
 					</div>
 					<div class="ellipsis fs_24 color_T1">{{ item.content }}</div>
 				</div>

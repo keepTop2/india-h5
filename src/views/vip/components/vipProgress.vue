@@ -60,14 +60,14 @@ const currentRankImage = computed(() => {
 });
 // 计算百分比
 const progressPercentage = computed(() => {
-	const { currentExp, upgradeVipExp } = props.userVipInfo;
+	const { currentExp, currentVipExp } = props.userVipInfo;
 	// 防止NaN：确保 upgradeVipExp 不为0，并且 currentExp 和 upgradeVipExp 都是有效数字
-	if (isNaN(currentExp) || isNaN(upgradeVipExp) || upgradeVipExp === 0) {
+	if (isNaN(currentExp) || isNaN(currentVipExp) || currentVipExp === 0) {
 		return 0;
 	}
 
 	// 计算百分比并取整
-	return Math.floor((currentExp / upgradeVipExp) * 100);
+	return Math.floor((currentExp / currentVipExp) * 100);
 });
 
 console.log("progressPercentage", progressPercentage);
@@ -113,7 +113,7 @@ console.log("progressPercentage", progressPercentage);
 
 		.progress {
 			min-width: 0;
-			max-width: calc(100% - 24px);
+			max-width: 100%;
 			height: 12px;
 			margin: 0px 2px;
 			border-radius: 8px;
@@ -136,6 +136,7 @@ console.log("progressPercentage", progressPercentage);
 					.arrow {
 						width: 20px;
 						height: 9px;
+						margin-left: -60px;
 					}
 					.value {
 						position: absolute;
@@ -143,6 +144,7 @@ console.log("progressPercentage", progressPercentage);
 						font-family: "PingFang SC";
 						font-size: 24px;
 						font-weight: 600;
+						margin-left: -60px;
 						background: linear-gradient(180deg, #fff 0%, rgba(255, 255, 255, 0) 100%);
 						background-clip: text;
 						-webkit-background-clip: text;
@@ -155,6 +157,7 @@ console.log("progressPercentage", progressPercentage);
 					top: -40%;
 					right: 0px;
 					width: 40px;
+
 					height: 22px;
 				}
 			}

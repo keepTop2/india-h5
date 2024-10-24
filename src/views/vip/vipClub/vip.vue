@@ -19,9 +19,12 @@
 
 			<div class="vip_level_progress">
 				<span>{{ $t(`vip["升级所需经验"]`) }}</span>
-				<span>{{ state.userVipInfo.currentExp }} / {{ state.userVipInfo.upgradeVipExp }}</span>
+				<span>{{ state.userVipInfo.vipGradeCode === state.userVipInfo.vipGradeUp ? state.userVipInfo.currentVipExp : state.userVipInfo.currentExp }}/ {{ state.userVipInfo.currentVipExp }}</span>
 				<van-popover v-model:show="showPopover" theme="dark" :show-arrow="false">
-					<div class="p_10 popup">体育/电竞场馆投注1 $ = 2积分，其他场馆投注 1$=1积分， 所有投注 均按当前汇率兑换为美元结算</div>
+					<div class="p_10 popup">
+						体育/电竞场馆投注1{{ useUserStore().getUserInfo.currencySymbol }} = {{ state.userVipInfo.sportExe }}积分，其他场馆投注1{{ useUserStore().getUserInfo.currencySymbol }} = 1积分， 所有投注
+						均按当前汇率兑换为美元结算
+					</div>
 					<template #reference>
 						<SvgIcon class="warning_icon" iconName="vip/warning" />
 					</template>
@@ -90,15 +93,12 @@
 
 							<van-popover v-model:show="showPopover4" theme="dark" :show-arrow="false" v-if="item.weekSportFlag == 2">
 								<div class="p_10 popup">
-									<p>7天体育赌注：</p>
-									<p>-投注$500至$2499 = 5$</p>
-									<p>-投注$2500至＄4999 = 30＄</p>
-									<p>-投注$5000 至＄9999 =70＄</p>
-									<p>-投注$10,000 或以上=150＄</p>
-									<p>-投注＄50,000或以上 =500＄</p>
-									<p>-投注$250,000或以上=1,000$</p>
-									<p>-流水统计时间：周六00:00时～周五 23:59时（7天）</p>
-									<p>礼金发放时间：每周六</p>
+									<p v-for="i in state.userVipInfo.vipBenefit[index].vipWeekSportVOS">
+										-投注{{ useUserStore().getUserInfo.platCurrencySymbol }} {{ i.weekSportMin }} 至
+										{{ i.weekSportMax > 0 ? `${useUserStore().getUserInfo.platCurrencySymbol} ${i.weekSportMax}` : "以上" }} = {{ i.weekSportBonus }}
+										{{ useUserStore().getUserInfo.platCurrencySymbol }}
+									</p>
+									<p>-流水统计时间：周六00:00时～周五 23:59时（7天） ﻿﻿礼金发放时间：每周六"</p>
 								</div>
 								<template #reference>
 									<SvgIcon class="warning_icon" iconName="vip/warning" />
@@ -180,13 +180,13 @@ import { i18n } from "/@/i18n/index";
 import { useUserStore } from "/@/store/modules/user";
 const currentRankImage = computed(() => {
 	return vipRank.value == 1
-		? rank0Img
-		: vipRank.value == 2
 		? rank1Img
-		: vipRank.value == 3
+		: vipRank.value == 2
 		? rank2Img
-		: vipRank.value == 4
+		: vipRank.value == 3
 		? rank3Img
+		: vipRank.value == 4
+		? rank4Img
 		: vipRank.value == 5
 		? rank4Img
 		: vipRank.value == 6

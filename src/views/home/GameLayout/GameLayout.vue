@@ -49,6 +49,7 @@ import { GameInfoList } from "/#/game";
 import GameApi from "/@/api/venueHome/games";
 import pubsub from "/@/pubSub/pubSub";
 import Common from "/@/utils/common";
+import { useUserStore } from "/@/store/modules/user";
 /**
  * @description 游戏6格基础布局组件的属性定义
  * @param {GameInfoList[]} gameInfoList 游戏列表
@@ -63,6 +64,9 @@ const props = defineProps<{
  * @param {boolean} collect 是否收藏
  */
 const onClickCollect = async (item, collect) => {
+	if (!useUserStore().token) {
+		return router.push("/login");
+	}
 	const res = await GameApi.gameCollection({
 		gameId: item.id,
 		type: collect,

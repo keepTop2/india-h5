@@ -33,10 +33,10 @@
 					</span>
 					<span class="more fw_400 fs_28 color_T1" @click="handleMore(item?.gameOneId)">{{ $t(`home["更多"]`) }}</span>
 				</h3>
-				<GameLayout v-if="item.gameInfoList.length" :gameInfoList="item.gameInfoList" class="m24" />
-				<GameBigPic v-else class="m24" />
+				<GameBigPic class="m24" v-if="item.modelCode == 'SIGN_VENUE'" />
+				<GameLayout v-else :gameInfoList="item.gameInfoList" class="m24" />
 			</template>
-			<h3 class="title_more">
+			<!-- <h3 class="title_more">
 				<span class="flex_align_center">
 					<SvgIcon iconName="home/electronic" alt="" />
 					{{ $t('home["热门电竞"]') }}
@@ -49,8 +49,8 @@
 					<SvgIcon iconName="home/game_fowl" alt="" />
 					{{ $t('home["热门斗鸡"]') }}
 				</span>
-			</h3>
-			<GameBigPic class="m24" />
+			</h3> -->
+			<!-- <GameBigPic class="m24" /> -->
 			<!-- 赞助 -->
 			<Sponsor :data="PartnerList" />
 			<!-- 转账方式 -->
