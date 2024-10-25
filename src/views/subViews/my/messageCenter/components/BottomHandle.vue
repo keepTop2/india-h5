@@ -13,7 +13,10 @@
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	padding: 24px 24px 0 24px;
-	background: var(--BG7-NBG4-N, #343434);
+  @include themeify {
+    color: themed("Theme");
+    background: themed("BG4");
+  }
 	border-radius: 24px 24px 0px 0px;
   gap: 26px;
 
