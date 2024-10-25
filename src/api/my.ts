@@ -44,7 +44,9 @@ export class medalApi {
 		return useAxiosApi(`/app/user-info/api/openMedalReward`, {
 			method: "POST",
 			data,
-			headers,
+			headers: {
+				showLoading: true,
+			},
 		});
 	};
 	// 点亮勋章
@@ -52,7 +54,9 @@ export class medalApi {
 		return useAxiosApi(`/app/user-info/api/lightUpMedal`, {
 			method: "POST",
 			data,
-			headers,
+			headers: {
+				showLoading: true,
+			},
 		});
 	};
 

@@ -100,7 +100,7 @@
 			<div class="result">{{ dialogInfo.platCurrencySymbol }} {{ dialogInfo.rewardAmount }}</div>
 		</activityDialog>
 		<activityDialog v-model="showRule" title="任务说明" :confirm="confirmDialog" :dialog2="true">
-			<div v-html="rule" class="RuleDialog"></div>
+			<div v-html="rule" class="RuleDialog htmlDesc"></div>
 		</activityDialog>
 	</div>
 </template>
