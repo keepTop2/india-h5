@@ -57,6 +57,7 @@ interface Spin {
 	spinList: Coin[]; //奖品列表
 	reward: any;
 	balanceCount: number;
+	enable: Boolean | null;
 }
 
 const props = withDefaults(defineProps<Spin>(), {
@@ -113,6 +114,8 @@ const clearSpin = () => {
 };
 // 处理开始旋转的逻辑
 const handleStartSpin = async () => {
+	console.log(props.enable);
+
 	if (!props.enable) return showToast("活动未开启");
 	if (!userStore.token) {
 		return emit("needLogin");

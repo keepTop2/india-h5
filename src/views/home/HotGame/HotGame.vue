@@ -3,7 +3,7 @@
 		<div v-for="(item, index) in gameInfoList" :key="index">
 			<div @click="Common.goToGame(item)">
 				<div class="collect">
-					<VantLazyImg v-if="item.collect" :src="collectImg" @click.stop="handleCollect(item, false)" alt="" width="100%" />
+					<VantLazyImg v-if="useCollectGamesStore().getCollectGamesList?.some((game) => game.id === item.id)" :src="collectImg" @click.stop="handleCollect(item, false)" alt="" width="100%" />
 					<VantLazyImg v-else :src="noCollectImg" alt="" @click.stop="handleCollect(item, true)" width="100%" />
 				</div>
 				<VantLazyImg class="gameImg" :src="item.icon" :loadingSrc="loadingSrc" :errorSrc="loadingSrc" alt="" width="100%" />
@@ -34,6 +34,7 @@ import { showToast } from "vant";
 import Common from "/@/utils/common";
 import { useUserStore } from "/@/store/modules/user";
 import router from "/@/router";
+import { useCollectGamesStore } from "/@/store/modules/collectGames";
 
 // 自动播放配置
 const autoplay = ref({
@@ -50,9 +51,6 @@ const gameList = ref<GameInfoList[]>([{ icon: "" }, { icon: "" }, { icon: "" }, 
 
 // 对话框显示状态
 const dialogShow = ref(false);
-
-// 定义emit事件
-const emit = defineEmits(["queryCollection"]);
 
 // 在组件挂载后启用 autoplay
 onMounted(() => {
@@ -104,7 +102,8 @@ const handleCollect = async (item, collect) => {
 			disableOnInteraction: false,
 			pauseOnMouseEnter: true,
 		};
-		pubsub.publish("getCollect");
+		useCollectGamesStore().setCollectGamesList();
+		// pubsub.publish("getCollect");
 	}
 };
 

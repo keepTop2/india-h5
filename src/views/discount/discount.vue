@@ -106,21 +106,19 @@ const activityPageList = async () => {
 //跳转活动详情
 const onToDeatils = (item) => {
 	const needLoginList = ["RED_BAG_RAIN", "DAILY_COMPETITION"];
-	if (item.activityTemplate == "DAILY_COMPETITION") {
-		if (!item.enable) return showToast("活动未开启");
-	} else {
-		if (needLoginList.includes(item.activityTemplate)) {
-			if (!userStore.token) {
-				showDialog.value = true;
-				return;
-			}
-		}
-
-		router.push({
-			path: `/activity/${item.activityTemplate}`,
-			query: { data: encodeURIComponent(JSON.stringify(item)) },
-		});
+	if (item.activityTemplate == "DAILY_COMPETITION" && !item.enable) {
+		return showToast("活动未开启");
 	}
+	if (needLoginList.includes(item.activityTemplate)) {
+		if (!userStore.token) {
+			showDialog.value = true;
+			return;
+		}
+	}
+	router.push({
+		path: `/activity/${item.activityTemplate}`,
+		query: { data: encodeURIComponent(JSON.stringify(item)) },
+	});
 };
 
 // 根据活动页id查对应活动

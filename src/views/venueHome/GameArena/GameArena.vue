@@ -60,7 +60,7 @@ const router = useRouter();
 const gameList = ref([]);
 const hotGameList: any = ref([]);
 const newGameList: any = ref([]);
-const { gameOneId } = route.query;
+
 // 初始化当前选中tab
 const tabsActiveKey = ref("all");
 
@@ -73,11 +73,17 @@ onBeforeMount(() => {
 	// 获取游戏列表
 	getGameList();
 });
-
+watch(
+	() => route.query,
+	() => {
+		getGameList();
+	}
+);
 /**
  * @description 获取游戏列表
  */
 const getGameList = () => {
+	const { gameOneId } = route.query;
 	GameApi.queryGameInfoByOneClassId({ gameOneId: gameOneId }).then((res) => {
 		gameList.value = res.data || [];
 		hotGameList.value = res.data.filter((item: any) => item.label === 1)[0];

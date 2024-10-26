@@ -213,7 +213,7 @@ const getUserMedalInfo = async () => {
 const onOpenMedalReward = async (item) => {
 	// 确保勋章数量达到要求且宝箱状态为未领取
 
-	if (state.canLightNum >= item.unlockMedalNum && item.openStatus === 0) {
+	if (state.canLightNum >= item.condNum && item.openStatus === 0) {
 		const params = {
 			rewardNo: item.rewardNo,
 		};
