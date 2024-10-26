@@ -122,10 +122,10 @@ const dialogInfo: any = ref({});
 const detailData: any = ref({});
 const currentTab = ref(0);
 const taskStatus = {
-	0: "去完成",
-	1: "领取",
-	2: "已领取",
-	3: "已经过期",
+	3: "去完成",
+	0: "领取",
+	1: "已领取",
+	2: "已经期",
 };
 const tasktype = ref([
 	{
@@ -177,19 +177,20 @@ const HandleBtn = (item) => {
 	}
 
 	if (item.taskStatus == 1) {
-		activityApi
-			.Taskreceive({
-				id: item.id,
-				subTaskType: item.subTaskType,
-			})
-			.then((res: any) => {
-				if (res.code === 10000) {
-					showDialog.value = true;
-					dialogInfo.value = res.data;
-					dialogInfo.value.platCurrencySymbol = item.platCurrencySymbol;
-					getTaskDetail();
-				}
-			});
+		router.push("/welfareCenter");
+		// activityApi
+		// 	.Taskreceive({
+		// 		id: item.id,
+		// 		subTaskType: item.subTaskType,
+		// 	})
+		// 	.then((res: any) => {
+		// 		if (res.code === 10000) {
+		// 			showDialog.value = true;
+		// 			dialogInfo.value = res.data;
+		// 			dialogInfo.value.platCurrencySymbol = item.platCurrencySymbol;
+		// 			getTaskDetail();
+		// 		}
+		// 	});
 	} else if (item.taskStatus == 0) {
 		router.push("/");
 	}
@@ -347,13 +348,16 @@ const calculatePercentage = (part, whole) => {
 				border-radius: 6px 6px 5px 5px;
 			}
 			.btnType0 {
-				background: linear-gradient(270deg, #ebb360 0%, #eb7933 100%);
+				background: linear-gradient(270deg, #fd6780 0%, #ff405e 100%);
 			}
 			.btnType1 {
-				background: linear-gradient(270deg, #fd6780 0%, #ff405e 100%);
+				background: linear-gradient(270deg, #afafb3 0%, #87878b 100%);
 			}
 			.btnType2 {
 				background: linear-gradient(270deg, #afafb3 0%, #87878b 100%);
+			}
+			.btnType3 {
+				background: linear-gradient(270deg, #ebb360 0%, #eb7933 100%);
 			}
 			.daojishiBg {
 				height: 45px;

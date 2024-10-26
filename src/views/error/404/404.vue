@@ -2,7 +2,7 @@
 	<VantNavBar @onClickLeft="onClickLeft">
 		<template v-slot:left>
 			<SvgIcon class="back" iconName="vantNavBar/back" />
-			<span>123</span>
+			<span class="logo"> <VantLazyImg :src="logo" /></span>
 		</template>
 	</VantNavBar>
 
@@ -15,16 +15,17 @@
 	</div>
 
 	<div class="footer">
-		<Button>{{ $t('error["返回首页"]') }}</Button>
+		<Button @click="router.push('/')">{{ $t('error["返回首页"]') }}</Button>
 	</div>
 </template>
 
 <script setup lang="ts">
 import err_img from "/@/assets/zh-CN/default/error/404_img.png";
 import { useRouter } from "vue-router";
+import logo from "/@/assets/zh-CN/default/my/my_logo.png";
 const router = useRouter();
 const onClickLeft = () => {
-	router.go(-1);
+	router.push("/");
 };
 </script>
 
@@ -33,7 +34,14 @@ const onClickLeft = () => {
 	width: 36px;
 	height: 36px;
 }
-
+.logo {
+	width: 198px;
+	height: 24px;
+	img {
+		width: 100%;
+		height: 100%;
+	}
+}
 .content {
 	margin-top: 100px;
 	padding: 0px 135px;
