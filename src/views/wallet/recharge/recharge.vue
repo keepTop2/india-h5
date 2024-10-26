@@ -61,7 +61,7 @@ import { walletApi } from "/@/api/wallet";
 import common from "/@/utils/common";
 // 引入支付方式对应的组件
 import bankCard from "/@/views/wallet/recharge/components/bankCard/bankCard.vue";
-import EWallet from "./components/EWallet/EWallet.vue";
+import EWallet from "/@/views/wallet/recharge/components/EWallet/EWallet.vue";
 import VirtualCurrency from "/@/views/wallet/recharge/components/VirtualCurrency/VirtualCurrency.vue";
 import Model from "../components/model.vue";
 
