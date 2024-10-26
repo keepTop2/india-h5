@@ -23,10 +23,11 @@ const props = defineProps<{
 	modelValue: boolean;
 }>();
 
-const emit = defineEmits(["update:modelValue"]);
+const emit = defineEmits(["update:modelValue", "closeModal"]);
 
 const closeModal = () => {
 	emit("update:modelValue", false);
+	emit("closeModal");
 };
 
 // 监听 props 变化来控制弹窗显示

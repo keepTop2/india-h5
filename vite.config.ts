@@ -1,6 +1,6 @@
 import { createVitePlugins } from "./build/vite/plugins";
 import { resolve } from "path";
-import { ConfigEnv, loadEnv, UserConfig } from "vite";
+import { ConfigEnv, loadEnv, defineConfig } from "vite";
 import { wrapperEnv } from "./build/utils";
 import path from "path";
 import svgLoader from "vite-svg-loader";
@@ -11,7 +11,7 @@ const pathResolve = (dir: string) => {
 };
 
 // https://vitejs.dev/config/
-export default function ({ command, mode }: ConfigEnv): UserConfig {
+export default defineConfig(({ command, mode }: ConfigEnv) => {
 	const isProduction = command === "build";
 	const root = process.cwd();
 	const env = loadEnv(mode, root);
@@ -43,31 +43,9 @@ export default function ({ command, mode }: ConfigEnv): UserConfig {
 			],
 		},
 		server: {
-			// headers: {
-			// 	"access-control-allow-origin": "*",
-			// 	"Access-Control-Allow-Origin": "http://192.168.30.69:3004",
-			// },
 			port: 3001,
 			host: true,
 			hmr: true,
-			// proxy: {
-			// 	"/sportA": {
-			// 		target: "http://localhost:3004", // app1 的实际开发地址
-			// 		changeOrigin: true,
-			// 		rewrite: (path) => path.replace(/^\/sportA/, ""),
-			// 	},
-			// 	"/S128": {
-			// 		// target: env.VITE_API_URL,
-			// 		target: "https://digmaantest.cm3645.com",
-			// 		changeOrigin: true,
-			// 		ws: true,
-			// 		secure: true,
-			// 		//重写代理tag（S128）
-			// 		rewrite: (path) => path.replace(/^\/S128/, ""),
-			// 		// bypass(req, res, options) {
-			// 		// },
-			// 	},
-			// },
 		},
 		preview: {
 			cors: true,
@@ -89,6 +67,7 @@ export default function ({ command, mode }: ConfigEnv): UserConfig {
 		build: {
 			minify: "terser",
 			sourcemap: false,
+			chunkSizeWarningLimit: 1500,
 			terserOptions: {
 				compress: {
 					//生产环境时移除console
@@ -99,13 +78,18 @@ export default function ({ command, mode }: ConfigEnv): UserConfig {
 			},
 			rollupOptions: {
 				output: {
-					format: "es",
+					chunkFileNames: "assets/js/[name]-[hash].js",
+					entryFileNames: "assets/js/[name]-[hash].js",
+					assetFileNames: "assets/[ext]/[name]-[hash].[ext]",
+					manualChunks(id) {
+						if (id.includes("node_modules")) {
+							return id.toString().match(/\/node_modules\/(?!.pnpm)(?<moduleName>[^\/]*)\//)?.groups!.moduleName ?? "vender";
+						}
+					},
 				},
 			},
 		},
-		worker: {
-			format: "es",
-		},
+
 		css: {
 			preprocessorOptions: {
 				scss: {
@@ -117,4 +101,4 @@ export default function ({ command, mode }: ConfigEnv): UserConfig {
 			},
 		},
 	};
-}
+});

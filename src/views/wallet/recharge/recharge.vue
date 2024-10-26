@@ -8,7 +8,12 @@
 			</div>
 			<div class="pay_list">
 				<!-- 遍历支付方式列表 -->
-				<div class="pay_item" :class="{ pay_active: item.rechargeTypeCode == rechargeWayData?.rechargeTypeCode }" v-for="(item, index) in rechargeWayList" @click="onRechargeWay(item)">
+				<div
+					class="pay_item"
+					:class="{ pay_active: item.rechargeTypeCode == rechargeWayData?.rechargeTypeCode && item.networkType == rechargeWayData?.networkType }"
+					v-for="(item, index) in rechargeWayList"
+					@click="onRechargeWay(item)"
+				>
 					<div class="tag" v-if="item.recommendFlag == 1">{{ $t(`recharge['推荐']`) }}</div>
 					<div class="pay_logo">
 						<VantLazyImg class="logo" :src="item.wayIconUrl" />
@@ -20,8 +25,33 @@
 
 		<div class="form">
 			<!-- 动态组件根据支付方式渲染 -->
-			<component :is="componentsMapsName[rechargeWayData?.rechargeTypeCode]" :rechargeWayData="rechargeWayData" />
+			<component :is="componentsMapsName[rechargeWayData?.rechargeTypeCode]" :rechargeWayData="rechargeWayData" :rechargeConfig="rechargeConfig" />
 		</div>
+
+		<Model v-model:modelValue="isModalVisible">
+			<template #default>
+				<div class="popup_body">
+					<div class="header">{{ $t(`recharge['温馨提示']`) }}</div>
+					<div class="content">
+						<div class="text">
+							<i18n-t keypath="recharge['请使用']" :tag="'p'">
+								<template v-slot:value>
+									<span class="text_2"> {{ $t(`recharge['波场链']`) }} </span>
+								</template>
+								<template v-slot:currency>
+									<span class="text_2">({{ rechargeWayData.networkType }})</span>
+								</template>
+							</i18n-t>
+						</div>
+						<div class="popup_tips" @click="checkbox = !checkbox">
+							<SvgIcon class="icon" :iconName="checkbox ? 'wallet/checkbox_active' : 'wallet/checkbox'" />
+							<span>{{ $t(`recharge['24小时内不再提示']`) }}</span>
+						</div>
+					</div>
+					<div class="footer" @click="isModalVisible = false">{{ $t(`recharge['我已知晓']`) }}</div>
+				</div>
+			</template>
+		</Model>
 	</div>
 	<div></div>
 </template>
@@ -31,8 +61,9 @@ import { walletApi } from "/@/api/wallet";
 import common from "/@/utils/common";
 // 引入支付方式对应的组件
 import bankCard from "/@/views/wallet/recharge/components/bankCard/bankCard.vue";
-import Ewallet from "/@/views/wallet/recharge/components/Ewallet/Ewallet.vue";
-import USDTTRC20 from "/@/views/wallet/recharge/components/USDTTRC20/USDTTRC20.vue";
+import EWallet from "/@/views/wallet/recharge/components/EWallet/EWallet.vue";
+import VirtualCurrency from "/@/views/wallet/recharge/components/VirtualCurrency/VirtualCurrency.vue";
+import Model from "../components/model.vue";
 
 // 使用 Vue Router
 const router = useRouter();
@@ -55,17 +86,24 @@ interface rechargeWayDataRootObject {
 // 定义组件映射
 const componentsMapsName = {
 	bank_card: bankCard,
-	electronic_wallet: Ewallet,
-	crypto_currency: USDTTRC20, // 修复: 应该是 'usdt_trc20' 而不是 'rechargeTypeCode'
+	electronic_wallet: EWallet,
+	crypto_currency: VirtualCurrency, // 修复: 应该是 'usdt_trc20' 而不是 'rechargeTypeCode'
 };
 
 // 定义响应式变量
 const rechargeWayData = ref({} as rechargeWayDataRootObject); // 当前选择的支付方式
 const rechargeWayList = ref([] as rechargeWayDataRootObject[]); // 支付方式列表
+const rechargeConfig = ref({
+	quickAmountList: [] as string[],
+}); // 通道配置
+
+const isModalVisible = ref(false);
+const checkbox = ref(false);
 
 // 选择支付方式时的处理
 const onRechargeWay = (item) => {
 	rechargeWayData.value = item;
+	getRechargeConfig();
 };
 
 // 获取支付方式列表
@@ -74,6 +112,23 @@ const getRechargeWayList = async () => {
 	if (res.code === common.getInstance().ResCode.SUCCESS) {
 		rechargeWayList.value = res.data; // 存储支付方式列表
 		rechargeWayData.value = res.data[0]; // 默认选择第一个支付方式
+		getRechargeConfig();
+	}
+};
+
+// 获取通道配置
+const getRechargeConfig = async () => {
+	const params = {
+		rechargeWayId: rechargeWayData.value.id,
+	};
+	const res = await walletApi.getRechargeConfig(params).catch((err) => err);
+	if (res.code === common.getInstance().ResCode.SUCCESS) {
+		if (rechargeWayData.value.rechargeTypeCode === "crypto_currency") {
+			checkbox.value = false;
+			isModalVisible.value = true;
+		}
+		rechargeConfig.value = res.data;
+		rechargeConfig.value.quickAmountList = res.data.quickAmount.split(",").map(Number);
 	}
 };
 
@@ -193,6 +248,80 @@ const onClickLeft = () => {
 				}
 			}
 		}
+	}
+}
+.popup_body {
+	.header {
+		width: 100%;
+		height: 80px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-bottom: 1px solid;
+		@include themeify {
+			color: themed("TB");
+			border-color: themed("Line");
+		}
+		font-family: "PingFang SC";
+		font-size: 32px;
+		font-weight: 400;
+	}
+
+	.content {
+		padding: 40px;
+		.text {
+			@include themeify {
+				color: themed("T1");
+			}
+			font-family: "PingFang SC";
+			font-size: 28px;
+			font-weight: 400;
+			line-height: 38px;
+			text-align: center;
+		}
+		.text_2 {
+			@include themeify {
+				color: themed("Theme");
+			}
+			font-family: "PingFang SC";
+			font-size: 28px;
+			font-weight: 400;
+			line-height: 38px;
+			text-align: center;
+		}
+		.popup_tips {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 16px;
+			margin-top: 40px;
+			@include themeify {
+				color: themed("T2");
+			}
+			font-family: "PingFang SC";
+			font-size: 22px;
+			font-weight: 400;
+			.icon {
+				width: 32px;
+				height: 32px;
+				transition: all 0.2s;
+			}
+		}
+	}
+	.footer {
+		width: 100%;
+		height: 80px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-top: 1px solid;
+		@include themeify {
+			color: themed("Theme");
+			border-color: themed("Line");
+		}
+		font-family: "PingFang SC";
+		font-size: 32px;
+		font-weight: 400;
 	}
 }
 </style>

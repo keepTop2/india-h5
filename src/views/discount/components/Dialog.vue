@@ -13,7 +13,7 @@
 					<slot name="footer"> 去注册 </slot>
 				</button>
 				<button class="common_btn" @click="toLogin">
-					<slot name="footer"> 去登陆 </slot>
+					<slot name="footer"> 去登录 </slot>
 				</button>
 			</div>
 			<div class="dialog-footer" v-else>
@@ -63,9 +63,11 @@ const close = () => {
 };
 const toRegister = () => {
 	router.push("/register");
+	close();
 };
 const toLogin = () => {
 	router.push("/login");
+	close();
 };
 </script>
 
@@ -81,6 +83,9 @@ const toLogin = () => {
 	align-items: center;
 	flex-direction: column;
 	justify-content: center;
+	:deep(img) {
+		max-width: 100% !important;
+	}
 	.dialog {
 		position: relative;
 		width: 594px;
@@ -126,6 +131,9 @@ const toLogin = () => {
 				border-radius: 10px;
 				background: linear-gradient(278deg, #ff284b 4.74%, #fd677f 92.73%);
 				border: none;
+				@include themeify {
+					color: themed("TB");
+				}
 			}
 		}
 		.dialog-footer2 {

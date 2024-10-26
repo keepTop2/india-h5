@@ -5,7 +5,7 @@
 			<div class="label">{{ $t(`recharge['存款金额']`) }}</div>
 			<div class="cell_input">
 				<!-- 输入框，显示最小和最大存款金额 -->
-				<input v-model="state.amount" type="number" :placeholder="`${rechargeConfig.rechargeMinAmount} - ${rechargeConfig.rechargeMaxAmount}`" @input="amountItemActive = null" />
+				<input v-model="state.amount" type="number" :placeholder="`${rechargeConfig.rechargeMinAmount ?? 0} - ${rechargeConfig.rechargeMaxAmount ?? 0}`" @input="amountItemActive = null" />
 				<!-- 显示货币单位 -->
 				<div class="input_label">{{ rechargeConfig.currencyCode }}</div>
 			</div>
@@ -16,7 +16,7 @@
 			<div
 				class="amount_item"
 				:class="{ amount_item_active: amountItemActive === index }"
-				v-for="(item, index) in quickAmountList"
+				v-for="(item, index) in rechargeConfig.quickAmountList"
 				:key="index"
 				@click="
 					{
@@ -31,20 +31,20 @@
 	</div>
 
 	<!-- 手机号码输入区域 -->
-	<div class="main mt_24">
+	<!--	<div class="main mt_24">
 		<div class="cell">
 			<div class="label">{{ $t(`recharge['手机号码']`) }}</div>
 			<div class="cell_input phone">
-				<!-- 区号选择 -->
+				<!~~ 区号选择 ~~>
 				<div class="area_code" @click="showAreaCode = true">
 					<span>+{{ state.areaCode }}</span>
 					<SvgIcon class="down" iconName="loginOrRegister/navBar/down" />
 				</div>
-				<!-- 手机号码输入框 -->
+				<!~~ 手机号码输入框 ~~>
 				<input v-model="state.telephone" type="number" :placeholder="$t(`recharge['请输入手机号码']`)" />
 			</div>
 		</div>
-	</div>
+	</div>-->
 
 	<!-- 提交按钮 -->
 	<div class="footer">
@@ -92,10 +92,9 @@ const searchAreaCode = ref(""); // 区号搜索内容
 const currentAreaCodeIndex = ref<number | string>(""); // 当前选中的区号索引
 const indexList = ref<string[]>([]); // 区号索引列表
 const areaCodeObj = ref<CountryData | null>(null); // 当前区号对象
-const state = reactive<{ areaCode: string; amount: number | string; telephone: number | string }>({
+const state = reactive<{ areaCode: string }>({
 	amount: "",
-	areaCode: "", // 存储区域代码
-	telephone: "", // 存储区域代码
+	depositWayId: props.rechargeWayData.id,
 });
 
 // 通道配置信息
@@ -110,12 +109,13 @@ const rechargeConfig = ref<{
 });
 
 // 快捷金额选项
-const quickAmountList = ref<number[]>([]);
+// const quickAmountList = ref<number[]>([]);
 const amountItemActive = ref(null) as unknown as null | number;
 
 // 计算属性，判断按钮类型
 const buttonType = computed(() => {
-	return state.amount && state.areaCode && state.telephone ? "default" : "disabled";
+	// return Number.isFinite(state.amount) && state.areaCode && state.telephone ? "default" : "disabled";
+	return Number.isFinite(state.amount) ? "default" : "disabled";
 });
 
 // 监听搜索区号的变化
@@ -135,18 +135,22 @@ watch(
 
 const countries = ref<CountryData[]>([]); // 国家数据
 
+onMounted(() => {
+	getAreaCodeDownBox();
+});
+
 // 点击充值
 const onRecharge = async () => {
 	const res = await walletApi.userRecharge(state).catch((err) => err);
-	router.push({
-		path: "/wallet/rechargeDetails",
-		query: {
-			orderNo: res.data.orderNo,
-		},
-	});
-	// if (res.code === common.getInstance().ResCode.SUCCESS) {
-
-	// }
+	if (res.code === common.getInstance().ResCode.SUCCESS) {
+		router.push({
+			path: "/wallet/rechargeDetails",
+			query: {
+				orderNo: res.data.orderNo,
+			},
+		});
+		window.open(res.data.thirdPayUrl, "_blank");
+	}
 };
 
 // 获取区号下拉框数据
@@ -163,16 +167,16 @@ const getAreaCodeDownBox = () => {
 };
 
 // 获取充值配置
-const getRechargeConfig = async () => {
-	const params = {
-		rechargeWayId: props.rechargeWayData.id,
-	};
-	const res = await walletApi.getRechargeConfig(params).catch((err) => err);
-	if (res.code === common.getInstance().ResCode.SUCCESS) {
-		rechargeConfig.value = res.data;
-		quickAmountList.value = res.data.quickAmount.split(",").map(Number); // 转换快捷金额列表为数字
-	}
-};
+// const getRechargeConfig = async () => {
+// 	const params = {
+// 		rechargeWayId: props.rechargeWayData.id,
+// 	};
+// 	const res = await walletApi.getRechargeConfig(params).catch((err) => err);
+// 	if (res.code === common.getInstance().ResCode.SUCCESS) {
+// 		rechargeConfig.value = res.data;
+// 		quickAmountList.value = res.data.quickAmount.split(",").map(Number); // 转换快捷金额列表为数字
+// 	}
+// };
 
 // 按首字母分组国家数据
 const groupByFirstLetter = (countries: CountryData[]) => {
@@ -187,8 +191,7 @@ const groupByFirstLetter = (countries: CountryData[]) => {
 };
 
 // 初始化获取充值配置和区号数据
-getRechargeConfig();
-getAreaCodeDownBox();
+// getRechargeConfig();
 
 // 选择区号的处理函数
 const selectAreaCode = (item: string, i: CountryData) => {

@@ -9,6 +9,9 @@
 <style scoped>
 div {
 	text-align: center;
+	min-height: 500px;
+	display: flex;
+	align-items: center;
 }
 img {
 	display: inline-block;

@@ -145,24 +145,51 @@ class Common {
 	}
 
 	/**
-	 * @description 若超出10位数，千位用K表示
+	 * @description 若超出指定位数，千位用K表示，默认超出10位数，最小支持5位
 	 */
-	public formatAmount(number) {
+	public formatAmount(number: number, digits: number = 10): string {
+		// 限制最小位数为 5
+		const minDigits = 5;
+		const thresholdDigits = Math.max(digits, minDigits);
+		const threshold = Math.pow(10, thresholdDigits - 1);
+
 		const absNumber = Math.abs(number);
-		const threshold = 10000000;
-		let formattedNumber = "" as number | string;
+		let formattedNumber: string;
+
 		if (absNumber >= threshold) {
 			const quotient = Math.floor(this.div(absNumber, 1000));
 			formattedNumber = `${quotient}K`;
 		} else {
 			formattedNumber = this.formatFloat(Number(absNumber));
 		}
+
 		// 处理负数情况
 		if (number < 0) {
 			formattedNumber = "-" + formattedNumber;
 		}
+
 		return formattedNumber;
 	}
+
+	/**
+	 * @description 若超出10位数，千位用K表示
+	 */
+	// public formatAmount(number) {
+	// 	const absNumber = Math.abs(number);
+	// 	const threshold = 10000000;
+	// 	let formattedNumber = "" as number | string;
+	// 	if (absNumber >= threshold) {
+	// 		const quotient = Math.floor(this.div(absNumber, 1000));
+	// 		formattedNumber = `${quotient}K`;
+	// 	} else {
+	// 		formattedNumber = this.formatFloat(Number(absNumber));
+	// 	}
+	// 	// 处理负数情况
+	// 	if (number < 0) {
+	// 		formattedNumber = "-" + formattedNumber;
+	// 	}
+	// 	return formattedNumber;
+	// }
 
 	/**
 	 * @param name
@@ -238,7 +265,7 @@ class Common {
 	 */
 	public dayFormat1(date: number | string | null): string {
 		if (date) {
-			return dayjs(date).tz("Asia/Shanghai").format("YYYY-MM-DD");
+			return dayjs(date).format("YYYY-MM-DD");
 		}
 		return "";
 	}
@@ -660,11 +687,11 @@ class Common {
 		return `${String(hours).padStart(2, "0")}:${String(remainingMinutes).padStart(2, "0")}:${String(remainingSeconds).padStart(2, "0")}`;
 	}
 	// 获取30天年月日
-	static getLast30Days() {
+	static getLast30Days(value?: any) {
 		const today = new Date();
 		const columns: any = [];
-
-		for (let i = 0; i < 30; i++) {
+		const firstIndexes: any = [];
+		for (let i = 0; i < (value ? value : 30); i++) {
 			const currentDate = new Date(today);
 			currentDate.setDate(today.getDate() - i);
 
@@ -674,17 +701,20 @@ class Common {
 
 			// 查找年份
 			let yearNode: any = columns.find((node: any) => node.value === String(year));
+
 			if (!yearNode) {
 				yearNode = {
 					text: String(year),
 					value: String(year),
 					children: [],
 				};
+
 				columns.unshift(yearNode);
 			}
 
 			// 查找月份
 			let monthNode = yearNode.children.find((node) => node.value === String(month));
+
 			if (!monthNode) {
 				monthNode = {
 					text: `${month}月`,
@@ -706,9 +736,13 @@ class Common {
 		const currentYear = today.getFullYear();
 		const currentMonth = today.getMonth() + 1; // 月份从0开始，所以需要加1
 		const currentDay = today.getDate();
+		const firstYear = columns[0]?.value;
+		const firstMonth = columns[0]?.children[0]?.value;
+		const firstDay = columns[0]?.children[0]?.children[0]?.value;
 
 		return {
 			columns: columns,
+			firstIndexes: [firstYear, firstMonth, firstDay],
 			defaultIndex: [String(currentYear), String(currentMonth), String(currentDay)],
 		};
 	}

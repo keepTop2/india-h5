@@ -5,7 +5,7 @@
 		<div class="content">
 			<div class="rewardbg">
 				<div class="color_TB fs_28">累计奖励:</div>
-				<div class="color_Hint">{{ detailData?.totalAmount }}</div>
+				<div class="color_Hint">{{ detailData?.platCurrencySymbol }} {{ detailData?.totalAmount }}</div>
 			</div>
 
 			<div class="tabs">
@@ -25,16 +25,19 @@
 						</div>
 						<div class="fs_18 color_TB bottom">
 							<span
-								>奖励：<span>{{ item.rewardAmount }}</span></span
+								>奖励：<span class="color_Hint"> {{ item.platCurrencySymbol }} {{ item.rewardAmount }}</span></span
 							>
 							<span
-								><span class="color_Theme">{{ calculatePercentage(item.achieveAmount, item.minBetAmount) }}</span
-								>/100</span
+								><span class="color_Theme">{{ item.achieveAmount }}</span
+								>/{{ item.minBetAmount }}</span
 							>
 						</div>
 					</div>
 					<div>
 						<div :class="'btnType btnType' + item.taskStatus" @click="HandleBtn(item)">{{ taskStatus[item.taskStatus] }}</div>
+					</div>
+					<div class="help_icon" @click="openDialog(item)">
+						<img src="./image/help_icon.png" />
 					</div>
 				</div>
 			</div>
@@ -50,48 +53,54 @@
 						</div>
 						<div class="fs_18 color_TB bottom">
 							<span
-								>奖励：<span>{{ item.rewardAmount }}</span></span
+								>奖励：<span class="color_Hint"> {{ item.platCurrencySymbol }} {{ item.rewardAmount }}</span></span
 							>
 							<span
-								><span class="color_Theme">{{ calculatePercentage(item.achieveAmount, item.minBetAmount) }}</span
-								>/100</span
+								><span class="color_Theme">{{ item.achieveAmount }}</span
+								>/{{ item.minBetAmount }}</span
 							>
 						</div>
 					</div>
 					<div>
 						<div :class="'btnType btnType' + item.taskStatus" @click="HandleBtn(item)">{{ taskStatus[item.taskStatus] }}</div>
 					</div>
+					<div class="help_icon" @click="openDialog(item)">
+						<img src="./image/help_icon.png" />
+					</div>
 				</div>
 			</div>
 			<div v-if="currentTab == 2">
-				<div v-for="item in detailData?.noviceTask" class="card">
+				<div class="daojishiBg fs_24">
+					<span class="color_TB">剩余时间：</span><span class="color_Theme">{{ Common.convertMilliseconds(countdown * 1000) }}</span>
+				</div>
+				<div v-for="item in detailData?.noviceTask" class="card" :class="item.subTaskType">
 					<div>
 						<VantLazyImg :src="item.taskPictureI18nCode" alt="" />
 					</div>
 					<div>
 						<div class="fs_24 color_TB fw_500">{{ item.taskNameI18nCode }}</div>
-						<div class="progress">
-							<div class="value" :style="{ width: calculatePercentage(item.achieveAmount, item.minBetAmount) + '%' }"></div>
-						</div>
+						<div class="fs_18 color_TB htmlDesc ellipsis" v-html="item.taskDescriptionI18nCode"></div>
 						<div class="fs_18 color_TB bottom">
 							<span
-								>奖励：<span>{{ item.rewardAmount }}</span></span
-							>
-							<span
-								><span class="color_Theme">{{ calculatePercentage(item.achieveAmount, item.minBetAmount) }}</span
-								>/100</span
+								>奖励：<span class="color_Hint"> {{ item.platCurrencySymbol }} {{ item.rewardAmount }}</span></span
 							>
 						</div>
 					</div>
 					<div>
 						<div :class="'btnType btnType' + item.taskStatus" @click="HandleBtn(item)">{{ taskStatus[item.taskStatus] }}</div>
+					</div>
+					<div class="help_icon" @click="openDialog(item)">
+						<img src="./image/help_icon.png" />
 					</div>
 				</div>
 			</div>
 		</div>
 		<activityDialog v-model="showDialog" title="温馨提示" :confirm="confirmDialog">
 			<div>恭喜你获得</div>
-			<div class="result">${{ 5 }}</div>
+			<div class="result">{{ dialogInfo.platCurrencySymbol }} {{ dialogInfo.rewardAmount }}</div>
+		</activityDialog>
+		<activityDialog v-model="showRule" title="任务说明" :confirm="confirmDialog" :dialog2="true">
+			<div v-html="rule" class="RuleDialog htmlDesc"></div>
 		</activityDialog>
 	</div>
 </template>
@@ -100,26 +109,25 @@
 import { ref } from "vue";
 import { activityApi } from "/@/api/activity";
 import activityDialog from "./dialog.vue";
-import dayjs from "dayjs";
-import { showToast } from "vant";
 import image from "./image/image.png";
+import Common from "/@/utils/common";
+import { useCountdown } from "/@/hooks/countdown";
 import { useUserStore } from "/@/store/modules/user";
-const userStore = useUserStore();
+const { countdown, startCountdown, stopCountdown } = useCountdown();
 const router = useRouter();
-const route = useRoute();
 const showDialog = ref(false);
-const showDialog2 = ref(false);
+const showRule = ref(false);
+const rule = ref("");
 const dialogInfo: any = ref({});
-const activityData = ref();
 const detailData: any = ref({});
 const currentTab = ref(0);
 const taskStatus = {
-	0: "未完成",
-	1: "已完成",
+	0: "去完成",
+	1: "领取",
 	2: "已领取",
 	3: "已经过期",
 };
-const tasktype = [
+const tasktype = ref([
 	{
 		label: "每日任务",
 		value: 0,
@@ -128,13 +136,13 @@ const tasktype = [
 		label: "每周任务",
 		value: 1,
 	},
-	{
-		label: "新人任务",
-		value: 2,
-	},
-];
+]);
 const changeTab = (value) => {
 	currentTab.value = value;
+};
+const openDialog = (item) => {
+	showRule.value = true;
+	rule.value = item.taskDescI18nCode;
 };
 onMounted(() => {
 	getTaskDetail();
@@ -142,24 +150,56 @@ onMounted(() => {
 const getTaskDetail = () => {
 	activityApi.getTaskDetail().then((res) => {
 		detailData.value = res.data;
-		console.log(detailData.value);
+		if (detailData.value.noviceTask) {
+			startCountdown(detailData.value?.noviceTask[0].expireTime);
+			tasktype.value = [
+				{
+					label: "每日任务",
+					value: 0,
+				},
+				{
+					label: "每周任务",
+					value: 1,
+				},
+				{
+					label: "新手任务",
+					value: 2,
+				},
+			];
+		}
 	});
 };
-const HandleBtn = () => {
-	showDialog.value = true;
-};
-const apply = () => {
-	if (!userStore.token) {
-		showDialog2.value = true;
-		return;
+const HandleBtn = (item) => {
+	if (item.subTaskType === "phone" && !useUserStore().getUserInfo.phone) {
+		return router.push("/bind/phone");
+	} else if (item.subTaskType === "email" && !useUserStore().getUserInfo.email) {
+		return router.push("/bind/email");
+	}
+
+	if (item.taskStatus == 1) {
+		activityApi
+			.Taskreceive({
+				id: item.id,
+				subTaskType: item.subTaskType,
+			})
+			.then((res: any) => {
+				if (res.code === 10000) {
+					showDialog.value = true;
+					dialogInfo.value = res.data;
+					dialogInfo.value.platCurrencySymbol = item.platCurrencySymbol;
+					getTaskDetail();
+				}
+			});
+	} else if (item.taskStatus == 0) {
+		router.push("/");
 	}
 };
+
 const confirmDialog = () => {
 	if (dialogInfo.value.status === 30049) {
 		router.push("/wallet/recharge");
 	}
 	showDialog.value = false;
-	showDialog2.value = false;
 };
 const calculatePercentage = (part, whole) => {
 	return (part / whole) * 100 || 0;
@@ -200,23 +240,43 @@ const calculatePercentage = (part, whole) => {
 				color: themed("TB");
 			}
 			.tab {
-				width: 33%;
+				flex: 1;
 				text-align: center;
-				background: url("./image/tabBg.png") no-repeat;
 				height: 72px;
 				background-size: 100% 100%;
+				@include themeify {
+					border-radius: 24px 24px 0px 0px;
+					background: themed("BG3");
+				}
 			}
 			.tab.active {
-				height: 80px;
-				margin-bottom: -12px;
-				background: url("./image/tabActive.png") no-repeat;
+				position: relative;
+				height: 72px;
 				background-size: 100% 100%;
+				@include themeify {
+					border-radius: 24px 24px 0px 0px;
+					background: themed("Theme");
+				}
+			}
+			.tab.active::after {
+				content: ""; /* 必须设置内容为 "" */
+				position: absolute; /* 绝对定位 */
+				left: 50%; /* 水平居中 */
+				bottom: -12px; /* 距离容器底部 */
+				transform: translateX(-50%); /* 水平居中 */
+				width: 0;
+				height: 0;
+				border-left: 12px solid transparent; /* 左边框透明 */
+				border-right: 12px solid transparent; /* 右边框透明 */
+				@include themeify {
+					border-top: 12px solid themed("Theme"); /* 顶部边框为黑色 */
+				}
 			}
 		}
 	}
 	.taskList {
 		border-radius: 24px 24px 0px 0px;
-		padding: 14px 24px;
+		padding: 24px 24px;
 		margin-top: -1px;
 		@include themeify {
 			background: themed("BG1");
@@ -231,6 +291,7 @@ const calculatePercentage = (part, whole) => {
 			justify-content: space-between;
 			padding: 0 40px 0 20px;
 			gap: 30px;
+			position: relative;
 			> div:first-child {
 				width: 80px;
 				img {
@@ -238,11 +299,20 @@ const calculatePercentage = (part, whole) => {
 					height: 80px;
 				}
 			}
+			.help_icon {
+				position: absolute;
+				right: 12px;
+				top: 12px;
+				img {
+					width: 22px;
+					height: 22px;
+				}
+			}
 			> div:nth-child(2) {
 				flex: 1;
 				display: flex;
 				flex-direction: column;
-				gap: 12px;
+				gap: 8px;
 				.progress {
 					background: url("./image/progress.png") no-repeat;
 					background-size: 100% 100%;
@@ -252,6 +322,7 @@ const calculatePercentage = (part, whole) => {
 						height: 12px;
 						border-radius: 10px;
 						background-color: Wam-P1;
+						max-width: 100%;
 						@include themeify {
 							background-color: themed("Wam-P1");
 						}
@@ -284,6 +355,39 @@ const calculatePercentage = (part, whole) => {
 			.btnType2 {
 				background: linear-gradient(270deg, #afafb3 0%, #87878b 100%);
 			}
+			.daojishiBg {
+				height: 45px;
+				width: 100%;
+				background: url("./image/daojishiBg.png") no-repeat;
+			}
+			.htmlDesc {
+				width: 350px;
+			}
+		}
+		.card.welcome {
+			background: url("./image/cardBg2.png") no-repeat;
+			background-size: 100% 100%;
+		}
+		.card.currency {
+			background: url("./image/cardBg3.png") no-repeat;
+			background-size: 100% 100%;
+		}
+		.card.email {
+			background: url("./image/cardBg3.png") no-repeat;
+			background-size: 100% 100%;
+		}
+		.card.phone {
+			background: url("./image/cardBg4.png") no-repeat;
+			background-size: 100% 100%;
+		}
+		.daojishiBg {
+			height: 45px;
+			width: 100%;
+			background: url("./image/daojishiBg.png") no-repeat;
+			background-size: auto 100%;
+			padding-left: 60px;
+			line-height: 45px;
+			margin: 24px 0;
 		}
 	}
 }

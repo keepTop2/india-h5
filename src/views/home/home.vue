@@ -33,10 +33,10 @@
 					</span>
 					<span class="more fw_400 fs_28 color_T1" @click="handleMore(item?.gameOneId)">{{ $t(`home["更多"]`) }}</span>
 				</h3>
-				<GameLayout v-if="item.gameInfoList.length" :gameInfoList="item.gameInfoList" class="m24" />
-				<GameBigPic v-else class="m24" />
+				<GameBigPic class="m24" v-if="item.modelCode == 'SIGN_VENUE'" />
+				<GameLayout v-else :gameInfoList="item.gameInfoList" class="m24" />
 			</template>
-			<h3 class="title_more">
+			<!-- <h3 class="title_more">
 				<span class="flex_align_center">
 					<SvgIcon iconName="home/electronic" alt="" />
 					{{ $t('home["热门电竞"]') }}
@@ -49,8 +49,8 @@
 					<SvgIcon iconName="home/game_fowl" alt="" />
 					{{ $t('home["热门斗鸡"]') }}
 				</span>
-			</h3>
-			<GameBigPic class="m24" />
+			</h3> -->
+			<!-- <GameBigPic class="m24" /> -->
 			<!-- 赞助 -->
 			<Sponsor :data="PartnerList" />
 			<!-- 转账方式 -->
@@ -106,7 +106,7 @@ import { GameInfoList, LobbyTopGame } from "/#/game";
 import activitySocketService from "/@/utils/activitySocketService";
 import { useActivityStore } from "/@/store/modules/activity";
 import { computed, onActivated, onDeactivated, ref, watch } from "vue";
-const websocketService = activitySocketService.getInstance();
+const websocketService: any = activitySocketService.getInstance();
 const router = useRouter();
 const UserStore = useUserStore();
 const sportsInfoStore = useSportsInfoStore();
@@ -119,7 +119,7 @@ const hotGames = ref<GameInfoList[]>([]);
 const lobbyTopGame = ref<LobbyTopGame[]>();
 const PaymentVendorList = ref([]);
 const PartnerList = ref([]);
-const showRedBagRain = ref(false);
+const showRedBagRain = computed(() => useActivityStore().getIsShowRedBagRain);
 //判断是否收藏
 const isShowCollect = computed(() => {
 	return collectList.value.length > 0 && UserStore.token;
@@ -166,9 +166,6 @@ onActivated(() => {
 	pubsub.subscribe("getCollect", queryCollection);
 	// 初始化活动ws连接
 	initializeWebSocket();
-	pubsub.subscribe("ShowRedBagRain", (data) => {
-		showRedBagRain.value = data;
-	});
 });
 onDeactivated(() => {
 	// 关闭登录接口轮询
@@ -336,7 +333,6 @@ const handleMore = (gameOneId) => {
 };
 
 const initializeWebSocket = async () => {
-	websocketService.send("/activity/redBagRain");
 	// 订阅红包雨推送消息
 	pubsub.subscribe("/activity/redBagRain", (data) => {
 		showCountdown.value = true;

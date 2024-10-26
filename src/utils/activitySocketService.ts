@@ -40,12 +40,13 @@ class activitySocketService {
 			const userStore = useUserStore(); // 获取用户信息
 			// 如果没有token则不建立连接
 			if (!userStore.token) return;
+			console.log("this.url", this.url);
 			this.socket = new WebSocket(`${this.url}?p=${userStore.token}`); // 使用token建立WebSocket连接
 			// WebSocket连接打开时
 			this.socket.onopen = () => {
 				this.reconnectAttempts = 0; // 重置重连次数
 				this.startHeartbeat(); // 启动心跳
-				pubsub.publish("websocket_reconnected"); // 连接成功后发布事件
+				// 连接成功后发布事件
 				resolve(); // 连接成功
 			};
 
@@ -130,6 +131,8 @@ class activitySocketService {
 	close(): void {
 		this.isManuallyClosed = true; // 设置手动关闭标志
 		if (this.socket) {
+			console.log(123123123);
+
 			this.socket.close(); // 关闭连接
 			this.stopHeartbeat(); // 停止心跳
 		}

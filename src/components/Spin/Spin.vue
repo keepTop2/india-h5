@@ -33,6 +33,7 @@ import crypto_btn from "./img/crypto_btn.png";
 import spinBG from "./img/spin_bg.png";
 import { activityApi } from "/@/api/activity";
 import { useUserStore } from "/@/store/modules/user";
+import { showToast } from "vant";
 const userStore = useUserStore();
 const spinning = ref(false);
 const spinOver = ref(false);
@@ -62,41 +63,47 @@ const props = withDefaults(defineProps<Spin>(), {
 	spinList: () => [] as any,
 	reward: () => ({} as Coin),
 	balanceCount: Number,
+	enable: Boolean,
 });
 
 // startSpinningCallback 开始旋转的回掉函数
-const emit = defineEmits(["startSpinningCallback", "endSpinningCallback", "needLogin"]);
+const emit = defineEmits(["startSpinningCallback", "endSpinningCallback", "needLogin", "noMorebalanceCount"]);
 
 // 监听props中的reward变化，以触发停止旋转
 watch(
 	() => props.reward,
 	async () => {
-		await nextTick();
-		spinOver.value = true;
-		const { id } = props.reward;
-		const findIndex = props.spinList.findIndex((i: any) => i.id === id);
-		if (findIndex === -1) {
-			// 错误处理
-			console.error("奖品信息错误");
-			clearSpin();
-			return;
-		}
-		spinRotate.value = `${(360 / 16) * (16 - findIndex) + 90}deg`;
-		await nextTick();
-		rewardAni.value = true;
-		const timer = setTimeout(() => {
-			spinning.value = false;
-			dialogVisible.value = true;
-			emit("endSpinningCallback");
-			clearTimeout(timer);
-		}, 2500);
+		endGame();
 	}
 );
+
+const endGame = async () => {
+	await nextTick();
+	spinOver.value = true;
+	const { id } = props.reward;
+	const findIndex = props.spinList.findIndex((i: any) => i.id === id);
+
+	if (findIndex === -1) {
+		// 错误处理
+		console.error("奖品信息错误");
+		clearSpin();
+		return;
+	}
+	spinRotate.value = `${360 - (360 / 16) * findIndex}deg`;
+	await nextTick();
+	rewardAni.value = true;
+	const timer = setTimeout(() => {
+		spinning.value = false;
+		dialogVisible.value = true;
+		emit("endSpinningCallback");
+		clearTimeout(timer);
+	}, 2500);
+};
 
 // 计算每个奖品项的样式
 const getItemStyle = (index: number) => ({
 	opacity: "1",
-	transform: `rotate(${(360 / 16) * index}deg)`,
+	transform: `rotate(${(360 / 16) * index - 90}deg)`,
 });
 // 重置旋转动画状态
 const clearSpin = () => {
@@ -106,12 +113,13 @@ const clearSpin = () => {
 };
 // 处理开始旋转的逻辑
 const handleStartSpin = async () => {
+	if (!props.enable) return showToast("活动未开启");
 	if (!userStore.token) {
 		return emit("needLogin");
 	}
 
 	if (props.balanceCount < 1) {
-		return emit("endSpinningCallback");
+		return emit("noMorebalanceCount");
 	}
 	if (spinning.value) return;
 	activityApi.toSpinActivity().then((res: any) => {
@@ -119,11 +127,14 @@ const handleStartSpin = async () => {
 			clearSpin();
 			spinning.value = true;
 			emit("startSpinningCallback");
+		} else {
+			return emit("endSpinningCallback");
 		}
 	});
 };
 defineExpose({
 	handleStartSpin,
+	endGame,
 });
 </script>
 

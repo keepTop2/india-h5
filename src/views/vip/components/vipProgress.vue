@@ -1,8 +1,8 @@
 <template>
 	<div class="vip_progress">
 		<div class="vip_icon">
-			<VantLazyImg class="vip_bg" :src="vip_icon_1" />
-			<span class="vip_level">LV{{ props.userVipInfo.vipGradeCode }}</span>
+			<VantLazyImg class="vip_bg" :src="currentRankImage" />
+			<span class="vip_level">{{ props.userVipInfo.vipGradeName }}</span>
 		</div>
 		<div class="progress_bar">
 			<div class="progress" :style="{ width: `${progressPercentage}%` }">
@@ -11,13 +11,14 @@
 						<div class="value">{{ progressPercentage }}%</div>
 						<SvgIcon class="arrow" iconName="vip/progress_bar_percent_arrow" />
 					</div>
-					<VantLazyImg class="vip_jdt" :src="vip_jdt" />
+
+					<VantLazyImg class="vip_jdt" :src="vip_jdt" v-if="progressPercentage > 0" />
 				</div>
 			</div>
 		</div>
 		<div class="vip_icon">
-			<VantLazyImg class="vip_bg" :src="vip_icon_1" />
-			<span class="vip_level">LV{{ props.userVipInfo.vipGradeUp }}</span>
+			<VantLazyImg class="vip_bg" :src="currentRankImage" />
+			<span class="vip_level">{{ props.userVipInfo.vipGradeUpName }}</span>
 		</div>
 	</div>
 </template>
@@ -26,28 +27,47 @@
 import vip_icon_1 from "/@/assets/zh-CN/default/vip/vip_icon_1.png";
 import vip_jdt from "/@/assets/zh-CN/default/my/vip_jdt.png";
 import { VIP } from "/@/views/vip/interface";
-
+import rank0Img from "./image/rank0.png";
+import rank1Img from "./image/rank1.png";
+import rank2Img from "./image/rank2.png";
+import rank3Img from "./image/rank3.png";
+import rank4Img from "./image/rank4.png";
+import rank5Img from "./image/rank5.png";
 const props = withDefaults(
 	defineProps<{
 		userVipInfo: VIP;
 		percentageShow?: boolean;
 	}>(),
 	{
-		userVipInfo: {} as VIP,
+		userVipInfo: {} as any,
 		percentageShow: false,
 	}
 );
-
+const currentRankImage = computed(() => {
+	return props.userVipInfo.vipRank == 0
+		? rank0Img
+		: props.userVipInfo.vipRank == 1
+		? rank1Img
+		: props.userVipInfo.vipRank == 2
+		? rank2Img
+		: props.userVipInfo.vipRank == 3
+		? rank3Img
+		: props.userVipInfo.vipRank == 4
+		? rank4Img
+		: props.userVipInfo.vipRank == 5
+		? rank4Img
+		: rank5Img;
+});
 // 计算百分比
 const progressPercentage = computed(() => {
-	const { currentExp, upgradeVipExp } = props.userVipInfo;
+	const { currentExp, currentVipExp } = props.userVipInfo;
 	// 防止NaN：确保 upgradeVipExp 不为0，并且 currentExp 和 upgradeVipExp 都是有效数字
-	if (isNaN(currentExp) || isNaN(upgradeVipExp) || upgradeVipExp === 0) {
+	if (isNaN(currentExp) || isNaN(currentVipExp) || currentVipExp === 0) {
 		return 0;
 	}
 
 	// 计算百分比并取整
-	return Math.floor((currentExp / upgradeVipExp) * 100);
+	return Math.floor((currentExp / currentVipExp) * 100);
 });
 
 console.log("progressPercentage", progressPercentage);
@@ -63,22 +83,24 @@ console.log("progressPercentage", progressPercentage);
 		width: 92px;
 		height: 40px;
 		.vip_bg {
-			width: 92px;
+			width: 102px;
 			height: 40px;
 		}
 		.vip_level {
 			position: absolute;
 			bottom: 2px;
-			right: 0px;
-			width: 50px;
+			text-align: center;
+			width: 100%;
+			padding-left: 25px;
 			height: 24px;
 			display: flex;
 			align-items: center;
 			justify-content: center;
+			text-align: center;
 			color: #fff;
 			font-family: "112-SS Yi Fang Ti";
 			font-size: 16px;
-			font-weight: 400;
+			font-weight: 300;
 		}
 	}
 	.progress_bar {
@@ -90,8 +112,8 @@ console.log("progressPercentage", progressPercentage);
 		background: url("/@/assets/zh-CN/default/my/progressBar_bg.png") center center / 100% 100% no-repeat;
 
 		.progress {
-			min-width: 40px;
-			max-width: calc(100% - 4px);
+			min-width: 0;
+			max-width: 100%;
 			height: 12px;
 			margin: 0px 2px;
 			border-radius: 8px;
@@ -106,7 +128,7 @@ console.log("progressPercentage", progressPercentage);
 				.percentage {
 					position: absolute;
 					top: -160%;
-					right: 0px;
+					right: -20px;
 					width: min-content;
 					display: flex;
 					flex-wrap: wrap;
@@ -114,6 +136,7 @@ console.log("progressPercentage", progressPercentage);
 					.arrow {
 						width: 20px;
 						height: 9px;
+						margin-left: -60px;
 					}
 					.value {
 						position: absolute;
@@ -121,6 +144,7 @@ console.log("progressPercentage", progressPercentage);
 						font-family: "PingFang SC";
 						font-size: 24px;
 						font-weight: 600;
+						margin-left: -60px;
 						background: linear-gradient(180deg, #fff 0%, rgba(255, 255, 255, 0) 100%);
 						background-clip: text;
 						-webkit-background-clip: text;
@@ -133,6 +157,7 @@ console.log("progressPercentage", progressPercentage);
 					top: -40%;
 					right: 0px;
 					width: 40px;
+
 					height: 22px;
 				}
 			}

@@ -106,6 +106,14 @@ export const activityApi = {
 			headers,
 		});
 	},
+	// 活动校验
+	queryLobbyLabelActivitySwitch: (data = {}, headers = {}) => {
+		return useAxiosApi(`/app/game_lobby/api/queryLobbyLabelActivitySwitch`, {
+			method: "POST",
+			data,
+			headers,
+		});
+	},
 	// 转盘详情
 	getSpinDetail: (data = {}, headers = {}) => {
 		return useAxiosApi(`/app/activity/spin/api/detail`, {
@@ -138,6 +146,9 @@ export const activityApi = {
 		return useAxiosApi(`/app/activityParticipate/api/querySpinWheelOrderRecord`, {
 			method: "POST",
 			data,
+			headers: {
+				showLoading: true,
+			},
 		});
 	},
 	// 任务详情
@@ -145,6 +156,18 @@ export const activityApi = {
 		return useAxiosApi(`/app/task/api/detail`, {
 			method: "POST",
 			data,
+			headers: {
+				showLoading: true,
+			},
+		});
+	},
+	Taskreceive: (data = {}) => {
+		return useAxiosApi(`/app/task/api/receive`, {
+			method: "POST",
+			data,
+			headers: {
+				showLoading: true,
+			},
 		});
 	},
 };

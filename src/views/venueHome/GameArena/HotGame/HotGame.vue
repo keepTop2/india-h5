@@ -1,23 +1,13 @@
 <template>
 	<div class="GameSwiper">
-		<Swiper
-			slidesPerView="auto"
-			:loop="true"
-			:autoplay="{
-				delay: 2500,
-				disableOnInteraction: false,
-				pauseOnMouseEnter: true,
-			}"
-			:modules="modules"
-			class="mySwiper"
-		>
-			<swiper-slide v-for="(item, index) in gameList?.gameInfoList" :key="index">
+		<Swiper :modules="modules" class="mySwiper" slidesPerView="auto">
+			<swiper-slide v-for="(item, index) in gameList?.gameInfoList" :key="index" class="mr_20">
 				<div class="card" @click="handleClickCard(item)">
 					<div class="collect">
 						<VantLazyImg v-if="item.collect" @click="onClickCollect(item, false)" :src="collectImg" alt="" width="100%" />
 						<VantLazyImg v-else @click="onClickCollect(item, true)" :src="noCollectImg" alt="" width="100%" />
 					</div>
-					<VantLazyImg :src="item.icon" alt="" width="100%" />
+					<VantLazyImg :src="item.icon" alt="" width="100%" class="gameIcon" />
 					<div class="message">
 						<span class="gameName color_TB fs_28 fw_600">
 							{{ item.name }}
@@ -81,4 +71,9 @@ const onClickCollect = async (item, collect) => {
 
 <style scoped lang="scss">
 @import "./HotGame.scss";
+.gameIcon {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
 </style>

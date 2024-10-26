@@ -26,13 +26,16 @@
 			<div class="progress">
 				<div class="value" :style="{ width: totalProgress + '%' }"></div>
 			</div>
-
 			<!-- 文本提示列表 -->
 			<div class="text_list">
 				<!-- 提示图标 -->
 				<div class="tooltip">
 					<van-popover v-model:show="showPopover" theme="dark" :show-arrow="false">
-						<div class="p_10 popup">{{ $t('medalCollection["宝箱奖励流水倍数为8倍"]') }}</div>
+						<div class="p_10 popup">
+							{{
+								$t('medalCollection["宝箱奖励流水倍数为8倍"]', { num: state.medalRewardRespVOS?.find((item) => item.openStatus == 0)?.typingMultiple || state.medalRewardRespVOS[0]?.typingMultiple })
+							}}
+						</div>
 						<template #reference>
 							<VantLazyImg class="icon" :src="theme === ThemeEnum.default ? tips_icon : tips_icon_light" />
 						</template>
@@ -43,7 +46,7 @@
 					<template v-slot:value>
 						<span class="text">{{ $t("medalCollection.枚", { value: item.unlockMedalNum }) }}</span>
 					</template>
-					<template v-slot:num>{{ item.rewardAmount }}{{ useUserStore().getUserInfo.platCurrencyName }} </template>
+					<template v-slot:num> {{ item.rewardAmount }} {{ useUserStore().getUserInfo.platCurrencyName }} </template>
 				</i18n-t>
 			</div>
 		</template>
@@ -118,6 +121,7 @@ import { ThemeEnum } from "/@/enum/appConfigEnum";
 import { useThemesStore } from "/@/store/modules/themes";
 import { useRouter } from "vue-router";
 import { useUserStore } from "/@/store/modules/user";
+import { showToast } from "vant";
 const router = useRouter();
 const themesStore = useThemesStore();
 const theme = computed(() => themesStore.themeName);
@@ -125,7 +129,7 @@ const showPopover = ref(false);
 const state = reactive({
 	canLightNum: 0 as number,
 	hasUnlockList: [] as NotUnlockList[],
-	medalRewardRespVOS: [] as MedalRewardRespVOS[],
+	medalRewardRespVOS: [] as any,
 	notUnlockList: [] as NotUnlockList[],
 	rewardRemarkList: [],
 });
@@ -208,14 +212,18 @@ const getUserMedalInfo = async () => {
 // 领取宝箱
 const onOpenMedalReward = async (item) => {
 	// 确保勋章数量达到要求且宝箱状态为未领取
+
 	if (state.canLightNum >= item.unlockMedalNum && item.openStatus === 0) {
 		const params = {
-			condNum: item.unlockMedalNum,
+			rewardNo: item.rewardNo,
 		};
 		const res = await medalApi.openMedalReward(params).catch((err) => err);
 
 		if (res.code == common.getInstance().ResCode.SUCCESS) {
 			// 成功领取后更新用户的勋章信息
+
+			showToast(`恭喜你获得${res.data.unlockMedalNum}个宝箱，奖励${res.data.rewardAmount}${useUserStore().getUserInfo.platCurrencySymbol}，已发送到您的账户`);
+
 			await getUserMedalInfo();
 		}
 	}
@@ -406,24 +414,24 @@ const onClickLeft = () => {
 			background-repeat: no-repeat;
 			background-size: 160px 160px;
 
-			// .bg {
-			// 	position: absolute;
-			// 	top: -17px;
-			// 	left: 50%;
-			// 	transform: translate(-50%, 0%);
-			// 	width: 162px;
-			// 	height: 162px;
-			// 	display: flex;
-			// 	align-items: center;
-			// 	justify-content: center;
-			// 	@include theme-bg("/my/medalCollection/highlight.png");
-			// 	background-position-x: center;
-			// 	background-position-y: bottom;
-			// 	background-repeat: no-repeat;
-			// 	background-size: 162px 162px;
-			// 	/* 添加旋转和缩放动画 */
-			// 	animation: rotateIcon 4s linear infinite;
-			// }
+			.bg {
+				position: absolute;
+				top: -17px;
+				left: 50%;
+				transform: translate(-50%, 0%);
+				width: 162px;
+				height: 162px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				background: url("./image.png");
+				background-position-x: center;
+				background-position-y: bottom;
+				background-repeat: no-repeat;
+				background-size: 162px 162px;
+				/* 添加旋转和缩放动画 */
+				animation: rotateIcon 4s linear infinite;
+			}
 			.icon {
 				position: absolute;
 				top: -17px;

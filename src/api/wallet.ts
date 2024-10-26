@@ -1,5 +1,4 @@
 import useAxiosApi from "/@/utils/useAxiosApi";
-import useAxiosUploadApi from "/@/utils/useAxiosUploadApi";
 
 export const walletApi = {
 	// 用户充值方式列表

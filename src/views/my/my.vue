@@ -5,6 +5,7 @@
 
 		<!-- 用户信息 -->
 		<template v-else>
+			<button @click="router.push('/welfareCenter')">福利中心（dev）</button>
 			<div class="user">
 				<div class="avatar">
 					<VantLazyImg :src="theme === ThemeEnum.default ? avatar : avatar_light" />
@@ -19,10 +20,11 @@
 			<!-- vip -->
 			<div class="vip_container">
 				<!-- <VantLazyImg class="vip_big" :src="vip_big" /> -->
-				<span class="vip_level">VIP{{ state.userVipInfo.vipGradeCode }}</span>
+				<span class="vip_level">{{ state.userVipInfo.vipGradeName }}</span>
 				<div class="vip_info">
 					<span class="vip_experience"
-						>升级所需经验: <span class="color_Warn">{{ state.userVipInfo.currentExp }}</span> / <span>{{ state.userVipInfo.upgradeVipExp }}</span></span
+						>升级所需经验: <span class="color_Warn">{{ state.userVipInfo.vipGradeCode === state.userVipInfo.vipGradeUp ? state.userVipInfo.currentVipExp : state.userVipInfo.currentExp }}</span> /
+						<span>{{ state.userVipInfo.currentVipExp }}</span></span
 					>
 					<SvgIcon class="arrow" iconName="my/arrow" @click="toPath('/vip')" />
 				</div>
@@ -40,9 +42,13 @@
 						<SvgIcon class="arrow" iconName="common/arrow" />
 					</div>
 					<div class="medal_content">
-						<div class="item" :class="{ item_bg: item.lockStatus == 1 }" v-for="(item, index) in state.medalListData" :key="index">
-							<i v-if="item.lockStatus == 0"></i>
-							<VantLazyImg class="medal_icon" :src="item.lockStatus == 0 || item.lockStatus == 2 ? item.inactivatedPicUrl : item.activatedPicUrl" />
+						<div class="item" :class="{ item_bg: item.lockStatus == 1 }" v-for="(item, index) in state.medalListData" :key="index" @click="onLightUpMedal(item)">
+							<template v-if="item.lockStatus === 0">
+								<i></i>
+								<div class="bg"></div>
+								<VantLazyImg class="medal_icon1" :src="item.lockStatus == 0 || item.lockStatus == 2 ? item.inactivatedPicUrl : item.activatedPicUrl" :class="{ animation: item.lockStatus === 0 }" />
+							</template>
+							<VantLazyImg class="medal_icon" :src="item.lockStatus == 0 || item.lockStatus == 2 ? item.inactivatedPicUrl : item.activatedPicUrl" v-else />
 						</div>
 					</div>
 				</div>
@@ -117,8 +123,26 @@
 			</template>
 			<template #footer>
 				<div class="footer">
-					<div class="cancel" @click="isPasswordModal = false">{{ $t('withdraw["取消"]') }}</div>
+					<div class="cancel" @click="onCancelPassWord">{{ $t('withdraw["取消"]') }}</div>
 					<div class="confirm" @click="toPath('/setTradingPassword')">{{ $t('withdraw["去设置"]') }}</div>
+				</div>
+			</template>
+		</Model>
+
+		<!-- 手机号弹窗提示 -->
+		<Model v-model:modelValue="isPhoneModal">
+			<template #header>
+				<div class="header">{{ $t('withdraw["温馨提示"]') }}</div>
+			</template>
+			<template #default>
+				<div class="content">
+					<p class="text">{{ $t('withdraw["您还未绑定手机号，请先绑定手机号"]') }}</p>
+				</div>
+			</template>
+			<template #footer>
+				<div class="footer">
+					<div class="cancel" @click="isPhoneModal = false">{{ $t('withdraw["取消"]') }}</div>
+					<div class="confirm" @click="toPath('/bind/phone')">{{ $t('withdraw["去设置"]') }}</div>
 				</div>
 			</template>
 		</Model>
@@ -126,7 +150,8 @@
 </template>
 
 <script setup lang="ts">
-import { myApi, medalApi } from "/@/api/my";
+import { medalApi } from "/@/api/my";
+import { walletApi } from "/@/api/wallet";
 import { vipApi } from "/@/api/vip";
 import { useThemesStore } from "/@/store/modules/themes";
 import { UserCenterMedalDetailRespVoList } from "./interface";
@@ -142,7 +167,6 @@ import { useRouter } from "vue-router";
 import { useUserStore } from "/@/store/modules/user";
 import avatar from "/@/assets/zh-CN/default/my/avatar.png";
 import avatar_light from "/@/assets/zh-CN/light/my/avatar.png";
-import vip_big from "/@/assets/zh-CN/default/vip/vip_big.png";
 import line from "/@/assets/zh-CN/default/common/line.png";
 import balance_operation_ck from "/@/assets/zh-CN/default/my/balance_operation_ck.png";
 import balance_operation_tx from "/@/assets/zh-CN/default/my/balance_operation_tx.png";
@@ -150,8 +174,9 @@ import balance_operation_jy from "/@/assets/zh-CN/default/my/balance_operation_j
 import balance_operation_tz from "/@/assets/zh-CN/default/my/balance_operation_tz.png";
 import { i18n } from "/@/i18n/index";
 import { loginApi } from "/@/api/loginRegister";
-import { securityCenterApi } from "/@/api/securityCenter";
 import Model from "/@/views/wallet/components/model.vue";
+import { showToast } from "vant";
+import { securityCenterApi } from "/@/api/securityCenter";
 const $: any = i18n.global;
 const router = useRouter();
 const store = useUserStore();
@@ -159,14 +184,16 @@ const themesStore = useThemesStore();
 const theme = computed(() => themesStore.themeName);
 const loginOutShow = ref(false);
 const isPasswordModal = ref(false);
+const isPhoneModal = ref(false);
 const balanceOperationList = [
 	{
 		name: $.t("my['存款']"),
 		icon: balance_operation_ck,
 		path: "/wallet/recharge",
+		verify: true,
 	},
 	{
-		name: $.t("my['提现']"),
+		name: $.t("my['提款']"),
 		icon: balance_operation_tx,
 		path: "/wallet/withdraw",
 		verify: true,
@@ -240,7 +267,6 @@ onMounted(() => {
 	if (store.token) {
 		topNList();
 		getUserVipInfo();
-		store.setUserGlobalSetInfo();
 	}
 });
 
@@ -261,23 +287,53 @@ const topNList = async () => {
 	}
 };
 
-const onClickCell = (item) => {
-	if (item.path == "/inviteFriends") {
+const onClickCell = async (item) => {
+	if (!item.path) return;
+	if (item.path === "/inviteFriends") {
 		pubsub.publish("onOpenInviteFriend");
 		return;
-	} else {
-		if (!item.path) {
+	}
+	// 如果 item 不需要验证，直接跳转
+	if (!item.verify) {
+		toPath(item.path);
+		return;
+	}
+	// 处理提款路径的逻辑
+	if (item.path === "/wallet/withdraw") {
+		const res = await securityCenterApi.getUserGlobalSetInfo().catch((err) => err);
+		const { isSetPwd, phone } = res.data;
+		if (isSetPwd || phone) {
+			const res = await walletApi.withdrawWayList().catch((err) => err);
+			if (res.code === common.getInstance().ResCode.SUCCESS && (!res.data || res.data.length === 0)) {
+				showToast($.t("my['暂无提款方式']"));
+				return;
+			}
+			toPath(item.path);
+		} else {
+			isPasswordModal.value = true;
+		}
+		return;
+	}
+	// 处理充值路径的逻辑
+	if (item.path === "/wallet/recharge") {
+		const res = await walletApi.rechargeWayList().catch((err) => err);
+		if (res.code === common.getInstance().ResCode.SUCCESS && (!res.data || res.data.length === 0)) {
+			showToast($.t("my['暂无存款方式']"));
 			return;
 		}
-		if (item.verify) {
-			if (store.getUserInfo.isSetPwd || store.getUserInfo.phone) {
-				toPath(item.path);
-			} else {
-				isPasswordModal.value = true;
-			}
-		} else {
-			toPath(item.path);
-		}
+		toPath(item.path);
+		return;
+	}
+	// 如果是其他路径，直接跳转
+	toPath(item.path);
+};
+
+// 取消设置交易密码
+const onCancelPassWord = () => {
+	isPasswordModal.value = false;
+	const { phone } = store.getUserInfo;
+	if (!phone) {
+		isPhoneModal.value = true;
 	}
 };
 
@@ -299,6 +355,19 @@ const onLoginOut = () => {
 		});
 };
 
+// 点亮勋章
+const onLightUpMedal = async (item) => {
+	if (item.lockStatus !== 0) {
+	} else {
+		const params = {
+			medalCode: item.medalCode,
+		};
+		const res = await medalApi.lightUpMedal(params).catch((err) => err);
+		if (res.code == common.getInstance().ResCode.SUCCESS) {
+			topNList();
+		}
+	}
+};
 const loginOut = () => {
 	loginOutShow.value = true;
 };
@@ -540,13 +609,40 @@ const loginOut = () => {
 					z-index: 1;
 					box-sizing: border-box;
 				}
-
+				.bg {
+					position: absolute;
+					top: -17px;
+					left: 50%;
+					transform: translate(-50%, 0%);
+					width: 132px;
+					height: 132px;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					background: url("./image.png");
+					background-position-x: center;
+					background-position-y: bottom;
+					background-repeat: no-repeat;
+					background-size: 132px 132px;
+					/* 添加旋转和缩放动画 */
+					animation: rotateIcon 4s linear infinite;
+				}
 				.medal_icon {
 					width: 72px;
 					height: 78px;
+					z-index: 20;
+				}
+				.medal_icon1 {
+					position: absolute;
+
+					width: 72px;
+					height: 78px;
+					text-align: center;
 				}
 			}
-
+			.animation {
+				animation: scaleIcon 1.5s ease-in-out infinite;
+			}
 			.item_bg {
 				width: 92px;
 				height: 92px;
@@ -827,5 +923,29 @@ const loginOut = () => {
 			}
 		}
 	}
+}
+/* 旋转动画 */
+@keyframes rotateIcon {
+	0% {
+		transform: translate(-50%, 0%) rotate(0deg);
+	}
+	100% {
+		transform: translate(-50%, 0%) rotate(180deg);
+	}
+}
+
+/* 缩放动画 */
+@keyframes scaleIcon {
+	0%,
+	100% {
+		transform: translate(0%, 0%) scale(1);
+	}
+	50% {
+		transform: translate(0%, 0%) scale(1.13);
+	}
+}
+:deep(.van-popover__content) {
+	background: rgba(0, 0, 0, 0.7) !important;
+	margin-right: 60px !important;
 }
 </style>

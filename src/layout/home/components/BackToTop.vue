@@ -1,7 +1,6 @@
 <template lang="">
 	<div class="backToTop" v-show="showButton">
-		<SvgIcon @click="backToTop" iconName="common/arrowTop" size="3.333333" class="color_Theme" />
-		<span class="color_Tag1 fs_22">TOP</span>
+		<img src="./image.png" @click="backToTop" />
 	</div>
 </template>
 <script setup>
@@ -31,16 +30,17 @@ onUnmounted(() => {
 	flex-direction: column;
 	justify-content: flex-end;
 	align-items: center;
-	width: 80px;
-	height: 80px;
-	padding: 22px 17px 6px 18px;
+
 	gap: 5.001px;
 	flex-shrink: 0;
 	border-radius: 28px;
-	background: rgba(255, 228, 228, 0.8);
 	box-sizing: border-box;
 	backdrop-filter: blur(3px);
 	z-index: 2;
+	img {
+		height: 100px;
+		width: 100px;
+	}
 	svg {
 		@include themeify {
 			stroke: themed("Tag1");

@@ -35,64 +35,26 @@
 	</div>
 
 	<!-- <button @click="isModalVisible = true">!</button> -->
-
-	<Model v-model:modelValue="isModalVisible">
-		<template #default>
-			<div class="popup_body">
-				<div class="header">{{ $t(`recharge['温馨提示']`) }}</div>
-				<div class="content">
-					<div class="text">
-						<i18n-t keypath="recharge['请使用']" :tag="'p'">
-							<template v-slot:value>
-								<span class="text_2"> {{ $t(`recharge['波场链']`) }} </span>
-							</template>
-							<template v-slot:currency>
-								<span class="text_2">({{ props.rechargeWayData.networkType }})</span>
-							</template>
-						</i18n-t>
-					</div>
-					<div class="popup_tips" @click="checkbox = !checkbox">
-						<SvgIcon class="icon" :iconName="checkbox ? 'wallet/checkbox_active' : 'wallet/checkbox'" />
-						<span>{{ $t(`recharge['24小时内不再提示']`) }}</span>
-					</div>
-				</div>
-				<div class="footer" @click="isModalVisible = false">{{ $t(`recharge['我已知晓']`) }}</div>
-			</div>
-		</template>
-	</Model>
 </template>
 
 <script setup lang="ts">
-import { walletApi } from "/@/api/wallet";
 import common from "/@/utils/common";
 import QrcodeVue from "qrcode.vue";
 import { useUserStore } from "/@/store/modules/user";
-import Model from "../../../components/model.vue";
 const UserStore = useUserStore();
 const props = defineProps({
 	rechargeWayData: {
 		type: Object,
 		default: {},
 	},
+	rechargeConfig: {
+		type: Object,
+		default: {},
+	},
 });
 
 // 通道配置信息
-const rechargeConfig = ref({});
-const isModalVisible = ref(false);
-const checkbox = ref(false);
-
-const getRechargeConfig = async () => {
-	const params = {
-		rechargeWayId: props.rechargeWayData.id,
-	};
-	const res = await walletApi.getRechargeConfig(params).catch((err) => err);
-	if (res.code === common.getInstance().ResCode.SUCCESS) {
-		isModalVisible.value = true;
-		rechargeConfig.value = res.data;
-	}
-};
-
-getRechargeConfig();
+// const rechargeConfig = ref({});
 </script>
 
 <style scoped lang="scss">
@@ -195,80 +157,5 @@ getRechargeConfig();
 	font-size: 24px;
 	font-weight: 400;
 	line-height: 38px;
-}
-
-.popup_body {
-	.header {
-		width: 100%;
-		height: 80px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		border-bottom: 1px solid;
-		@include themeify {
-			color: themed("TB");
-			border-color: themed("Line");
-		}
-		font-family: "PingFang SC";
-		font-size: 32px;
-		font-weight: 400;
-	}
-
-	.content {
-		padding: 40px;
-		.text {
-			@include themeify {
-				color: themed("T1");
-			}
-			font-family: "PingFang SC";
-			font-size: 28px;
-			font-weight: 400;
-			line-height: 38px;
-			text-align: center;
-		}
-		.text_2 {
-			@include themeify {
-				color: themed("Theme");
-			}
-			font-family: "PingFang SC";
-			font-size: 28px;
-			font-weight: 400;
-			line-height: 38px;
-			text-align: center;
-		}
-		.popup_tips {
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			gap: 16px;
-			margin-top: 40px;
-			@include themeify {
-				color: themed("T2");
-			}
-			font-family: "PingFang SC";
-			font-size: 22px;
-			font-weight: 400;
-			.icon {
-				width: 32px;
-				height: 32px;
-				transition: all 0.2s;
-			}
-		}
-	}
-	.footer {
-		width: 100%;
-		height: 80px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		border-top: 1px solid;
-		@include themeify {
-			color: themed("Theme");
-			border-color: themed("Line");
-		}
-		font-family: "PingFang SC";
-		font-size: 32px;
-		font-weight: 400;
-	}
 }
 </style>

@@ -598,6 +598,7 @@ const listToTimestamp = (list: Array<string>, type) => {
 	@include themeify {
 		border-color: themed("Line");
 		color: themed("T1");
+		background-color: themed("BG3");
 	}
 	@include flex_align_center;
 	@include flex_space_between;

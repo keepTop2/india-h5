@@ -2,7 +2,7 @@
 	<div class="content">
 		<div class="title">{{ $t('forgetPassword["找回密码"]') }}</div>
 		<div class="from">
-			<FormInput v-model="state.userAccount" type="text" :placeholder="$t(`forgetPassword['账户名']`)">
+			<FormInput v-model="state.userAccount" type="text" :placeholder="$t(`forgetPassword['账户名']`)" :maxlength="11">
 				<template v-slot:right>
 					<SvgIcon v-if="state.userAccount" class="clearIcon" iconName="loginOrRegister/clear" @click="state.userAccount = ''" />
 				</template>
