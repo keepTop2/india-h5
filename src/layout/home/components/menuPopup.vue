@@ -19,7 +19,7 @@
 			</div>
 
 			<div class="menu_list">
-				<div class="menu van-haptics-feedback" @click="toPath('/activity/DAILY_COMPETITION')">
+				<div class="menu van-haptics-feedback" @click="toPath('/activity/DAILY_COMPETITION')" v-if="showDAILY_COMPETITION">
 					<div class="icon">
 						<img :src="mrjs" />
 					</div>
@@ -53,6 +53,12 @@
 				</div>
 				<div class="label">{{ $t(`menuPopup["客服"]`) }}</div>
 			</div>
+			<div class="menu van-haptics-feedback">
+				<div class="icon">
+					<img :src="helpCenter" />
+				</div>
+				<div class="label" @click="toPath('/helpCenter')">{{ $t(`menuPopup["帮助中心"]`) }}</div>
+			</div>
 		</div>
 	</van-popup>
 	<activityDialog v-model="showDialog" title="温馨提示" :confirm="confirmDialog" :goToLogin="true"> 您的账号暂未登录无法参与活动， 如已有账号请登录，如还未有账号 请前往注册 </activityDialog>
@@ -69,6 +75,7 @@ import close_light from "/@/assets/zh-CN/light/menuPopup/close.png";
 import mrjs from "/@/assets/zh-CN/default/menuPopup/mrjs.png";
 import home from "/@/assets/zh-CN/default/menuPopup/home.png";
 import kefu from "/@/assets/zh-CN/default/menuPopup/kefu.png";
+import helpCenter from "/@/assets/zh-CN/default/menuPopup/helpCenter.png";
 import pubsub from "/@/pubSub/pubSub";
 import CommonApi from "/@/api/common";
 import common from "/@/utils/common";
@@ -78,6 +85,7 @@ import { useRouter } from "vue-router";
 import { useUserStore } from "/@/store/modules/user";
 import { activityApi } from "/@/api/activity";
 import { showToast } from "vant";
+const showDAILY_COMPETITION = ref(false);
 const userStore = useUserStore();
 const router = useRouter();
 const show = ref(false);
@@ -94,11 +102,12 @@ const confirmDialog = () => {
 const onCollapseMenu = () => {
 	show.value = true;
 	queryLobbyLabelList();
+	queryLobbyLabelActivitySwitch();
 };
 const handleMenuClick = (item) => {
 	show.value = false;
 	console.log(item, "===item");
-	if (item.modelCode === "PE") {
+	if (item.modelCode === "SBA") {
 		router.push({ name: "rollingBallList", params: { sportType: 1 } });
 	} else {
 		router.push({
@@ -116,11 +125,17 @@ const queryLobbyLabelList = async () => {
 		state.menuList = res.data;
 	}
 };
-
+const queryLobbyLabelActivitySwitch = () => {
+	activityApi.queryLobbyLabelActivitySwitch({ activityTemplate: "DAILY_COMPETITION" }).then((res: any) => {
+		if (res.code === 10000 && res.data.activityTemplate.includes("DAILY_COMPETITION")) {
+			showDAILY_COMPETITION.value = true;
+		}
+	});
+};
 const toPath = (path) => {
 	if ("/activity/SPIN_WHEEL" === path) {
 		activityApi.getSpinDetail().then((res: any) => {
-			if (res.code === 10000 && res.data) {
+			if (res.code === 10000 && res.data.enable) {
 				router.push(path);
 				show.value = false;
 			} else {
@@ -137,6 +152,7 @@ const toPath = (path) => {
 		}
 	} else {
 		router.push(path);
+		show.value = false;
 	}
 };
 onMounted(() => {

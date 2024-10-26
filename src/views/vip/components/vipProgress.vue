@@ -2,7 +2,7 @@
 	<div class="vip_progress">
 		<div class="vip_icon">
 			<VantLazyImg class="vip_bg" :src="currentRankImage" />
-			<span class="vip_level">LV{{ props.userVipInfo.vipGradeCode }}</span>
+			<span class="vip_level">{{ props.userVipInfo.vipGradeName }}</span>
 		</div>
 		<div class="progress_bar">
 			<div class="progress" :style="{ width: `${progressPercentage}%` }">
@@ -18,7 +18,7 @@
 		</div>
 		<div class="vip_icon">
 			<VantLazyImg class="vip_bg" :src="currentRankImage" />
-			<span class="vip_level">LV{{ props.userVipInfo.vipGradeUp }}</span>
+			<span class="vip_level">{{ props.userVipInfo.vipGradeUpName }}</span>
 		</div>
 	</div>
 </template>
@@ -39,7 +39,7 @@ const props = withDefaults(
 		percentageShow?: boolean;
 	}>(),
 	{
-		userVipInfo: {} as VIP,
+		userVipInfo: {} as any,
 		percentageShow: false,
 	}
 );
@@ -60,14 +60,14 @@ const currentRankImage = computed(() => {
 });
 // 计算百分比
 const progressPercentage = computed(() => {
-	const { currentExp, upgradeVipExp } = props.userVipInfo;
+	const { currentExp, currentVipExp } = props.userVipInfo;
 	// 防止NaN：确保 upgradeVipExp 不为0，并且 currentExp 和 upgradeVipExp 都是有效数字
-	if (isNaN(currentExp) || isNaN(upgradeVipExp) || upgradeVipExp === 0) {
+	if (isNaN(currentExp) || isNaN(currentVipExp) || currentVipExp === 0) {
 		return 0;
 	}
 
 	// 计算百分比并取整
-	return Math.floor((currentExp / upgradeVipExp) * 100);
+	return Math.floor((currentExp / currentVipExp) * 100);
 });
 
 console.log("progressPercentage", progressPercentage);
@@ -83,22 +83,24 @@ console.log("progressPercentage", progressPercentage);
 		width: 92px;
 		height: 40px;
 		.vip_bg {
-			width: 92px;
+			width: 102px;
 			height: 40px;
 		}
 		.vip_level {
 			position: absolute;
 			bottom: 2px;
-			right: 0px;
-			width: 50px;
+			text-align: center;
+			width: 100%;
+			padding-left: 25px;
 			height: 24px;
 			display: flex;
 			align-items: center;
 			justify-content: center;
+			text-align: center;
 			color: #fff;
 			font-family: "112-SS Yi Fang Ti";
 			font-size: 16px;
-			font-weight: 400;
+			font-weight: 300;
 		}
 	}
 	.progress_bar {
@@ -111,7 +113,7 @@ console.log("progressPercentage", progressPercentage);
 
 		.progress {
 			min-width: 0;
-			max-width: calc(100% - 24px);
+			max-width: 100%;
 			height: 12px;
 			margin: 0px 2px;
 			border-radius: 8px;
@@ -134,6 +136,7 @@ console.log("progressPercentage", progressPercentage);
 					.arrow {
 						width: 20px;
 						height: 9px;
+						margin-left: -60px;
 					}
 					.value {
 						position: absolute;
@@ -141,6 +144,7 @@ console.log("progressPercentage", progressPercentage);
 						font-family: "PingFang SC";
 						font-size: 24px;
 						font-weight: 600;
+						margin-left: -60px;
 						background: linear-gradient(180deg, #fff 0%, rgba(255, 255, 255, 0) 100%);
 						background-clip: text;
 						-webkit-background-clip: text;
@@ -153,6 +157,7 @@ console.log("progressPercentage", progressPercentage);
 					top: -40%;
 					right: 0px;
 					width: 40px;
+
 					height: 22px;
 				}
 			}

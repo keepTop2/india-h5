@@ -44,7 +44,9 @@ export class medalApi {
 		return useAxiosApi(`/app/user-info/api/openMedalReward`, {
 			method: "POST",
 			data,
-			headers,
+			headers: {
+				showLoading: true,
+			},
 		});
 	};
 	// 点亮勋章
@@ -52,7 +54,59 @@ export class medalApi {
 		return useAxiosApi(`/app/user-info/api/lightUpMedal`, {
 			method: "POST",
 			data,
+			headers: {
+				showLoading: true,
+			},
+		});
+	};
+
+	// 意见反馈提交
+	static submitFeedback = (data = {}, headers = {}) => {
+		return useAxiosApi(`/app/userFeedback/api/submit`, {
+			method: "POST",
+			data,
+			headers: {
+				showLoading: true,
+			},
+		});
+	};
+
+	// 意见反馈列表
+	static FeedbackList = (data = {}, headers = {}) => {
+		return useAxiosApi(`/app/userFeedback/api/pageList`, {
+			method: "POST",
+			data,
+			headers: {
+				showLoading: true,
+			},
+		});
+	};
+	// 历史意见反馈详情
+	static FeedbackDetail = (data = {}, headers = {}) => {
+		return useAxiosApi(`/app/userFeedback/api/detail`, {
+			method: "POST",
+			data,
+			headers: {
+				showLoading: true,
+			},
+		});
+	};
+	// 意见反馈问题下拉
+	static getDownBox = (data = {}, headers = {}) => {
+		return useAxiosApi(`/app/userFeedback/api/getDownBox`, {
+			method: "GET",
+			data,
 			headers,
+		});
+	};
+	// 删除意见反馈
+	static delFeedback = (data = {}, headers = {}) => {
+		return useAxiosApi(`/app/userFeedback/api/del`, {
+			method: "POST",
+			data,
+			headers: {
+				showLoading: true,
+			},
 		});
 	};
 }

@@ -48,6 +48,12 @@ export const MySubRouter = {
 			meta: { title: "通知" },
 		},
 		{
+			path: "/messageDetail",
+			name: "messageDetail",
+			component: () => import("/@/views/subViews/my/messageDetail/messageDetail.vue"),
+			meta: { title: "反馈详情" },
+		},
+		{
 			path: "/language",
 			name: "language",
 			component: () => import("/@/views/subViews/my/language/language.vue"),

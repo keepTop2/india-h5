@@ -54,7 +54,7 @@
 					</div>
 				</div>
 				<div class="detail-content">
-					<div v-html="activityInfo?.activityRuleI18nCode"></div>
+					<div v-html="activityInfo?.activityRuleI18nCode" class="htmlDesc"></div>
 				</div>
 				<div class="detail-footer"></div>
 			</div>

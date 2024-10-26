@@ -10,15 +10,26 @@
 		<div class="order-info">
 			<div class="order-number">
 				<span class="label">{{ $t('records["单号"]') }}：</span>
-				<span>2103102391230123</span>
-				<SvgIcon @click="copy('2103102391230123')" iconName="common/copy2" />
-			</div>
-			<div class="order-date">
-				<span>2024-07-18 16:42:08</span>
+				<span class="code" >
+					<span>2103102391230123</span>
+					<SvgIcon @click="copy('2103102391230123')" iconName="common/copy2" />
+				</span>
 			</div>
 		</div>
 		<div class="bet-info">
-			<div class="bet-item flex-between">
+			<div class="order-date">
+				<span class="label">{{ $t('records["投注时间"]') }}：</span>
+				<span>2024-07-18 16:42:08</span>
+			</div>
+			<div class="bet-item">
+					<span class="label">{{ $t('records["投注金额"]') }}：</span>
+					<span class="value">999999.00</span>
+				</div>
+				<div class="bet-item">
+					<span class="label">{{ $t('records["投注金额"]') }}</span>
+					<span class="value negative">-999999999.00</span>
+				</div>
+			<!-- <div class="bet-item flex-between">
 				<div class="bet-item-content">
 					<span class="label">{{ $t('records["投注金额"]') }}：</span>
 					<span class="value">999999.00</span>
@@ -27,7 +38,7 @@
 					<span class="label">{{ $t('records["投注金额"]') }}</span>
 					<span class="value negative">-999999999.00</span>
 				</div>
-			</div>
+			</div> -->
 		</div>
 	</div>
 </template>

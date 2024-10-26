@@ -1,5 +1,5 @@
 <template>
-	<VantNavBar :title="$t(`home['幸运转盘']`)" @onClickLeft="router.back()" />
+	<VantNavBar :title="activityData?.activityNameI18nCode || '幸运转盘'" @onClickLeft="router.back()" />
 	<div class="content">
 		<div class="tabs">
 			<ul>
@@ -14,12 +14,15 @@
 				@start-spinning-callback="spinStart"
 				@end-spinning-callback="spinEnd"
 				@needLogin="needLogin"
+				@noMorebalanceCount="noMorebalanceCount"
+				:enable="activityData?.enable"
 				:reward="reward"
 				:spinList="currentTab == '0' ? activityData?.bronze : currentTab == '1' ? activityData?.silver : activityData?.gold"
 				:balanceCount="activityData?.balanceCount"
 				ref="SpinRef"
 			/>
-			<div class="vipLevel color_TB fw_600" :class="'vip' + currentTab">{{ activityData?.vipRankConfig?.[currentTab - 1]?.maxVipGradeName }}级或以上</div>
+
+			<div class="vipLevel color_TB fw_600" :class="'vip' + (currentTab * 1 + 1)">{{ activityData?.vipRankConfig?.[currentTab]?.minVipGradeName }}级或以上</div>
 		</div>
 		<div class="remaining_times_bg">{{ $t('home["剩余抽奖次数"]') }}：{{ activityData?.balanceCount || 0 }}</div>
 		<div class="container">
@@ -43,7 +46,7 @@
 				</div>
 			</div>
 			<div class="detail-content">
-				<div v-html="activityData?.activityRuleI18nCode" class="color_TB"></div>
+				<div v-html="activityData?.activityRuleI18nCode" class="color_TB htmlDesc"></div>
 			</div>
 			<div class="detail-footer"></div>
 		</div>
@@ -94,7 +97,7 @@
 					<span>{{ item.rewardRankText }}</span>
 					<span>{{ item.prizeName }}</span>
 					<span>{{ item.activityAmount }}</span>
-					<span>{{ item.receiveTime }}</span>
+					<span>{{ dayjs(item.receiveTime).format("YYYY-MM-DD HH:mm:ss") }}</span>
 				</div>
 			</div>
 			<div v-else>
@@ -105,6 +108,9 @@
 			<img src="./images/close.png" alt="" />
 		</div>
 	</div>
+	<activityDialog v-model="showDialog" title="温馨提示" :confirm="confirmDialog">
+		{{ dialogInfo.message }}
+	</activityDialog>
 	<activityDialog v-model="showDialog2" title="温馨提示" :confirm="confirmDialog" :goToLogin="true"> 您的账号暂未登录无法参与活动， 如已有账号请登录，如还未有账号 请前往注册 </activityDialog>
 </template>
 
@@ -115,16 +121,16 @@ import Spin from "/@/components/Spin/Spin.vue";
 import { activityApi } from "/@/api/activity";
 import activityDialog from "../../components/Dialog.vue";
 import { useUserStore } from "/@/store/modules/user";
-import { showToast } from "vant";
+import dayjs from "dayjs";
 const userStore = useUserStore();
 const showResult = ref(false);
-const showResult2 = ref(false);
 const showResult3 = ref(false);
 const showRecord = ref(false);
 const showDialog2 = ref(false);
+const showDialog = ref(false);
 const SpinRef: any = ref(null);
-// 奖项列表
-const spinList = ref();
+
+const dialogInfo: any = ref({});
 // 获得的奖励
 const reward = ref();
 // 当前选中的标签
@@ -163,7 +169,7 @@ onMounted(() => {
  * @returns {string} 图片URL
  */
 const getImg = (val: string) => {
-	return new URL(`./images/tab_bg${val}.png`, import.meta.url).href;
+	return new URL(`./images/tab_bg${Number(val) + 1}.png`, import.meta.url).href;
 };
 
 /**
@@ -178,23 +184,26 @@ const selectTab = (tabKey: string) => {
  * @description 抽奖开始
  */
 const spinStart = async () => {
-	activityData.value.balanceCount--;
 	const startTime = Date.now();
 	const params = {
 		id: activityData.value.id,
-		vipRankCode: currentTab.value,
+		vipRankCode: Number(currentTab.value) + 1,
 	};
 	const res: any = await activityApi.getSpinPrizeResult(params);
 	if (res.code !== 10000) {
-		showToast(res.data);
-		SpinRef.value?.endSpinningCallback();
+		showDialog.value = true;
+		SpinRef.value?.endGame();
+		dialogInfo.value = res;
+	} else {
+		activityData.value.balanceCount--;
+		// 最少旋转3秒钟
+		const elapsedTime = Date.now() - startTime;
+		const remainingTime = 3000 - elapsedTime;
+		if (remainingTime > 0) {
+			await delay(remainingTime);
+		}
+		reward.value = res.data;
 	}
-	const elapsedTime = Date.now() - startTime;
-	const remainingTime = 3000 - elapsedTime;
-	if (remainingTime > 0) {
-		await delay(remainingTime);
-	}
-	reward.value = res.data;
 };
 const delay = (ms) => {
 	return new Promise((resolve) => setTimeout(resolve, ms));
@@ -209,14 +218,18 @@ const playAgain = () => {
 const spinEnd = () => {
 	showResult.value = true;
 };
+const noMorebalanceCount = () => {
+	showResult3.value = true;
+};
 const needLogin = () => {
 	showDialog2.value = true;
 };
 const confirmDialog = () => {
 	showDialog2.value = false;
+	showDialog.value = false;
 };
 const goToRecharge = () => {
-	showResult2.value = false;
+	showResult3.value = false;
 	router.push("/wallet/recharge");
 };
 const handleShowRecord = () => {

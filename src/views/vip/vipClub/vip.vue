@@ -15,13 +15,16 @@
 				<div class="label">{{ $t(`vip["当前等级"]`) }}</div>
 			</div>
 
-			<div class="vip_level">VIP{{ state.userVipInfo.vipGradeCode }}</div>
+			<div class="vip_level">{{ state.userVipInfo.vipGradeName }}</div>
 
 			<div class="vip_level_progress">
 				<span>{{ $t(`vip["升级所需经验"]`) }}</span>
-				<span>{{ state.userVipInfo.currentExp }} / {{ state.userVipInfo.upgradeVipExp }}</span>
+				<span>{{ state.userVipInfo.vipGradeCode === state.userVipInfo.vipGradeUp ? state.userVipInfo.currentVipExp : state.userVipInfo.currentExp }}/ {{ state.userVipInfo.currentVipExp }}</span>
 				<van-popover v-model:show="showPopover" theme="dark" :show-arrow="false">
-					<div class="p_10 popup">体育/电竞场馆投注1 $ = 2积分，其他场馆投注 1$=1积分， 所有投注 均按当前汇率兑换为美元结算</div>
+					<div class="p_10 popup">
+						体育/电竞场馆投注1{{ useUserStore().getUserInfo.currencySymbol }} = {{ state.userVipInfo.sportExe }}积分，其他场馆投注1{{ useUserStore().getUserInfo.currencySymbol }} = 1积分， 所有投注
+						均按当前汇率兑换为美元结算
+					</div>
 					<template #reference>
 						<SvgIcon class="warning_icon" iconName="vip/warning" />
 					</template>
@@ -49,10 +52,9 @@
 				<span class="label">{{ $t(`vip["VIP福利"]`) }}</span>
 				<img :src="vip_line_right" alt="" />
 			</div>
-			<div class="tips">{{ $t(`vip["通过OKSPORT专属VIP福利体系探索最佳游戏体验"]`) }}</div>
 			<div class="level_grid">
 				<div class="item" v-for="(item, index) in levelData" :key="index" @click="onSwitchRank(item)">
-					<div class="value" :class="{ value_active: state.vipRank == index }" @click="state.vipRank = index">
+					<div class="value" :class="{ value_active: state.vipRank == item.vipRankCode }" @click="state.vipRank = item.vipRankCode">
 						<div class="icon">
 							<img :src="item.rankIcon" />
 						</div>
@@ -63,9 +65,8 @@
 			<div class="reward_list">
 				<div class="reward_list_header">
 					<div>
-						<span>{{ levelData[state.vipRank].label }}</span>
-						<span>VIP</span>
-						<span>{{ levelData[state.vipRank]?.minVipGrade }}-{{ levelData[state.vipRank]?.maxVipGrade }}</span>
+						<span>{{ levelData[state.vipRank - 1]?.label }} </span>&nbsp;
+						<span> {{ levelData[state.vipRank - 1]?.minVipGradeName }} - {{ levelData[state.vipRank - 1]?.maxVipGradeName }}</span>
 					</div>
 					<van-popover v-model:show="showPopover3" theme="dark" :show-arrow="false">
 						<div class="p_10 popup">包含之前等级的所有福利</div>
@@ -92,15 +93,12 @@
 
 							<van-popover v-model:show="showPopover4" theme="dark" :show-arrow="false" v-if="item.weekSportFlag == 2">
 								<div class="p_10 popup">
-									<p>7天体育赌注：</p>
-									<p>-投注$500至$2499 = 5$</p>
-									<p>-投注$2500至＄4999 = 30＄</p>
-									<p>-投注$5000 至＄9999 =70＄</p>
-									<p>-投注$10,000 或以上=150＄</p>
-									<p>-投注＄50,000或以上 =500＄</p>
-									<p>-投注$250,000或以上=1,000$</p>
-									<p>-流水统计时间：周六00:00时～周五 23:59时（7天）</p>
-									<p>礼金发放时间：每周六</p>
+									<p v-for="i in state.userVipInfo.vipBenefit[index].vipWeekSportVOS">
+										-投注{{ useUserStore().getUserInfo.platCurrencySymbol }} {{ i.weekSportMin }} 至
+										{{ i.weekSportMax > 0 ? `${useUserStore().getUserInfo.platCurrencySymbol} ${i.weekSportMax}` : "以上" }} = {{ i.weekSportBonus }}
+										{{ useUserStore().getUserInfo.platCurrencySymbol }}
+									</p>
+									<p>-流水统计时间：周六00:00时～周五 23:59时（7天） ﻿﻿礼金发放时间：每周六"</p>
 								</div>
 								<template #reference>
 									<SvgIcon class="warning_icon" iconName="vip/warning" />
@@ -112,7 +110,7 @@
 							<div class="value">
 								<i18n-t keypath="vip['总奖金']" :tag="'span'">
 									<template v-slot:value>
-										<span class="num"> {{ item.upgrade }} {{ useUserStore().getUserInfo.platCurrencySymbol }}</span>
+										<span class="num"> {{ item.upgrade }} {{ useUserStore().getUserInfo.platCurrencyName }}</span>
 									</template>
 								</i18n-t>
 							</div>
@@ -181,9 +179,7 @@ import common from "/@/utils/common";
 import { i18n } from "/@/i18n/index";
 import { useUserStore } from "/@/store/modules/user";
 const currentRankImage = computed(() => {
-	return vipRank.value == 0
-		? rank0Img
-		: vipRank.value == 1
+	return vipRank.value == 1
 		? rank1Img
 		: vipRank.value == 2
 		? rank2Img
@@ -192,6 +188,8 @@ const currentRankImage = computed(() => {
 		: vipRank.value == 4
 		? rank4Img
 		: vipRank.value == 5
+		? rank4Img
+		: vipRank.value == 6
 		? rank4Img
 		: rank5Img;
 });
@@ -204,7 +202,7 @@ const showPopover2 = ref(false);
 const showPopover3 = ref(false);
 const showPopover4 = ref(false);
 const vipRank = ref(0);
-let state = reactive({
+const state: any = reactive({
 	vipRank: 0,
 	userVipInfo: {
 		vipRank: 0,
@@ -263,43 +261,38 @@ let state = reactive({
 
 const levelData: any = [
 	{
-		vipRankCode: 0,
+		vipRankCode: 1,
 		label: $.t(`vip['青铜']`),
 		rankIcon: icon_bronze,
 	},
 	{
-		vipRankCode: 1,
+		vipRankCode: 2,
 		label: $.t(`vip['白银']`),
 		rankIcon: icon_silver,
 	},
 	{
-		vipRankCode: 2,
+		vipRankCode: 3,
 		label: $.t(`vip['黄金']`),
 		rankIcon: icon_gold,
 	},
 	{
-		vipRankCode: 3,
+		vipRankCode: 4,
 		label: $.t(`vip['白金I']`),
 		rankIcon: icon_platinium,
 	},
 	{
-		vipRankCode: 4,
+		vipRankCode: 5,
 		label: $.t(`vip['白金II']`),
 		rankIcon: icon_platinium,
 	},
 	{
-		vipRankCode: 5,
+		vipRankCode: 6,
 		label: $.t(`vip['钻石I']`),
 		rankIcon: icon_diamond,
 	},
 	{
-		vipRankCode: 6,
-		label: $.t(`vip['钻石II']`),
-		rankIcon: icon_diamond,
-	},
-	{
 		vipRankCode: 7,
-		label: $.t(`vip['钻石III']`),
+		label: $.t(`vip['钻石II']`),
 		rankIcon: icon_diamond,
 	},
 ];
@@ -592,14 +585,17 @@ const onClickLeft = () => {
 		.level_grid {
 			display: flex;
 			flex-wrap: wrap;
-			row-gap: 24px;
-			column-gap: 70px;
 			padding: 24px 22px;
 
 			.item {
-				flex: 1;
-				min-width: 112px;
+				width: 25%;
 
+				min-width: 112px;
+				text-align: center;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
 				.value_active {
 					position: relative;
 					box-sizing: border-box;
@@ -643,6 +639,7 @@ const onClickLeft = () => {
 				}
 
 				.label {
+					width: 106px;
 					display: flex;
 					justify-content: center;
 					margin-top: 10px;
