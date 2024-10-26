@@ -88,7 +88,7 @@
 					<!-- 虚拟币预计到账计算 -->
 					<div v-if="withdrawWayData.withdrawTypeCode === 'crypto_currency'" class="amount_info mt_4">
 						<div class="item">
-							<span class="value">≈{{ common.getInstance().formatFloat(estimatedAmount * exchangeRate) }}</span>
+							<span class="value">≈{{ common.getInstance().formatFloat(Number(state.amount) - Math.trunc((Number(state.amount) * withdrawWayConfig.feeRate) / 100)) }}</span>
 							<span class="sign">&nbsp;{{ UserStore.userInfo.mainCurrency }}</span>
 						</div>
 						<div class="item">
@@ -139,8 +139,8 @@ import { myApi } from "/@/api/my";
 
 // 引入支付方式对应的组件
 import bankCard from "/@/views/wallet/withdraw/components/bankCard/bankCard.vue";
-import Ewallet from "/@/views/wallet/withdraw/components/Ewallet/Ewallet.vue";
-import USDTTRC20 from "/@/views/wallet/withdraw/components/USDTTRC20/USDTTRC20.vue";
+import EWallet from "/@/views/wallet/withdraw/components/EWallet/EWallet.vue";
+import VirtualCurrency from "/@/views/wallet/withdraw/components/VirtualCurrency/VirtualCurrency.vue";
 
 import PassWordInput from "../components/passWordInput.vue";
 import { i18n } from "/@/i18n/index";
@@ -151,8 +151,8 @@ const $: any = i18n.global;
 // 定义组件映射
 const componentsMapsName = {
 	bank_card: bankCard,
-	electronic_wallet: Ewallet,
-	crypto_currency: USDTTRC20, // 修复: 应该是 'usdt_trc20' 而不是 'rechargeTypeCode'
+	electronic_wallet: EWallet,
+	crypto_currency: VirtualCurrency, // 修复: 应该是 'usdt_trc20' 而不是 'rechargeTypeCode'
 };
 
 interface withdrawWayDataRootObject {
@@ -287,10 +287,12 @@ const calculateFeeAndEstimatedAmount = () => {
 		feeAmount.value = 0; // 免费提款条件下手续费为0
 	} else {
 		// 计算手续费
-		feeAmount.value = isCrypto ? (amount * feeRate) / 100 / exchangeRate.value : (amount * feeRate) / 100;
+		feeAmount.value = isCrypto ? Math.trunc(Math.trunc((amount * feeRate) / 100) / exchangeRate.value) : (amount * feeRate) / 100;
 	}
 	// 预计到账金额计算
-	estimatedAmount.value = isCrypto ? amount / exchangeRate.value - feeAmount.value : amount - feeAmount.value;
+	estimatedAmount.value = isCrypto
+		? Number(common.getInstance().formatFloat(Number(state.amount) - Math.trunc((Number(state.amount) * feeRate) / 100))) / exchangeRate.value
+		: amount - feeAmount.value;
 };
 
 // 获取冻结金额
