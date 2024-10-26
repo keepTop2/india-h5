@@ -162,9 +162,11 @@ const onSubmit = async () => {
 	};
 	const res = await bindApi.bindAccount(params).catch((err) => err);
 	if (res.code == common.getInstance().ResCode.SUCCESS) {
-		useUserStore().setUserGlobalSetInfo;
+		await useUserStore().setUserGlobalSetInfo;
 		showToast(res.message);
 		router.push("/securityCenter");
+	} else {
+		showToast(res.message);
 	}
 };
 const selectAreaCode = (item, i) => {

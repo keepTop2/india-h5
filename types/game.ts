@@ -18,6 +18,7 @@ export interface LobbyTopGame {
 	gameOneId: string;
 	name: string;
 	icon: string;
+	modelCode: string;
 	gameInfoList: GameInfoList[];
 }
 /**

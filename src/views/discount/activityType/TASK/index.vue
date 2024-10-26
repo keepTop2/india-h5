@@ -56,7 +56,7 @@
 								>奖励：<span class="color_Hint"> {{ item.platCurrencySymbol }} {{ item.rewardAmount }}</span></span
 							>
 							<span
-								><span class="color_Theme">{{ calculatePercentage(item.achieveAmount, item.minBetAmount) }}</span
+								><span class="color_Theme">{{ item.achieveAmount }}</span
 								>/{{ item.minBetAmount }}</span
 							>
 						</div>
@@ -112,6 +112,7 @@ import activityDialog from "./dialog.vue";
 import image from "./image/image.png";
 import Common from "/@/utils/common";
 import { useCountdown } from "/@/hooks/countdown";
+import { useUserStore } from "/@/store/modules/user";
 const { countdown, startCountdown, stopCountdown } = useCountdown();
 const router = useRouter();
 const showDialog = ref(false);
@@ -151,17 +152,27 @@ const getTaskDetail = () => {
 		detailData.value = res.data;
 		if (detailData.value.noviceTask) {
 			startCountdown(detailData.value?.noviceTask[0].expireTime);
-			tasktype.value.push({
-				label: "新手任务",
-				value: 2,
-			});
+			tasktype.value = [
+				{
+					label: "每日任务",
+					value: 0,
+				},
+				{
+					label: "每周任务",
+					value: 1,
+				},
+				{
+					label: "新手任务",
+					value: 2,
+				},
+			];
 		}
 	});
 };
 const HandleBtn = (item) => {
-	if (item.subTaskType === "phone") {
+	if (item.subTaskType === "phone" && !useUserStore().getUserInfo.phone) {
 		return router.push("/bind/phone");
-	} else if (item.subTaskType === "email") {
+	} else if (item.subTaskType === "email" && !useUserStore().getUserInfo.email) {
 		return router.push("/bind/email");
 	}
 

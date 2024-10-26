@@ -1,5 +1,5 @@
 <template>
-	<VantNavBar :title="$t(`home['幸运转盘']`)" @onClickLeft="router.back()" />
+	<VantNavBar :title="activityData?.activityNameI18nCode || '幸运转盘'" @onClickLeft="router.back()" />
 	<div class="content">
 		<div class="tabs">
 			<ul>
@@ -97,7 +97,7 @@
 					<span>{{ item.rewardRankText }}</span>
 					<span>{{ item.prizeName }}</span>
 					<span>{{ item.activityAmount }}</span>
-					<span>{{ dayjs(item.receiveTime).format("YYYY-MM-DD hh:mm:ss") }}</span>
+					<span>{{ dayjs(item.receiveTime).format("YYYY-MM-DD HH:mm:ss") }}</span>
 				</div>
 			</div>
 			<div v-else>
@@ -168,7 +168,7 @@ onMounted(() => {
  * @param {string} val - 当前选中的标签值
  * @returns {string} 图片URL
  */
-const getImg = (val: number) => {
+const getImg = (val: string) => {
 	return new URL(`./images/tab_bg${Number(val) + 1}.png`, import.meta.url).href;
 };
 

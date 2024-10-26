@@ -20,7 +20,6 @@
  * @description 获取热门游戏列表
  */
 import { ref } from "vue";
-import { Swiper, SwiperSlide } from "swiper/vue";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";

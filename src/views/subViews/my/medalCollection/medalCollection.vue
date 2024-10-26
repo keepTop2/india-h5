@@ -31,7 +31,11 @@
 				<!-- 提示图标 -->
 				<div class="tooltip">
 					<van-popover v-model:show="showPopover" theme="dark" :show-arrow="false">
-						<div class="p_10 popup">{{ $t('medalCollection["宝箱奖励流水倍数为8倍"]', { num: state.medalRewardRespVOS?.find((item) => item.openStatus == 0).typingMultiple }) }}</div>
+						<div class="p_10 popup">
+							{{
+								$t('medalCollection["宝箱奖励流水倍数为8倍"]', { num: state.medalRewardRespVOS?.find((item) => item.openStatus == 0)?.typingMultiple || state.medalRewardRespVOS[0]?.typingMultiple })
+							}}
+						</div>
 						<template #reference>
 							<VantLazyImg class="icon" :src="theme === ThemeEnum.default ? tips_icon : tips_icon_light" />
 						</template>

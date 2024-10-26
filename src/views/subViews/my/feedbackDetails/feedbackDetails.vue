@@ -21,7 +21,7 @@
 						<span>{{ useUserStore().getUserInfo.userAccount }}</span>
 					</div>
 					<div class="right">
-						<div>{{ dayjs(item.createdTime).format("YYYY/MM/DD hh:mm:ss") }}</div>
+						<div>{{ dayjs(item.createdTime).format("YYYY/MM/DD HH:mm:ss") }}</div>
 					</div>
 				</div>
 				<div class="content">
@@ -37,7 +37,7 @@
 							<span>{{ item.backAccount }}</span>
 						</div>
 						<div class="right">
-							<div>{{ dayjs(item.backTime).format("YYYY/MM/DD hh:mm:ss") }}</div>
+							<div>{{ dayjs(item.backTime).format("YYYY/MM/DD HH:mm:ss") }}</div>
 						</div>
 					</div>
 					<div class="content">
