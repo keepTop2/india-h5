@@ -52,12 +52,14 @@ import common from "/@/utils/common";
 import { useRouter } from "vue-router";
 import { i18n } from "/@/i18n/index";
 import { showToast } from "vant";
+// import { useUserStore } from "/@/store/modules/user";
 const router = useRouter();
 const $: any = i18n.global;
 
 const eyeShow = ref(true);
 const eyeShow2 = ref(true);
 const btnDisabled = ref(true);
+// const userStore = useUserStore();
 
 const state = reactive({
 	password: "", // 密码
@@ -92,6 +94,7 @@ watch(
 const onSubmit = async () => {
 	const res = await tradingPasswordApi.setWithdrawPwd(state).catch((err) => err);
 	if (res.code == common.getInstance().ResCode.SUCCESS) {
+		// userStore.setUserGlobalSetInfo();
 		showToast(res.message);
 		router.go(-1);
 	}

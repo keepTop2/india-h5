@@ -8,7 +8,7 @@
 			<div class="wallet_center_container">
 				<div class="label">{{ $t(`withdraw['中心钱包']`) }}</div>
 				<div class="value">
-					<span>{{ common.getInstance().formatFloat(UserStore.userInfo.totalBalance) }}</span>
+					<span>{{ common.getInstance().formatAmount(UserStore.userInfo.totalBalance, 8) }}</span>
 					<span>&nbsp;</span>
 					<span>{{ UserStore.userInfo.mainCurrency }}</span>
 				</div>
@@ -70,31 +70,33 @@
 				</div>
 				<div v-if="errorMessage" class="error_text">{{ errorMessage }}</div>
 				<!-- 银行卡 电子钱包 预计到账计算 -->
-				<div v-else class="amount_info mt_10">
-					<div class="item">
-						<span class="label">{{ $t(`withdraw['预计到账']`) }}</span>
-						<span class="value">&nbsp;{{ common.getInstance().formatFloat(estimatedAmount) }}</span>
-						<span class="sign" v-if="withdrawWayData.withdrawTypeCode !== 'crypto_currency'">&nbsp;{{ UserStore.userInfo.mainCurrency }}</span>
-						<span class="sign" v-else>&nbsp;USDT</span>
+				<template v-else>
+					<div class="amount_info mt_10">
+						<div class="item">
+							<span class="label">{{ $t(`withdraw['预计到账']`) }}</span>
+							<span class="value">&nbsp;{{ common.getInstance().formatFloat(estimatedAmount) }}</span>
+							<span class="sign" v-if="withdrawWayData.withdrawTypeCode !== 'crypto_currency'">&nbsp;{{ UserStore.userInfo.mainCurrency }}</span>
+							<span class="sign" v-else>&nbsp;USDT</span>
+						</div>
+						<div class="item">
+							<span class="label">{{ $t(`withdraw['手续费']`) }}({{ withdrawWayConfig.feeRate }}%):</span>
+							<span class="value">&nbsp;{{ common.getInstance().formatFloat(feeAmount) }}</span>
+							<span class="sign" v-if="withdrawWayData.withdrawTypeCode !== 'crypto_currency'">&nbsp;{{ UserStore.userInfo.mainCurrency }}</span>
+							<span class="sign" v-else>&nbsp;USDT</span>
+						</div>
 					</div>
-					<div class="item">
-						<span class="label">{{ $t(`withdraw['手续费']`) }}({{ withdrawWayConfig.feeRate }}%):</span>
-						<span class="value">&nbsp;{{ common.getInstance().formatFloat(feeAmount) }}</span>
-						<span class="sign" v-if="withdrawWayData.withdrawTypeCode !== 'crypto_currency'">&nbsp;{{ UserStore.userInfo.mainCurrency }}</span>
-						<span class="sign" v-else>&nbsp;USDT</span>
+					<!-- 虚拟币预计到账计算 -->
+					<div v-if="withdrawWayData.withdrawTypeCode === 'crypto_currency'" class="amount_info mt_4">
+						<div class="item">
+							<span class="value">≈{{ common.getInstance().formatFloat(estimatedAmount * exchangeRate) }}</span>
+							<span class="sign">&nbsp;{{ UserStore.userInfo.mainCurrency }}</span>
+						</div>
+						<div class="item">
+							<span class="label">{{ $t(`withdraw['当前汇率']`, { value: exchangeRate }) }}</span>
+							<SvgIcon class="icon ml_6" iconName="wallet/refresh" @click="getWithdrawExchange" />
+						</div>
 					</div>
-				</div>
-				<!-- 虚拟币预计到账计算 -->
-				<div v-if="withdrawWayData.withdrawTypeCode === 'crypto_currency'" class="amount_info mt_4">
-					<div class="item">
-						<span class="value">≈{{ common.getInstance().formatFloat(estimatedAmount * exchangeRate) }}</span>
-						<span class="sign">&nbsp;{{ UserStore.userInfo.mainCurrency }}</span>
-					</div>
-					<div class="item">
-						<span class="label">{{ $t(`withdraw['当前汇率']`, { value: exchangeRate }) }}</span>
-						<SvgIcon class="icon ml_6" iconName="wallet/refresh" @click="getWithdrawExchange" />
-					</div>
-				</div>
+				</template>
 			</div>
 		</div>
 
@@ -204,14 +206,6 @@ const errorMessage = computed(() => {
 	return "";
 });
 
-watch(
-	() => childRef.value,
-	(newValue) => {},
-	{
-		deep: true,
-	}
-);
-
 const buttonType = computed(() => {
 	// 检查手机号是否有效（仅在银行卡和电子钱包表单中使用）
 	const isPhoneValid = withdrawWayData.value.withdrawTypeCode !== "crypto_currency" && childRef.value?.isPhoneValid;
@@ -265,6 +259,8 @@ const buttonType = computed(() => {
 		default:
 			break;
 	}
+
+	console.log("触发表单检验？？？？？？");
 
 	// 检查所有属性是否有值
 	const allFieldsHaveValue = requiredFields.every((key) => dynamicFields[key] !== undefined && dynamicFields[key] !== "");
@@ -336,6 +332,7 @@ const onWithdrawApply = async () => {
 const getWithdrawApply = async (params) => {
 	const res = await walletApi.withdrawApply(params).catch((err) => err);
 	if (res.code === common.getInstance().ResCode.SUCCESS) {
+		getWithdrawConfig();
 		showToast($.t('withdraw["申请成功"]'));
 		clearParams();
 	}
