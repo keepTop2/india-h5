@@ -2,11 +2,11 @@
 	<!-- 通知 -->
 	<div class="content">
 		<div class="wrapper">
-			<VantNavBar title="消息中心" @onClickLeft="onClickLeft" />
+			<VantNavBar :title="$t(`my['消息中心']`)" @onClickLeft="onClickLeft" />
 
 			<div class="tab">
 				<van-tabs v-model:active="active" type="card" :border="false">
-					<van-tab title="消息通知" name="2">
+					<van-tab name="2">
 						<template #title>
 							<div>{{ $t(`my['消息通知']`) }}</div>
 							<!--						<van-badge :content="state.unreadCount.messageUnread <= 99 ? state.unreadCount.messageUnread : '99+'" :show-zero="false">-->
@@ -14,7 +14,7 @@
 							<!--						</van-badge>-->
 						</template>
 					</van-tab>
-					<van-tab title="活动通知" name="1">
+					<van-tab name="1">
 						<template #title>
 							<div>{{ $t(`my['活动通知']`) }}</div>
 							<!--						<van-badge :content="state.unreadCount.announcementUnread <= 99 ? state.unreadCount.announcementUnread : '99+'" :show-zero="false">-->

@@ -128,7 +128,7 @@
 			<div class="popup_body">
 				<div class="popup_header">
 					<span>{{ $t(`rechargeDetails['上传凭证']`) }}</span>
-					<SvgIcon class="icon" iconName="wallet/popup_close" />
+					<SvgIcon class="icon" iconName="wallet/popup_close" @click="isModalVisible = false" />
 				</div>
 				<div class="popup_content">
 					<div class="upload_content">
