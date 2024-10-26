@@ -15,10 +15,6 @@ import { useUserStore } from "../store/modules/user";
  * @description idx大小判断路由左切动画还是右切动画
  */
 const routes = [
-	// {
-	// 	path: "/:pathMatch(.*)*",
-	// 	redirect: "/frontPage/home",
-	// },
 	{
 		path: "/",
 		component: Layout,
@@ -90,7 +86,6 @@ const routes = [
 					title: "记录",
 				},
 			},
-
 			//  钱包路由
 			WalletRouter,
 			{
@@ -182,6 +177,10 @@ const routes = [
 	activityRoutes,
 	// 错误路由
 	ErrorRouter,
+	{
+		path: "/:pathMatch(.*)",
+		redirect: "/404",
+	},
 ];
 
 const router: Router = createRouter({
