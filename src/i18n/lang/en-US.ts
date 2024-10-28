@@ -355,8 +355,8 @@ export const lang = {
 		意见反馈: "Feedback",
 		主货币: "Main Currency",
 		版本号: "Version Number",
-		消息通知: "Message Notification",
-		活动通知: "Event Notification",
+		通知: "Message Notification",
+		活动: "Event Notification",
 		消息中心: "Message Center"
 	},
 	feedback: {
