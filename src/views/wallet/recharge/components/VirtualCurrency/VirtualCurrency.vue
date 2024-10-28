@@ -52,9 +52,6 @@ const props = defineProps({
 		default: {},
 	},
 });
-
-// 通道配置信息
-// const rechargeConfig = ref({});
 </script>
 
 <style scoped lang="scss">
