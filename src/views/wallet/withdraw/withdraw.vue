@@ -57,7 +57,7 @@
 			</div>
 
 			<div class="cell">
-				<div class="cell_input operate">
+				<div class="cell_input operate" :class="{ error_input: errorMessage }">
 					<input
 						v-model="state.amount"
 						type="number"
@@ -74,7 +74,7 @@
 					<div class="amount_info mt_10">
 						<div class="item">
 							<span class="label">{{ $t(`withdraw['预计到账']`) }}</span>
-							<span class="value">&nbsp;{{ common.getInstance().formatFloat(estimatedAmount) }}</span>
+							<span class="sign">&nbsp;{{ common.getInstance().formatFloat(estimatedAmount) }}</span>
 							<span class="sign" v-if="withdrawWayData.withdrawTypeCode !== 'crypto_currency'">&nbsp;{{ UserStore.userInfo.mainCurrency }}</span>
 							<span class="sign" v-else>&nbsp;USDT</span>
 						</div>
@@ -108,7 +108,8 @@
 			<p class="tips">
 				<span class="theme">{{ $t(`withdraw['注意']`) }}</span>
 				<span>{{ $t(`withdraw['请确保填写真实有效信息，信息不正确导致提现失败或无法到账，平台不承担任何责任，若出现充值异常']`) }}</span>
-				<span class="theme">{{ $t(`withdraw['请联系客服']`) }}</span>
+				<span>&nbsp;&nbsp;</span>
+				<span class="F2" @click="common.getSiteCustomerChannel()">{{ $t(`withdraw['请联系客服']`) }}</span>
 			</p>
 			<!-- 提交按钮 -->
 			<Button class="mt_44" :type="buttonType" @click="onWithdrawApply">{{ $t('recharge["立即提款"]') }}</Button>
@@ -199,9 +200,9 @@ const errorMessage = computed(() => {
 	if (amount > totalBalance || !totalBalance) {
 		return $.t(`withdraw["余额不足"]`);
 	} else if (amount < withdrawWayConfig.value.withdrawMinAmount) {
-		return `${$.t('withdraw["单次最低提款"]')}: ${withdrawWayConfig.value.withdrawMinAmount} ${UserStore.userInfo.mainCurrency}`;
+		return `${$.t('withdraw["单次最低提款"]')}: ${UserStore.userInfo.mainCurrency} ${withdrawWayConfig.value.withdrawMinAmount}`;
 	} else if (amount > withdrawWayConfig.value.withdrawMaxAmount) {
-		return `${$.t('withdraw["单次最高提款"]')}: ${withdrawWayConfig.value.withdrawMaxAmount} ${UserStore.userInfo.mainCurrency}`;
+		return `${$.t('withdraw["单次最高提款"]')}: ${UserStore.userInfo.mainCurrency} ${withdrawWayConfig.value.withdrawMaxAmount}`;
 	}
 	return "";
 });
@@ -657,6 +658,12 @@ const onClickLeft = () => {
 				}
 			}
 		}
+		.error_input {
+			border: 1px solid;
+			@include themeify {
+				border-color: themed("Hint");
+			}
+		}
 		.amount_info {
 			display: flex;
 			align-items: center;
@@ -676,7 +683,7 @@ const onClickLeft = () => {
 			}
 			.value {
 				@include themeify {
-					color: themed("Theme");
+					color: themed("Hint");
 				}
 				font-family: "DIN Alternate";
 				font-size: 24px;
@@ -698,7 +705,7 @@ const onClickLeft = () => {
 		.error_text {
 			margin-top: 10px;
 			@include themeify {
-				color: themed("Warn");
+				color: themed("Hint");
 			}
 			font-family: "PingFang SC";
 			font-size: 22px;
@@ -719,8 +726,14 @@ const onClickLeft = () => {
 	}
 	.theme {
 		@include themeify {
-			color: themed("Theme");
+			color: themed("Hint");
 		}
+	}
+	.F2 {
+		@include themeify {
+			color: themed("F2");
+		}
+		text-decoration: underline;
 	}
 }
 </style>
