@@ -5,34 +5,86 @@
 			<VantNavBar :title="$t(`my['消息中心']`)" @onClickLeft="onClickLeft" />
 
 			<div class="tab">
-				<van-tabs v-model:active="active" type="card" :border="false">
-					<van-tab name="2">
+				<van-tabs v-model:active="state.params.noticeType" type="card" :border="false" animated>
+					<van-tab name="1">
 						<template #title>
-							<div>{{ $t(`my['消息通知']`) }}</div>
+							<div>{{ $t(`my['通知']`) }}</div>
 							<!--						<van-badge :content="state.unreadCount.messageUnread <= 99 ? state.unreadCount.messageUnread : '99+'" :show-zero="false">-->
 							<!--							<div>{{ $t(`my['消息通知']`) }}</div>-->
 							<!--						</van-badge>-->
 						</template>
+						<van-list v-model:loading="loading" :finished="finished" @load="onLoad">
+							<van-swipe-cell v-for="(item, index) in state.noticeList" :key="index" right-width="66">
+								<div class="info" @click="$router.push('/messageDetail')">
+									<div class="text_title">{{ item.noticeTitleI18nCode }}</div>
+									<div class="time">
+										<span class="label">2023/03/10 22:16:31</span>
+									</div>
+									<div ref="textRefs" class="text_content" v-bind:class="{ collapsed: isCollapsed[index] }">
+										{{ item.messageContentI18nCode }}
+									</div>
+									<div v-if="showToggleButton[index]" class="unfold" @click.stop="toggleText(index)">
+										{{ isCollapsed[index] ? "展开" : "收起" }}
+										<van-icon name="arrow-up" class="icon" :class="isCollapsed[index] && 'icon-collapsed'" />
+									</div>
+								</div>
+
+								<template #right>
+									<div class="info-handle">
+										<div class="delete" @click="msgDelete(item)">
+											<svg-icon iconName="common/delete_icon_fill" size="44px"></svg-icon>
+										</div>
+									</div>
+								</template>
+							</van-swipe-cell>
+							<NoData v-if="!state.noticeList.length && finished" />
+						</van-list>
 					</van-tab>
-					<van-tab name="1">
+					<van-tab name="2">
 						<template #title>
-							<div>{{ $t(`my['活动通知']`) }}</div>
+							<div>{{ $t(`my['活动']`) }}</div>
 							<!--						<van-badge :content="state.unreadCount.announcementUnread <= 99 ? state.unreadCount.announcementUnread : '99+'" :show-zero="false">-->
 							<!--							<div>{{ $t(`my['活动通知']`) }}</div>-->
 							<!--						</van-badge>-->
 						</template>
+						<van-list v-model:loading="loading" :finished="finished" @load="onLoad">
+							<van-swipe-cell v-for="(item, index) in state.noticeList" :key="index" right-width="66">
+								<div class="info" @click="$router.push('/messageDetail')">
+									<div class="text_title">{{ item.noticeTitleI18nCode }}</div>
+									<div class="time">
+										<span class="label">2023/03/10 22:16:31</span>
+									</div>
+									<div ref="textRefs" class="text_content" v-bind:class="{ collapsed: isCollapsed[index] }">
+										{{ item.messageContentI18nCode }}
+									</div>
+									<div v-if="showToggleButton[index]" class="unfold" @click.stop="toggleText(index)">
+										{{ isCollapsed[index] ? "展开" : "收起" }}
+										<van-icon name="arrow-up" class="icon" :class="isCollapsed[index] && 'icon-collapsed'" />
+									</div>
+								</div>
+
+								<template #right>
+									<div class="info-handle">
+										<div class="delete" @click="msgDelete(item)">
+											<svg-icon iconName="common/delete_icon_fill" size="44px"></svg-icon>
+										</div>
+									</div>
+								</template>
+							</van-swipe-cell>
+							<NoData v-if="!state.noticeList.length && finished" />
+						</van-list>
 					</van-tab>
 				</van-tabs>
 			</div>
 
-			<van-swipe-cell v-for="(item, index) in state.aaa" :key="index" right-width="66">
+			<!-- <van-swipe-cell v-for="(item, index) in state.noticeList" :key="index" right-width="66">
 				<div class="info" @click="$router.push('/messageDetail')">
-					<div class="text_title">{{ item.a }}</div>
+					<div class="text_title">{{ item.noticeTitleI18nCode }}</div>
 					<div class="time">
 						<span class="label">2023/03/10 22:16:31</span>
 					</div>
 					<div ref="textRefs" class="text_content" v-bind:class="{ collapsed: isCollapsed[index] }">
-						{{ item.b }}
+						{{ item.messageContentI18nCode }}
 					</div>
 					<div v-if="showToggleButton[index]" class="unfold" @click.stop="toggleText(index)">
 						{{ isCollapsed[index] ? "展开" : "收起" }}
@@ -47,68 +99,71 @@
 						</div>
 					</div>
 				</template>
-			</van-swipe-cell>
-			<NoData v-if="!state.aaa.length" />
+			</van-swipe-cell> -->
+			<!-- <NoData v-if="!state.noticeList.length" />  -->
 		</div>
 
-		<BottomHandle v-if="state.aaa.length" />
+		<BottomHandle v-if="state.noticeList.length" @readAll="readAll" @delAll="delAll" />
 	</div>
 </template>
 <script setup lang="ts">
 import { useRouter } from "vue-router";
 import BottomHandle from "/@/views/subViews/my/messageCenter/components/BottomHandle.vue";
 import NoData from "/@/views/subViews/my/messageCenter/components/noData.vue";
+import messageApi from "/@/api/message";
+import { Message } from "./type"
 
-const router = useRouter();
-
-const active = ref("2");
 const state = reactive({
 	list: [] as any,
-	aaa: [
-		{
-			a: "标题标题标题标题标题标题标题",
-			b: "我们想提请您注意有关我们平台上 $ICP 存款地址的重要更新。旧的充值地址已经被禁用我们想提请您注意有关我们平台上 $ICP 存款地址的我们想提请您注意有关我们平台上 $ICP 存款地址的重要更新。旧的充值地址已经被禁用我们想提请您注意有关我们平台上 $ICP 存款地址的我们想提请您注意有关我们平台上 $ICP 存款地址的重要更新。",
-		},
-		{
-			a: "标题标题标题标题标题标题标题",
-			b: "我们想提请您注意有关我们平台上 $ICP 存款地址的重要更新。旧的充值地址已经被禁用我们想提请您注意有关我们平台上 $ICP 存款地址的我们想提请您注意有关我们平台上 $ICP 存款地址的重要更新。旧的充值地址已经被禁用我们想提请您注意有关我们平台上 $ICP 存款地址的我们想提请您注意有关我们平台上 $ICP 存款地址的重要更新。",
-		},
-		{
-			a: "标题标题标题标题标题标题标题",
-			b: "我们想提请您注意有关我们平台上 $ICP 存款地址的重要更新。旧的充值地址已经被禁用我们想提请您注意有关我们平台上 $ICP 存款地址的我们想提请您注意有关我们平台上 $ICP 存款地址的重要更新。旧的充值地址已经被禁用我们想提请您注意有关我们平台上 $ICP 存款地址的我们想提请您注意有关我们平台上 $ICP 存款地址的重要更新。",
-		},
-		{
-			a: "标题标题标题标题标题标题标题",
-			b: "我们想提请您注意有关我们平台上 $ICP 存款地址的重要更新。旧的充值地址已经被禁用我们想提请您注意有关我们平台上 $ICP 存款地址的我们想提请您注意有关我们平台上 $ICP 存款地址的重要更新。旧的充值地址已经被禁用我们想提请您注意有关我们平台上 $ICP 存款地址的我们想提请您注意有关我们平台上 $ICP 存款地址的重要更新。",
-		},
-		{
-			a: "标题标题标题标题标题标题标题",
-			b: "我们想提请您注意有关我们平台上 $ICP 存款地址的重要更新。旧的充值地址已经被禁用我们想提请您注意有关我们平台上 $ICP 存款地址的我们想提请您注意有关我们平台上 $ICP 存款地址的重要更新。旧的充值地址已经被禁用我们想提请您注意有关我们平台上 $ICP 存款地址的我们想提请您注意有关我们平台上 $ICP 存款地址的重要更新。",
-		},
-		{
-			a: "标题标题标题标题标题标题标题",
-			b: "我们想提请您注意有关我们平台上 $ICP 存款地址的重要更新。旧的充值地址已经被禁用我们想提请您注意有关我们平台上 $ICP 存款地址的我们想提请您注意有关我们平台上 $ICP 存款地址的重要更新。旧的充值地址已经被禁用我们想提请您注意有关我们平台上 $ICP 存款地址的我们想提请您注意有关我们平台上 $ICP 存款地址的重要更新。",
-		},
-		{
-			a: "标题标题标题标题标题标题标题",
-			b: "我们想提请您注意有关我们平台上 $ICP 存款地址的重要更新。旧的充值地址已经被禁用我们想提请您注意有关我们平台上 $ICP 313513131315存款地1niha ",
-		},
-		{
-			a: "标题标题标题标题标题标题标题",
-			b: "我们想提请您注意有关我们平台上 $ICP 存款地址的重要更新。我们想提请您注意有关我们平台上 $ICP 存款地址的重要更新。我们想提请您注意有关我们平台上 $ICP 存款地址的重要更新。",
-		},
-	] as any,
 	unreadCount: {
 		announcementUnread: 20,
 		messageUnread: 9,
 	},
 	params: {
-		noticeType: null as null | string,
+		noticeType: 1 as number | string,
 		pageNumber: 0,
 		pageSize: 10,
 	},
-	noticeList: [],
+	noticeList: [] as Message[],
+	total: 0
 });
+const router = useRouter();
+
+const loading = ref<boolean>(false);
+const finished = ref<boolean>(false);
+const onLoad = () => {
+	console.log('执行');
+	state.params.pageNumber++
+	getMessageList()
+}
+
+
+watch(() => state.params.noticeType, (newV) => {
+	finished.value = false;
+	state.noticeList = [];
+	state.params.pageNumber = 0;
+});
+
+
+const getMessageList = () => {
+	const data = {
+		...state.params
+	}
+	messageApi.messagePageList(data).then(res => {
+		loading.value = false;
+		state.total = res.data.total;
+		if (state.noticeList.length >= res.data.total) {
+			finished.value = true;
+		}
+		state.noticeList.push(...res.data.records)
+		console.log(res, 'res');
+	}, err => {
+		console.log(err, 'res');
+	})
+}
+
+
+
 
 const isCollapsed = ref<boolean[]>([]);
 const showToggleButton = ref<boolean[]>([]);
@@ -119,7 +174,7 @@ const toggleText = (index: number) => {
 };
 
 const checkTextOverflow = () => {
-	state.aaa.forEach((_, index) => {
+	state.noticeList.forEach((_, index) => {
 		const textElement = textRefs.value[index];
 		if (textElement) {
 			const lineHeight = parseFloat(getComputedStyle(textElement).lineHeight);
@@ -133,9 +188,36 @@ const checkTextOverflow = () => {
 	});
 };
 
+const readAll = () => {
+	console.log('readAll');
+	messageApi.messageReadAll({ noticeType: state.params.noticeType }).then(res => {
+		refresh()
+	}).catch(err => {
+
+	})
+}
+
+const delAll = () => {
+	messageApi.messageDeleteAll({ noticeType: state.params.noticeType }).then(res => {
+		refresh()
+	}).catch(err => {
+
+	})
+}
+const msgDelete = (row) => {
+	console.log(row, 'delete');
+
+}
+
+// 刷新
+const refresh = () => {
+	state.params.pageNumber = 1;
+	getMessageList()
+}
+
 onMounted(async () => {
-	isCollapsed.value = state.aaa.map(() => true);
-	showToggleButton.value = state.aaa.map(() => false);
+	isCollapsed.value = state.noticeList.map(() => true);
+	showToggleButton.value = state.noticeList.map(() => false);
 	// 等待 DOM 渲染完成后检查溢出
 	await nextTick();
 	checkTextOverflow();
@@ -166,10 +248,16 @@ const onClickLeft = () => {
 .tab {
 	margin: 24px 24px 0;
 
+	:deep(.van-tab__panel) {
+		width: 101%;
+	}
+
 	:deep(.van-tabs) {
 		.van-tabs__wrap {
 			border: none;
 			height: 68px;
+
+
 
 			.van-tab {
 				@include themeify {
