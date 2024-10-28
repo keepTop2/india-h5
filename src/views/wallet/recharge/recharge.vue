@@ -48,7 +48,7 @@
 							<span>{{ $t(`recharge['24小时内不再提示']`) }}</span>
 						</div>
 					</div>
-					<div class="footer" @click="isModalVisible = false">{{ $t(`recharge['我已知晓']`) }}</div>
+					<div class="footer" @click="onNotRemind">{{ $t(`recharge['我已知晓']`) }}</div>
 				</div>
 			</template>
 		</Model>
@@ -87,7 +87,7 @@ interface rechargeWayDataRootObject {
 const componentsMapsName = {
 	bank_card: bankCard,
 	electronic_wallet: EWallet,
-	crypto_currency: VirtualCurrency, // 修复: 应该是 'usdt_trc20' 而不是 'rechargeTypeCode'
+	crypto_currency: VirtualCurrency,
 };
 
 // 定义响应式变量
@@ -102,6 +102,9 @@ const checkbox = ref(false);
 
 // 选择支付方式时的处理
 const onRechargeWay = (item) => {
+	if (item.rechargeTypeCode == rechargeWayData.value.rechargeTypeCode && item.networkType == rechargeWayData.value.networkType) {
+		return;
+	}
 	rechargeWayData.value = item;
 	getRechargeConfig();
 };
@@ -123,12 +126,25 @@ const getRechargeConfig = async () => {
 	};
 	const res = await walletApi.getRechargeConfig(params).catch((err) => err);
 	if (res.code === common.getInstance().ResCode.SUCCESS) {
-		if (rechargeWayData.value.rechargeTypeCode === "crypto_currency") {
+		if (rechargeWayData.value.rechargeTypeCode === "crypto_currency" && res.data.isRemind === 1) {
 			checkbox.value = false;
 			isModalVisible.value = true;
 		}
 		rechargeConfig.value = res.data;
 		rechargeConfig.value.quickAmountList = res.data.quickAmount.split(",").map(Number);
+	}
+};
+
+// 不再提醒
+const onNotRemind = async () => {
+	if (checkbox.value) {
+		const res = await walletApi.notRemind().catch((err) => err);
+		if (res.code === common.getInstance().ResCode.SUCCESS) {
+			checkbox.value = false;
+			isModalVisible.value = false;
+		}
+	} else {
+		isModalVisible.value = false;
 	}
 };
 
