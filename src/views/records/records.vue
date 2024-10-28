@@ -90,6 +90,28 @@ import Chuanguan from "./components/Chuanguan.vue";
 import Qipai from "./components/Qipai.vue";
 import Zhenren from "./components/Zhenren.vue";
 import Dianzi from "./components/Dianzi.vue";
+// 接口
+import sportsApi from "/@/api/venueHome/sports";
+onMounted(() => { 
+	getList()
+})
+
+const getList = () => { 
+	const data = {
+  "pageNumber": 1,
+  "pageSize": 10,
+  "venueType": 1,
+  "betStartTime": dateRangeSelectDemoState.startTime,
+  "betEndTime": dateRangeSelectDemoState.endTime
+}
+	sportsApi.getBettingRecordList(data).then(res => { 
+		console.log(res,'res+++++++++++++');
+	}).catch(err => { 
+		console.log(err,'errrrrrrrrrrr');
+		
+	})
+}
+
 const onClickLeft = () => {
 	// 发布事件
 	pubsub.publish("onCollapseMenu");

@@ -20,6 +20,7 @@ export interface LobbyTopGame {
 	icon: string;
 	modelCode: string;
 	gameInfoList: GameInfoList[];
+	hasMoreGames: boolean;
 }
 /**
  * @description 搜索游戏列表

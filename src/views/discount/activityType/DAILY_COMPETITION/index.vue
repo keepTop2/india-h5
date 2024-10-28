@@ -11,7 +11,7 @@
 				<div>
 					<h3 class="color_TB fs_36 fw_400">{{ $t('betting["比赛奖池"]') }}</h3>
 					<span class="money color_Hint fw_700 fs_64 flex">
-						<img :src="icon" alt="" />
+						{{ userInfo.platCurrencySymbol }}
 						{{ PrizePool }}
 					</span>
 				</div>
@@ -108,8 +108,8 @@
 								</span>
 							</div>
 							<div class="color_T1">{{ item.userAccount }}</div>
-							<div class="color_TB">{{ item.betAmount }}</div>
-							<div class="color_TB">{{ item.awardAmount }}</div>
+							<div class="color_TB">{{ item.betAmount }}{{ item.currencySymbol }}</div>
+							<div class="color_TB">{{ item.awardAmount }}{{ userInfo.platCurrencySymbol }}</div>
 						</div>
 					</div>
 				</div>

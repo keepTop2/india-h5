@@ -22,8 +22,8 @@
 				<span>{{ state.userVipInfo.vipGradeCode === state.userVipInfo.vipGradeUp ? state.userVipInfo.currentVipExp : state.userVipInfo.currentExp }}/ {{ state.userVipInfo.currentVipExp }}</span>
 				<van-popover v-model:show="showPopover" theme="dark" :show-arrow="false">
 					<div class="p_10 popup">
-						体育/电竞场馆投注1{{ useUserStore().getUserInfo.currencySymbol }} = {{ state.userVipInfo.sportExe }}积分，其他场馆投注1{{ useUserStore().getUserInfo.currencySymbol }} = 1积分， 所有投注
-						均按当前汇率兑换为美元结算
+						体育/电竞场馆投注 1{{ useUserStore().getUserInfo.currencySymbol }} = {{ state.userVipInfo.sportExe }} 积分，其他场馆投注 1{{ useUserStore().getUserInfo.currencySymbol }} = 1 积分，
+						所有投注 均按当前汇率兑换为美元结算
 					</div>
 					<template #reference>
 						<SvgIcon class="warning_icon" iconName="vip/warning" />
@@ -137,6 +137,17 @@
 										<span class="num">*{{ item.monthAmountProp2 }}%</span>
 									</template>
 								</i18n-t>
+							</div>
+						</template>
+						<template v-else-if="item.luckFlag">
+							{{}}
+							<div class="value">
+								{{ $t(`vip["从vip开始，达到活动要求即可获得每日抽取幸运大奖得机会"]`, { vip: state.userVipInfo.vipBenefit.find((item2) => item2.luckFlag == 2).minVipGradeName }) }}
+								<!-- <i18n-t keypath="vip['从VIP开始，达到活动要求即可获得每日抽取幸运大奖得机会']" :tag="'span'">
+									<template v-slot:vip>
+										{{ item }}
+									</template>
+								</i18n-t> -->
 							</div>
 						</template>
 						<template v-else>

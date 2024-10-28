@@ -1,9 +1,9 @@
 <template>
 	<div class="CollectGames">
 		<ul>
-			<li v-for="(item, index) in collectList" class="gameCard" :key="index" @click="Common.goToGame(item)">
-				<SvgIcon v-if="item.collect" iconName="home/event_collect" @click.stop="handleCollect(item, false)" alt="" />
-				<SvgIcon v-else iconName="home/event_collect_no" @click.stop="handleCollect(item, true)" />
+			<li v-for="(item, index) in useCollectGamesStore().getCollectGamesList" class="gameCard" :key="index" @click="Common.goToGame(item)">
+				<SvgIcon iconName="home/event_collect" @click.stop="handleCollect(item, false)" alt="" />
+				<!-- <SvgIcon iconName="home/event_collect_no" @click.stop="handleCollect(item, true)" /> -->
 				<VantLazyImg :src="item.icon" :loadingSrc="loadingSrc" :errorSrc="loadingSrc" />
 				<div class="nameBox">
 					<div class="name">{{ item.name }}</div>
@@ -20,9 +20,8 @@ import { GameInfoList } from "/#/game";
 import loadingSrc from "../static/loading.png";
 import GameApi from "/@/api/venueHome/games";
 import Common from "/@/utils/common";
+import { useCollectGamesStore } from "/@/store/modules/collectGames";
 // 定义组件的emit事件
-const emit = defineEmits(["queryCollection"]);
-
 /**
  * @description 组件的props定义
  * @param {Array<GameInfoList>} collectList - 收藏游戏列表
@@ -52,7 +51,7 @@ const handleCollect = async (item, collect) => {
 	});
 	if (res.ok) {
 		item.collect = collect;
-		emit("queryCollection");
+		useCollectGamesStore().setCollectGamesList();
 	}
 };
 </script>
