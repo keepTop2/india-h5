@@ -8,7 +8,7 @@
 			<div class="wallet_center_container">
 				<div class="label">{{ $t(`withdraw['中心钱包']`) }}</div>
 				<div class="value">
-					<span>{{ common.getInstance().formatFloat(UserStore.userInfo.totalBalance) }}</span>
+					<span>{{ common.getInstance().formatAmount(UserStore.userInfo.totalBalance, 8) }}</span>
 					<span>&nbsp;</span>
 					<span>{{ UserStore.userInfo.mainCurrency }}</span>
 				</div>
@@ -70,31 +70,33 @@
 				</div>
 				<div v-if="errorMessage" class="error_text">{{ errorMessage }}</div>
 				<!-- 银行卡 电子钱包 预计到账计算 -->
-				<div v-else class="amount_info mt_10">
-					<div class="item">
-						<span class="label">{{ $t(`withdraw['预计到账']`) }}</span>
-						<span class="value">&nbsp;{{ common.getInstance().formatFloat(estimatedAmount) }}</span>
-						<span class="sign" v-if="withdrawWayData.withdrawTypeCode !== 'crypto_currency'">&nbsp;{{ UserStore.userInfo.mainCurrency }}</span>
-						<span class="sign" v-else>&nbsp;USDT</span>
+				<template v-else>
+					<div class="amount_info mt_10">
+						<div class="item">
+							<span class="label">{{ $t(`withdraw['预计到账']`) }}</span>
+							<span class="value">&nbsp;{{ common.getInstance().formatFloat(estimatedAmount) }}</span>
+							<span class="sign" v-if="withdrawWayData.withdrawTypeCode !== 'crypto_currency'">&nbsp;{{ UserStore.userInfo.mainCurrency }}</span>
+							<span class="sign" v-else>&nbsp;USDT</span>
+						</div>
+						<div class="item">
+							<span class="label">{{ $t(`withdraw['手续费']`) }}({{ withdrawWayConfig.feeRate }}%):</span>
+							<span class="value">&nbsp;{{ common.getInstance().formatFloat(feeAmount) }}</span>
+							<span class="sign" v-if="withdrawWayData.withdrawTypeCode !== 'crypto_currency'">&nbsp;{{ UserStore.userInfo.mainCurrency }}</span>
+							<span class="sign" v-else>&nbsp;USDT</span>
+						</div>
 					</div>
-					<div class="item">
-						<span class="label">{{ $t(`withdraw['手续费']`) }}({{ withdrawWayConfig.feeRate }}%):</span>
-						<span class="value">&nbsp;{{ common.getInstance().formatFloat(feeAmount) }}</span>
-						<span class="sign" v-if="withdrawWayData.withdrawTypeCode !== 'crypto_currency'">&nbsp;{{ UserStore.userInfo.mainCurrency }}</span>
-						<span class="sign" v-else>&nbsp;USDT</span>
+					<!-- 虚拟币预计到账计算 -->
+					<div v-if="withdrawWayData.withdrawTypeCode === 'crypto_currency'" class="amount_info mt_4">
+						<div class="item">
+							<span class="value">≈{{ common.getInstance().formatFloat(Number(state.amount) - Math.trunc((Number(state.amount) * withdrawWayConfig.feeRate) / 100)) }}</span>
+							<span class="sign">&nbsp;{{ UserStore.userInfo.mainCurrency }}</span>
+						</div>
+						<div class="item">
+							<span class="label">{{ $t(`withdraw['当前汇率']`, { value: exchangeRate }) }}</span>
+							<SvgIcon class="icon ml_6" iconName="wallet/refresh" @click="getWithdrawExchange" />
+						</div>
 					</div>
-				</div>
-				<!-- 虚拟币预计到账计算 -->
-				<div v-if="withdrawWayData.withdrawTypeCode === 'crypto_currency'" class="amount_info mt_4">
-					<div class="item">
-						<span class="value">≈{{ common.getInstance().formatFloat(estimatedAmount * exchangeRate) }}</span>
-						<span class="sign">&nbsp;{{ UserStore.userInfo.mainCurrency }}</span>
-					</div>
-					<div class="item">
-						<span class="label">{{ $t(`withdraw['当前汇率']`, { value: exchangeRate }) }}</span>
-						<SvgIcon class="icon ml_6" iconName="wallet/refresh" @click="getWithdrawExchange" />
-					</div>
-				</div>
+				</template>
 			</div>
 		</div>
 
@@ -137,8 +139,8 @@ import { myApi } from "/@/api/my";
 
 // 引入支付方式对应的组件
 import bankCard from "/@/views/wallet/withdraw/components/bankCard/bankCard.vue";
-import Ewallet from "/@/views/wallet/withdraw/components/Ewallet/Ewallet.vue";
-import USDTTRC20 from "/@/views/wallet/withdraw/components/USDTTRC20/USDTTRC20.vue";
+import EWallet from "/@/views/wallet/withdraw/components/EWallet/EWallet.vue";
+import VirtualCurrency from "/@/views/wallet/withdraw/components/VirtualCurrency/VirtualCurrency.vue";
 
 import PassWordInput from "../components/passWordInput.vue";
 import { i18n } from "/@/i18n/index";
@@ -149,8 +151,8 @@ const $: any = i18n.global;
 // 定义组件映射
 const componentsMapsName = {
 	bank_card: bankCard,
-	electronic_wallet: Ewallet,
-	crypto_currency: USDTTRC20, // 修复: 应该是 'usdt_trc20' 而不是 'rechargeTypeCode'
+	electronic_wallet: EWallet,
+	crypto_currency: VirtualCurrency, // 修复: 应该是 'usdt_trc20' 而不是 'rechargeTypeCode'
 };
 
 interface withdrawWayDataRootObject {
@@ -203,14 +205,6 @@ const errorMessage = computed(() => {
 	}
 	return "";
 });
-
-watch(
-	() => childRef.value,
-	(newValue) => {},
-	{
-		deep: true,
-	}
-);
 
 const buttonType = computed(() => {
 	// 检查手机号是否有效（仅在银行卡和电子钱包表单中使用）
@@ -266,6 +260,8 @@ const buttonType = computed(() => {
 			break;
 	}
 
+	console.log("触发表单检验？？？？？？");
+
 	// 检查所有属性是否有值
 	const allFieldsHaveValue = requiredFields.every((key) => dynamicFields[key] !== undefined && dynamicFields[key] !== "");
 
@@ -291,10 +287,12 @@ const calculateFeeAndEstimatedAmount = () => {
 		feeAmount.value = 0; // 免费提款条件下手续费为0
 	} else {
 		// 计算手续费
-		feeAmount.value = isCrypto ? (amount * feeRate) / 100 / exchangeRate.value : (amount * feeRate) / 100;
+		feeAmount.value = isCrypto ? Math.trunc(Math.trunc((amount * feeRate) / 100) / exchangeRate.value) : (amount * feeRate) / 100;
 	}
 	// 预计到账金额计算
-	estimatedAmount.value = isCrypto ? amount / exchangeRate.value - feeAmount.value : amount - feeAmount.value;
+	estimatedAmount.value = isCrypto
+		? Number(common.getInstance().formatFloat(Number(state.amount) - Math.trunc((Number(state.amount) * feeRate) / 100))) / exchangeRate.value
+		: amount - feeAmount.value;
 };
 
 // 获取冻结金额
@@ -336,6 +334,7 @@ const onWithdrawApply = async () => {
 const getWithdrawApply = async (params) => {
 	const res = await walletApi.withdrawApply(params).catch((err) => err);
 	if (res.code === common.getInstance().ResCode.SUCCESS) {
+		getWithdrawConfig();
 		showToast($.t('withdraw["申请成功"]'));
 		clearParams();
 	}

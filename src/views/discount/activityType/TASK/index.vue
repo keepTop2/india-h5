@@ -56,7 +56,7 @@
 								>奖励：<span class="color_Hint"> {{ item.platCurrencySymbol }} {{ item.rewardAmount }}</span></span
 							>
 							<span
-								><span class="color_Theme">{{ calculatePercentage(item.achieveAmount, item.minBetAmount) }}</span
+								><span class="color_Theme">{{ item.achieveAmount }}</span
 								>/{{ item.minBetAmount }}</span
 							>
 						</div>
@@ -112,6 +112,7 @@ import activityDialog from "./dialog.vue";
 import image from "./image/image.png";
 import Common from "/@/utils/common";
 import { useCountdown } from "/@/hooks/countdown";
+import { useUserStore } from "/@/store/modules/user";
 const { countdown, startCountdown, stopCountdown } = useCountdown();
 const router = useRouter();
 const showDialog = ref(false);
@@ -121,10 +122,10 @@ const dialogInfo: any = ref({});
 const detailData: any = ref({});
 const currentTab = ref(0);
 const taskStatus = {
-	0: "去完成",
-	1: "领取",
-	2: "已领取",
-	3: "已经过期",
+	3: "去完成",
+	0: "领取",
+	1: "已领取",
+	2: "已经期",
 };
 const tasktype = ref([
 	{
@@ -151,34 +152,45 @@ const getTaskDetail = () => {
 		detailData.value = res.data;
 		if (detailData.value.noviceTask) {
 			startCountdown(detailData.value?.noviceTask[0].expireTime);
-			tasktype.value.push({
-				label: "新手任务",
-				value: 2,
-			});
+			tasktype.value = [
+				{
+					label: "每日任务",
+					value: 0,
+				},
+				{
+					label: "每周任务",
+					value: 1,
+				},
+				{
+					label: "新手任务",
+					value: 2,
+				},
+			];
 		}
 	});
 };
 const HandleBtn = (item) => {
-	if (item.subTaskType === "phone") {
+	if (item.subTaskType === "phone" && !useUserStore().getUserInfo.phone) {
 		return router.push("/bind/phone");
-	} else if (item.subTaskType === "email") {
+	} else if (item.subTaskType === "email" && !useUserStore().getUserInfo.email) {
 		return router.push("/bind/email");
 	}
 
 	if (item.taskStatus == 1) {
-		activityApi
-			.Taskreceive({
-				id: item.id,
-				subTaskType: item.subTaskType,
-			})
-			.then((res: any) => {
-				if (res.code === 10000) {
-					showDialog.value = true;
-					dialogInfo.value = res.data;
-					dialogInfo.value.platCurrencySymbol = item.platCurrencySymbol;
-					getTaskDetail();
-				}
-			});
+		router.push("/welfareCenter");
+		// activityApi
+		// 	.Taskreceive({
+		// 		id: item.id,
+		// 		subTaskType: item.subTaskType,
+		// 	})
+		// 	.then((res: any) => {
+		// 		if (res.code === 10000) {
+		// 			showDialog.value = true;
+		// 			dialogInfo.value = res.data;
+		// 			dialogInfo.value.platCurrencySymbol = item.platCurrencySymbol;
+		// 			getTaskDetail();
+		// 		}
+		// 	});
 	} else if (item.taskStatus == 0) {
 		router.push("/");
 	}
@@ -336,13 +348,16 @@ const calculatePercentage = (part, whole) => {
 				border-radius: 6px 6px 5px 5px;
 			}
 			.btnType0 {
-				background: linear-gradient(270deg, #ebb360 0%, #eb7933 100%);
+				background: linear-gradient(270deg, #fd6780 0%, #ff405e 100%);
 			}
 			.btnType1 {
-				background: linear-gradient(270deg, #fd6780 0%, #ff405e 100%);
+				background: linear-gradient(270deg, #afafb3 0%, #87878b 100%);
 			}
 			.btnType2 {
 				background: linear-gradient(270deg, #afafb3 0%, #87878b 100%);
+			}
+			.btnType3 {
+				background: linear-gradient(270deg, #ebb360 0%, #eb7933 100%);
 			}
 			.daojishiBg {
 				height: 45px;

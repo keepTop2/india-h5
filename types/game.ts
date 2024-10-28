@@ -18,7 +18,9 @@ export interface LobbyTopGame {
 	gameOneId: string;
 	name: string;
 	icon: string;
+	modelCode: string;
 	gameInfoList: GameInfoList[];
+	hasMoreGames: boolean;
 }
 /**
  * @description 搜索游戏列表

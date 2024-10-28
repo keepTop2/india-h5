@@ -31,7 +31,11 @@
 				<!-- 提示图标 -->
 				<div class="tooltip">
 					<van-popover v-model:show="showPopover" theme="dark" :show-arrow="false">
-						<div class="p_10 popup">{{ $t('medalCollection["宝箱奖励流水倍数为8倍"]', { num: state.medalRewardRespVOS?.find((item) => item.openStatus == 0).typingMultiple }) }}</div>
+						<div class="p_10 popup">
+							{{
+								$t('medalCollection["宝箱奖励流水倍数为8倍"]', { num: state.medalRewardRespVOS?.find((item) => item.openStatus == 0)?.typingMultiple || state.medalRewardRespVOS[0]?.typingMultiple })
+							}}
+						</div>
 						<template #reference>
 							<VantLazyImg class="icon" :src="theme === ThemeEnum.default ? tips_icon : tips_icon_light" />
 						</template>
@@ -209,7 +213,7 @@ const getUserMedalInfo = async () => {
 const onOpenMedalReward = async (item) => {
 	// 确保勋章数量达到要求且宝箱状态为未领取
 
-	if (state.canLightNum >= item.unlockMedalNum && item.openStatus === 0) {
+	if (state.canLightNum >= item.condNum && item.openStatus === 0) {
 		const params = {
 			rewardNo: item.rewardNo,
 		};

@@ -23,7 +23,8 @@
 				<span class="vip_level">{{ state.userVipInfo.vipGradeName }}</span>
 				<div class="vip_info">
 					<span class="vip_experience"
-						>升级所需经验: <span class="color_Warn">{{ state.userVipInfo.currentVipExp }}</span> / <span>{{ state.userVipInfo.upgradeVipExp }}</span></span
+						>升级所需经验: <span class="color_Warn">{{ state.userVipInfo.vipGradeCode === state.userVipInfo.vipGradeUp ? state.userVipInfo.currentVipExp : state.userVipInfo.currentExp }}</span> /
+						<span>{{ state.userVipInfo.currentVipExp }}</span></span
 					>
 					<SvgIcon class="arrow" iconName="my/arrow" @click="toPath('/vip')" />
 				</div>
@@ -175,6 +176,7 @@ import { i18n } from "/@/i18n/index";
 import { loginApi } from "/@/api/loginRegister";
 import Model from "/@/views/wallet/components/model.vue";
 import { showToast } from "vant";
+import { securityCenterApi } from "/@/api/securityCenter";
 const $: any = i18n.global;
 const router = useRouter();
 const store = useUserStore();
@@ -298,7 +300,8 @@ const onClickCell = async (item) => {
 	}
 	// 处理提款路径的逻辑
 	if (item.path === "/wallet/withdraw") {
-		const { isSetPwd, phone } = store.getUserInfo;
+		const res = await securityCenterApi.getUserGlobalSetInfo().catch((err) => err);
+		const { isSetPwd, phone } = res.data;
 		if (isSetPwd || phone) {
 			const res = await walletApi.withdrawWayList().catch((err) => err);
 			if (res.code === common.getInstance().ResCode.SUCCESS && (!res.data || res.data.length === 0)) {

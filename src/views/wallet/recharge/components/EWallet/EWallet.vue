@@ -16,7 +16,7 @@
 			<div
 				class="amount_item"
 				:class="{ amount_item_active: amountItemActive === index }"
-				v-for="(item, index) in quickAmountList"
+				v-for="(item, index) in rechargeConfig.quickAmountList"
 				:key="index"
 				@click="
 					{
@@ -109,7 +109,7 @@ const rechargeConfig = ref<{
 });
 
 // 快捷金额选项
-const quickAmountList = ref<number[]>([]);
+// const quickAmountList = ref<number[]>([]);
 const amountItemActive = ref(null) as unknown as null | number;
 
 // 计算属性，判断按钮类型
@@ -134,6 +134,10 @@ watch(
 );
 
 const countries = ref<CountryData[]>([]); // 国家数据
+
+onMounted(() => {
+	getAreaCodeDownBox();
+});
 
 // 点击充值
 const onRecharge = async () => {
@@ -163,16 +167,16 @@ const getAreaCodeDownBox = () => {
 };
 
 // 获取充值配置
-const getRechargeConfig = async () => {
-	const params = {
-		rechargeWayId: props.rechargeWayData.id,
-	};
-	const res = await walletApi.getRechargeConfig(params).catch((err) => err);
-	if (res.code === common.getInstance().ResCode.SUCCESS) {
-		rechargeConfig.value = res.data;
-		quickAmountList.value = res.data.quickAmount.split(",").map(Number); // 转换快捷金额列表为数字
-	}
-};
+// const getRechargeConfig = async () => {
+// 	const params = {
+// 		rechargeWayId: props.rechargeWayData.id,
+// 	};
+// 	const res = await walletApi.getRechargeConfig(params).catch((err) => err);
+// 	if (res.code === common.getInstance().ResCode.SUCCESS) {
+// 		rechargeConfig.value = res.data;
+// 		quickAmountList.value = res.data.quickAmount.split(",").map(Number); // 转换快捷金额列表为数字
+// 	}
+// };
 
 // 按首字母分组国家数据
 const groupByFirstLetter = (countries: CountryData[]) => {
@@ -187,8 +191,7 @@ const groupByFirstLetter = (countries: CountryData[]) => {
 };
 
 // 初始化获取充值配置和区号数据
-getRechargeConfig();
-getAreaCodeDownBox();
+// getRechargeConfig();
 
 // 选择区号的处理函数
 const selectAreaCode = (item: string, i: CountryData) => {

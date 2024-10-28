@@ -8,7 +8,7 @@ import Common from "/@/utils/common";
 import { useSportsBetInfoStore } from "./sports/sportsBetInfo";
 import activitySocketService from "/@/utils/activitySocketService";
 import pubsub from "/@/pubSub/pubSub";
-
+import { useCollectGamesStore } from "./collectGames";
 export interface StoreUser {
 	token: string;
 	userInfo: Record<any, any>;
@@ -92,6 +92,8 @@ export const useUserStore = defineStore("User", {
 			const sportsBetInfo = useSportsBetInfoStore();
 			sportsBetInfo.balance = this.getUserInfo.totalBalance;
 			const websocketService = activitySocketService.getInstance();
+			const collectGamesStore = useCollectGamesStore();
+			collectGamesStore.setCollectGamesList();
 			websocketService.connect().then(() => {
 				pubsub.publish("websocket_reconnected");
 			});
