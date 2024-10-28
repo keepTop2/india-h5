@@ -8,7 +8,7 @@
 			<div class="wallet_center_container">
 				<div class="label">{{ $t(`withdraw['中心钱包']`) }}</div>
 				<div class="value">
-					<span>{{ common.getInstance().formatAmount(UserStore.userInfo.totalBalance, 8) }}</span>
+					<span>{{ common.getInstance().formatAmount(Number(state.totalBalance), 8) }}</span>
 					<span>&nbsp;</span>
 					<span>{{ UserStore.userInfo.mainCurrency }}</span>
 				</div>
@@ -62,10 +62,9 @@
 						v-model="state.amount"
 						type="number"
 						:placeholder="`${withdrawWayConfig.withdrawMinAmount ?? 0} ${UserStore.userInfo.mainCurrency} ~ ${withdrawWayConfig.withdrawMaxAmount ?? 0} ${UserStore.userInfo.mainCurrency} `"
-						@input="calculateFeeAndEstimatedAmount"
 					/>
 					<div class="operate_content">
-						<span @click="state.amount = UserStore.userInfo.totalBalance">{{ $t(`withdraw['全部金额']`) }}</span>
+						<span @click="state.amount = Math.trunc(Number(state.totalBalance))">{{ $t(`withdraw['全部金额']`) }}</span>
 					</div>
 				</div>
 				<div v-if="errorMessage" class="error_text">{{ errorMessage }}</div>
@@ -88,7 +87,7 @@
 					<!-- 虚拟币预计到账计算 -->
 					<div v-if="withdrawWayData.withdrawTypeCode === 'crypto_currency'" class="amount_info mt_4">
 						<div class="item">
-							<span class="value">≈{{ common.getInstance().formatFloat(Number(state.amount) - Math.trunc((Number(state.amount) * withdrawWayConfig.feeRate) / 100)) }}</span>
+							<span class="value">≈{{ approximateAmount }}</span>
 							<span class="sign">&nbsp;{{ UserStore.userInfo.mainCurrency }}</span>
 						</div>
 						<div class="item">
@@ -177,13 +176,12 @@ const withdrawWayConfig = ref({
 
 const childRef = ref(null);
 const state = reactive({
+	totalBalance: "",
 	freezeAmount: "",
 	withdrawPassWord: "" as string,
 	amount: "" as string | number,
 });
 
-const feeAmount = ref(0); // 手续费
-const estimatedAmount = ref(0); // 预计到账金额
 const exchangeRate = ref(0); // 预计到账金额
 
 const passWordShow = ref(false);
@@ -195,9 +193,9 @@ const errorMessage = computed(() => {
 		return "";
 	}
 	// 获取账户余额
-	const totalBalance = UserStore.userInfo.totalBalance;
+	const totalBalance = state.totalBalance;
 	// 判断输入的金额
-	if (amount > totalBalance || !totalBalance) {
+	if (amount > Number(totalBalance) || !totalBalance) {
 		return $.t(`withdraw["余额不足"]`);
 	} else if (amount < withdrawWayConfig.value.withdrawMinAmount) {
 		return `${$.t('withdraw["单次最低提款"]')}: ${UserStore.userInfo.mainCurrency} ${withdrawWayConfig.value.withdrawMinAmount}`;
@@ -261,7 +259,8 @@ const buttonType = computed(() => {
 			break;
 	}
 
-	console.log("触发表单检验？？？？？？");
+	console.log("requiredFields", requiredFields);
+	console.log("dynamicFields", dynamicFields);
 
 	// 检查所有属性是否有值
 	const allFieldsHaveValue = requiredFields.every((key) => dynamicFields[key] !== undefined && dynamicFields[key] !== "");
@@ -274,32 +273,55 @@ const buttonType = computed(() => {
 	}
 });
 
-// 计算手续费和预计到账金额
-const calculateFeeAndEstimatedAmount = () => {
-	// 将输入的 amount 转换为数字
-	let amount = Number(state.amount);
-	let isCrypto = withdrawWayData.value.withdrawTypeCode === "crypto_currency";
-	let feeRate = withdrawWayConfig.value.feeRate;
-	let maxWithdrawAmount = withdrawWayConfig.value.singleDayRemindMaxWithdrawAmount;
-	let remainingWithdrawCount = withdrawWayConfig.value.singleDayRemindWithdrawCount;
-
-	// 检查是否满足免费提款条件
+// 虚拟币约等于到账额度
+const approximateAmount = computed(() => {
+	const amount = Number(state.amount);
+	const { singleDayRemindMaxWithdrawAmount: maxWithdrawAmount, singleDayRemindWithdrawCount: remainingWithdrawCount, feeRate } = withdrawWayConfig.value;
 	if (isNaN(amount) || (remainingWithdrawCount > 0 && amount <= maxWithdrawAmount)) {
-		feeAmount.value = 0; // 免费提款条件下手续费为0
-	} else {
-		// 计算手续费
-		feeAmount.value = isCrypto ? Math.trunc(Math.trunc((amount * feeRate) / 100) / exchangeRate.value) : (amount * feeRate) / 100;
+		return amount;
 	}
-	// 预计到账金额计算
-	estimatedAmount.value = isCrypto
-		? Number(common.getInstance().formatFloat(Number(state.amount) - Math.trunc((Number(state.amount) * feeRate) / 100))) / exchangeRate.value
-		: amount - feeAmount.value;
-};
+	return common.getInstance().formatFloat(amount - Math.trunc((amount * feeRate) / 100));
+});
+
+// 计算手续费
+const feeAmount = computed(() => {
+	const amount = Number(state.amount);
+	const isCrypto = withdrawWayData.value.withdrawTypeCode === "crypto_currency";
+	const { singleDayRemindMaxWithdrawAmount: maxWithdrawAmount, singleDayRemindWithdrawCount: remainingWithdrawCount, feeRate } = withdrawWayConfig.value;
+	if (isNaN(amount) || amount <= 0 || (isCrypto && (!exchangeRate.value || exchangeRate.value <= 0))) {
+		return 0;
+	}
+	const meetsFreeCondition = remainingWithdrawCount > 0 && amount <= maxWithdrawAmount;
+	if (meetsFreeCondition) {
+		return 0;
+	}
+	const calculatedFee = Math.trunc((amount * feeRate) / 100);
+	return isCrypto ? Math.trunc(calculatedFee / exchangeRate.value) : calculatedFee;
+});
+
+// 计算预计到账金额
+const estimatedAmount = computed(() => {
+	const amount = Number(state.amount);
+	const isCrypto = withdrawWayData.value.withdrawTypeCode === "crypto_currency";
+	const { singleDayRemindMaxWithdrawAmount: maxWithdrawAmount, singleDayRemindWithdrawCount: remainingWithdrawCount, feeRate } = withdrawWayConfig.value;
+	// console.log("isNaN(amount)", isNaN(amount));
+	// console.log("amount", amount);
+	// console.log("isCrypto", isCrypto);
+	// console.log("exchangeRate.value", exchangeRate.value);
+	const meetsFreeCondition = remainingWithdrawCount > 0 && amount <= maxWithdrawAmount;
+	if (meetsFreeCondition) {
+		return isCrypto ? amount / exchangeRate.value : amount;
+	}
+	const calculatedFee = Math.trunc((amount * feeRate) / 100);
+	const netAmount = amount - calculatedFee;
+	return isCrypto ? netAmount / exchangeRate.value : netAmount;
+});
 
 // 获取冻结金额
 const getUserBalance = async () => {
 	const res = await myApi.getUserBalance().catch((err) => err);
 	if (res.code === common.getInstance().ResCode.SUCCESS) {
+		state.totalBalance = res.data.balance;
 		state.freezeAmount = res.data.freezeAmount;
 	}
 };
@@ -332,12 +354,15 @@ const onWithdrawApply = async () => {
 	}
 };
 
+// 提款请求
 const getWithdrawApply = async (params) => {
 	const res = await walletApi.withdrawApply(params).catch((err) => err);
 	if (res.code === common.getInstance().ResCode.SUCCESS) {
-		getWithdrawConfig();
 		showToast($.t('withdraw["申请成功"]'));
 		clearParams();
+		getWithdrawConfig(); // 获取通道配置
+		getUserBalance(); // 获取最新余额
+		getWithdrawExchange(); // 获取提款汇率
 	}
 };
 
@@ -346,7 +371,7 @@ const onRechargeWay = (item) => {
 	withdrawWayData.value = item;
 	clearParams();
 	getWithdrawConfig(); // 获取通道配置
-
+	getUserBalance();
 	if (item.withdrawTypeCode == "crypto_currency") {
 		getWithdrawExchange();
 	}
@@ -382,16 +407,21 @@ const getWithdrawExchange = async () => {
 };
 
 // 初始化数据
-getRechargeWayList();
-getUserBalance();
+const initData = () => {
+	getRechargeWayList();
+	getUserBalance();
+	getWithdrawExchange();
+};
+
+initData();
 
 // 清空表单参数
 const clearParams = () => {
 	Object.keys(state).forEach((key) => {
-		state[key] = ""; // 将每个属性设置为空字符串
+		if (key !== "totalBalance" && key !== "freezeAmount") {
+			state[key] = ""; // 将每个属性设置为空字符串
+		}
 	});
-	feeAmount.value = 0;
-	estimatedAmount.value = 0;
 	childRef.value?.clearParams();
 };
 

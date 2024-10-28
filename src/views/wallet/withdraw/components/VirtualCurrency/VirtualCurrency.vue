@@ -44,6 +44,14 @@ const props = defineProps({
 	},
 });
 const lastWithdrawInfoShow = ref(false); // 控制区号选择器的显示
+
+watch(
+	() => props.withdrawWayData.networkType,
+	(newValue) => {
+		state.networkType = newValue;
+	}
+);
+
 const state = reactive({
 	networkType: props.withdrawWayData.networkType, // 网络协议
 	addressNo: "", // 加密货币收款地址
