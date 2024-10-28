@@ -24,6 +24,19 @@ class CommonApi {
 	};
 
 	/**
+	 *@description 获取客服信息
+	 */
+	static getSiteCustomerChannel = (data = {}, headers = {}) => {
+		return useAxiosApi(`/app/common/getSiteCustomerChannel`, {
+			method: "POST",
+			data,
+			headers: {
+				showLoading: true,
+			},
+		});
+	};
+
+	/**
 	 *@description 下拉框-语言、币种
 	 */
 	static getCommonBusinessDownBox = (data = {}, headers = {}) => {
