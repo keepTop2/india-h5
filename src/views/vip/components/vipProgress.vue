@@ -8,7 +8,7 @@
 			<div class="progress" :style="{ width: `${progressPercentage}%` }">
 				<div class="percentage_info">
 					<div v-if="props.percentageShow" class="percentage">
-						<div class="value">{{ progressPercentage }}%</div>
+						<div class="value">{{ progressPercentage > 100 ? 100 : progressPercentage }}%</div>
 						<SvgIcon class="arrow" iconName="vip/progress_bar_percent_arrow" />
 					</div>
 
@@ -59,7 +59,7 @@ const currentRankImage = computed(() => {
 		: rank5Img;
 });
 // 计算百分比
-const progressPercentage = computed(() => {
+const progressPercentage: any = computed(() => {
 	const { currentExp, currentVipExp } = props.userVipInfo;
 	// 防止NaN：确保 upgradeVipExp 不为0，并且 currentExp 和 upgradeVipExp 都是有效数字
 	if (isNaN(currentExp) || isNaN(currentVipExp) || currentVipExp === 0) {
@@ -67,7 +67,7 @@ const progressPercentage = computed(() => {
 	}
 
 	// 计算百分比并取整
-	return Math.floor((currentExp / currentVipExp) * 100);
+	return (currentExp / currentVipExp) * 100 > 100 ? 100 : ((currentExp / currentVipExp) * 100).toFixed(2);
 });
 
 console.log("progressPercentage", progressPercentage);

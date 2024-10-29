@@ -35,7 +35,7 @@ const emit = defineEmits(["update:modelValue"]);
 const confirmDialog = () => {};
 // 点击红包进入详情页
 const handleClickCountdown = async () => {
-	router.push("/activity/RED_BAG_RAIN");
+	pubsub.publish("ShowRedBagRain", true);
 };
 // 关闭倒计时
 const closeRedbagRainCountdown = () => {

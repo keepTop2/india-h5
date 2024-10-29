@@ -105,6 +105,7 @@ const onClickLeft = () => {
  * @param {number} label - 游戏类别标签
  */
 const showMoreList = (title, label) => {
+	const { gameOneId } = route.query;
 	router.push({ name: "GameLists", query: { title, label, gameOneId } });
 };
 </script>

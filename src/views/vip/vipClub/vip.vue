@@ -19,7 +19,12 @@
 
 			<div class="vip_level_progress">
 				<span>{{ $t(`vip["升级所需经验"]`) }}</span>
-				<span>{{ state.userVipInfo.vipGradeCode === state.userVipInfo.vipGradeUp ? state.userVipInfo.currentVipExp : state.userVipInfo.currentExp }}/ {{ state.userVipInfo.currentVipExp }}</span>
+				<span
+					><span class="color_Theme">{{
+						state.userVipInfo.vipGradeCode === state.userVipInfo.vipGradeUp ? state.userVipInfo.currentVipExp?.toFixed(2) : state.userVipInfo.currentExp?.toFixed(2)
+					}}</span
+					>/ {{ state.userVipInfo.currentVipExp?.toFixed(2) }}</span
+				>
 				<van-popover v-model:show="showPopover" theme="dark" :show-arrow="false">
 					<div class="p_10 popup">
 						体育/电竞场馆投注 1{{ useUserStore().getUserInfo.currencySymbol }} = {{ state.userVipInfo.sportExe }} 积分，其他场馆投注 1{{ useUserStore().getUserInfo.currencySymbol }} = 1 积分，
@@ -64,6 +69,7 @@
 			</div>
 			<div class="reward_list">
 				<div class="reward_list_header">
+					<img :src="currentRankIconImage" alt="" />
 					<div>
 						<span>{{ levelData[state.vipRank - 1]?.label }} </span>&nbsp;
 						<span> {{ levelData[state.vipRank - 1]?.minVipGradeName }} - {{ levelData[state.vipRank - 1]?.maxVipGradeName }}</span>
@@ -82,7 +88,7 @@
 					<div v-if="shouldDisplayReward(item)" :class="theme === ThemeEnum.default ? 'reward_cell' : 'reward_cell_light'">
 						<div class="icon">
 							<div :class="{ mask: !isUnlocked(item) }">
-								<img :src="reward_icon1" />
+								<img :src="item.icon" />
 								<div v-if="!isUnlocked(item)" class="lock">
 									<SvgIcon iconName="vip/lock" />
 								</div>
@@ -91,14 +97,14 @@
 						<div class="label">
 							{{ item.label }}
 
-							<van-popover v-model:show="showPopover4" theme="dark" :show-arrow="false" v-if="item.weekSportFlag == 2">
+							<van-popover v-model:show="showPopover4" theme="dark" :show-arrow="false" v-if="item.weekSportFlag">
 								<div class="p_10 popup">
 									<p v-for="i in state.userVipInfo.vipBenefit[index].vipWeekSportVOS">
 										-投注{{ useUserStore().getUserInfo.platCurrencySymbol }} {{ i.weekSportMin }} 至
 										{{ i.weekSportMax > 0 ? `${useUserStore().getUserInfo.platCurrencySymbol} ${i.weekSportMax}` : "以上" }} = {{ i.weekSportBonus }}
 										{{ useUserStore().getUserInfo.platCurrencySymbol }}
 									</p>
-									<p>-流水统计时间：周六00:00时～周五 23:59时（7天） ﻿﻿礼金发放时间：每周六"</p>
+									<p>-流水统计时间：周六00:00时～周五 23:59时（7天） ﻿﻿礼金发放时间：每周六</p>
 								</div>
 								<template #reference>
 									<SvgIcon class="warning_icon" iconName="vip/warning" />
@@ -140,7 +146,6 @@
 							</div>
 						</template>
 						<template v-else-if="item.luckFlag">
-							{{}}
 							<div class="value">
 								{{ $t(`vip["从vip开始，达到活动要求即可获得每日抽取幸运大奖得机会"]`, { vip: state.userVipInfo.vipBenefit.find((item2) => item2.luckFlag == 2).minVipGradeName }) }}
 								<!-- <i18n-t keypath="vip['从VIP开始，达到活动要求即可获得每日抽取幸运大奖得机会']" :tag="'span'">
@@ -174,13 +179,29 @@ import icon_diamond from "/@/assets/zh-CN/default/vip/icon_diamond.png";
 import vip_big from "/@/assets/zh-CN/default/vip/vip_big.png";
 import vip_line_left from "/@/assets/zh-CN/default/vip/vip_line_left.png";
 import vip_line_right from "/@/assets/zh-CN/default/vip/vip_line_right.png";
-import reward_icon1 from "/@/assets/zh-CN/default/vip/reward_icon1.png";
+import reward_icon1 from "./image/reward_icon1.png";
+import reward_icon2 from "./image/reward_icon2.png";
+import reward_icon3 from "./image/reward_icon3.png";
+import reward_icon4 from "./image/reward_icon4.png";
+import reward_icon5 from "./image/reward_icon5.png";
+import reward_icon6 from "./image/reward_icon6.png";
+import reward_icon7 from "./image/reward_icon7.png";
+import reward_icon8 from "./image/reward_icon8.png";
+import reward_icon9 from "./image/reward_icon9.png";
+import reward_icon10 from "./image/reward_icon10.png";
 import rank0Img from "./image/rank0.png";
 import rank1Img from "./image/rank1.png";
 import rank2Img from "./image/rank2.png";
 import rank3Img from "./image/rank3.png";
 import rank4Img from "./image/rank4.png";
 import rank5Img from "./image/rank5.png";
+import rank_tag1 from "./image/rank_tag1.png";
+import rank_tag2 from "./image/rank_tag2.png";
+import rank_tag3 from "./image/rank_tag3.png";
+import rank_tag4 from "./image/rank_tag4.png";
+import rank_tag5 from "./image/rank_tag5.png";
+import rank_tag6 from "./image/rank_tag6.png";
+
 import { ThemeEnum } from "/@/enum/appConfigEnum";
 import { useThemesStore } from "/@/store/modules/themes";
 import { useRouter } from "vue-router";
@@ -203,6 +224,21 @@ const currentRankImage = computed(() => {
 		: vipRank.value == 6
 		? rank4Img
 		: rank5Img;
+});
+const currentRankIconImage = computed(() => {
+	return state.vipRank == 1
+		? rank_tag1
+		: state.vipRank == 2
+		? rank_tag2
+		: state.vipRank == 3
+		? rank_tag3
+		: state.vipRank == 4
+		? rank_tag4
+		: state.vipRank == 5
+		? rank_tag5
+		: state.vipRank == 6
+		? rank_tag6
+		: rank_tag6;
 });
 const router = useRouter();
 const $: any = i18n.global;
@@ -230,7 +266,7 @@ const state: any = reactive({
 		{
 			label: $.t(`vip['每周流水礼金']`),
 			text: $.t(`vip['会员根据每周投注额度获得周流水的礼金奖励']`),
-			icon: reward_icon1,
+			icon: reward_icon2,
 			weekAmountProp1: 0,
 			weekAmountProp2: 0,
 			weekAmountFlag: 0,
@@ -238,7 +274,7 @@ const state: any = reactive({
 		{
 			label: $.t(`vip['每月流水礼金']`),
 			text: $.t(`vip['会员根据每月投注额度获得月流水的礼金奖励']`),
-			icon: reward_icon1,
+			icon: reward_icon3,
 			monthAmountProp1: 0,
 			monthAmountProp2: 0,
 			monthAmountFlag: 0,
@@ -246,26 +282,33 @@ const state: any = reactive({
 		{
 			label: $.t(`vip['周体育流水礼金']`),
 			text: $.t(`vip['会员根据每周体育投注额度获得额外礼金奖励']`),
-			icon: reward_icon1,
+			icon: reward_icon8,
 			weekSportFlag: 0,
+		},
+		{
+			label: $.t(`vip['幸运转盘']`),
+			text: $.t(`vip['从VIP8开始，达到活动要求即可获得每日抽取幸运大奖得机会']`),
+			icon: reward_icon6,
+			luckFlag: 0,
 		},
 		{
 			label: $.t(`vip['SVIP专属福利']`),
 			text: $.t(`vip['成为钻石会员尊享更多私人专属福利惊喜']`),
-			icon: reward_icon1,
+			icon: reward_icon9,
 			svipWelfareFlag: 0,
 		},
 		{
 			label: $.t(`vip['豪华赠品']`),
 			text: $.t(`vip['尊享赠送私人顶级奢华福利机会']`),
-			icon: reward_icon1,
+			icon: reward_icon10,
 			luxuriousGiftsFlag: 0,
 		},
+
 		{
-			label: $.t(`vip['幸运转盘']`),
-			text: $.t(`vip['从VIP8开始，达到活动要求即可获得每日抽取幸运大奖得机会']`),
-			icon: reward_icon1,
-			luckFlag: 0,
+			label: $.t(`vip['免加密货币提款手续费']`),
+			text: $.t(`vip['免除加密货币提款手续费']`),
+			icon: reward_icon7,
+			encryCoinFee: 0,
 		},
 	],
 });
@@ -362,13 +405,20 @@ const matchTierRewardListData = () => {
 
 // 判断对应奖励是否存在
 const shouldDisplayReward = (item) => {
-	return item.upgradeFlag || item.weekAmountFlag || item.monthAmountFlag || item.weekSportFlag || item.svipWelfareFlag || item.luxuriousGiftsFlag || item.luckFlag;
+	return item.upgradeFlag || item.weekAmountFlag || item.monthAmountFlag || item.weekSportFlag || item.svipWelfareFlag || item.luxuriousGiftsFlag || item.luckFlag || item.encryCoinFee;
 };
 
 // 判断奖励是否解锁
 const isUnlocked = (item) => {
 	return (
-		item.upgradeFlag === 2 || item.weekAmountFlag === 2 || item.monthAmountFlag === 2 || item.weekSportFlag === 2 || item.svipWelfareFlag === 2 || item.luxuriousGiftsFlag === 2 || item.luckFlag === 2
+		item.upgradeFlag === 2 ||
+		item.weekAmountFlag === 2 ||
+		item.monthAmountFlag === 2 ||
+		item.weekSportFlag === 2 ||
+		item.svipWelfareFlag === 2 ||
+		item.luxuriousGiftsFlag === 2 ||
+		item.luckFlag === 2 ||
+		item.encryCoinFee === 2
 	);
 };
 
@@ -691,17 +741,13 @@ const onClickLeft = () => {
 				font-size: 28px;
 				font-weight: 600;
 				overflow: hidden;
-
-				&::after {
-					content: "";
+				img {
 					position: absolute;
-					top: 50%;
-					left: 0px;
-					transform: translate(0, -50%);
+					left: 0;
 					width: 6px;
 					height: 48px;
-					border-radius: 0px 4px 4px 0px;
-					background: #ddae96;
+					top: 50%;
+					transform: translateY(-50%);
 				}
 				:deep(.van-popover__wrapper) {
 					.warning_icon {

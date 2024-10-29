@@ -33,6 +33,26 @@ class CommonApi {
 			headers,
 		});
 	};
+	/**
+	 *@description 下拉框-语言、币种
+	 */
+	static getLangDownBox = (data = {}, headers = {}) => {
+		return useAxiosApi(`/app/common/getLangDownBox`, {
+			method: "POST",
+			data,
+			headers,
+		});
+	};
+	/**
+	 *@description 下拉框-语言、币种
+	 */
+	static getCurrencyList = (data = {}, headers = {}) => {
+		return useAxiosApi(`/app/common/getCurrencyList`, {
+			method: "POST",
+			data,
+			headers,
+		});
+	};
 
 	/**
 	 *@description 获取会员首页信息

@@ -36,21 +36,6 @@
 				<GameBigPic class="m24" v-if="item.modelCode == 'SIGN_VENUE'" />
 				<GameLayout v-else :gameInfoList="item.gameInfoList" class="m24" />
 			</template>
-			<!-- <h3 class="title_more">
-				<span class="flex_align_center">
-					<SvgIcon iconName="home/electronic" alt="" />
-					{{ $t('home["热门电竞"]') }}
-				</span>
-			</h3>
-			<GameBigPic class="m24" />
-
-			<h3 class="title_more">
-				<span class="flex_align_center">
-					<SvgIcon iconName="home/game_fowl" alt="" />
-					{{ $t('home["热门斗鸡"]') }}
-				</span>
-			</h3> -->
-			<!-- <GameBigPic class="m24" /> -->
 			<!-- 赞助 -->
 			<Sponsor :data="PartnerList" />
 			<!-- 转账方式 -->
@@ -107,7 +92,7 @@ import activitySocketService from "/@/utils/activitySocketService";
 import { useActivityStore } from "/@/store/modules/activity";
 import { computed, onActivated, onDeactivated, ref, watch } from "vue";
 import { useCollectGamesStore } from "/@/store/modules/collectGames";
-const websocketService: any = activitySocketService.getInstance();
+
 const router = useRouter();
 const UserStore = useUserStore();
 const sportsInfoStore = useSportsInfoStore();
@@ -143,7 +128,6 @@ watch(
 			newEvents.push(...item.events);
 		});
 		eventList.value = newEvents;
-		console.log(newEvents, "===newEvents");
 	}
 );
 
@@ -170,7 +154,7 @@ onDeactivated(() => {
 	// 卸载体育
 	unSport();
 	//关闭ws连接
-	destroyWS();
+	// destroyWS();
 });
 
 /**
@@ -321,7 +305,16 @@ const handleMore = (gameOneId) => {
 };
 
 const initializeWebSocket = async () => {
-	// 订阅红包雨推送消息
+	const websocketService: any = activitySocketService.getInstance();
+	if (websocketService.socket?.readyState) {
+		websocketService.send("/activity/redBagRain");
+	} else {
+		// 如果socket连接不成功，等待成功指令
+		pubsub.subscribe("websocket_reconnected", () => {
+			websocketService.send("/activity/redBagRain");
+		});
+	}
+
 	pubsub.subscribe("/activity/redBagRain", (data) => {
 		showCountdown.value = true;
 		redBagInfo.value = data;
@@ -330,10 +323,10 @@ const initializeWebSocket = async () => {
 		showCountdown.value = false;
 	});
 };
-const destroyWS = () => {
-	pubsub.unsubscribe("/activity/redBagRain", () => {});
-	pubsub.unsubscribe("/activity/redBagRain/end", () => {});
-};
+// const destroyWS = () => {
+// 	pubsub.unsubscribe("/activity/redBagRain", () => {});
+// 	pubsub.unsubscribe("/activity/redBagRain/end", () => {});
+// };
 </script>
 
 <style lang="scss" scoped>
