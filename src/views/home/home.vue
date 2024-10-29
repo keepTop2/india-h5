@@ -2,6 +2,10 @@
 	<div class="Home_Page bg_BG1">
 		<!-- 轮播图 -->
 		<Banner class="Home_Banner" />
+
+		<!-- 跑马灯 -->
+		<HorseRaceLamp />
+
 		<div class="Home_Content">
 			<!-- 热门游戏 -->
 			<h3 class="title" v-if="hotGames.length">
@@ -62,6 +66,9 @@
 		<redbagRainCountdown v-model="showCountdown" :redBagInfo="redBagInfo" />
 		<!-- 红包雨页面 -->
 		<rainPage v-if="showRedBagRain" v-model="showRedBagRain" :redBagInfo="redBagInfo" />
+
+		<!-- 跑马灯 -->
+		<Announcement />
 	</div>
 </template>
 
@@ -106,6 +113,8 @@ import { GameInfoList, LobbyTopGame } from "/#/game";
 import activitySocketService from "/@/utils/activitySocketService";
 import { useActivityStore } from "/@/store/modules/activity";
 import { computed, onActivated, onDeactivated, ref, watch } from "vue";
+import HorseRaceLamp from "/@/views/home/HorseRaceLamp/HorseRaceLamp.vue";
+
 const websocketService: any = activitySocketService.getInstance();
 const router = useRouter();
 const UserStore = useUserStore();

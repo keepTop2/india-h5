@@ -9,6 +9,7 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    Announcement: typeof import('./../src/components/Announcement/Announcement.vue')['default']
     AreaCodePicker: typeof import('./../src/components/AreaCodePicker/AreaCodePicker.vue')['default']
     Button: typeof import('./../src/components/Button/Button.vue')['default']
     Carousel: typeof import('./../src/components/Carousel/Carousel.vue')['default']
@@ -23,6 +24,7 @@ declare module '@vue/runtime-core' {
     NoGameImg: typeof import('./../src/components/NoGameImg/NoGameImg.vue')['default']
     Notify: typeof import('./../src/components/Notify/Notify.vue')['default']
     OkDialog: typeof import('./../src/components/OkDialog/index.vue')['default']
+    Popup: typeof import('./../src/components/Announcement/Popup.vue')['default']
     RedbagRainCountdown: typeof import('./../src/components/redbagRainCountdown/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
@@ -31,10 +33,11 @@ declare module '@vue/runtime-core' {
     SvgIcon: typeof import('./../src/components/svgIcon/index.vue')['default']
     Tabs: typeof import('./../src/components/Tabs/Tabs.vue')['default']
     VanButton: typeof import('vant/es')['Button']
-    VanCellGroup: typeof import('vant/es')['CellGroup']
-    VanField: typeof import('vant/es')['Field']
+    VanDatePicker: typeof import('vant/es')['DatePicker']
     VanIcon: typeof import('vant/es')['Icon']
+    VanList: typeof import('vant/es')['List']
     VanNavBar: typeof import('vant/es')['NavBar']
+    VanNoticeBar: typeof import('vant/es')['NoticeBar']
     VanPicker: typeof import('vant/es')['Picker']
     VanPopup: typeof import('vant/es')['Popup']
     VanSwipeCell: typeof import('vant/es')['SwipeCell']
@@ -46,6 +49,5 @@ declare module '@vue/runtime-core' {
     VantNavBar: typeof import('./../src/components/vant/VantNavBar.vue')['default']
     VantPicker: typeof import('./../src/components/vant/VantPicker.vue')['default']
     VantTabs: typeof import('./../src/components/vant/VantTabs.vue')['default']
-    VanUploader: typeof import('vant/es')['Uploader']
   }
 }
