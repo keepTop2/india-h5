@@ -4,20 +4,20 @@
 			<template #default>
 				<div class="header">
 					<div class="icon"><SvgIcon class="close_icon" iconName="common/close" @click="showAreaCode = false" /></div>
-					<div class="title">{{ title }}</div>
+					<div class="title">选择银行名称</div>
 					<div class="right_text" @click="showAreaCode = false">确定</div>
 				</div>
 				<div class="search_input">
 					<div class="icon"><SvgIcon iconName="common/search_input_icon" @click="showAreaCode = false" /></div>
-					<input v-model="searchAreaCode" type="text" placeholder="搜索区号" />
-					<div v-if="searchAreaCode" class="icon"><SvgIcon class="clear_icon" iconName="common/close" @click="searchAreaCode = ''" /></div>
+					<input v-model="stateBankCard" type="text" placeholder="搜索银行名称" />
+					<div v-if="stateBankCard" class="icon"><SvgIcon class="clear_icon" iconName="common/close" @click="stateBankCard = ''" /></div>
 				</div>
 
 				<template v-if="Object.keys(props.areaCode).length > 0">
 					<van-index-bar :index-list="props.indexList" :sticky="false" @change="selectAreaCodeIndex">
 						<van-index-anchor :index="item" v-for="item in Object.keys(props.areaCode)">
 							<div class="cell_header" :class="currentAreaCodeIndex === item ? 'active' : ''">{{ item }}</div>
-							<div class="cell_item" :class="{ cell_item_active: i.areaCode == stateAreaCode }" v-for="(i, idx) in areaCode[item]" :key="idx" @click="selectAreaCode(item, i)">
+							<div class="cell_item" :class="{ cell_item_active: i.areaCode == stateAreaCode }" v-for="(i, idx) in areaCode[item]" :key="idx" @click="selectBankCard(item, i)">
 								<div class="label">
 									<img :src="i.icon" class="icon" />
 									<span>{{ i.countryCode }}</span>
@@ -42,10 +42,6 @@ function defineModel<T>(name: string, defaultValue: T) {
 }
 const currentAreaCodeIndex: Ref<number | string> = ref("");
 const props = defineProps({
-	title: {
-		type: String,
-		default: "选择区号",
-	},
 	indexList: {
 		type: Array,
 		default: () => [] as any,
@@ -54,16 +50,16 @@ const props = defineProps({
 		type: Object,
 		default: () => {},
 	},
-	stateAreaCode: String,
+	stateBankCard: String,
 });
 
 const showAreaCode = defineModel<boolean>("showAreaCode", false);
-const searchAreaCode = defineModel<string>("searchAreaCode", "");
+const stateBankCard = defineModel<string>("stateBankCard", "");
 
-const emit = defineEmits(["selectAreaCode"]);
+const emit = defineEmits(["selectBankCard"]);
 
-const selectAreaCode = (item, i) => {
-	emit("selectAreaCode", item, i);
+const selectBankCard = (item, i) => {
+	emit("selectBankCard", item, i);
 };
 const selectAreaCodeIndex = (index: number | string) => {
 	currentAreaCodeIndex.value = index;
