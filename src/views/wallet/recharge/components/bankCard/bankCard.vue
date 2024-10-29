@@ -9,8 +9,8 @@
 		<div class="cell">
 			<div class="label">{{ $t(`recharge['存款金额']`) }}</div>
 			<div class="cell_input">
-				<input v-model="state.amount" type="number" :placeholder="`${rechargeConfig.rechargeMinAmount ?? 0} - ${rechargeConfig.rechargeMaxAmount ?? 0}`" @input="amountItemActive = null" />
-				<div class="input_label">{{ rechargeConfig.currencyCode }}</div>
+				<input v-model="state.amount" type="number" :placeholder="`${props.rechargeConfig.rechargeMinAmount ?? 0} - ${props.rechargeConfig.rechargeMaxAmount ?? 0}`" @input="amountItemActive = null" />
+				<div class="input_label">{{ props.rechargeConfig.currencyCode }}</div>
 			</div>
 		</div>
 
@@ -18,7 +18,7 @@
 			<div
 				class="amount_item"
 				:class="{ amount_item_active: amountItemActive === index }"
-				v-for="(item, index) in quickAmountList"
+				v-for="(item, index) in props.rechargeConfig.quickAmountList"
 				:key="index"
 				@click="
 					{
@@ -48,6 +48,10 @@ const props = defineProps({
 		type: Object,
 		default: {},
 	},
+	rechargeConfig: {
+		type: Object,
+		default: {},
+	},
 });
 
 const state = reactive({
@@ -56,13 +60,6 @@ const state = reactive({
 	depositWayId: props.rechargeWayData.id,
 });
 
-// 通道配置信息
-const rechargeConfig = ref({
-	rechargeMinAmount: 0,
-	rechargeMaxAmount: 0,
-});
-// 快捷金额选项
-const quickAmountList = ref([]);
 const amountItemActive = ref(null) as unknown as null | number;
 
 // 计算属性，判断按钮类型
@@ -83,19 +80,6 @@ const onRecharge = async () => {
 		window.open(res.data.thirdPayUrl, "_blank");
 	}
 };
-
-const getRechargeConfig = async () => {
-	const params = {
-		rechargeWayId: props.rechargeWayData.id,
-	};
-	const res = await walletApi.getRechargeConfig(params).catch((err) => err);
-	if (res.code === common.getInstance().ResCode.SUCCESS) {
-		rechargeConfig.value = res.data;
-		quickAmountList.value = res.data.quickAmount.split(",").map(Number);
-	}
-};
-
-getRechargeConfig();
 </script>
 
 <style scoped lang="scss">

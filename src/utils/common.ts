@@ -8,6 +8,7 @@ import { Decimal } from "decimal.js";
 // 引入复制插件
 import useClipboard from "vue-clipboard3";
 import GameApi from "/@/api/venueHome/games";
+import commonApi from "/@/api/common";
 import mitt from "mitt";
 import qs from "qs";
 import router from "../router";
@@ -774,6 +775,12 @@ class Common {
 			// 将脚本添加到文档中
 			document.head.appendChild(script);
 		});
+	}
+
+	// 联系客服
+	static async getSiteCustomerChannel() {
+		const res = await commonApi.getSiteCustomerChannel().catch((err) => err);
+		console.log("res", res);
 	}
 }
 
