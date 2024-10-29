@@ -9,7 +9,7 @@
 		<div class="deposit-info">
 			<div class="info-item">
 				<span class="label">{{ $t(`rechargeDetails['状态']`) }}</span>
-				<span class="value" :class="getClass">{{ depositOrderDetail.customerStatusText }}</span>
+				<span class="value" :class="getClass">{{ getStatusLabel() }}</span>
 			</div>
 			<div class="info-item">
 				<span class="label">{{ $t(`rechargeDetails['充值金额']`) }}</span>
@@ -71,11 +71,11 @@
 					<div class="circle">
 						<div class="header">
 							<div class="step_icon">
-								<span v-if="depositOrderDetail.customerStatus != 0">2</span>
+								<span v-if="depositOrderDetail.customerStatus == 0">2</span>
 								<SvgIcon v-else iconName="wallet/deal_success" />
 							</div>
 						</div>
-						<div class="line"></div>
+						<div class="line" :class="{ highlight: depositOrderDetail.customerStatus != 0 }"></div>
 					</div>
 					<div class="content">
 						<div class="title">{{ $t(`rechargeDetails['第三方商户处理中']`) }}</div>
@@ -97,7 +97,11 @@
 				<div class="step">
 					<div class="circle">
 						<div class="header">
-							<div class="step_icon">3</div>
+							<div class="step_icon">
+								<span v-if="depositOrderDetail.customerStatus == '0'">3</span>
+								<SvgIcon v-else-if="depositOrderDetail.customerStatus == '1'" iconName="wallet/deal_success" />
+								<SvgIcon v-else-if="depositOrderDetail.customerStatus == '2'" iconName="wallet/deal_error" />
+							</div>
 						</div>
 					</div>
 					<div class="content">
@@ -112,13 +116,18 @@
 		</div>
 	</div>
 	<div class="footer">
-		<template v-if="depositOrderDetail.voucherFlag === 0">
-			<div class="cancel_btn" @click="onCancelDepositOrder">{{ $t(`rechargeDetails['取消充值']`) }}</div>
-			<div class="confirm_btn" @click="router.push('/wallet/recharge')">{{ $t(`rechargeDetails['继续充值']`) }}</div>
+		<template v-if="depositOrderDetail.customerStatus == '0'">
+			<template v-if="depositOrderDetail.voucherFlag == 0">
+				<div class="cancel_btn" @click="onCancelDepositOrder">{{ $t(`rechargeDetails['取消充值']`) }}</div>
+				<div class="confirm_btn" @click="router.replace('/wallet/recharge')">{{ $t(`rechargeDetails['继续充值']`) }}</div>
+			</template>
+			<template v-else-if="depositOrderDetail.voucherFlag == 1">
+				<div class="cancel_btn" @click="common.getSiteCustomerChannel">{{ $t(`rechargeDetails['联系客服']`) }}</div>
+				<div v-if="depositOrderDetail.urgeOrder == 0" class="confirm_btn" @click="onUrgeOrder">{{ $t(`rechargeDetails['我要催单']`) }}</div>
+			</template>
 		</template>
-		<template v-else-if="depositOrderDetail.voucherFlag === 1">
-			<div class="cancel_btn">{{ $t(`rechargeDetails['联系客服']`) }}</div>
-			<div v-if="depositOrderDetail.urgeOrder === 0" class="confirm_btn" @click="onUrgeOrder">{{ $t(`rechargeDetails['我要催单']`) }}</div>
+		<template v-else>
+			<div class="cancel_btn" @click="common.getSiteCustomerChannel">{{ $t(`rechargeDetails['联系客服']`) }}</div>
 		</template>
 	</div>
 
@@ -248,21 +257,14 @@ const cashFlowRemark = ref(""); // 留言
 onMounted(() => {
 	getDepositOrderDetail();
 	console.log("开始推送数据");
-	// websocketService.connect().then(() => {
-	// 	websocketService.send("/wallet/rechargeSuccessFail");
-	// });
-	// 监听 WebSocket 重连事件，以便局部组件可以重新订阅消息
-	// pubsub.subscribe("websocket_reconnected", () => {
-	// 	websocketService.send("/wallet/rechargeSuccessFail");
-	// });
 	pubsub.subscribe("/wallet/rechargeSuccessFail", rechargeSuccessFail);
 });
 
 // 收到订单推送订阅
 const rechargeSuccessFail = (data) => {
-	console.log("收到订单更新通知", data, depositOrderDetail);
+	console.log("收到订单更新通知", data);
 	Object.assign(depositOrderDetail.value, data);
-	console.log("depositOrderDetail.value", depositOrderDetail.value);
+	// console.log("depositOrderDetail.value", depositOrderDetail.value);
 };
 
 // 获取订单详情
@@ -325,6 +327,17 @@ const onCancelDepositOrder = async () => {
 	}
 };
 
+// 获取状态名称
+const getStatusLabel = () => {
+	if (depositOrderDetail.value.customerStatus == "0") {
+		return "处理中";
+	} else if (depositOrderDetail.value.customerStatus == "1") {
+		return "成功";
+	} else if (depositOrderDetail.value.customerStatus == "2") {
+		return "失败";
+	}
+};
+
 // 根据状态返回对应的类名
 const getClass = computed(() => {
 	switch (depositOrderDetail.value.customerStatus) {
@@ -334,8 +347,6 @@ const getClass = computed(() => {
 			return "success"; // 成功
 		case "2":
 			return "error"; // 失败
-		default:
-			return ""; // 默认类
 	}
 });
 
