@@ -19,7 +19,7 @@ const targetIndex = ref(0);
 
 const getHorseRaceLampList = async () => {
 	const res = await HomeApi.horseRaceLampList();
-	horseRaceLampList.value = res.data.userNoticeList || [];
+	horseRaceLampList.value = res.data || [];
 };
 getHorseRaceLampList();
 
