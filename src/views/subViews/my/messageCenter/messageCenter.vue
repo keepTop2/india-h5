@@ -78,28 +78,28 @@
 			</div>
 
 			<!-- <van-swipe-cell v-for="(item, index) in state.noticeList" :key="index" right-width="66">
-				<div class="info" @click="$router.push('/messageDetail')">
-					<div class="text_title">{{ item.noticeTitleI18nCode }}</div>
-					<div class="time">
-						<span class="label">2023/03/10 22:16:31</span>
-					</div>
-					<div ref="textRefs" class="text_content" v-bind:class="{ collapsed: isCollapsed[index] }">
-						{{ item.messageContentI18nCode }}
-					</div>
-					<div v-if="showToggleButton[index]" class="unfold" @click.stop="toggleText(index)">
-						{{ isCollapsed[index] ? "展开" : "收起" }}
-						<van-icon name="arrow-up" class="icon" :class="isCollapsed[index] && 'icon-collapsed'" />
-					</div>
-				</div>
+        <div class="info" @click="$router.push('/messageDetail')">
+          <div class="text_title">{{ item.noticeTitleI18nCode }}</div>
+          <div class="time">
+            <span class="label">2023/03/10 22:16:31</span>
+          </div>
+          <div ref="textRefs" class="text_content" v-bind:class="{ collapsed: isCollapsed[index] }">
+            {{ item.messageContentI18nCode }}
+          </div>
+          <div v-if="showToggleButton[index]" class="unfold" @click.stop="toggleText(index)">
+            {{ isCollapsed[index] ? "展开" : "收起" }}
+            <van-icon name="arrow-up" class="icon" :class="isCollapsed[index] && 'icon-collapsed'" />
+          </div>
+        </div>
 
-				<template #right>
-					<div class="info-handle">
-						<div class="delete">
-							<svg-icon iconName="common/delete_icon_fill" size="44px"></svg-icon>
-						</div>
-					</div>
-				</template>
-			</van-swipe-cell> -->
+        <template #right>
+          <div class="info-handle">
+            <div class="delete">
+              <svg-icon iconName="common/delete_icon_fill" size="44px"></svg-icon>
+            </div>
+          </div>
+        </template>
+      </van-swipe-cell> -->
 			<!-- <NoData v-if="!state.noticeList.length" />  -->
 		</div>
 
@@ -111,7 +111,7 @@ import { useRouter } from "vue-router";
 import BottomHandle from "/@/views/subViews/my/messageCenter/components/BottomHandle.vue";
 import NoData from "/@/views/subViews/my/messageCenter/components/noData.vue";
 import messageApi from "/@/api/message";
-import { Message } from "./type"
+import { Message } from "./type";
 
 const state = reactive({
 	list: [] as any,
@@ -125,45 +125,46 @@ const state = reactive({
 		pageSize: 10,
 	},
 	noticeList: [] as Message[],
-	total: 0
+	total: 0,
 });
 const router = useRouter();
 
 const loading = ref<boolean>(false);
 const finished = ref<boolean>(false);
 const onLoad = () => {
-	console.log('执行');
-	state.params.pageNumber++
-	getMessageList()
-}
+	console.log("执行");
+	state.params.pageNumber++;
+	getMessageList();
+};
 
-
-watch(() => state.params.noticeType, (newV) => {
-	finished.value = false;
-	state.noticeList = [];
-	state.params.pageNumber = 0;
-});
-
+watch(
+	() => state.params.noticeType,
+	(newV) => {
+		finished.value = false;
+		state.noticeList = [];
+		state.params.pageNumber = 0;
+	}
+);
 
 const getMessageList = () => {
 	const data = {
-		...state.params
-	}
-	messageApi.messagePageList(data).then(res => {
-		loading.value = false;
-		state.total = res.data.total;
-		if (state.noticeList.length >= res.data.total) {
-			finished.value = true;
+		...state.params,
+	};
+	messageApi.messagePageList(data).then(
+		(res) => {
+			loading.value = false;
+			state.total = res.data.total;
+			if (state.noticeList.length >= res.data.total) {
+				finished.value = true;
+			}
+			state.noticeList.push(...res.data.records);
+			console.log(res, "res");
+		},
+		(err) => {
+			console.log(err, "res");
 		}
-		state.noticeList.push(...res.data.records)
-		console.log(res, 'res');
-	}, err => {
-		console.log(err, 'res');
-	})
-}
-
-
-
+	);
+};
 
 const isCollapsed = ref<boolean[]>([]);
 const showToggleButton = ref<boolean[]>([]);
@@ -189,31 +190,32 @@ const checkTextOverflow = () => {
 };
 
 const readAll = () => {
-	console.log('readAll');
-	messageApi.messageReadAll({ noticeType: state.params.noticeType }).then(res => {
-		refresh()
-	}).catch(err => {
-
-	})
-}
+	console.log("readAll");
+	messageApi
+		.messageReadAll({ noticeType: state.params.noticeType })
+		.then((res) => {
+			refresh();
+		})
+		.catch((err) => {});
+};
 
 const delAll = () => {
-	messageApi.messageDeleteAll({ noticeType: state.params.noticeType }).then(res => {
-		refresh()
-	}).catch(err => {
-
-	})
-}
+	messageApi
+		.messageDeleteAll({ noticeType: state.params.noticeType })
+		.then((res) => {
+			refresh();
+		})
+		.catch((err) => {});
+};
 const msgDelete = (row) => {
-	console.log(row, 'delete');
-
-}
+	console.log(row, "delete");
+};
 
 // 刷新
 const refresh = () => {
 	state.params.pageNumber = 1;
-	getMessageList()
-}
+	getMessageList();
+};
 
 onMounted(async () => {
 	isCollapsed.value = state.noticeList.map(() => true);
@@ -256,8 +258,6 @@ const onClickLeft = () => {
 		.van-tabs__wrap {
 			border: none;
 			height: 68px;
-
-
 
 			.van-tab {
 				@include themeify {
