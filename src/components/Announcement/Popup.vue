@@ -42,6 +42,8 @@ const visible = defineModel({ type: Boolean, default: true });
 
 		.close {
 			position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
 			right: 24px;
 		}
 	}
