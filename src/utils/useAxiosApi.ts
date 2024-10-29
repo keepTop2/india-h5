@@ -77,7 +77,8 @@ instance.interceptors.response.use(
 				case 10007:
 					useUserStore().logOut();
 			}
-			showToast(res.message);
+			if (!response.config.headers.hideToast) showToast(res.message);
+
 			return res;
 		} else {
 			return res;

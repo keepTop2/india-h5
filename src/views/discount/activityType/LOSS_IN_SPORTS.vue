@@ -101,20 +101,21 @@ const apply = () => {
 	if (!userStore.token) {
 		showDialog2.value = true;
 		return;
-	}
-	activityApi.toActivity({ id: activityInfo.id }).then((res: any) => {
-		if (res.code === 10000) {
-			if (res.data.status !== 10000) {
-				dialogInfo.value = res.data;
-				showDialog.value = true;
+	} else if (activityData.value.status === 10000 && new Date().getTime() >= activityData.value.activityStartTime) {
+		activityApi.toActivity({ id: activityInfo.id }).then((res: any) => {
+			if (res.code === 10000) {
+				if (res.data.status !== 10000) {
+					dialogInfo.value = res.data;
+					showDialog.value = true;
+				} else {
+					showToast("申请成功");
+					getConfigDetail();
+				}
 			} else {
-				showToast("申请成功");
-				getConfigDetail();
+				showToast(res.message);
 			}
-		} else {
-			showToast(res.message);
-		}
-	});
+		});
+	}
 };
 const confirmDialog = () => {
 	if (dialogInfo.value.status === 30049) {

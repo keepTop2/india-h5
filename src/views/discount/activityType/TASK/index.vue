@@ -123,7 +123,7 @@ const detailData: any = ref({});
 const currentTab = ref(0);
 const taskStatus = {
 	3: "去完成",
-	0: "领取",
+	0: "去领取",
 	1: "已领取",
 	2: "已经期",
 };
@@ -176,7 +176,7 @@ const HandleBtn = (item) => {
 		return router.push("/bind/email");
 	}
 
-	if (item.taskStatus == 1) {
+	if (item.taskStatus == 0) {
 		router.push("/welfareCenter");
 		// activityApi
 		// 	.Taskreceive({
@@ -191,7 +191,7 @@ const HandleBtn = (item) => {
 		// 			getTaskDetail();
 		// 		}
 		// 	});
-	} else if (item.taskStatus == 0) {
+	} else if (item.taskStatus == 3) {
 		router.push("/");
 	}
 };

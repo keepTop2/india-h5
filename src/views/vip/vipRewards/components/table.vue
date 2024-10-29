@@ -44,6 +44,13 @@
 					</td>
 				</tr>
 				<tr>
+					<td>{{ $t(`vip['免费提款']`) }}</td>
+					<td v-for="(item, index) in state.userVipInfo.vipBenefit" :key="index">
+						<img v-if="item.encryCoinFee != 0" :src="item.icon" />
+						<span v-else>-</span>
+					</td>
+				</tr>
+				<tr>
 					<td>{{ $t(`vip['SVIP专属福利']`) }}</td>
 					<td v-for="(item, index) in state.userVipInfo.vipBenefit" :key="index">
 						<img v-if="item.svipWelfareFlag != 0" :src="item.icon" />

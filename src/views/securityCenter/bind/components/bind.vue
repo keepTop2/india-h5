@@ -152,7 +152,6 @@ const onCaptcha = async () => {
 		captchaButton.value?.startCountdown();
 	}
 };
-
 const onSubmit = async () => {
 	const params = {
 		areaCode: state.areaCode,
@@ -161,8 +160,8 @@ const onSubmit = async () => {
 		verifyCode: state.verifyCode,
 	};
 	const res = await bindApi.bindAccount(params).catch((err) => err);
-	if (res.code == common.getInstance().ResCode.SUCCESS) {
-		await useUserStore().setUserGlobalSetInfo;
+	if (res.code == 10000) {
+		await useUserStore().setUserGlobalSetInfo();
 		showToast(res.message);
 		router.push("/securityCenter");
 	} else {

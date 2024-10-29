@@ -131,9 +131,12 @@ export const useUserStore = defineStore("User", {
 			});
 		},
 		async setUserGlobalSetInfo() {
-			securityCenterApi.getUserGlobalSetInfo().then((res: any) => {
+			console.log(1234124);
+
+			securityCenterApi.getUserGlobalSetInfo().then(async (res: any) => {
 				if (res.code == Common.getInstance().ResCode.SUCCESS) {
-					this.setInfo({ ...this.getUserInfo, ...res.data });
+					await this.setInfo({ ...this.getUserInfo, ...res.data });
+					console.log(this.getUserInfo);
 				}
 			});
 		},

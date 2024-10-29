@@ -38,9 +38,6 @@ onBeforeMount(() => {
 	}
 
 	// 监听 WebSocket 重连事件，以便局部组件可以重新订阅消息
-	pubsub.subscribe("websocket_reconnected", () => {
-		websocketService.send("/activity/redBagRain");
-	});
 });
 
 // 自动登录

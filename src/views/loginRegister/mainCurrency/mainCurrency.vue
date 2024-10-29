@@ -6,8 +6,8 @@
 
 			<div class="option mt_18" v-if="filteredCurrencyList.length > 0">
 				<div class="item" :class="{ active_item: item.code == route.query.currency }" v-for="(item, index) in filteredCurrencyList" :key="index" @click="onSelectCurrency(item)">
-					<span class="label">{{ item.value }}</span>
-					<span class="value">{{ item.code }}</span>
+					<span class="label">{{ item.currencyNameI18 }}</span>
+					<span class="value">{{ item.currencyCode }}</span>
 				</div>
 			</div>
 
@@ -31,7 +31,7 @@ const route = useRoute();
 const router = useRouter();
 
 const state = reactive({
-	currencyList: [] as CurrencyEnums[],
+	currencyList: [],
 	value: "",
 	dataLoaded: false,
 });
@@ -39,19 +39,19 @@ const state = reactive({
 console.log("route", route);
 
 // 获取语言配置
-const getCommonBusinessDownBox = async () => {
-	const res = await CommonApi.getCommonBusinessDownBox().catch((err) => err);
+const getCurrencyList = async () => {
+	const res = await CommonApi.getCurrencyList().catch((err) => err);
 	if (res.code == common.getInstance().ResCode.SUCCESS) {
-		state.currencyList = res.data.currencyEnums;
+		state.currencyList = res.data;
 		state.dataLoaded = true;
 	}
 };
 
-getCommonBusinessDownBox();
+getCurrencyList();
 
 //  选择币种
 const onSelectCurrency = (item: CurrencyEnums) => {
-	router.push({ path: "/register", query: { currency: item.code, value: item.value } });
+	router.push({ path: "/register", query: { currency: item.currencyNameI18, value: item.currencyCode } });
 };
 
 // 创建一个计算属性 filteredCurrencyList，用于根据输入的搜索值动态过滤 currencyList 中的对象
@@ -63,8 +63,8 @@ const filteredCurrencyList = computed(() => {
 		// 检查 item 的 code 属性是否包含搜索值（忽略大小写）
 		// 或者 item 的 value 属性是否包含搜索值（忽略大小写）
 		return (
-			item.code?.toLowerCase().includes(searchValue) || // 如果 code 中包含搜索值，返回 true
-			item.value?.toLowerCase().includes(searchValue) // 或者如果 value 中包含搜索值，返回 true
+			item.currencyCode?.toLowerCase().includes(searchValue) || // 如果 code 中包含搜索值，返回 true
+			item.currencyNameI18?.toLowerCase().includes(searchValue) // 或者如果 value 中包含搜索值，返回 true
 		);
 	});
 });
