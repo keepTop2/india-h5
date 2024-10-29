@@ -25,4 +25,22 @@ export default class HomeApi {
 			headers,
 		});
 	};
+
+	// 公告
+	static noticeList = (data = {}, headers = {}) => {
+		return useAxiosApi(`/app/client/user/notice/getForceUserNoticeHeadList`, {
+			method: "POST",
+			data,
+			headers,
+		});
+	};
+
+	// 跑马灯消息
+	static horseRaceLampList = (data = {}, headers = {}) => {
+		return useAxiosApi(`/app/client/user/notice/getUserNoticeHeadList`, {
+			method: "POST",
+			data,
+			headers,
+		});
+	};
 }

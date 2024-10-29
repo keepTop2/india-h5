@@ -52,60 +52,52 @@
 	</div>
 
 	<!-- 区号选择器 -->
-	<AreaCodePicker
+	<!--	<AreaCodePicker
 		v-model:showAreaCode="showAreaCode"
 		v-model:searchAreaCode="searchAreaCode"
 		:currentAreaCodeIndex="currentAreaCodeIndex"
 		:indexList="indexList"
 		:areaCode="areaCode"
 		@selectAreaCode="selectAreaCode"
-	/>
+	/>-->
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, watch } from "vue"; // 导入必要的 Vue 函数
+import { ref, reactive, watch } from "vue";
 import { useRouter } from "vue-router";
-import { walletApi } from "/@/api/wallet"; // 导入钱包 API
-import common from "/@/utils/common"; // 导入公共工具
-import CommonApi from "/@/api/common"; // 导入公共 API
+import { walletApi } from "/@/api/wallet";
+import common from "/@/utils/common";
 const router = useRouter();
 // 定义组件的 props
 const props = defineProps<{
 	rechargeWayData: {
 		id: string; // 充值方式 ID
 	};
+	rechargeConfig: {
+		type: Object;
+		default: {};
+	};
 }>();
 
-interface CountryData {
+/*interface CountryData {
 	areaCode: string; // 国家区号
 	countryName: string; // 国家名称
 	countryCode: string; // 国家代码
 	icon: string | null; // 国家图标
 	maxLength: number; // 最大长度
 	minLength: number; // 最小长度
-}
+}*/
 
 // 定义响应式状态
-const showAreaCode = ref(false); // 是否显示区号选择器
+/*const showAreaCode = ref(false); // 是否显示区号选择器
 const areaCode = ref<Record<string, CountryData[]>>({});
 const searchAreaCode = ref(""); // 区号搜索内容
 const currentAreaCodeIndex = ref<number | string>(""); // 当前选中的区号索引
 const indexList = ref<string[]>([]); // 区号索引列表
-const areaCodeObj = ref<CountryData | null>(null); // 当前区号对象
-const state = reactive<{ areaCode: string }>({
+const areaCodeObj = ref<CountryData | null>(null); // 当前区号对象*/
+const state = reactive<{ amount: string; depositWayId: string }>({
 	amount: "",
 	depositWayId: props.rechargeWayData.id,
-});
-
-// 通道配置信息
-const rechargeConfig = ref<{
-	rechargeMinAmount: number;
-	rechargeMaxAmount: number;
-	currencyCode: string;
-}>({
-	rechargeMinAmount: 0,
-	rechargeMaxAmount: 0,
-	currencyCode: "",
 });
 
 // 快捷金额选项
@@ -119,7 +111,7 @@ const buttonType = computed(() => {
 });
 
 // 监听搜索区号的变化
-watch(
+/*watch(
 	() => searchAreaCode.value,
 	() => {
 		const filterData = countries.value.filter(
@@ -131,13 +123,13 @@ watch(
 		areaCode.value = groupByFirstLetter(filterData || []);
 		indexList.value = Object.keys(areaCode.value);
 	}
-);
+);*/
 
-const countries = ref<CountryData[]>([]); // 国家数据
+// const countries = ref<CountryData[]>([]); // 国家数据
 
-onMounted(() => {
-	getAreaCodeDownBox();
-});
+// onMounted(() => {
+// 	getAreaCodeDownBox();
+// });
 
 // 点击充值
 const onRecharge = async () => {
@@ -153,18 +145,18 @@ const onRecharge = async () => {
 	}
 };
 
-// 获取区号下拉框数据
-const getAreaCodeDownBox = () => {
-	CommonApi.getAreaCodeDownBox().then((res: any) => {
-		if (res.code === common.getInstance().ResCode.SUCCESS) {
-			countries.value = res.data; // 设置国家数据
-			areaCode.value = groupByFirstLetter(countries.value || []);
-			indexList.value = Object.keys(areaCode.value);
-			state.areaCode = countries.value[0].areaCode; // 默认选择第一个区号
-			areaCodeObj.value = countries.value[0]; // 设置当前区号对象
-		}
-	});
-};
+// // 获取区号下拉框数据
+// const getAreaCodeDownBox = () => {
+// 	CommonApi.getAreaCodeDownBox().then((res: any) => {
+// 		if (res.code === common.getInstance().ResCode.SUCCESS) {
+// 			countries.value = res.data; // 设置国家数据
+// 			areaCode.value = groupByFirstLetter(countries.value || []);
+// 			indexList.value = Object.keys(areaCode.value);
+// 			state.areaCode = countries.value[0].areaCode; // 默认选择第一个区号
+// 			areaCodeObj.value = countries.value[0]; // 设置当前区号对象
+// 		}
+// 	});
+// };
 
 // 获取充值配置
 // const getRechargeConfig = async () => {
@@ -179,7 +171,7 @@ const getAreaCodeDownBox = () => {
 // };
 
 // 按首字母分组国家数据
-const groupByFirstLetter = (countries: CountryData[]) => {
+/*const groupByFirstLetter = (countries: CountryData[]) => {
 	return countries.reduce((acc, country) => {
 		const firstLetter = country.countryCode[0].toUpperCase(); // 获取首字母并大写处理
 		if (!acc[firstLetter]) {
@@ -188,18 +180,18 @@ const groupByFirstLetter = (countries: CountryData[]) => {
 		acc[firstLetter].push(country); // 将国家添加到相应字母组
 		return acc;
 	}, {} as Record<string, CountryData[]>);
-};
+};*/
 
 // 初始化获取充值配置和区号数据
 // getRechargeConfig();
 
 // 选择区号的处理函数
-const selectAreaCode = (item: string, i: CountryData) => {
+/*const selectAreaCode = (item: string, i: CountryData) => {
 	currentAreaCodeIndex.value = item; // 更新当前选择的区号索引
 	areaCodeObj.value = i; // 更新区号对象
 	state.areaCode = i.areaCode; // 更新区域代码
 	showAreaCode.value = false; // 隐藏区号选择器
-};
+};*/
 </script>
 
 <style scoped lang="scss">

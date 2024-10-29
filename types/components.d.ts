@@ -9,6 +9,7 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    Announcement: typeof import('./../src/components/Announcement/Announcement.vue')['default']
     AreaCodePicker: typeof import('./../src/components/AreaCodePicker/AreaCodePicker.vue')['default']
     Button: typeof import('./../src/components/Button/Button.vue')['default']
     Carousel: typeof import('./../src/components/Carousel/Carousel.vue')['default']
@@ -23,6 +24,7 @@ declare module '@vue/runtime-core' {
     NoGameImg: typeof import('./../src/components/NoGameImg/NoGameImg.vue')['default']
     Notify: typeof import('./../src/components/Notify/Notify.vue')['default']
     OkDialog: typeof import('./../src/components/OkDialog/index.vue')['default']
+    Popup: typeof import('./../src/components/Announcement/Popup.vue')['default']
     RedbagRainCountdown: typeof import('./../src/components/redbagRainCountdown/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
@@ -43,6 +45,7 @@ declare module '@vue/runtime-core' {
     VanIndexBar: typeof import('vant/es')['IndexBar']
     VanList: typeof import('vant/es')['List']
     VanNavBar: typeof import('vant/es')['NavBar']
+    VanNoticeBar: typeof import('vant/es')['NoticeBar']
     VanPicker: typeof import('vant/es')['Picker']
     VanPopover: typeof import('vant/es')['Popover']
     VanPopup: typeof import('vant/es')['Popup']
