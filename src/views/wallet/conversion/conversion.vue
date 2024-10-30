@@ -47,13 +47,13 @@
 </template>
   
 <script setup lang='ts'>
-const formInput = ref<Number>(0)
-const toInput = ref<Number>(0)
+const formInput = ref<string>('0')
+const toInput = ref<string>('0')
 watch(
     [() => formInput.value,() => toInput.value],
     (arr) => {
-        formInput.value = arr[0].toFixed(2)
-        toInput.value = arr[1].toFixed(2)
+        formInput.value = parseFloat(arr[0]).toFixed(2)
+        toInput.value = parseFloat(arr[1]).toFixed(2)
     }, {immediate:true}
   )
 
