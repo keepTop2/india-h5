@@ -57,22 +57,31 @@
 				<div class="stats-container color_T1 bg_BG3">
 					<div class="stat-item">
 						<span class="label">{{ $t('records["投注金额"]') }}：</span>
-						<span class="value">99999999</span>
+						<span class="value">{{ orderRecordsData.totalVO.betAmount }}</span>
 					</div>
 					<div class="stat-item">
 						<span class="label">{{ $t('records["输赢金额"]') }}：</span>
-						<span class="value negative">-99999999</span>
+						<span class="value negative">{{ orderRecordsData.totalVO.winLoseAmount }}</span>
 					</div>
 					<div class="stat-item">
 						<span class="label">{{ $t('records["投注笔数"]') }}：</span>
-						<span class="value">999999</span>
+						<span class="value">{{ orderRecordsData.totalVO.betNum }}</span>
 					</div>
 				</div>
-				<Sports />
+
+				<van-list v-model:loading="loading" :finished="finished" @load="onLoad">
+					<Sports v-for="(item, index) in orderRecordsData.sabOrderList" :key="index" :item="item" />
+					<Chuanguan v-for="(item, index) in orderRecordsData.eventOrderPage.records" :key="index" :item="item" />
+					<Qipai v-for="(item, index) in orderRecordsData.basicOrderPage" :key="index" :item="item" />
+					<Zhenren v-for="(item, index) in orderRecordsData.tableOrderPage" :key="index" :item="item" />
+					<!-- <Dianzi /> -->
+				</van-list>
+
+				<!-- <Sports />
 				<Chuanguan :list="matches" />
 				<Qipai />
 				<Zhenren />
-				<Dianzi />
+				<Dianzi /> -->
 			</div>
 		</div>
 	</div>
@@ -92,30 +101,59 @@ import Zhenren from "./components/Zhenren.vue";
 import Dianzi from "./components/Dianzi.vue";
 // 接口
 import sportsApi from "/@/api/venueHome/sports";
-onMounted(() => { 
-	getList()
-})
+import { onActivated } from "vue";
+import { ClientOrderRecordRes } from "./type";
+import { showToast } from "vant";
 
-const getList = () => { 
+onActivated(() => {
+	console.log("进入页面执行");
+	pageVo.pageNumber = 1;
+	getList();
+});
+const orderRecordsData = reactive<ClientOrderRecordRes>({
+	basicOrderPage: {},
+	tableOrderPage: {},
+	sabOrderList: {},
+	eventOrderPage: {},
+	totalVO: {
+		betAmount: 0,
+		winLoseAmount: 0,
+		betNum: 0,
+	},
+} as ClientOrderRecordRes);
+const getList = () => {
 	const data = {
-  "pageNumber": 1,
-  "pageSize": 10,
-  "venueType": 1,
-  "betStartTime": dateRangeSelectDemoState.startTime,
-  "betEndTime": dateRangeSelectDemoState.endTime
-}
-	sportsApi.getBettingRecordList(data).then(res => { 
-		console.log(res,'res+++++++++++++');
-	}).catch(err => { 
-		console.log(err,'errrrrrrrrrrr');
-		
-	})
-}
+		...pageVo,
+		venueType: state.activeList,
+		betStartTime: dateRangeSelectDemoState.startTime,
+		betEndTime: dateRangeSelectDemoState.endTime,
+	};
+	sportsApi
+		.getBettingRecordList(data)
+		.then((res) => {
+			console.log(res, "res+++++++++++++");
+		})
+		.catch((err) => {
+			console.log(err, "errrrrrrrrrrr");
+		});
+};
+const loading = ref(false);
+const finished = ref(false);
+const onLoad = () => {
+	console.log("加载");
+	pageVo.pageNumber++;
+	getList();
+};
 
 const onClickLeft = () => {
 	// 发布事件
 	pubsub.publish("onCollapseMenu");
 };
+
+const pageVo = reactive({
+	pageNumber: 1,
+	pageSize: 100,
+});
 const state = reactive({
 	showPicker: false,
 	//条件查询选项
@@ -142,7 +180,7 @@ const state = reactive({
 		},
 	],
 	//激活的选项
-	activeList: "3",
+	activeList: "1",
 	showPicker2: false,
 	//条件查询选项
 	typeList2: [
@@ -181,9 +219,9 @@ const dateRangeSelectDemoState = reactive({
 });
 
 const matches = ref([
-	{ team1: "荷兰",team2:"英格兰", betContent: "荷兰全场独赢", result: "赢", odds: "2.98" },
-	{ team1: "ColorasddColorasddColorasdd",team2:"BetContentbetContent", betContent: "荷兰全场独赢", result: "输", odds: "2.98" },
-	{ team1: "荷兰",team2:"英格兰", betContent: "荷兰全场独赢", result: "-", odds: "2.98" },
+	{ team1: "荷兰", team2: "英格兰", betContent: "荷兰全场独赢", result: "赢", odds: "2.98" },
+	{ team1: "ColorasddColorasddColorasdd", team2: "BetContentbetContent", betContent: "荷兰全场独赢", result: "输", odds: "2.98" },
+	{ team1: "荷兰", team2: "英格兰", betContent: "荷兰全场独赢", result: "-", odds: "2.98" },
 ]);
 
 /**
@@ -192,7 +230,7 @@ const matches = ref([
  */
 const copyOrderNumber = () => {
 	navigator.clipboard.writeText("2103102391230123").then(() => {
-		alert("单号已复制");
+		showToast("复制成功");
 	});
 };
 
