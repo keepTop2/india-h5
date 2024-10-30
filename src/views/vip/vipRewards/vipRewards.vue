@@ -75,14 +75,14 @@ const welfareList = [
 		icon: icon2,
 	},
 	{
+		title: $.t(`vipRewards['豪华赠品']`),
+		text: $.t(`vipRewards['尊享赠送私人顶级奢华福利机会']`),
+		icon: icon4,
+	},
+	{
 		title: $.t(`vipRewards['惊人的升级奖金']`),
 		text: $.t(`vipRewards['惊喜的奖励正在等着你，随着你等级的提升，奖励会被多次解锁。']`),
 		icon: icon3,
-	},
-	{
-		title: $.t(`vipRewards['专属 VIP 接待员']`),
-		text: $.t(`vipRewards['解锁 VIP 38 的免费提款特权，享受 VIP 主机的个性化关注和专属福利。']`),
-		icon: icon4,
 	},
 ];
 
@@ -205,6 +205,7 @@ const onClickLeft = () => {
 		.content {
 			max-width: 432px;
 			text-align: center;
+			flex: 1;
 			.title {
 				margin-top: 28px;
 				@include themeify {

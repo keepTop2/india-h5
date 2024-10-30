@@ -6,35 +6,27 @@
 			<div class="currency">
 				<div v-for="(i, index) in spinList" :key="index" class="spin-item" :style="getItemStyle(index)">
 					<span class="amount"><VantLazyImg :src="i.prizePictureUrl" alt="" /></span>
-					<!-- <img :src="getImg(i.currency)" /> -->
 				</div>
 			</div>
 		</div>
-
 		<!-- 大转盘背景 -->
 		<div class="point-img">
 			<img :src="crypto_point" alt="" :class="{ reward: rewardAni }" />
 		</div>
-
 		<!-- 手动画 -->
 		<canvas v-if="!spinning" id="canvas" width="160" height="200"></canvas>
-
 		<!-- 中间 -->
-		<div :class="['btn-img', { loading: spinning }]" @click.stop="handleStartSpin">
+		<div :class="['btn-img', { loading: spinning }]" @click.stop="StartVerification">
 			<img class="btn-txt" :src="crypto_btn" alt="" />
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
-import { ref, watch, nextTick } from "vue";
+import { ref, nextTick } from "vue";
 import crypto_point from "./img/crypto_point.png";
 import crypto_btn from "./img/crypto_btn.png";
 import spinBG from "./img/spin_bg.png";
-import { activityApi } from "/@/api/activity";
-import { useUserStore } from "/@/store/modules/user";
-import { showToast } from "vant";
-const userStore = useUserStore();
 const spinning = ref(false);
 const spinOver = ref(false);
 const spinRotate = ref("0deg");
@@ -54,38 +46,20 @@ interface Coin {
 }
 
 interface Spin {
-	spinList: Coin[]; //奖品列表
+	spinList: any; //奖品列表
 	reward: any;
-	balanceCount: number;
-	enable: Boolean | null;
 }
-
 const props = withDefaults(defineProps<Spin>(), {
 	spinList: () => [] as any,
 	reward: () => ({} as Coin),
-	balanceCount: Number,
-	enable: Boolean,
 });
-
-// startSpinningCallback 开始旋转的回掉函数
-const emit = defineEmits(["startSpinningCallback", "endSpinningCallback", "needLogin", "noMorebalanceCount"]);
-
-// 监听props中的reward变化，以触发停止旋转
-watch(
-	() => props.reward,
-	async () => {
-		endGame();
-	}
-);
-
+const emit = defineEmits(["startSpinningCallback", "endSpinningCallback", "StartVerification"]);
 const endGame = async () => {
 	await nextTick();
 	spinOver.value = true;
 	const { id } = props.reward;
 	const findIndex = props.spinList.findIndex((i: any) => i.id === id);
-
 	if (findIndex === -1) {
-		// 错误处理
 		console.error("奖品信息错误");
 		clearSpin();
 		return;
@@ -112,28 +86,14 @@ const clearSpin = () => {
 	spinning.value = false;
 	rewardAni.value = false;
 };
+const StartVerification = () => {
+	emit("StartVerification");
+};
 // 处理开始旋转的逻辑
 const handleStartSpin = async () => {
-	console.log(props.enable);
-
-	if (!props.enable) return showToast("活动未开启");
-	if (!userStore.token) {
-		return emit("needLogin");
-	}
-
-	if (props.balanceCount < 1) {
-		return emit("noMorebalanceCount");
-	}
 	if (spinning.value) return;
-	activityApi.toSpinActivity().then((res: any) => {
-		if (res.code === 10000) {
-			clearSpin();
-			spinning.value = true;
-			emit("startSpinningCallback");
-		} else {
-			return emit("endSpinningCallback");
-		}
-	});
+	clearSpin();
+	spinning.value = true;
 };
 defineExpose({
 	handleStartSpin,

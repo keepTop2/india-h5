@@ -8,7 +8,7 @@
 			<div class="progress" :style="{ width: `${progressPercentage}%` }">
 				<div class="percentage_info">
 					<div v-if="props.percentageShow" class="percentage">
-						<div class="value">{{ progressPercentage }}%</div>
+						<div class="value">{{ progressPercentage > 100 ? 100 : progressPercentage }}%</div>
 						<SvgIcon class="arrow" iconName="vip/progress_bar_percent_arrow" />
 					</div>
 
@@ -59,18 +59,24 @@ const currentRankImage = computed(() => {
 		: rank5Img;
 });
 // 计算百分比
-const progressPercentage = computed(() => {
+const progressPercentage: any = computed(() => {
 	const { currentExp, currentVipExp } = props.userVipInfo;
 	// 防止NaN：确保 upgradeVipExp 不为0，并且 currentExp 和 upgradeVipExp 都是有效数字
 	if (isNaN(currentExp) || isNaN(currentVipExp) || currentVipExp === 0) {
 		return 0;
 	}
-
+	//
 	// 计算百分比并取整
-	return Math.floor((currentExp / currentVipExp) * 100);
+	return truncateToTwoDecimals((currentExp / currentVipExp) * 100 > 100 ? 100.0 : (currentExp / currentVipExp) * 100);
 });
 
-console.log("progressPercentage", progressPercentage);
+const truncateToTwoDecimals = (num) => {
+	const [integerPart, decimalPart] = String(num).split(".");
+	// 如果没有小数部分，直接返回整数部分
+	if (!decimalPart) return integerPart + ".00";
+	// 截取小数点后两位
+	return integerPart + "." + decimalPart.slice(0, 2);
+};
 </script>
 
 <style scoped lang="scss">

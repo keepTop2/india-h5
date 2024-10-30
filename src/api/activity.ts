@@ -131,6 +131,7 @@ export const activityApi = {
 			data,
 			headers: {
 				showLoading: true,
+				hideToast: true,
 			},
 		});
 	},

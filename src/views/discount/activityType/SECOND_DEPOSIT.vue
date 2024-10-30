@@ -91,6 +91,7 @@
 			{{ dialogInfo.message }}
 			<template v-slot:footer v-if="dialogInfo.status === 30049"> 去存款 </template>
 		</activityDialog>
+		<activityDialog v-model="showDialog2" title="温馨提示" :confirm="confirmDialog" :goToLogin="true"> 您的账号暂未登录无法参与活动， 如已有账号请登录，如还未有账号 请前往注册 </activityDialog>
 	</div>
 </template>
 
@@ -104,6 +105,7 @@ import { showToast } from "vant";
 const router = useRouter();
 const route = useRoute();
 const showDialog = ref(false);
+const showDialog2 = ref(false);
 const dialogInfo: any = ref({});
 const activityInfo = JSON.parse(decodeURIComponent(route.query.data as string));
 const activityData = ref();
@@ -120,17 +122,24 @@ const getConfigDetail = () => {
 	});
 };
 const apply = () => {
-	activityApi.toActivity({ id: activityInfo.id }).then((res: any) => {
-		if (res.code === 10000) {
-			if (res.data.status !== 10000) {
-				dialogInfo.value = res.data;
-				showDialog.value = true;
+	if (!useUserStore().token) {
+		showDialog2.value = true;
+		return;
+	} else if (activityData.value.status === 10000 && new Date().getTime() >= activityData.value.activityStartTime) {
+		activityApi.toActivity({ id: activityInfo.id }).then((res: any) => {
+			if (res.code === 10000) {
+				if (res.data.status !== 10000) {
+					dialogInfo.value = res.data;
+					showDialog.value = true;
+				} else {
+					showToast("申请成功");
+					getConfigDetail();
+				}
 			} else {
-				showToast("申请成功");
-				getConfigDetail();
+				showToast(res.message);
 			}
-		}
-	});
+		});
+	}
 };
 const confirmDialog = () => {
 	if (dialogInfo.value.status === 30049) {

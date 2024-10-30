@@ -1,16 +1,17 @@
 <template>
 	<div class="content">
-		<VantNavBar title="反馈详情" @onClickLeft="onClickLeft" />
+    <VantNavBar title="消息中心" @onClickLeft="onClickLeft"/>
 
 		<div class="wrapper">
 			<div class="message">
-				<div class="text_title">标题标题标题标题标题标题标题</div>
+        <div class="text_title">
+          <div v-html="messageContentI18nCode"></div>
+        </div>
 				<div class="time">
-					<span class="label">2023/03/10 22:16:31</span>
+          <span class="label">{{ new Date(+createdTime).toLocaleString() }}</span>
 				</div>
 				<div ref="textRefs" class="text_content">
-					我们想提请您注意有关我们平台上 $ICP 存款地址的重要更新。旧的充值地址已经被禁用我们想提请您注意有关我们平台上 $ICP 存款地址的我们想提请您注意有关我们平台上 $ICP
-					存款地址的重要更新。旧的充值地址已经被禁用我们想提请您注意有关我们平台上 $ICP 存款地址的我们想提请您注意有关我们平台上 $ICP 存款地址的重要更新。
+          <div v-html="noticeTitleI18nCode"></div>
 				</div>
 			</div>
 		</div>
@@ -19,6 +20,8 @@
 
 <script setup lang="ts">
 const router = useRouter();
+const route = useRoute()
+const {messageContentI18nCode, noticeTitleI18nCode, targetId, createdTime} = route.query;
 
 const onClickLeft = () => {
 	router.go(-1);

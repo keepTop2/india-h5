@@ -58,7 +58,7 @@
 						<p class="label">
 							<span>活动时间</span>
 						</p>
-						<p class="value" v-if="activityData.activityDeadline == 0">
+						<p class="value" v-if="activityData?.activityDeadline == 0">
 							{{ dayjs(activityData?.activityStartTime).format("YYYY-MM-DD HH:mm:ss") }}~{{ dayjs(activityData?.activityEndTime).format("YYYY-MM-DD HH:mm:ss") }}
 						</p>
 						<p class="value" v-if="activityData.activityDeadline == 1">长期活动</p>
@@ -129,18 +129,19 @@ const apply = () => {
 	if (!userStore.token) {
 		showDialog2.value = true;
 		return;
-	}
-	activityApi.toActivity({ id: activityInfo.id }).then((res: any) => {
-		if (res.code === 10000) {
-			if (res.data.status !== 10000) {
-				dialogInfo.value = res.data;
-				showDialog.value = true;
-			} else {
-				showToast("申请成功");
-				getConfigDetail();
+	} else if (activityData.value.status === 10000 && new Date().getTime() >= activityData.value.activityStartTime) {
+		activityApi.toActivity({ id: activityInfo.id }).then((res: any) => {
+			if (res.code === 10000) {
+				if (res.data.status !== 10000) {
+					dialogInfo.value = res.data;
+					showDialog.value = true;
+				} else {
+					showToast("申请成功");
+					getConfigDetail();
+				}
 			}
-		}
-	});
+		});
+	}
 };
 const confirmDialog = () => {
 	if (dialogInfo.value.status === 30049) {

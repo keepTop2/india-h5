@@ -215,7 +215,7 @@ onMounted(() => {
 // 注册
 const onSubmit = async () => {
 	const certifyId = refhcaptcha.value.certifyId;
-	const res = await registerApi.userRegister({ ...state, certifyId, mainCurrency: route.query.currency }).catch((err) => err);
+	const res = await registerApi.userRegister({ ...state, certifyId, mainCurrency: route.query.value }).catch((err) => err);
 	if (res.code == common.getInstance().ResCode.SUCCESS) {
 		store.setInfo(res.data);
 		store.initUserInfo();
