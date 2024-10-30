@@ -37,7 +37,7 @@
 				<div
 					class="item"
 					:class="{ pay_active: item.withdrawTypeCode == withdrawWayData?.withdrawTypeCode && item.networkType == withdrawWayData?.networkType }"
-					v-for="(item, index) in withdrawWayList"
+					v-for="item in withdrawWayList"
 					@click="onRechargeWay(item)"
 				>
 					<div class="tag" v-if="item.recommendFlag == 1">{{ $t(`withdraw['推荐']`) }}</div>
