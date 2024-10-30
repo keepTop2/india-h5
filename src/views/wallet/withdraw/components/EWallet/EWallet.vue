@@ -9,8 +9,8 @@
 		<div v-for="field in inputFields" :key="field.code">
 			<div class="cell" v-if="isFieldVisible(field.code)">
 				<div class="cell_input" :class="{ phone: field.code === 'userPhone', error: field.code === 'userPhone' && !isPhoneValid && state.userPhone }">
-					<div v-if="field.code === 'userPhone' && state.areaCode" class="area_code" @click="showAreaCode = true">
-						<span>+{{ state.areaCode }}</span> <SvgIcon class="down" iconName="loginOrRegister/navBar/down" />
+					<div v-if="field.code === 'userPhone'" class="area_code" @click="showAreaCode = true">
+						<span v-if="state.areaCode">+{{ state.areaCode }}</span> <SvgIcon class="down" iconName="loginOrRegister/navBar/down" />
 					</div>
 					<input v-model="state[field.model]" :type="field.type" :placeholder="$t(`withdraw['${field.placeholder}']`)" @focus="onFocus(field.model)" @blur="onBlur(field.model)" />
 					<SvgIcon v-if="field.code === 'bankName'" class="arrow" iconName="wallet/arrow" />
@@ -221,6 +221,7 @@ defineExpose({
 	isPhoneValid,
 	inputFields,
 	clearParams,
+	getAreaCodeDownBox,
 });
 </script>
 

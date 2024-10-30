@@ -199,21 +199,11 @@ const errorMessage = computed(() => {
 	if (amount > Number(totalBalance) || !totalBalance) {
 		return $.t(`withdraw["余额不足"]`);
 	} else if (amount < withdrawWayConfig.value.withdrawMinAmount) {
-		return `${$.t('withdraw["单次最低提款"]')}: ${UserStore.userInfo.mainCurrency} ${withdrawWayConfig.value.withdrawMinAmount}`;
+		return `${$.t('withdraw["单次最低提款"]')}: ${UserStore.userInfo.currencySymbol} ${withdrawWayConfig.value.withdrawMinAmount}`;
 	} else if (amount > withdrawWayConfig.value.withdrawMaxAmount) {
-		return `${$.t('withdraw["单次最高提款"]')}: ${UserStore.userInfo.mainCurrency} ${withdrawWayConfig.value.withdrawMaxAmount}`;
+		return `${$.t('withdraw["单次最高提款"]')}: ${UserStore.userInfo.currencySymbol} ${withdrawWayConfig.value.withdrawMaxAmount}`;
 	}
 	return "";
-});
-
-// 虚拟币约等于到账额度
-const approximateAmount = computed(() => {
-	const amount = Number(state.amount);
-	const { singleDayRemindMaxWithdrawAmount: maxWithdrawAmount, singleDayRemindWithdrawCount: remainingWithdrawCount, feeRate } = withdrawWayConfig.value;
-	if (isNaN(amount) || (remainingWithdrawCount > 0 && amount <= maxWithdrawAmount)) {
-		return amount;
-	}
-	return common.getInstance().formatFloat(amount - Math.trunc((amount * feeRate) / 100));
 });
 
 // 计算手续费
@@ -228,26 +218,24 @@ const feeAmount = computed(() => {
 	if (meetsFreeCondition) {
 		return 0;
 	}
-	const calculatedFee = Math.trunc((amount * feeRate) / 100);
-	return isCrypto ? Math.trunc(calculatedFee / exchangeRate.value) : calculatedFee;
+	const calculatedFee = common.getInstance().div(common.getInstance().mul(amount, feeRate), 100);
+	return isCrypto ? Math.trunc(common.getInstance().div(calculatedFee, exchangeRate.value)) : calculatedFee;
 });
 
 // 计算预计到账金额
 const estimatedAmount = computed(() => {
 	const amount = Number(state.amount);
 	const isCrypto = withdrawWayData.value.withdrawTypeCode === "crypto_currency";
-	const { singleDayRemindMaxWithdrawAmount: maxWithdrawAmount, singleDayRemindWithdrawCount: remainingWithdrawCount, feeRate } = withdrawWayConfig.value;
-	// console.log("isNaN(amount)", isNaN(amount));
-	// console.log("amount", amount);
-	// console.log("isCrypto", isCrypto);
-	// console.log("exchangeRate.value", exchangeRate.value);
-	const meetsFreeCondition = remainingWithdrawCount > 0 && amount <= maxWithdrawAmount;
-	if (meetsFreeCondition) {
-		return isCrypto ? amount / exchangeRate.value : amount;
+	if (!isCrypto) {
+		return common.getInstance().sub(amount, feeAmount.value);
+	} else {
+		return common.getInstance().sub(common.getInstance().div(amount, exchangeRate.value), feeAmount.value);
 	}
-	const calculatedFee = Math.trunc((amount * feeRate) / 100);
-	const netAmount = amount - calculatedFee;
-	return isCrypto ? netAmount / exchangeRate.value : netAmount;
+});
+
+// 虚拟币约等于到账额度
+const approximateAmount = computed(() => {
+	return common.getInstance().mul(estimatedAmount.value, exchangeRate.value);
 });
 
 // 获取冻结金额
@@ -299,8 +287,8 @@ const buttonType = computed(() => {
 		default:
 			break;
 	}
-	console.log("requiredFields", requiredFields);
-	console.log("dynamicFields", dynamicFields);
+	// console.log("requiredFields", requiredFields);
+	// console.log("dynamicFields", dynamicFields);
 	// 检查所有属性是否有值
 	const allFieldsHaveValue = requiredFields.every((key) => dynamicFields[key] !== undefined && dynamicFields[key] !== "");
 	// 按钮状态判断
@@ -379,6 +367,9 @@ const getWithdrawApply = async (params) => {
 		getWithdrawConfig(); // 获取通道配置
 		getUserBalance(); // 获取最新余额
 		getWithdrawExchange(); // 获取提款汇率
+		if (withdrawWayData.value.withdrawTypeCode !== "crypto_currency") {
+			childRef.value?.getAreaCodeDownBox();
+		}
 	}
 };
 

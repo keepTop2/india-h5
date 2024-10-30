@@ -26,7 +26,7 @@
 			2.
 			<i18n-t keypath="recharge['请勿向上述地址充值任何非USDT-TRC20的货币，否则将无法找回。']" :tag="'span'">
 				<template v-slot:value>
-					<span class="text_2" @click=""> {{ rechargeConfig.rechargeWay }} </span>
+					<span class="text_2"> {{ rechargeWayData.networkType }} </span>
 				</template>
 			</i18n-t>
 		</div>

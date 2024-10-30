@@ -13,8 +13,8 @@
 					:class="{ phone: field.code === 'userPhone', error: field.code === 'userPhone' && !isPhoneValid && state.userPhone }"
 					@click="field.code === 'bankName' ? (backShow = true) : null"
 				>
-					<div v-if="field.code === 'userPhone' && state.areaCode" class="area_code" @click="showAreaCode = true">
-						<span>+{{ state.areaCode }}</span> <SvgIcon class="down" iconName="loginOrRegister/navBar/down" />
+					<div v-if="field.code === 'userPhone'" class="area_code" @click="showAreaCode = true">
+						<span v-if="state.areaCode">+{{ state.areaCode }}</span> <SvgIcon class="down" iconName="loginOrRegister/navBar/down" />
 					</div>
 					<input
 						v-model="state[field.model]"
@@ -76,7 +76,7 @@
 		@confirm="handleConfirm"
 	>
 		<template #cell="{ item }">
-			<div class="cell">
+			<div class="cell_option">
 				<div class="icon">
 					<img :src="item.iconFileUrl" alt="" />
 				</div>
@@ -239,7 +239,6 @@ const selectAreaCode = (item, i) => {
 // 选择上一次提款信息
 const onGetLastWithdrawInfo = () => {
 	Object.assign(state, props.withdrawWayConfig.lastWithdrawInfoVO);
-	console.log("state", state);
 	lastWithdrawInfoShow.value = false;
 };
 
@@ -272,13 +271,14 @@ defineExpose({
 	isPhoneValid,
 	inputFields,
 	clearParams,
+	getAreaCodeDownBox,
 });
 </script>
 
 <style scoped lang="scss">
 @import "../common.scss"; // 引入公共样式
 
-.cell {
+.cell_option {
 	display: flex;
 	align-items: center;
 	gap: 16px;
