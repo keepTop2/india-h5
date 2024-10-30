@@ -15,10 +15,10 @@
 						</template>
 						<van-list v-model:loading="loading" :finished="finished" @load="onLoad">
 							<van-swipe-cell v-for="(item, index) in state.noticeList" :key="index" right-width="66">
-								<div class="info" @click="$router.push('/messageDetail')">
+								<div class="info" @click="toDetail(item)">
 									<div class="text_title">{{ item.noticeTitleI18nCode }}</div>
 									<div class="time">
-										<span class="label">2023/03/10 22:16:31</span>
+										<span class="label">{{ new Date(item.createdTime).toLocaleString() }}</span>
 									</div>
 									<div ref="textRefs" class="text_content" v-bind:class="{ collapsed: isCollapsed[index] }">
 										{{ item.messageContentI18nCode }}
@@ -49,10 +49,10 @@
 						</template>
 						<van-list v-model:loading="loading" :finished="finished" @load="onLoad">
 							<van-swipe-cell v-for="(item, index) in state.noticeList" :key="index" right-width="66">
-								<div class="info" @click="$router.push('/messageDetail')">
+								<div class="info" @click="toDetail(item)">
 									<div class="text_title">{{ item.noticeTitleI18nCode }}</div>
 									<div class="time">
-										<span class="label">2023/03/10 22:16:31</span>
+										<span class="label">{{ new Date(item.createdTime).toLocaleString() }}</span>
 									</div>
 									<div ref="textRefs" class="text_content" v-bind:class="{ collapsed: isCollapsed[index] }">
 										{{ item.messageContentI18nCode }}
@@ -83,8 +83,7 @@
           <div class="time">
             <span class="label">2023/03/10 22:16:31</span>
           </div>
-          <div ref="textRefs" class="text_content" v-bind:class="{ collapsed: isCollapsed[index] }">
-            {{ item.messageContentI18nCode }}
+              {{ item.messageContentI18nCode }}
           </div>
           <div v-if="showToggleButton[index]" class="unfold" @click.stop="toggleText(index)">
             {{ isCollapsed[index] ? "展开" : "收起" }}
@@ -112,6 +111,7 @@ import BottomHandle from "/@/views/subViews/my/messageCenter/components/BottomHa
 import NoData from "/@/views/subViews/my/messageCenter/components/noData.vue";
 import messageApi from "/@/api/message";
 import { Message } from "./type";
+import { showToast } from "vant";
 
 const state = reactive({
 	list: [] as any,
@@ -132,7 +132,6 @@ const router = useRouter();
 const loading = ref<boolean>(false);
 const finished = ref<boolean>(false);
 const onLoad = () => {
-	console.log("执行");
 	state.params.pageNumber++;
 	getMessageList();
 };
@@ -158,11 +157,8 @@ const getMessageList = () => {
 				finished.value = true;
 			}
 			state.noticeList.push(...res.data.records);
-			console.log(res, "res");
 		},
-		(err) => {
-			console.log(err, "res");
-		}
+		(err) => {}
 	);
 };
 
@@ -190,7 +186,6 @@ const checkTextOverflow = () => {
 };
 
 const readAll = () => {
-	console.log("readAll");
 	messageApi
 		.messageReadAll({ noticeType: state.params.noticeType })
 		.then((res) => {
@@ -207,13 +202,25 @@ const delAll = () => {
 		})
 		.catch((err) => {});
 };
-const msgDelete = (row) => {
-	console.log(row, "delete");
+const msgDelete = async (row) => {
+	const { targetId } = row;
+	const res = await messageApi.msgDelOrRead({
+		targetId,
+		status: 2,
+	});
+	if (res.code !== 10000) return showToast(res.message);
+	state.noticeList.splice(
+		state.noticeList.findIndex((item) => item === row),
+		1
+	);
+	// refresh();
+	showToast("删除成功");
 };
 
 // 刷新
 const refresh = () => {
 	state.params.pageNumber = 1;
+	state.noticeList = [];
 	getMessageList();
 };
 
@@ -227,6 +234,25 @@ onMounted(async () => {
 
 const onClickLeft = () => {
 	router.go(-1);
+};
+
+// 详情
+const toDetail = async (item) => {
+	const { messageContentI18nCode, noticeTitleI18nCode, targetId, createdTime } = item;
+	const res = await messageApi.msgDelOrRead({
+		targetId,
+		status: 1,
+	});
+	if (res.code !== 10000) showToast(res.message);
+	router.push({
+		path: "/messageDetail",
+		query: {
+			messageContentI18nCode,
+			noticeTitleI18nCode,
+			targetId,
+			createdTime,
+		},
+	});
 };
 </script>
 <style lang="scss" scoped>

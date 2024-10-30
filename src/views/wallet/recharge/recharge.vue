@@ -138,7 +138,10 @@ const getRechargeConfig = async () => {
 // 不再提醒
 const onNotRemind = async () => {
 	if (checkbox.value) {
-		const res = await walletApi.notRemind().catch((err) => err);
+		const params = {
+			netWorkType: rechargeWayData.value.networkType,
+		};
+		const res = await walletApi.notRemind(params).catch((err) => err);
 		if (res.code === common.getInstance().ResCode.SUCCESS) {
 			checkbox.value = false;
 			isModalVisible.value = false;
