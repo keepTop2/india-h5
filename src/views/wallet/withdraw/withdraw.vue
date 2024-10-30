@@ -299,8 +299,8 @@ const buttonType = computed(() => {
 		default:
 			break;
 	}
-	// console.log("requiredFields", requiredFields);
-	// console.log("dynamicFields", dynamicFields);
+	console.log("requiredFields", requiredFields);
+	console.log("dynamicFields", dynamicFields);
 	// 检查所有属性是否有值
 	const allFieldsHaveValue = requiredFields.every((key) => dynamicFields[key] !== undefined && dynamicFields[key] !== "");
 	// 按钮状态判断
