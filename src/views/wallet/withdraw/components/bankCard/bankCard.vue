@@ -13,7 +13,7 @@
 					:class="{ phone: field.code === 'userPhone', error: field.code === 'userPhone' && !isPhoneValid && state.userPhone }"
 					@click="field.code === 'bankName' ? (backShow = true) : null"
 				>
-					<div v-if="field.code === 'userPhone'" class="area_code" @click="showAreaCode = true">
+					<div v-if="field.code === 'userPhone' && state.areaCode" class="area_code" @click="showAreaCode = true">
 						<span>+{{ state.areaCode }}</span> <SvgIcon class="down" iconName="loginOrRegister/navBar/down" />
 					</div>
 					<input
@@ -75,6 +75,8 @@
 		</template>
 	</VantPicker>
 
+	<!-- <BankCardPicker v-model:showAreaCode="backShow" v-model:stateBankCard="stateBankCard" @selectBankCard="handleConfirm" :indexList="indexList" :areaCode="areaCode" :stateAreaCode="state.areaCode" /> -->
+
 	<!-- 手机区号选择器 -->
 	<AreaCodePicker
 		v-model:showAreaCode="showAreaCode"
@@ -92,6 +94,7 @@ import common from "/@/utils/common";
 import { useUserStore } from "/@/store/modules/user";
 import { bindApi } from "/@/api/securityCenter";
 import CaptchaButton from "/@/views/loginRegister/forgetPassword/components/captchaButton/captchaButton.vue";
+// import BankCardPicker from "../../../components/bankCardPicker.vue";
 
 // 定义组件的props
 const props = defineProps({
@@ -119,6 +122,9 @@ const searchAreaCode = ref(""); // 存储搜索的区号
 const areaCode: any = ref([]); // 存储区号数据
 const countries: any = ref([]); // 存储国家数据
 const areaCodeObj: any = ref({}); // 存储当前选中的区号对象
+
+// const stateBankCard = ref(""); // 存储搜索的银行名称
+
 const state = reactive({
 	userPhone: "",
 	areaCode: "", // 存储当前选中的区号
@@ -144,6 +150,9 @@ const isFieldVisible = (code) => {
 	return props.withdrawWayConfig.collectInfoVOS && Array.isArray(props.withdrawWayConfig.collectInfoVOS) && props.withdrawWayConfig.collectInfoVOS.some((item) => item.filedCode === code);
 };
 
+// 手机号正则验证
+const isPhoneValid = computed(() => new RegExp(`^\\d{${areaCodeObj.value.minLength},${areaCodeObj.value.maxLength}}$`).test(state.userPhone));
+
 // 监听区号搜索变化
 watch(
 	() => searchAreaCode.value,
@@ -159,9 +168,6 @@ watch(
 		indexList.value = Object.keys(areaCode.value); // 更新索引列表
 	}
 );
-
-// 手机号正则验证
-const isPhoneValid = computed(() => new RegExp(`^\\d{${areaCodeObj.value.minLength},${areaCodeObj.value.maxLength}}$`).test(state.userPhone));
 
 // 组件挂载时获取区号数据
 onMounted(() => {
@@ -253,6 +259,7 @@ const clearParams = () => {
 defineExpose({
 	state,
 	isPhoneValid,
+	inputFields,
 	clearParams,
 });
 </script>

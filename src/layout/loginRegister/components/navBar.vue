@@ -12,7 +12,6 @@
 			</div>
 		</div>
 	</div>
-
 	<VantPicker v-model:select="checked" :multiple="true" v-model:show="languageShow" :columns="stateLang.langList" title="" toText="name" toValue="code" @confirm="handleConfirm">
 		<template #option="item">
 			<div class="lang_cell">
@@ -44,25 +43,31 @@ const onLang = () => {
 };
 
 // 获取语言配置
-const getCommonBusinessDownBox = async () => {
+const getLangDownBox = async () => {
 	// 调用通用业务下拉框接口，并捕获任何可能的错误
-	const res = await CommonApi.getCommonBusinessDownBox().catch((err) => err);
+	const res = await CommonApi.getLangDownBox().catch((err) => err);
 	// 如果响应的状态码为成功状态码
 	if (res.code == common.getInstance().ResCode.SUCCESS) {
 		// 将获取的语言列表赋值给 stateLang 的 langList 属性
-		stateLang.langList = res.data.languageEnums;
+		res.data.forEach((item) => {
+			item.icon = item.iconFileUrl;
+		});
+		stateLang.langList = res.data;
 		// 如果用户没有选择语言（即 langChoice 为空）
 		if (!userStore.langChoice) {
 			// 查找默认的语言（currLang 为 1 表示默认语言）
 			const filteredData = stateLang.langList.find((item) => item.currLang === 1);
 			// 将默认语言的图标赋值给 stateLang 的 langPicture 属性
-			stateLang.langPicture = filteredData.icon;
+			console.log(filteredData);
+			stateLang.langPicture = filteredData.iconFileUrl;
 		}
 	}
 };
 
-stateLang.langPicture = userStore.langIcon;
-getCommonBusinessDownBox();
+onMounted(() => {
+	stateLang.langPicture = userStore.langIcon;
+	getLangDownBox();
+});
 
 const handleConfirm = (selectedValues) => {
 	const { selectedOptions } = selectedValues;

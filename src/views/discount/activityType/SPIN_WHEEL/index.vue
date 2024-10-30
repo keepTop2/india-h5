@@ -3,8 +3,8 @@
 	<div class="content">
 		<div class="tabs">
 			<ul>
-				<li :class="['color_Text_a', { active: tab.value === currentTab }]" v-for="tab in tabs" :key="tab.name" @click="selectTab(tab.value)">
-					<img v-if="tab.value === currentTab" :src="getImg(tab.value)" alt="" />
+				<li :class="['color_Text_a', { active: tab.value == currentTab }]" v-for="tab in tabs" :key="tab.name" @click="selectTab(tab.value)">
+					<img v-if="tab.value === currentTab" :src="getImg(tab.value - 1)" alt="" />
 					<a>{{ tab.name }}</a>
 				</li>
 			</ul>
@@ -13,8 +13,7 @@
 			<Spin
 				@start-spinning-callback="spinStart"
 				@end-spinning-callback="spinEnd"
-				@needLogin="needLogin"
-				@noMorebalanceCount="noMorebalanceCount"
+				@StartVerification="StartVerification"
 				:enable="activityData?.enable"
 				:reward="reward"
 				:spinList="currentTab == '0' ? activityData?.bronze : currentTab == '1' ? activityData?.silver : activityData?.gold"
@@ -22,7 +21,7 @@
 				ref="SpinRef"
 			/>
 
-			<div class="vipLevel color_TB fw_600" :class="'vip' + (currentTab * 1 + 1)">{{ activityData?.vipRankConfig?.[currentTab]?.minVipGradeName }}级或以上</div>
+			<div class="vipLevel color_TB fw_600" :class="'vip' + currentTab * 1">{{ activityData?.vipRankConfig?.[currentTab - 1]?.minVipGradeName }}级或以上</div>
 		</div>
 		<div class="remaining_times_bg">{{ $t('home["剩余抽奖次数"]') }}：{{ activityData?.balanceCount || 0 }}</div>
 		<div class="container">
@@ -51,35 +50,6 @@
 			<div class="detail-footer"></div>
 		</div>
 	</div>
-	<!-- 弹窗-->
-	<div class="dialog fade-in" v-if="showResult">
-		<div class="dialog-content">
-			<div class="resultImg">
-				<img :src="reward?.prizePictureUrl" alt="" />
-			</div>
-			<div class="dialog-title color_Hint">恭喜您获得</div>
-			<div class="dialog-amount">${{ reward?.prizeAmount }} {{ useUserStore().getUserInfo.platCurrencyName }}</div>
-			<div @click="playAgain" class="button">
-				<div>再抽一次</div>
-				<span class="remaining_times_btn">剩余次数:{{ activityData?.balanceCount }}</span>
-			</div>
-		</div>
-		<div class="close" @click="showResult = false">
-			<img src="./images/close.png" alt="" />
-		</div>
-	</div>
-
-	<!-- 弹窗3 -->
-	<div class="dialog fade-in" v-if="showResult3">
-		<div class="dialog-content2">
-			<div class="dialog-title color_TB fs_32">温馨提示</div>
-			<div class="dialog-text color_T1 mb_21">您的抽奖次数不足</div>
-			<Button @click="goToRecharge">去领取</Button>
-		</div>
-		<div class="close" @click="showResult3 = false">
-			<img src="./images/close.png" alt="" />
-		</div>
-	</div>
 
 	<!-- 抽奖记录 -->
 	<div class="dialog" v-if="showRecord">
@@ -92,7 +62,6 @@
 					<span>奖品价值</span>
 					<span>中奖时间</span>
 				</div>
-
 				<div v-for="(item, index) in recordList" :key="index" class="dialogTableItem">
 					<span>{{ item.rewardRankText }}</span>
 					<span>{{ item.prizeName }}</span>
@@ -111,7 +80,36 @@
 	<activityDialog v-model="showDialog" title="温馨提示" :confirm="confirmDialog">
 		{{ dialogInfo.message }}
 	</activityDialog>
-	<activityDialog v-model="showDialog2" title="温馨提示" :confirm="confirmDialog" :goToLogin="true"> 您的账号暂未登录无法参与活动， 如已有账号请登录，如还未有账号 请前往注册 </activityDialog>
+
+	<!-- 弹窗-->
+	<div class="dialog fade-in" v-if="showResult">
+		<div class="dialog-content">
+			<div class="resultImg">
+				<img :src="reward?.prizePictureUrl" alt="" />
+			</div>
+			<div class="dialog-title color_Hint">恭喜您获得</div>
+			<div class="dialog-amount">{{ reward?.prizeAmount }} {{ useUserStore().getUserInfo.platCurrencySymbol }}</div>
+			<div @click="playAgain" class="button">
+				<div>再抽一次</div>
+				<span class="remaining_times_btn">剩余次数:{{ activityData?.balanceCount }}</span>
+			</div>
+		</div>
+		<div class="close" @click="showResult = false">
+			<img src="./images/close.png" alt="" />
+		</div>
+	</div>
+
+	<!-- 弹窗3 -->
+	<div class="dialog fade-in" v-if="showNoMorebalanceCount">
+		<div class="dialog-content2">
+			<div class="dialog-title color_TB fs_32">温馨提示</div>
+			<div class="dialog-text color_T1 mb_21">您的抽奖次数不足</div>
+			<Button @click="goToRecharge">去领取</Button>
+		</div>
+		<div class="close" @click="showNoMorebalanceCount = false">
+			<img src="./images/close.png" alt="" />
+		</div>
+	</div>
 </template>
 
 <script setup lang="ts">
@@ -122,11 +120,10 @@ import { activityApi } from "/@/api/activity";
 import activityDialog from "../../components/Dialog.vue";
 import { useUserStore } from "/@/store/modules/user";
 import dayjs from "dayjs";
-const userStore = useUserStore();
 const showResult = ref(false);
 const showResult3 = ref(false);
+const showNoMorebalanceCount = ref(false);
 const showRecord = ref(false);
-const showDialog2 = ref(false);
 const showDialog = ref(false);
 const SpinRef: any = ref(null);
 
@@ -134,31 +131,31 @@ const dialogInfo: any = ref({});
 // 获得的奖励
 const reward = ref();
 // 当前选中的标签
-const currentTab: any = ref("0");
+const currentTab: any = ref(1);
 const router = useRouter();
 // 标签列表
 const tabs = ref([
 	{
 		name: "青铜",
-		value: "0",
+		value: 1,
 	},
 	{
 		name: "白银",
-		value: "1",
+		value: 2,
 	},
 	{
 		name: "黄金及以上",
-		value: "2",
+		value: 3,
 	},
 ]);
 const recordList: any = ref([]);
-
 const activityData: any = ref({});
 onMounted(() => {
 	/**
 	 * @description 获取奖项列表
 	 */
 	activityApi.getSpinDetail().then((res) => {
+		currentTab.value = res.data.vipRankCode;
 		activityData.value = res.data;
 	});
 });
@@ -180,6 +177,58 @@ const selectTab = (tabKey: string) => {
 	currentTab.value = tabKey;
 };
 
+const delay = (ms) => {
+	return new Promise((resolve) => setTimeout(resolve, ms));
+};
+const playAgain = () => {
+	showResult.value = false;
+	SpinRef.value?.handleStartSpin();
+	spinStart();
+};
+/**
+ * @description 处理转盘停止后的逻辑
+ */
+const spinEnd = () => {
+	showResult.value = true;
+};
+
+const confirmDialog = () => {
+	showDialog.value = false;
+};
+const goToRecharge = () => {
+	showResult3.value = false;
+	router.push("/wallet/recharge");
+};
+const StartVerification = () => {
+	if (!activityData.value.enable) {
+		dialogInfo.value.message = `活动未开启`;
+		return (showDialog.value = true);
+	} else if (!useUserStore().token) {
+		dialogInfo.value.message = `您的账号暂未登录无法参与活动，如已有账号请登录，如还未有账号请前往注册`;
+		return (showDialog.value = true);
+	} else if (!useUserStore().getUserInfo.phone && !useUserStore().getUserInfo.email) {
+		dialogInfo.value.message = `很抱歉,您不符合参与活动条件,参与活动前需要验证绑定您的手机号和电子邮箱，请尽快完善资料`;
+		return (showDialog.value = true);
+	} else if (!useUserStore().getUserInfo.phone) {
+		dialogInfo.value.message = `很抱歉,您不符合参与活动条件,参与活动前需要验证绑定您的手机号，请尽快完善资料`;
+		return (showDialog.value = true);
+	} else if (!useUserStore().getUserInfo.email) {
+		dialogInfo.value.message = `很抱歉,您不符合参与活动条件,参与活动前需要验证绑定您的电子邮箱，请尽快完善资料`;
+		return (showDialog.value = true);
+	} else if (activityData.value.balanceCount < 1) {
+		return (showNoMorebalanceCount.value = true);
+	} else {
+		activityApi.toSpinActivity().then((res: any) => {
+			if (res.data.status === 10000) {
+				SpinRef.value?.handleStartSpin();
+				spinStart();
+			} else {
+				dialogInfo.value = res.data;
+				return (showDialog.value = true);
+			}
+		});
+	}
+};
 /**
  * @description 抽奖开始
  */
@@ -187,7 +236,7 @@ const spinStart = async () => {
 	const startTime = Date.now();
 	const params = {
 		id: activityData.value.id,
-		vipRankCode: Number(currentTab.value) + 1,
+		vipRankCode: currentTab.value,
 	};
 	const res: any = await activityApi.getSpinPrizeResult(params);
 	if (res.code !== 10000) {
@@ -203,39 +252,14 @@ const spinStart = async () => {
 			await delay(remainingTime);
 		}
 		reward.value = res.data;
+		SpinRef.value?.endGame();
 	}
 };
-const delay = (ms) => {
-	return new Promise((resolve) => setTimeout(resolve, ms));
-};
-const playAgain = () => {
-	showResult.value = false;
-	SpinRef.value?.handleStartSpin();
-};
-/**
- * @description 处理转盘停止后的逻辑
- */
-const spinEnd = () => {
-	showResult.value = true;
-};
-const noMorebalanceCount = () => {
-	showResult3.value = true;
-};
-const needLogin = () => {
-	showDialog2.value = true;
-};
-const confirmDialog = () => {
-	showDialog2.value = false;
-	showDialog.value = false;
-};
-const goToRecharge = () => {
-	showResult3.value = false;
-	router.push("/wallet/recharge");
-};
 const handleShowRecord = () => {
+	const userStore = useUserStore();
 	if (!userStore.token) {
-		needLogin();
-		return;
+		dialogInfo.value.message = `您的账号暂未登录无法参与活动，如已有账号请登录，如还未有账号请前往注册`;
+		return (showDialog.value = true);
 	}
 	showRecord.value = true;
 	querySpinWheelOrderRecord();

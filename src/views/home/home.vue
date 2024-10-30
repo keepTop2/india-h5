@@ -40,7 +40,7 @@
 				<GameLayout v-if="item.gameInfoList.length" :gameInfoList="item.gameInfoList" class="m24" />
 				<GameBigPic v-else class="m24" />
 			</template>
-			<h3 class="title_more">
+			<!-- <h3 class="title_more">
 				<span class="flex_align_center">
 					<SvgIcon iconName="home/electronic" alt="" />
 					{{ $t('home["热门电竞"]') }}
@@ -53,8 +53,8 @@
 					<SvgIcon iconName="home/game_fowl" alt="" />
 					{{ $t('home["热门斗鸡"]') }}
 				</span>
-			</h3>
-			<GameBigPic class="m24" />
+			</h3> -->
+			<!-- <GameBigPic class="m24" /> -->
 			<!-- 赞助 -->
 			<Sponsor :data="PartnerList" />
 			<!-- 转账方式 -->
@@ -154,7 +154,6 @@ watch(
 			newEvents.push(...item.events);
 		});
 		eventList.value = newEvents;
-		console.log(newEvents, "===newEvents");
 	}
 );
 
@@ -184,7 +183,7 @@ onDeactivated(() => {
 	// 卸载体育
 	unSport();
 	//关闭ws连接
-	destroyWS();
+	// destroyWS();
 });
 //获取关注列表
 const queryCollection = () => {
@@ -342,7 +341,16 @@ const handleMore = (gameOneId) => {
 };
 
 const initializeWebSocket = async () => {
-	// 订阅红包雨推送消息
+	const websocketService: any = activitySocketService.getInstance();
+	if (websocketService.socket?.readyState) {
+		websocketService.send("/activity/redBagRain");
+	} else {
+		// 如果socket连接不成功，等待成功指令
+		pubsub.subscribe("websocket_reconnected", () => {
+			websocketService.send("/activity/redBagRain");
+		});
+	}
+
 	pubsub.subscribe("/activity/redBagRain", (data) => {
 		showCountdown.value = true;
 		redBagInfo.value = data;
@@ -351,10 +359,10 @@ const initializeWebSocket = async () => {
 		showCountdown.value = false;
 	});
 };
-const destroyWS = () => {
-	pubsub.unsubscribe("/activity/redBagRain", () => {});
-	pubsub.unsubscribe("/activity/redBagRain/end", () => {});
-};
+// const destroyWS = () => {
+// 	pubsub.unsubscribe("/activity/redBagRain", () => {});
+// 	pubsub.unsubscribe("/activity/redBagRain/end", () => {});
+// };
 </script>
 
 <style lang="scss" scoped>

@@ -2,7 +2,7 @@
 	<div class="GameSwiper">
 		<Swiper :modules="modules" class="mySwiper" slidesPerView="auto">
 			<swiper-slide v-for="(item, index) in gameList?.gameInfoList" :key="index" class="mr_20">
-				<div class="card" @click="handleClickCard(item)">
+				<div class="card" @click="Common.goToGame(item)">
 					<div class="collect">
 						<VantLazyImg v-if="item.collect" @click="onClickCollect(item, false)" :src="collectImg" alt="" width="100%" />
 						<VantLazyImg v-else @click="onClickCollect(item, true)" :src="noCollectImg" alt="" width="100%" />
@@ -36,7 +36,7 @@ import gameImg from "./images/gameImg.png";
 import collectImg from "./images/collect.png";
 import noCollectImg from "./images/noCollect.png";
 import GameApi from "/@/api/venueHome/games";
-
+import Common from "/@/utils/common";
 const modules = ref([Autoplay, Pagination, Navigation]); //swiper配置项
 
 const dialogShow = ref(false);

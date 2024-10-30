@@ -174,7 +174,7 @@ const withdrawWayConfig = ref({
 	withdrawMaxAmount: 1000,
 } as any); // 支付方式列表
 
-const childRef = ref(null);
+const childRef = ref(null as any);
 const state = reactive({
 	totalBalance: "",
 	freezeAmount: "",
@@ -186,6 +186,7 @@ const exchangeRate = ref(0); // 预计到账金额
 
 const passWordShow = ref(false);
 
+// 错误信息
 const errorMessage = computed(() => {
 	const amount = parseFloat(state.amount as string);
 	// 检查是否为有效数字
@@ -203,74 +204,6 @@ const errorMessage = computed(() => {
 		return `${$.t('withdraw["单次最高提款"]')}: ${UserStore.userInfo.mainCurrency} ${withdrawWayConfig.value.withdrawMaxAmount}`;
 	}
 	return "";
-});
-
-const buttonType = computed(() => {
-	// 检查手机号是否有效（仅在银行卡和电子钱包表单中使用）
-	const isPhoneValid = withdrawWayData.value.withdrawTypeCode !== "crypto_currency" && childRef.value?.isPhoneValid;
-
-	// 获取当前的提现类型
-	const withdrawTypeCode = withdrawWayData.value.withdrawTypeCode;
-
-	// 定义 requiredFields 和 dynamicFields
-	let requiredFields: string[] = [];
-	let dynamicFields = {};
-	let smsCode = "";
-
-	// 动态构建表单字段
-	const buildDynamicFields = () => {
-		const collectInfoVOS = withdrawWayConfig.value.collectInfoVOS || [];
-		return collectInfoVOS.reduce((acc, { filedCode, checkFlag }) => {
-			if (checkFlag) {
-				acc[filedCode] = childRef.value?.state?.[filedCode] || "";
-			}
-			return acc;
-		}, {});
-	};
-
-	// 添加 SMS 代码的检查
-	const addSmsCodeCheck = () => {
-		if (!UserStore.getUserInfo.isSetPwd && UserStore.getUserInfo.phone) {
-			smsCode = childRef.value?.state?.smsCode || "";
-			requiredFields.push("smsCode");
-		}
-	};
-
-	// 根据提现类型动态处理表单
-	switch (withdrawTypeCode) {
-		case "bank_card":
-			dynamicFields = buildDynamicFields();
-			requiredFields = Object.keys(dynamicFields);
-			addSmsCodeCheck();
-			break;
-
-		case "electronic_wallet":
-			dynamicFields = buildDynamicFields();
-			requiredFields = Object.keys(dynamicFields);
-			addSmsCodeCheck();
-			break;
-
-		case "crypto_currency":
-			dynamicFields = buildDynamicFields();
-			requiredFields = Object.keys(dynamicFields);
-			break;
-
-		default:
-			break;
-	}
-
-	console.log("requiredFields", requiredFields);
-	console.log("dynamicFields", dynamicFields);
-
-	// 检查所有属性是否有值
-	const allFieldsHaveValue = requiredFields.every((key) => dynamicFields[key] !== undefined && dynamicFields[key] !== "");
-
-	// 按钮状态判断
-	if (errorMessage.value || !state.amount || !allFieldsHaveValue || (requiredFields.includes("userPhone") && !isPhoneValid && withdrawTypeCode !== "crypto_currency")) {
-		return "disabled";
-	} else {
-		return "default";
-	}
 });
 
 // 虚拟币约等于到账额度
@@ -326,16 +259,103 @@ const getUserBalance = async () => {
 	}
 };
 
+// 按钮高亮
+const buttonType = computed(() => {
+	// 检查手机号是否有效（仅在银行卡和电子钱包表单中使用）
+	const isPhoneValid = withdrawWayData.value.withdrawTypeCode !== "crypto_currency" && childRef.value?.isPhoneValid;
+
+	// 获取当前的提现类型
+	const withdrawTypeCode = withdrawWayData.value.withdrawTypeCode;
+
+	// 定义 requiredFields 和 dynamicFields
+	let requiredFields: string[] = [];
+	let dynamicFields = {};
+	let smsCode = "";
+
+	// 添加 SMS 代码的检查
+	const addSmsCodeCheck = () => {
+		if (!UserStore.getUserInfo.isSetPwd && UserStore.getUserInfo.phone) {
+			smsCode = childRef.value?.state?.smsCode || "";
+			requiredFields.push("smsCode");
+		}
+	};
+
+	// 根据提现类型动态处理表单
+	switch (withdrawTypeCode) {
+		case "bank_card":
+			dynamicFields = buildDynamicFields();
+			requiredFields = Object.keys(dynamicFields);
+			addSmsCodeCheck();
+			break;
+		case "electronic_wallet":
+			dynamicFields = buildDynamicFields();
+			requiredFields = Object.keys(dynamicFields);
+			addSmsCodeCheck();
+			break;
+		case "crypto_currency":
+			dynamicFields = buildDynamicFields();
+			requiredFields = Object.keys(dynamicFields);
+			break;
+		default:
+			break;
+	}
+	// console.log("requiredFields", requiredFields);
+	// console.log("dynamicFields", dynamicFields);
+	// 检查所有属性是否有值
+	const allFieldsHaveValue = requiredFields.every((key) => dynamicFields[key] !== undefined && dynamicFields[key] !== "");
+	// 按钮状态判断
+	if (errorMessage.value || !state.amount || !allFieldsHaveValue || (requiredFields.includes("userPhone") && !isPhoneValid && withdrawTypeCode !== "crypto_currency")) {
+		return "disabled";
+	} else {
+		return "default";
+	}
+});
+
+// 动态构建表单字段
+const buildDynamicFields = () => {
+	// 获取后台返回的校验字段
+	const { collectInfoVOS = [] } = withdrawWayConfig.value;
+	// 获取本地组件自定义校验字段
+	const validCodes = new Set(childRef.value?.inputFields?.map((field) => field.code));
+	// 过滤并生成有效的表单字段
+	return collectInfoVOS
+		.filter(
+			({ filedCode, checkFlag }) =>
+				// 判断后台是否勾选 并且 本地配置拥有此字段
+				checkFlag && validCodes.has(filedCode)
+		)
+		.reduce((acc, { filedCode }) => {
+			// 构建表单信息
+			acc[filedCode] = childRef.value?.state?.[filedCode] || "";
+			return acc;
+		}, {});
+};
+
+// 构建参数对象的通用函数
+const buildParams = (withdrawPassWord: string) => {
+	return {
+		amount: state.amount,
+		withdrawWayId: withdrawWayData.value.id,
+		withdrawPassWord, // 将 withdrawPassWord 添加到参数中
+		// 只合并 buildDynamicFields 中存在的键值对
+		...Object.keys(buildDynamicFields()).reduce((acc: any, key) => {
+			if (key in childRef.value?.state) {
+				acc[key] = buildDynamicFields()[key]; // 只保留 buildDynamicFields 中的值
+				// 判断是否包含 userPhone，若是则添加 areaCode
+				if (key === "userPhone") {
+					acc.areaCode = childRef.value?.state.areaCode; // 从 state 中取 areaCode
+				}
+			}
+			return acc;
+		}, {}),
+	};
+};
+
 // 交易密码输入完成
 const onTransactionPasswordEntered = () => {
 	passWordShow.value = false;
 	if (state.withdrawPassWord.length === 6) {
-		const params = {
-			amount: state.amount,
-			withdrawWayId: withdrawWayData.value.id,
-			withdrawPassWord: state.withdrawPassWord,
-			...childRef.value?.state,
-		};
+		const params = buildParams(state.withdrawPassWord); // 传递 withdrawPassWord
 		getWithdrawApply(params);
 	}
 };
@@ -345,11 +365,7 @@ const onWithdrawApply = async () => {
 	if (UserStore.getUserInfo.isSetPwd) {
 		passWordShow.value = true;
 	} else if (UserStore.getUserInfo.phone) {
-		const params = {
-			amount: state.amount,
-			withdrawWayId: withdrawWayData.value.id,
-			...childRef.value?.state,
-		};
+		const params = buildParams(""); // 如果不需要 withdrawPassWord，可以传空字符串
 		getWithdrawApply(params);
 	}
 };

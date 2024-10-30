@@ -85,6 +85,7 @@ import { useRouter } from "vue-router";
 import { useUserStore } from "/@/store/modules/user";
 import { activityApi } from "/@/api/activity";
 import { showToast } from "vant";
+import Common from "/@/utils/common";
 const showDAILY_COMPETITION = ref(false);
 const userStore = useUserStore();
 const router = useRouter();
@@ -106,9 +107,10 @@ const onCollapseMenu = () => {
 };
 const handleMenuClick = (item) => {
 	show.value = false;
-	console.log(item, "===item");
 	if (item.modelCode === "SBA") {
 		router.push({ name: "rollingBallList", params: { sportType: 1 } });
+	} else if (item.modelCode === "SIGN_VENUE") {
+		Common.goToGame(item.gameInfo);
 	} else {
 		router.push({
 			name: "GameArena",
