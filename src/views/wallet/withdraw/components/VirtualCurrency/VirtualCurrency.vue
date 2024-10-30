@@ -5,16 +5,15 @@
 			<span>{{ $t(`withdraw['收款信息']`) }}</span>
 		</div>
 
-		<div class="user_phone">
-			<div class="label">{{ $t(`withdraw['协议']`) }}</div>
-			<div class="value">
-				<span>{{ withdrawWayData.networkType }}</span>
-			</div>
-		</div>
-
 		<!-- 通过循环生成输入字段 -->
 		<div v-for="field in inputFields" :key="field.code">
-			<div class="cell" v-if="isFieldVisible(field.code)">
+			<div class="user_phone" v-if="field.code === 'networkType' && isFieldVisible(field.code)">
+				<div class="label">{{ $t(`withdraw['协议']`) }}</div>
+				<div class="value">
+					<span>{{ withdrawWayData.networkType }}</span>
+				</div>
+			</div>
+			<div class="cell" v-if="!['networkType'].includes(field.code) && isFieldVisible(field.code)">
 				<div class="cell_input">
 					<input v-model="state[field.model]" :type="field.type" :placeholder="$t(`withdraw['${field.placeholder}']`)" @focus="onFocus(field.model)" @blur="onBlur(field.model)" />
 				</div>
@@ -58,7 +57,10 @@ const state = reactive({
 });
 
 // 输入字段的映射数组
-const inputFields = [{ code: "addressNo", model: "addressNo", type: "text", placeholder: "请输入地址" }];
+const inputFields = [
+	{ code: "networkType", model: "networkType", type: "text", placeholder: "" },
+	{ code: "addressNo", model: "addressNo", type: "text", placeholder: "请输入地址" },
+];
 
 // 检查字段是否可见的函数
 const isFieldVisible = (code) => {
@@ -91,7 +93,9 @@ const onBlur = (code) => {
 // 清空表单参数
 const clearParams = () => {
 	Object.keys(state).forEach((key) => {
-		state[key] = ""; // 将每个属性设置为空字符串
+		if (!["networkType"].includes(key)) {
+			state[key] = "";
+		}
 	});
 };
 
