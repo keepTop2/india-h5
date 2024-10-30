@@ -33,7 +33,7 @@ declare module '@vue/runtime-core' {
     SvgIcon: typeof import('./../src/components/svgIcon/index.vue')['default']
     Tabs: typeof import('./../src/components/Tabs/Tabs.vue')['default']
     VanButton: typeof import('vant/es')['Button']
-    VanDatePicker: typeof import('vant/es')['DatePicker']
+    VanField: typeof import('vant/es')['Field']
     VanIcon: typeof import('vant/es')['Icon']
     VanList: typeof import('vant/es')['List']
     VanNavBar: typeof import('vant/es')['NavBar']
