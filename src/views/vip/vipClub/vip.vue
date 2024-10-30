@@ -27,8 +27,8 @@
 				>
 				<van-popover v-model:show="showPopover" theme="dark" :show-arrow="false">
 					<div class="p_10 popup">
-						体育/电竞场馆投注 1{{ useUserStore().getUserInfo.currencySymbol }} = {{ state.userVipInfo.sportExe }} 积分，其他场馆投注 1{{ useUserStore().getUserInfo.currencySymbol }} = 1 积分，
-						所有投注 均按当前汇率兑换为美元结算
+						体育/电竞场馆投注 1 {{ useUserStore().getUserInfo.platCurrencySymbol }} = {{ state.userVipInfo.sportExe }} 积分，其他场馆投注 1 {{ useUserStore().getUserInfo.platCurrencySymbol }} = 1
+						积分， 所有投注 均按当前汇率兑换为美元结算
 					</div>
 					<template #reference>
 						<SvgIcon class="warning_icon" iconName="vip/warning" />
@@ -99,12 +99,14 @@
 
 							<van-popover v-model:show="showPopover4" theme="dark" :show-arrow="false" v-if="item.weekSportFlag">
 								<div class="p_10 popup">
-									<p v-for="i in state.userVipInfo.vipBenefit[index].vipWeekSportVOS">
-										-投注{{ useUserStore().getUserInfo.platCurrencySymbol }} {{ i.weekSportMin }} 至
-										{{ i.weekSportMax > 0 ? `${useUserStore().getUserInfo.platCurrencySymbol} ${i.weekSportMax}` : "以上" }} = {{ i.weekSportBonus }}
+									<p>·7天体育赌注：</p>
+									<p v-for="i in state.userVipInfo.vipBenefit.find((item) => item.vipRankCode == state.vipRank).vipWeekSportVOS">
+										&nbsp;&nbsp;-投注{{ useUserStore().getUserInfo.platCurrencySymbol }} {{ i.weekSportMin }}
+										{{ i.weekSportMax > 0 ? `至 ${useUserStore().getUserInfo.platCurrencySymbol} ${i.weekSportMax}` : "或以上" }} = {{ i.weekSportBonus }}
 										{{ useUserStore().getUserInfo.platCurrencySymbol }}
 									</p>
-									<p>-流水统计时间：周六00:00时～周五 23:59时（7天） ﻿﻿礼金发放时间：每周六</p>
+									<p>&nbsp;&nbsp;-流水统计时间：周六00:00时～周五 23:59时（7天</p>
+									<p>· 礼金发放时间：每周六</p>
 								</div>
 								<template #reference>
 									<SvgIcon class="warning_icon" iconName="vip/warning" />
@@ -257,7 +259,7 @@ const state: any = reactive({
 	// 段位对应奖励配置
 	rankRewardConfig: [
 		{
-			label: $.t(`vip['升级奖励']`),
+			label: $.t(`vip['升级奖金']`),
 			text: $.t(`vip['总奖金']`),
 			icon: reward_icon1,
 			upgrade: 0,
@@ -922,6 +924,9 @@ const onClickLeft = () => {
 .popup {
 	max-width: 500px !important;
 	word-wrap: break-word;
+	@include themeify {
+		color: themed("TB1");
+	}
 }
 :deep(.van-popover__wrapper) {
 	.warning_icon {

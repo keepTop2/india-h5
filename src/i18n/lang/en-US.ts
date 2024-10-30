@@ -357,7 +357,7 @@ export const lang = {
 		版本号: "Version Number",
 		通知: "Message Notification",
 		活动: "Event Notification",
-		消息中心: "Message Center"
+		消息中心: "Message Center",
 	},
 	feedback: {
 		帮助我们改善您的体验: "Help us improve your experience",
@@ -384,7 +384,7 @@ export const lang = {
 		钻石II: "Diamond II",
 		钻石III: "Diamond III",
 		详细了解: "Learn More About OKsport’s VIP Benefits System",
-		升级奖励: "Upgrade Rewards",
+		升级奖金: "Upgrade Rewards",
 		总奖金: "Total Bonus: {value}",
 		每周流水礼金: "Weekly Cashback",
 		会员根据每周投注额度获得周流水的礼金奖励: "Members receive a weekly cashback reward based on their weekly betting amount, with a reward rate of *{value}%*{value2}%",
@@ -519,7 +519,7 @@ export const lang = {
 		单号: "单号",
 		局号: "局号",
 		结果: "结果",
-		投注时间:"投注时间"
+		投注时间: "投注时间",
 	},
 	sports: {
 		冠军: "Champion",

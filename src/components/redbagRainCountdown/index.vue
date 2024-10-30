@@ -13,29 +13,59 @@
 			</div>
 		</div>
 	</div>
+	<RED_BAG_RAIN_Dialog v-model="shwoDialog" title="温馨提示" :confirm="confirmDialog" class="redBagRainResult">
+		<div class="mt_20 mb_20">
+			{{ dialogInfo.message }}
+		</div>
+	</RED_BAG_RAIN_Dialog>
 </template>
 
 <script lang="ts" setup>
 import { onMounted, ref, onBeforeUnmount } from "vue";
 import { useCountdown } from "../../hooks/countdown";
-import router from "/@/router";
 import Common from "/@/utils/common";
 import pubsub from "/@/pubSub/pubSub";
+const { startLoading, stopLoading } = useLoading();
+import { redbagRainSingleton } from "/@/hooks/useRedbagRain";
+import { activityApi } from "/@/api/activity";
+import { useLoading } from "/@/directives/loading/hooks";
+import RED_BAG_RAIN_Dialog from "/@/views/discount/activityType/RED_BAG_RAIN/RED_BAG_RAIN_Dialog/index.vue";
+import router from "/@/router";
 const { countdown, startCountdown, stopCountdown } = useCountdown();
 const draggable = ref<HTMLElement | null>(null);
 const position = ref({ x: 0, y: 0 });
 const isDragging = ref(false);
 const offset = ref({ x: 0, y: 0 });
 let startMousePosition = ref({ x: 0, y: 0 });
+const shwoDialog = ref(false);
+const dialogInfo: any = ref({});
 const props = defineProps({
 	modelValue: Boolean,
 	redBagInfo: {} as any,
 });
 const emit = defineEmits(["update:modelValue"]);
-const confirmDialog = () => {};
-// 点击红包进入详情页
+const confirmDialog = () => {
+	shwoDialog.value = false;
+};
+
 const handleClickCountdown = async () => {
-	pubsub.publish("ShowRedBagRain", true);
+	if (countdown.value > 0) {
+		router.push("/activity/RED_BAG_RAIN");
+	}
+	startLoading();
+	activityApi
+		.redBagParticipate({ redbagSessionId: props.redBagInfo?.redbagSessionId || props.redBagInfo.value.redbagSessionId })
+		.then((res: any) => {
+			if (res.data?.status !== 10000) {
+				dialogInfo.value = res.data;
+				shwoDialog.value = true;
+			} else {
+				redbagRainSingleton.showRedbagRain();
+			}
+		})
+		.finally(() => {
+			stopLoading();
+		});
 };
 // 关闭倒计时
 const closeRedbagRainCountdown = () => {
@@ -100,7 +130,7 @@ watch(
 			stopCountdown();
 		}
 		if (countdown.value == 3) {
-			pubsub.publish("ShowRedBagRain", true);
+			redbagRainSingleton.showCountdown();
 		}
 	}
 );
