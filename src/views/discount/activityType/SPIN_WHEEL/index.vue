@@ -78,7 +78,7 @@
 		</div>
 	</div>
 
-	<activityDialog v-model="showDialog" title="温馨提示" :confirm="confirmDialog">
+	<activityDialog v-model="showDialog" title="温馨提示" :confirm="confirmDialog" :goToLogin="dialogInfo.goToLogin">
 		{{ dialogInfo.message }}
 	</activityDialog>
 
@@ -206,6 +206,7 @@ const StartVerification = () => {
 		return (showDialog.value = true);
 	} else if (!useUserStore().token) {
 		dialogInfo.value.message = `您的账号暂未登录无法参与活动，如已有账号请登录，如还未有账号请前往注册`;
+		dialogInfo.value.goToLogin = true;
 		return (showDialog.value = true);
 	} else {
 		activityApi.toSpinActivity().then((res: any) => {
