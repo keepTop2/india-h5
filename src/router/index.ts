@@ -86,8 +86,6 @@ const routes = [
 					title: "记录",
 				},
 			},
-			//  钱包路由
-			WalletRouter,
 			{
 				path: "/my",
 				name: "my",
@@ -96,6 +94,8 @@ const routes = [
 					title: "我的",
 				},
 			},
+			//  钱包路由
+			WalletRouter,
 		],
 	},
 

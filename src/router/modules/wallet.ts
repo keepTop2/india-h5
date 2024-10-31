@@ -22,7 +22,7 @@ export const WalletRouter = {
 		},
 		{
 			path: "/wallet/conversion",
-			name: "withdraw",
+			name: "conversion",
 			component: () => import("/@/views/wallet/conversion/conversion.vue"),
 			meta: {
 				title: "交易",
