@@ -140,6 +140,9 @@ export const activityApi = {
 		return useAxiosApi(`/app/activity/spin/api/prizeResult`, {
 			method: "POST",
 			data,
+			headers: {
+				hideToast: true,
+			},
 		});
 	},
 	// 转盘中奖记录

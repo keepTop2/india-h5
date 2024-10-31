@@ -161,13 +161,6 @@ const getActivityReward = async () => {
 				shwoDialog.value = true;
 			}
 		});
-	} else {
-		// 活动不在进行中
-		await getRedBagInfo();
-		if (redBagInfo.value.clientStatus == 1) {
-			getActivityReward();
-		}
-		// 校验参与资格
 	}
 };
 const onClickLeft = () => {
