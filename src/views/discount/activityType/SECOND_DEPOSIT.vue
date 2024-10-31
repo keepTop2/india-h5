@@ -10,14 +10,14 @@
 						<div class="bonus-row">
 							<span class="text">存款金额</span>
 							<span class="Amount"
-								>{{ activityData?.depositAmount }} <span>{{ activityData?.depositCurrencyCode }}</span></span
+								>{{ activityData?.depositAmount || "0.00" }} <span>{{ activityData?.depositCurrencyCode }}</span></span
 							>
 						</div>
 						<div class="bonus-row1-line"></div>
 						<div class="bonus-row">
 							<span class="text">需打流水</span>
 							<span class="Amount"
-								>{{ activityData?.runningWater }} <span>{{ activityData?.runningWaterCurrencyCode }}</span>
+								>{{ activityData?.runningWater || "0.00" }} <span>{{ activityData?.runningWaterCurrencyCode }}</span>
 							</span>
 						</div>
 					</div>
@@ -25,7 +25,7 @@
 					<div class="bonus-row2">
 						<span>可得金额:</span>
 						<span class="Amount highlight"
-							>{{ activityData?.activityAmount }} <span>{{ activityData?.activityAmountCurrencyCode }}</span></span
+							>{{ activityData?.activityAmount || "0.00" }} <span>{{ activityData?.activityAmountCurrencyCode }}</span></span
 						>
 					</div>
 				</div>

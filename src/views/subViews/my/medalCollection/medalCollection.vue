@@ -224,7 +224,7 @@ const onOpenMedalReward = async (item) => {
 		if (res.code == common.getInstance().ResCode.SUCCESS) {
 			// 成功领取后更新用户的勋章信息
 
-			showToast(`恭喜你获得${res.data.unlockMedalNum}个宝箱，奖励${res.data.rewardAmount}${useUserStore().getUserInfo.platCurrencySymbol}，已发送到您的账户`);
+			showToast(`恭喜你解锁${res.data.unlockMedalNum}个宝箱，奖励${res.data.rewardAmount}${useUserStore().getUserInfo.platCurrencySymbol}，已发送到您的账户`);
 
 			await getUserMedalInfo();
 		}
