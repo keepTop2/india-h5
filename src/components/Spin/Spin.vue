@@ -58,6 +58,8 @@ const endGame = async () => {
 	await nextTick();
 	spinOver.value = true;
 	const { id } = props.reward;
+	console.log(id, props.spinList);
+
 	const findIndex = props.spinList.findIndex((i: any) => i.id === id);
 	if (findIndex === -1) {
 		console.error("奖品信息错误");
