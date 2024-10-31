@@ -12,13 +12,14 @@
 				<SvgIcon iconName="home/fire" alt="" />
 				{{ $t('home["热门游戏"]') }}
 			</h3>
-			<HotGame class="m24" @queryCollection="queryCollection" :gameInfoList="hotGames" />
+			<HotGame class="m24" :gameInfoList="hotGames" />
 			<!-- 喜欢的游戏 -->
-			<h3 class="title" v-show="isShowCollect">
+			<h3 class="title" v-show="useCollectGamesStore().getCollectGamesList.length > 0">
 				<SvgIcon iconName="home/star" alt="" />
 				{{ $t('home["喜欢的游戏"]') }}
 			</h3>
-			<CollectGames v-show="isShowCollect" @queryCollection="queryCollection" :collectList="collectList" class="m24" />
+			<CollectGames v-show="useCollectGamesStore().getCollectGamesList.length > 0" class="m24" />
+
 			<h3 class="title_more" v-show="eventList?.length">
 				<span class="flex_align_center">
 					<SvgIcon iconName="home/event_game" alt="" />
@@ -40,22 +41,6 @@
 				<GameLayout v-if="item.gameInfoList.length" :gameInfoList="item.gameInfoList" class="m24" />
 				<GameBigPic v-else class="m24" />
 			</template>
-			<!-- <h3 class="title_more">
-				<span class="flex_align_center">
-					<SvgIcon iconName="home/electronic" alt="" />
-					{{ $t('home["热门电竞"]') }}
-				</span>
-			</h3>
-			<GameBigPic class="m24" />
-
-			<h3 class="title_more">
-				<span class="flex_align_center">
-					<SvgIcon iconName="home/game_fowl" alt="" />
-					{{ $t('home["热门斗鸡"]') }}
-				</span>
-			</h3> -->
-			<!-- <GameBigPic class="m24" /> -->
-			<!-- 赞助 -->
 			<Sponsor :data="PartnerList" />
 			<!-- 转账方式 -->
 			<Currency :data="PaymentVendorList" />
@@ -64,9 +49,6 @@
 		</div>
 		<!-- 红包雨倒计时 -->
 		<redbagRainCountdown v-model="showCountdown" :redBagInfo="redBagInfo" />
-		<!-- 红包雨页面 -->
-		<rainPage v-if="showRedBagRain" v-model="showRedBagRain" :redBagInfo="redBagInfo" />
-
 		<!-- 跑马灯 -->
 		<Announcement />
 	</div>
@@ -81,7 +63,6 @@ import { useSportsInfoStore } from "/@/store/modules/sports/sportsInfo";
 import { useSportsBetEventStore } from "/@/store/modules/sports/sportsBetData";
 import useSportPubSubEvents from "/@/views/venueHome/sports/hooks/useSportPubSubEvents";
 import SportsShopCart from "/@/views/venueHome/sports/components/sportsShopCart/sportsShopCart.vue";
-import rainPage from "/@/views/discount/activityType/RED_BAG_RAIN/rainPage.vue";
 import redbagRainCountdown from "../../components/redbagRainCountdown/index.vue";
 //热门游戏
 import Banner from "./Banner/banner.vue";
@@ -114,8 +95,7 @@ import activitySocketService from "/@/utils/activitySocketService";
 import { useActivityStore } from "/@/store/modules/activity";
 import { computed, onActivated, onDeactivated, ref, watch } from "vue";
 import HorseRaceLamp from "/@/views/home/HorseRaceLamp/HorseRaceLamp.vue";
-
-const websocketService: any = activitySocketService.getInstance();
+import { useCollectGamesStore } from "/@/store/modules/collectGames";
 const router = useRouter();
 const UserStore = useUserStore();
 const sportsInfoStore = useSportsInfoStore();
@@ -123,16 +103,10 @@ const sportsBetEvent = useSportsBetEventStore();
 const { startPolling, stopPolling, initSportPubsub, unSubSport, sportsLogin, clearState } = useSportPubSubEvents();
 const eventIDList = ref();
 const eventList = ref();
-const collectList = ref([]);
 const hotGames = ref<GameInfoList[]>([]);
 const lobbyTopGame = ref<LobbyTopGame[]>();
 const PaymentVendorList = ref([]);
 const PartnerList = ref([]);
-const showRedBagRain = computed(() => useActivityStore().getIsShowRedBagRain);
-//判断是否收藏
-const isShowCollect = computed(() => {
-	return collectList.value.length > 0 && UserStore.token;
-});
 // 红包倒计时
 const showCountdown = ref(false);
 // 红包开始信息
@@ -162,8 +136,6 @@ onActivated(() => {
 	getLobbyTopGame();
 	//获取体育赛事id
 	getSportEventsRecommend();
-	//获取收藏的游戏列表
-	queryCollection();
 	// 获取支付商
 	queryPaymentVendorList();
 	// 获取赞助商
@@ -171,7 +143,6 @@ onActivated(() => {
 	getGameInfoDetail();
 	//初始化体育
 	initSport();
-	pubsub.subscribe("getCollect", queryCollection);
 	// 初始化活动ws连接
 	initializeWebSocket();
 });
@@ -185,14 +156,6 @@ onDeactivated(() => {
 	//关闭ws连接
 	// destroyWS();
 });
-//获取关注列表
-const queryCollection = () => {
-	if (useUserStore().token) {
-		GameApi.queryCollection().then((res) => {
-			collectList.value = res.data.records || [];
-		});
-	}
-};
 /**
  * @description 获取热门游戏详情
  */
@@ -354,6 +317,7 @@ const initializeWebSocket = async () => {
 	pubsub.subscribe("/activity/redBagRain", (data) => {
 		showCountdown.value = true;
 		redBagInfo.value = data;
+		useActivityStore().setActivityData(data);
 	});
 	pubsub.subscribe("/activity/redBagRain/end", (data) => {
 		showCountdown.value = false;

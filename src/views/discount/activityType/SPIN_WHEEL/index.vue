@@ -77,18 +77,19 @@
 			<img src="./images/close.png" alt="" />
 		</div>
 	</div>
-	<activityDialog v-model="showDialog" title="温馨提示" :confirm="confirmDialog">
+
+	<activityDialog v-model="showDialog" title="温馨提示" :confirm="confirmDialog" :goToLogin="dialogInfo.goToLogin">
 		{{ dialogInfo.message }}
 	</activityDialog>
 
-	<!-- 弹窗-->
+	<!-- 结算弹窗-->
 	<div class="dialog fade-in" v-if="showResult">
 		<div class="dialog-content">
 			<div class="resultImg">
 				<img :src="reward?.prizePictureUrl" alt="" />
 			</div>
 			<div class="dialog-title color_Hint">恭喜您获得</div>
-			<div class="dialog-amount">{{ reward?.prizeAmount }} {{ useUserStore().getUserInfo.platCurrencySymbol }}</div>
+			<div class="dialog-amount">{{ useUserStore().getUserInfo.platCurrencySymbol }} {{ reward?.prizeAmount }}</div>
 			<div @click="playAgain" class="button">
 				<div>再抽一次</div>
 				<span class="remaining_times_btn">剩余次数:{{ activityData?.balanceCount }}</span>
@@ -99,7 +100,7 @@
 		</div>
 	</div>
 
-	<!-- 弹窗3 -->
+	<!-- 抽奖次数不足 -->
 	<div class="dialog fade-in" v-if="showNoMorebalanceCount">
 		<div class="dialog-content2">
 			<div class="dialog-title color_TB fs_32">温馨提示</div>
@@ -155,7 +156,7 @@ onMounted(() => {
 	 * @description 获取奖项列表
 	 */
 	activityApi.getSpinDetail().then((res) => {
-		currentTab.value = res.data.vipRankCode;
+		currentTab.value = res.data.vipRankCode >= 3 ? 3 : res.data.vipRankCode ? res.data.vipRankCode : 1;
 		activityData.value = res.data;
 	});
 });
@@ -205,18 +206,8 @@ const StartVerification = () => {
 		return (showDialog.value = true);
 	} else if (!useUserStore().token) {
 		dialogInfo.value.message = `您的账号暂未登录无法参与活动，如已有账号请登录，如还未有账号请前往注册`;
+		dialogInfo.value.goToLogin = true;
 		return (showDialog.value = true);
-	} else if (!useUserStore().getUserInfo.phone && !useUserStore().getUserInfo.email) {
-		dialogInfo.value.message = `很抱歉,您不符合参与活动条件,参与活动前需要验证绑定您的手机号和电子邮箱，请尽快完善资料`;
-		return (showDialog.value = true);
-	} else if (!useUserStore().getUserInfo.phone) {
-		dialogInfo.value.message = `很抱歉,您不符合参与活动条件,参与活动前需要验证绑定您的手机号，请尽快完善资料`;
-		return (showDialog.value = true);
-	} else if (!useUserStore().getUserInfo.email) {
-		dialogInfo.value.message = `很抱歉,您不符合参与活动条件,参与活动前需要验证绑定您的电子邮箱，请尽快完善资料`;
-		return (showDialog.value = true);
-	} else if (activityData.value.balanceCount < 1) {
-		return (showNoMorebalanceCount.value = true);
 	} else {
 		activityApi.toSpinActivity().then((res: any) => {
 			if (res.data.status === 10000) {

@@ -86,7 +86,7 @@
 					<div class="cell">
 						<SvgIcon class="icon" iconName="my/theme" />
 						<div class="label">{{ $t('my["主题"]') }}</div>
-						<SvgIcon class="themeChange_icon" :iconName="theme === ThemeEnum.default ? '/my/themeChange' : '/my/themeChange_light'" @click="changeTheme" />
+						<SvgIcon class="themeChange_icon" :iconName="theme === ThemeEnum.default ? 'my/themeChange' : 'my/themeChange_light'" @click="changeTheme" />
 					</div>
 				</div>
 
@@ -201,7 +201,7 @@ const balanceOperationList = [
 	{
 		name: $.t("my['交易']"),
 		icon: balance_operation_jy,
-		path: "",
+		path: "/wallet/conversion",
 	},
 	{
 		name: $.t("my['投注记录']"),

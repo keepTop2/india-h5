@@ -1,21 +1,6 @@
 <template>
-	<div class="canvas-container" v-if="modelValue">
-		<div class="getReadyCountdown fade-in" v-if="setp == 0">
-			<div><img src="./image/getReadyCountdownText.png" alt="" /></div>
-			<div class="getReadyCountdownNumber" :class="getReadyCountdown == 0 ? 'animate' : ''">
-				<img src="./image/getReadyCountdownBg.png" alt="" />
-				<div class="getReadyCountdownNumber">
-					<img src="./image/getReadyCountdown3.png" alt="" v-if="getReadyCountdown == 3" />
-					<img src="./image/getReadyCountdown2.png" alt="" v-if="getReadyCountdown == 2" />
-					<img src="./image/getReadyCountdown1.png" alt="" v-if="getReadyCountdown == 1" />
-					<img src="./image/getReadyCountdown0.png" alt="" v-if="getReadyCountdown == 0" @click="startRedbagRain" />
-				</div>
-			</div>
-			<div>
-				<img src="./image/close2.png" alt="" class="close2" @click="confirmDialog" />
-			</div>
-		</div>
-		<div class="redbag-rain-wrapper" v-show="setp == 1 || setp == 2">
+	<div class="canvas-container">
+		<div class="redbag-rain-wrapper">
 			<div class="redbag-rain-canvas">
 				<div v-if="setp == 1" class="redayGo">
 					<img src="./image/readyGo.png" alt="" />
@@ -47,8 +32,6 @@
 				{{ dialogInfo.message }}
 			</div>
 			<template v-slot:footer v-if="[30045, 30053].includes(dialogInfo.status)"> 去绑定 </template>
-			<!-- <div class="Text3">您领取的红包太多啦，请下一场次再参与</div>
-			<img src="./image/pityIcon.png" alt="" /> -->
 		</RED_BAG_RAIN_Dialog>
 	</div>
 </template>
@@ -60,14 +43,11 @@ import openRedBagImg from "./image/opened_redbag.png";
 import { useCountdown } from "/@/hooks/countdown";
 import activitySocketService from "/@/utils/activitySocketService";
 import pubsub from "/@/pubSub/pubSub";
-import { activityApi } from "/@/api/activity";
-import readyGo from "./image/readyGo.png";
 import RED_BAG_RAIN_Dialog from "./RED_BAG_RAIN_Dialog/index.vue";
 import { useActivityStore } from "/@/store/modules/activity";
 import { useUserStore } from "/@/store/modules/user";
-import { useLoading } from "/@/directives/loading/hooks";
 import router from "/@/router";
-const { startLoading, stopLoading } = useLoading();
+import { redbagRainSingleton } from "/@/hooks/useRedbagRain";
 const props = defineProps({
 	modelValue: Boolean,
 	redBagInfo: {} as any,
@@ -80,10 +60,9 @@ const canvas = ref<HTMLCanvasElement | null>(null);
 const emit = defineEmits(["update:modelValue"]);
 
 const isPaused = ref(false);
-const setp: any = ref(null);
+const setp: any = ref(1);
 const showRedBagRainResult = ref(false);
 const shwoDialog = ref(false);
-const getReadyCountdown = ref(3);
 const dialogTitle = ref("温馨提示");
 const dialogInfo: any = ref({});
 const settlement: any = ref({});
@@ -277,48 +256,6 @@ function addNewRedBag() {
 	redBags.push(newRedBag); // 添加红包到数组
 }
 
-const initReadyTime = () => {
-	setp.value = 0;
-	const timer = setInterval(() => {
-		if (getReadyCountdown.value == 0) {
-			clearInterval(timer);
-		} else {
-			getReadyCountdown.value = getReadyCountdown.value - 1;
-		}
-	}, 1000);
-};
-
-const startRedbagRain = () => {
-	startLoading();
-	console.log(props.redBagInfo?.redbagSessionId, activityData.value.redbagSessionId);
-
-	activityApi
-		.redBagParticipate({ redbagSessionId: props.redBagInfo?.redbagSessionId || activityData.value.redbagSessionId })
-		.then((res: any) => {
-			if (res.data?.status !== 10000) {
-				dialogInfo.value = res.data;
-				shwoDialog.value = true;
-				// emit("update:modelValue", false);
-			} else {
-				setp.value = 1;
-				const timer = setTimeout(() => {
-					setp.value = 2;
-					animate(); // 启动动画
-					redBagInterval = setInterval(() => {
-						if (!isPaused.value) {
-							addNewRedBag();
-						}
-					}, 250);
-					startCountdown(props.redBagInfo?.dropTime);
-					clearTimeout(timer);
-				}, 3000);
-			}
-		})
-		.finally(() => {
-			stopLoading();
-		});
-};
-
 const initRedbagRain = () => {
 	adjustCanvasSize();
 	// canvas.value?.addEventListener("mousemove", handleMouseMove);
@@ -343,16 +280,28 @@ function exitGame() {
 	}
 }
 const confirmDialog = () => {
-	if ([30045, 30053].includes(dialogInfo.value.status)) {
-		router.push("/securityCenter");
-	}
-	emit("update:modelValue", false);
-	activityStore.setIsShowRedBagRain(false);
+	redbagRainSingleton.hideRedbagRain();
+};
+
+const initReadyTime = () => {
+	setp.value = 1;
+	const timer = setTimeout(() => {
+		setp.value = 2;
+		animate(); // 启动动画
+		redBagInterval = setInterval(() => {
+			if (!isPaused.value) {
+				addNewRedBag();
+			}
+		}, 150);
+		startCountdown(activityData.value.dropTime);
+		clearTimeout(timer);
+	}, 3000);
 };
 // 生命周期管理
 onMounted(async () => {
 	initReadyTime();
 	initRedbagRain();
+
 	pubsub.subscribe("/activity/redBagRain/settlement", (data) => {
 		if (data.code === 10000) {
 			settlement.value = data.data;
