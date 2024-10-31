@@ -201,7 +201,7 @@ const balanceOperationList = [
 	{
 		name: $.t("my['交易']"),
 		icon: balance_operation_jy,
-		path: "",
+		path: "/wallet/conversion",
 	},
 	{
 		name: $.t("my['投注记录']"),
