@@ -89,7 +89,7 @@
 				<img :src="reward?.prizePictureUrl" alt="" />
 			</div>
 			<div class="dialog-title color_Hint">恭喜您获得</div>
-			<div class="dialog-amount">{{ reward?.prizeAmount }} {{ useUserStore().getUserInfo.platCurrencySymbol }}</div>
+			<div class="dialog-amount">{{ useUserStore().getUserInfo.platCurrencySymbol }} {{ reward?.prizeAmount }}</div>
 			<div @click="playAgain" class="button">
 				<div>再抽一次</div>
 				<span class="remaining_times_btn">剩余次数:{{ activityData?.balanceCount }}</span>

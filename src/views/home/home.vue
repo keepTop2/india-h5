@@ -96,7 +96,6 @@ import { useActivityStore } from "/@/store/modules/activity";
 import { computed, onActivated, onDeactivated, ref, watch } from "vue";
 import HorseRaceLamp from "/@/views/home/HorseRaceLamp/HorseRaceLamp.vue";
 import { useCollectGamesStore } from "/@/store/modules/collectGames";
-za;
 const router = useRouter();
 const UserStore = useUserStore();
 const sportsInfoStore = useSportsInfoStore();
