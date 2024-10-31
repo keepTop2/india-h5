@@ -1,13 +1,35 @@
 <template>
 	<div class="BigPic bg_BG3">
-		<img :src="img" alt="" />
+		<!-- <SvgIcon v-if="useCollectGamesStore().getCollectGamesList?.some((game) => game.id === gameInfoList.id)" iconName="home/event_collect" @click.stop="onClickCollect(gameInfoList)" />
+		<SvgIcon v-else @click.stop="onClickCollect(gameInfoList)" iconName="home/event_collect_no" /> -->
+		<img :src="gameInfoList.icon" alt="" @click="Common.goToGame(gameInfoList)" />
 	</div>
 </template>
 <script lang="ts" setup>
+import GameApi from "/@/api/venueHome/games";
+import router from "/@/router";
+import { useCollectGamesStore } from "/@/store/modules/collectGames";
+import { useUserStore } from "/@/store/modules/user";
+import Common from "/@/utils/common";
+const props = defineProps<{
+	gameInfoList: [];
+}>();
 /**
  * @description 游戏布局大图片展示
  */
-import img from "./image.png";
+const onClickCollect = async (item) => {
+	if (!useUserStore().token) {
+		return router.push("/login");
+	}
+	const res: any = await GameApi.gameCollection({
+		gameId: item.id,
+		type: !item.collect,
+	});
+	if (res?.ok) {
+		item.collect = !item.collect;
+		useCollectGamesStore().setCollectGamesList();
+	}
+};
 </script>
 <style scoped lang="scss">
 $background-color: #333;
@@ -20,6 +42,15 @@ $star-size: 30px;
 	height: 534px;
 	box-sizing: border-box;
 	border-radius: 26px;
+	position: relative;
+	svg {
+		position: absolute;
+		top: 40px;
+		right: 40px;
+		width: 40px;
+		height: 40px;
+		background-size: contain;
+	}
 	img {
 		width: 100%;
 		height: 100%;

@@ -1,11 +1,15 @@
 <template>
 	<div class="login-container">
 		<NavBar />
-		<HeaderBG />
+
 		<div class="login-form">
 			<div class="title">{{ $t('login["登录"]') }}</div>
 			<form class="form" autocomplete="off">
+				<div class="label"><span class="required">*</span>账号</div>
 				<FormInput v-model="state.userAccount" type="text" :placeholder="$t(`login['账户名']`)" :maxlength="11">
+					<template v-slot:left>
+						<SvgIcon class="pr_14" iconName="loginOrRegister/userAccount" @click="state.userAccount = ''" size="32px" />
+					</template>
 					<template v-slot:right>
 						<SvgIcon v-if="state.userAccount" class="clearIcon" iconName="loginOrRegister/clear" @click="state.userAccount = ''" />
 					</template>
@@ -13,8 +17,11 @@
 				<!-- <div class="error_text">
 					<span v-if="!isAccountValid && state.userAccount !== ''" class="text">{{ $t('register["请输入4-11位字母+数字组成，首位必须是字母"]') }}</span>
 				</div> -->
-
+				<div class="label"><span class="required">*</span>账号</div>
 				<FormInput class="mt_20" v-model="state.password" :type="eyeShow ? 'password' : 'text'" :maxlength="16" :placeholder="$t(`login['登录密码']`)">
+					<template v-slot:left>
+						<SvgIcon class="pr_14" iconName="loginOrRegister/userAccount" @click="state.userAccount = ''" size="32px" />
+					</template>
 					<template v-slot:right>
 						<div class="right">
 							<SvgIcon v-if="state.password" class="clearIcon" iconName="loginOrRegister/clear" @click="state.password = ''" />
@@ -150,6 +157,7 @@ onBeforeMount(() => {
 	width: 100%;
 	min-height: 100vh;
 	font-family: "PingFang SC";
+	background: url("../image/image.png") no-repeat;
 	@include themeify {
 		background-color: themed("BG1");
 	}
@@ -157,15 +165,30 @@ onBeforeMount(() => {
 	.login-form {
 		padding: 0px 55px;
 		.title {
-			font-size: 36px;
+			padding-top: 140px;
+			font-size: 52px;
 			font-weight: 600;
+			margin-bottom: 50px;
+			text-align: center;
 			@include themeify {
 				color: themed("TB");
 			}
 		}
 		.form {
 			margin-top: 40px;
-
+			> div.label {
+				@include themeify {
+					color: themed("TB");
+					font-size: 28px;
+					margin-bottom: 16px;
+					margin-top: 28px;
+				}
+				.required {
+					@include themeify {
+						color: themed("Hint");
+					}
+				}
+			}
 			.right {
 				display: flex;
 				align-items: center;
