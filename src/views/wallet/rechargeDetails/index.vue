@@ -263,8 +263,11 @@ onMounted(() => {
 // 收到订单推送订阅
 const rechargeSuccessFail = (data) => {
 	console.log("收到订单更新通知", data);
+	if (depositOrderDetail.value.orderNo !== data.orderNo) return; // 订单号不同则就退出
 	Object.assign(depositOrderDetail.value, data);
-	// console.log("depositOrderDetail.value", depositOrderDetail.value);
+	if (depositOrderDetail.value.customerStatus !== "0") {
+		clearInterval(startCountdown);
+	}
 };
 
 // 获取订单详情
