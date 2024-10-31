@@ -34,12 +34,12 @@
 				<h3 class="title_more">
 					<span class="flex_align_center">
 						<VantLazyImg :src="item.icon" />
-						{{ item.name }}
+						{{ item.modelCode == "SIGN_VENUE" ? item.gameInfoList[0].name : item.name }}
 					</span>
-					<span class="more fw_400 fs_28 color_T1" @click="handleMore(item?.gameOneId)">{{ $t(`home["更多"]`) }}</span>
+					<span class="more fw_400 fs_28 color_T1" v-if="item.modelCode !== 'SIGN_VENUE' && item.hasMoreGames" @click="handleMore(item?.gameOneId)">{{ $t(`home["更多"]`) }}</span>
 				</h3>
-				<GameLayout v-if="item.gameInfoList.length" :gameInfoList="item.gameInfoList" class="m24" />
-				<GameBigPic v-else class="m24" />
+				<GameBigPic v-if="item.modelCode === 'SIGN_VENUE'" class="m24" :gameInfoList="item.gameInfoList[0]" />
+				<GameLayout v-else :gameInfoList="item.gameInfoList" class="m24" />
 			</template>
 			<Sponsor :data="PartnerList" />
 			<!-- 转账方式 -->

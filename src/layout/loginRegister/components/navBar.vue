@@ -3,11 +3,13 @@
 		<div class="left">
 			<SvgIcon class="arrow" iconName="loginOrRegister/navBar/arrow" @click="goBack()" />
 		</div>
+
 		<div class="right" @click="onLang">
 			<div class="lang">
 				<div class="lang_icon">
-					<VantLazyImg :src="stateLang.langPicture" />
+					<img :src="stateLang.langPicture" />
 				</div>
+				<span class="color_TB fs_24">{{ stateLang.name }}</span>
 				<SvgIcon class="down" iconName="loginOrRegister/navBar/down" />
 			</div>
 		</div>
@@ -60,12 +62,14 @@ const getLangDownBox = async () => {
 			// 将默认语言的图标赋值给 stateLang 的 langPicture 属性
 			console.log(filteredData);
 			stateLang.langPicture = filteredData.iconFileUrl;
+			stateLang.name = filteredData.name;
 		}
 	}
 };
 
 onMounted(() => {
 	stateLang.langPicture = userStore.langIcon;
+	stateLang.name = userStore.langName;
 	getLangDownBox();
 });
 

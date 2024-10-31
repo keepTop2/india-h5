@@ -16,7 +16,7 @@
 				@StartVerification="StartVerification"
 				:enable="activityData?.enable"
 				:reward="reward"
-				:spinList="currentTab == '0' ? activityData?.bronze : currentTab == '1' ? activityData?.silver : activityData?.gold"
+				:spinList="currentTab == '1' ? activityData?.bronze : currentTab == '2' ? activityData?.silver : activityData?.gold"
 				:balanceCount="activityData?.balanceCount"
 				ref="SpinRef"
 			/>
@@ -78,7 +78,7 @@
 		</div>
 	</div>
 
-	<activityDialog v-model="showDialog" title="温馨提示" :confirm="confirmDialog" :goToLogin="dialogInfo.goToLogin">
+	<activityDialog v-model="showDialog" title="温馨提示" :confirm="confirmDialog" :goToLogin="dialogInfo.toLogin">
 		{{ dialogInfo.message }}
 	</activityDialog>
 
@@ -89,7 +89,7 @@
 				<img :src="reward?.prizePictureUrl" alt="" />
 			</div>
 			<div class="dialog-title color_Hint">恭喜您获得</div>
-			<div class="dialog-amount">{{ useUserStore().getUserInfo.platCurrencySymbol }} {{ reward?.prizeAmount }}</div>
+			<div class="dialog-amount">{{ reward?.prizeAmount }} {{ useUserStore().getUserInfo.platCurrencySymbol }}</div>
 			<div @click="playAgain" class="button">
 				<div>再抽一次</div>
 				<span class="remaining_times_btn">剩余次数:{{ activityData?.balanceCount }}</span>
@@ -191,6 +191,9 @@ const playAgain = () => {
  */
 const spinEnd = () => {
 	showResult.value = true;
+	activityApi.getSpinDetail().then((res) => {
+		activityData.value = res.data;
+	});
 };
 
 const confirmDialog = () => {
@@ -206,7 +209,7 @@ const StartVerification = () => {
 		return (showDialog.value = true);
 	} else if (!useUserStore().token) {
 		dialogInfo.value.message = `您的账号暂未登录无法参与活动，如已有账号请登录，如还未有账号请前往注册`;
-		dialogInfo.value.goToLogin = true;
+		dialogInfo.value.toLogin = true;
 		return (showDialog.value = true);
 	} else {
 		activityApi.toSpinActivity().then((res: any) => {
@@ -214,7 +217,7 @@ const StartVerification = () => {
 				SpinRef.value?.handleStartSpin();
 				spinStart();
 			} else {
-				dialogInfo.value = res.data;
+				if (res.data.status === 80019) dialogInfo.value = res.data;
 				return (showDialog.value = true);
 			}
 		});

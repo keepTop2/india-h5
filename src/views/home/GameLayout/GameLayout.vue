@@ -35,18 +35,30 @@
 		<div class="right-section">
 			<div class="small-items">
 				<div class="item" id="item-3" @click="Common.goToGame(gameInfoList?.[2])">
-					<SvgIcon v-if="useCollectGamesStore().getCollectGamesList?.some((game) => game.id === gameInfoList?.[2]?.id)" iconName="home/event_collect" />
+					<SvgIcon
+						v-if="useCollectGamesStore().getCollectGamesList?.some((game) => game.id === gameInfoList?.[2]?.id)"
+						iconName="home/event_collect"
+						@click.stop="onClickCollect(gameInfoList?.[2], false)"
+					/>
 					<SvgIcon v-else @click.stop="onClickCollect(gameInfoList?.[2], true)" iconName="home/event_collect_no" />
 					<VantLazyImg :src="gameInfoList?.[2]?.icon || ''" :loadingSrc="loadingSrc" :errorSrc="loadingSrc" />
 				</div>
 				<div class="item" id="item-4" @click="Common.goToGame(gameInfoList?.[3])">
-					<SvgIcon v-if="useCollectGamesStore().getCollectGamesList?.some((game) => game.id === gameInfoList?.[3]?.id)" iconName="home/event_collect" />
+					<SvgIcon
+						v-if="useCollectGamesStore().getCollectGamesList?.some((game) => game.id === gameInfoList?.[3]?.id)"
+						iconName="home/event_collect"
+						@click.stop="onClickCollect(gameInfoList?.[3], false)"
+					/>
 					<SvgIcon v-else @click.stop="onClickCollect(gameInfoList?.[3], true)" iconName="home/event_collect_no" />
 					<VantLazyImg :src="gameInfoList?.[3]?.icon || ''" :loadingSrc="loadingSrc" :errorSrc="loadingSrc" />
 				</div>
 			</div>
 			<div class="item big" id="item-2" @click="Common.goToGame(gameInfoList?.[1])">
-				<SvgIcon v-if="useCollectGamesStore().getCollectGamesList?.some((game) => game.id === gameInfoList?.[1]?.id)" iconName="home/event_collect" />
+				<SvgIcon
+					v-if="useCollectGamesStore().getCollectGamesList?.some((game) => game.id === gameInfoList?.[1]?.id)"
+					iconName="home/event_collect"
+					@click.stop="onClickCollect(gameInfoList?.[1], false)"
+				/>
 				<SvgIcon v-else @click.stop="onClickCollect(gameInfoList?.[1], true)" iconName="home/event_collect_no" />
 				<VantLazyImg :src="gameInfoList?.[1]?.icon || ''" :loadingSrc="loadingSrc" :errorSrc="loadingSrc" />
 			</div>
