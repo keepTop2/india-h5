@@ -136,6 +136,7 @@ const toPath = (path) => {
 	if ("/activity/SPIN_WHEEL" === path) {
 		if (activityTemplate.value.includes("SPIN_WHEEL")) {
 			router.push(path);
+			show.value = false;
 		} else {
 			showToast("敬请期待");
 		}

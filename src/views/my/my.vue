@@ -18,18 +18,19 @@
 			</div>
 
 			<!-- vip -->
-			<div class="vip_container">
+			<div class="vip_container" @click="toPath('/vip')">
 				<!-- <VantLazyImg class="vip_big" :src="vip_big" /> -->
 				<span class="vip_level">{{ state.userVipInfo.vipGradeName }}</span>
-				<div class="vip_info">
+				<div class="vip_info" v-if="state.userVipInfo.vipGradeCode !== state.userVipInfo.vipGradeUp">
 					<span class="vip_experience"
 						>升级所需经验: <span class="color_Warn">{{ state.userVipInfo.vipGradeCode === state.userVipInfo.vipGradeUp ? state.userVipInfo.currentVipExp : state.userVipInfo.currentExp }}</span> /
 						<span>{{ state.userVipInfo.currentVipExp }}</span></span
 					>
-					<SvgIcon class="arrow" iconName="my/arrow" @click="toPath('/vip')" />
+					<SvgIcon class="arrow" iconName="my/arrow" />
 				</div>
 				<!-- VIP进度条 -->
-				<Progress class="vip_progress" :userVipInfo="state.userVipInfo" />
+				<Progress class="vip_progress" :userVipInfo="state.userVipInfo" v-if="state.userVipInfo.vipGradeCode !== state.userVipInfo.vipGradeUp" />
+				<div v-else-if="state.userVipInfo.vipGradeCode" class="vip_info2">恭喜！您已达到最高等级</div>
 			</div>
 
 			<div class="my-content">
@@ -486,6 +487,16 @@ const loginOut = () => {
 				vertical-align: top;
 			}
 		}
+	}
+	.vip_info2 {
+		gap: 12px;
+		padding: 31px 58px 0px;
+		font-weight: 600;
+		font-size: 40px;
+		background: linear-gradient(90deg, #fdfdfd 6.39%, #bebebe 35.7%, #fdfdfd 66.76%, #979797 93.89%);
+		background-clip: text;
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
 	}
 
 	.vip_progress {
