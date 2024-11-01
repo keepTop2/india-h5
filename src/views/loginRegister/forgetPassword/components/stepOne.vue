@@ -1,8 +1,11 @@
 <template>
 	<div class="content">
-		<div class="title">{{ $t('forgetPassword["找回密码"]') }}</div>
 		<div class="from">
+			<div class="label"><span class="required">*</span>账号</div>
 			<FormInput v-model="state.userAccount" type="text" :placeholder="$t(`forgetPassword['账户名']`)" :maxlength="11">
+				<template v-slot:left>
+					<SvgIcon class="pr_14" iconName="loginOrRegister/userAccount" size="32px" />
+				</template>
 				<template v-slot:right>
 					<SvgIcon v-if="state.userAccount" class="clearIcon" iconName="loginOrRegister/clear" @click="state.userAccount = ''" />
 				</template>
@@ -14,9 +17,7 @@
 			<Button class="mt_40" :type="!isAccountValid ? 'disabled' : 'default'" @click="onStep">{{ $t('forgetPassword["下一步"]') }}</Button>
 
 			<div class="footer">
-				<div>
-					<span class="help">{{ $t('common["联系客服"]') }}</span>
-				</div>
+				<span class="help">{{ $t('common["联系客服"]') }}</span>
 			</div>
 		</div>
 	</div>
@@ -60,7 +61,19 @@ const onStep = async () => {
 	}
 	.from {
 		margin-top: 40px;
-
+		> div.label {
+			@include themeify {
+				color: themed("TB");
+				font-size: 28px;
+				margin-bottom: 16px;
+				margin-top: 28px;
+			}
+			.required {
+				@include themeify {
+					color: themed("Hint");
+				}
+			}
+		}
 		.right {
 			display: flex;
 			align-items: center;
@@ -90,7 +103,7 @@ const onStep = async () => {
 		.footer {
 			display: flex;
 			align-items: center;
-			justify-content: left;
+			justify-content: center;
 			margin-top: 40px;
 			text-align: center;
 			font-family: "PingFang SC";
@@ -99,7 +112,7 @@ const onStep = async () => {
 			line-height: 34px;
 			.help {
 				@include themeify {
-					color: themed("Theme");
+					color: themed("F2");
 				}
 			}
 		}

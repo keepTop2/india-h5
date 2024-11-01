@@ -18,14 +18,14 @@
 				<VantLazyImg :src="event.teamInfo?.homeIconUrl" alt="France" />
 				<span class="color_TB">{{ event.teamInfo?.homeName }}</span>
 			</div>
-			<div class="score color_TB bg_BG4">{{ event.gameInfo?.liveHomeScore }}</div>
+			<div class="score color_TB bg_BG4">{{ !SportsCommonFn.isStartMatch(event) ? event.gameInfo?.liveHomeScore : "-" }}</div>
 		</div>
 		<div class="match-info">
 			<div class="team">
 				<VantLazyImg :src="event.teamInfo?.awayIconUrl" alt="" />
 				<span class="color_TB">{{ event.teamInfo?.awayName }}</span>
 			</div>
-			<div class="score color_TB bg_BG4">{{ event.gameInfo?.liveAwayScore }}</div>
+			<div class="score color_TB bg_BG4">{{ !SportsCommonFn.isStartMatch(event) ? event.gameInfo?.liveAwayScore : "-" }}</div>
 		</div>
 		<div class="line bg_Line"></div>
 		<Markets :event="event" :markets="event.markets" :sportType="event.sportType" />

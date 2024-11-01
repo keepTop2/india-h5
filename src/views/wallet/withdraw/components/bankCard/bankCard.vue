@@ -120,6 +120,7 @@ const UserStore = useUserStore();
 
 const captchaButton = ref<{
 	startCountdown: () => void;
+	stopCountdown: () => void;
 } | null>(null);
 
 const backShow = ref(false); // 控制银行卡选择器的显示
@@ -220,6 +221,11 @@ const onCaptcha = async () => {
 	}
 };
 
+// 归零验证码
+const stopCountdown = () => {
+	captchaButton.value?.stopCountdown();
+};
+
 // 选择银行卡时的确认处理
 const handleConfirm = (selectedValues) => {
 	// console.log("selectedValues", selectedValues);
@@ -272,6 +278,7 @@ defineExpose({
 	inputFields,
 	clearParams,
 	getAreaCodeDownBox,
+	stopCountdown,
 });
 </script>
 

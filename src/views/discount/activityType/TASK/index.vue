@@ -290,14 +290,14 @@ const calculatePercentage = (part, whole) => {
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
-			padding: 0 40px 0 20px;
+			padding: 0 40px 0 3px;
 			gap: 30px;
 			position: relative;
 			> div:first-child {
 				width: 80px;
 				img {
-					width: 80px;
-					height: 80px;
+					width: 100px;
+					height: 140px;
 				}
 			}
 			.help_icon {

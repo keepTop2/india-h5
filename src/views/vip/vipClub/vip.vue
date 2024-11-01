@@ -11,13 +11,16 @@
 		<div class="vip_card">
 			<img class="vip_big" :src="currentRankImage" />
 
-			<div class="head">
+			<div class="head" v-if="state.userVipInfo.vipGradeCode !== state.userVipInfo.vipGradeUp">
+				<div class="label">{{ $t(`vip["当前等级"]`) }}</div>
+			</div>
+			<div class="head head2" v-else>
 				<div class="label">{{ $t(`vip["当前等级"]`) }}</div>
 			</div>
 
 			<div class="vip_level">{{ state.userVipInfo.vipGradeName }}</div>
 
-			<div class="vip_level_progress">
+			<div class="vip_level_progress" v-if="state.userVipInfo.vipGradeCode !== state.userVipInfo.vipGradeUp">
 				<span>{{ $t(`vip["升级所需经验"]`) }}</span>
 				<span
 					><span class="color_Theme">{{
@@ -28,7 +31,7 @@
 				<van-popover v-model:show="showPopover" theme="dark" :show-arrow="false">
 					<div class="p_10 popup">
 						体育/电竞场馆投注 1 {{ useUserStore().getUserInfo.platCurrencySymbol }} = {{ state.userVipInfo.sportExe }} 积分，其他场馆投注 1 {{ useUserStore().getUserInfo.platCurrencySymbol }} = 1
-						积分， 所有投注 均按当前汇率兑换为美元结算
+						积分， 所有投注 均按当前汇率兑换为{{ useUserStore().getUserInfo.platCurrencyName }}结算
 					</div>
 					<template #reference>
 						<SvgIcon class="warning_icon" iconName="vip/warning" />
@@ -36,7 +39,8 @@
 				</van-popover>
 			</div>
 			<!-- VIP进度条 -->
-			<Progress class="vip_progress" :userVipInfo="state.userVipInfo" :percentageShow="true" />
+			<Progress class="vip_progress" :userVipInfo="state.userVipInfo" :percentageShow="true" v-if="state.userVipInfo.vipGradeCode !== state.userVipInfo.vipGradeUp" />
+			<div v-else class="vip_level_progress2">恭喜！您已达到最高等级</div>
 		</div>
 
 		<div class="notify">
@@ -64,14 +68,15 @@
 							<img :src="item.rankIcon" />
 						</div>
 					</div>
-					<div class="label">{{ item.label }}</div>
+					<div class="label">{{ state.userVipInfo.vipBenefit?.[index].vipRankNameI18nCode }}</div>
 				</div>
 			</div>
 			<div class="reward_list">
 				<div class="reward_list_header">
 					<img :src="currentRankIconImage" alt="" />
 					<div>
-						<span>{{ levelData[state.vipRank - 1]?.label }} </span>&nbsp;
+						<span>{{ state.userVipInfo.vipBenefit?.[state.vipRank - 1].vipRankNameI18nCode }}</span
+						>&nbsp;
 						<span> {{ levelData[state.vipRank - 1]?.minVipGradeName }} - {{ levelData[state.vipRank - 1]?.maxVipGradeName }}</span>
 					</div>
 					<van-popover v-model:show="showPopover3" theme="dark" :show-arrow="false">
@@ -105,7 +110,7 @@
 										{{ i.weekSportMax > 0 ? `至 ${useUserStore().getUserInfo.platCurrencySymbol} ${i.weekSportMax}` : "或以上" }} = {{ i.weekSportBonus }}
 										{{ useUserStore().getUserInfo.platCurrencySymbol }}
 									</p>
-									<p>&nbsp;&nbsp;-流水统计时间：周六00:00时～周五 23:59时（7天</p>
+									<p>&nbsp;&nbsp;-流水统计时间：周六00:00时～周五 23:59时（7天）</p>
 									<p>· 礼金发放时间：每周六</p>
 								</div>
 								<template #reference>
@@ -149,7 +154,7 @@
 						</template>
 						<template v-else-if="item.luckFlag">
 							<div class="value">
-								{{ $t(`vip["从vip开始，达到活动要求即可获得每日抽取幸运大奖得机会"]`, { vip: state.userVipInfo.vipBenefit.find((item2) => item2.luckFlag == 2).minVipGradeName }) }}
+								{{ $t(`vip["从vip开始，达到活动要求即可获得每日抽取幸运大奖得机会"]`, { vip: state.userVipInfo.vipBenefit.find((item2) => item2.luckFlag == 2)?.minVipGradeName }) }}
 								<!-- <i18n-t keypath="vip['从VIP开始，达到活动要求即可获得每日抽取幸运大奖得机会']" :tag="'span'">
 									<template v-slot:vip>
 										{{ item }}
@@ -288,12 +293,6 @@ const state: any = reactive({
 			weekSportFlag: 0,
 		},
 		{
-			label: $.t(`vip['幸运转盘']`),
-			text: $.t(`vip['从VIP8开始，达到活动要求即可获得每日抽取幸运大奖得机会']`),
-			icon: reward_icon6,
-			luckFlag: 0,
-		},
-		{
 			label: $.t(`vip['SVIP专属福利']`),
 			text: $.t(`vip['成为钻石会员尊享更多私人专属福利惊喜']`),
 			icon: reward_icon9,
@@ -304,6 +303,12 @@ const state: any = reactive({
 			text: $.t(`vip['尊享赠送私人顶级奢华福利机会']`),
 			icon: reward_icon10,
 			luxuriousGiftsFlag: 0,
+		},
+		{
+			label: $.t(`vip['幸运转盘']`),
+			text: $.t(`vip['从VIP8开始，达到活动要求即可获得每日抽取幸运大奖得机会']`),
+			icon: reward_icon6,
+			luckFlag: 0,
 		},
 
 		{
@@ -523,7 +528,9 @@ const onClickLeft = () => {
 				box-sizing: border-box;
 			}
 		}
-
+		.head2 {
+			padding-top: 17px;
+		}
 		.vip_level {
 			margin-top: 44px;
 			padding: 0px 52px;
@@ -553,6 +560,30 @@ const onClickLeft = () => {
 
 			font-family: "PingFang SC";
 			font-size: 24px;
+			font-weight: 400;
+
+			.warning_icon {
+				width: 24px;
+				height: 24px;
+			}
+		}
+		.vip_level_progress2 {
+			min-height: 84px;
+			display: flex;
+			align-items: center;
+
+			margin-top: 8px;
+			padding: 0px 52px;
+			background: linear-gradient(250deg, #fdfdfd 6.39%, #bebebe 35.7%, #fdfdfd 66.76%, #979797 93.89%);
+			background-clip: text;
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+			@include themeify {
+				color: themed("TB1");
+			}
+
+			font-family: "PingFang SC";
+
 			font-weight: 400;
 
 			.warning_icon {

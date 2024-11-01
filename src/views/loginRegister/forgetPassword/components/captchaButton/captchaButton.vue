@@ -31,7 +31,7 @@ const { countdown, isCountingDown, startCountdown, stopCountdown } = useCountdow
 const buttonClass = computed(() => {
 	if (isCountingDown.value) {
 		if (props.type === "button") {
-			return "send"; // 倒计时中，使用 'send' 类
+			return " send sending"; // 倒计时中，使用 'send' 类
 		} else if (props.type === "text") {
 			return "send_text"; // 倒计时中，使用 'send' 类
 		}
@@ -69,6 +69,10 @@ defineExpose({
 	font-size: 28px;
 	font-weight: 400;
 	box-sizing: border-box;
+	@include themeify {
+		color: themed("Theme");
+		border-color: themed("Theme");
+	}
 }
 
 .send {
@@ -77,11 +81,12 @@ defineExpose({
 		border-color: themed("Theme");
 	}
 }
-
+.sending {
+	opacity: 0.3;
+}
 .send_disabled {
 	@include themeify {
-		color: themed("T3");
-		border-color: themed("T3");
+		opacity: 0.3;
 	}
 }
 

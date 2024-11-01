@@ -10,7 +10,7 @@ import { VipRouter } from "/@/router/modules/vip";
 import { activityRoutes } from "/@/router/modules/activity";
 import { SecurityCenterRouter } from "/@/router/modules/securityCenter";
 import { ErrorRouter } from "/@/router/modules/error";
-import { useUserStore } from "../store/modules/user";
+// import { useUserStore } from "../store/modules/user";
 /**
  * @description idx大小判断路由左切动画还是右切动画
  */
@@ -186,6 +186,24 @@ const routes = [
 const router: Router = createRouter({
 	history: createWebHashHistory(),
 	routes: routes,
+	scrollBehavior(_, from, savedPosition) {
+		console.log(_, from, "scrollBehavior");
+
+		// 如果有保存的滚动位置（比如返回前进浏览器时）
+		if (savedPosition) {
+			return savedPosition;
+		} else if (from.meta.scrollTop !== undefined) {
+			// 在体育模块导航栏headerMenuNav、headerMenuCondition组件中记录了scrollTop
+			const scrollDom = document.getElementById("sports");
+			if (scrollDom) {
+				scrollDom.scrollTop = from.meta.scrollTop as number;
+				delete from.meta.scrollTop;
+			}
+		} else {
+			// 记录自定义的滚动行为，跳转到指定位置
+			return { top: 0 };
+		}
+	},
 } as any);
 
 // router.beforeEach((to, from, next) => {

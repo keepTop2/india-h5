@@ -20,7 +20,7 @@ import { useSportsBetInfoStore } from "/@/store/modules/sports/sportsBetInfo";
 import common from "/@/utils/common";
 
 const sportsBetInfo = useSportsBetInfoStore();
-let stake = computed(() => shopCartPubSub.getSingleTicketBetValue());
+let stake = computed(() => Number(shopCartPubSub.getSingleTicketBetValue()));
 
 // watch(
 // 	() => sportsBetInfo.singleTicketInfo.maxBet,

@@ -81,7 +81,7 @@
 						<div class="title">{{ $t(`rechargeDetails['第三方商户处理中']`) }}</div>
 						<div class="description">
 							<p class="text">{{ $t(`rechargeDetails['此过程可能需要1小时，更新于']`, { value: common.getInstance().dayFormat2(depositOrderDetail.updatedTime) }) }}</p>
-							<p v-if="depositOrderDetail.voucherFlag == 0">
+							<p v-if="depositOrderDetail.customerStatus == '0'">
 								<span class="a" @click="isModalVisible = true">{{ $t(`rechargeDetails['提供转账凭证']`) }}</span>
 							</p>
 							<p v-if="depositOrderDetail.customerStatus == 0" class="text">

@@ -134,7 +134,6 @@ watch(
 		}
 	}
 );
-startCountdown(10);
 watch(
 	() => props.redBagInfo,
 	() => {

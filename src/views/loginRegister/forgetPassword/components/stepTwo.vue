@@ -1,24 +1,28 @@
 <template>
 	<div class="content">
-		<div class="title">{{ state.type == "email" ? $t('forgetPassword["邮箱验证"]') : $t('forgetPassword["手机号验证"]') }}</div>
-		<div class="change" @click="onChange">{{ $t('forgetPassword["其他方式"]') }}</div>
 		<div class="form">
 			<!-- 邮箱 -->
 			<div v-show="state.type == 'email'">
+				<div class="label"><span class="required">*</span>电子邮箱</div>
 				<FormInput v-model="state.email" type="text" :placeholder="$t(`forgetPassword['请输入电子邮箱']`)" :errorBorder="!isEmailValid && state.email !== '' ? true : false">
+					<template v-slot:left>
+						<SvgIcon class="pr_14" iconName="loginOrRegister/email" size="32px" />
+					</template>
 					<template v-slot:right>
 						<SvgIcon v-if="state.email" class="clearIcon" iconName="loginOrRegister/clear" @click="state.email = ''" />
 					</template>
 				</FormInput>
-				<div class="error_text">
-					<span v-if="!isEmailValid && state.email !== ''" class="text">{{ $t('forgetPassword["邮箱格式不正确"]') }}</span>
+				<div class="error_text" v-if="!isEmailValid && state.email !== ''">
+					<span class="text">{{ $t('forgetPassword["邮箱格式不正确"]') }}</span>
 				</div>
 			</div>
 
 			<!-- 手机号码 -->
 			<div v-show="state.type == 'phone'">
+				<div class="label"><span class="required">*</span>手机号</div>
 				<div class="phone" :class="{ 'form-input-error': !isPhoneValid && state.phone !== '' ? true : false }">
 					<div class="area_code" @click="showAreaCode = true">
+						<SvgIcon class="pr_14 pl_24" iconName="loginOrRegister/phone" size="32px" />
 						<span>+{{ state.areaCode }}</span> <SvgIcon class="down" iconName="loginOrRegister/navBar/down" />
 					</div>
 					<FormInput v-model="state.phone" type="text" :placeholder="$t(`forgetPassword['请输入手机号']`)" :maxlength="areaCodeObj.maxLength">
@@ -27,12 +31,15 @@
 						</template>
 					</FormInput>
 				</div>
-				<div class="error_text">
-					<span v-if="!isPhoneValid && state.phone !== ''" class="text">{{ $t(`forgetPassword["请输入8-12位数字"]`, { min: areaCodeObj.minLength, max: areaCodeObj.maxLength }) }}</span>
+				<div class="error_text" v-if="!isPhoneValid && state.phone !== ''">
+					<span class="text">{{ $t(`forgetPassword["请输入8-12位数字"]`, { min: areaCodeObj.minLength, max: areaCodeObj.maxLength }) }}</span>
 				</div>
 			</div>
-
+			<div class="label"><span class="required">*</span>验证码</div>
 			<FormInput v-model="state.verifyCode" type="text" :placeholder="$t(`common['验证码']`)" :maxlength="6">
+				<template v-slot:left>
+					<SvgIcon class="pr_14" iconName="loginOrRegister/verifyCode" size="32px" />
+				</template>
 				<template v-slot:right>
 					<CaptchaButton ref="captchaButton" :disabled="captchaDisabled" @onCaptcha="onCaptcha" />
 				</template>
@@ -43,6 +50,7 @@
 			</div>
 
 			<Button class="mt_40" :type="btnDisabled ? 'disabled' : 'default'" @click="onStep">{{ $t('forgetPassword["下一步"]') }}</Button>
+			<div class="change" @click="onChange">{{ $t('forgetPassword["其他验证方式"]') }}</div>
 		</div>
 		<!-- 手机区号选择器 -->
 		<AreaCodePicker
@@ -203,6 +211,19 @@ const selectAreaCode = (item, i: CountryData) => {
 <style scoped lang="scss">
 .content {
 	padding: 0px 55px;
+	.label {
+		@include themeify {
+			color: themed("TB");
+			font-size: 28px;
+			margin-bottom: 16px;
+			margin-top: 28px;
+		}
+		.required {
+			@include themeify {
+				color: themed("Hint");
+			}
+		}
+	}
 	.title {
 		font-size: 36px;
 		font-weight: 600;
@@ -218,6 +239,7 @@ const selectAreaCode = (item, i: CountryData) => {
 		font-family: "PingFang SC";
 		font-size: 28px;
 		font-weight: 500;
+		text-align: center;
 		text-decoration-line: underline;
 	}
 	.form {
@@ -232,7 +254,7 @@ const selectAreaCode = (item, i: CountryData) => {
 			}
 			.area_code {
 				position: relative;
-				width: 148px;
+				width: 198px;
 				height: 88px;
 				display: flex;
 				align-items: center;
@@ -275,7 +297,7 @@ const selectAreaCode = (item, i: CountryData) => {
 				border-radius: 12px;
 				border: 1px solid;
 				@include themeify {
-					border-color: themed("Theme");
+					border-color: themed("Hint");
 				}
 				box-sizing: border-box;
 				pointer-events: none; /* 确保伪元素不会阻止用户与实际内容交互 */
@@ -303,7 +325,7 @@ const selectAreaCode = (item, i: CountryData) => {
 				font-size: 20px;
 				font-weight: 400;
 				@include themeify {
-					color: themed("Theme");
+					color: themed("Hint");
 				}
 			}
 		}
@@ -318,7 +340,7 @@ const selectAreaCode = (item, i: CountryData) => {
 			font-weight: 400;
 			.help {
 				@include themeify {
-					color: themed("Theme");
+					color: themed("F2");
 				}
 			}
 		}
