@@ -18,7 +18,7 @@
 			</div>
 
 			<!-- vip -->
-			<div class="vip_container">
+			<div class="vip_container" @click="toPath('/vip')">
 				<!-- <VantLazyImg class="vip_big" :src="vip_big" /> -->
 				<span class="vip_level">{{ state.userVipInfo.vipGradeName }}</span>
 				<div class="vip_info" v-if="state.userVipInfo.vipGradeCode !== state.userVipInfo.vipGradeUp">
@@ -26,11 +26,11 @@
 						>升级所需经验: <span class="color_Warn">{{ state.userVipInfo.vipGradeCode === state.userVipInfo.vipGradeUp ? state.userVipInfo.currentVipExp : state.userVipInfo.currentExp }}</span> /
 						<span>{{ state.userVipInfo.currentVipExp }}</span></span
 					>
-					<SvgIcon class="arrow" iconName="my/arrow" @click="toPath('/vip')" />
+					<SvgIcon class="arrow" iconName="my/arrow" />
 				</div>
 				<!-- VIP进度条 -->
 				<Progress class="vip_progress" :userVipInfo="state.userVipInfo" v-if="state.userVipInfo.vipGradeCode !== state.userVipInfo.vipGradeUp" />
-				<div v-else class="vip_info2">恭喜！您已达到最高等级</div>
+				<div v-else-if="state.userVipInfo.vipGradeCode" class="vip_info2">恭喜！您已达到最高等级</div>
 			</div>
 
 			<div class="my-content">

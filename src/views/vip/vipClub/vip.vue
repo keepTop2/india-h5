@@ -68,14 +68,15 @@
 							<img :src="item.rankIcon" />
 						</div>
 					</div>
-					<div class="label">{{ item.label }}</div>
+					<div class="label">{{ state.userVipInfo.vipBenefit?.[index].vipRankNameI18nCode }}</div>
 				</div>
 			</div>
 			<div class="reward_list">
 				<div class="reward_list_header">
 					<img :src="currentRankIconImage" alt="" />
 					<div>
-						<span>{{ levelData[state.vipRank - 1]?.label }} </span>&nbsp;
+						<span>{{ state.userVipInfo.vipBenefit?.[state.vipRank - 1].vipRankNameI18nCode }}</span
+						>&nbsp;
 						<span> {{ levelData[state.vipRank - 1]?.minVipGradeName }} - {{ levelData[state.vipRank - 1]?.maxVipGradeName }}</span>
 					</div>
 					<van-popover v-model:show="showPopover3" theme="dark" :show-arrow="false">
@@ -153,7 +154,7 @@
 						</template>
 						<template v-else-if="item.luckFlag">
 							<div class="value">
-								{{ $t(`vip["从vip开始，达到活动要求即可获得每日抽取幸运大奖得机会"]`, { vip: state.userVipInfo.vipBenefit.find((item2) => item2.luckFlag == 2).minVipGradeName }) }}
+								{{ $t(`vip["从vip开始，达到活动要求即可获得每日抽取幸运大奖得机会"]`, { vip: state.userVipInfo.vipBenefit.find((item2) => item2.luckFlag == 2)?.minVipGradeName }) }}
 								<!-- <i18n-t keypath="vip['从VIP开始，达到活动要求即可获得每日抽取幸运大奖得机会']" :tag="'span'">
 									<template v-slot:vip>
 										{{ item }}
