@@ -128,6 +128,32 @@
 	</div>
 
 	<PassWordInput v-model:modelValue="state.withdrawPassWord" :passWordShow="passWordShow" @onClose="onTransactionPasswordEntered" @onOverlay="passWordShow = false" />
+
+	<!-- 流失不足弹窗提示 -->
+	<Model v-model:modelValue="isRemainingFlowModal">
+		<template #header>
+			<div class="header">{{ $t('withdraw["温馨提示"]') }}</div>
+		</template>
+		<template #default>
+			<div class="content">
+				<i18n-t class="text" keypath="withdraw['流水未完成']" :tag="'p'">
+					<template v-slot:value>
+						<span> {{ withdrawWayConfig.remainingFlow ?? 0 }} </span>
+					</template>
+
+					<template v-slot:currency>
+						<span> {{ UserStore.userInfo.mainCurrency }} </span>
+					</template>
+				</i18n-t>
+			</div>
+		</template>
+		<template #footer>
+			<div class="footer">
+				<div class="cancel" @click="isRemainingFlowModal = false">{{ $t('withdraw["取消"]') }}</div>
+				<div class="confirm" @click="router.push('/')">{{ $t('withdraw["去完成"]') }}</div>
+			</div>
+		</template>
+	</Model>
 </template>
 
 <script setup lang="ts">
@@ -136,6 +162,7 @@ import { useUserStore } from "/@/store/modules/user";
 import { useRouter } from "vue-router";
 import { walletApi } from "/@/api/wallet";
 import { myApi } from "/@/api/my";
+import Model from "/@/views/wallet/components/model.vue";
 
 // 引入支付方式对应的组件
 import bankCard from "/@/views/wallet/withdraw/components/bankCard/bankCard.vue";
@@ -185,6 +212,8 @@ const state = reactive({
 const exchangeRate = ref(0); // 预计到账金额
 
 const passWordShow = ref(false);
+
+const isRemainingFlowModal = ref(false);
 
 // 错误信息
 const errorMessage = computed(() => {
@@ -258,14 +287,13 @@ const buttonType = computed(() => {
 
 	// 定义 requiredFields 和 dynamicFields
 	let requiredFields: string[] = [];
-	let dynamicFields = {};
-	let smsCode = "";
+	let dynamicFields = {} as any;
 
 	// 添加 SMS 代码的检查
 	const addSmsCodeCheck = () => {
 		if (!UserStore.getUserInfo.isSetPwd && UserStore.getUserInfo.phone) {
-			smsCode = childRef.value?.state?.smsCode || "";
 			requiredFields.push("smsCode");
+			dynamicFields.smsCode = childRef.value?.state?.smsCode || "";
 		}
 	};
 
@@ -284,6 +312,7 @@ const buttonType = computed(() => {
 		case "crypto_currency":
 			dynamicFields = buildDynamicFields();
 			requiredFields = Object.keys(dynamicFields);
+			addSmsCodeCheck();
 			break;
 		default:
 			break;
@@ -321,7 +350,7 @@ const buildDynamicFields = () => {
 };
 
 // 构建参数对象的通用函数
-const buildParams = (withdrawPassWord: string) => {
+const buildParams = (withdrawPassWord?: string) => {
 	return {
 		amount: state.amount,
 		withdrawWayId: withdrawWayData.value.id,
@@ -329,7 +358,7 @@ const buildParams = (withdrawPassWord: string) => {
 		// 只合并 buildDynamicFields 中存在的键值对
 		...Object.keys(buildDynamicFields()).reduce((acc: any, key) => {
 			if (key in childRef.value?.state) {
-				acc[key] = buildDynamicFields()[key]; // 只保留 buildDynamicFields 中的值
+				acc[key] = buildDynamicFields()[key];
 				// 判断是否包含 userPhone，若是则添加 areaCode
 				if (key === "userPhone") {
 					acc.areaCode = childRef.value?.state.areaCode; // 从 state 中取 areaCode
@@ -351,10 +380,18 @@ const onTransactionPasswordEntered = () => {
 
 // 会员提款申请
 const onWithdrawApply = async () => {
+	// 先判断流水信息
+	// console.log("withdrawWayConfig.value", withdrawWayConfig.value);
+	if (withdrawWayConfig.value.remainingFlow > 0) {
+		isRemainingFlowModal.value = true;
+		return;
+	}
+	// 在进行判断校验方式
 	if (UserStore.getUserInfo.isSetPwd) {
 		passWordShow.value = true;
 	} else if (UserStore.getUserInfo.phone) {
-		const params = buildParams(""); // 如果不需要 withdrawPassWord，可以传空字符串
+		const params = buildParams();
+		params.smsCode = childRef.value?.state?.smsCode || "";
 		getWithdrawApply(params);
 	}
 };
@@ -376,6 +413,8 @@ const getWithdrawApply = async (params) => {
 
 // 选择支付方式时的处理
 const onRechargeWay = (item) => {
+	if (item.withdrawTypeCode == withdrawWayData.value.withdrawTypeCode && item.networkType == withdrawWayData.value.networkType) return;
+	childRef.value?.stopCountdown();
 	withdrawWayData.value = item;
 	clearParams();
 	getWithdrawConfig(); // 获取通道配置
@@ -772,6 +811,89 @@ const onClickLeft = () => {
 			color: themed("F2");
 		}
 		text-decoration: underline;
+	}
+}
+
+.modal-container {
+	width: 448px;
+
+	.header {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 20px;
+		border-bottom: 1px solid;
+		@include themeify {
+			color: themed("TB");
+			border-color: themed("Line");
+		}
+		/* Title1-标题1 */
+		font-family: "PingFang SC";
+		font-size: 32px;
+		font-weight: 400;
+		box-sizing: border-box;
+	}
+
+	.content {
+		min-height: 190px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0px 46px;
+		box-sizing: border-box;
+		.text {
+			white-space: pre-line;
+			@include themeify {
+				color: themed("T1");
+			}
+			text-align: center;
+			font-family: "PingFang SC";
+			font-size: 28px;
+			font-weight: 400;
+		}
+	}
+
+	.footer {
+		position: relative;
+		width: 100%;
+		height: 76px;
+		display: flex;
+		gap: 1px;
+		align-items: center;
+		justify-content: space-between;
+		border-top: 1px solid;
+		@include themeify {
+			border-color: themed("Line");
+		}
+		&::after {
+			position: absolute;
+			content: "";
+			top: 0px;
+			left: 50%;
+			width: 1px;
+			height: 100%;
+			@include themeify {
+				background-color: themed("Line");
+			}
+		}
+		.cancel,
+		.confirm {
+			flex: 1;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			@include themeify {
+				color: themed("T1");
+			}
+			font-family: "PingFang SC";
+			font-size: 32px;
+			font-weight: 400;
+		}
+		.confirm {
+			@include themeify {
+				color: themed("Theme");
+			}
+		}
 	}
 }
 </style>
