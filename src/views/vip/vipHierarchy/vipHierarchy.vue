@@ -2,7 +2,7 @@
 	<VantNavBar :title="$t(`VantNavBar['VIP等级制度']`)" @onClickLeft="onClickLeft"></VantNavBar>
 
 	<div class="content">
-		<Collapse v-for="(item, index) in state.vipHierarchyData?.siteVIPSystemRankVOList?.filter((item) => item.vipRankCode > 0)" :key="index" :is-open="index == 0 ? true : false">
+		<Collapse v-for="(item, index) in state.vipHierarchyData?.siteVIPSystemRankVOList" :key="index" :is-open="index === isOpen ? true : false" @updateOpen="updateOpen" :index="index">
 			<template #header>
 				<div class="header" :class="getClass(item)">
 					<div>
@@ -46,7 +46,7 @@ import Collapse from "./Collapse/index.vue";
 import { useRouter } from "vue-router";
 import { useUserStore } from "/@/store/modules/user";
 const router = useRouter();
-
+const isOpen = ref(null);
 const state: any = reactive({
 	vipHierarchyData: {},
 });
@@ -57,9 +57,12 @@ const getUserVipBenefitDetail = async () => {
 	const res = await vipApi.getUserVipBenefitDetail().catch((err) => err);
 	if (res.code === common.getInstance().ResCode.SUCCESS) {
 		state.vipHierarchyData = res.data;
+		isOpen.value = state.vipHierarchyData.currentVIPRankCode - 1;
 	}
 };
-
+const updateOpen = (value) => {
+	isOpen.value = value;
+};
 const getClass = (item) => {
 	if (item.vipRankCode === 0) {
 		return "icon_0";

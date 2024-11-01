@@ -204,12 +204,12 @@ const goToRecharge = () => {
 	router.push("/wallet/recharge");
 };
 const StartVerification = () => {
-	if (!activityData.value.enable) {
-		dialogInfo.value.message = `活动未开启`;
-		return (showDialog.value = true);
-	} else if (!useUserStore().token) {
+	if (!useUserStore().token) {
 		dialogInfo.value.message = `您的账号暂未登录无法参与活动，如已有账号请登录，如还未有账号请前往注册`;
 		dialogInfo.value.toLogin = true;
+		return (showDialog.value = true);
+	} else if (!activityData.value.enable) {
+		dialogInfo.value.message = `活动未开启`;
 		return (showDialog.value = true);
 	} else {
 		activityApi.toSpinActivity().then((res: any) => {
