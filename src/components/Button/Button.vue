@@ -36,22 +36,23 @@ const props = withDefaults(
 }
 
 .button:disabled {
-	width: 100%;
-	height: 86px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	padding: 10px;
-	border: 0;
-	border-radius: 12px;
-	@include themeify {
-		background: themed("BG3");
-		color: themed("T3");
-	}
-	text-align: center;
-	font-family: "PingFang SC";
-	font-size: 30px;
-	font-weight: 400;
-	box-sizing: border-box;
+	opacity: 0.3;
+	// width: 100%;
+	// height: 86px;
+	// display: flex;
+	// align-items: center;
+	// justify-content: center;
+	// padding: 10px;
+	// border: 0;
+	// border-radius: 12px;
+	// @include themeify {
+	// 	background: themed("BG3");
+	// 	color: themed("T3");
+	// }
+	// text-align: center;
+	// font-family: "PingFang SC";
+	// font-size: 30px;
+	// font-weight: 400;
+	// box-sizing: border-box;
 }
 </style>

@@ -139,6 +139,7 @@ const columns = ref(Common.getLast30Days(90).columns);
 const activeDate: any = ref(2);
 const activeDateBtn = ref(0);
 const dateRange = ref([dayjs(Common.getLast30Days(90).firstIndexes.join("-")).format("YYYY-MM-DD"), dayjs(new Date()).format("YYYY-MM-DD")]);
+
 const pageData: any = ref({});
 const finished = ref(false);
 const recordsList: any = ref([]);
@@ -152,6 +153,7 @@ const cloneSelect = reactive({
 	welfareCenterRewardType: currentWelfareCenterRewardType.value,
 	receiveStatus: currentActivityReceiveStatus.value,
 });
+
 const params = reactive({
 	pfTimeStartTime: new Date(cloneSelect.dateRange[0]).getTime(),
 	pfTimeEndTime: new Date(cloneSelect.dateRange[1]).getTime(),
@@ -226,8 +228,8 @@ const clickReceive = (item) => {
 const getList = () => {
 	params.welfareCenterRewardType = cloneSelect.welfareCenterRewardType == "all" ? "" : cloneSelect.welfareCenterRewardType;
 	params.receiveStatus = cloneSelect.receiveStatus == "all" ? "" : cloneSelect.receiveStatus;
-	params.pfTimeStartTime = new Date(cloneSelect.dateRange[0] + "00:00:00").getTime();
-	params.pfTimeEndTime = new Date(cloneSelect.dateRange[1] + "23:59:59").getTime();
+	params.pfTimeStartTime = new Date(cloneSelect.dateRange[0] + " 00:00:00").getTime();
+	params.pfTimeEndTime = new Date(cloneSelect.dateRange[1] + " 23:59:59").getTime();
 	welfareCenterApi.pageQuery(params).then((res) => {
 		pageData.value = res.data;
 		if (params.pageNumber == 1) {

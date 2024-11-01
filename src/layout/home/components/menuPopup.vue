@@ -19,7 +19,7 @@
 			</div>
 
 			<div class="menu_list">
-				<div class="menu van-haptics-feedback" @click="toPath('/activity/DAILY_COMPETITION')" v-if="showDAILY_COMPETITION">
+				<div class="menu van-haptics-feedback" @click="toPath('/activity/DAILY_COMPETITION')" v-if="activityTemplate.includes('DAILY_COMPETITION')">
 					<div class="icon">
 						<img :src="mrjs" />
 					</div>
@@ -36,7 +36,7 @@
 					<div class="icon">
 						<img :src="item.icon" alt="" />
 					</div>
-					<div class="label">{{ item.homeName }}</div>
+					<div class="label">{{ item.directoryName }}</div>
 				</div>
 			</div>
 		</div>
@@ -93,7 +93,7 @@ const show = ref(false);
 const showDialog = ref(false);
 const themesStore = useThemesStore();
 const theme = computed(() => themesStore.themeName);
-
+const activityTemplate: any = ref([]);
 let state: any = reactive({
 	menuList: [],
 });
@@ -129,21 +129,16 @@ const queryLobbyLabelList = async () => {
 };
 const queryLobbyLabelActivitySwitch = () => {
 	activityApi.queryLobbyLabelActivitySwitch({ activityTemplate: "DAILY_COMPETITION" }).then((res: any) => {
-		if (res.code === 10000 && res.data.activityTemplate.includes("DAILY_COMPETITION")) {
-			showDAILY_COMPETITION.value = true;
-		}
+		activityTemplate.value = res.data.activityTemplate;
 	});
 };
 const toPath = (path) => {
 	if ("/activity/SPIN_WHEEL" === path) {
-		activityApi.getSpinDetail().then((res: any) => {
-			if (res.code === 10000 && res.data.enable) {
-				router.push(path);
-				show.value = false;
-			} else {
-				showToast("敬请期待");
-			}
-		});
+		if (activityTemplate.value.includes("SPIN_WHEEL")) {
+			router.push(path);
+		} else {
+			showToast("敬请期待");
+		}
 	} else if (path === "/activity/DAILY_COMPETITION" || path === "/activity/TASK") {
 		if (useUserStore().token) {
 			router.push(path);

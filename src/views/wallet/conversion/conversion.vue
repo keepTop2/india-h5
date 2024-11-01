@@ -1,24 +1,24 @@
 <template>
     <div class="content">
-        <VantNavBar title="平台币转换" :leftArrow="true" />
+        <VantNavBar title="平台币转换" @on-click-left="onClickLeft" :leftArrow="true" />
         <div class="price_box">
             <div class="top">
                 <div class="title">
                     <div class="font">From</div>
                     <div class="icon_label">
                         <SvgIcon class="icon" iconName="my/conversion/qianbao" />
-                        <div>100.00</div>
-                        <div>BCD</div>
+                        <div>{{userPlat?.platAvailableAmount}}</div>
+                        <div>{{userPlat?.platCurrency}}</div>
                     </div>
                 </div>
 
                 <div class="type_pay">
                     <SvgIcon class="icon" iconName="my/conversion/top_pay" />
-                    <div class="type_title">BCD</div>
+                    <div class="type_title">{{userPlat?.platCurrency}}</div>
                 </div>
                 <!--支付输入框  -->
                 <div class="pay_input">
-                    <van-field type="number"  v-model="toInput" />
+                    <van-field  v-model.number="formInput"   @keyup="numberFixedDigit" />
                     <span class="max">MAX</span>
                 </div>
             </div>
@@ -30,32 +30,104 @@
 
                 <div class="type_pay">
                     <SvgIcon class="icon" iconName="my/conversion/us" />
-                    <div class="type_title">USD</div>
+                    <div class="type_title">{{userPlat?.userCurrencyCode}}</div>
                 </div>
                 <!--支付输入框  -->
                 <div class="pay_input">
-                    <van-field  v-model="formInput" />
+                    <van-field  v-model="toInput" :disabled="true" />
                 </div>
                 <div class="log">
-                    Exchange Rate：1.2
+                    Exchange Rate：{{userPlat?.transferRate}}
                 </div>
             </div>
 
-            <div class="btn">一键转换</div>
+            <div class="btn" :class="{contrast:parseFloat(formInput) <= 0}" @click="conversionHandler">一键转换</div>
         </div>
     </div>    
 </template>
   
 <script setup lang='ts'>
-const formInput = ref<string>('0')
+import { showToast } from 'vant';
+import { walletApi } from '/@/api/wallet';
+import Common from '/@/utils/common';
+import router from '/@/router';
+
+interface userinfoType{
+    userAccount: string;
+	siteCode: string;
+	platAvailableAmount: number;
+	platCurrency: string;
+	transferRate: number;
+	userAvailableAmount: number;
+	userCurrencyCode: string;
+}
+
+const formInput = ref<string>('0.00')
 const toInput = ref<string>('0')
+const userPlat = ref<userinfoType>()
+// 金额补零
 watch(
     [() => formInput.value,() => toInput.value],
     (arr) => {
+        console.log(arr)
         formInput.value = parseFloat(arr[0]).toFixed(2)
         toInput.value = parseFloat(arr[1]).toFixed(2)
     }, {immediate:true}
-  )
+)
+
+onMounted(() => {
+    getUserPlatformBalance()
+})
+
+const numberFixedDigit = (e) => {
+    e.target.value = e.target.value.replace(/[^\d.]/g, "");
+    e.target.value = e.target.value.replace(/\.{2,}/g, ".");
+    e.target.value = e.target.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+    e.target.value = e.target.value.replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3');//只能输入两个小数
+    e.target.value = e.target.value.replace(/^\./g, ''); //首位不能输入“.”
+    if (e.target.value.indexOf(".") < 0 && e.target.value != "") {//如果没有小数点，首位不能为0，如01、02...
+        e.target.value = parseFloat(e.target.value);
+    }
+    nextTick(() => {
+        formInput.value = e.target.value
+  })
+    
+}
+
+// 返回上一页
+const onClickLeft = () => {
+	router.go(-1);
+};
+
+// 获取余额、汇率
+const getUserPlatformBalance = async() => {
+    const {code,data} = await walletApi.requestGetPlatformBalance().catch((err) => err);
+    if (code !== Common.getInstance().ResCode.SUCCESS) return 
+
+    userPlat.value = data
+}
+
+// 转换金额
+const conversionHandler = async () => {
+    if (parseFloat(formInput.value) <= 0) {
+        showToast("请输入转换金额");
+        return    
+    }
+
+    const body = {
+        transferAmount:parseFloat(formInput.value)
+    }
+    const {code,data} = await walletApi.conversionAmount(body).catch((err) => err);
+
+    if (code !== Common.getInstance().ResCode.SUCCESS) return 
+
+    toInput.value = (parseFloat(formInput.value) * userPlat.value!.transferRate) + ''
+
+    getUserPlatformBalance()
+
+    showToast("转换成功");
+
+}
 
 </script>
   
@@ -200,6 +272,9 @@ watch(
             align-items: center;
             gap: 10px;
             flex-shrink: 0;
+        }
+        .contrast{
+            filter: contrast(0.5);
         }
        
         

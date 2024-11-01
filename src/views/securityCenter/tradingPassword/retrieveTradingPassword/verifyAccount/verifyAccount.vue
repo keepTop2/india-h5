@@ -158,7 +158,7 @@ const onStep = async () => {
 				border-radius: 12px;
 				border: 1px solid;
 				@include themeify {
-					border-color: themed("Theme");
+					border-color: themed("Hint");
 				}
 				box-sizing: border-box;
 				pointer-events: none; /* 确保伪元素不会阻止用户与实际内容交互 */

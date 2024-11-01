@@ -1,19 +1,22 @@
 <template>
 	<div class="register-container">
 		<NavBar />
-		<HeaderBG />
 		<div class="register-from">
 			<div class="title">{{ $t('register["注册"]') }}</div>
 			<div class="from">
+				<div class="label"><span class="required">*</span>账号</div>
 				<FormInput v-model="state.userAccount" type="text" :placeholder="$t(`register['输入账号']`)" :errorBorder="!isAccountValid && state.userAccount !== '' ? true : false" :maxlength="11">
+					<template v-slot:left>
+						<SvgIcon class="pr_14" iconName="loginOrRegister/userAccount" @click="state.userAccount = ''" size="32px" />
+					</template>
 					<template v-slot:right>
 						<SvgIcon v-if="state.userAccount" class="clearIcon" iconName="loginOrRegister/clear" @click="state.userAccount = ''" />
 					</template>
 				</FormInput>
-				<div class="error_text">
-					<span v-if="!isAccountValid && state.userAccount !== ''" class="text">{{ $t('register["4-11位，字母、数字组成 ，首位必须是字母"]') }}</span>
+				<div class="error_text" v-if="!isAccountValid && state.userAccount !== ''">
+					<span class="text">{{ $t('register["4-11位，字母、数字组成 ，首位必须是字母"]') }}</span>
 				</div>
-
+				<div class="label"><span class="required">*</span>登录密码</div>
 				<FormInput
 					v-model="state.password"
 					:type="eyeShow ? 'password' : 'text'"
@@ -21,6 +24,9 @@
 					:placeholder="$t(`register['登录密码']`)"
 					:errorBorder="!isPasswordValid && state.password !== '' ? true : false"
 				>
+					<template v-slot:left>
+						<SvgIcon class="pr_14" iconName="loginOrRegister/password" @click="state.userAccount = ''" size="32px" />
+					</template>
 					<template v-slot:right>
 						<div class="right">
 							<SvgIcon v-if="state.password" class="clearIcon" iconName="loginOrRegister/clear" @click="state.password = ''" />
@@ -28,34 +34,40 @@
 						</div>
 					</template>
 				</FormInput>
-				<div class="error_text">
-					<span v-if="!isPasswordValid && state.password !== ''" class="text">{{ $t('register["密码为8-16位"]') }}</span>
+				<div class="error_text" v-if="!isPasswordValid && state.password !== ''">
+					<span class="text">{{ $t('register["密码为8-16位"]') }}</span>
 				</div>
-
+				<div class="label"><span class="required">*</span>确认密码</div>
 				<FormInput
 					v-model="state.confirmPassword"
-					:type="eyeShow ? 'password' : 'text'"
+					:type="eyeShow2 ? 'password' : 'text'"
 					:maxlength="16"
 					:placeholder="$t(`register['确认登录密码']`)"
 					:errorBorder="!isConfirmPasswordValid ? true : false"
 				>
+					<template v-slot:left>
+						<SvgIcon class="pr_14" iconName="loginOrRegister/password" @click="state.userAccount = ''" size="32px" />
+					</template>
 					<template v-slot:right>
 						<div class="right">
 							<SvgIcon v-if="state.confirmPassword" class="clearIcon" iconName="loginOrRegister/clear" @click="state.confirmPassword = ''" />
-							<SvgIcon class="icon" :iconName="eyeShow ? 'loginOrRegister/eye-off' : 'loginOrRegister/eye'" @click="eyeShow = !eyeShow" />
+							<SvgIcon class="icon" :iconName="eyeShow2 ? 'loginOrRegister/eye-off' : 'loginOrRegister/eye'" @click="eyeShow2 = !eyeShow2" />
 						</div>
 					</template>
 				</FormInput>
-				<div class="error_text">
-					<span v-if="!isConfirmPasswordValid" class="text">{{ $t('register["两次输入密码不一致"]') }}</span>
+				<div class="error_text" v-if="!isConfirmPasswordValid">
+					<span class="text">{{ $t('register["两次输入密码不一致"]') }}</span>
 				</div>
-
+				<div class="label"><span class="required">*</span>主货币</div>
 				<FormInput v-model="state.mainCurrency" :placeholder="$t(`register['选择主货币']`)" readonly :errorBorder="mainCurrencyRG ? true : false" @click="goTomainCurrency">
+					<template v-slot:left>
+						<SvgIcon class="pr_14" iconName="loginOrRegister/currency" @click="state.userAccount = ''" size="32px" />
+					</template>
 					<template v-slot:right>
 						<SvgIcon class="icon" iconName="loginOrRegister/arrow" />
 					</template>
 				</FormInput>
-				<div class="error_text">
+				<div class="error_text" v-if="mainCurrencyRG">
 					<span v-if="mainCurrencyRG" class="text">{{ $t('register["请选择"]') }}</span>
 				</div>
 
@@ -79,7 +91,7 @@
 					<p :class="userAgreement ? 'text' : 'text3'">
 						<i18n-t keypath="register['我同意用户协议并确认我已年满18岁']" :tag="'span'">
 							<template v-slot:text
-								><span class="text2" @click="router.push('/userAgreement')"> {{ $t('register["用户协议"]') }} </span></template
+								><span class="color_F2" @click="router.push('/userAgreement')"> {{ $t('register["用户协议"]') }} </span></template
 							>
 						</i18n-t>
 					</p>
@@ -124,6 +136,7 @@ const router = useRouter();
 const refhcaptcha: any = ref(null);
 const HcaptchaMounted = ref(false);
 const eyeShow = ref(true);
+const eyeShow2 = ref(true);
 const btnDisabled = ref(true);
 const mainCurrencyRG = ref(false);
 const userAgreement = ref(false); // 用户协议认证
@@ -182,7 +195,7 @@ watch(
 	() => route.query.currency,
 	(newValue) => {
 		if (newValue) {
-			state.mainCurrency = (newValue + `(${route.query.value})`) as string;
+			state.mainCurrency = (newValue + `${route.query.value}`) as string;
 		}
 	}
 );
@@ -239,6 +252,8 @@ const toggleInviteCode = () => {
 	width: 100%;
 	min-height: 100vh;
 	font-family: "PingFang SC";
+	background: url("../image/image.png") no-repeat;
+	background-size: 100% auto;
 	@include themeify {
 		background-color: themed("BG1");
 	}
@@ -246,17 +261,30 @@ const toggleInviteCode = () => {
 	.register-from {
 		padding: 0px 55px 40px;
 		.title {
-			margin-bottom: 40px;
+			padding-top: 140px;
+			font-size: 52px;
+			font-weight: 600;
+			margin-bottom: 50px;
+			text-align: center;
 			@include themeify {
 				color: themed("TB");
 			}
-			font-family: "PingFang SC";
-			font-size: 36px;
-			font-weight: 600;
 		}
 		.from {
 			margin-top: 10px;
-
+			> div.label {
+				@include themeify {
+					color: themed("TB");
+					font-size: 28px;
+					margin-bottom: 16px;
+					margin-top: 28px;
+				}
+				.required {
+					@include themeify {
+						color: themed("Hint");
+					}
+				}
+			}
 			.right {
 				display: flex;
 				align-items: center;
@@ -279,7 +307,7 @@ const toggleInviteCode = () => {
 					font-size: 20px;
 					font-weight: 400;
 					@include themeify {
-						color: themed("Theme");
+						color: themed("Hint");
 					}
 				}
 			}

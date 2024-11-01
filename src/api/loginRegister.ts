@@ -74,7 +74,9 @@ export class forgetPasswordApi {
 		return useAxiosApi(`/app/login/api/submitAccount`, {
 			method: "POST",
 			data,
-			headers,
+			headers: {
+				showLoading: true,
+			},
 		});
 	};
 	// 发送手机验证码
