@@ -299,32 +299,53 @@ const onClickCell = async (item) => {
 		toPath(item.path);
 		return;
 	}
+
 	// 处理提款路径的逻辑
 	if (item.path === "/wallet/withdraw") {
+		const { rechargeWithdrawLimit, withdrawLimit } = store.getUserInfo;
+		// 检查账户是否被锁定
+		const isAccountLocked = rechargeWithdrawLimit.value === 1 || withdrawLimit.value === 1;
+		if (isAccountLocked) {
+			showToast($.t("wallet['你的账户已被锁定，请联系在线客服']"));
+			return;
+		}
 		const res = await securityCenterApi.getUserGlobalSetInfo().catch((err) => err);
 		const { isSetPwd, phone } = res.data;
+		// 检查用户是否设置密码或绑定手机号
 		if (isSetPwd || phone) {
-			const res = await walletApi.withdrawWayList().catch((err) => err);
-			if (res.code === common.getInstance().ResCode.SUCCESS && (!res.data || res.data.length === 0)) {
-				showToast($.t("my['暂无提款方式']"));
+			const withdrawalRes = await walletApi.withdrawWayList().catch((err) => err);
+			// 检查提款方式
+			if (withdrawalRes.code === common.getInstance().ResCode.SUCCESS) {
+				if (!withdrawalRes.data || withdrawalRes.data.length === 0) {
+					showToast($.t("my['暂无提款方式']"));
+					return;
+				}
+				toPath(item.path);
+			}
+		} else {
+			isPasswordModal.value = true; // 显示密码设置模态框
+		}
+	}
+
+	// 处理充值路径的逻辑
+	if (item.path === "/wallet/recharge") {
+		const { rechargeWithdrawLimit } = store.getUserInfo;
+		// 检查账户是否被锁定
+		if (rechargeWithdrawLimit.value === 1) {
+			showToast($.t("wallet['你的账户已被锁定，请联系在线客服']"));
+			return;
+		}
+		const res = await walletApi.rechargeWayList().catch((err) => err);
+		// 检查充值方式
+		if (res.code === common.getInstance().ResCode.SUCCESS) {
+			if (!res.data || res.data.length === 0) {
+				showToast($.t("my['暂无存款方式']"));
 				return;
 			}
 			toPath(item.path);
-		} else {
-			isPasswordModal.value = true;
 		}
-		return;
 	}
-	// 处理充值路径的逻辑
-	if (item.path === "/wallet/recharge") {
-		const res = await walletApi.rechargeWayList().catch((err) => err);
-		if (res.code === common.getInstance().ResCode.SUCCESS && (!res.data || res.data.length === 0)) {
-			showToast($.t("my['暂无存款方式']"));
-			return;
-		}
-		toPath(item.path);
-		return;
-	}
+
 	// 如果是其他路径，直接跳转
 	toPath(item.path);
 };
