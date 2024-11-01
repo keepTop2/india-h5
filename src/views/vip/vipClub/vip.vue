@@ -105,7 +105,7 @@
 										{{ i.weekSportMax > 0 ? `至 ${useUserStore().getUserInfo.platCurrencySymbol} ${i.weekSportMax}` : "或以上" }} = {{ i.weekSportBonus }}
 										{{ useUserStore().getUserInfo.platCurrencySymbol }}
 									</p>
-									<p>&nbsp;&nbsp;-流水统计时间：周六00:00时～周五 23:59时（7天</p>
+									<p>&nbsp;&nbsp;-流水统计时间：周六00:00时～周五 23:59时（7天）</p>
 									<p>· 礼金发放时间：每周六</p>
 								</div>
 								<template #reference>
@@ -288,12 +288,6 @@ const state: any = reactive({
 			weekSportFlag: 0,
 		},
 		{
-			label: $.t(`vip['幸运转盘']`),
-			text: $.t(`vip['从VIP8开始，达到活动要求即可获得每日抽取幸运大奖得机会']`),
-			icon: reward_icon6,
-			luckFlag: 0,
-		},
-		{
 			label: $.t(`vip['SVIP专属福利']`),
 			text: $.t(`vip['成为钻石会员尊享更多私人专属福利惊喜']`),
 			icon: reward_icon9,
@@ -304,6 +298,12 @@ const state: any = reactive({
 			text: $.t(`vip['尊享赠送私人顶级奢华福利机会']`),
 			icon: reward_icon10,
 			luxuriousGiftsFlag: 0,
+		},
+		{
+			label: $.t(`vip['幸运转盘']`),
+			text: $.t(`vip['从VIP8开始，达到活动要求即可获得每日抽取幸运大奖得机会']`),
+			icon: reward_icon6,
+			luckFlag: 0,
 		},
 
 		{

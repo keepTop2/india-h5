@@ -1,7 +1,7 @@
 <template>
 	<div class="content">
-		<div class="title">{{ $t('forgetPassword["设置新密码"]') }}</div>
 		<div class="from">
+			<div class="label"><span class="required">*</span>新密码</div>
 			<FormInput
 				v-model="state.newPassword"
 				:type="eyeShow ? 'password' : 'text'"
@@ -9,6 +9,9 @@
 				:placeholder="$t(`forgetPassword['新密码']`)"
 				:errorBorder="!isPasswordValid && state.newPassword !== '' ? true : false"
 			>
+				<template v-slot:left>
+					<SvgIcon class="pr_14" iconName="loginOrRegister/password" size="32px" />
+				</template>
 				<template v-slot:right>
 					<div class="right">
 						<SvgIcon v-if="state.newPassword" class="clearIcon" iconName="loginOrRegister/clear" @click="state.newPassword = ''" />
@@ -16,10 +19,10 @@
 					</div>
 				</template>
 			</FormInput>
-			<div class="error_text">
-				<span v-if="!isPasswordValid && state.newPassword !== ''" class="text">{{ $t('register["密码为8-16位"]') }}</span>
+			<div class="error_text" v-if="!isPasswordValid && state.newPassword !== ''">
+				<span class="text">{{ $t('register["密码为8-16位"]') }}</span>
 			</div>
-
+			<div class="label"><span class="required">*</span>确认新密码</div>
 			<FormInput
 				v-model="state.confirmPassword"
 				:type="eyeShow ? 'password' : 'text'"
@@ -27,6 +30,9 @@
 				:placeholder="$t(`forgetPassword['确认密码']`)"
 				:errorBorder="!isConfirmPasswordValid ? true : false"
 			>
+				<template v-slot:left>
+					<SvgIcon class="pr_14" iconName="loginOrRegister/password" size="32px" />
+				</template>
 				<template v-slot:right>
 					<div class="right">
 						<SvgIcon v-if="state.confirmPassword" class="clearIcon" iconName="loginOrRegister/clear" @click="state.confirmPassword = ''" />
@@ -112,6 +118,19 @@ const onStep = async () => {
 <style scoped lang="scss">
 .content {
 	padding: 0px 55px;
+	.label {
+		@include themeify {
+			color: themed("TB");
+			font-size: 28px;
+			margin-bottom: 16px;
+			margin-top: 28px;
+		}
+		.required {
+			@include themeify {
+				color: themed("Hint");
+			}
+		}
+	}
 	.title {
 		font-size: 36px;
 		font-weight: 600;
@@ -143,7 +162,7 @@ const onStep = async () => {
 				font-size: 20px;
 				font-weight: 400;
 				@include themeify {
-					color: themed("Theme");
+					color: themed("Hint");
 				}
 			}
 		}

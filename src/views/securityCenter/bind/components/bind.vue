@@ -247,7 +247,7 @@ const selectAreaCode = (item, i) => {
 			border: 1px solid;
 			@include themeify {
 				// box-shadow: 0 0 0 1px themed("Theme");
-				border-color: themed("Theme");
+				border-color: themed("Hint");
 			}
 			transition: box-shadow 20s;
 			box-sizing: border-box;

@@ -1,7 +1,7 @@
 <template>
 	<div class="forgetPassword-container">
 		<NavBar @onPreviousStep="onPreviousStep" />
-		<HeaderBG />
+		<div class="title">{{ state.computedIndex !== 2 ? "忘记密码" : "设置新密码" }}</div>
 		<component :is="componentMaps[state.computedIndex]" :data="state.params" @onStep="onStep" />
 	</div>
 </template>
@@ -53,8 +53,20 @@ const onPreviousStep = () => {
 	width: 100%;
 	min-height: 100vh;
 	font-family: "PingFang SC";
+	background: url("../image/image.png") no-repeat;
+	background-size: 100% auto;
 	@include themeify {
 		background-color: themed("BG1");
+	}
+	.title {
+		padding-top: 140px;
+		font-size: 52px;
+		font-weight: 600;
+		margin-bottom: 50px;
+		text-align: center;
+		@include themeify {
+			color: themed("TB");
+		}
 	}
 }
 </style>
