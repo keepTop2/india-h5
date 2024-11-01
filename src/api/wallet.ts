@@ -133,4 +133,21 @@ export const walletApi = {
 			headers,
 		});
 	},
+
+	// 获取余额、汇率
+	requestGetPlatformBalance: (data = {}, headers = { showLoading: true }) => {
+		return useAxiosApi(`/app/userPlatformCoin/api/getUserPlatformBalance`, {
+			method: "POST",
+			data,
+			headers,
+		});
+	},
+	// 金额转换
+	conversionAmount: (data = {}, headers = { showLoading: true }) => {
+		return useAxiosApi(`/app/userPlatformCoin/api/transfer`, {
+			method: "POST",
+			data,
+			headers,
+		});
+	},
 };

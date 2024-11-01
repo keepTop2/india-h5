@@ -9,7 +9,7 @@ import { useLoading } from "/@/directives/loading/hooks";
 import dayjs from "dayjs";
 import { convertUtcToUtc5AndFormat } from "/@/webWorker/module/utils/formattingChildrenViewData";
 import { useUserStore } from "/@/store/modules/user";
-
+import { RouteLocationNormalized } from "vue-router";
 // 请求余额信息
 export const getIndexInfo = async () => {
 	const sportsBetInfo = useSportsBetInfoStore();
@@ -303,6 +303,16 @@ const updateOddsChange = (betMarketInfo, currentPrice, previousPrice) => {
 		betMarketInfo.oddsChange = "";
 	}
 	betMarketInfo.decimalPrice = currentPrice;
+};
+
+/**
+ * .mainArea节点
+ * 体育模块点击导航栏时，记录当前页面scrollTop到route.mate.scrollTop中，优化用户体验
+ */
+export const saveScrollTop = (route: RouteLocationNormalized) => {
+	const scrollDom = document.getElementById("sports") as HTMLElement;
+	route.meta.scrollTop = scrollDom.scrollTop;
+	console.log(route.meta, "route.meta");
 };
 
 // 格式化赛事开始日期，适应设计图格式
