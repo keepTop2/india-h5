@@ -13,8 +13,8 @@
 					:class="{ phone: field.code === 'userPhone', error: field.code === 'userPhone' && !isPhoneValid && state.userPhone }"
 					@click="field.code === 'bankName' ? (backShow = true) : null"
 				>
-					<div v-if="field.code === 'userPhone' && state.areaCode" class="area_code" @click="showAreaCode = true">
-						<span>+{{ state.areaCode }}</span> <SvgIcon class="down" iconName="loginOrRegister/navBar/down" />
+					<div v-if="field.code === 'userPhone'" class="area_code" @click="showAreaCode = true">
+						<span v-if="state.areaCode">+{{ state.areaCode }}</span> <SvgIcon class="down" iconName="loginOrRegister/navBar/down" />
 					</div>
 					<input
 						v-model="state[field.model]"
@@ -66,16 +66,24 @@
 		</div>
 	</div>
 
-	<!-- 银行卡选择器 -->
-	<VantPicker :multiple="true" v-model:show="backShow" :columns="withdrawWayConfig.bankList" title="" toText="bankName" toValue="bankCode" @confirm="handleConfirm">
-		<template #option="item">
-			<div class="lang_cell">
-				<span> {{ item.item.text }}</span>
+	<SearchSelector
+		:title="$t(`withdraw['选择银行名称']`)"
+		:placeholder="$t(`withdraw['搜索银行名称']`)"
+		v-model:modelShow="backShow"
+		v-model:searchModel="bankNameModel"
+		:searchCodeList="['bankName']"
+		:dataList="withdrawWayConfig.bankList"
+		@confirm="handleConfirm"
+	>
+		<template #cell="{ item }">
+			<div class="cell_option">
+				<div class="icon">
+					<img :src="item.iconFileUrl" alt="" />
+				</div>
+				<div class="value">{{ item.bankName }}</div>
 			</div>
 		</template>
-	</VantPicker>
-
-	<!-- <BankCardPicker v-model:showAreaCode="backShow" v-model:stateBankCard="stateBankCard" @selectBankCard="handleConfirm" :indexList="indexList" :areaCode="areaCode" :stateAreaCode="state.areaCode" /> -->
+	</SearchSelector>
 
 	<!-- 手机区号选择器 -->
 	<AreaCodePicker
@@ -115,6 +123,8 @@ const captchaButton = ref<{
 } | null>(null);
 
 const backShow = ref(false); // 控制银行卡选择器的显示
+const bankNameModel: Ref<string> = ref("");
+
 const showAreaCode = ref(false); // 控制区号选择器的显示
 const lastWithdrawInfoShow = ref(false); // 控制区号选择器的显示
 const indexList: any = ref([]); // 存储区号索引列表
@@ -212,10 +222,11 @@ const onCaptcha = async () => {
 
 // 选择银行卡时的确认处理
 const handleConfirm = (selectedValues) => {
-	const { selectedOptions } = selectedValues;
-	const options = selectedOptions[0];
-	state.bankName = options.text; // 设置银行名称
-	state.bankCode = options.value; // 设置银行代码
+	// console.log("selectedValues", selectedValues);
+	if (!selectedValues) return;
+	const { bankName, bankCode } = selectedValues;
+	state.bankName = bankName; // 设置银行名称
+	state.bankCode = bankCode; // 设置银行代码
 };
 
 // 选择区号的处理
@@ -228,7 +239,6 @@ const selectAreaCode = (item, i) => {
 // 选择上一次提款信息
 const onGetLastWithdrawInfo = () => {
 	Object.assign(state, props.withdrawWayConfig.lastWithdrawInfoVO);
-	console.log("state", state);
 	lastWithdrawInfoShow.value = false;
 };
 
@@ -261,9 +271,47 @@ defineExpose({
 	isPhoneValid,
 	inputFields,
 	clearParams,
+	getAreaCodeDownBox,
 });
 </script>
 
 <style scoped lang="scss">
 @import "../common.scss"; // 引入公共样式
+
+.cell_option {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	.icon {
+		width: 32px;
+		height: 32px;
+		img {
+			width: 100%;
+			height: 100%;
+		}
+	}
+	.value {
+		flex: 1;
+		@include themeify {
+			color: themed("T1");
+		}
+		font-family: "PingFang SC";
+		font-size: 28px;
+		font-weight: 400;
+		line-height: 36px;
+		white-space: nowrap; /* 禁止换行 */
+		overflow: hidden; /* 隐藏超出部分 */
+		text-overflow: ellipsis; /* 超出部分显示省略号 */
+	}
+}
+
+.cell_item_active {
+	.cell {
+		.value {
+			@include themeify {
+				color: themed("Theme");
+			}
+		}
+	}
+}
 </style>

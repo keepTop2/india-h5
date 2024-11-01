@@ -65,12 +65,18 @@ const progressPercentage: any = computed(() => {
 	if (isNaN(currentExp) || isNaN(currentVipExp) || currentVipExp === 0) {
 		return 0;
 	}
-
+	//
 	// 计算百分比并取整
-	return (currentExp / currentVipExp) * 100 > 100 ? 100 : ((currentExp / currentVipExp) * 100).toFixed(2);
+	return truncateToTwoDecimals((currentExp / currentVipExp) * 100 > 100 ? 100.0 : (currentExp / currentVipExp) * 100);
 });
 
-console.log("progressPercentage", progressPercentage);
+const truncateToTwoDecimals = (num) => {
+	const [integerPart, decimalPart] = String(num).split(".");
+	// 如果没有小数部分，直接返回整数部分
+	if (!decimalPart) return integerPart + ".00";
+	// 截取小数点后两位
+	return integerPart + "." + decimalPart.slice(0, 2);
+};
 </script>
 
 <style scoped lang="scss">

@@ -226,8 +226,8 @@ const clickReceive = (item) => {
 const getList = () => {
 	params.welfareCenterRewardType = cloneSelect.welfareCenterRewardType == "all" ? "" : cloneSelect.welfareCenterRewardType;
 	params.receiveStatus = cloneSelect.receiveStatus == "all" ? "" : cloneSelect.receiveStatus;
-	params.pfTimeStartTime = new Date(cloneSelect.dateRange[0]).getTime();
-	params.pfTimeEndTime = new Date(cloneSelect.dateRange[1]).getTime();
+	params.pfTimeStartTime = new Date(cloneSelect.dateRange[0] + "00:00:00").getTime();
+	params.pfTimeEndTime = new Date(cloneSelect.dateRange[1] + "23:59:59").getTime();
 	welfareCenterApi.pageQuery(params).then((res) => {
 		pageData.value = res.data;
 		if (params.pageNumber == 1) {

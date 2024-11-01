@@ -17,7 +17,6 @@
 	position: relative;
 	width: 100%;
 	height: 568px;
-	background: url("/@/assets/zh-CN/default/loginOrRegister/header-bg.png") center center / 100% 100% no-repeat;
 
 	.content {
 		position: absolute;

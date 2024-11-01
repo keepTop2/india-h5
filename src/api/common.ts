@@ -63,7 +63,9 @@ class CommonApi {
 		return useAxiosApi(`/app/common/getCurrencyList`, {
 			method: "POST",
 			data,
-			headers,
+			headers: {
+				showLoading: true,
+			},
 		});
 	};
 

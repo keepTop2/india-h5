@@ -9,7 +9,7 @@
 			</thead>
 			<tbody>
 				<tr>
-					<td>{{ $t(`vip['升级奖励']`) }}</td>
+					<td>{{ $t(`vip['升级奖金']`) }}</td>
 					<td v-for="(item, index) in state.userVipInfo.vipBenefit" :key="index">
 						<img v-if="item.upgradeFlag != 0" :src="item.icon" />
 						<span v-else>-</span>
