@@ -19,7 +19,7 @@ import shopCartChampionPubSub from "/@/views/venueHome/sports/hooks/shopCartCham
 import { useSportsBetInfoStore } from "/@/store/modules/sports/sportsBetInfo";
 import common from "/@/utils/common";
 const sportsBetInfo = useSportsBetInfoStore();
-const stake = computed(() => shopCartChampionPubSub.getSingleTicketBetValue());
+const stake = computed(() => Number(shopCartChampionPubSub.getSingleTicketBetValue()));
 
 const onBetNumber = () => {
 	shopCartChampionPubSub.setBetNumberShow();
