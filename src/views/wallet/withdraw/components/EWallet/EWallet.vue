@@ -49,8 +49,7 @@
 			<div class="cell_input operate">
 				<input v-model="state.smsCode" :placeholder="$t(`withdraw['验证码']`)" />
 				<div class="operate_content">
-					<!-- <span>{{ $t(`withdraw['获取验证码']`) }}</span> -->
-					<CaptchaButton ref="captchaButton" @onCaptcha="onCaptcha" />
+					<CaptchaButton ref="captchaButton" type="text" :text="$t('withdraw.获取验证码')" @onCaptcha="onCaptcha" />
 				</div>
 			</div>
 		</div>
@@ -90,6 +89,7 @@ const UserStore = useUserStore();
 
 const captchaButton = ref<{
 	startCountdown: () => void;
+	stopCountdown: () => void;
 } | null>(null);
 
 const showAreaCode = ref(false); // 控制区号选择器的显示
@@ -178,6 +178,11 @@ const onCaptcha = async () => {
 	}
 };
 
+// 归零验证码
+const stopCountdown = () => {
+	captchaButton.value?.stopCountdown();
+};
+
 // 选择区号的处理
 const selectAreaCode = (item, i) => {
 	areaCodeObj.value = i; // 更新区号对象
@@ -222,6 +227,7 @@ defineExpose({
 	inputFields,
 	clearParams,
 	getAreaCodeDownBox,
+	stopCountdown,
 });
 </script>
 
