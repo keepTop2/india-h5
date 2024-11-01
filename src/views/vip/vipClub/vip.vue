@@ -11,13 +11,16 @@
 		<div class="vip_card">
 			<img class="vip_big" :src="currentRankImage" />
 
-			<div class="head">
+			<div class="head" v-if="state.userVipInfo.vipGradeCode !== state.userVipInfo.vipGradeUp">
+				<div class="label">{{ $t(`vip["当前等级"]`) }}</div>
+			</div>
+			<div class="head head2" v-else>
 				<div class="label">{{ $t(`vip["当前等级"]`) }}</div>
 			</div>
 
 			<div class="vip_level">{{ state.userVipInfo.vipGradeName }}</div>
 
-			<div class="vip_level_progress">
+			<div class="vip_level_progress" v-if="state.userVipInfo.vipGradeCode !== state.userVipInfo.vipGradeUp">
 				<span>{{ $t(`vip["升级所需经验"]`) }}</span>
 				<span
 					><span class="color_Theme">{{
@@ -28,7 +31,7 @@
 				<van-popover v-model:show="showPopover" theme="dark" :show-arrow="false">
 					<div class="p_10 popup">
 						体育/电竞场馆投注 1 {{ useUserStore().getUserInfo.platCurrencySymbol }} = {{ state.userVipInfo.sportExe }} 积分，其他场馆投注 1 {{ useUserStore().getUserInfo.platCurrencySymbol }} = 1
-						积分， 所有投注 均按当前汇率兑换为美元结算
+						积分， 所有投注 均按当前汇率兑换为{{ useUserStore().getUserInfo.platCurrencyName }}结算
 					</div>
 					<template #reference>
 						<SvgIcon class="warning_icon" iconName="vip/warning" />
@@ -36,7 +39,8 @@
 				</van-popover>
 			</div>
 			<!-- VIP进度条 -->
-			<Progress class="vip_progress" :userVipInfo="state.userVipInfo" :percentageShow="true" />
+			<Progress class="vip_progress" :userVipInfo="state.userVipInfo" :percentageShow="true" v-if="state.userVipInfo.vipGradeCode !== state.userVipInfo.vipGradeUp" />
+			<div v-else class="vip_level_progress2">恭喜！您已达到最高等级</div>
 		</div>
 
 		<div class="notify">
@@ -523,7 +527,9 @@ const onClickLeft = () => {
 				box-sizing: border-box;
 			}
 		}
-
+		.head2 {
+			padding-top: 17px;
+		}
 		.vip_level {
 			margin-top: 44px;
 			padding: 0px 52px;
@@ -553,6 +559,30 @@ const onClickLeft = () => {
 
 			font-family: "PingFang SC";
 			font-size: 24px;
+			font-weight: 400;
+
+			.warning_icon {
+				width: 24px;
+				height: 24px;
+			}
+		}
+		.vip_level_progress2 {
+			min-height: 84px;
+			display: flex;
+			align-items: center;
+
+			margin-top: 8px;
+			padding: 0px 52px;
+			background: linear-gradient(250deg, #fdfdfd 6.39%, #bebebe 35.7%, #fdfdfd 66.76%, #979797 93.89%);
+			background-clip: text;
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+			@include themeify {
+				color: themed("TB1");
+			}
+
+			font-family: "PingFang SC";
+
 			font-weight: 400;
 
 			.warning_icon {

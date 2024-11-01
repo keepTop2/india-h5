@@ -41,13 +41,9 @@ const props = defineProps({
 
 const isOpen = ref(props.isOpen);
 const bodyRef = ref(null);
-
+const emit = defineEmits(["updateOpen"]);
 const toggle = () => {
-	if (props.hasOneOpen) {
-		props.hasOneOpen(props.index);
-	} else {
-		isOpen.value = !isOpen.value;
-	}
+	emit("updateOpen", props.index);
 };
 
 const beforeEnter = (el) => {
