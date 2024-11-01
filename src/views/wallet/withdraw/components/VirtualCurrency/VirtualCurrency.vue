@@ -26,10 +26,39 @@
 			</div>
 		</div>
 	</div>
+
+	<!-- 手机号验证 -->
+	<div class="card" v-if="!UserStore.getUserInfo.isSetPwd && UserStore.getUserInfo.phone">
+		<div class="header">
+			<SvgIcon class="icon" iconName="wallet/line" />
+			<span>{{ $t(`withdraw['手机号验证']`) }}</span>
+		</div>
+
+		<div class="user_phone">
+			<div class="label">{{ $t(`withdraw['手机号']`) }}</div>
+			<div class="value">
+				<span>+{{ UserStore.getUserInfo.areaCode }}</span>
+				<span>&nbsp;</span>
+				<span>{{ common.maskString(UserStore.getUserInfo.phone) }}</span>
+			</div>
+		</div>
+
+		<div class="cell">
+			<div class="cell_input operate">
+				<input v-model="state.smsCode" :placeholder="$t(`withdraw['验证码']`)" />
+				<div class="operate_content">
+					<CaptchaButton ref="captchaButton" type="text" :text="$t('withdraw.获取验证码')" @onCaptcha="onCaptcha" />
+				</div>
+			</div>
+		</div>
+	</div>
 </template>
 
 <script setup lang="ts">
 import common from "/@/utils/common";
+import { useUserStore } from "/@/store/modules/user";
+import { bindApi } from "/@/api/securityCenter";
+import CaptchaButton from "/@/views/loginRegister/forgetPassword/components/captchaButton/captchaButton.vue";
 
 // 定义组件的props
 const props = defineProps({
@@ -42,6 +71,14 @@ const props = defineProps({
 		default: {},
 	},
 });
+
+const UserStore = useUserStore();
+
+const captchaButton = ref<{
+	startCountdown: () => void;
+	stopCountdown: () => void;
+} | null>(null);
+
 const lastWithdrawInfoShow = ref(false); // 控制区号选择器的显示
 
 watch(
@@ -54,6 +91,7 @@ watch(
 const state = reactive({
 	networkType: props.withdrawWayData.networkType, // 网络协议
 	addressNo: "", // 加密货币收款地址
+	smsCode: "", // 手机号验证码
 });
 
 // 输入字段的映射数组
@@ -65,6 +103,21 @@ const inputFields = [
 // 检查字段是否可见的函数
 const isFieldVisible = (code) => {
 	return props.withdrawWayConfig.collectInfoVOS && Array.isArray(props.withdrawWayConfig.collectInfoVOS) && props.withdrawWayConfig.collectInfoVOS.some((item) => item.filedCode === code);
+};
+
+// 发送验证码
+const onCaptcha = async () => {
+	let params = {} as any;
+	params = { phone: UserStore.getUserInfo.areaCode, areaCode: UserStore.getUserInfo.phone };
+	const res = await bindApi.sendSms(params).catch();
+	if (res.code === common.getInstance().ResCode.SUCCESS) {
+		captchaButton.value?.startCountdown();
+	}
+};
+
+// 归零验证码
+const stopCountdown = () => {
+	captchaButton.value?.stopCountdown();
 };
 
 // 选择上一次提款信息
@@ -104,6 +157,7 @@ defineExpose({
 	state,
 	inputFields,
 	clearParams,
+	stopCountdown,
 });
 </script>
 
