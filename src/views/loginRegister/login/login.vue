@@ -20,7 +20,7 @@
 				<div class="label"><span class="required">*</span>账号</div>
 				<FormInput class="mt_20" v-model="state.password" :type="eyeShow ? 'password' : 'text'" :maxlength="16" :placeholder="$t(`login['登录密码']`)">
 					<template v-slot:left>
-						<SvgIcon class="pr_14" iconName="loginOrRegister/userAccount" @click="state.userAccount = ''" size="32px" />
+						<SvgIcon class="pr_14" iconName="loginOrRegister/password" @click="state.userAccount = ''" size="32px" />
 					</template>
 					<template v-slot:right>
 						<div class="right">
@@ -158,6 +158,7 @@ onBeforeMount(() => {
 	min-height: 100vh;
 	font-family: "PingFang SC";
 	background: url("../image/image.png") no-repeat;
+	background-size: 100% auto;
 	@include themeify {
 		background-color: themed("BG1");
 	}
@@ -248,6 +249,11 @@ onBeforeMount(() => {
 					font-size: 28px;
 					font-weight: 400;
 				}
+				.forgot-password {
+					@include themeify {
+						border-bottom: 2px solid themed("T1");
+					}
+				}
 			}
 
 			.footer {
@@ -269,6 +275,11 @@ onBeforeMount(() => {
 				.help {
 					@include themeify {
 						color: themed("Theme");
+					}
+				}
+				.help {
+					@include themeify {
+						color: themed("F2");
 					}
 				}
 			}
