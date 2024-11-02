@@ -37,6 +37,8 @@ declare module '@vue/runtime-core' {
     VanButton: typeof import('vant/es')['Button']
     VanField: typeof import('vant/es')['Field']
     VanIcon: typeof import('vant/es')['Icon']
+    VanIndexAnchor: typeof import('vant/es')['IndexAnchor']
+    VanIndexBar: typeof import('vant/es')['IndexBar']
     VanList: typeof import('vant/es')['List']
     VanNavBar: typeof import('vant/es')['NavBar']
     VanNoticeBar: typeof import('vant/es')['NoticeBar']
