@@ -325,6 +325,7 @@ const onClickCell = async (item) => {
 		} else {
 			isPasswordModal.value = true; // 显示密码设置模态框
 		}
+		return;
 	}
 
 	// 处理充值路径的逻辑
