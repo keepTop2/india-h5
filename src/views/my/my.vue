@@ -302,13 +302,13 @@ const onClickCell = async (item) => {
 
 	// 处理提款路径的逻辑
 	if (item.path === "/wallet/withdraw") {
-		const { rechargeWithdrawLimit, withdrawLimit } = store.getUserInfo;
-		// 检查账户是否被锁定
-		const isAccountLocked = rechargeWithdrawLimit.value === 1 || withdrawLimit.value === 1;
-		if (isAccountLocked) {
-			showToast($.t("wallet['你的账户已被锁定，请联系在线客服']"));
-			return;
-		}
+		// const { rechargeWithdrawLimit, withdrawLimit } = store.getUserInfo;
+		// // 检查账户是否被锁定
+		// const isAccountLocked = rechargeWithdrawLimit.value === 1 || withdrawLimit.value === 1;
+		// if (isAccountLocked) {
+		// 	showToast($.t("wallet['你的账户已被锁定，请联系在线客服']"));
+		// 	return;
+		// }
 		const res = await securityCenterApi.getUserGlobalSetInfo().catch((err) => err);
 		const { isSetPwd, phone } = res.data;
 		// 检查用户是否设置密码或绑定手机号
@@ -329,12 +329,12 @@ const onClickCell = async (item) => {
 
 	// 处理充值路径的逻辑
 	if (item.path === "/wallet/recharge") {
-		const { rechargeWithdrawLimit } = store.getUserInfo;
-		// 检查账户是否被锁定
-		if (rechargeWithdrawLimit.value === 1) {
-			showToast($.t("wallet['你的账户已被锁定，请联系在线客服']"));
-			return;
-		}
+		// const { rechargeWithdrawLimit } = store.getUserInfo;
+		// // 检查账户是否被锁定
+		// if (rechargeWithdrawLimit.value === 1) {
+		// 	showToast($.t("wallet['你的账户已被锁定，请联系在线客服']"));
+		// 	return;
+		// }
 		const res = await walletApi.rechargeWayList().catch((err) => err);
 		// 检查充值方式
 		if (res.code === common.getInstance().ResCode.SUCCESS) {
