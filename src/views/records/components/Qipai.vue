@@ -3,35 +3,35 @@
 		<div class="header">
 			<div class="match-info">
 				<!-- <img src="path/to/flag.png" alt="flag" class="flag" /> -->
-				<span class="match-type">四人麻将 | A01-02</span>
+				<span class="match-type">{{ item.gameName }} | {{ item.thirdGameCode }}</span>
 			</div>
 			<span class="Settled">{{ $t('records["已结算"]') }}</span>
 		</div>
 		<div class="order-info">
 			<div class="order-number">
 				<span class="label">{{ $t('records["局号"]') }}：</span>
-				<span>GR12932139</span>
+				<span>{{ item.orderId }}</span>
 			</div>
 			<div class="order-number">
 				<span class="label">{{ $t('records["单号"]') }}：</span>
-				<span class="code" >
-					<span>2103102391230123</span>
-					<SvgIcon @click="copy('2103102391230123')" iconName="common/copy2" />
+				<span class="code">
+					<span>{{ item.orderId }}</span>
+					<SvgIcon @click="copy(item.orderId)" iconName="common/copy2" />
 				</span>
 			</div>
 		</div>
 		<div class="bet-info">
 			<div class="order-date">
 				<span class="label">{{ $t('records["投注时间"]') }}：</span>
-				<span>2024-07-18 16:42:08</span>
+				<span>{{ item.betTime }}</span>
 			</div>
 			<div class="bet-item">
 				<span class="label">{{ $t('records["投注金额"]') }}：</span>
-				<span class="value">999999.00</span>
+				<span class="value">{{ item.betAmount }}</span>
 			</div>
 			<div class="bet-item">
 				<span class="label">{{ $t('records["输赢金额"]') }}：</span>
-				<span class="value negative">-999999999.00</span>
+				<span class="value negative">{{ item.winLossAmount }}</span>
 			</div>
 			<!-- <div class="bet-item flex-between">
 				<div class="bet-item-content">
@@ -52,11 +52,13 @@
  *
  * @description: 棋牌投注记录模板
  */
-import { ref, onMounted } from "vue";
 import { copy } from "../common";
-onMounted(() => {
-	console.log("Component mounted");
-});
+import { BasicOrderPageRecords } from "../type";
+
+interface Props {
+	item: BasicOrderPageRecords;
+}
+defineProps<Props>();
 </script>
 
 <style lang="scss">
