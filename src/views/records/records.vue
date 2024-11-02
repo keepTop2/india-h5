@@ -72,8 +72,8 @@
 				<van-list v-model:loading="loading" :finished="finished" @load="onLoad">
 					<Sports v-for="(item, index) in orderRecordsData.sabOrderList" :key="index" :item="item" />
 					<Chuanguan v-for="(item, index) in orderRecordsData.eventOrderPage.records" :key="index" :item="item" />
-					<Qipai v-for="(item, index) in orderRecordsData.basicOrderPage" :key="index" :item="item" />
-					<Zhenren v-for="(item, index) in orderRecordsData.tableOrderPage" :key="index" :item="item" />
+					<Qipai v-for="(item, index) in orderRecordsData.basicOrderPage.records" :key="index" :item="item" />
+					<Zhenren v-for="(item, index) in orderRecordsData.tableOrderPage.records" :key="index" :item="item" />
 					<!-- <Dianzi /> -->
 				</van-list>
 
@@ -110,7 +110,7 @@ onActivated(() => {
 	pageVo.pageNumber = 1;
 	getList();
 });
-const orderRecordsData = reactive<ClientOrderRecordRes>({
+const orderRecordsData = ref<ClientOrderRecordRes>({
 	basicOrderPage: {},
 	tableOrderPage: {},
 	sabOrderList: {},
@@ -131,14 +131,15 @@ const getList = () => {
 	sportsApi
 		.getBettingRecordList(data)
 		.then((res) => {
-			console.log(res, "res+++++++++++++");
+			if (res.code !== 1000) return showToast(res.message);
+			orderRecordsData.value = res.data;
 		})
 		.catch((err) => {
 			console.log(err, "errrrrrrrrrrr");
 		});
 };
 const loading = ref(false);
-const finished = ref(false);
+const finished = ref(true);
 const onLoad = () => {
 	console.log("加载");
 	pageVo.pageNumber++;
@@ -217,22 +218,6 @@ const dateRangeSelectDemoState = reactive({
 	startTime: 0,
 	endTime: 0,
 });
-
-const matches = ref([
-	{ team1: "荷兰", team2: "英格兰", betContent: "荷兰全场独赢", result: "赢", odds: "2.98" },
-	{ team1: "ColorasddColorasddColorasdd", team2: "BetContentbetContent", betContent: "荷兰全场独赢", result: "输", odds: "2.98" },
-	{ team1: "荷兰", team2: "英格兰", betContent: "荷兰全场独赢", result: "-", odds: "2.98" },
-]);
-
-/**
- * @description: 复制单号
- * @return {*}
- */
-const copyOrderNumber = () => {
-	navigator.clipboard.writeText("2103102391230123").then(() => {
-		showToast("复制成功");
-	});
-};
 
 //日期时间选择器组件点击确认
 const onConfirmDate = () => {

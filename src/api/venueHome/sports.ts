@@ -1,6 +1,9 @@
 import useAxiosApi from "/@/utils/useAxiosApi";
 import useAxiosSabaApi from "/@/utils/useAxiosSabaApi";
 import qs from "qs";
+import { ClientOrderRecordRes } from "/@/views/records/type";
+import { AxiosResponse } from "axios";
+
 class sportsApi {
 	/**
 	 *@description 体育登录
