@@ -305,16 +305,6 @@ const updateOddsChange = (betMarketInfo, currentPrice, previousPrice) => {
 	betMarketInfo.decimalPrice = currentPrice;
 };
 
-/**
- * .mainArea节点
- * 体育模块点击导航栏时，记录当前页面scrollTop到route.mate.scrollTop中，优化用户体验
- */
-export const saveScrollTop = (route: RouteLocationNormalized) => {
-	const scrollDom = document.getElementById("sports") as HTMLElement;
-	route.meta.scrollTop = scrollDom.scrollTop;
-	console.log(route.meta, "route.meta");
-};
-
 // 格式化赛事开始日期，适应设计图格式
 export const timeFormate = (globalShowTime) => {
 	if (globalShowTime) {
