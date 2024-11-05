@@ -1,6 +1,6 @@
 <!-- 体育入口 -->
 <template>
-	<div class="Sports" id="sports" ref="sportsContainer" @scroll="onScroll">
+	<div class="Sports" ref="sportsContainer" @scroll="onScroll">
 		<Banner class="Home_Banner" />
 		<div class="sports-container" ref="stickyContainer">
 			<!-- 滚球 今日 早盘 冠军 关注 -->
@@ -80,7 +80,6 @@ import SportsCommonFn from "/@/views/venueHome/sports/utils/common";
 import viewSportPubSubEventData from "/@/views/venueHome/sports/hooks/viewSportPubSubEventData";
 import { useSportsBetChampionStore } from "/@/store/modules/sports/sportsBetChampionData";
 import { useUserStore } from "/@/store/modules/user";
-import { saveScrollTop } from "/@/views/venueHome/sports/utils/commonFn";
 const { isHaveToken } = useToLogin();
 const sportsBetChampion = useSportsBetChampionStore();
 const { startLoading, stopLoading } = useLoading();
@@ -478,9 +477,7 @@ const initRouter = () => {
 
 // 切换tab时 根据path处理对应的获取数据逻辑
 const onTab = async (path) => {
-	// 记录滚动元素节点scrollTop
-	saveScrollTop(route);
-
+	console.log(path, "====path");
 	activeSwitchingSort.value = "time";
 	if (tabActive.value == path) {
 		return;
@@ -530,9 +527,6 @@ const clearExpand = () => {
 
 // 点击球类执行逻辑
 const onSportsType = (item: Sports) => {
-	// 记录滚动元素节点scrollTop
-	saveScrollTop(route);
-
 	clearExpand();
 	//切换球类清空筛选
 	sportsBetEvent.clearLeagueSelect();
