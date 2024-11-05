@@ -20,7 +20,7 @@
 		<div class="card">
 			<div class="cell flex">
 				<div class="color_T1">发放时间</div>
-				<div class="color_TB">{{ detailsInfo?.pfTime }}</div>
+				<div class="color_TB">{{ dayjs(detailsInfo?.pfTime).format("YYYY-MM-DD HH:mm:ss") }}</div>
 			</div>
 			<div class="cell flex">
 				<div class="color_T1">订单号</div>
@@ -41,6 +41,7 @@ import { showToast } from "vant";
 import { welfareCenterApi } from "/@/api/welfareCenter";
 import router from "/@/router";
 import { useClipboard } from "@vueuse/core";
+import dayjs from "dayjs";
 const detailsInfo: any = ref({});
 
 const source = ref(detailsInfo.value.orderNo);

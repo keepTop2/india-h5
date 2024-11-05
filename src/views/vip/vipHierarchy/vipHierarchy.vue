@@ -61,7 +61,11 @@ const getUserVipBenefitDetail = async () => {
 	}
 };
 const updateOpen = (value) => {
-	isOpen.value = value;
+	if (value == isOpen.value) {
+		isOpen.value = null;
+	} else {
+		isOpen.value = value;
+	}
 };
 const getClass = (item) => {
 	if (item.vipRankCode === 0) {
