@@ -7,8 +7,8 @@
 				<div class="header" :class="getClass(item)">
 					<div>
 						<span>{{ item.vipRankNameI18nCode }}</span>
-						<span>VIP</span>
-						<span>{{ item.minVipGrade }}-{{ item.maxVipGrade }}</span>
+
+						<span>{{ item.minVipGradeName }} - {{ item.maxVipGradeName }}</span>
 					</div>
 					<SvgIcon class="arrow" iconName="vip/vipRewards/arrow" />
 				</div>
