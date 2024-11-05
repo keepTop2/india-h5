@@ -176,6 +176,7 @@ import balance_operation_tz from "/@/assets/zh-CN/default/my/balance_operation_t
 import { i18n } from "/@/i18n/index";
 import { loginApi } from "/@/api/loginRegister";
 import Model from "/@/views/wallet/components/model.vue";
+import { useModal } from "/@/views/wallet/components/useTipModel.ts";
 import { showToast } from "vant";
 import { securityCenterApi } from "/@/api/securityCenter";
 const $: any = i18n.global;
@@ -184,8 +185,8 @@ const store = useUserStore();
 const themesStore = useThemesStore();
 const theme = computed(() => themesStore.themeName);
 const loginOutShow = ref(false);
-const isPasswordModal = ref(false);
-const isPhoneModal = ref(false);
+const isPasswordModal = ref(false); // 交易密码校验弹窗
+const isPhoneModal = ref(false); // 手机号绑定校验弹窗
 const balanceOperationList = [
 	{
 		name: $.t("my['存款']"),
@@ -302,30 +303,70 @@ const onClickCell = async (item) => {
 
 	// 处理提款路径的逻辑
 	if (item.path === "/wallet/withdraw") {
-		// const { rechargeWithdrawLimit, withdrawLimit } = store.getUserInfo;
-		// // 检查账户是否被锁定
-		// const isAccountLocked = rechargeWithdrawLimit.value === 1 || withdrawLimit.value === 1;
-		// if (isAccountLocked) {
-		// 	showToast($.t("wallet['你的账户已被锁定，请联系在线客服']"));
-		// 	return;
-		// }
 		const res = await securityCenterApi.getUserGlobalSetInfo().catch((err) => err);
 		const { isSetPwd, phone } = res.data;
+
+		const withdrawalRes = await walletApi.withdrawWayList().catch((err) => err);
+		const hasWithdrawalWays = withdrawalRes.data && withdrawalRes.data.length > 0;
+
+		// 创建模态框的函数
+		const createModal = (titleKey, textKey, showCancel, showConfirm, confirmText, onConfirm, onClose) => {
+			useModal({
+				title: $.t(titleKey),
+				text: $.t(textKey),
+				showCancel,
+				showConfirm,
+				cancelText: showCancel ? $.t("withdraw['取消']") : undefined,
+				confirmText: $.t(confirmText),
+				onConfirm,
+				onClose,
+			});
+		};
+
 		// 检查用户是否设置密码或绑定手机号
-		if (isSetPwd || phone) {
-			const withdrawalRes = await walletApi.withdrawWayList().catch((err) => err);
-			// 检查提款方式
-			if (withdrawalRes.code === common.getInstance().ResCode.SUCCESS) {
-				if (!withdrawalRes.data || withdrawalRes.data.length === 0) {
-					showToast($.t("my['暂无提款方式']"));
-					return;
+		if (phone && !isSetPwd) {
+			createModal(
+				"withdraw['温馨提示']",
+				"withdraw['您还未设置交易密码，请先设置交易密码']",
+				true,
+				true,
+				"withdraw['去设置']",
+				() => {
+					toPath("/setTradingPassword");
+				},
+				() => {
+					if (!hasWithdrawalWays) {
+						createModal(
+							"withdraw['温馨提示']",
+							"my['暂无可用提款方式']",
+							false,
+							true,
+							"my['确定']",
+							() => {},
+							() => {}
+						);
+					} else {
+						toPath(item.path);
+					}
 				}
-				toPath(item.path);
-			}
-		} else {
-			isPasswordModal.value = true; // 显示密码设置模态框
+			);
+			return;
 		}
-		return;
+		if (phone && isSetPwd) {
+			if (!hasWithdrawalWays) {
+				createModal(
+					"withdraw['温馨提示']",
+					"my['暂无可用提款方式']",
+					false,
+					true,
+					"my['确定']",
+					() => {},
+					() => {}
+				);
+				return;
+			}
+			toPath(item.path);
+		}
 	}
 
 	// 处理充值路径的逻辑
@@ -340,7 +381,15 @@ const onClickCell = async (item) => {
 		// 检查充值方式
 		if (res.code === common.getInstance().ResCode.SUCCESS) {
 			if (!res.data || res.data.length === 0) {
-				showToast($.t("my['暂无存款方式']"));
+				useModal({
+					title: $.t("withdraw['温馨提示']"),
+					text: $.t("my['暂无可用存款方式']"),
+					showCancel: false,
+					showConfirm: true,
+					confirmText: $.t("my['确定']"),
+					onConfirm: () => {},
+					onClose: () => {},
+				});
 				return;
 			}
 			toPath(item.path);

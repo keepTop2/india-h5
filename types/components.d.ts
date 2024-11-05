@@ -35,6 +35,7 @@ declare module '@vue/runtime-core' {
     Tabs: typeof import('./../src/components/Tabs/Tabs.vue')['default']
     VanActionSheet: typeof import('vant/es')['ActionSheet']
     VanButton: typeof import('vant/es')['Button']
+    VanCellGroup: typeof import('vant/es')['CellGroup']
     VanField: typeof import('vant/es')['Field']
     VanIcon: typeof import('vant/es')['Icon']
     VanIndexAnchor: typeof import('vant/es')['IndexAnchor']
@@ -43,6 +44,7 @@ declare module '@vue/runtime-core' {
     VanNavBar: typeof import('vant/es')['NavBar']
     VanNoticeBar: typeof import('vant/es')['NoticeBar']
     VanPicker: typeof import('vant/es')['Picker']
+    VanPopover: typeof import('vant/es')['Popover']
     VanPopup: typeof import('vant/es')['Popup']
     VanSwipeCell: typeof import('vant/es')['SwipeCell']
     VanTab: typeof import('vant/es')['Tab']
@@ -53,5 +55,6 @@ declare module '@vue/runtime-core' {
     VantNavBar: typeof import('./../src/components/vant/VantNavBar.vue')['default']
     VantPicker: typeof import('./../src/components/vant/VantPicker.vue')['default']
     VantTabs: typeof import('./../src/components/vant/VantTabs.vue')['default']
+    VanUploader: typeof import('vant/es')['Uploader']
   }
 }
