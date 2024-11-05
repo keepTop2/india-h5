@@ -9,7 +9,7 @@
 			</div>
 			<div class="dialog-footer">
 				<div class="color_T1" @click="close">取消</div>
-				<div class="color_Theme" @click="confirm">确定</div>
+				<div class="color_Theme" @click="confirm">{{ confirmText }}</div>
 			</div>
 		</div>
 	</div>
@@ -24,6 +24,10 @@ const props = defineProps({
 	title: {
 		type: String,
 		default: "温馨提示",
+	},
+	confirmText: {
+		type: String,
+		default: "确定",
 	},
 	confirm: {
 		type: Function,

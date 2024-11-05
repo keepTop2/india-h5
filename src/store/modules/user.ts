@@ -150,7 +150,7 @@ export const useUserStore = defineStore("User", {
 			this.userInfo = {};
 			this.loginStatus = false;
 			const websocketService = activitySocketService.getInstance();
-			websocketService.close;
+			websocketService.close();
 			localStorage.clear();
 		},
 		logOut() {

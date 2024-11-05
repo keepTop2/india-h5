@@ -58,7 +58,7 @@
 					<div class="balance_header">
 						<VantLazyImg class="line" :src="line" />
 						<div class="label">总余额</div>
-						<div class="value">100.00</div>
+						<div class="value">{{ store.getUserInfo.totalBalance }} {{ store.getUserInfo.mainCurrency }}</div>
 					</div>
 					<div class="balance_content">
 						<div class="balance_item" v-for="item in balanceOperationList" @click="onClickCell(item)">

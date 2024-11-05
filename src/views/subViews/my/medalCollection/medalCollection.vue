@@ -34,7 +34,7 @@
 						<div class="p_10 popup">
 							{{
 								$t('medalCollection["宝箱奖励流水倍数为8倍"]', {
-									num: state.medalRewardRespVOS?.find((item) => item.openStatus == 0)?.typingMultiple || state.medalRewardRespVOS[state.medalRewardRespVOS.length - 1]?.typingMultiple,
+									num: state.medalRewardRespVOS?.find((item) => item.openStatus == 2)?.typingMultiple || state.medalRewardRespVOS[state.medalRewardRespVOS.length - 1]?.typingMultiple,
 								})
 							}}
 						</div>
@@ -46,9 +46,9 @@
 				<!-- 遍历展示解锁勋章的提示信息 -->
 				<i18n-t v-for="(item, index) in state.medalRewardRespVOS" :key="index" keypath="medalCollection.解锁勋章" :tag="'p'">
 					<template v-slot:value>
-						<span class="text">{{ $t("medalCollection.枚", { value: item.unlockMedalNum }) }}</span>
+						<span class="text">{{ $t("medalCollection.枚", { value: item.unlockMedalNum }) }} </span>
 					</template>
-					<template v-slot:num> {{ item.rewardAmount }} {{ useUserStore().getUserInfo.platCurrencyName }} </template>
+					<template v-slot:num> &nbsp;{{ useUserStore().getUserInfo.platCurrencySymbol }} {{ item.rewardAmount }} </template>
 				</i18n-t>
 			</div>
 		</template>
@@ -224,7 +224,7 @@ const onOpenMedalReward = async (item) => {
 		if (res.code == common.getInstance().ResCode.SUCCESS) {
 			// 成功领取后更新用户的勋章信息
 
-			showToast(`恭喜您获得${res.data.unlockMedalNum}个勋章，解锁宝箱，奖励${res.data.rewardAmount} ${useUserStore().getUserInfo.platCurrencySymbol}，已发送到您的账户`);
+			showToast(`恭喜您获得${res.data.unlockMedalNum}个勋章，解锁宝箱，奖励 ${useUserStore().getUserInfo.platCurrencySymbol} ${res.data.rewardAmount} ，已发送到您的账户`);
 
 			await getUserMedalInfo();
 		}

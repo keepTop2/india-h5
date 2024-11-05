@@ -7,8 +7,8 @@
 				<div class="header" :class="getClass(item)">
 					<div>
 						<span>{{ item.vipRankNameI18nCode }}</span>
-						<span>VIP</span>
-						<span>{{ item.minVipGrade }}-{{ item.maxVipGrade }}</span>
+
+						<span>{{ item.minVipGradeName }} - {{ item.maxVipGradeName }}</span>
 					</div>
 					<SvgIcon class="arrow" iconName="vip/vipRewards/arrow" />
 				</div>
@@ -61,7 +61,11 @@ const getUserVipBenefitDetail = async () => {
 	}
 };
 const updateOpen = (value) => {
-	isOpen.value = value;
+	if (value == isOpen.value) {
+		isOpen.value = null;
+	} else {
+		isOpen.value = value;
+	}
 };
 const getClass = (item) => {
 	if (item.vipRankCode === 0) {

@@ -43,17 +43,17 @@
 							<div class="color_T1 fs_26">{{ item.welfareCenterRewardTypeText }}</div>
 						</div>
 						<div class="">
-							<div class="color_T2 fs_24">{{ dayjs(item.pfEndTime).format("YYYY-MM-DD hh:mm:ss") }}</div>
+							<div class="color_T2 fs_24">{{ dayjs(item.pfTime).format("YYYY-MM-DD hh:mm:ss") }}</div>
 						</div>
 					</div>
-					<div class="right">
+					<div class="right" @click="clickReceive(item)">
 						<div class="color_TB fs_28">{{ item.amount }} {{ item.currencyCode }}</div>
 						<div class="color_Theme fs_20" v-if="item.receiveStatus == 0 && item.isPermanentValidity == 0" style="display: flex">
-							<CountdownTimer :endTime="new Date(item.expiryTimeRemaining)"> </CountdownTimer>
+							<CountdownTimer :endTime="new Date(new Date().getTime() + item.expiryTimeRemaining)"> </CountdownTimer>
 							<div class="color_T3" style="flex: 1">后过期</div>
 						</div>
-						<div v-else="item.receiveStatus == 0" class="color_TB">长期有效</div>
-						<div class="btn fs_24" v-if="item.receiveStatus == 0" @click="clickReceive(item)">{{ receiveStatus[item.receiveStatus] }}</div>
+						<!-- <div v-else="item.receiveStatus == 0" class="color_TB">长期有效</div> -->
+						<div class="btn fs_24" v-if="item.receiveStatus == 0">{{ receiveStatus[item.receiveStatus] }}</div>
 						<div class="fs_24 color_Wam-P1" v-else-if="item.receiveStatus == 1">{{ receiveStatus[item.receiveStatus] }}</div>
 						<div class="fs_24 color_T3" v-else>{{ receiveStatus[item.receiveStatus] }}</div>
 					</div>
@@ -139,7 +139,7 @@ const columns = ref(Common.getLast30Days(90).columns);
 const activeDate: any = ref(2);
 const activeDateBtn = ref(0);
 const dateRange = ref([dayjs(Common.getLast30Days(90).firstIndexes.join("-")).format("YYYY-MM-DD"), dayjs(new Date()).format("YYYY-MM-DD")]);
-
+const loading = ref(false);
 const pageData: any = ref({});
 const finished = ref(false);
 const recordsList: any = ref([]);
@@ -226,20 +226,27 @@ const clickReceive = (item) => {
 	});
 };
 const getList = () => {
+	if (loading.value) return;
+	loading.value = true;
 	params.welfareCenterRewardType = cloneSelect.welfareCenterRewardType == "all" ? "" : cloneSelect.welfareCenterRewardType;
 	params.receiveStatus = cloneSelect.receiveStatus == "all" ? "" : cloneSelect.receiveStatus;
 	params.pfTimeStartTime = new Date(cloneSelect.dateRange[0] + " 00:00:00").getTime();
 	params.pfTimeEndTime = new Date(cloneSelect.dateRange[1] + " 23:59:59").getTime();
-	welfareCenterApi.pageQuery(params).then((res) => {
-		pageData.value = res.data;
-		if (params.pageNumber == 1) {
-			recordsList.value = res.data.pages.records;
-		} else {
-			recordsList.value.push(...res.data.pages.records);
-		}
-		if (res.data.pages.records.length < 1) return (finished.value = true);
-		params.pageNumber++;
-	});
+	welfareCenterApi
+		.pageQuery(params)
+		.then((res) => {
+			pageData.value = res.data;
+			if (params.pageNumber == 1) {
+				recordsList.value = res.data.pages.records;
+			} else {
+				recordsList.value.push(...res.data.pages.records);
+			}
+			if (res.data.pages.records.length < 1) return (finished.value = true);
+			params.pageNumber++;
+		})
+		.finally(() => {
+			loading.value = false;
+		});
 };
 // 删除筛选条件，
 const deleteTab = (item, index) => {
@@ -315,6 +322,7 @@ const onChangeDate = (value) => {
 	activeDate.value = index !== -1 ? index : null;
 };
 const resetParams = () => {
+	pageData.value = {};
 	finished.value = false;
 	params.pageNumber = 1;
 };
