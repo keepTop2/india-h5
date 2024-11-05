@@ -15,7 +15,7 @@
 			</div>
 			<div class="cell" v-if="!['networkType'].includes(field.code) && isFieldVisible(field.code)">
 				<div class="cell_input">
-					<input v-model="state[field.model]" :type="field.type" :placeholder="$t(`withdraw['${field.placeholder}']`)" @focus="onFocus(field.model)" @blur="onBlur(field.model)" />
+					<input v-model="state[field.model]" :type="field.type" :placeholder="$t(`withdraw['${field.placeholder}']`)" @focus="lastWithdrawInfoShow = true" @blur="lastWithdrawInfoShow = false" />
 				</div>
 				<div v-if="field.code === 'addressNo' && withdrawWayConfig.lastWithdrawInfoVO.addressNo && lastWithdrawInfoShow && !state.addressNo" class="last_info">
 					<div class="last_cell" @mousedown="onGetLastWithdrawInfo">
@@ -123,24 +123,7 @@ const stopCountdown = () => {
 // 选择上一次提款信息
 const onGetLastWithdrawInfo = () => {
 	Object.assign(state, props.withdrawWayConfig.lastWithdrawInfoVO);
-	console.log("state", state);
 	lastWithdrawInfoShow.value = false;
-};
-
-// 银行卡号输入框聚焦
-const onFocus = (code) => {
-	if (code === "bankCard") {
-		if (props.withdrawWayConfig.lastWithdrawInfoVO.bankCard) {
-			lastWithdrawInfoShow.value = true;
-		}
-	}
-};
-
-// 银行卡号输入框失去焦点
-const onBlur = (code) => {
-	if (code === "bankCard") {
-		lastWithdrawInfoShow.value = false;
-	}
 };
 
 // 清空表单参数
