@@ -3,7 +3,7 @@
 		<div class="redbag-rain-wrapper">
 			<div class="redbag-rain-canvas">
 				<div v-if="setp == 1" class="redayGo">
-					<img src="./image/readyGo.png" alt="" />
+					<img :src="readyGo" alt="" />
 				</div>
 				<div v-show="setp == 2">
 					<canvas ref="canvas"></canvas>
@@ -47,6 +47,7 @@ import RED_BAG_RAIN_Dialog from "./RED_BAG_RAIN_Dialog/index.vue";
 import { useActivityStore } from "/@/store/modules/activity";
 import { useUserStore } from "/@/store/modules/user";
 import router from "/@/router";
+import readyGo from "./image/readyGo.png";
 import { redbagRainSingleton } from "/@/hooks/useRedbagRain";
 const props = defineProps({
 	modelValue: Boolean,

@@ -104,6 +104,7 @@ const onClickLeft = () => {
 	display: block;
 	position: relative;
 	border: none;
+
 	outline: none;
 }
 .no_data_container {

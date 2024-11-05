@@ -256,7 +256,7 @@ defineExpose({
 		left: calc(50% - 50px);
 		margin-left: -50px;
 		margin-top: -55px;
-		z-index: 11;
+
 		cursor: pointer;
 		display: flex;
 		justify-content: center;

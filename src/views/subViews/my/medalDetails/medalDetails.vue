@@ -16,7 +16,7 @@
 		<div class="cell_list">
 			<div class="cell">
 				<div class="label">{{ $t('medalDetails["奖励"]') }}</div>
-				<div class="value">{{ data.rewardAmount }} {{ useUserStore().getUserInfo.platCurrencyName }}</div>
+				<div class="value">{{ useUserStore().getUserInfo.platCurrencySymbol }} {{ data.rewardAmount }}</div>
 			</div>
 			<div class="cell">
 				<div class="label">{{ $t('medalDetails["流水倍数"]') }}</div>

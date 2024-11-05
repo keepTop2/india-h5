@@ -30,8 +30,8 @@
 				>
 				<van-popover v-model:show="showPopover" theme="dark" :show-arrow="false">
 					<div class="p_10 popup">
-						体育/电竞场馆投注 1 {{ useUserStore().getUserInfo.platCurrencySymbol }} = {{ state.userVipInfo.sportExe }} 积分，其他场馆投注 1 {{ useUserStore().getUserInfo.platCurrencySymbol }} = 1
-						积分， 所有投注 均按当前汇率兑换为{{ useUserStore().getUserInfo.platCurrencyName }}结算
+						体育/电竞场馆投注 1 {{ useUserStore().getUserInfo.platCurrencyName }} = {{ state.userVipInfo.sportExe }} 积分，其他场馆投注 1 {{ useUserStore().getUserInfo.platCurrencyName }} = 1 积分，
+						所有投注 均按当前汇率兑换为{{ useUserStore().getUserInfo.platCurrencyName }}结算
 					</div>
 					<template #reference>
 						<SvgIcon class="warning_icon" iconName="vip/warning" />

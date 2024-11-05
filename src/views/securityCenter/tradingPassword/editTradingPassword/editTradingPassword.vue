@@ -70,10 +70,11 @@
 			<!-- 忘记旧密码提示 -->
 			<div class="tips">
 				{{ $t('editTradingPassword["忘记了旧交易密码？"]') }}
-				<span @click="$router.push('/retrieveTradingPassword/phone')">{{ $t('editTradingPassword["找回交易密码"]') }}</span>
+				<span @click="goTofindPwd">{{ $t('editTradingPassword["找回交易密码"]') }}</span>
 			</div>
 		</form>
 	</div>
+	<ok-dialog v-model="showDialog" confirmText="去绑定" :confirm="confirm"> 您暂未绑定验证方式，请先绑定电子邮箱或手机号 </ok-dialog>
 </template>
 
 <script setup lang="ts">
@@ -83,13 +84,14 @@ import common from "/@/utils/common";
 import { useRouter } from "vue-router";
 import { i18n } from "/@/i18n/index";
 import { showToast } from "vant";
+import { useUserStore } from "/@/store/modules/user";
 const router = useRouter();
 const $ = i18n.global;
 const eyeShow = ref(true);
 const eyeShow2 = ref(true);
 const eyeShow3 = ref(true);
 const btnDisabled = ref(true);
-
+const showDialog = ref(false);
 const state = reactive({
 	oldPassword: "", // 旧密码
 	newPassword: "", // 新密码
@@ -145,6 +147,19 @@ const clear = () => {
 
 const onClickLeft = () => {
 	router.go(-1);
+};
+
+const goTofindPwd = (value) => {
+	if (useUserStore().getUserInfo.email) {
+		router.push("/retrieveTradingPassword/email");
+	} else if (useUserStore().getUserInfo.phone) {
+		router.push("/retrieveTradingPassword/phone");
+	} else {
+		showDialog.value = true;
+	}
+};
+const confirm = () => {
+	router.push("/securityCenter");
 };
 </script>
 

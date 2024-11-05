@@ -7,7 +7,7 @@
 			<FormInput
 				v-model="state.password"
 				:type="eyeShow ? 'password' : 'text'"
-				:maxlength="16"
+				:maxlength="6"
 				:placeholder="$t(`setTradingPassword['交易密码']`)"
 				:errorBorder="!isPasswordValid && state.password !== '' ? true : false"
 			>
@@ -26,7 +26,7 @@
 			<FormInput
 				v-model="state.confirmPassword"
 				:type="eyeShow2 ? 'password' : 'text'"
-				:maxlength="16"
+				:maxlength="6"
 				:placeholder="$t(`setTradingPassword['确认交易密码']`)"
 				:errorBorder="!isConfirmPasswordValid ? true : false"
 			>
