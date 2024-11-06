@@ -16,7 +16,7 @@
 				<span class="label">{{ $t(`records["单号"]`) }}：</span>
 				<span class="code">
 					<span>{{ item.orderId }}</span>
-					<SvgIcon @click="copy(item.orderId)" iconName="common/copy2" />
+					<SvgIcon @click="_copy(item.orderId)" iconName="common/copy2" />
 				</span>
 			</div>
 		</div>
@@ -52,11 +52,19 @@
  */
 import { copy } from "../common";
 import { TableOrderPageRecords } from "/@/views/records/type";
+import { showToast } from "vant";
+import { i18n } from "/@/i18n";
+const $: any = i18n.global;
 
 interface Props {
 	item: TableOrderPageRecords;
 }
 defineProps<Props>();
+
+function _copy(orderId) {
+  copy(orderId);
+  showToast($.t("common['成功']"));
+}
 </script>
 
 <style lang="scss">
