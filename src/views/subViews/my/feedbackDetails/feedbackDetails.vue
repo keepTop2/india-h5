@@ -161,7 +161,7 @@ const submit = () => {
 	};
 	medalApi.submitFeedback(prams).then((res: any) => {
 		if (res.code === 10000) {
-			showToast("谢谢你的反馈");
+			showToast("感谢您的反馈!");
 			Object.assign(state.params, {});
 			state.params.content = "";
 			fileList.value = [];

@@ -16,11 +16,12 @@
 	</div>
 
 	<div class="footer">
-		<Button>{{ $t('error["联系客服"]') }}</Button>
+		<Button @click="common.getSiteCustomerChannel">{{ $t('error["联系客服"]') }}</Button>
 	</div>
 </template>
 
 <script setup lang="ts">
+import common from "/@/utils/common";
 import err_img from "/@/assets/zh-CN/default/error/ipsx_img.png";
 import { useRouter } from "vue-router";
 import logo from "/@/assets/zh-CN/default/my/my_logo.png";

@@ -40,7 +40,6 @@
 			<div class="error_text">
 				<span v-if="!isConfirmPasswordValid" class="text">{{ $t('setTradingPassword["两次交易密码不一致"]') }}</span>
 			</div>
-
 			<Button class="mt_40" :type="btnDisabled ? 'disabled' : 'default'" @click="onSubmit">{{ $t('setTradingPassword["确定"]') }}</Button>
 		</form>
 	</div>
@@ -142,7 +141,7 @@ const onClickLeft = () => {
 			font-size: 20px;
 			font-weight: 400;
 			@include themeify {
-				color: themed("Theme");
+				color: themed("Hint");
 			}
 		}
 	}

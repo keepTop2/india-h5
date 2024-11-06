@@ -66,7 +66,7 @@
 		</FormInput>
 
 		<div class="tips">
-			{{ $t('editContactDetails["重新发送"]') }}<span class="help">{{ $t('common["联系客服"]') }}</span>
+			{{ $t('editContactDetails["重新发送"]') }}<span class="help" @click="common.getSiteCustomerChannel">{{ $t('common["联系客服"]') }}</span>
 		</div>
 
 		<Button class="mt_40" :type="btnDisabled ? 'disabled' : 'default'" @click="onSubmit">{{ $t('editContactDetails["确定"]') }}</Button>

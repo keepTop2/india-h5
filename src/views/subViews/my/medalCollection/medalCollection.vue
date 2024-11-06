@@ -34,7 +34,7 @@
 						<div class="p_10 popup">
 							{{
 								$t('medalCollection["宝箱奖励流水倍数为8倍"]', {
-									num: state.medalRewardRespVOS?.find((item) => item.openStatus == 2)?.typingMultiple || state.medalRewardRespVOS[state.medalRewardRespVOS.length - 1]?.typingMultiple,
+									num: state.medalRewardRespVOS.find((item: any) => item.openStatus !== 1).typingMultiple,
 								})
 							}}
 						</div>
