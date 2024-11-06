@@ -33,11 +33,14 @@ declare module '@vue/runtime-core' {
     Spin: typeof import('./../src/components/Spin/Spin.vue')['default']
     SvgIcon: typeof import('./../src/components/svgIcon/index.vue')['default']
     Tabs: typeof import('./../src/components/Tabs/Tabs.vue')['default']
+    VanCellGroup: typeof import('vant/es')['CellGroup']
     VanDatePicker: typeof import('vant/es')['DatePicker']
+    VanField: typeof import('vant/es')['Field']
     VanList: typeof import('vant/es')['List']
     VanNavBar: typeof import('vant/es')['NavBar']
     VanNoticeBar: typeof import('vant/es')['NoticeBar']
     VanPicker: typeof import('vant/es')['Picker']
+    VanPopover: typeof import('vant/es')['Popover']
     VanPopup: typeof import('vant/es')['Popup']
     VanTab: typeof import('vant/es')['Tab']
     VanTabs: typeof import('vant/es')['Tabs']
@@ -47,5 +50,6 @@ declare module '@vue/runtime-core' {
     VantNavBar: typeof import('./../src/components/vant/VantNavBar.vue')['default']
     VantPicker: typeof import('./../src/components/vant/VantPicker.vue')['default']
     VantTabs: typeof import('./../src/components/vant/VantTabs.vue')['default']
+    VanUploader: typeof import('vant/es')['Uploader']
   }
 }
