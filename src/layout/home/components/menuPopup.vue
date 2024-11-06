@@ -47,7 +47,7 @@
 				</div>
 				<div class="label">{{ userStore.langName }}</div>
 			</div>
-			<div class="menu van-haptics-feedback">
+			<div class="menu van-haptics-feedback" @click="common.getSiteCustomerChannel">
 				<div class="icon">
 					<img :src="kefu" />
 				</div>
