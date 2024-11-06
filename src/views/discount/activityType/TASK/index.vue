@@ -211,7 +211,7 @@ const calculatePercentage = (part, whole) => {
 .wrapper {
 	background: url("./image/bg.png") no-repeat;
 	background-size: 100% 100%;
-
+	overflow-x: hidden;
 	.main-image {
 		height: 640px;
 		width: 100%;
