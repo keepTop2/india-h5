@@ -40,7 +40,7 @@
 		</FormInput>
 
 		<div class="tips">
-			{{ $t('forgetPassword["重新发送"]') }}<span class="help">{{ $t('common["联系客服"]') }}</span>
+			{{ $t('forgetPassword["重新发送"]') }}<span class="help" @click="common.getSiteCustomerChannel">{{ $t('common["联系客服"]') }}</span>
 		</div>
 
 		<Button class="mt_40" :type="btnDisabled ? 'disabled' : 'default'" @click="onSubmit">{{ $t('bindPhone["确定"]') }}</Button>

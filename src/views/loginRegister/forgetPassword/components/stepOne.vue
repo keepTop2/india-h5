@@ -17,7 +17,7 @@
 			<Button class="mt_40" :type="!isAccountValid ? 'disabled' : 'default'" @click="onStep">{{ $t('forgetPassword["下一步"]') }}</Button>
 
 			<div class="footer">
-				<span class="help">{{ $t('common["联系客服"]') }}</span>
+				<span class="help" @click="common.getSiteCustomerChannel">{{ $t('common["联系客服"]') }}</span>
 			</div>
 		</div>
 	</div>

@@ -50,7 +50,7 @@
 						<span class="create van-haptics-feedback" @click="router.push('/register')">{{ $t('login["创建账户"]') }}</span>
 					</div>
 					<div>
-						<span class="help">{{ $t('common["联系客服"]') }}</span>
+						<span class="help" @click="common.getSiteCustomerChannel">{{ $t('common["联系客服"]') }}</span>
 					</div>
 				</div>
 			</form>
@@ -78,7 +78,7 @@ const router = useRouter();
 const eyeShow = ref(true);
 const btnDisabled = ref(true);
 const userAgreement = ref(false);
-const captchaBtn = ref(null);
+const captchaBtn: any = ref(null);
 const isOnloadScript = ref(false);
 
 let state = reactive({

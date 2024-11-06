@@ -97,7 +97,6 @@ import { useRouter } from "vue-router";
 import { useUserStore } from "/@/store/modules/user";
 import { activityApi } from "/@/api/activity";
 import { showToast } from "vant";
-import Common from "/@/utils/common";
 const showDAILY_COMPETITION = ref(false);
 const userStore = useUserStore();
 const router = useRouter();
