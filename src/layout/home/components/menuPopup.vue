@@ -1,11 +1,14 @@
 <template>
 	<van-popup v-model:show="show" position="left">
-		<VantLazyImg class="close" :src="theme === ThemeEnum.default ? close : close_light" @click="show = false" />
 		<div class="menu_header">
+			<div>
+				<SvgIcon iconName="common/collapse_icon" size="60px" @click="show = false" />
+			</div>
 			<div class="logo">
 				<img :src="logo" alt="" />
 			</div>
 		</div>
+		<div class="line"></div>
 		<div class="menu_content">
 			<div class="menu_content_header">
 				<div class="task van-haptics-feedback" @click="toPath('/activity/TASK')">
@@ -38,26 +41,35 @@
 					</div>
 					<div class="label">{{ item.directoryName }}</div>
 				</div>
-			</div>
-		</div>
-		<div class="menu_footer">
-			<div class="menu van-haptics-feedback" @click="toPath('/language')">
-				<div class="icon">
-					<img :src="userStore.langIcon" />
+
+				<div class="menu van-haptics-feedback">
+					<div class="icon">
+						<img :src="helpCenter" />
+					</div>
+					<div class="label" @click="toPath('/helpCenter')">{{ $t(`menuPopup["帮助中心"]`) }}</div>
 				</div>
-				<div class="label">{{ userStore.langName }}</div>
-			</div>
-			<div class="menu van-haptics-feedback" @click="common.getSiteCustomerChannel">
-				<div class="icon">
-					<img :src="kefu" />
+				<div class="menu van-haptics-feedback" @click="common.getSiteCustomerChannel">
+					<div class="icon">
+						<img :src="kefu" />
+					</div>
+					<div class="label">{{ $t(`menuPopup["线上客服"]`) }}</div>
 				</div>
-				<div class="label">{{ $t(`menuPopup["客服"]`) }}</div>
-			</div>
-			<div class="menu van-haptics-feedback">
-				<div class="icon">
-					<img :src="helpCenter" />
+				<div class="menu van-haptics-feedback">
+					<div class="icon">
+						<img :src="helpCenter" />
+					</div>
+					<div class="label" @click="toPath('/helpCenter')">{{ $t(`menuPopup["加入我们"]`) }}</div>
 				</div>
-				<div class="label" @click="toPath('/helpCenter')">{{ $t(`menuPopup["帮助中心"]`) }}</div>
+				<div class="menu van-haptics-feedback">
+					<div class="icon">
+						<img :src="helpCenter" />
+					</div>
+					<div class="label" @click="toPath('/helpCenter')">{{ $t(`menuPopup["语言切换"]`) }}</div>
+				</div>
+				<div class="menu themeDarkBg">
+					<div @click="changeTheme('light')"><SvgIcon class="mr_16" iconName="common/light" size="36px" />白天</div>
+					<div class="dark" @click="changeTheme('dark')"><SvgIcon class="mr_16" iconName="common/dark_on" size="36px" />黑夜</div>
+				</div>
 			</div>
 		</div>
 	</van-popup>
@@ -68,8 +80,8 @@
 import { ref } from "vue";
 import activityDialog from "../../../views/discount/components/Dialog.vue";
 import logo from "/@/assets/zh-CN/default/menuPopup/logo.png";
-import task_icon from "/@/assets/zh-CN/default/menuPopup/task_icon.png";
-import wheel_icon from "/@/assets/zh-CN/default/menuPopup/wheel_icon.png";
+import task_icon from "./image/taskIcon.png";
+import wheel_icon from "./image/spinIcon.png";
 import close from "/@/assets/zh-CN/default/menuPopup/close.png";
 import close_light from "/@/assets/zh-CN/light/menuPopup/close.png";
 import mrjs from "/@/assets/zh-CN/default/menuPopup/mrjs.png";
@@ -105,6 +117,10 @@ const onCollapseMenu = () => {
 	queryLobbyLabelList();
 	queryLobbyLabelActivitySwitch();
 };
+const changeTheme = (value) => {
+	themesStore.setTheme(value === ThemeEnum.light ? ThemeEnum.light : ThemeEnum.default);
+};
+
 const handleMenuClick = (item) => {
 	show.value = false;
 	if (item.modelCode === "SBA") {
@@ -160,13 +176,13 @@ onMounted(() => {
 
 <style scoped lang="scss">
 .van-popup {
-	width: 530px;
+	width: 100%;
 	height: 100%;
 	@include themeify {
-		background: themed("BG1");
+		background: linear-gradient(352.19deg, #24262b 80.86%, #df2745 293.82%);
 	}
-	overflow-y: unset;
-
+	overflow-y: auto;
+	padding: 0 24px;
 	.close {
 		position: absolute;
 		top: 50%;
@@ -178,8 +194,8 @@ onMounted(() => {
 	.menu_header {
 		display: flex;
 		align-items: center;
-		justify-content: space-between;
-		padding: 60px 40px;
+		gap: 47px;
+		padding: 60px 10px 27px;
 		.logo {
 			width: 240px;
 			height: 29px;
@@ -193,37 +209,43 @@ onMounted(() => {
 			height: 36px;
 		}
 	}
+	.line {
+		height: 1px;
+		width: 100%;
+		margin: 0 0 20px;
+		@include themeify {
+			background: themed("T1");
+		}
+		transform: scale(1, 0.2);
+	}
 
 	.menu_content {
-		border-bottom: 1px solid;
-		@include themeify {
-			border-color: themed("Line");
-		}
 		.menu_content_header {
 			display: flex;
 			gap: 20px;
 			justify-content: space-between;
-			padding: 0px 40px;
+			padding: 0px;
 			.task,
 			.wheel {
-				width: 218px;
-				height: 80px;
+				width: 50%;
+				height: 105px;
 				display: flex;
 				align-items: center;
-				padding: 14px 16px;
+				padding: 14px 30px;
 				border-radius: 8px;
 				box-sizing: border-box;
 				background-size: 100% 100%;
 				.icon {
-					width: 52px;
-					height: 52px;
+					width: 79px;
+					height: 79px;
+					margin-bottom: 10px;
 					img {
 						width: 100%;
 						height: 100%;
 					}
 				}
 				.label {
-					margin-left: 16px;
+					margin-left: 20px;
 					color: #fff;
 					font-family: "PingFang SC";
 					font-size: 28px;
@@ -231,10 +253,12 @@ onMounted(() => {
 				}
 			}
 			.task {
-				background: url("/@/assets/zh-CN/default/menuPopup/task_bg.png") center center no-repeat;
+				background: url("./image/taskBg.png") center center no-repeat;
+				background-size: 100% 100%;
 			}
 			.wheel {
-				background: url("/@/assets/zh-CN/default/menuPopup/wheel_bg.png") center center no-repeat;
+				background: url("./image/spinBg.png") center center no-repeat;
+				background-size: 100% 100%;
 			}
 		}
 
@@ -248,7 +272,11 @@ onMounted(() => {
 				display: flex;
 				align-items: center;
 				padding: 20px 40px;
+
 				box-sizing: border-box;
+				@include themeify {
+					background: themed("BG3");
+				}
 				.icon {
 					width: 32px;
 					height: 32px;
@@ -260,41 +288,36 @@ onMounted(() => {
 				.label {
 					margin-left: 16px;
 					@include themeify {
-						color: themed("T1");
+						color: themed("TB");
 					}
 					font-family: Inter;
 					font-size: 28px;
 					font-weight: 400;
 				}
 			}
-		}
-	}
-
-	.menu_footer {
-		padding: 40px;
-		.menu {
-			width: 100%;
-			height: 80px;
-			display: flex;
-			align-items: center;
-			padding: 20px 0px;
-			box-sizing: border-box;
-			.icon {
-				width: 32px;
-				height: 32px;
-				img {
-					width: 100%;
+			.menu.themeDarkBg {
+				padding: 0;
+				background: url("./image/themeDarkBg.png") no-repeat;
+				background-size: 100% 100%;
+				display: flex;
+				justify-content: space-around;
+				> div {
+					flex: 1;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					@include themeify {
+						color: themed("T1");
+					}
+				}
+				.dark {
 					height: 100%;
+					@include themeify {
+						color: themed("TB");
+					}
+					background: url("./image/darkBg.png") no-repeat;
+					background-size: 100% 100%;
 				}
-			}
-			.label {
-				margin-left: 16px;
-				@include themeify {
-					color: themed("T1");
-				}
-				font-family: Inter;
-				font-size: 28px;
-				font-weight: 400;
 			}
 		}
 	}
