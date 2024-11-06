@@ -107,8 +107,8 @@
 									<p>·7天体育赌注：</p>
 									<p v-for="i in state.userVipInfo.vipBenefit.find((item) => item.vipRankCode == state.vipRank).vipWeekSportVOS">
 										&nbsp;&nbsp;-投注{{ useUserStore().getUserInfo.platCurrencySymbol }} {{ i.weekSportMin }}
-										{{ i.weekSportMax > 0 ? `至 ${useUserStore().getUserInfo.platCurrencySymbol} ${i.weekSportMax}` : "或以上" }} = {{ i.weekSportBonus }}
-										{{ useUserStore().getUserInfo.platCurrencySymbol }}
+										{{ i.weekSportMax > 0 ? `至 ${useUserStore().getUserInfo.platCurrencySymbol} ${i.weekSportMax}` : "或以上" }} = {{ useUserStore().getUserInfo.platCurrencySymbol }}
+										{{ i.weekSportBonus }}
 									</p>
 									<p>&nbsp;&nbsp;-流水统计时间：周六00:00时～周五 23:59时（7天）</p>
 									<p>· 礼金发放时间：每周六</p>

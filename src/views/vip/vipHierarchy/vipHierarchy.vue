@@ -17,7 +17,7 @@
 				<div class="content_header">
 					<span>{{ $t('vipHierarchy["等级"]') }}</span>
 					<span>{{ $t('vipHierarchy["所需经验"]') }}</span>
-					<span>{{ $t('vipHierarchy["升级奖金"]') }} {{ useUserStore().getUserInfo.platCurrencyName }}</span>
+					<span>{{ $t('vipHierarchy["升级奖金"]') }} ({{ useUserStore().getUserInfo.platCurrencyName }})</span>
 				</div>
 				<div class="content_cell" v-for="(i, idx) in item.siteVIPGradeVOList" :key="idx">
 					<div>
@@ -25,7 +25,7 @@
 						<span>{{ i.vipGradeName }}</span>
 					</div>
 					<div>{{ i.upgradeXp }}</div>
-					<div>{{ i.upgradeBonus }}</div>
+					<div>{{ i.upgradeBonus }} {{ useUserStore().getUserInfo.platCurrencyName }}</div>
 				</div>
 			</template>
 		</Collapse>
