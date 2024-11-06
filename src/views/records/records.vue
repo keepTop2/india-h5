@@ -68,14 +68,17 @@
 				<!--						<span class="value">{{ orderRecordsData.totalVO.betNum }}</span>-->
 				<!--					</div>-->
 				<!--				</div>-->
-
-				<van-list v-model:loading="loading" :finished="finished" @load="onLoad">
-					<Sports v-for="(item, index) in orderRecordsData.sabOrderList" :key="index" :item="item" />
-					<Chuanguan v-for="(item, index) in orderRecordsData.eventOrderPage?.records" :key="index" :item="item" />
-					<Qipai v-for="(item, index) in orderRecordsData.basicOrderPage?.records" :key="index" :item="item" />
-					<Zhenren v-for="(item, index) in orderRecordsData.tableOrderPage?.records" :key="index" :item="item" />
-					<!-- <Dianzi /> -->
+				<van-list v-if="hasData" v-model:loading="loading" :finished="finished" @load="onLoad">
+					<van-pull-refresh v-model="loading" @refresh="getList">
+						<Sports v-for="(item, index) in orderRecordsData.sabOrderList" :key="index" :item="item" />
+						<Chuanguan v-for="(item, index) in orderRecordsData.eventOrderPage?.records" :key="index" :item="item" />
+						<Qipai v-for="(item, index) in orderRecordsData.basicOrderPage?.records" :key="index" :item="item" />
+						<Zhenren v-for="(item, index) in orderRecordsData.tableOrderPage?.records" :key="index" :item="item" />
+						<!-- <Dianzi /> -->
+					</van-pull-refresh>
 				</van-list>
+
+				<NoData v-else info="暂无投注记录" />
 
 				<!-- <Sports />
         <Chuanguan :list="matches" />
@@ -103,13 +106,15 @@ import sportsApi from "/@/api/venueHome/sports";
 import { onActivated } from "vue";
 import { ClientOrderRecordRes } from "./type";
 import { showToast } from "vant";
+import NoData from "/@/views/subViews/my/messageCenter/components/noData.vue";
 
 onActivated(() => {
 	console.log("进入页面执行");
 	pageVo.pageNumber = 1;
 	getDownBox();
-	getList();
+	// getList();
 });
+const loading = ref(false);
 const orderRecordsData = ref<ClientOrderRecordRes>({
 	basicOrderPage: {},
 	tableOrderPage: {},
@@ -134,6 +139,7 @@ const state = reactive({
 	activeList2: "3",
 });
 const getList = () => {
+	loading.value = true;
 	const data = {
 		...pageVo,
 		venueType: +state.activeList,
@@ -149,6 +155,9 @@ const getList = () => {
 		})
 		.catch((err) => {
 			console.log(err, "errrrrrrrrrrr");
+		})
+		.finally(() => {
+			loading.value = false;
 		});
 };
 const getDownBox = () => {
@@ -165,23 +174,21 @@ const getDownBox = () => {
 			console.log(err, "errrrrrrrrrrr");
 		});
 };
-const loading = ref(false);
 const finished = ref(true);
+const pageVo = reactive({
+	pageNumber: 1,
+	pageSize: 100,
+});
 const onLoad = () => {
 	console.log("加载");
-	pageVo.pageNumber++;
 	getList();
+	pageVo.pageNumber++;
 };
 
 const onClickLeft = () => {
 	// 发布事件
 	pubsub.publish("onCollapseMenu");
 };
-
-const pageVo = reactive({
-	pageNumber: 1,
-	pageSize: 100,
-});
 
 const onTypeConfrim = (data) => {
 	getList();
@@ -192,9 +199,19 @@ const dateRangeSelectDemoState = reactive({
 	endTime: 0,
 });
 
+const hasData = computed(() => {
+	return (
+		orderRecordsData.value.sabOrderList?.length > 0 ||
+		orderRecordsData.value.eventOrderPage?.records?.length > 0 ||
+		orderRecordsData.value.basicOrderPage?.records?.length > 0 ||
+		orderRecordsData.value.tableOrderPage?.records?.length > 0
+	);
+});
 //日期时间选择器组件点击确认
 const onConfirmDate = () => {
 	console.log(dateRangeSelectDemoState.startTime, dateRangeSelectDemoState.endTime, "点击确认");
+
+	getList();
 };
 </script>
 
