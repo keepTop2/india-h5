@@ -177,6 +177,11 @@ const routes = [
 	activityRoutes,
 	// 错误路由
 	ErrorRouter,
+	// 客服中心
+	{
+		path: "/customerService",
+		component: () => import("/@/views/customerService/customerService.vue"),
+	},
 	{
 		path: "/:pathMatch(.*)",
 		redirect: "/404",

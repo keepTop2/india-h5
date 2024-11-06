@@ -780,7 +780,9 @@ class Common {
 	// 联系客服
 	static async getSiteCustomerChannel() {
 		const res = await commonApi.getSiteCustomerChannel().catch((err) => err);
-		console.log("res", res);
+		if (res.code == Common.getInstance().ResCode.SUCCESS) {
+			router.push({ path: "/customerService", query: { url: res.data.channelAddr } });
+		}
 	}
 }
 
