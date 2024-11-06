@@ -195,6 +195,7 @@ const dateRangeSelectDemoState = reactive({
 //日期时间选择器组件点击确认
 const onConfirmDate = () => {
 	console.log(dateRangeSelectDemoState.startTime, dateRangeSelectDemoState.endTime, "点击确认");
+	getList();
 };
 </script>
 

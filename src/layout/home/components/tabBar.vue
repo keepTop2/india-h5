@@ -55,11 +55,13 @@ import line from "/@/assets/zh-CN/default/layout/line.png";
 import { useThemesStore } from "/@/store/modules/themes";
 import { useRoute, useRouter } from "vue-router";
 import { i18n } from "/@/i18n/index";
+import { useUserStore } from "/@/store/modules/user";
 const themesStore = useThemesStore();
 const route = useRoute();
 const router = useRouter();
 const $: any = i18n.global;
 const theme = computed(() => themesStore.themeName);
+const userStore = useUserStore();
 
 // 钱包二级页
 const walletPaths = ["/wallet/recharge", "/wallet/withdraw", "/wallet/records"];
@@ -101,6 +103,10 @@ const getHighlightLine = (item) => {
 };
 
 const toPath = (item) => {
+	console.log(item);
+	if (item.path === "/records") {
+		if (!userStore.token) return router.push("/login");
+	}
 	router.push(item.path);
 };
 
