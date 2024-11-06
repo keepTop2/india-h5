@@ -32,7 +32,7 @@
 		</div>
 
 		<Button class="mt_42 mb_42" @click="clickReceive" v-if="detailsInfo?.receiveStatus == 0">立即领取</Button>
-		<div class="text-center fs_24 color_T1">如需帮助，请 <span class="color_Theme">联系客服</span></div>
+		<div class="text-center fs_24 color_T1">如需帮助，请 <span class="color_Theme" @click="Common.getSiteCustomerChannel">联系客服</span></div>
 	</div>
 </template>
 
@@ -41,6 +41,7 @@ import { showToast } from "vant";
 import { welfareCenterApi } from "/@/api/welfareCenter";
 import router from "/@/router";
 import { useClipboard } from "@vueuse/core";
+
 import dayjs from "dayjs";
 import Common from "/@/utils/common";
 const detailsInfo: any = ref({});
