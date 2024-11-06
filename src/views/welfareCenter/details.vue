@@ -27,7 +27,7 @@
 				<div class="color_TB orderNo ellipsis">
 					<span>{{ detailsInfo?.orderNo }}</span>
 				</div>
-				<SvgIcon iconName="common/copy2" size="40px" @click="copyOrder" />
+				<SvgIcon iconName="common/copy2" size="40px" @click="copyOrder(detailsInfo?.orderNo)" />
 			</div>
 		</div>
 
@@ -42,10 +42,10 @@ import { welfareCenterApi } from "/@/api/welfareCenter";
 import router from "/@/router";
 import { useClipboard } from "@vueuse/core";
 import dayjs from "dayjs";
+import Common from "/@/utils/common";
 const detailsInfo: any = ref({});
 
 const source = ref(detailsInfo.value.orderNo);
-const { copy } = useClipboard({ source });
 
 onMounted(() => {
 	welfareCenterDetail();
@@ -59,10 +59,8 @@ const welfareCenterDetail = () => {
 		detailsInfo.value = res.data;
 	});
 };
-const copyOrder = () => {
-	copy(detailsInfo.value.orderNo).then((res) => {
-		showToast("复制成功");
-	});
+const copyOrder = (value) => {
+	Common.getInstance().copy(value);
 };
 const clickReceive = (item) => {
 	const params = {
