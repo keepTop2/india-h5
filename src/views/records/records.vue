@@ -11,8 +11,8 @@
 				<!--使用插槽-->
 				<SingleSelect
 					class="color_T1 fs_28 fw_400"
-					:toText="'webName'"
-					:toValue="'javaName'"
+					:toText="'value'"
+					:toValue="'code'"
 					v-model:show="state.showPicker2"
 					v-model:select="state.activeList2"
 					:columns="state.typeList2"
@@ -30,8 +30,8 @@
 				<!--使用插槽-->
 				<SingleSelect
 					class="color_T1 fs_28 fw_400"
-					:toText="'webName'"
-					:toValue="'javaName'"
+					:toText="'value'"
+					:toValue="'code'"
 					v-model:show="state.showPicker"
 					v-model:select="state.activeList"
 					:columns="state.typeList"
@@ -54,34 +54,34 @@
 				/>
 			</div>
 			<div class="BettingRecord_List">
-				<div class="stats-container color_T1 bg_BG3">
-					<div class="stat-item">
-						<span class="label">{{ $t('records["投注金额"]') }}：</span>
-						<span class="value">{{ orderRecordsData.totalVO.betAmount }}</span>
-					</div>
-					<div class="stat-item">
-						<span class="label">{{ $t('records["输赢金额"]') }}：</span>
-						<span class="value negative">{{ orderRecordsData.totalVO.winLoseAmount }}</span>
-					</div>
-					<div class="stat-item">
-						<span class="label">{{ $t('records["投注笔数"]') }}：</span>
-						<span class="value">{{ orderRecordsData.totalVO.betNum }}</span>
-					</div>
-				</div>
+				<!--				<div class="stats-container color_T1 bg_BG3">-->
+				<!--					<div class="stat-item">-->
+				<!--						<span class="label">{{ $t('records["投注金额"]') }}：</span>-->
+				<!--						<span class="value">{{ orderRecordsData.totalVO.betAmount }}</span>-->
+				<!--					</div>-->
+				<!--					<div class="stat-item">-->
+				<!--						<span class="label">{{ $t('records["输赢金额"]') }}：</span>-->
+				<!--						<span class="value negative">{{ orderRecordsData.totalVO.winLoseAmount }}</span>-->
+				<!--					</div>-->
+				<!--					<div class="stat-item">-->
+				<!--						<span class="label">{{ $t('records["投注笔数"]') }}：</span>-->
+				<!--						<span class="value">{{ orderRecordsData.totalVO.betNum }}</span>-->
+				<!--					</div>-->
+				<!--				</div>-->
 
 				<van-list v-model:loading="loading" :finished="finished" @load="onLoad">
 					<Sports v-for="(item, index) in orderRecordsData.sabOrderList" :key="index" :item="item" />
-					<Chuanguan v-for="(item, index) in orderRecordsData.eventOrderPage.records" :key="index" :item="item" />
-					<Qipai v-for="(item, index) in orderRecordsData.basicOrderPage.records" :key="index" :item="item" />
-					<Zhenren v-for="(item, index) in orderRecordsData.tableOrderPage.records" :key="index" :item="item" />
+					<Chuanguan v-for="(item, index) in orderRecordsData.eventOrderPage?.records" :key="index" :item="item" />
+					<Qipai v-for="(item, index) in orderRecordsData.basicOrderPage?.records" :key="index" :item="item" />
+					<Zhenren v-for="(item, index) in orderRecordsData.tableOrderPage?.records" :key="index" :item="item" />
 					<!-- <Dianzi /> -->
 				</van-list>
 
 				<!-- <Sports />
-				<Chuanguan :list="matches" />
-				<Qipai />
-				<Zhenren />
-				<Dianzi /> -->
+        <Chuanguan :list="matches" />
+        <Qipai />
+        <Zhenren />
+        <Dianzi /> -->
 			</div>
 		</div>
 	</div>
@@ -98,7 +98,6 @@ import Sports from "./components/Tiyu.vue";
 import Chuanguan from "./components/Chuanguan.vue";
 import Qipai from "./components/Qipai.vue";
 import Zhenren from "./components/Zhenren.vue";
-import Dianzi from "./components/Dianzi.vue";
 // 接口
 import sportsApi from "/@/api/venueHome/sports";
 import { onActivated } from "vue";
@@ -108,6 +107,7 @@ import { showToast } from "vant";
 onActivated(() => {
 	console.log("进入页面执行");
 	pageVo.pageNumber = 1;
+	getDownBox();
 	getList();
 });
 const orderRecordsData = ref<ClientOrderRecordRes>({
@@ -121,18 +121,45 @@ const orderRecordsData = ref<ClientOrderRecordRes>({
 		betNum: 0,
 	},
 } as ClientOrderRecordRes);
+const state = reactive({
+	showPicker: false,
+	//条件查询选项
+	typeList: [],
+	//激活的选项
+	activeList: "1",
+	showPicker2: false,
+	//条件查询选项
+	typeList2: [],
+	//激活的选项
+	activeList2: "3",
+});
 const getList = () => {
 	const data = {
 		...pageVo,
-		venueType: state.activeList,
+		venueType: +state.activeList,
 		betStartTime: dateRangeSelectDemoState.startTime,
 		betEndTime: dateRangeSelectDemoState.endTime,
 	};
 	sportsApi
 		.getBettingRecordList(data)
 		.then((res) => {
-			if (res.code !== 1000) return showToast(res.message);
+			console.log(res, "res");
+			if (res.code !== 10000) return showToast(res.message);
 			orderRecordsData.value = res.data;
+		})
+		.catch((err) => {
+			console.log(err, "errrrrrrrrrrr");
+		});
+};
+const getDownBox = () => {
+	const params = ["order_status_client", "order_date_num", "venue_type"];
+	sportsApi
+		.requestGetTypeList(params)
+		.then((res) => {
+			console.log(res, "res");
+			if (res.code !== 10000) return showToast(res.message);
+			state.typeList = res.data.order_status_client;
+			state.typeList2 = res.data.venue_type;
 		})
 		.catch((err) => {
 			console.log(err, "errrrrrrrrrrr");
@@ -155,63 +182,9 @@ const pageVo = reactive({
 	pageNumber: 1,
 	pageSize: 100,
 });
-const state = reactive({
-	showPicker: false,
-	//条件查询选项
-	typeList: [
-		{
-			javaName: "1",
-			webName: "存款金额",
-		},
-		{
-			javaName: "2",
-			webName: "提款金额",
-		},
-		{
-			javaName: "3",
-			webName: "总输赢",
-		},
-		{
-			javaName: "4",
-			webName: "总输赢4",
-		},
-		{
-			javaName: "5",
-			webName: "总输赢5",
-		},
-	],
-	//激活的选项
-	activeList: "1",
-	showPicker2: false,
-	//条件查询选项
-	typeList2: [
-		{
-			javaName: "1",
-			webName: "存款金额",
-		},
-		{
-			javaName: "2",
-			webName: "提款金额",
-		},
-		{
-			javaName: "3",
-			webName: "总输赢",
-		},
-		{
-			javaName: "4",
-			webName: "总输赢4",
-		},
-		{
-			javaName: "5",
-			webName: "总输赢5",
-		},
-	],
-	//激活的选项
-	activeList2: "3",
-});
 
 const onTypeConfrim = (data) => {
-	console.log(data);
+	getList();
 };
 const dateRangeSelectDemoState = reactive({
 	timeShortcutOptionsValue: TimeShortcutOptionsEnum.d1,
@@ -252,6 +225,7 @@ const onConfirmDate = () => {
 		}
 		.BettingRecord_List {
 			padding: 0 24px;
+
 			.stats-container {
 				padding: 24px;
 				margin-bottom: 24px;
@@ -270,6 +244,7 @@ const onConfirmDate = () => {
 					display: flex;
 					align-items: center;
 					justify-content: space-between;
+
 					.label {
 						flex-shrink: 0;
 					}
@@ -301,6 +276,7 @@ const onConfirmDate = () => {
 		border: 1px solid themed("Line");
 		background-color: themed("BG3");
 	}
+
 	svg {
 		width: 24px;
 		height: 24px;

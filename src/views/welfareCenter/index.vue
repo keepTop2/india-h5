@@ -43,7 +43,7 @@
 							<div class="color_T1 fs_26">{{ item.welfareCenterRewardTypeText }}</div>
 						</div>
 						<div class="">
-							<div class="color_T2 fs_24">{{ dayjs(item.pfTime).format("YYYY-MM-DD hh:mm:ss") }}</div>
+							<div class="color_T2 fs_24">{{ dayjs(item.pfTime).format("YYYY-MM-DD HH:mm:ss") }}</div>
 						</div>
 					</div>
 					<div class="right" @click="clickReceive(item)">
@@ -124,6 +124,8 @@ import type1 from "./image/type1.png";
 import type2 from "./image/type2.png";
 import type3 from "./image/type3.png";
 import type4 from "./image/type4.png";
+import type5 from "./image/type5.png";
+import type6 from "./image/type6.png";
 import dayjs from "dayjs";
 import { showToast } from "vant";
 const activeTab = ref(1);
@@ -144,7 +146,7 @@ const pageData: any = ref({});
 const finished = ref(false);
 const recordsList: any = ref([]);
 const getTypeIcon = (index) => {
-	return index == 0 ? type0 : index == 1 ? type1 : index == 2 ? type2 : index == 3 ? type3 : index == 4 ? type4 : "";
+	return index == 0 ? type0 : index == 1 ? type1 : index == 2 ? type2 : index == 3 ? type3 : index == 4 ? type4 : index == 5 ? type5 : index == 6 ? type6 : "";
 };
 const cloneSelect = reactive({
 	defaultDate: defaultDate.value,

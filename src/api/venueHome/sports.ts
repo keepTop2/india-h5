@@ -204,11 +204,24 @@ class sportsApi {
 			data,
 		});
 	};
-
+	/**
+	 *@description 投注记录
+	 */
 	static getBettingRecordList = (data?: object) => {
 		return useAxiosApi(`/app/order/api/client/orderRecord`, {
 			method: "POST",
 			data,
+		});
+	};
+
+	/**
+	 *@description 投注记录 类型目录
+	 */
+	static requestGetTypeList = (data = {}, headers = { showLoading: true }) => {
+		return useAxiosApi(`/app/common/getDownBox`, {
+			method: "POST",
+			data,
+			headers,
 		});
 	};
 
