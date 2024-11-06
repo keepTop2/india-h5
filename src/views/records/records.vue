@@ -112,7 +112,7 @@ onActivated(() => {
 	console.log("进入页面执行");
 	pageVo.pageNumber = 1;
 	getDownBox();
-	// getList();
+	getList();
 });
 const loading = ref(false);
 const orderRecordsData = ref<ClientOrderRecordRes>({
@@ -142,7 +142,8 @@ const getList = () => {
 	loading.value = true;
 	const data = {
 		...pageVo,
-		venueType: +state.activeList,
+		venueType: +state.activeList2,
+    orderclass: [+state.activeList],
 		betStartTime: dateRangeSelectDemoState.startTime,
 		betEndTime: dateRangeSelectDemoState.endTime,
 	};
@@ -169,6 +170,7 @@ const getDownBox = () => {
 			if (res.code !== 10000) return showToast(res.message);
 			state.typeList = res.data.order_status_client;
 			state.typeList2 = res.data.venue_type;
+			console.log(res.data, "res.data");
 		})
 		.catch((err) => {
 			console.log(err, "errrrrrrrrrrr");
@@ -180,7 +182,6 @@ const pageVo = reactive({
 	pageSize: 100,
 });
 const onLoad = () => {
-	console.log("加载");
 	getList();
 	pageVo.pageNumber++;
 };
@@ -191,6 +192,7 @@ const onClickLeft = () => {
 };
 
 const onTypeConfrim = (data) => {
+	console.log(data, "data");
 	getList();
 };
 const dateRangeSelectDemoState = reactive({
