@@ -36,7 +36,7 @@
 				</div>
 			</div>
 			<van-list @load="getList" :immediate-check="false" :finished="finished">
-				<div class="card" v-for="item in recordsList" :class="'status' + item.receiveStatus">
+				<div class="card" v-for="item in recordsList" :class="'status' + item.receiveStatus" @click="clickReceive(item)">
 					<div class="left">
 						<div class="flex-start">
 							<img :src="getTypeIcon(item.welfareCenterRewardType)" alt="" class="typeIcon" />
@@ -46,14 +46,14 @@
 							<div class="color_T2 fs_24">{{ dayjs(item.pfTime).format("YYYY-MM-DD HH:mm:ss") }}</div>
 						</div>
 					</div>
-					<div class="right" @click="clickReceive(item)">
+					<div class="right">
 						<div class="color_TB fs_28">{{ item.amount }} {{ item.currencyCode }}</div>
 						<div class="color_Theme fs_20" v-if="item.receiveStatus == 0 && item.isPermanentValidity == 0" style="display: flex">
 							<CountdownTimer :endTime="new Date(new Date().getTime() + item.expiryTimeRemaining)"> </CountdownTimer>
 							<div class="color_T3" style="flex: 1">后过期</div>
 						</div>
 						<!-- <div v-else="item.receiveStatus == 0" class="color_TB">长期有效</div> -->
-						<div class="btn fs_24" v-if="item.receiveStatus == 0">{{ receiveStatus[item.receiveStatus] }}</div>
+						<div class="btn fs_24" v-if="item.receiveStatus == 0" @click="clickReceive(item)">{{ receiveStatus[item.receiveStatus] }}</div>
 						<div class="fs_24 color_Wam-P1" v-else-if="item.receiveStatus == 1">{{ receiveStatus[item.receiveStatus] }}</div>
 						<div class="fs_24 color_T3" v-else>{{ receiveStatus[item.receiveStatus] }}</div>
 					</div>
@@ -107,7 +107,7 @@
 				至
 				<span :class="activeDateBtn == 1 ? 'active' : ''" @click="changeDateBtn(1)"> {{ cloneSelect.dateRange[1] }}</span>
 			</div>
-			<div class="color_Hint fs_20 text-center mt_20 mb_20">当前系统支持查询最近30日的记录</div>
+			<div class="color_Hint fs_20 text-center mt_20 mb_20">当前系统支持查询最近90日的记录</div>
 			<datePicker :columns="columns" ref="datePickerRef" @onChange="onChangeDate"></datePicker>
 		</van-action-sheet>
 	</div>
@@ -219,17 +219,27 @@ const oneClickReceive = () => {
 		});
 };
 const clickReceive = (item) => {
-	router.push({
-		path: "/welfareCenter/details",
-		query: {
-			id: item.id,
-			welfareCenterRewardType: item.welfareCenterRewardType,
-		},
-	});
+	const params = {
+		id: item.id,
+		welfareCenterRewardType: item.welfareCenterRewardType,
+	};
+	welfareCenterApi
+		.clickReceive(params)
+		.then((res: any) => {
+			if (res.code === 10000) {
+				showToast("领取成功");
+			}
+		})
+		.finally(() => {
+			resetParams();
+			getList();
+		});
 };
 const getList = () => {
 	if (loading.value) return;
 	loading.value = true;
+	console.log(cloneSelect);
+
 	params.welfareCenterRewardType = cloneSelect.welfareCenterRewardType == "all" ? "" : cloneSelect.welfareCenterRewardType;
 	params.receiveStatus = cloneSelect.receiveStatus == "all" ? "" : cloneSelect.receiveStatus;
 	params.pfTimeStartTime = new Date(cloneSelect.dateRange[0] + " 00:00:00").getTime();
@@ -252,17 +262,19 @@ const getList = () => {
 };
 // 删除筛选条件，
 const deleteTab = (item, index) => {
-	resetParams();
 	tabs.value.splice(index, 1);
+	resetParams();
 	if (item.type == "activity_receive_status") {
 		currentActivityReceiveStatus.value = "all";
-		cloneSelect.welfareCenterRewardType = "all";
+		cloneSelect.receiveStatus = "all";
+		getList();
 	}
 	if (item.type == "welfare_center_reward_type") {
 		currentWelfareCenterRewardType.value = "all";
-		cloneSelect.receiveStatus = "all";
+
+		cloneSelect.welfareCenterRewardType = "all";
+		getList();
 	}
-	getList();
 };
 const changeTab = (item) => {
 	if (item === "all") {
