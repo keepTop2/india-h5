@@ -16,7 +16,7 @@ import { ConfigPagesPlugin } from "./pages";
 import { ConfigRestartPlugin } from "./restart";
 import { ConfigProgressPlugin } from "./progress";
 import { ConfigEruda } from "./eruda";
-import { ConfigImageminPlugin } from "./imagemin";
+// import { ConfigImageminPlugin } from "./imagemin";
 import { ConfigVisualizerConfig } from "./visualizer";
 
 export function createVitePlugins(env: ViteEnv, isBuild: boolean) {
@@ -57,7 +57,7 @@ export function createVitePlugins(env: ViteEnv, isBuild: boolean) {
 
 	if (isBuild) {
 		// vite-plugin-imagemin
-		vitePlugins.push(ConfigImageminPlugin());
+		// vitePlugins.push(ConfigImageminPlugin());
 
 		// 开启.gz压缩  rollup-plugin-gzip
 		VITE_USE_COMPRESS && vitePlugins.push(ConfigCompressPlugin());
