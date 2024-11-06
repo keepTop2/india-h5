@@ -6,27 +6,37 @@
 		</div>
 
 		<!-- 通过循环生成输入字段 -->
-		<div v-for="field in inputFields" :key="field.code">
-			<div class="cell" v-if="isFieldVisible(field.code)">
-				<div class="cell_input" :class="{ phone: field.code === 'userPhone', error: field.code === 'userPhone' && !isPhoneValid && state.userPhone }">
-					<div v-if="field.code === 'userPhone'" class="area_code" @click="showAreaCode = true">
-						<span v-if="state.areaCode">+{{ state.areaCode }}</span> <SvgIcon class="down" iconName="loginOrRegister/navBar/down" />
+		<template v-for="field in inputFields" :key="field.code">
+			<div class="cell">
+				<div class="cell_input" v-if="isFieldVisible(field.code) && !['userAccount', 'userPhone'].includes(field.code)">
+					<input v-model="state[field.model]" :type="field.type" :placeholder="$t(`withdraw['${field.placeholder}']`)" />
+				</div>
+				<!-- 用户账号 -->
+				<template v-if="isFieldVisible(field.code) && field.code === 'userAccount'">
+					<div class="cell_input">
+						<input v-model="state[field.model]" :type="field.type" :placeholder="$t(`withdraw['${field.placeholder}']`)" @focus="lastWithdrawInfoShow = true" @blur="lastWithdrawInfoShow = false" />
 					</div>
-					<input v-model="state[field.model]" :type="field.type" :placeholder="$t(`withdraw['${field.placeholder}']`)" @focus="onFocus(field.model)" @blur="onBlur(field.model)" />
-					<SvgIcon v-if="field.code === 'bankName'" class="arrow" iconName="wallet/arrow" />
-					<!-- 如果是手机号码且不合法，则显示错误信息 -->
-				</div>
-				<div v-if="field.code === 'userPhone' && !isPhoneValid && state.userPhone" class="error_text">
-					{{ $t(`withdraw['请输入位数字']`, { min: areaCodeObj.minLength, max: areaCodeObj.maxLength }) }}
-				</div>
-				<div v-if="field.code === 'bankCard' && withdrawWayConfig.lastWithdrawInfoVO.bankCard && lastWithdrawInfoShow && !state.bankCard" class="last_info">
-					<div class="last_cell" @mousedown="onGetLastWithdrawInfo">
-						<SvgIcon class="icon" iconName="wallet/history_Icon" />
-						<div class="value">{{ common.getInstance().bankCardHiding(withdrawWayConfig.lastWithdrawInfoVO.bankCard) }}</div>
+					<div v-if="withdrawWayConfig.lastWithdrawInfoVO.userAccount && lastWithdrawInfoShow && !state.userAccount" class="last_info">
+						<div class="last_cell" @mousedown="onGetLastWithdrawInfo">
+							<SvgIcon class="icon" iconName="wallet/history_Icon" />
+							<div class="value">{{ common.getInstance().bankCardHiding(withdrawWayConfig.lastWithdrawInfoVO.userAccount) }}</div>
+						</div>
 					</div>
-				</div>
+				</template>
+				<!-- 手机号 -->
+				<template v-if="isFieldVisible(field.code) && field.code === 'userPhone'">
+					<div class="cell_input phone">
+						<div class="area_code" :class="{ error: !isPhoneValid && state.userPhone }" @click="showAreaCode = true">
+							<span v-if="state.areaCode">+{{ state.areaCode }}</span> <SvgIcon class="down" iconName="loginOrRegister/navBar/down" />
+						</div>
+						<input v-model="state[field.model]" :type="field.type" :placeholder="$t(`withdraw['${field.placeholder}']`)" />
+					</div>
+					<div v-if="!isPhoneValid && state.userPhone" class="error_text">
+						{{ $t(`withdraw['请输入位数字']`, { min: areaCodeObj.minLength, max: areaCodeObj.maxLength }) }}
+					</div>
+				</template>
 			</div>
-		</div>
+		</template>
 	</div>
 
 	<!-- 手机号验证 -->
@@ -100,6 +110,7 @@ const areaCode: any = ref([]); // 存储区号数据
 const countries: any = ref([]); // 存储国家数据
 const areaCodeObj: any = ref({}); // 存储当前选中的区号对象
 const state = reactive({
+	userAccount: "",
 	userPhone: "",
 	areaCode: "", // 存储当前选中的区号
 	smsCode: "", // 手机号验证码
@@ -193,24 +204,7 @@ const selectAreaCode = (item, i) => {
 // 选择上一次提款信息
 const onGetLastWithdrawInfo = () => {
 	Object.assign(state, props.withdrawWayConfig.lastWithdrawInfoVO);
-	console.log("state", state);
 	lastWithdrawInfoShow.value = false;
-};
-
-// 银行卡号输入框聚焦
-const onFocus = (code) => {
-	if (code === "bankCard") {
-		if (props.withdrawWayConfig.lastWithdrawInfoVO.bankCard) {
-			lastWithdrawInfoShow.value = true;
-		}
-	}
-};
-
-// 银行卡号输入框失去焦点
-const onBlur = (code) => {
-	if (code === "bankCard") {
-		lastWithdrawInfoShow.value = false;
-	}
 };
 
 // 清空表单参数

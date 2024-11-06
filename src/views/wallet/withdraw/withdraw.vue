@@ -79,7 +79,7 @@
 						</div>
 						<div class="item">
 							<span class="label">{{ $t(`withdraw['手续费']`) }}({{ withdrawWayConfig.feeRate }}%):</span>
-							<span class="value">&nbsp;{{ common.getInstance().formatFloat(feeAmount) }}</span>
+							<span class="value">&nbsp;{{ Math.trunc(Number(common.getInstance().formatFloat(feeAmount))) }}</span>
 							<span class="sign" v-if="withdrawWayData.withdrawTypeCode !== 'crypto_currency'">&nbsp;{{ UserStore.userInfo.mainCurrency }}</span>
 							<span class="sign" v-else>&nbsp;USDT</span>
 						</div>
@@ -140,7 +140,6 @@
 					<template v-slot:value>
 						<span> {{ withdrawWayConfig.remainingFlow ?? 0 }} </span>
 					</template>
-
 					<template v-slot:currency>
 						<span> {{ UserStore.userInfo.mainCurrency }} </span>
 					</template>
@@ -232,7 +231,6 @@ const errorMessage = computed(() => {
 	} else if (amount > withdrawWayConfig.value.withdrawMaxAmount) {
 		return `${$.t('withdraw["单次最高提款"]')}: ${UserStore.userInfo.currencySymbol} ${withdrawWayConfig.value.withdrawMaxAmount}`;
 	}
-	return "";
 });
 
 // 计算手续费

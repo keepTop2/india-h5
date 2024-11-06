@@ -54,34 +54,34 @@
 				/>
 			</div>
 			<div class="BettingRecord_List">
-				<div class="stats-container color_T1 bg_BG3">
-					<div class="stat-item">
-						<span class="label">{{ $t('records["投注金额"]') }}：</span>
-						<span class="value">{{ orderRecordsData.totalVO.betAmount }}</span>
-					</div>
-					<div class="stat-item">
-						<span class="label">{{ $t('records["输赢金额"]') }}：</span>
-						<span class="value negative">{{ orderRecordsData.totalVO.winLoseAmount }}</span>
-					</div>
-					<div class="stat-item">
-						<span class="label">{{ $t('records["投注笔数"]') }}：</span>
-						<span class="value">{{ orderRecordsData.totalVO.betNum }}</span>
-					</div>
-				</div>
+				<!--				<div class="stats-container color_T1 bg_BG3">-->
+				<!--					<div class="stat-item">-->
+				<!--						<span class="label">{{ $t('records["投注金额"]') }}：</span>-->
+				<!--						<span class="value">{{ orderRecordsData.totalVO.betAmount }}</span>-->
+				<!--					</div>-->
+				<!--					<div class="stat-item">-->
+				<!--						<span class="label">{{ $t('records["输赢金额"]') }}：</span>-->
+				<!--						<span class="value negative">{{ orderRecordsData.totalVO.winLoseAmount }}</span>-->
+				<!--					</div>-->
+				<!--					<div class="stat-item">-->
+				<!--						<span class="label">{{ $t('records["投注笔数"]') }}：</span>-->
+				<!--						<span class="value">{{ orderRecordsData.totalVO.betNum }}</span>-->
+				<!--					</div>-->
+				<!--				</div>-->
 
 				<van-list v-model:loading="loading" :finished="finished" @load="onLoad">
 					<Sports v-for="(item, index) in orderRecordsData.sabOrderList" :key="index" :item="item" />
-					<Chuanguan v-for="(item, index) in orderRecordsData.eventOrderPage.records" :key="index" :item="item" />
-					<Qipai v-for="(item, index) in orderRecordsData.basicOrderPage.records" :key="index" :item="item" />
-					<Zhenren v-for="(item, index) in orderRecordsData.tableOrderPage.records" :key="index" :item="item" />
+					<Chuanguan v-for="(item, index) in orderRecordsData.eventOrderPage?.records" :key="index" :item="item" />
+					<Qipai v-for="(item, index) in orderRecordsData.basicOrderPage?.records" :key="index" :item="item" />
+					<Zhenren v-for="(item, index) in orderRecordsData.tableOrderPage?.records" :key="index" :item="item" />
 					<!-- <Dianzi /> -->
 				</van-list>
 
 				<!-- <Sports />
-				<Chuanguan :list="matches" />
-				<Qipai />
-				<Zhenren />
-				<Dianzi /> -->
+        <Chuanguan :list="matches" />
+        <Qipai />
+        <Zhenren />
+        <Dianzi /> -->
 			</div>
 		</div>
 	</div>
@@ -98,7 +98,6 @@ import Sports from "./components/Tiyu.vue";
 import Chuanguan from "./components/Chuanguan.vue";
 import Qipai from "./components/Qipai.vue";
 import Zhenren from "./components/Zhenren.vue";
-import Dianzi from "./components/Dianzi.vue";
 // 接口
 import sportsApi from "/@/api/venueHome/sports";
 import { onActivated } from "vue";
@@ -131,7 +130,8 @@ const getList = () => {
 	sportsApi
 		.getBettingRecordList(data)
 		.then((res) => {
-			if (res.code !== 1000) return showToast(res.message);
+			console.log(res, "res");
+			if (res.code !== 10000) return showToast(res.message);
 			orderRecordsData.value = res.data;
 		})
 		.catch((err) => {
@@ -252,6 +252,7 @@ const onConfirmDate = () => {
 		}
 		.BettingRecord_List {
 			padding: 0 24px;
+
 			.stats-container {
 				padding: 24px;
 				margin-bottom: 24px;
@@ -270,6 +271,7 @@ const onConfirmDate = () => {
 					display: flex;
 					align-items: center;
 					justify-content: space-between;
+
 					.label {
 						flex-shrink: 0;
 					}
@@ -301,6 +303,7 @@ const onConfirmDate = () => {
 		border: 1px solid themed("Line");
 		background-color: themed("BG3");
 	}
+
 	svg {
 		width: 24px;
 		height: 24px;

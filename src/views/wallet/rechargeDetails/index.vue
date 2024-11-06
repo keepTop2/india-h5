@@ -32,7 +32,10 @@
 		<div class="deposit-info">
 			<div class="info-item">
 				<span class="label">{{ $t(`rechargeDetails['订单号']`) }}</span>
-				<span class="value">{{ depositOrderDetail.orderNo }}</span>
+				<span class="value">
+					{{ depositOrderDetail.orderNo }}
+					<SvgIcon @click="common.getInstance().copy(depositOrderDetail.orderNo)" class="icon" iconName="common/copy" />
+				</span>
 			</div>
 			<div class="info-item">
 				<span class="label">{{ $t(`rechargeDetails['申请时间']`) }}</span>
@@ -494,12 +497,19 @@ onUnmounted(() => {
 			font-weight: 400;
 		}
 		.value {
+			display: flex;
+			align-items: center;
+			gap: 10px;
 			@include themeify {
 				color: themed("TB");
 			}
 			font-family: "PingFang SC";
 			font-size: 28px;
 			font-weight: 400;
+		}
+		.icon {
+			width: 36px;
+			height: 36px;
 		}
 	}
 }
