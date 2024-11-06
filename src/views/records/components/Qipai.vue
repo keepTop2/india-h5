@@ -23,15 +23,15 @@
 		<div class="bet-info">
 			<div class="order-date">
 				<span class="label">{{ $t('records["投注时间"]') }}：</span>
-				<span>{{ item.betTime }}</span>
+				<span>{{ new Date(item.betTime).toLocaleString() }}</span>
 			</div>
 			<div class="bet-item">
 				<span class="label">{{ $t('records["投注金额"]') }}：</span>
-				<span class="value">{{ item.betAmount }}</span>
+				<span class="value">{{ item.betAmount.toFixed(2) }}</span>
 			</div>
 			<div class="bet-item">
 				<span class="label">{{ $t('records["输赢金额"]') }}：</span>
-				<span class="value negative">{{ item.winLossAmount }}</span>
+				<span class="value negative">{{ item.winLossAmount.toFixed(2) }}</span>
 			</div>
 			<!-- <div class="bet-item flex-between">
 				<div class="bet-item-content">
