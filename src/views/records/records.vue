@@ -136,7 +136,7 @@ const state = reactive({
 const getList = () => {
 	const data = {
 		...pageVo,
-		venueType: state.activeList,
+		venueType: +state.activeList,
 		betStartTime: dateRangeSelectDemoState.startTime,
 		betEndTime: dateRangeSelectDemoState.endTime,
 	};
