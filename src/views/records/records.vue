@@ -11,8 +11,8 @@
 				<!--使用插槽-->
 				<SingleSelect
 					class="color_T1 fs_28 fw_400"
-					:toText="'webName'"
-					:toValue="'javaName'"
+					:toText="'value'"
+					:toValue="'code'"
 					v-model:show="state.showPicker2"
 					v-model:select="state.activeList2"
 					:columns="state.typeList2"
@@ -30,8 +30,8 @@
 				<!--使用插槽-->
 				<SingleSelect
 					class="color_T1 fs_28 fw_400"
-					:toText="'webName'"
-					:toValue="'javaName'"
+					:toText="'value'"
+					:toValue="'code'"
 					v-model:show="state.showPicker"
 					v-model:select="state.activeList"
 					:columns="state.typeList"
@@ -107,6 +107,7 @@ import { showToast } from "vant";
 onActivated(() => {
 	console.log("进入页面执行");
 	pageVo.pageNumber = 1;
+	getDownBox();
 	getList();
 });
 const orderRecordsData = ref<ClientOrderRecordRes>({
@@ -120,6 +121,18 @@ const orderRecordsData = ref<ClientOrderRecordRes>({
 		betNum: 0,
 	},
 } as ClientOrderRecordRes);
+const state = reactive({
+	showPicker: false,
+	//条件查询选项
+	typeList: [],
+	//激活的选项
+	activeList: "1",
+	showPicker2: false,
+	//条件查询选项
+	typeList2: [],
+	//激活的选项
+	activeList2: "3",
+});
 const getList = () => {
 	const data = {
 		...pageVo,
@@ -133,6 +146,20 @@ const getList = () => {
 			console.log(res, "res");
 			if (res.code !== 10000) return showToast(res.message);
 			orderRecordsData.value = res.data;
+		})
+		.catch((err) => {
+			console.log(err, "errrrrrrrrrrr");
+		});
+};
+const getDownBox = () => {
+	const params = ["order_status_client", "order_date_num", "venue_type"];
+	sportsApi
+		.requestGetTypeList(params)
+		.then((res) => {
+			console.log(res, "res");
+			if (res.code !== 10000) return showToast(res.message);
+			state.typeList = res.data.order_status_client;
+			state.typeList2 = res.data.venue_type;
 		})
 		.catch((err) => {
 			console.log(err, "errrrrrrrrrrr");
@@ -155,63 +182,9 @@ const pageVo = reactive({
 	pageNumber: 1,
 	pageSize: 100,
 });
-const state = reactive({
-	showPicker: false,
-	//条件查询选项
-	typeList: [
-		{
-			javaName: "1",
-			webName: "存款金额",
-		},
-		{
-			javaName: "2",
-			webName: "提款金额",
-		},
-		{
-			javaName: "3",
-			webName: "总输赢",
-		},
-		{
-			javaName: "4",
-			webName: "总输赢4",
-		},
-		{
-			javaName: "5",
-			webName: "总输赢5",
-		},
-	],
-	//激活的选项
-	activeList: "1",
-	showPicker2: false,
-	//条件查询选项
-	typeList2: [
-		{
-			javaName: "1",
-			webName: "存款金额",
-		},
-		{
-			javaName: "2",
-			webName: "提款金额",
-		},
-		{
-			javaName: "3",
-			webName: "总输赢",
-		},
-		{
-			javaName: "4",
-			webName: "总输赢4",
-		},
-		{
-			javaName: "5",
-			webName: "总输赢5",
-		},
-	],
-	//激活的选项
-	activeList2: "3",
-});
 
 const onTypeConfrim = (data) => {
-	console.log(data);
+	getList();
 };
 const dateRangeSelectDemoState = reactive({
 	timeShortcutOptionsValue: TimeShortcutOptionsEnum.d1,
