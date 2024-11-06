@@ -9,6 +9,7 @@ export const lang = {
 		取消: "Cancel",
 		提交: "Submit",
 		修改成功: "Modification Successful",
+		成功: "Success"
 	},
 	//公共组件
 	components: {
