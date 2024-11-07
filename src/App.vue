@@ -68,6 +68,7 @@ const initLang = async () => {
 			userStore.setlangList(res.data);
 			userStore.setlangInfo(res.data.find((item) => item.code == userStore.langInfo.code));
 		} else {
+			userStore.setlangList(res.data);
 			userStore.setlangInfo(res.data.find((item) => item.currLang == 1));
 		}
 	}

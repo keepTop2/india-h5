@@ -51,6 +51,8 @@
 		<redbagRainCountdown v-model="showCountdown" :redBagInfo="redBagInfo" />
 		<!-- 跑马灯 -->
 		<Announcement />
+
+		<BackToTop />
 	</div>
 </template>
 
@@ -58,6 +60,7 @@
 import sportsApi from "/@/api/venueHome/sports";
 import HomeApi from "/@/api/home";
 import GameApi from "/@/api/venueHome/games";
+import BackToTop from "/@/layout/home/components/BackToTop.vue";
 import workerManage from "/@/webWorker/workerManage";
 import { useSportsInfoStore } from "/@/store/modules/sports/sportsInfo";
 import { useSportsBetEventStore } from "/@/store/modules/sports/sportsBetData";

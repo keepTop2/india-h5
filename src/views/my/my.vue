@@ -74,6 +74,7 @@
 					</div>
 					<div class="cell van-haptics-feedback" v-for="(item, index) in menuData.group1" :key="index" @click="onClickCell(item)">
 						<SvgIcon class="icon" :iconName="item.icon" />
+
 						<div class="label">{{ item.name }}</div>
 						<div class="value">{{ item.value }}</div>
 						<SvgIcon class="arrow" iconName="common/arrow" />

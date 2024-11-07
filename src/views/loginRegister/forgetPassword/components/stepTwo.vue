@@ -181,6 +181,7 @@ const onStep = async () => {
 		account: state.type === "email" ? state.email : state.phone,
 		type: state.type === "email" ? 1 : 2,
 		verifyCode: state.verifyCode,
+		areaCode: state.areaCode,
 	};
 	const res = await forgetPasswordApi.checkVerifyCode(params).catch((err) => err);
 	if (res.code == common.getInstance().ResCode.SUCCESS) {

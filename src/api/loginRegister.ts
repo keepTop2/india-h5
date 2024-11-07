@@ -21,10 +21,10 @@ export class loginApi {
 		});
 	};
 	// 获取用户协议
-	static getAgreement = (data = {}, headers = {}) => {
-		return useAxiosApi(`/app/login/api/getAgreement`, {
-			method: "POST",
-			data,
+	static getAgreement = (params = {}, headers = {}) => {
+		return useAxiosApi(`/app/site-helpCenter/api/getSingleSpecificInfo`, {
+			method: "GET",
+			params,
 			headers: {
 				showLoading: true,
 			},

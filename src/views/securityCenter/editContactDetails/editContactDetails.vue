@@ -22,7 +22,7 @@
 			</div>
 
 			<span class="title">{{ $t('bindPhone["验证码"]') }}</span>
-			<FormInput v-model="state.verifyCode" type="text" :placeholder="$t(`common['验证码']`)">
+			<FormInput v-model="state.verifyCode" type="text" :placeholder="$t(`common['验证码']`)" :maxlength="6">
 				<template v-slot:right>
 					<CaptchaButton ref="captchaButton" :disabled="captchaDisabled" @onCaptcha="onCaptcha" />
 				</template>
@@ -178,7 +178,7 @@ const onClickLeft = () => {
 		font-weight: 400;
 		.help {
 			@include themeify {
-				color: themed("Theme");
+				color: themed("F2");
 			}
 		}
 	}

@@ -173,7 +173,7 @@ const handleMenuClick = (item) => {
 	if (item.modelCode === "SBA") {
 		router.push({ name: "rollingBallList", params: { sportType: 1 } });
 	} else if (item.modelCode === "SIGN_VENUE") {
-		Common.goToGame(item.gameInfo);
+		Common.goToGame(item);
 	} else {
 		router.push({
 			name: "GameArena",

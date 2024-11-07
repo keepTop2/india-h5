@@ -79,8 +79,9 @@ const filterSearch = computed(() => {
 	return userStore.getlangList.value.filter((item: any) => item.name.toLocaleLowerCase().includes(searchValue.value.toLocaleLowerCase())).map((item: any) => item);
 });
 
-const confirm = () => {
-	userStore.setlangInfo(currentLangInfo.value);
+const confirm = async () => {
+	await userStore.setlangInfo(currentLangInfo.value);
+	location.reload();
 	cancel();
 };
 </script>

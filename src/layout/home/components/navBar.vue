@@ -12,7 +12,7 @@
 				<img :src="userIcon" alt="" />
 			</div>
 			<div class="user">
-				<div class="userName">{{ store.userInfo.userAccount }}</div>
+				<div class="userName">{{ userAccount }}</div>
 				<div class="balance">
 					{{ store.userInfo.currencySymbol }}{{ common.getInstance().formatFloat(store.userInfo.totalBalance) }}
 					<img src="./arrow_bottom.png" alt="" />
@@ -30,9 +30,12 @@ import Notify from "/@/components/Notify/Notify.vue";
 import common from "/@/utils/common";
 import pubsub from "/@/pubSub/pubSub";
 import { useRouter } from "vue-router";
+
 const router = useRouter();
 const store = useUserStore();
-
+const userAccount = computed(() => {
+	store.getUserInfo.userAccount;
+});
 const onCollapse = () => {
 	// 发布事件
 	pubsub.publish("onCollapseMenu");

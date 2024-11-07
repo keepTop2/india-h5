@@ -138,7 +138,7 @@ const showDate = ref(false);
 const datePickerRef = ref(null);
 const defaultDate: any = ref(Common.getLast30Days(90).firstIndexes);
 const columns = ref(Common.getLast30Days(90).columns);
-const activeDate: any = ref(2);
+const activeDate: any = ref(3);
 const activeDateBtn = ref(0);
 const dateRange = ref([dayjs(Common.getLast30Days(90).firstIndexes.join("-")).format("YYYY-MM-DD"), dayjs(new Date()).format("YYYY-MM-DD")]);
 const loading = ref(false);
@@ -177,6 +177,10 @@ const changeDate = (item, index) => {
 	});
 };
 const dateNumLabel = [
+	{
+		label: "今日",
+		value: 1,
+	},
 	{
 		label: "近7天",
 		value: 7,
