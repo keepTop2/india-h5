@@ -351,7 +351,7 @@ const buildDynamicFields = () => {
 const buildParams = (withdrawPassWord?: string) => {
 	return {
 		amount: state.amount,
-		withdrawWayId: withdrawWayData.value.id,
+		withdrawWayId: withdrawWayData.value?.id,
 		withdrawPassWord, // 将 withdrawPassWord 添加到参数中
 		// 只合并 buildDynamicFields 中存在的键值对
 		...Object.keys(buildDynamicFields()).reduce((acc: any, key) => {
@@ -435,7 +435,7 @@ const getRechargeWayList = async () => {
 // 获取通道配置
 const getWithdrawConfig = async () => {
 	const params = {
-		withdrawWayId: withdrawWayData.value.id,
+		withdrawWayId: withdrawWayData.value?.id,
 	};
 	const res = await walletApi.getWithdrawConfig(params).catch((err) => err);
 	if (res.code === common.getInstance().ResCode.SUCCESS) {
