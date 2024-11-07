@@ -1,17 +1,12 @@
 <template>
 	<div>
-		<!-- <div class="tabs">
-			<div :class="item.path != route.path ? 'tab' : 'tab_active'" v-for="(item, index) in tabList" :key="index" @click="router.push(item.path)">{{ item.name }}</div>
-		</div> -->
 		<router-view v-slot="{ Component }">
 			<component :is="Component" />
 		</router-view>
 	</div>
 </template>
 
-<script setup lang="ts">
-import pubsub from "/@/pubSub/pubSub";
-</script>
+<script setup lang="ts"></script>
 
 <style scoped lang="scss">
 .collapse_icon {
