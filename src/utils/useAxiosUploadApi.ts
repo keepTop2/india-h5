@@ -5,6 +5,9 @@ import ResCode from "./resCode";
 import EncryptionFn from "/@/utils/encryption";
 import { useUserStore } from "/@/store/modules/user";
 import router from "/@/router";
+import { useLoading } from "/@/directives/loading/hooks";
+const { startLoading, stopLoading } = useLoading();
+
 function getUrl() {
 	switch (import.meta.env.VITE_BASEENV) {
 		case "development":
@@ -15,6 +18,7 @@ function getUrl() {
 			return "";
 	}
 }
+
 // create an axios instance
 const instance = axios.create({
 	baseURL: getUrl(),
@@ -25,6 +29,10 @@ const instance = axios.create({
 // request interceptor
 instance.interceptors.request.use(
 	(config) => {
+		//判断当前请求头是否设置了不显示 Loading，没有设置则默认加载
+		if (config.headers.showLoading !== false) {
+			startLoading();
+		}
 		config["headers"]["Sign"] = EncryptionFn.encryption();
 		return config;
 	},
@@ -37,6 +45,9 @@ instance.interceptors.request.use(
 
 instance.interceptors.response.use(
 	(response) => {
+		if (response.config.headers.showLoading !== false) {
+			stopLoading();
+		}
 		const UserStore = useUserStore();
 		const res = response.data;
 		if (res.code !== ResCode.SUCCESS) {
@@ -59,6 +70,10 @@ instance.interceptors.response.use(
 		}
 	},
 	(error) => {
+		//判断当前请求是否设置了不显示Loading
+		if (error.headers.showLoading !== false) {
+			stopLoading();
+		}
 		showToast(error);
 		return Promise.reject(error);
 	}

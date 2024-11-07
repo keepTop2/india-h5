@@ -305,10 +305,6 @@ const onClickCell = async (item) => {
 	if (item.path === "/wallet/withdraw") {
 		const res = await securityCenterApi.getUserGlobalSetInfo().catch((err) => err);
 		const { isSetPwd, phone } = res.data;
-
-		const withdrawalRes = await walletApi.withdrawWayList().catch((err) => err);
-		const hasWithdrawalWays = withdrawalRes.data && withdrawalRes.data.length > 0;
-
 		// 创建模态框的函数
 		const createModal = (titleKey, textKey, showCancel, showConfirm, confirmText, onConfirm, onClose) => {
 			useModal({
@@ -322,8 +318,36 @@ const onClickCell = async (item) => {
 				onClose,
 			});
 		};
-
 		// 检查用户是否设置密码或绑定手机号
+		if (!phone && !isSetPwd) {
+			createModal(
+				"withdraw['温馨提示']",
+				"withdraw['您还未设置交易密码，请先设置交易密码']",
+				true,
+				true,
+				"withdraw['去设置']",
+				() => {
+					toPath("/setTradingPassword");
+				},
+				() => {
+					createModal(
+						"withdraw['温馨提示']",
+						"withdraw['您还未绑定手机号，请先绑定手机号']",
+						true,
+						true,
+						"withdraw['去设置']",
+						() => {
+							toPath("/bind/phone");
+						},
+						() => {}
+					);
+				}
+			);
+			return;
+		}
+		// 用户绑定了手机号码 没有设置交易密码
+		const withdrawalRes = await walletApi.withdrawWayList().catch((err) => err);
+		const hasWithdrawalWays = withdrawalRes?.data && withdrawalRes?.data.length > 0;
 		if (phone && !isSetPwd) {
 			createModal(
 				"withdraw['温馨提示']",
