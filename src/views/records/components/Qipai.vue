@@ -8,10 +8,10 @@
 			<span class="Settled">{{ $t('records["已结算"]') }}</span>
 		</div>
 		<div class="order-info">
-			<div class="order-number">
+			<!-- <div class="order-number">
 				<span class="label">{{ $t('records["局号"]') }}：</span>
 				<span>{{ item.orderId }}</span>
-			</div>
+			</div> -->
 			<div class="order-number">
 				<span class="label">{{ $t('records["单号"]') }}：</span>
 				<span class="code">
@@ -64,8 +64,8 @@ interface Props {
 defineProps<Props>();
 
 function _copy(orderId) {
-  copy(orderId);
-  showToast($.t("common['成功']"));
+	copy(orderId);
+	showToast($.t("common['成功']"));
 }
 </script>
 
