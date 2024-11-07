@@ -63,21 +63,15 @@ const $: any = i18n.global;
 const theme = computed(() => themesStore.themeName);
 const userStore = useUserStore();
 
-// 钱包二级页
-const walletPaths = ["/wallet/recharge", "/wallet/withdraw", "/wallet/records"];
-
 // 检查 tab 项是否活跃
 const isActivePath = (itemPath) => {
 	// 钱包相关路径
 	// 判断当前路径是否为 itemPath 或者 itemPath 是否为钱包相关路径且当前路径在钱包路径中
-	return itemPath === route.path || (itemPath === "/wallet" && walletPaths.includes(route.path));
+	return itemPath === route.path;
 };
 
 // 获取 tab 项的图标
 const getHighlightStatus = (item) => {
-	if (item.path === "/wallet" && walletPaths.includes(route.path)) {
-		return item.active_icon;
-	}
 	return item.path === route.path ? item.active_icon : item.icon;
 };
 
@@ -95,16 +89,12 @@ const getHighlightClass = (item) => {
 
 // 判断是否显示高亮分隔线
 const getHighlightLine = (item) => {
-	// 如果 item.path 是 "/wallet" 且当前路径在钱包路径中，则返回 true，否则返回 false
-	if (item.path === "/wallet" && walletPaths.includes(route.path)) {
-		return true;
-	}
 	if (item.path === route.path) return true;
 };
 
 const toPath = (item) => {
 	console.log(item);
-	if (item.path === "/records") {
+	if (item.path === "/records" || item.path === "/recharge") {
 		if (!userStore.token) return router.push("/login");
 	}
 	router.push(item.path);
@@ -133,7 +123,7 @@ const tabData = [
 		icon: wallet,
 		active_icon: wallet_active,
 		label: $.t('layout["钱包"]'),
-		path: "/wallet",
+		path: "/recharge",
 	},
 	{
 		icon: my,

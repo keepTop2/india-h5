@@ -62,15 +62,12 @@
 					</div>
 					<div class="label" @click="toPath('/helpCenter')">{{ $t(`menuPopup["帮助中心"]`) }}</div>
 				</div>
-
-				<!-- 客服 -->
 				<div
 					class="menu van-haptics-feedback"
 					@click="
-						() => {
-							common.getSiteCustomerChannel();
+						common.getSiteCustomerChannel(() => {
 							show = false;
-						}
+						})
 					"
 				>
 					<div class="icon">

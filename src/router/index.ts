@@ -94,8 +94,14 @@ const routes = [
 					title: "我的",
 				},
 			},
-			//  钱包路由
-			WalletRouter,
+			{
+				path: "/recharge",
+				component: () => import("/@/views/wallet/recharge/recharge.vue"),
+				meta: {
+					title: "充值",
+					firstLevelPage: true,
+				},
+			},
 		],
 	},
 
@@ -155,8 +161,8 @@ const routes = [
 		path: "/demo",
 		component: () => import("/@/views/demoApp/demoApp.vue"),
 	},
-	// 一级页路由
-
+	//  钱包路由
+	WalletRouter,
 	// 游戏场馆主页
 	VenueHome,
 	// 登录注册路由
