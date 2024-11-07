@@ -39,7 +39,7 @@
 			</div>
 			<div class="bet-item">
 				<span class="label">{{ $t(`records["输赢金额"]`) }}：</span>
-				<span class="value negative">-{{ item.winLossAmount.toFixed(2) }}</span>
+				<span class="value negative">{{ item.winLossAmount.toFixed(2) }}</span>
 			</div>
 		</div>
 	</div>
@@ -62,8 +62,8 @@ interface Props {
 defineProps<Props>();
 
 function _copy(orderId) {
-  copy(orderId);
-  showToast($.t("common['成功']"));
+	copy(orderId);
+	showToast($.t("common['成功']"));
 }
 </script>
 
