@@ -5,7 +5,6 @@
 
 		<!-- 用户信息 -->
 		<template v-else>
-			<button @click="router.push('/welfareCenter')">福利中心（dev）</button>
 			<div class="user">
 				<div class="avatar">
 					<VantLazyImg :src="theme === ThemeEnum.default ? avatar : avatar_light" />
@@ -69,6 +68,10 @@
 				</div>
 
 				<div class="group">
+					<div class="cell van-haptics-feedback" @click="router.push('/welfareCenter')">
+						<SvgIcon class="icon" iconName="my/lang" />
+						<div class="label">福利中心</div>
+					</div>
 					<div class="cell van-haptics-feedback" v-for="(item, index) in menuData.group1" :key="index" @click="onClickCell(item)">
 						<SvgIcon class="icon" :iconName="item.icon" />
 						<div class="label">{{ item.name }}</div>

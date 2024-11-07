@@ -5,7 +5,7 @@
 				<SvgIcon iconName="common/collapse_icon" size="40px" @click="show = false" />
 			</div>
 			<div class="logo">
-				<img :src="logo" alt="" />
+				<img :src="logo" alt="" @click="goToHome" />
 			</div>
 		</div>
 		<div class="line"></div>
@@ -38,20 +38,20 @@
 				<div v-for="(item, index) in state.menuList" @click.stop="handleMenuClick(item)" :key="index">
 					<div class="menu" :class="openMenuIndex == index ? 'active' : ''">
 						<div class="icon">
-							<img :src="item.icon" alt="" />
+							<img :src="item.iconFileUrl" alt="" />
 						</div>
 						<div class="label">{{ item.directoryName }}</div>
-						<div class="arrow">
+						<div class="arrow" v-if="item.twoList?.length">
 							<svg-icon :iconName="openMenuIndex !== index ? 'common/arrowDown' : 'common/arrowTop'" width="24px" height="12px" @click.stop="openSubMenu(index)"></svg-icon>
 						</div>
 					</div>
 
-					<div v-show="item.twoList.length && openMenuIndex == index" class="subMenuBox">
-						<div class="menu subMenu" @click="toPath('/activity/DAILY_COMPETITION')" v-for="item2 in item.twoList">
+					<div v-show="item.twoList?.length && openMenuIndex == index" class="subMenuBox">
+						<div class="menu subMenu" @click="goTogame" v-for="item2 in item.twoList">
 							<div class="icon">
-								<img :src="item2.icon" />
+								<img :src="item2.iconFileUrl" />
 							</div>
-							<div class="label">{{ $t(`menuPopup["每日竞赛"]`) }}</div>
+							<div class="label">{{ item2.name }}</div>
 						</div>
 					</div>
 				</div>
@@ -128,6 +128,7 @@ import { useRouter } from "vue-router";
 import { useUserStore } from "/@/store/modules/user";
 import { activityApi } from "/@/api/activity";
 import { showToast } from "vant";
+import Common from "/@/utils/common";
 
 const router = useRouter();
 const show = ref(false);
@@ -138,64 +139,7 @@ const theme = computed(() => themesStore.themeName);
 const activityTemplate: any = ref([]);
 const openMenuIndex: any = ref(null);
 let state: any = reactive({
-	menuList: [
-		{
-			directoryName: "电子",
-			gameInfo: null,
-			gameOneClassId: "1840946802325618689",
-			homeName: "电子",
-			icon: "https://oss.playesoversea.store/baowang/11354330aa014187b6c2eab740454921.jpg",
-			modelCode: "CA",
-			twoList: [
-				{
-					directoryName: "电子",
-					gameInfo: null,
-					gameOneClassId: "1840946802325618689",
-					homeName: "电子",
-					icon: "https://oss.playesoversea.store/baowang/11354330aa014187b6c2eab740454921.jpg",
-					modelCode: "CA",
-					twoList: [],
-				},
-				{
-					directoryName: "电子",
-					gameInfo: null,
-					gameOneClassId: "1840946802325618689",
-					homeName: "电子",
-					icon: "https://oss.playesoversea.store/baowang/11354330aa014187b6c2eab740454921.jpg",
-					modelCode: "CA",
-					twoList: [],
-				},
-			],
-		},
-		{
-			directoryName: "电子",
-			gameInfo: null,
-			gameOneClassId: "1840946802325618689",
-			homeName: "电子",
-			icon: "https://oss.playesoversea.store/baowang/11354330aa014187b6c2eab740454921.jpg",
-			modelCode: "CA",
-			twoList: [
-				{
-					directoryName: "电子",
-					gameInfo: null,
-					gameOneClassId: "1840946802325618689",
-					homeName: "电子",
-					icon: "https://oss.playesoversea.store/baowang/11354330aa014187b6c2eab740454921.jpg",
-					modelCode: "CA",
-					twoList: [],
-				},
-				{
-					directoryName: "电子",
-					gameInfo: null,
-					gameOneClassId: "1840946802325618689",
-					homeName: "电子",
-					icon: "https://oss.playesoversea.store/baowang/11354330aa014187b6c2eab740454921.jpg",
-					modelCode: "CA",
-					twoList: [],
-				},
-			],
-		},
-	],
+	menuList: [],
 });
 
 const openSubMenu = (index) => {
@@ -215,6 +159,10 @@ const onCollapseMenu = () => {
 };
 const changeTheme = (value) => {
 	themesStore.setTheme(value === ThemeEnum.light ? ThemeEnum.light : ThemeEnum.default);
+};
+const goToHome = () => {
+	show.value = false;
+	router.push("/");
 };
 const setLang = () => {
 	showSetLang.value = true;
@@ -239,7 +187,7 @@ const handleMenuClick = (item) => {
 const queryLobbyLabelList = async () => {
 	const res = await CommonApi.queryLobbyLabelList().catch((err) => err);
 	if (res.code == common.getInstance().ResCode.SUCCESS) {
-		// state.menuList = res.data;
+		state.menuList = res.data;
 	}
 };
 const queryLobbyLabelActivitySwitch = () => {

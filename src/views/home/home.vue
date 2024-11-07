@@ -33,7 +33,7 @@
 			<template v-for="(item, index) in lobbyTopGame" :key="index">
 				<h3 class="title_more">
 					<span class="flex_align_center">
-						<VantLazyImg :src="item.icon" />
+						<VantLazyImg :src="item.iconFileUrl" />
 						{{ item.modelCode == "SIGN_VENUE" ? item.gameInfoList[0].name : item.name }}
 					</span>
 					<span class="more fw_400 fs_28 color_T1" v-if="item.modelCode !== 'SIGN_VENUE' && item.hasMoreGames" @click="handleMore(item?.gameOneId)">{{ $t(`home["更多"]`) }}</span>

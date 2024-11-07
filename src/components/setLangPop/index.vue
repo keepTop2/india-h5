@@ -62,23 +62,21 @@ const cancel = () => {
 	show.value = false;
 };
 const searchValue = ref("");
-onMounted(() => {
-	getLangDownBox();
-});
-const getLangDownBox = async () => {
-	// 调用通用业务下拉框接口，并捕获任何可能的错误
-	const res = await CommonApi.getLangDownBox().catch((err) => err);
-	// 如果响应的状态码为成功状态码
-	if (res.code == 10000) {
-		langList.value = res.data;
-	}
-};
+// onMounted(() => {
+// 	getLangDownBox();
+// });
+// const getLangDownBox = async () => {
+// 	// 调用通用业务下拉框接口，并捕获任何可能的错误
+// 	const res = await CommonApi.getLangDownBox().catch((err) => err);
+// 	// 如果响应的状态码为成功状态码
+// 	if (res.code == 10000) {
+// 		langList.value = res.data;
+// 	}
+// };
 
 const filterSearch = computed(() => {
-	if (!searchValue.value) return langList.value;
-	console.log(langList.value.filter((item: any) => item.name.toLocaleLowerCase().includes(searchValue.value.toLocaleLowerCase())).map((item: any) => item));
-
-	return langList.value.filter((item: any) => item.name.toLocaleLowerCase().includes(searchValue.value.toLocaleLowerCase())).map((item: any) => item);
+	if (!searchValue.value) return userStore.getlangList;
+	return userStore.getlangList.value.filter((item: any) => item.name.toLocaleLowerCase().includes(searchValue.value.toLocaleLowerCase())).map((item: any) => item);
 });
 
 const confirm = () => {

@@ -64,8 +64,6 @@ const initTheme = () => {
 const initLang = async () => {
 	const res = await CommonApi.getLangDownBox().catch((err) => err);
 	if (res.code == 10000) {
-		console.log(userStore.getLang, 123123);
-
 		if (res.data.find((item) => item.code == userStore.langInfo.code)) {
 			userStore.setlangList(res.data);
 			userStore.setlangInfo(res.data.find((item) => item.code == userStore.langInfo.code));
