@@ -1,10 +1,10 @@
 <!-- 单项选择器使用示例demo -->
 <template>
 	<div>
-		<VantNavBar :title="$t(`VantNavBar['投注订单']`)" @onClickLeft="onClickLeft">
-			<template v-slot:left>
+		<VantNavBar :title="'投注记录'" @onClickLeft="onClickLeft">
+			<!-- <template v-slot:left>
 				<SvgIcon size="8.53" class="collapse_icon" iconName="common/collapse_icon" />
-			</template>
+			</template> -->
 		</VantNavBar>
 		<div class="BettingRecord">
 			<div class="BettingRecord_Top">
