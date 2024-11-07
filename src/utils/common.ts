@@ -754,9 +754,12 @@ class Common {
 	}
 
 	// 联系客服
-	static async getSiteCustomerChannel() {
+	static async getSiteCustomerChannel(successCallback?: (data: any) => void) {
 		const res = await commonApi.getSiteCustomerChannel().catch((err) => err);
-		if (res.code == Common.getInstance().ResCode.SUCCESS) {
+		if (res.code === Common.getInstance().ResCode.SUCCESS) {
+			if (successCallback) {
+				successCallback(res.data); // 执行成功的回调函数
+			}
 			router.push({ path: "/customerService", query: { url: res.data.channelAddr } });
 		}
 	}
