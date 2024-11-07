@@ -396,19 +396,12 @@ class Common {
 	}
 
 	/**
-	 * @description 银行卡号显示格式化
-	 */
-	public formatBankCard(cardNumber) {
-		return cardNumber.replace(/(.{4})/g, "$1 ");
-	}
-
-	/**
 	 * @description 转换银行卡号
 	 */
-	public bankCardHiding(number: string) {
-		if (number) {
+	public bankCardHiding(value: string) {
+		if (value) {
 			const hiddenChars = " **** **** ";
-			const visibleChars = number.slice(0, 4) + hiddenChars + number.slice(-4);
+			const visibleChars = value.slice(0, 4) + hiddenChars + value.slice(-4);
 			return visibleChars;
 		}
 	}
@@ -416,39 +409,14 @@ class Common {
 	/**
 	 * @description 转换USDT地址
 	 */
-	public USDTAddressHiding(number: string) {
-		if (number) {
-			if (number === "**** **** **** ****") {
-				return number;
-			} else {
-				const hiddenChars = " **** **** ";
-				const visibleChars = number.slice(0, 6) + hiddenChars + number.slice(-6);
-				return visibleChars;
-			}
-		}
-	}
-
-	/**
-	 * @description 转换手机号码
-	 */
-	public phoneNumberHiding(number: string) {
-		if (number) {
-			const hiddenChars = "****";
-			const visibleChars = number.slice(0, 3) + hiddenChars + number.slice(-4);
+	public USDTAddressHiding(value: string) {
+		if (value) {
+			const hiddenChars = " **** **** ";
+			const visibleChars = value.slice(0, 6) + hiddenChars + value.slice(-6);
 			return visibleChars;
 		}
 	}
 
-	/**
-	 * @description 转换姓名
-	 */
-	public userNameHiding(number: string) {
-		if (number) {
-			const hiddenChars = "**";
-			const visibleChars = number.slice(0, 1) + hiddenChars + number.slice(2);
-			return visibleChars;
-		}
-	}
 	// 电话号码转换*
 	static maskString(str: string) {
 		if (!str) return "";

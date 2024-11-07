@@ -36,10 +36,11 @@
 						<div class="text">
 							<i18n-t keypath="recharge['请使用']" :tag="'p'">
 								<template v-slot:value>
-									<span class="text_2"> {{ $t(`recharge['波场链']`) }} </span>
+									<span v-if="rechargeWayData.networkType === 'TRC20'" class="text_2"> {{ $t(`recharge['波场链']`) }} </span>
+									<span v-if="rechargeWayData.networkType === 'ERC20'" class="text_2"> {{ $t(`recharge['以太坊链']`) }} </span>
 								</template>
 								<template v-slot:currency>
-									<span class="text_2">({{ rechargeWayData.networkType }})</span>
+									<span class="text_2">({{ rechargeWayData.networkType }}){{ $t(`recharge['协议']`) }}</span>
 								</template>
 							</i18n-t>
 						</div>
@@ -300,7 +301,7 @@ const onClickLeft = () => {
 		}
 		.text_2 {
 			@include themeify {
-				color: themed("Theme");
+				color: themed("Hint");
 			}
 			font-family: "PingFang SC";
 			font-size: 28px;

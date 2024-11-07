@@ -2,13 +2,21 @@
 	<div class="noData-content">
 		<div class="content">
 			<VantLazyImg class="noData-icon" :src="noData" />
-			<div class="label">哎呀！暂无公告</div>
+			<div class="label">{{ info }}</div>
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
 import noData from "/@/assets/zh-CN/default/venueHome/sports/noNotice.png";
+
+interface Props {
+	info: string;
+}
+
+withDefaults(defineProps<Props>(), {
+	info: "哎呀！暂无公告",
+});
 </script>
 
 <style scoped lang="scss">
@@ -17,7 +25,7 @@ import noData from "/@/assets/zh-CN/default/venueHome/sports/noNotice.png";
 	//height: 100%;
 	display: flex;
 	justify-content: center;
-  margin-top: 300px;
+	margin-top: 300px;
 
 	.noData-icon {
 		width: 241px;

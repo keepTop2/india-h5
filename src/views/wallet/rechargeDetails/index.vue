@@ -84,16 +84,18 @@
 						<div class="title">{{ $t(`rechargeDetails['第三方商户处理中']`) }}</div>
 						<div class="description">
 							<p class="text">{{ $t(`rechargeDetails['此过程可能需要1小时，更新于']`, { value: common.getInstance().dayFormat2(depositOrderDetail.updatedTime) }) }}</p>
-							<p v-if="depositOrderDetail.customerStatus == '0'">
-								<span class="a" @click="isModalVisible = true">{{ $t(`rechargeDetails['提供转账凭证']`) }}</span>
-							</p>
-							<p v-if="depositOrderDetail.customerStatus == 0" class="text">
-								<i18n-t keypath="rechargeDetails['超时']" :tag="'p'">
-									<template v-slot:value>
-										<span class="text_2"> {{ formattedTime }} </span>
-									</template>
-								</i18n-t>
-							</p>
+							<template v-if="depositOrderDetail.customerStatus == '0'">
+								<p v-if="depositOrderDetail.cashFlowFileList.length == 0">
+									<span class="a" @click="isModalVisible = true">{{ $t(`rechargeDetails['提供转账凭证']`) }}</span>
+								</p>
+								<p class="text">
+									<i18n-t keypath="rechargeDetails['超时']" :tag="'p'">
+										<template v-slot:value>
+											<span class="text_2"> {{ formattedTime }} </span>
+										</template>
+									</i18n-t>
+								</p>
+							</template>
 						</div>
 					</div>
 				</div>
@@ -422,7 +424,7 @@ const clearParams = () => {
 };
 
 const onClickLeft = () => {
-	window.history.back();
+	router.back();
 };
 
 // 清除倒计时
@@ -638,7 +640,7 @@ onUnmounted(() => {
 			}
 			.a {
 				@include themeify {
-					color: themed("Wam-P1");
+					color: themed("F2");
 				}
 				font-family: "PingFang SC";
 				font-size: 24px;
