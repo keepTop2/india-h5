@@ -22,6 +22,8 @@ export interface StoreUser {
 	} | null;
 	loginStatus: boolean;
 	registerInfo: any;
+	langList: any;
+	langInfo: any;
 }
 
 export const useUserStore = defineStore("User", {
@@ -46,6 +48,8 @@ export const useUserStore = defineStore("User", {
 
 			// 注册信息
 			registerInfo: {},
+			langList: [],
+			langInfo: {},
 		};
 	},
 	getters: {
@@ -60,6 +64,12 @@ export const useUserStore = defineStore("User", {
 		getLang(): any {
 			return this.lang;
 		},
+		getlangList(): any {
+			return this.langList;
+		},
+		getlangInfo(): any {
+			return this.langInfo;
+		},
 		getregisterInfo(): any {
 			return this.registerInfo;
 		},
@@ -72,6 +82,13 @@ export const useUserStore = defineStore("User", {
 		},
 		setLangName(data) {
 			this.langName = data;
+		},
+		setlangList(data) {
+			this.langList = data;
+		},
+		setlangInfo(data) {
+			i18nSetLang(data.code);
+			this.langInfo = data;
 		},
 		setLangIcon(data) {
 			this.langIcon = data;
@@ -161,7 +178,7 @@ export const useUserStore = defineStore("User", {
 		{
 			key: "useUserStore",
 			storage: localStorage,
-			paths: ["lang", "langName", "langIcon", "langChoice", "loginStatus"],
+			paths: ["lang", "langName", "langIcon", "langChoice", "loginStatus", "langInfo"],
 		},
 		{
 			key: "loginInfo",

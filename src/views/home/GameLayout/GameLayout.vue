@@ -8,7 +8,7 @@
 					iconName="home/event_collect"
 				/>
 				<SvgIcon v-else @click.stop="onClickCollect(gameInfoList?.[0], true)" iconName="home/event_collect_no" />
-				<VantLazyImg :src="gameInfoList?.[0]?.icon || ''" :loadingSrc="loadingSrc" :errorSrc="loadingSrc" />
+				<VantLazyImg :src="gameInfoList?.[0]?.icon" />
 				<!-- <NoGameImg v-else /> -->
 			</div>
 			<div class="small-items">
@@ -19,7 +19,7 @@
 						iconName="home/event_collect"
 					/>
 					<SvgIcon v-else @click.stop="onClickCollect(gameInfoList?.[4], true)" iconName="home/event_collect_no" />
-					<VantLazyImg :src="gameInfoList?.[4]?.icon || ''" :loadingSrc="loadingSrc" :errorSrc="loadingSrc" />
+					<VantLazyImg :src="gameInfoList?.[4]?.icon" />
 				</div>
 				<div class="item" id="item-6" @click="Common.goToGame(gameInfoList?.[5])">
 					<SvgIcon
@@ -28,7 +28,7 @@
 						iconName="home/event_collect"
 					/>
 					<SvgIcon v-else @click.stop="onClickCollect(gameInfoList?.[5], true)" iconName="home/event_collect_no" />
-					<VantLazyImg :src="gameInfoList?.[5]?.icon || ''" :loadingSrc="loadingSrc" :errorSrc="loadingSrc" />
+					<VantLazyImg :src="gameInfoList?.[5]?.icon" />
 				</div>
 			</div>
 		</div>
@@ -41,7 +41,7 @@
 						@click.stop="onClickCollect(gameInfoList?.[2], false)"
 					/>
 					<SvgIcon v-else @click.stop="onClickCollect(gameInfoList?.[2], true)" iconName="home/event_collect_no" />
-					<VantLazyImg :src="gameInfoList?.[2]?.icon || ''" :loadingSrc="loadingSrc" :errorSrc="loadingSrc" />
+					<VantLazyImg :src="gameInfoList?.[2]?.icon" />
 				</div>
 				<div class="item" id="item-4" @click="Common.goToGame(gameInfoList?.[3])">
 					<SvgIcon
@@ -50,7 +50,7 @@
 						@click.stop="onClickCollect(gameInfoList?.[3], false)"
 					/>
 					<SvgIcon v-else @click.stop="onClickCollect(gameInfoList?.[3], true)" iconName="home/event_collect_no" />
-					<VantLazyImg :src="gameInfoList?.[3]?.icon || ''" :loadingSrc="loadingSrc" :errorSrc="loadingSrc" />
+					<VantLazyImg :src="gameInfoList?.[3]?.icon" />
 				</div>
 			</div>
 			<div class="item big" id="item-2" @click="Common.goToGame(gameInfoList?.[1])">
@@ -60,7 +60,7 @@
 					@click.stop="onClickCollect(gameInfoList?.[1], false)"
 				/>
 				<SvgIcon v-else @click.stop="onClickCollect(gameInfoList?.[1], true)" iconName="home/event_collect_no" />
-				<VantLazyImg :src="gameInfoList?.[1]?.icon || ''" :loadingSrc="loadingSrc" :errorSrc="loadingSrc" />
+				<VantLazyImg :src="gameInfoList?.[1]?.icon" />
 			</div>
 		</div>
 	</div>

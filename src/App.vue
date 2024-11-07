@@ -61,11 +61,17 @@ const initTheme = () => {
 };
 
 // 初始化语言
-const initLang = () => {
-	if (userStore.lang) {
-		userStore.setLang(userStore.lang);
-	} else {
-		userStore.setLang(LangEnum["en-US"]);
+const initLang = async () => {
+	const res = await CommonApi.getLangDownBox().catch((err) => err);
+	if (res.code == 10000) {
+		console.log(userStore.getLang, 123123);
+
+		if (res.data.find((item) => item.code == userStore.langInfo.code)) {
+			userStore.setlangList(res.data);
+			userStore.setlangInfo(res.data.find((item) => item.code == userStore.langInfo.code));
+		} else {
+			userStore.setlangInfo(res.data.find((item) => item.currLang == 1));
+		}
 	}
 };
 </script>

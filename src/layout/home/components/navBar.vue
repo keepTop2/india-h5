@@ -1,7 +1,7 @@
 <template>
 	<div class="navBar bg_BG1">
 		<!-- <CollapseIcon class="collapseIcon van-haptics-feedback" @click="onCollapse" /> -->
-		<SvgIcon class="collapseIcon van-haptics-feedback" iconName="common/collapse_icon_on" @click="onCollapse" size="44px" />
+		<SvgIcon class="collapseIcon van-haptics-feedback" iconName="common/collapse_icon" @click="onCollapse" size="40px" />
 		<div v-if="!store.token" class="noLogin">
 			<div class="register van-haptics-feedback" @click="router.push('/register')">{{ $t(`navBar["注册"]`) }}</div>
 			<div class="login van-haptics-feedback" @click="router.push('/login')">{{ $t(`navBar["登录"]`) }}</div>
@@ -54,10 +54,6 @@ const onCollapse = () => {
 		width: 64px;
 		height: 64px;
 		margin-left: 28px;
-		@include themeify {
-			color: themed("TB");
-			stroke: themed("TB");
-		}
 	}
 
 	.noLogin {

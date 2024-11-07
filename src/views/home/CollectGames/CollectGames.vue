@@ -4,7 +4,7 @@
 			<li v-for="(item, index) in useCollectGamesStore().getCollectGamesList" class="gameCard" :key="index" @click="Common.goToGame(item)">
 				<SvgIcon iconName="home/event_collect" @click.stop="handleCollect(item, false)" alt="" />
 				<!-- <SvgIcon iconName="home/event_collect_no" @click.stop="handleCollect(item, true)" /> -->
-				<VantLazyImg :src="item.icon" :loadingSrc="loadingSrc" :errorSrc="loadingSrc" />
+				<VantLazyImg :src="item.icon" />
 				<div class="nameBox">
 					<div class="name">{{ item.name }}</div>
 				</div>
