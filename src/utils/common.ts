@@ -400,10 +400,18 @@ class Common {
 	 */
 	public bankCardHiding(value: string) {
 		if (value) {
-			const hiddenChars = " **** **** ";
-			const visibleChars = value.slice(0, 4) + hiddenChars + value.slice(-4);
-			return visibleChars;
+			const length = value.length;
+			if (length > 8) {
+				const hiddenChars = " **** **** ";
+				return value.slice(0, 4) + hiddenChars + value.slice(-4);
+			} else if (length <= 8) {
+				const hiddenChars = " ** ";
+				return value.slice(0, 2) + hiddenChars + value.slice(-2);
+			} else {
+				return value; // 如果长度不足4位，返回原值
+			}
 		}
+		return "";
 	}
 
 	/**
@@ -746,9 +754,12 @@ class Common {
 	}
 
 	// 联系客服
-	static async getSiteCustomerChannel() {
+	static async getSiteCustomerChannel(successCallback?: (data: any) => void) {
 		const res = await commonApi.getSiteCustomerChannel().catch((err) => err);
-		if (res.code == Common.getInstance().ResCode.SUCCESS) {
+		if (res.code === Common.getInstance().ResCode.SUCCESS) {
+			if (successCallback) {
+				successCallback(res.data); // 执行成功的回调函数
+			}
 			router.push({ path: "/customerService", query: { url: res.data.channelAddr } });
 		}
 	}

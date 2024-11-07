@@ -48,7 +48,14 @@
 					</div>
 					<div class="label" @click="toPath('/helpCenter')">{{ $t(`menuPopup["帮助中心"]`) }}</div>
 				</div>
-				<div class="menu van-haptics-feedback" @click="common.getSiteCustomerChannel">
+				<div
+					class="menu van-haptics-feedback"
+					@click="
+						common.getSiteCustomerChannel(() => {
+							show = false;
+						})
+					"
+				>
 					<div class="icon">
 						<img :src="kefu" />
 					</div>

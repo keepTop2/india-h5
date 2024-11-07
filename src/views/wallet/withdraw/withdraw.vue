@@ -468,6 +468,7 @@ const clearParams = () => {
 		}
 	});
 	childRef.value?.clearParams();
+	childRef.value?.stopCountdown();
 };
 
 // 返回上一页的处理
