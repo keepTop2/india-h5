@@ -376,7 +376,7 @@ const onClickCell = async (item) => {
 			);
 			return;
 		}
-		if (phone && isSetPwd) {
+		if ((phone && isSetPwd) || (!phone && isSetPwd)) {
 			if (!hasWithdrawalWays) {
 				createModal(
 					"withdraw['温馨提示']",
