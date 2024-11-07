@@ -34,6 +34,7 @@
 				</template>
 
 				<template #option="item">
+					{{ item }}
 					<slot name="option" :item="item"></slot>
 				</template>
 			</van-picker>
@@ -55,6 +56,7 @@ interface CustomFieldName {
 	value: string | number;
 	children: any;
 	icon: string;
+	iconFileUrl: string;
 }
 
 const props = withDefaults(
@@ -91,6 +93,7 @@ const props = withDefaults(
 		//需要映射到组件value的后端字段key 默认为code
 		toValue?: string | number;
 		icon?: string;
+		iconFileUrl?: string;
 	}>(),
 	{
 		show: false,

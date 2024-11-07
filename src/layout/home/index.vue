@@ -3,7 +3,7 @@
 		<template v-if="blacklist.includes(route.path)">
 			<NavBar />
 		</template>
-		<BackToTop />
+
 		<div class="HomeContainer">
 			<router-view v-slot="{ Component }" class="content">
 				<keep-alive :max="10">
@@ -18,7 +18,6 @@
 <script setup lang="ts">
 import NavBar from "/@/layout/home/components/navBar.vue";
 import TabBar from "/@/layout/home/components/tabBar.vue";
-import BackToTop from "/@/layout/home/components/BackToTop.vue";
 
 import { useUserStore } from "/@/store/modules/user";
 const blacklist = ["/"];

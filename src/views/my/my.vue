@@ -5,7 +5,6 @@
 
 		<!-- 用户信息 -->
 		<template v-else>
-			<button @click="router.push('/welfareCenter')">福利中心（dev）</button>
 			<div class="user">
 				<div class="avatar">
 					<VantLazyImg :src="theme === ThemeEnum.default ? avatar : avatar_light" />
@@ -69,8 +68,13 @@
 				</div>
 
 				<div class="group">
+					<div class="cell van-haptics-feedback" @click="router.push('/welfareCenter')">
+						<SvgIcon class="icon" iconName="my/lang" />
+						<div class="label">福利中心</div>
+					</div>
 					<div class="cell van-haptics-feedback" v-for="(item, index) in menuData.group1" :key="index" @click="onClickCell(item)">
 						<SvgIcon class="icon" :iconName="item.icon" />
+
 						<div class="label">{{ item.name }}</div>
 						<div class="value">{{ item.value }}</div>
 						<SvgIcon class="arrow" iconName="common/arrow" />
@@ -83,6 +87,12 @@
 						<div class="label">{{ item.name }}</div>
 						<div class="value">{{ item.value }}</div>
 						<SvgIcon v-if="item.arrow" class="arrow" iconName="common/arrow" />
+					</div>
+					<div class="cell" @click="languageShow = true">
+						<SvgIcon class="icon" iconName="my/lang" />
+						<div class="label">{{ $t('my["语言"]') }}</div>
+						<div class="value">{{ store.getlangInfo.name }}</div>
+						<SvgIcon class="arrow" iconName="common/arrow" />
 					</div>
 					<div class="cell">
 						<SvgIcon class="icon" iconName="my/theme" />
@@ -147,6 +157,7 @@
 				</div>
 			</template>
 		</Model>
+		<set-lang-pop v-model="languageShow" />
 	</div>
 </template>
 
@@ -178,11 +189,13 @@ import { loginApi } from "/@/api/loginRegister";
 import Model from "/@/views/wallet/components/model.vue";
 import { useModal } from "/@/views/wallet/components/useTipModel.ts";
 import { showToast } from "vant";
+
 import { securityCenterApi } from "/@/api/securityCenter";
 const $: any = i18n.global;
 const router = useRouter();
 const store = useUserStore();
 const themesStore = useThemesStore();
+const languageShow = ref(false);
 const theme = computed(() => themesStore.themeName);
 const loginOutShow = ref(false);
 const isPasswordModal = ref(false); // 交易密码校验弹窗
@@ -216,19 +229,19 @@ const menuData = {
 	group1: [
 		{
 			name: $.t("my['安全中心']"),
-			icon: "/my/aqzx",
+			icon: "my/aqzx",
 			value: "",
 			path: "/securityCenter",
 		},
 		{
 			name: $.t("my['邀请好友']"),
-			icon: "/my/yqhy",
+			icon: "my/yqhy",
 			value: "",
 			path: "/inviteFriends",
 		},
 		{
 			name: $.t("my['代理联盟']"),
-			icon: "/my/dllm",
+			icon: "my/dllm",
 			value: "",
 			path: "",
 		},
@@ -236,24 +249,17 @@ const menuData = {
 	group2: [
 		{
 			name: $.t("my['意见反馈']"),
-			icon: "/my/yjfk",
+			icon: "my/yjfk",
 			value: "",
 			path: "/feedback",
 			arrow: true,
 		},
 		{
 			name: $.t("my['主货币']"),
-			icon: "/my/zhb",
+			icon: "my/zhb",
 			value: store.userInfo.mainCurrency,
 			path: "",
 			arrow: false,
-		},
-		{
-			name: $.t("my['语言']"),
-			icon: "/my/lang",
-			value: store.langName,
-			path: "/language",
-			arrow: true,
 		},
 	],
 };
@@ -291,10 +297,12 @@ const topNList = async () => {
 
 const onClickCell = async (item) => {
 	if (!item.path) return;
+
 	if (item.path === "/inviteFriends") {
 		pubsub.publish("onOpenInviteFriend");
 		return;
 	}
+
 	// 如果 item 不需要验证，直接跳转
 	if (!item.verify) {
 		toPath(item.path);

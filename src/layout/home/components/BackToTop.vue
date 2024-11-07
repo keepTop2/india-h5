@@ -35,7 +35,6 @@ onUnmounted(() => {
 	flex-shrink: 0;
 	border-radius: 28px;
 	box-sizing: border-box;
-	backdrop-filter: blur(3px);
 	z-index: 2;
 	img {
 		height: 100px;

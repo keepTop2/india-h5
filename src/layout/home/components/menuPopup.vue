@@ -2,10 +2,10 @@
 	<van-popup v-model:show="show" position="left">
 		<div class="menu_header">
 			<div>
-				<SvgIcon iconName="common/collapse_icon" size="60px" @click="show = false" />
+				<SvgIcon iconName="common/collapse_icon" size="40px" @click="show = false" />
 			</div>
 			<div class="logo">
-				<img :src="logo" alt="" />
+				<img :src="logo" alt="" @click="goToHome" />
 			</div>
 		</div>
 		<div class="line"></div>
@@ -35,13 +35,27 @@
 					<div class="label">{{ $t(`menuPopup["首页"]`) }}</div>
 				</div>
 
-				<div class="menu van-haptics-feedback" v-for="(item, index) in state.menuList" @click="handleMenuClick(item)" :key="index">
-					<div class="icon">
-						<img :src="item.icon" alt="" />
+				<div v-for="(item, index) in state.menuList" @click.stop="handleMenuClick(item)" :key="index">
+					<div class="menu" :class="openMenuIndex == index ? 'active' : ''">
+						<div class="icon">
+							<img :src="item.iconFileUrl" alt="" />
+						</div>
+						<div class="label">{{ item.directoryName }}</div>
+						<div class="arrow" v-if="item.twoList?.length">
+							<svg-icon :iconName="openMenuIndex !== index ? 'common/arrowDown' : 'common/arrowTop'" width="24px" height="12px" @click.stop="openSubMenu(index)"></svg-icon>
+						</div>
 					</div>
-					<div class="label">{{ item.directoryName }}</div>
-				</div>
 
+					<div v-show="item.twoList?.length && openMenuIndex == index" class="subMenuBox">
+						<div class="menu subMenu" @click="goTogame" v-for="item2 in item.twoList">
+							<div class="icon">
+								<img :src="item2.iconFileUrl" />
+							</div>
+							<div class="label">{{ item2.name }}</div>
+						</div>
+					</div>
+				</div>
+				<!-- 帮助中心 -->
 				<div class="menu van-haptics-feedback">
 					<div class="icon">
 						<img :src="helpCenter" />
@@ -63,23 +77,31 @@
 				</div>
 				<div class="menu van-haptics-feedback">
 					<div class="icon">
-						<img :src="helpCenter" />
+						<img :src="joinUs" />
 					</div>
 					<div class="label" @click="toPath('/helpCenter')">{{ $t(`menuPopup["加入我们"]`) }}</div>
 				</div>
+
+				<!-- 语言 -->
 				<div class="menu van-haptics-feedback">
-					<div class="icon">
-						<img :src="helpCenter" />
+					<div class="icon langIcon">
+						<img :src="useUserStore().getlangInfo.iconFileUrl" />
 					</div>
-					<div class="label" @click="toPath('/helpCenter')">{{ $t(`menuPopup["语言切换"]`) }}</div>
+					<div class="label">{{ $t(`menuPopup["语言切换"]`) }}</div>
+					<div class="arrow" @click="setLang">
+						<svg-icon iconName="common/arrowRight"></svg-icon>
+					</div>
 				</div>
+				<!-- 切换主题 -->
 				<div class="menu themeDarkBg">
 					<div @click="changeTheme('light')"><SvgIcon class="mr_16" iconName="common/light" size="36px" />白天</div>
-					<div class="dark" @click="changeTheme('dark')"><SvgIcon class="mr_16" iconName="common/dark_on" size="36px" />黑夜</div>
+					<div class="dark" @click="changeTheme('dark')"><SvgIcon class="mr_16" :iconName="theme == 'default' ? 'common/dark_on' : 'common/dark'" size="36px" />黑夜</div>
 				</div>
 			</div>
 		</div>
+		<set-lang-pop v-model="showSetLang" />
 	</van-popup>
+
 	<activityDialog v-model="showDialog" title="温馨提示" :confirm="confirmDialog" :goToLogin="true"> 您的账号暂未登录无法参与活动， 如已有账号请登录，如还未有账号 请前往注册 </activityDialog>
 </template>
 
@@ -89,12 +111,11 @@ import activityDialog from "../../../views/discount/components/Dialog.vue";
 import logo from "/@/assets/zh-CN/default/menuPopup/logo.png";
 import task_icon from "./image/taskIcon.png";
 import wheel_icon from "./image/spinIcon.png";
-import close from "/@/assets/zh-CN/default/menuPopup/close.png";
-import close_light from "/@/assets/zh-CN/light/menuPopup/close.png";
 import mrjs from "/@/assets/zh-CN/default/menuPopup/mrjs.png";
 import home from "/@/assets/zh-CN/default/menuPopup/home.png";
 import kefu from "/@/assets/zh-CN/default/menuPopup/kefu.png";
 import helpCenter from "/@/assets/zh-CN/default/menuPopup/helpCenter.png";
+import joinUs from "/@/assets/zh-CN/default/menuPopup/joinUs.png";
 import pubsub from "/@/pubSub/pubSub";
 import CommonApi from "/@/api/common";
 import common from "/@/utils/common";
@@ -104,17 +125,27 @@ import { useRouter } from "vue-router";
 import { useUserStore } from "/@/store/modules/user";
 import { activityApi } from "/@/api/activity";
 import { showToast } from "vant";
-const showDAILY_COMPETITION = ref(false);
-const userStore = useUserStore();
+import Common from "/@/utils/common";
+
 const router = useRouter();
 const show = ref(false);
+const showSetLang = ref(false);
 const showDialog = ref(false);
 const themesStore = useThemesStore();
 const theme = computed(() => themesStore.themeName);
 const activityTemplate: any = ref([]);
+const openMenuIndex: any = ref(null);
 let state: any = reactive({
 	menuList: [],
 });
+
+const openSubMenu = (index) => {
+	if (openMenuIndex.value === index) {
+		openMenuIndex.value = null;
+	} else {
+		openMenuIndex.value = index;
+	}
+};
 const confirmDialog = () => {
 	showDialog.value = false;
 };
@@ -126,13 +157,20 @@ const onCollapseMenu = () => {
 const changeTheme = (value) => {
 	themesStore.setTheme(value === ThemeEnum.light ? ThemeEnum.light : ThemeEnum.default);
 };
-
+const goToHome = () => {
+	show.value = false;
+	router.push("/");
+};
+const setLang = () => {
+	showSetLang.value = true;
+	console.log(showSetLang.value);
+};
 const handleMenuClick = (item) => {
 	show.value = false;
 	if (item.modelCode === "SBA") {
 		router.push({ name: "rollingBallList", params: { sportType: 1 } });
 	} else if (item.modelCode === "SIGN_VENUE") {
-		Common.goToGame(item.gameInfo);
+		Common.goToGame(item);
 	} else {
 		router.push({
 			name: "GameArena",
@@ -185,7 +223,7 @@ onMounted(() => {
 	width: 100%;
 	height: 100%;
 	@include themeify {
-		background: linear-gradient(352.19deg, #24262b 80.86%, #df2745 293.82%);
+		background: themed("menuBg");
 	}
 	overflow-y: auto;
 	padding: 0 24px;
@@ -200,8 +238,8 @@ onMounted(() => {
 	.menu_header {
 		display: flex;
 		align-items: center;
-		gap: 47px;
-		padding: 60px 10px 27px;
+		gap: 37px;
+		padding: 30px 10px 17px;
 		.logo {
 			width: 240px;
 			height: 29px;
@@ -270,19 +308,22 @@ onMounted(() => {
 
 		.menu_list {
 			display: grid;
-			gap: 20px;
+			gap: 8px;
 			padding: 40px 0px;
 			.menu {
 				width: 100%;
 				height: 80px;
+				border-radius: 8px;
 				display: flex;
 				align-items: center;
 				padding: 20px 40px;
-
+				flex-wrap: wrap;
 				box-sizing: border-box;
 				@include themeify {
 					background: themed("BG3");
 				}
+				border-bottom: 4px solid rgba(255, 255, 255, 0.05);
+
 				.icon {
 					width: 32px;
 					height: 32px;
@@ -300,10 +341,37 @@ onMounted(() => {
 					font-size: 28px;
 					font-weight: 400;
 				}
+				.langIcon {
+					img {
+						border-radius: 50%;
+					}
+				}
+				.arrow {
+					text-align: right;
+					width: 40px;
+					height: 40px;
+					margin-left: auto;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					border-radius: 12px;
+					@include themeify {
+						background: themed("BG4");
+					}
+					svg {
+						height: 21px;
+						width: 12px;
+						@include themeify {
+							color: themed("T2");
+						}
+					}
+				}
 			}
 			.menu.themeDarkBg {
 				padding: 0;
-				background: url("./image/themeDarkBg.png") no-repeat;
+				@include themeify {
+					background: themed("BG1");
+				}
 				background-size: 100% 100%;
 				display: flex;
 				justify-content: space-around;
@@ -320,9 +388,26 @@ onMounted(() => {
 					height: 100%;
 					@include themeify {
 						color: themed("TB");
+						background: themed("BG3");
 					}
-					background: url("./image/darkBg.png") no-repeat;
-					background-size: 100% 100%;
+				}
+			}
+			.subMenuBox {
+				@include themeify {
+					background: themed("BG1");
+				}
+				.subMenu {
+					border-bottom: none;
+					height: 80px;
+					padding-left: 60px;
+					border-radius: 0;
+				}
+			}
+
+			.menu.active {
+				@include themeify {
+					background: themed("menuActiveBg");
+					border-bottom: 4px solid rgba(#ff284b, 0.4);
 				}
 			}
 		}

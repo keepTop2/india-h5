@@ -47,6 +47,8 @@ $themes: (
 			--JBS-CARD--shadow: rgba(255, 255, 255, 0.25),
 			// 每日竞赛倒计时背景渐变
 			--JBS-competition-countDown: linear-gradient(261deg, #9823b4 0%, #00e0e0 100%),
+			menuActiveBg: linear-gradient(to top, rgba(255, 40, 75, 0.3), rgba(255, 40, 75, 0.05)),
+			menuBg: linear-gradient(352.19deg, #24262b 80.86%, #df2745 293.82%),
 		),
 	// 浅色主题
 	light:
@@ -90,5 +92,7 @@ $themes: (
 			--JBS-CARD--shadow: rgba(255, 255, 255, 0.25),
 			// 每日竞赛倒计时背景渐变
 			--JBS-competition-countDown: linear-gradient(261deg, #9823b4 0%, #00e0e0 100%),
+			menuActiveBg: linear-gradient(0deg, rgba(255, 40, 75, 0.3) 0%, rgba(255, 40, 75, 0.05) 100%) #fff,
+			menuBg: linear-gradient(349deg, #e3e9ef 83.7%, #ff758c 146.12%),
 		)
 );

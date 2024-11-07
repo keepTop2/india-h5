@@ -4,7 +4,7 @@
 			<SvgIcon iconName="venueHome/gameArena/new_game" v-if="gameInfo.cornerLabels == 1" />
 			<SvgIcon iconName="venueHome/gameArena/hot_game" v-if="gameInfo.cornerLabels == 2" />
 		</div>
-		<VantLazyImg :src="gameInfo.icon" class="game-image" alt="Game" />
+		<VantLazyImg :src="gameInfo.iconFileUrl" class="game-image" alt="Game" />
 		<div class="favorite-icon">
 			<SvgIcon v-if="gameInfo.collect" @click="onClickCollect(gameInfo, false)" iconName="home/event_collect" />
 			<SvgIcon v-else @click="onClickCollect(gameInfo, true)" iconName="home/event_collect_no" />

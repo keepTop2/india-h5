@@ -15,8 +15,8 @@ onMounted(() => {
 	getAgreement();
 });
 const getAgreement = () => {
-	loginApi.getAgreement().then((res) => {
-		AgreementContent.value = res.data;
+	loginApi.getAgreement({ code: 9 }).then((res) => {
+		AgreementContent.value = res.data.help_center_option.find((item) => item.code == 9);
 	});
 };
 </script>

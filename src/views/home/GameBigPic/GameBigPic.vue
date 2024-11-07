@@ -2,7 +2,7 @@
 	<div class="BigPic bg_BG3">
 		<!-- <SvgIcon v-if="useCollectGamesStore().getCollectGamesList?.some((game) => game.id === gameInfoList.id)" iconName="home/event_collect" @click.stop="onClickCollect(gameInfoList)" />
 		<SvgIcon v-else @click.stop="onClickCollect(gameInfoList)" iconName="home/event_collect_no" /> -->
-		<img :src="gameInfoList.icon" alt="" @click="Common.goToGame(gameInfoList)" />
+		<VantLazyImg :src="gameInfoList.iconFileUrl" alt="" @click="Common.goToGame(gameInfoList)" />
 	</div>
 </template>
 <script lang="ts" setup>
