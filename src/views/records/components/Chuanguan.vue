@@ -60,8 +60,8 @@ interface Props {
 defineProps<Props>();
 
 function _copy(orderId) {
-  copy(orderId);
-  showToast($.t("common['成功']"));
+	copy(orderId);
+	showToast($.t("common['成功']"));
 }
 </script>
 
