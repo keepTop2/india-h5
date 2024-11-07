@@ -143,7 +143,7 @@ const getList = () => {
 	const data = {
 		...pageVo,
 		venueType: +state.activeList2,
-    orderclass: [+state.activeList],
+		orderClassifyList: [+state.activeList],
 		betStartTime: dateRangeSelectDemoState.startTime,
 		betEndTime: dateRangeSelectDemoState.endTime,
 	};

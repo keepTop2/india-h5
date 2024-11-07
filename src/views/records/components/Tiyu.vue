@@ -26,7 +26,10 @@
 			</div>
 			<div class="bet-item">
 				<span class="label">{{ $t('records["投注内容"]') }}：</span>
-				<span class="value"><span class="item-nation">ColorasddColorasdd</span> {{ item.betContent }}</span>
+				<span class="value">
+					<!-- <span class="item-nation">ColorasddColorasdd</span> -->
+					{{ item.betContent }} {{ item.odds }}
+				</span>
 			</div>
 			<div class="bet-item">
 				<span class="label">{{ $t('records["投注金额"]') }}：</span>
