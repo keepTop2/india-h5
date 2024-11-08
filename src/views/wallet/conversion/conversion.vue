@@ -37,7 +37,7 @@
                     <van-field  v-model="toInput" :disabled="true" />
                 </div>
                 <div class="log">
-                    Exchange Rate：{{userPlat?.transferRate}}
+                    汇率：{{userPlat?.transferRate}}
                 </div>
             </div>
 
