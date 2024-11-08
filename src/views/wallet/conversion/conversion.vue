@@ -4,7 +4,7 @@
 		<div class="price_box">
 			<div class="top">
 				<div class="title">
-					<div class="font">从</div>
+					<div class="font">{{ $t(`transfer['从']`) }}</div>
 					<div class="icon_label">
 						<SvgIcon class="icon" iconName="my/conversion/qianbao" />
 						<div>{{ userPlat?.platAvailableAmount }}</div>
@@ -19,13 +19,13 @@
 				<!--支付输入框  -->
 				<div class="pay_input">
 					<van-field v-model.number="formInput" @keyup="numberFixedDigit" />
-					<span class="max">MAX</span>
+					<span class="max">{{ $t(`transfer['全部']`) }}</span>
 				</div>
 			</div>
 			<div class="arrow_down"></div>
 			<div class="bottom">
 				<div class="title">
-					<div class="font">到</div>
+					<div class="font">{{ $t(`transfer['到']`) }}</div>
 				</div>
 
 				<div class="type_pay">
@@ -36,10 +36,10 @@
 				<div class="pay_input">
 					<van-field v-model="toInput" :disabled="true" />
 				</div>
-				<div class="log">汇率：{{ userPlat?.transferRate }}</div>
+				<div class="log">{{ $t(`transfer['汇率']`) }}：{{ userPlat?.transferRate }}</div>
 			</div>
 
-			<div class="btn" :class="{ contrast: parseFloat(formInput) <= 0 }" @click="conversionHandler">一键转换</div>
+			<div class="btn" :class="{ contrast: parseFloat(formInput) <= 0 }" @click="conversionHandler">{{ $t(`transfer['一键转换']`) }}</div>
 		</div>
 	</div>
 </template>
@@ -210,8 +210,9 @@ const conversionHandler = async () => {
 					right: 10px;
 					top: 50%;
 					transform: translateY(-50%);
+					font-size: 24px;
 					@include themeify {
-						color: themed("TB");
+						color: themed("T1");
 					}
 				}
 				:deep(.van-field) {
