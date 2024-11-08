@@ -124,7 +124,7 @@
 		<template v-if="depositOrderDetail.customerStatus == '0'">
 			<template v-if="depositOrderDetail.voucherFlag == 0">
 				<div class="cancel_btn" @click="onCancelDepositOrder">{{ $t(`rechargeDetails['取消充值']`) }}</div>
-				<div class="confirm_btn" @click="router.replace('/wallet/recharge')">{{ $t(`rechargeDetails['继续充值']`) }}</div>
+				<div class="confirm_btn" @click="router.back()">{{ $t(`rechargeDetails['继续充值']`) }}</div>
 			</template>
 			<template v-else-if="depositOrderDetail.voucherFlag == 1">
 				<div class="cancel_btn" @click="common.getSiteCustomerChannel">{{ $t(`rechargeDetails['联系客服']`) }}</div>
@@ -331,7 +331,7 @@ const onCancelDepositOrder = async () => {
 	};
 	const res = await walletApi.cancelDepositOrder(params).catch((err) => err);
 	if (res.code === common.getInstance().ResCode.SUCCESS) {
-		router.push("/wallet/recharge");
+		router.back();
 	}
 };
 
