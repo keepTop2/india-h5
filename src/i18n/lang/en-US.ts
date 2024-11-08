@@ -9,7 +9,7 @@ export const lang = {
 		取消: "Cancel",
 		提交: "Submit",
 		修改成功: "Modification Successful",
-		成功: "Success"
+		成功: "Success",
 	},
 	//公共组件
 	components: {
@@ -23,6 +23,7 @@ export const lang = {
 			确认: "Confirm",
 			自定义时间: "Custom Time",
 			至: "To",
+			选择时间: "Selection time",
 		},
 	},
 	home: {

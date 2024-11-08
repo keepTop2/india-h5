@@ -46,7 +46,7 @@
 						</div>
 					</template>
 				</SingleSelect>
-				<DateRangeSelect
+				<NewDateRangeSelect
 					v-model:select="dateRangeSelectDemoState.timeShortcutOptionsValue"
 					v-model:start-time-u="dateRangeSelectDemoState.startTime"
 					v-model:end-time-u="dateRangeSelectDemoState.endTime"
@@ -136,14 +136,14 @@ const state = reactive({
 	//条件查询选项
 	typeList2: [],
 	//激活的选项
-	activeList2: "3",
+	activeList2: "1",
 });
 const getList = () => {
 	loading.value = true;
 	const data = {
 		...pageVo,
 		venueType: +state.activeList2,
-    orderclass: [+state.activeList],
+		orderclass: [+state.activeList],
 		betStartTime: dateRangeSelectDemoState.startTime,
 		betEndTime: dateRangeSelectDemoState.endTime,
 	};
@@ -182,8 +182,8 @@ const pageVo = reactive({
 	pageSize: 100,
 });
 const onLoad = () => {
-	getList();
 	pageVo.pageNumber++;
+	getList();
 };
 
 const onClickLeft = () => {
