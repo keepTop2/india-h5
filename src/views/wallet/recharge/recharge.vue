@@ -119,6 +119,7 @@ const onRechargeWay = (item) => {
 	if (item.rechargeTypeCode == rechargeWayData.value.rechargeTypeCode && item.networkType == rechargeWayData.value.networkType) {
 		return;
 	}
+	rechargeConfig.value = {} as any;
 	rechargeWayData.value = item;
 	getRechargeConfig();
 };
