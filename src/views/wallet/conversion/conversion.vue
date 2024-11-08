@@ -39,7 +39,7 @@
 				<div class="log">{{ $t(`transfer['汇率']`) }}：{{ userPlat?.transferRate }}</div>
 			</div>
 
-			<div class="btn" :class="{ contrast: parseFloat(formInput) <= 0 }" @click="conversionHandler">一键转换</div>
+			<div class="btn" :class="{ contrast: parseFloat(formInput) <= 0 }" @click="conversionHandler">{{ $t(`transfer['一键转换']`) }}</div>
 		</div>
 	</div>
 </template>
