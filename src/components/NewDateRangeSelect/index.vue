@@ -75,7 +75,7 @@
 					{{ state.dateTimeList }} -->
 					<div class="customTime columnsContainer">
 						<div class="title">
-							{{ $t(`components['DateRangeSelect']['自定义']`) }}
+							{{ $t(`components['DateRangeSelect']['筛选时间']`) }}
 						</div>
 						<div class="dateRangeSelect_columnstop">
 							<div :class="{ dateRangeSelect_active: state.activeType == 1 }" class="dateRangeSelect_timebox" @click="onStartOrEnd(1)">
@@ -89,6 +89,7 @@
 							</div>
 						</div>
 					</div>
+          <div class="hint">{{ $t(`components['DateRangeSelect']['当前系统支持查询最近30日的记录']`) }}</div>
 				</template>
 			</van-date-picker>
 		</van-popup>
@@ -517,7 +518,7 @@ const listToTimestamp = (list: Array<string>, type) => {
 
 		.dateRangeSelect_text1 {
 			font-size: 28px;
-			font-weight: 600;
+			//font-weight: 600;
 			@include themeify {
 				color: themed("TB");
 			}
@@ -526,9 +527,10 @@ const listToTimestamp = (list: Array<string>, type) => {
 	.dateRangeSelect_timebox {
 		font-size: 28px;
 		width: 280px;
-		height: 90px;
+		height: 75px;
 		border-radius: 12px;
 		box-sizing: border-box;
+    border: 2px solid var(--Line-N, #343434);
 		@include flex_center;
 		@include themeify {
 			background: themed("BG3");
@@ -540,17 +542,20 @@ const listToTimestamp = (list: Array<string>, type) => {
 		display: flex;
 		padding: 0 40px;
 		justify-content: space-between;
+    &>div{
+      border: 2px solid var(--Line-N, #343434);
+      border-radius: 12px;
+      background-color: #222324 !important;
+    }
 		.selectionTime_item {
-			// width: 20%;
-			font-size: 28px;
-			// width: 160px;
-			height: 90px;
+			font-size: 26px;
+			height: 64px;
 			border-radius: 12px;
 			box-sizing: border-box;
 			@include flex_center;
 			@include themeify {
-				background: themed("BG3");
-				color: themed("T1");
+				//background: themed("BG3");
+        color: var(--T1-N, #999ba0);
 			}
 		}
 	}
@@ -571,7 +576,7 @@ const listToTimestamp = (list: Array<string>, type) => {
 
 	:deep(.van-picker__toolbar) {
 		height: 82px;
-		border-bottom: 2px solid #dee1e3;
+		border-bottom: 2px solid #343434;
 
 		.van-haptics-feedback {
 			@include themeify {
@@ -685,5 +690,21 @@ const listToTimestamp = (list: Array<string>, type) => {
 	}
 	@include flex_align_center;
 	@include flex_space_between;
+}
+
+.hint{
+  font-family: PingFang SC;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 30px;
+  text-align: center;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+  color: var(--Hint-P, #FF7A00);
+  margin: 16px 0;
+}
+
+:deep(.van-picker__confirm){
+  color: #fff !important;
 }
 </style>

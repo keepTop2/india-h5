@@ -312,6 +312,9 @@ const onClickLeft = () => {
 						&.negative {
 							color: themed("Warn");
 						}
+            &.is {
+              color: var(--F2-P, #21A8F7);
+            }
 					}
 				}
 			}

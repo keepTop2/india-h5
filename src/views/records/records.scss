@@ -113,6 +113,9 @@
 					&.negative {
 						color: themed("Warn");
 					}
+					&.is {
+						color: var(--F2-P, #21A8F7);
+					}
 					.item-nation {
 						max-width: 190px;
 						display: inline-block;
