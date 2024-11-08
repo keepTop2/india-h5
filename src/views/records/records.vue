@@ -17,7 +17,7 @@
 					v-model:select="state.activeList2"
 					:columns="state.typeList2"
 					:title="''"
-					@confirm="onTypeConfrim"
+					@confirm="reload"
 				>
 					<!--外部触发插槽-->
 					<template v-slot:active-name="{ activeName }">
@@ -36,7 +36,7 @@
 					v-model:select="state.activeList"
 					:columns="state.typeList"
 					:title="''"
-					@confirm="onTypeConfrim"
+					@confirm="reload"
 				>
 					<!--外部触发插槽-->
 					<template v-slot:active-name="{ activeName }">
@@ -50,41 +50,35 @@
 					v-model:select="dateRangeSelectDemoState.timeShortcutOptionsValue"
 					v-model:start-time-u="dateRangeSelectDemoState.startTime"
 					v-model:end-time-u="dateRangeSelectDemoState.endTime"
-					@on-confirm-date="onConfirmDate"
+					@on-confirm-date="reload"
 				/>
 			</div>
 			<div class="BettingRecord_List">
-				<!--				<div class="stats-container color_T1 bg_BG3">-->
-				<!--					<div class="stat-item">-->
-				<!--						<span class="label">{{ $t('records["投注金额"]') }}：</span>-->
-				<!--						<span class="value">{{ orderRecordsData.totalVO.betAmount }}</span>-->
-				<!--					</div>-->
-				<!--					<div class="stat-item">-->
-				<!--						<span class="label">{{ $t('records["输赢金额"]') }}：</span>-->
-				<!--						<span class="value negative">{{ orderRecordsData.totalVO.winLoseAmount }}</span>-->
-				<!--					</div>-->
-				<!--					<div class="stat-item">-->
-				<!--						<span class="label">{{ $t('records["投注笔数"]') }}：</span>-->
-				<!--						<span class="value">{{ orderRecordsData.totalVO.betNum }}</span>-->
-				<!--					</div>-->
-				<!--				</div>-->
-				<van-list v-if="hasData" v-model:loading="loading" :finished="finished" @load="onLoad">
-					<van-pull-refresh v-model="loading" @refresh="getList">
+				<van-pull-refresh v-if="hasData" v-model="loading" @refresh="reload">
+					<div class="stats-container color_T1 bg_BG3">
+						<div class="stat-item">
+							<span class="label">{{ $t('records["投注金额"]') }}：</span>
+							<span class="value">{{ orderRecordsData.totalVO?.betAmount || 0 }}</span>
+						</div>
+						<div class="stat-item">
+							<span class="label">{{ $t('records["输赢金额"]') }}：</span>
+							<span class="value negative">{{ orderRecordsData.totalVO?.winLoseAmount || 0 }}</span>
+						</div>
+						<div class="stat-item">
+							<span class="label">{{ $t('records["投注笔数"]') }}：</span>
+							<span class="value">{{ orderRecordsData.totalVO?.betNum || 0 }}</span>
+						</div>
+					</div>
+					<van-list v-model:loading="loading" :finished="finished" @load="getList">
 						<Sports v-for="(item, index) in orderRecordsData.sabOrderList" :key="index" :item="item" />
 						<Chuanguan v-for="(item, index) in orderRecordsData.eventOrderPage?.records" :key="index" :item="item" />
 						<Qipai v-for="(item, index) in orderRecordsData.basicOrderPage?.records" :key="index" :item="item" />
 						<Zhenren v-for="(item, index) in orderRecordsData.tableOrderPage?.records" :key="index" :item="item" />
 						<!-- <Dianzi /> -->
-					</van-pull-refresh>
-				</van-list>
+					</van-list>
+				</van-pull-refresh>
 
 				<NoData v-else info="暂无投注记录" />
-
-				<!-- <Sports />
-        <Chuanguan :list="matches" />
-        <Qipai />
-        <Zhenren />
-        <Dianzi /> -->
 			</div>
 		</div>
 	</div>
@@ -109,7 +103,6 @@ import { showToast } from "vant";
 import NoData from "/@/views/subViews/my/messageCenter/components/noData.vue";
 
 onActivated(() => {
-	console.log("进入页面执行");
 	pageVo.pageNumber = 1;
 	getDownBox();
 	getList();
@@ -138,8 +131,21 @@ const state = reactive({
 	//激活的选项
 	activeList2: "1",
 });
-const getList = () => {
-	loading.value = true;
+const finished = ref(false);
+const pageVo = reactive({
+	pageNumber: 1,
+	pageSize: 10,
+});
+const hasData = computed(() => {
+	return (
+		orderRecordsData.value.sabOrderList?.length > 0 ||
+		orderRecordsData.value.eventOrderPage?.records?.length > 0 ||
+		orderRecordsData.value.basicOrderPage?.records?.length > 0 ||
+		orderRecordsData.value.tableOrderPage?.records?.length > 0
+	);
+});
+
+const getList = (type) => {
 	const data = {
 		...pageVo,
 		venueType: +state.activeList2,
@@ -150,70 +156,102 @@ const getList = () => {
 	sportsApi
 		.getBettingRecordList(data)
 		.then((res) => {
-			console.log(res, "res");
 			if (res.code !== 10000) return showToast(res.message);
-			orderRecordsData.value = res.data;
-		})
-		.catch((err) => {
-			console.log(err, "errrrrrrrrrrr");
-		})
-		.finally(() => {
+			if (type === "reload") {
+				orderRecordsData.value = {
+					basicOrderPage: {},
+					tableOrderPage: {},
+					sabOrderList: {},
+					eventOrderPage: {},
+					totalVO: {
+						betAmount: 0,
+						winLoseAmount: 0,
+						betNum: 0,
+					},
+				} as ClientOrderRecordRes;
+			}
+
+			if (state.activeList2 === "1") {
+				orderRecordsData.value = res.data;
+				finished.value = true;
+				loading.value = false;
+				return;
+			}
+			const { eventOrderPage, basicOrderPage, tableOrderPage, totalVO } = res.data;
+			orderRecordsData.value.totalVO = totalVO;
+
+			const eventOrderPage_b = eventOrderPage?.records.length < pageVo.pageSize || !eventOrderPage;
+			const basicOrderPage_b = basicOrderPage?.records.length < pageVo.pageSize || !basicOrderPage;
+			const tableOrderPage_b = tableOrderPage?.records.length < pageVo.pageSize || !tableOrderPage;
+			if (eventOrderPage_b && basicOrderPage_b && tableOrderPage_b && pageVo.pageNumber !== 1) {
+				finished.value = true;
+				loading.value = false;
+				return;
+			}
+
+			if (eventOrderPage) {
+				if (!orderRecordsData.value.eventOrderPage) {
+					orderRecordsData.value.eventOrderPage = eventOrderPage;
+				} else {
+					if (!Array.isArray(orderRecordsData.value.eventOrderPage.records)) orderRecordsData.value.eventOrderPage.records = [];
+					orderRecordsData.value.eventOrderPage.records.push(...eventOrderPage.records);
+				}
+			}
+			if (basicOrderPage) {
+				if (!orderRecordsData.value.basicOrderPage) {
+					orderRecordsData.value.basicOrderPage = basicOrderPage;
+				} else {
+					if (!Array.isArray(orderRecordsData.value.basicOrderPage.records)) orderRecordsData.value.basicOrderPage.records = [];
+					orderRecordsData.value.basicOrderPage.records.push(...basicOrderPage.records);
+				}
+			}
+			if (tableOrderPage) {
+				if (!orderRecordsData.value.tableOrderPage) {
+					orderRecordsData.value.tableOrderPage = tableOrderPage;
+				} else {
+					if (!Array.isArray(orderRecordsData.value.tableOrderPage.records)) orderRecordsData.value.tableOrderPage.records = [];
+					orderRecordsData.value.tableOrderPage.records.push(...tableOrderPage.records);
+				}
+			}
+
+			pageVo.pageNumber++;
 			loading.value = false;
-		});
-};
-const getDownBox = () => {
-	const params = ["order_status_client", "order_date_num", "venue_type"];
-	sportsApi
-		.requestGetTypeList(params)
-		.then((res) => {
-			console.log(res, "res");
-			if (res.code !== 10000) return showToast(res.message);
-			state.typeList = res.data.order_status_client;
-			state.typeList2 = res.data.venue_type;
-			console.log(res.data, "res.data");
 		})
 		.catch((err) => {
-			console.log(err, "errrrrrrrrrrr");
-		});
-};
-const finished = ref(true);
-const pageVo = reactive({
-	pageNumber: 1,
-	pageSize: 100,
-});
-const onLoad = () => {
-	pageVo.pageNumber++;
-	getList();
+			console.log(err);
+		})
+		.finally(() => {});
 };
 
-const onClickLeft = () => {
-	// 发布事件
-	pubsub.publish("onCollapseMenu");
-};
-
-const onTypeConfrim = (data) => {
-	console.log(data, "data");
-	getList();
-};
 const dateRangeSelectDemoState = reactive({
 	timeShortcutOptionsValue: TimeShortcutOptionsEnum.d1,
 	startTime: 0,
 	endTime: 0,
 });
 
-const hasData = computed(() => {
-	return (
-		orderRecordsData.value.sabOrderList?.length > 0 ||
-		orderRecordsData.value.eventOrderPage?.records?.length > 0 ||
-		orderRecordsData.value.basicOrderPage?.records?.length > 0 ||
-		orderRecordsData.value.tableOrderPage?.records?.length > 0
-	);
-});
-//日期时间选择器组件点击确认
-const onConfirmDate = () => {
-	console.log(dateRangeSelectDemoState.startTime, dateRangeSelectDemoState.endTime, "点击确认");
+const reload = () => {
+	finished.value = false;
+	pageVo.pageNumber = 1;
+	getList("reload");
+};
 
-	getList();
+const getDownBox = () => {
+	const params = ["order_status_client", "order_date_num", "venue_type"];
+	sportsApi
+		.requestGetTypeList(params)
+		.then((res) => {
+			if (res.code !== 10000) return showToast(res.message);
+			state.typeList = res.data.order_status_client;
+			state.typeList2 = res.data.venue_type;
+		})
+		.catch((err) => {
+			console.log(err, "errrrrrrrrrrr");
+		});
+};
+
+const onClickLeft = () => {
+	// 发布事件
+	pubsub.publish("onCollapseMenu");
 };
 </script>
 
