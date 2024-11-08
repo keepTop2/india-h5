@@ -17,7 +17,7 @@
 				<!-- <div class="error_text">
 					<span v-if="!isAccountValid && state.userAccount !== ''" class="text">{{ $t('register["请输入4-11位字母+数字组成，首位必须是字母"]') }}</span>
 				</div> -->
-				<div class="label"><span class="required">*</span>账号</div>
+				<div class="label"><span class="required">*</span>密码</div>
 				<FormInput class="mt_20" v-model="state.password" :type="eyeShow ? 'password' : 'text'" :maxlength="16" :placeholder="$t(`login['登录密码']`)">
 					<template v-slot:left>
 						<SvgIcon class="pr_14" iconName="loginOrRegister/password" @click="state.userAccount = ''" size="32px" />
@@ -64,7 +64,6 @@
 import NavBar from "/@/layout/loginRegister/components/navBar.vue";
 import { loginApi } from "/@/api/loginRegister";
 import common from "/@/utils/common";
-import HeaderBG from "/@/views/loginRegister/components/headerBG.vue";
 import { getIndexInfo } from "/@/views/venueHome/sports/utils/commonFn";
 import { ref } from "vue";
 import { useRouter } from "vue-router";

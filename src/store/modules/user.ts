@@ -22,6 +22,8 @@ export interface StoreUser {
 	} | null;
 	loginStatus: boolean;
 	registerInfo: any;
+	langList: any;
+	langInfo: any;
 }
 
 export const useUserStore = defineStore("User", {
@@ -32,7 +34,7 @@ export const useUserStore = defineStore("User", {
 			// 用户信息
 			userInfo: {},
 			// 语言
-			lang: LangEnum["en-US"],
+			lang: localStorage.getItem("useUserStore") ? JSON.parse(localStorage.getItem("useUserStore") || "{}")?.langInfo?.code : "en-US",
 			// 语言名称
 			langName: "English",
 			// 语言图标
@@ -46,6 +48,8 @@ export const useUserStore = defineStore("User", {
 
 			// 注册信息
 			registerInfo: {},
+			langList: [],
+			langInfo: {},
 		};
 	},
 	getters: {
@@ -60,6 +64,12 @@ export const useUserStore = defineStore("User", {
 		getLang(): any {
 			return this.lang;
 		},
+		getlangList(): any {
+			return this.langList;
+		},
+		getlangInfo(): any {
+			return this.langInfo;
+		},
 		getregisterInfo(): any {
 			return this.registerInfo;
 		},
@@ -72,6 +82,16 @@ export const useUserStore = defineStore("User", {
 		},
 		setLangName(data) {
 			this.langName = data;
+		},
+		setlangList(data) {
+			this.langList = data;
+		},
+		async setlangInfo(data) {
+			console.log(123123);
+
+			this.langInfo = data;
+			await i18nSetLang(data.code);
+			//
 		},
 		setLangIcon(data) {
 			this.langIcon = data;
@@ -161,7 +181,7 @@ export const useUserStore = defineStore("User", {
 		{
 			key: "useUserStore",
 			storage: localStorage,
-			paths: ["lang", "langName", "langIcon", "langChoice", "loginStatus"],
+			paths: ["lang", "langName", "langIcon", "langChoice", "loginStatus", "langInfo"],
 		},
 		{
 			key: "loginInfo",

@@ -21,7 +21,7 @@ export function loadLang() {
 
 export const i18n = createI18n({
 	legacy: false,
-	locale: langMaps.get(LangEnum["en-US"])?.serverLang,
+	locale: localStorage.getItem("useUserStore") ? JSON.parse(localStorage.getItem("useUserStore") || "{}")?.langInfo?.code : "en-US",
 	fallbackLocale: langMaps.get(LangEnum["en-US"])?.serverLang,
 	messages: loadLang(),
 });
@@ -32,7 +32,6 @@ export const i18n = createI18n({
  */
 export function i18nSetLang(lang: LangEnum) {
 	// const LangList = loadLang();
-	// console.log('LangList',LangList);
 	i18n.global.locale.value = lang;
 	setVantLang(lang);
 }

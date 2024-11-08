@@ -234,7 +234,7 @@ getUserGlobalSetInfo();
 		font-weight: 400;
 		.help {
 			@include themeify {
-				color: themed("Theme");
+				color: themed("F2");
 			}
 		}
 	}

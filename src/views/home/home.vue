@@ -33,7 +33,7 @@
 			<template v-for="(item, index) in lobbyTopGame" :key="index">
 				<h3 class="title_more">
 					<span class="flex_align_center">
-						<VantLazyImg :src="item.icon" />
+						<VantLazyImg :src="item.iconFileUrl" />
 						{{ item.modelCode == "SIGN_VENUE" ? item.gameInfoList[0].name : item.name }}
 					</span>
 					<span class="more fw_400 fs_28 color_T1" v-if="item.modelCode !== 'SIGN_VENUE' && item.hasMoreGames" @click="handleMore(item?.gameOneId)">{{ $t(`home["更多"]`) }}</span>
@@ -51,6 +51,8 @@
 		<redbagRainCountdown v-model="showCountdown" :redBagInfo="redBagInfo" />
 		<!-- 跑马灯 -->
 		<Announcement />
+
+		<BackToTop />
 	</div>
 </template>
 
@@ -58,6 +60,7 @@
 import sportsApi from "/@/api/venueHome/sports";
 import HomeApi from "/@/api/home";
 import GameApi from "/@/api/venueHome/games";
+import BackToTop from "/@/layout/home/components/BackToTop.vue";
 import workerManage from "/@/webWorker/workerManage";
 import { useSportsInfoStore } from "/@/store/modules/sports/sportsInfo";
 import { useSportsBetEventStore } from "/@/store/modules/sports/sportsBetData";

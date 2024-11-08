@@ -38,7 +38,7 @@ instance.interceptors.request.use(
 		config["headers"]["Sign"] = EncryptionFn.encryption();
 		// Accept-Language:zh-CN
 		const UserStore = useUserStore();
-		const language = UserStore.getLang;
+		const language = UserStore.getlangInfo.code;
 		if (language) {
 			config["headers"]["Accept-Language"] = language;
 		}

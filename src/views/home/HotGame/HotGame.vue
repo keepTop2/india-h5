@@ -6,7 +6,7 @@
 					<VantLazyImg v-if="useCollectGamesStore().getCollectGamesList?.some((game) => game.id === item.id)" :src="collectImg" @click.stop="handleCollect(item, false)" alt="" width="100%" />
 					<VantLazyImg v-else :src="noCollectImg" alt="" @click.stop="handleCollect(item, true)" width="100%" />
 				</div>
-				<VantLazyImg class="gameImg" :src="item.icon" :loadingSrc="loadingSrc" :errorSrc="loadingSrc" alt="" width="100%" />
+				<VantLazyImg class="gameImg" :src="item.iconFileUrl" alt="" width="100%" />
 				<div class="gameInfo">
 					<p class="color_T1 bg_BG3 color_T1 fs_24">{{ item.name }}</p>
 				</div>

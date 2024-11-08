@@ -7,7 +7,7 @@
 						<VantLazyImg v-if="item.collect" @click="onClickCollect(item, false)" :src="collectImg" alt="" width="100%" />
 						<VantLazyImg v-else @click="onClickCollect(item, true)" :src="noCollectImg" alt="" width="100%" />
 					</div>
-					<VantLazyImg :src="item.icon" alt="" width="100%" class="gameIcon" />
+					<VantLazyImg :src="item.iconFileUrl" alt="" width="100%" class="gameIcon" />
 					<div class="message">
 						<span class="gameName color_TB fs_28 fw_600">
 							{{ item.name }}
