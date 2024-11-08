@@ -1,6 +1,5 @@
 .bet-detail,
 .bet-detail2 {
-	
 	@include themeify {
 		.label {
 			color: themed("T1");
@@ -74,14 +73,12 @@
 					width: 38px;
 					height: 38px;
 				}
-				.code{
+				.code {
 					display: flex;
 					align-items: center;
 					gap: 12px;
 				}
 			}
-
-			
 		}
 		.order-date {
 			color: themed("TB");
@@ -116,12 +113,12 @@
 					&.negative {
 						color: themed("Warn");
 					}
-					.item-nation{
-							max-width: 190px;
-							display: inline-block;
-							white-space: nowrap; /* 强制文本不换行 */
-							overflow: hidden; /* 超出部分隐藏 */
-							text-overflow: ellipsis; /* 末尾显示省略号 */
+					.item-nation {
+						max-width: 190px;
+						display: inline-block;
+						white-space: nowrap; /* 强制文本不换行 */
+						overflow: hidden; /* 超出部分隐藏 */
+						text-overflow: ellipsis; /* 末尾显示省略号 */
 					}
 				}
 			}
@@ -145,6 +142,7 @@
 			border-bottom: 1px solid themed("Line");
 			display: flex;
 			justify-content: space-between;
+			align-items: center;
 			&:last-child {
 				border-bottom: none;
 			}
@@ -152,20 +150,21 @@
 				margin-bottom: 4px;
 				display: flex;
 				flex-direction: column;
+				width: 60%;
+
 				gap: 16px;
-				.info-vs{
+				.info-vs {
 					gap: 8px;
 					display: flex;
 					width: 100%;
-					.info-nation{
-							max-width: 210px;
-							display: inline-block;
-							white-space: nowrap; /* 强制文本不换行 */
-							overflow: hidden; /* 超出部分隐藏 */
-							text-overflow: ellipsis; /* 末尾显示省略号 */
+					.info-nation {
+						max-width: 210px;
+						display: inline-block;
+						white-space: nowrap; /* 强制文本不换行 */
+						overflow: hidden; /* 超出部分隐藏 */
+						text-overflow: ellipsis; /* 末尾显示省略号 */
 					}
 				}
-				
 			}
 
 			.match-result {

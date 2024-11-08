@@ -19,11 +19,11 @@
 
 			<div class="bet-amount">
 				<span class="label">{{ $t('records["投注金额"]') }}：</span>
-				<span>{{ item.betAmount.toFixed(2) }}</span>
+				<span>{{ item?.betAmount?.toFixed(2) || "0.00" }}</span>
 			</div>
 			<div class="bet-figure">
 				<span class="label">{{ $t('records["输赢金额"]') }}：</span>
-				<span>{{ item.winLossAmount.toFixed(2) }}</span>
+				<span>{{ item?.winLossAmount?.toFixed(2) || "0.00" }}</span>
 			</div>
 		</div>
 
@@ -41,6 +41,9 @@
 			<div class="match-result">
 				<span class="fs_36 mr_24 fw_400" :class="{ win: match.winlossStatus === 1, lose: match.winlossStatus === 0, color_T3: [0, 1].includes(match.winlossStatus) }">{{ match.result }}</span>
 				<span class="fs_26">@{{ match.odds }}</span>
+			</div>
+			<div class="match-status">
+				<span :class="match.winlossStatus == 1 ? 'win' : match.winlossStatus == 0 ? 'Settled' : 'lose'">{{ match.winlossStatusText || "-" }}</span>
 			</div>
 		</div>
 	</div>
@@ -60,8 +63,8 @@ interface Props {
 defineProps<Props>();
 
 function _copy(orderId) {
-  copy(orderId);
-  showToast($.t("common['成功']"));
+	copy(orderId);
+	showToast($.t("common['成功']"));
 }
 </script>
 

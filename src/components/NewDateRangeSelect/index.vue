@@ -211,7 +211,7 @@ const defaultColumns = computed(() => [
 	},
 	{
 		code: timeShortcutOptionsMap.get(TimeShortcutOptionsEnum.d3)?.code,
-		name: t(`components['DateRangeSelect']['近60天']`),
+		name: t(`components['DateRangeSelect']['近30天']`),
 	},
 	{
 		code: timeShortcutOptionsMap.get(TimeShortcutOptionsEnum.d4)?.code,
