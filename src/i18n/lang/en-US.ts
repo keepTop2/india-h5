@@ -9,7 +9,7 @@ export const lang = {
 		取消: "Cancel",
 		提交: "Submit",
 		修改成功: "Modification Successful",
-		成功: "Success"
+		成功: "Success",
 	},
 	//公共组件
 	components: {
@@ -17,12 +17,13 @@ export const lang = {
 		DateRangeSelect: {
 			近24小时: "Last 24 Hours",
 			近7天: "Last 7 Days",
-			近60天: "Last 60 Days",
+			近30天: "Last 30 Days",
 			近90天: "Last 90 Days",
 			自定义: "Custom",
 			确认: "Confirm",
 			自定义时间: "Custom Time",
 			至: "To",
+			选择时间: "Selection time",
 		},
 	},
 	home: {
