@@ -694,7 +694,7 @@ class Common {
 
 			if (!monthNode) {
 				monthNode = {
-					text: `${month}月`,
+					text: `${String(month).padStart(2, "0")}`,
 					value: String(month),
 					children: [],
 				};
@@ -704,7 +704,7 @@ class Common {
 			// 添加日期
 			if (!monthNode.children.find((node) => node.value === String(day))) {
 				monthNode.children.unshift({
-					text: String(day),
+					text: String(day).padStart(2, "0"),
 					value: String(day),
 				});
 			}

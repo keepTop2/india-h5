@@ -30,7 +30,7 @@
 			<div class="text_list">
 				<!-- 提示图标 -->
 				<div class="tooltip">
-					<van-popover v-model:show="showPopover" theme="dark" :show-arrow="false">
+					<van-popover v-model:show="showPopover" theme="dark" :show-arrow="false" placement="bottom-end">
 						<div class="p_10 popup">
 							{{
 								$t('medalCollection["宝箱奖励流水倍数为8倍"]', {
@@ -339,6 +339,7 @@ const onClickLeft = () => {
 			position: absolute;
 			top: 2px;
 			right: 27px;
+
 			.icon {
 				width: 30px;
 				height: 30px;

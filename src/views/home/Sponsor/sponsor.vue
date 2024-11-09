@@ -4,7 +4,7 @@
 			<h3 class="zanzhu">{{ $t('home["合作商"]') }}</h3>
 			<div class="image-container sponsor_list">
 				<div v-for="(item, index) in data" :key="index" class="card bg_BG3">
-					<VantLazyImg :src="item.icon" alt="平台赞助图片" />
+					<VantLazyImg :src="item.iconFileUrl" alt="平台赞助图片" />
 				</div>
 			</div>
 		</div>
