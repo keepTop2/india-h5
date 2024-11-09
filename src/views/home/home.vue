@@ -134,7 +134,7 @@ watch(
 	}
 );
 
-onActivated(() => {
+onMounted(() => {
 	//获取游戏场馆热门赛事
 	getLobbyTopGame();
 	//获取体育赛事id
