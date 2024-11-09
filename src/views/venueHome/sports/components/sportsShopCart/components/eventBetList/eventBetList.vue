@@ -50,6 +50,8 @@ import shopCartPubSub from "/@/views/venueHome/sports/hooks/shopCartPubSub";
 import { getIndexInfo, getBetOrderId, getPublicSetting, restoreStatus } from "/@/views/venueHome/sports/utils/commonFn";
 import { useSportsBetEventStore } from "/@/store/modules/sports/sportsBetData";
 import { useToLogin } from "/@/hooks/toLogin";
+import { useUserStore } from "/@/store/modules/user";
+const UserStore = useUserStore();
 const { isHaveToken } = useToLogin();
 const sportsBetEvent = useSportsBetEventStore();
 
@@ -78,6 +80,7 @@ watch(
 	() => sportsBetEvent.sportsBetShow,
 	(newValue) => {
 		if (newValue) {
+			UserStore.setIndexInfo();
 			// 重新打开清空之前状态;不再关闭时清空是因为投注成功之后需要输入金额做展示
 			shopCartPubSub.initializeState();
 			// 判断容器是否出现滚动条
@@ -93,7 +96,8 @@ watch(
 			// 恢复状态 重新判断投注状态
 			restoreStatus();
 		}
-	}
+	},
+	{ deep: true }
 );
 
 watch(
@@ -149,6 +153,8 @@ const getSingleTicketSuccess = (result) => {
 	ComponentMarkup.value = 1;
 	betInfoShow.value = true;
 	state.singleTicketSuccess = result;
+	// 请求余额信息
+	UserStore.setIndexInfo();
 };
 
 /**
@@ -159,6 +165,8 @@ const getParlayTicketsSuccess = (result) => {
 	betInfoShow.value = true;
 	ComponentMarkup.value = 2;
 	state.parlayTicketsSuccess = result;
+	// 请求余额信息
+	UserStore.setIndexInfo();
 	// 结束线程
 };
 
