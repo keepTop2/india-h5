@@ -38,7 +38,7 @@
 					</span>
 					<span class="more fw_400 fs_28 color_T1" v-if="item.modelCode !== 'SIGN_VENUE' && item.hasMoreGames" @click="handleMore(item?.gameOneId)">{{ $t(`home["更多"]`) }}</span>
 				</h3>
-				<GameBigPic v-if="item.modelCode === 'SIGN_VENUE'" class="m24" :gameInfoList="item.gameInfoList[0]" />
+				<GameBigPic v-if="item.modelCode === 'SIGN_VENUE'" class="m24" :gameInfoList="item" />
 				<GameLayout v-else :gameInfoList="item.gameInfoList" class="m24" />
 			</template>
 			<Sponsor :data="PartnerList" />
@@ -148,6 +148,8 @@ onActivated(() => {
 	initSport();
 	// 初始化活动ws连接
 	initializeWebSocket();
+
+	UserStore.setIndexInfo();
 });
 onDeactivated(() => {
 	// 关闭登录接口轮询

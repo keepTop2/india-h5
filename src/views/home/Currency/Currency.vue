@@ -6,7 +6,7 @@
 			<!-- 第一组转账方式图标 -->
 			<div class="image-container sponsor_list mb_44">
 				<div v-for="item in data" :key="item" class="card">
-					<VantLazyImg :src="item.icon" alt="平台赞助图片" />
+					<VantLazyImg :src="item.iconFileUrl" alt="平台赞助图片" />
 				</div>
 			</div>
 		</div>

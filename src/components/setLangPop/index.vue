@@ -76,7 +76,7 @@ const searchValue = ref("");
 
 const filterSearch = computed(() => {
 	if (!searchValue.value) return userStore.getlangList;
-	return userStore.getlangList.value.filter((item: any) => item.name.toLocaleLowerCase().includes(searchValue.value.toLocaleLowerCase())).map((item: any) => item);
+	return userStore.getlangList.filter((item: any) => item.name.toLocaleLowerCase().includes(searchValue.value.toLocaleLowerCase())).map((item: any) => item);
 });
 
 const confirm = async () => {

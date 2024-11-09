@@ -4,7 +4,7 @@
 			<li v-for="(item, index) in useCollectGamesStore().getCollectGamesList" class="gameCard" :key="index" @click="Common.goToGame(item)">
 				<SvgIcon iconName="home/event_collect" @click.stop="handleCollect(item, false)" alt="" />
 				<!-- <SvgIcon iconName="home/event_collect_no" @click.stop="handleCollect(item, true)" /> -->
-				<VantLazyImg :src="item.icon" />
+				<VantLazyImg :src="item.iconFileUrl" />
 				<div class="nameBox">
 					<div class="name">{{ item.name }}</div>
 				</div>
@@ -15,9 +15,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import GameImg from "/@/views/home/static/images/GameImg.png";
 import { GameInfoList } from "/#/game";
-import loadingSrc from "../static/loading.png";
 import GameApi from "/@/api/venueHome/games";
 import Common from "/@/utils/common";
 import { useCollectGamesStore } from "/@/store/modules/collectGames";
