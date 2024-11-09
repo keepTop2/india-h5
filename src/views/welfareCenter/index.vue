@@ -11,7 +11,7 @@
 			</div>
 			<div class="tabs mb_20">
 				<span v-for="(item, index) in tabs" class="tab color_T1 active" :class="activeTab === item ? 'active' : ''" :key="index">
-					{{ item.value }} <SvgIcon class="arrow ml_20" iconName="common/close" size="24px" @click="deleteTab(item, index)" />
+					{{ item.value }} <SvgIcon class="arrow ml_20 color_Theme" iconName="common/close_theme" size="24px" @click="deleteTab(item, index)" />
 				</span>
 			</div>
 			<div class="mb_15 filterBtn color_T1 fs_28" @click="showSheet = true">筛选<SvgIcon class="arrow ml_5" iconName="common/arrowDown" size="24px" /></div>
@@ -19,7 +19,7 @@
 		<div class="content">
 			<div>
 				<div class="header color_T3 mb_16 mt_16" @click="showDate = true">
-					{{ cloneSelect.activeDate !== null ? dateNumLabel[cloneSelect.activeDate].label : cloneSelect.dateRange[0] + "-" + cloneSelect.dateRange[1]
+					{{ cloneSelect.activeDate !== null ? dateNumLabel[cloneSelect.activeDate].label : cloneSelect.dateRange[0] + " 至 " + cloneSelect.dateRange[1]
 					}}<SvgIcon class="arrow ml_5" iconName="common/arrowDown" size="24px" />
 				</div>
 				<div class="header color_TB mb_16 mt_16 fs_26 flex-start">
@@ -36,7 +36,7 @@
 				</div>
 			</div>
 			<van-list @load="getList" :immediate-check="false" :finished="finished">
-				<div class="card" v-for="item in recordsList" :class="'status' + item.receiveStatus" @click="clickReceive(item)">
+				<div class="card" v-for="item in recordsList" :class="'status' + item.receiveStatus" @click="goTodetails(item)">
 					<div class="left">
 						<div class="flex-start">
 							<img :src="getTypeIcon(item.welfareCenterRewardType)" alt="" class="typeIcon" />
@@ -53,7 +53,7 @@
 							<div class="color_T3" style="flex: 1">后过期</div>
 						</div>
 						<!-- <div v-else="item.receiveStatus == 0" class="color_TB">长期有效</div> -->
-						<div class="btn fs_24" v-if="item.receiveStatus == 0" @click="clickReceive(item)">{{ receiveStatus[item.receiveStatus] }}</div>
+						<div class="btn fs_24" v-if="item.receiveStatus == 0" @click.stop="clickReceive(item)">{{ receiveStatus[item.receiveStatus] }}</div>
 						<div class="fs_24 color_Wam-P1" v-else-if="item.receiveStatus == 1">{{ receiveStatus[item.receiveStatus] }}</div>
 						<div class="fs_24 color_T3" v-else>{{ receiveStatus[item.receiveStatus] }}</div>
 					</div>
@@ -344,6 +344,16 @@ const resetParams = () => {
 	finished.value = false;
 	params.pageNumber = 1;
 };
+
+const goTodetails = (item) => {
+	router.push({
+		path: "/welfareCenter/details",
+		query: {
+			id: item.id,
+			welfareCenterRewardType: item.welfareCenterRewardType,
+		},
+	});
+};
 </script>
 
 <style lang="scss" scoped>
@@ -369,6 +379,9 @@ const resetParams = () => {
 				@include themeify {
 					border: 1px solid themed("Line");
 				}
+			}
+			.tab {
+				color: themed("Theme");
 			}
 			.active {
 				@include themeify {
@@ -412,7 +425,6 @@ const resetParams = () => {
 			.active {
 				@include themeify {
 					border: 1px solid themed("Theme");
-					color: themed("Theme");
 				}
 			}
 		}
@@ -441,6 +453,7 @@ const resetParams = () => {
 		@include themeify {
 			border: 1px solid themed(Line);
 		}
+
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -448,6 +461,7 @@ const resetParams = () => {
 	.tab.active {
 		@include themeify {
 			border: 1px solid themed(Theme);
+			color: themed("Theme");
 		}
 	}
 }

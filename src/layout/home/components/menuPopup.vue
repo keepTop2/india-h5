@@ -28,12 +28,6 @@
 					</div>
 					<div class="label">{{ $t(`menuPopup["每日竞赛"]`) }}</div>
 				</div>
-				<div class="menu van-haptics-feedback">
-					<div class="icon">
-						<img :src="home" />
-					</div>
-					<div class="label">{{ $t(`menuPopup["首页"]`) }}</div>
-				</div>
 
 				<div v-for="(item, index) in state.menuList" @click.stop="handleMenuClick(item)" :key="index">
 					<div class="menu" :class="openMenuIndex == index ? 'active' : ''">

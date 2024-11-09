@@ -186,7 +186,7 @@ const onStep = async () => {
 				font-size: 20px;
 				font-weight: 400;
 				@include themeify {
-					color: themed("Theme");
+					color: themed("Hint");
 				}
 			}
 		}

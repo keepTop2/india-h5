@@ -18,8 +18,6 @@
 <script setup lang="ts">
 import NavBar from "/@/layout/home/components/navBar.vue";
 import TabBar from "/@/layout/home/components/tabBar.vue";
-
-import { useUserStore } from "/@/store/modules/user";
 const blacklist = ["/"];
 const route = useRoute();
 const isTabBar = computed(() => {
