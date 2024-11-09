@@ -18,12 +18,12 @@
 					<SvgIcon @click="_copy(item.orderId)" iconName="common/copy2" />
 				</span>
 			</div>
-		</div>
-		<div class="bet-info">
 			<div class="order-date">
 				<span class="label">{{ $t('records["投注时间"]') }}：</span>
 				<span>{{ new Date(item.betTime).toLocaleString() }}</span>
 			</div>
+		</div>
+		<div class="bet-info">
 			<div class="bet-item">
 				<span class="label">{{ $t('records["投注内容"]') }}：</span>
 				<span class="value">
@@ -37,7 +37,7 @@
 			</div>
 			<div class="bet-item">
 				<span class="label">{{ $t('records["输赢金额"]') }}：</span>
-				<span class="value negative">{{ item.winLossAmount.toFixed(2) }}</span>
+				<span class="value" :class="item.winLossAmount > 0 ? 'is' : 'negative'">{{ item.winLossAmount.toFixed(2) }}</span>
 			</div>
 		</div>
 	</div>
