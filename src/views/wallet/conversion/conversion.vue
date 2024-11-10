@@ -19,7 +19,7 @@
 				<!--支付输入框  -->
 				<div class="pay_input">
 					<van-field v-model.number="formInput" @keyup="numberFixedDigit" />
-					<span class="max">{{ $t(`transfer['全部']`) }}</span>
+					<span class="max" @click="formInput = userPlat?.platAvailableAmount">{{ $t(`transfer['全部']`) }}</span>
 				</div>
 			</div>
 			<div class="arrow_down"></div>
@@ -67,9 +67,17 @@ const userPlat = ref<userinfoType>();
 watch(
 	[() => formInput.value, () => toInput.value],
 	(arr) => {
-		console.log(arr);
-		formInput.value = parseFloat(arr[0]).toFixed(2);
-		toInput.value = parseFloat(arr[1]).toFixed(2);
+    if(!isNaN(parseFloat(arr[0]))){
+      formInput.value = parseFloat(arr[0]).toFixed(2);
+    }else{
+      formInput.value = "0.00";
+    }
+    const res = formInput.value * userPlat.value?.transferRate
+		if (!isNaN(res)) {
+			toInput.value = res.toFixed(2);
+		} else {
+			toInput.value = "0.00";
+		}
 	},
 	{ immediate: true }
 );
@@ -122,7 +130,7 @@ const conversionHandler = async () => {
 
 	toInput.value = parseFloat(formInput.value) * userPlat.value!.transferRate + "";
 
-	getUserPlatformBalance();
+	await getUserPlatformBalance();
 
 	showToast("转换成功");
 };
