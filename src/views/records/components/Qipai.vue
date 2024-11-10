@@ -5,7 +5,7 @@
 				<!-- <img src="path/to/flag.png" alt="flag" class="flag" /> -->
 				<span class="match-type">{{ item.gameName }}</span>
 			</div>
-			<span class="Settled">{{ $t('records["已结算"]') }}</span>
+			<span class="Settled">{{ item.orderClassifyText }}</span>
 		</div>
 		<div class="order-info">
 			<!-- <div class="order-number">
@@ -31,7 +31,7 @@
 			</div>
 			<div class="bet-item">
 				<span class="label">{{ $t('records["输赢金额"]') }}：</span>
-				<span class="value" :class="item.winLossAmount > 0 ? 'negative' : 'is'">{{ item.winLossAmount.toFixed(2) }}</span>
+				<span class="value" :class="item.winLossAmount >= 0 ? 'negative' : 'is'">{{ item.winLossAmount.toFixed(2) }}</span>
 			</div>
 			<!-- <div class="bet-item flex-between">
 				<div class="bet-item-content">
