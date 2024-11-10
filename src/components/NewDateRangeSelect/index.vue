@@ -253,7 +253,7 @@ const startTime: ModelRef<number, number> = defineModel("startTimeU", {
 		return value as number;
 	},
 	set(value) {
-		state.startTimeSlotText = dayjs(value).tz("America/New_York").format("YYYY/MM/DD");
+		state.startTimeSlotText = state.startTimeText;
 		return value as number;
 	},
 	default: 0,
@@ -269,7 +269,7 @@ const endTime: ModelRef<number, number> = defineModel("endTimeU", {
 		return value as number;
 	},
 	set(value) {
-		state.endTimeSlotText = dayjs(value).tz("America/New_York").format("YYYY/MM/DD");
+		state.endTimeSlotText = state.endTimeText;
 		return value as number;
 	},
 	default: 0,
