@@ -14,8 +14,8 @@
 						{{ state.acitveName }}
 					</div>
 					<div v-else>
-						<div>{{ state.startTimeSlotText }}</div>
-						<div>{{ state.endTimeSlotText }}</div>
+						<div>{{ dayjs(state.startTimeSlotText, "YYYY/MM/DD").format("YYYY-MM-DD") }}</div>
+						<div>{{ dayjs(state.endTimeSlotText, "YYYY/MM/DD").format("YYYY-MM-DD") }}</div>
 					</div>
 					<SvgIcon size="3.2" iconName="common/arrowDown" />
 				</div>
@@ -79,13 +79,13 @@
 						</div>
 						<div class="dateRangeSelect_columnstop">
 							<div :class="{ dateRangeSelect_active: state.activeType == 1 }" class="dateRangeSelect_timebox" @click="onStartOrEnd(1)">
-								{{ state.startTimeText }}
+								{{ dayjs(state.startTimeText, "YYYY/MM/DD").format("YYYY-MM-DD") }}
 							</div>
 							<div class="dateRangeSelect_text1">
 								{{ $t(`components['DateRangeSelect']['至']`) }}
 							</div>
 							<div :class="{ dateRangeSelect_active: state.activeType == 2 }" class="dateRangeSelect_timebox" @click="onStartOrEnd(2)">
-								{{ state.endTimeText }}
+								{{ dayjs(state.endTimeText, "YYYY/MM/DD").format("YYYY-MM-DD") }}
 							</div>
 						</div>
 					</div>
@@ -384,7 +384,9 @@ const selectionTimeHandler = (selectedOptions: any) => {
 const setDatePickerData = () => {
 	nextTick(() => {
 		state.activeType = 1;
-		state.dateTimeList = timestampToList(timeShortcutOptionsMap.get(<TimeShortcutOptionsEnum>checkedType.value)?.startTime());
+		if (checkedType.value != "999") {
+			state.dateTimeList = timestampToList(timeShortcutOptionsMap.get(<TimeShortcutOptionsEnum>checkedType.value)?.startTime());
+		}
 		state.startTimeText = state.dateTimeList.join("/");
 		state.endTimeText = dayjs(timeShortcutOptionsMap.get(<TimeShortcutOptionsEnum>checkedType.value)?.endTime())
 			.tz("America/New_York")
@@ -423,8 +425,8 @@ const onOneClosed = () => {
 const onTwoConfirm = async ({ selectedValues, selectedOptions, selectedIndexes }) => {
 	state.acitveName = cacheShortcutOptions.value.text;
 	state.activeList = [checkedType.value];
-	initStartTimeAndEndTimer(cacheShortcutOptions.value.value);
-
+	// initStartTimeAndEndTimer(cacheShortcutOptions.value.value);
+	initStartTimeAndEndTimerByText();
 	// const dateStr = state.dateTimeList.join("-");
 	// if (state.activeType == 1) {
 	// 	startTime.value = dayjs.tz(dateStr, "America/New_York").valueOf();
@@ -473,10 +475,14 @@ const onStartOrEnd = (type: number) => {
  * @description 初始化开始时间和结束时间
  */
 const initStartTimeAndEndTimer = (options: TimeShortcutOptionsEnum = activeValue.value as TimeShortcutOptionsEnum) => {
-	// console.log(timeShortcutOptionsMap.get(<TimeShortcutOptionsEnum>options)?.startTime(), "开始时间timeShortcutOptionsMap.get(<TimeShortcutOptionsEnum>options)?.startTime()");
-
 	startTime.value = timeShortcutOptionsMap.get(<TimeShortcutOptionsEnum>options)?.startTime() as number;
 	endTime.value = timeShortcutOptionsMap.get(<TimeShortcutOptionsEnum>options)?.endTime() as number;
+};
+
+// 根据state.startTimeText 和 state.endTimeText 初始化开始时间和结束时间
+const initStartTimeAndEndTimerByText = () => {
+	startTime.value = dayjs(state.startTimeText, "YYYY/MM/DD").tz("America/New_York").startOf("day").valueOf();
+	endTime.value = dayjs(state.endTimeText, "YYYY/MM/DD").tz("America/New_York").endOf("day").valueOf();
 };
 
 /**
@@ -696,7 +702,7 @@ const listToTimestamp = (list: Array<string>, type) => {
 	padding: 9px 24px 9px 14px;
 	border-radius: 12px;
 	border: 1px solid;
-	font-size: 22px;
+	font-size: 26px;
 	line-height: 30px;
 	@include themeify {
 		border-color: themed("Line");
