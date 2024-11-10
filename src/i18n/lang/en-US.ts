@@ -15,9 +15,10 @@ export const lang = {
 	components: {
 		//日期范围选择器组件
 		DateRangeSelect: {
-			近24小时: "Last 24 Hours",
-			近7天: "Last 7 Days",
-			近30天: "Last 30 Days",
+			今日: "today",
+			昨日: "yesterday",
+			近7日: "Last 7 Days",
+			近30日: "Last 30 Days",
 			近90天: "Last 90 Days",
 			自定义: "Custom",
 			确认: "Confirm",

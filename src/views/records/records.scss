@@ -5,7 +5,7 @@
 			color: themed("T1");
 		}
 		.Settled {
-			color: themed("Wam-P1");
+			color: var(--T3-P, #7D8086);
 		}
 		.win {
 			color: themed("Wam-P1");
@@ -15,7 +15,7 @@
 			color: themed("Warn");
 		}
 		.PendingSettlement {
-			color: themed("Hint");
+			color: var(--T3-P, #7D8086);
 		}
 		margin-bottom: 24px;
 		background-color: themed("BG3");
@@ -59,7 +59,7 @@
 			// margin-bottom: 8px;
 			padding: 16px 0px;
 			// align-items: center;
-			border-bottom: 1px solid themed("Line");
+			//border-bottom: 1px solid themed("Line");
 			// &>*{
 			// 	margin-bottom: 16px;
 			// }
@@ -86,7 +86,7 @@
 			justify-content: space-between;
 		}
 		.bet-info {
-			padding: 16px 0px;
+			//padding: 16px 0px;
 			display: flex;
 			flex-direction: column;
 			gap: 16px;
@@ -177,4 +177,7 @@
 			}
 		}
 	}
+}
+.line{
+	border-bottom: 1px solid #343434;
 }

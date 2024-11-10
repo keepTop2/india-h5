@@ -1,10 +1,11 @@
 <template>
 	<div class="bet-detail2">
 		<div class="header">
-			<span class="color_TB">串关 | 3串1 @5.98</span>
-			<span class="PendingSettlement">{{ $t('records["待结算"]') }}</span>
+			<span class="color_TB">{{ item.eventInfo }}</span>
+			<span class="PendingSettlement">{{ item.orderClassifyText }}</span>
 		</div>
 		<div class="order-info">
+			<div>{{ item.teamInfo }}</div>
 			<div class="order-number">
 				<span class="label">{{ $t('records["单号"]') }}：</span>
 				<span class="code">
@@ -16,14 +17,18 @@
 				<span class="label">{{ $t('records["投注时间"]') }}：</span>
 				<span>{{ new Date(item.betTime).toLocaleString() }}</span>
 			</div>
-
+			<div class="line"></div>
+			<div class="bet-amount">
+				<span class="label">{{ $t('records["投注内容"]') }}：</span>
+				<span>{{ item?.betContent }}</span>
+			</div>
 			<div class="bet-amount">
 				<span class="label">{{ $t('records["投注金额"]') }}：</span>
 				<span>{{ item?.betAmount?.toFixed(2) || "0.00" }}</span>
 			</div>
 			<div class="bet-figure">
 				<span class="label">{{ $t('records["输赢金额"]') }}：</span>
-				<span>{{ item?.winLossAmount?.toFixed(2) || "0.00" }}</span>
+				<span :class="item?.winLossAmount >= 0 ? 'win' : 'lose'">{{ item?.winLossAmount?.toFixed(2) || "0.00" }}</span>
 			</div>
 		</div>
 
@@ -43,7 +48,8 @@
 				<span class="fs_26">@{{ match.odds }}</span>
 			</div>
 			<div class="match-status">
-				<span :class="match.winlossStatus == 1 ? 'win' : match.winlossStatus == 0 ? 'Settled' : 'lose'">{{ match.winlossStatusText || "-" }}</span>
+				<span v-if="match.winlossStatusText" :class="match.winlossStatus == 1 ? 'win' : match.winlossStatus == 0 ? 'win' : 'lose'">{{ match.winlossStatusText }}</span>
+        <span v-else class="Settled">取消</span>
 			</div>
 		</div>
 	</div>
@@ -71,5 +77,9 @@ function _copy(orderId) {
 <style lang="scss">
 @import "../records.scss";
 .content {
+}
+
+.PendingSettlement {
+	color: var(--T3-P, #7d8086);
 }
 </style>
