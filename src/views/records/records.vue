@@ -28,6 +28,7 @@
 					</template>
 				</SingleSelect>
 				<!--使用插槽-->
+				<!-- {{ state.typeList }} -->
 				<SingleSelect
 					class="color_T1 fs_28 fw_400"
 					:toText="'value'"
@@ -149,7 +150,7 @@ const getList = (type) => {
 	const data = {
 		...pageVo,
 		venueType: +state.activeList2,
-		orderclass: [+state.activeList],
+		orderclass: state.activeList == "all" ? [] : [+state.activeList],
 		betStartTime: dateRangeSelectDemoState.startTime,
 		betEndTime: dateRangeSelectDemoState.endTime,
 	};
@@ -243,6 +244,13 @@ const getDownBox = () => {
 			if (res.code !== 10000) return showToast(res.message);
 			state.typeList = res.data.order_status_client;
 			state.typeList2 = res.data.venue_type;
+			const all = {
+				type: "",
+				code: "all",
+				value: "全部",
+			};
+			state.typeList.unshift(all);
+			// state.typeList2.unshift(all);
 		})
 		.catch((err) => {
 			console.log(err, "errrrrrrrrrrr");
