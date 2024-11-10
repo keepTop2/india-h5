@@ -124,11 +124,11 @@ const conversionHandler = async () => {
 	const body = {
 		transferAmount: parseFloat(formInput.value),
 	};
-	const { code, data } = await walletApi.conversionAmount(body).catch((err) => err);
+	const { code } = await walletApi.conversionAmount(body).catch((err) => err);
 
 	if (code !== Common.getInstance().ResCode.SUCCESS) return;
 
-	toInput.value = parseFloat(formInput.value) * userPlat.value!.transferRate + "";
+  formInput.value = "0.00";
 
 	await getUserPlatformBalance();
 

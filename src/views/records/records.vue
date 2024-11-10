@@ -56,18 +56,18 @@
 			</div>
 			<div class="BettingRecord_List">
 				<van-pull-refresh v-if="hasData" v-model="loading" @refresh="reload">
-					<div class="stats-container color_T1 bg_BG3">
+					<div v-if="state.activeList2 !== '1'" class="stats-container color_T1 bg_BG3">
 						<div class="stat-item">
 							<span class="label">{{ $t('records["投注金额"]') }}：</span>
-							<span class="value">{{ orderRecordsData.totalVO?.betAmount || 0 }}</span>
+							<span class="value">{{ orderRecordsData.totalVO?.betAmount || '0.00' }}</span>
 						</div>
 						<div class="stat-item">
 							<span class="label">{{ $t('records["输赢金额"]') }}：</span>
-							<span class="value negative">{{ orderRecordsData.totalVO?.winLoseAmount || 0 }}</span>
+							<span class="value" :class="orderRecordsData.totalVO?.winLoseAmount >= 0 ? 'win' : 'lose'">{{ orderRecordsData.totalVO?.winLoseAmount || '0.00' }}</span>
 						</div>
 						<div class="stat-item">
 							<span class="label">{{ $t('records["投注笔数"]') }}：</span>
-							<span class="value">{{ orderRecordsData.totalVO?.betNum || 0 }}</span>
+							<span class="value">{{ orderRecordsData.totalVO?.betNum || '0.00' }}</span>
 						</div>
 					</div>
 					<van-list v-model:loading="loading" :finished="finished" @load="getList">
@@ -125,7 +125,7 @@ const state = reactive({
 	//条件查询选项
 	typeList: [],
 	//激活的选项
-	activeList: "1",
+	activeList: "all",
 	showPicker2: false,
 	//条件查询选项
 	typeList2: [],
@@ -316,6 +316,7 @@ const onClickLeft = () => {
 
 					.value {
 						font-weight: 400;
+            color: #fff;
 
 						&.negative {
 							color: themed("Warn");
@@ -349,5 +350,13 @@ const onClickLeft = () => {
 		width: 24px;
 		height: 24px;
 	}
+}
+
+:deep(.win) {
+	color: var(--Theme-P, #ff284b) !important;
+}
+
+:deep(.lose) {
+	color: var(--F2-P, #21a8f7) !important;
 }
 </style>

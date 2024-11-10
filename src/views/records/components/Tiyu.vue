@@ -5,7 +5,7 @@
 				<!-- <img src="path/to/flag.png" alt="flag" class="flag" /> -->
 				<span class="match-type">{{ item.eventInfo }}</span>
 			</div>
-			<span class="Settled">{{ $t('records["已结算"]') }}</span>
+			<span class="Settled">{{ item.orderClassifyText }}</span>
 		</div>
 		<div class="teams">
 			<span>{{ item.teamInfo }}</span>
