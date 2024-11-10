@@ -31,7 +31,7 @@
 			</div>
 			<div class="bet-item">
 				<span class="label">{{ $t('records["输赢金额"]') }}：</span>
-				<span class="value" :class="item.winLossAmount > 0 ? 'negative' : 'is'">{{ item.winLossAmount.toFixed(2) }}</span>
+				<span class="value" :class="item.winLossAmount >= 0 ? 'negative' : 'is'">{{ item.winLossAmount.toFixed(2) }}</span>
 			</div>
 			<!-- <div class="bet-item flex-between">
 				<div class="bet-item-content">
