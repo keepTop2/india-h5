@@ -3,7 +3,8 @@
 	<div>
 		<VantNavBar :title="'投注记录'" @onClickLeft="onClickLeft">
 			<template v-slot:left>
-				<SvgIcon size="8.53" class="collapse_icon" iconName="common/collapse_icon" />
+				<!-- <SvgIcon size="8.53" class="collapse_icon" iconName="common/collapse_icon" /> -->
+				{{}}
 			</template>
 		</VantNavBar>
 		<div class="BettingRecord">

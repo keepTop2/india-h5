@@ -41,7 +41,7 @@
 					</div>
 
 					<div v-show="item.twoList?.length && openMenuIndex == index" class="subMenuBox">
-						<div class="menu subMenu" @click="goTogame" v-for="item2 in item.twoList">
+						<div class="menu subMenu" @click="goToarena" v-for="item2 in item.twoList">
 							<div class="icon">
 								<img :src="item2.iconFileUrl" />
 							</div>
@@ -77,12 +77,12 @@
 				</div>
 
 				<!-- 语言 -->
-				<div class="menu van-haptics-feedback">
+				<div class="menu van-haptics-feedback" @click="setLang">
 					<div class="icon langIcon">
 						<img :src="useUserStore().getlangInfo.iconFileUrl" />
 					</div>
 					<div class="label">{{ $t(`menuPopup["语言切换"]`) }}</div>
-					<div class="arrow" @click="setLang">
+					<div class="arrow">
 						<svg-icon iconName="common/arrowRight"></svg-icon>
 					</div>
 				</div>
@@ -186,6 +186,7 @@ const queryLobbyLabelActivitySwitch = () => {
 		activityTemplate.value = res.data.activityTemplate;
 	});
 };
+const goToarena = () => {};
 const toPath = (path) => {
 	if ("/activity/SPIN_WHEEL" === path) {
 		if (activityTemplate.value.includes("SPIN_WHEEL")) {

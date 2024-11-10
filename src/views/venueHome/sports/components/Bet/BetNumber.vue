@@ -23,7 +23,13 @@ const props = defineProps({
 		type: Object,
 		default: () => {
 			return {
-				default: ["{100} {200} {500} {1000}", "1 2 3 {max}", "4 5 6 {min}", "7 8 9 {bksp}", "0 00 000 {close}"],
+				default: [
+					// "{100} {200} {500} {1000}",
+					"1 2 3 {max}",
+					"4 5 6 {min}",
+					"7 8 9 {bksp}",
+					"0 00 000 {close}",
+				],
 			};
 		},
 	},
@@ -39,10 +45,10 @@ onMounted(() => {
 		layoutName: "default",
 		layout: props.layout,
 		display: {
-			"{100}": `<span class="theme">100</span>`,
-			"{200}": `<span class="theme">200</span>`,
-			"{500}": `<span class="theme">500</span>`,
-			"{1000}": `<span class="theme">1000</span>`,
+			// "{100}": `<span class="theme">100</span>`,
+			// "{200}": `<span class="theme">200</span>`,
+			// "{500}": `<span class="theme">500</span>`,
+			// "{1000}": `<span class="theme">1000</span>`,
 			"{max}": `<span class="text">${i18.t('sports["virtualKeyboard"]["最大"]')}</span>`,
 			"{min}": `<span class="text">${i18.t('sports["virtualKeyboard"]["最小"]')}</span>`,
 			"{bksp}": `<img class="icon" src=${numberKeyboard_delete}>`,

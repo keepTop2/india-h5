@@ -6,9 +6,7 @@
 
 		<div class="HomeContainer">
 			<router-view v-slot="{ Component }" class="content">
-				<keep-alive :max="10">
-					<component :is="Component" />
-				</keep-alive>
+				<component :is="Component" />
 			</router-view>
 		</div>
 		<TabBar v-show="isTabBar" />
