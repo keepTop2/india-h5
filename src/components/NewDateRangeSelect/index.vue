@@ -349,15 +349,15 @@ const onOneConfirm = ({ selectedValues, selectedOptions, selectedIndexes }) => {
 		initStartTimeAndEndTimer();
 		emit("onConfirmDate");
 	} else {
-		state.minDate = dayjs().tz("America/New_York").subtract(90, "day").toDate();
-		state.maxDate = dayjs().tz("America/New_York").toDate();
+		state.minDate = dayjs().subtract(90, "day").toDate();
+		state.maxDate = dayjs().toDate();
 		//赋值开始时间给日期时间选择器组件
 		state.dateTimeList = timestampToList(startTime.value);
 		state.startTimeText = state.dateTimeList.join("/");
-		state.endTimeText = dayjs(endTime.value).tz("America/New_York").format("YYYY/MM/DD");
+		state.endTimeText = dayjs(endTime.value).format("YYYY/MM/DD");
 		//外部插槽展示日期
 		state.startTimeSlotText = state.dateTimeList.join("/");
-		state.endTimeSlotText = dayjs(endTime.value).tz("America/New_York").format("YYYY/MM/DD");
+		state.endTimeSlotText = dayjs(endTime.value).format("YYYY/MM/DD");
 		state.activeType = 1;
 		state.twoShow = true;
 	}
@@ -388,9 +388,7 @@ const setDatePickerData = () => {
 			state.dateTimeList = timestampToList(timeShortcutOptionsMap.get(<TimeShortcutOptionsEnum>checkedType.value)?.startTime());
 		}
 		state.startTimeText = state.dateTimeList.join("/");
-		state.endTimeText = dayjs(timeShortcutOptionsMap.get(<TimeShortcutOptionsEnum>checkedType.value)?.endTime())
-			.tz("America/New_York")
-			.format("YYYY/MM/DD");
+		state.endTimeText = dayjs(timeShortcutOptionsMap.get(<TimeShortcutOptionsEnum>checkedType.value)?.endTime()).format("YYYY/MM/DD");
 	});
 };
 
@@ -481,8 +479,8 @@ const initStartTimeAndEndTimer = (options: TimeShortcutOptionsEnum = activeValue
 
 // 根据state.startTimeText 和 state.endTimeText 初始化开始时间和结束时间
 const initStartTimeAndEndTimerByText = () => {
-	startTime.value = dayjs(state.startTimeText, "YYYY/MM/DD").tz("America/New_York").startOf("day").valueOf();
-	endTime.value = dayjs(state.endTimeText, "YYYY/MM/DD").tz("America/New_York").endOf("day").valueOf();
+	startTime.value = dayjs(state.startTimeText, "YYYY/MM/DD").startOf("day").valueOf();
+	endTime.value = dayjs(state.endTimeText, "YYYY/MM/DD").endOf("day").valueOf();
 };
 
 /**
@@ -492,7 +490,7 @@ const initStartTimeAndEndTimerByText = () => {
 const timestampToList = (timestamp: number) => {
 	console.log(timestamp, "timestampToList");
 
-	const dateStr = dayjs(timestamp).tz("America/New_York").format("YYYY/MM/DD");
+	const dateStr = dayjs(timestamp).format("YYYY/MM/DD");
 	const list = dateStr.split("/");
 	return list;
 };
@@ -729,7 +727,7 @@ const listToTimestamp = (list: Array<string>, type) => {
 	color: #fff !important;
 }
 
-:deep(.van-picker__cancel){
-  font-size: 52px;
+:deep(.van-picker__cancel) {
+	font-size: 52px;
 }
 </style>
