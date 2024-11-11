@@ -60,19 +60,19 @@ interface userinfoType {
 	userCurrencyCode: string;
 }
 
-const formInput = ref<string>("0.00");
+const formInput = ref<string>("");
 const toInput = ref<string>("0");
 const userPlat = ref<userinfoType>();
 // 金额补零
 watch(
 	[() => formInput.value, () => toInput.value],
 	(arr) => {
-    if(!isNaN(parseFloat(arr[0]))){
-      formInput.value = parseFloat(arr[0]).toFixed(2);
-    }else{
-      formInput.value = "0.00";
-    }
-    const res = formInput.value * userPlat.value?.transferRate
+		if (!isNaN(parseFloat(arr[0]))) {
+			formInput.value = parseFloat(arr[0]);
+		} else {
+			formInput.value = "";
+		}
+		const res = formInput.value * userPlat.value?.transferRate;
 		if (!isNaN(res)) {
 			toInput.value = res.toFixed(2);
 		} else {
@@ -88,8 +88,8 @@ onMounted(() => {
 
 const numberFixedDigit = (e) => {
 	e.target.value = e.target.value.replace(/[^\d.]/g, "");
-	e.target.value = e.target.value.replace(/\.{2,}/g, ".");
-	e.target.value = e.target.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+	// e.target.value = e.target.value.replace(/\.{2,}/g, ".");
+	// e.target.value = e.target.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
 	e.target.value = e.target.value.replace(/^(\-)*(\d+)\.(\d\d).*$/, "$1$2.$3"); //只能输入两个小数
 	e.target.value = e.target.value.replace(/^\./g, ""); //首位不能输入“.”
 	if (e.target.value.indexOf(".") < 0 && e.target.value != "") {
@@ -128,7 +128,7 @@ const conversionHandler = async () => {
 
 	if (code !== Common.getInstance().ResCode.SUCCESS) return;
 
-  formInput.value = "0.00";
+	formInput.value = "0.00";
 
 	await getUserPlatformBalance();
 
