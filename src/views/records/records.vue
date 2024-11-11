@@ -60,15 +60,15 @@
 					<div v-if="state.activeList2 !== '1'" class="stats-container color_T1 bg_BG3">
 						<div class="stat-item">
 							<span class="label">{{ $t('records["投注金额"]') }}：</span>
-							<span class="value">{{ orderRecordsData.totalVO?.betAmount || '0.00' }}</span>
+							<span class="value">{{ orderRecordsData.totalVO?.betAmount || "0.00" }}</span>
 						</div>
 						<div class="stat-item">
 							<span class="label">{{ $t('records["输赢金额"]') }}：</span>
-							<span class="value" :class="orderRecordsData.totalVO?.winLoseAmount >= 0 ? 'win' : 'lose'">{{ orderRecordsData.totalVO?.winLoseAmount || '0.00' }}</span>
+							<span class="value" :class="orderRecordsData.totalVO?.winLoseAmount >= 0 ? 'win' : 'lose'">{{ orderRecordsData.totalVO?.winLoseAmount || "0.00" }}</span>
 						</div>
 						<div class="stat-item">
 							<span class="label">{{ $t('records["投注笔数"]') }}：</span>
-							<span class="value">{{ orderRecordsData.totalVO?.betNum || '0.00' }}</span>
+							<span class="value">{{ orderRecordsData.totalVO?.betNum || "0.00" }}</span>
 						</div>
 					</div>
 					<van-list v-model:loading="loading" :finished="finished" @load="getList">
@@ -99,12 +99,13 @@ import Qipai from "./components/Qipai.vue";
 import Zhenren from "./components/Zhenren.vue";
 // 接口
 import sportsApi from "/@/api/venueHome/sports";
-import { onActivated } from "vue";
+// import { onActivated } from "vue";
+import { onMounted } from "vue";
 import { ClientOrderRecordRes } from "./type";
 import { showToast } from "vant";
 import NoData from "/@/views/subViews/my/messageCenter/components/noData.vue";
 
-onActivated(() => {
+onMounted(() => {
 	pageVo.pageNumber = 1;
 	getDownBox();
 	getList();
@@ -317,7 +318,7 @@ const onClickLeft = () => {
 
 					.value {
 						font-weight: 400;
-            color: #fff;
+						color: #fff;
 
 						&.negative {
 							color: themed("Warn");
