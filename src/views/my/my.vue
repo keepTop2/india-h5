@@ -157,6 +157,7 @@
 				</div>
 			</template>
 		</Model>
+		<!-- 设置语言 -->
 		<set-lang-pop v-model="languageShow" />
 	</div>
 </template>

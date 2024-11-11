@@ -19,14 +19,14 @@
 						<!-- <SvgIcon iconName="home/fire" alt="" /> -->
 						<!-- :placeholder="$t(`game['输入游戏名称']`)" -->
 						{{ $t('game["热门游戏"]') }}
-						<span class="color_T1 fs_28 fw_400" @click="showMoreList($t(`game['热门游戏']`), 1)">{{ $t(`home["更多"]`) }}</span>
+						<span class="color_T1 fs_28 fw_400" @click="showMoreList($t(`game['热门游戏']`), 1)" v-if="hotGameList?.hasMoreGames">{{ $t(`home["更多"]`) }}</span>
 					</h3>
 					<HotGame class="m24" :gameList="hotGameList" v-if="hotGameList?.gameInfoList?.length > 0" />
 					<!-- 新游戏 -->
 					<h3 class="title" v-if="newGameList?.gameInfoList?.length > 0">
 						<!-- <SvgIcon iconName="home/event_game" alt="" /> -->
 						{{ $t('game["新游戏"]') }}
-						<span class="color_T1 fs_28 fw_400" @click="showMoreList($t(`game['新游戏']`), 2)">{{ $t(`home["更多"]`) }}</span>
+						<span class="color_T1 fs_28 fw_400" @click="showMoreList($t(`game['新游戏']`), 2)" v-if="newGameList?.hasMoreGames">{{ $t(`home["更多"]`) }}</span>
 					</h3>
 					<NewGame class="m24" :gameList="newGameList" />
 					<!-- 二级列表 -->

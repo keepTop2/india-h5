@@ -149,7 +149,9 @@ onMounted(() => {
 	// 初始化活动ws连接
 	initializeWebSocket();
 
-	UserStore.setIndexInfo();
+	if (UserStore.token) {
+		UserStore.setIndexInfo();
+	}
 });
 onDeactivated(() => {
 	// 关闭登录接口轮询
