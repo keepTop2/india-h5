@@ -24,7 +24,7 @@ export const useCollectGamesStore = defineStore("collectGames", {
 	actions: {
 		setCollectGamesList() {
 			GameApi.queryCollection().then((res) => {
-				this.collectGamesList = res.data.records;
+				this.collectGamesList = res.data.records.filter((item) => item.collect);
 			});
 		},
 	},

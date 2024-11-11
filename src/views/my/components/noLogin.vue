@@ -18,7 +18,7 @@
 		</div>
 
 		<div class="group">
-			<div class="cell" @click="toPath('/language')">
+			<div class="cell" @click="languageShow = true">
 				<SvgIcon class="icon" iconName="my/lang" />
 				<div class="label">{{ $t('my["语言"]') }}</div>
 				<div class="value">{{ store.langName }}</div>
@@ -31,6 +31,8 @@
 			</div>
 		</div>
 	</div>
+	<!-- 设置语言 -->
+	<set-lang-pop v-model="languageShow" />
 </template>
 
 <script setup lang="ts">
@@ -40,6 +42,7 @@ import { useUserStore } from "/@/store/modules/user";
 import avatar from "/@/assets/zh-CN/default/my/avatar.png";
 import avatar_light from "/@/assets/zh-CN/light/my/avatar.png";
 import { useRouter } from "vue-router";
+const languageShow = ref(false);
 const themesStore = useThemesStore();
 const store = useUserStore();
 const router = useRouter();
