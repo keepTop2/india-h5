@@ -60,6 +60,8 @@ import common from "/@/utils/common";
 import SportsCommonFn from "/@/views/venueHome/sports/utils/common";
 import { useSportsBetEventStore } from "/@/store/modules/sports/sportsBetData";
 import { useSportsBetInfoStore } from "/@/store/modules/sports/sportsBetInfo";
+import { i18n } from "/@/i18n/index";
+const $: any = i18n.global;
 const sportsBetEvent = useSportsBetEventStore();
 const sportsBetInfo = useSportsBetInfoStore();
 const props = withDefaults(
