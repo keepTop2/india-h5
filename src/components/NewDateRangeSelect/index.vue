@@ -64,7 +64,7 @@
 						</div>
 						<div class="selectionTimeList">
 							<div v-for="(item, index) in state.columnsMap" :key="index" @click="selectionTimeHandler(item)" :style="{ width: '22%', display: item.value == 999 ? 'none' : 'block' }">
-								<div class="selectionTime_item" :class="{ dateRangeSelect_active: item.value == activeValue }" v-if="item.value != 999">
+								<div class="selectionTime_item" :class="{ dateRangeSelect_active: item.value == checkedType }" v-if="item.value != 999">
 									{{ item.text }}
 								</div>
 							</div>
@@ -89,7 +89,7 @@
 							</div>
 						</div>
 					</div>
-          <div class="hint">{{ $t(`components['DateRangeSelect']['当前系统支持查询最近30日的记录']`) }}</div>
+					<div class="hint">{{ $t(`components['DateRangeSelect']['当前系统支持查询最近30日的记录']`) }}</div>
 				</template>
 			</van-date-picker>
 		</van-popup>
@@ -112,6 +112,7 @@ import dayjs, { Dayjs } from "dayjs";
 import tz from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
 import { showToast } from "vant";
+import { any } from "video.js/dist/types/utils/events";
 
 dayjs.extend(utc);
 dayjs.extend(tz);
@@ -204,19 +205,19 @@ const state = reactive({
 const defaultColumns = computed(() => [
 	{
 		code: timeShortcutOptionsMap.get(TimeShortcutOptionsEnum.d1)?.code,
-		name: t(`components['DateRangeSelect']['近24小时']`),
+		name: t(`components['DateRangeSelect']['今日']`),
 	},
 	{
 		code: timeShortcutOptionsMap.get(TimeShortcutOptionsEnum.d2)?.code,
-		name: t(`components['DateRangeSelect']['近7天']`),
+		name: t(`components['DateRangeSelect']['昨日']`),
 	},
 	{
 		code: timeShortcutOptionsMap.get(TimeShortcutOptionsEnum.d3)?.code,
-		name: t(`components['DateRangeSelect']['近30天']`),
+		name: t(`components['DateRangeSelect']['近7日']`),
 	},
 	{
 		code: timeShortcutOptionsMap.get(TimeShortcutOptionsEnum.d4)?.code,
-		name: t(`components['DateRangeSelect']['近90天']`),
+		name: t(`components['DateRangeSelect']['近30日']`),
 	},
 	{ code: "999", name: t(`components['DateRangeSelect']['自定义']`) },
 ]);
@@ -364,22 +365,30 @@ const onOneConfirm = ({ selectedValues, selectedOptions, selectedIndexes }) => {
 	state.oneShow = false;
 };
 
+// 缓存快捷选项数据
+const cacheShortcutOptions = ref<any>(state.columnsMap[0]);
+const checkedType = ref<TimeShortcutOptionsEnum | "999">(TimeShortcutOptionsEnum.d1);
 // 点击快捷选项选项时触发
 const selectionTimeHandler = (selectedOptions: any) => {
-	state.acitveName = selectedOptions.text;
-	state.activeList = [selectedOptions.value];
-	initStartTimeAndEndTimer(selectedOptions.value);
+	cacheShortcutOptions.value = selectedOptions;
+	// state.acitveName = selectedOptions.text;
+	// state.activeList = [selectedOptions.value];
+	checkedType.value = selectedOptions.value;
+
+	// initStartTimeAndEndTimer(selectedOptions.value);
 	setDatePickerData();
-	emit("onConfirmDate");
+	// emit("onConfirmDate");
 };
 
 // 设置日期选择器组件数据
 const setDatePickerData = () => {
 	nextTick(() => {
 		state.activeType = 1;
-		state.dateTimeList = timestampToList(startTime.value);
+		state.dateTimeList = timestampToList(timeShortcutOptionsMap.get(<TimeShortcutOptionsEnum>checkedType.value)?.startTime());
 		state.startTimeText = state.dateTimeList.join("/");
-		state.endTimeText = dayjs(endTime.value).tz("America/New_York").format("YYYY/MM/DD");
+		state.endTimeText = dayjs(timeShortcutOptionsMap.get(<TimeShortcutOptionsEnum>checkedType.value)?.endTime())
+			.tz("America/New_York")
+			.format("YYYY/MM/DD");
 	});
 };
 
@@ -412,12 +421,16 @@ const onOneClosed = () => {
 
 //日期时间选择器点击确认
 const onTwoConfirm = async ({ selectedValues, selectedOptions, selectedIndexes }) => {
-	const dateStr = state.dateTimeList.join("-");
-	if (state.activeType == 1) {
-		startTime.value = dayjs.tz(dateStr, "America/New_York").startOf("day").valueOf();
-	} else {
-		endTime.value = dayjs.tz(dateStr, "America/New_York").endOf("day").valueOf();
-	}
+	state.acitveName = cacheShortcutOptions.value.text;
+	state.activeList = [checkedType.value];
+	initStartTimeAndEndTimer(cacheShortcutOptions.value.value);
+
+	// const dateStr = state.dateTimeList.join("-");
+	// if (state.activeType == 1) {
+	// 	startTime.value = dayjs.tz(dateStr, "America/New_York").valueOf();
+	// } else {
+	// 	endTime.value = dayjs.tz(dateStr, "America/New_York").valueOf();
+	// }
 	await console.log("1");
 
 	setTimeout(() => {
@@ -438,7 +451,7 @@ const onTwoCancel = () => {
 
 //日期时间选择器选项变化回调
 const onTwoChange = ({ selectedValues, selectedOptions, selectedIndexes, columnIndex }) => {
-	state.activeList = ["999"];
+	checkedType.value = "999";
 	if (state.activeType == 1) {
 		state.startTimeText = selectedValues.join("/");
 	} else {
@@ -460,6 +473,8 @@ const onStartOrEnd = (type: number) => {
  * @description 初始化开始时间和结束时间
  */
 const initStartTimeAndEndTimer = (options: TimeShortcutOptionsEnum = activeValue.value as TimeShortcutOptionsEnum) => {
+	// console.log(timeShortcutOptionsMap.get(<TimeShortcutOptionsEnum>options)?.startTime(), "开始时间timeShortcutOptionsMap.get(<TimeShortcutOptionsEnum>options)?.startTime()");
+
 	startTime.value = timeShortcutOptionsMap.get(<TimeShortcutOptionsEnum>options)?.startTime() as number;
 	endTime.value = timeShortcutOptionsMap.get(<TimeShortcutOptionsEnum>options)?.endTime() as number;
 };
@@ -530,7 +545,7 @@ const listToTimestamp = (list: Array<string>, type) => {
 		height: 75px;
 		border-radius: 12px;
 		box-sizing: border-box;
-    border: 2px solid var(--Line-N, #343434);
+		border: 2px solid var(--Line-N, #343434);
 		@include flex_center;
 		@include themeify {
 			background: themed("BG3");
@@ -542,11 +557,11 @@ const listToTimestamp = (list: Array<string>, type) => {
 		display: flex;
 		padding: 0 40px;
 		justify-content: space-between;
-    &>div{
-      border: 2px solid var(--Line-N, #343434);
-      border-radius: 12px;
-      background-color: #222324 !important;
-    }
+		& > div {
+			border: 2px solid var(--Line-N, #343434);
+			border-radius: 12px;
+			background-color: #222324 !important;
+		}
 		.selectionTime_item {
 			font-size: 26px;
 			height: 64px;
@@ -555,7 +570,7 @@ const listToTimestamp = (list: Array<string>, type) => {
 			@include flex_center;
 			@include themeify {
 				//background: themed("BG3");
-        color: var(--T1-N, #999ba0);
+				color: var(--T1-N, #999ba0);
 			}
 		}
 	}
@@ -692,19 +707,19 @@ const listToTimestamp = (list: Array<string>, type) => {
 	@include flex_space_between;
 }
 
-.hint{
-  font-family: PingFang SC;
-  font-size: 20px;
-  font-weight: 400;
-  line-height: 30px;
-  text-align: center;
-  text-underline-position: from-font;
-  text-decoration-skip-ink: none;
-  color: var(--Hint-P, #FF7A00);
-  margin: 16px 0;
+.hint {
+	font-family: PingFang SC;
+	font-size: 20px;
+	font-weight: 400;
+	line-height: 30px;
+	text-align: center;
+	text-underline-position: from-font;
+	text-decoration-skip-ink: none;
+	color: var(--Hint-P, #ff7a00);
+	margin: 16px 0;
 }
 
-:deep(.van-picker__confirm){
-  color: #fff !important;
+:deep(.van-picker__confirm) {
+	color: #fff !important;
 }
 </style>
