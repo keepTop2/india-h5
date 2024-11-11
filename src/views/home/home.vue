@@ -150,7 +150,7 @@ onMounted(() => {
 	initializeWebSocket();
 
 	if (UserStore.token) {
-		setIndexInfo();
+		UserStore.setIndexInfo();
 	}
 });
 onDeactivated(() => {
