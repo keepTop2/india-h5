@@ -160,7 +160,7 @@ const props = withDefaults(
 		// columns: [{}, {}, {}] as Array<any>,
 
 		confirmButtonText: "确认",
-		cancelButtonText: "X",
+		cancelButtonText: "×",
 		toolbarPosition: "top",
 
 		showToolbar: true,
@@ -727,5 +727,9 @@ const listToTimestamp = (list: Array<string>, type) => {
 
 :deep(.van-picker__confirm) {
 	color: #fff !important;
+}
+
+:deep(.van-picker__cancel){
+  font-size: 52px;
 }
 </style>
