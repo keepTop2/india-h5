@@ -220,9 +220,9 @@ const balanceOperationList = [
 		path: "/wallet/conversion",
 	},
 	{
-		name: $.t("my['投注记录']"),
+		name: $.t("my['交易记录']"),
 		icon: balance_operation_tz,
-		path: "",
+		path: "/wallet/records",
 	},
 ];
 

@@ -74,6 +74,7 @@ const onRecharge = async () => {
 		router.push({
 			path: "/wallet/rechargeDetails",
 			query: {
+				tradeWayType: "bank_card_recharge",
 				orderNo: res.data.orderNo,
 			},
 		});

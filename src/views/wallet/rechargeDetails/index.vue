@@ -1,140 +1,165 @@
 <template>
-	<VantNavBar :title="$t(`VantNavBar['存款详情']`)" @onClickLeft="onClickLeft" />
+	<VantNavBar :title="$t(`VantNavBar['${navTitle}']`)" @onClickLeft="onClickLeft" />
 	<div class="deposit-details">
 		<div class="status-bar">
-			<span class="value">+{{ depositOrderDetail.tradeCurrencyAmount }}</span
-			>&nbsp;<span class="label">{{ UserStore.userInfo.mainCurrency }}</span>
+			<!-- 虚拟货币单独判断 -->
+			<template v-if="route.query.tradeWayType === 'electronic_wallet_recharge' || route.query.tradeWayType === 'crypto_currency_withdraw'">
+				<span class="value">{{ getPlusMinusSign() }}{{ depositOrderDetail.applyAmount }}</span>
+				<span class="label ml_12">{{ UserStore.userInfo.mainCurrency }}</span>
+			</template>
+			<!-- 银行卡存款电子钱包存款 -->
+			<template v-else-if="!route.query.tradeWayType || route.query.tradeWayType === 'bank_card_recharge' || route.query.tradeWayType === 'electronic_wallet_recharge'">
+				<span class="value">{{ getPlusMinusSign() }}{{ depositOrderDetail.tradeCurrencyAmount }}</span>
+				<span class="label ml_12">{{ UserStore.userInfo.mainCurrency }}</span>
+			</template>
+			<!-- 其余方式都显示  -- arriveAmount -->
+			<template v-else>
+				<span class="value">{{ getPlusMinusSign() }}{{ depositOrderDetail.arriveAmount }}</span>
+				<span class="label ml_12">{{ UserStore.userInfo.mainCurrency }}</span>
+			</template>
 		</div>
 
-		<div class="deposit-info">
-			<div class="info-item">
-				<span class="label">{{ $t(`rechargeDetails['状态']`) }}</span>
-				<span class="value" :class="getClass">{{ getStatusLabel() }}</span>
-			</div>
-			<div class="info-item">
-				<span class="label">{{ $t(`rechargeDetails['充值金额']`) }}</span>
-				<span class="value">{{ common.getInstance().formatFloat(depositOrderDetail.applyAmount) }} {{ UserStore.userInfo.mainCurrency }}</span>
-			</div>
-			<div class="info-item">
-				<span class="label">{{ $t(`rechargeDetails['手续费']`) }}</span>
-				<span class="value">
-					<span v-if="depositOrderDetail.feeAmount > 0">-</span>
-					<span>{{ common.getInstance().formatFloat(depositOrderDetail.feeAmount) }}</span>
+		<div class="deposit-info" v-for="fromFields in fromFieldsList[route.query.tradeWayType]">
+			<div class="info-item" v-for="item in fromFields">
+				<span class="label">{{ $t(`rechargeDetails['${item.label}']`) }}</span>
+				<!-- 状态处理 -->
+				<span v-if="item.key == 'customerStatus'" class="value" :class="getClass">{{ getStatusLabel() }}</span>
+				<!-- 时间处理 -->
+				<span v-else-if="item.key == 'cratedTime' || item.key == 'updatedTime'" class="value">{{ common.getInstance().dayFormat2(depositOrderDetail[item.key]) }}</span>
+				<!-- 复制处理 -->
+				<span v-else-if="item.key == 'orderNo'" class="value">
+					<span>{{ depositOrderDetail[item.key] }}</span>
+					<SvgIcon @click="common.getInstance().copy(depositOrderDetail[item.key])" class="icon" iconName="common/copy" />
+				</span>
+				<!-- 币种处理 -->
+				<span v-else-if="item.key == 'feeAmount' || item.key == 'arriveAmount'" class="value">
+					<span>{{ common.getInstance().formatFloat(depositOrderDetail[item.key]) }}</span>
 					<span>{{ UserStore.userInfo.mainCurrency }}</span>
 				</span>
-			</div>
-			<div class="info-item">
-				<span class="label">{{ $t(`rechargeDetails['到账金额']`) }}</span>
-				<span class="value">{{ common.getInstance().formatFloat(depositOrderDetail.tradeCurrencyAmount) }} {{ UserStore.userInfo.mainCurrency }}</span>
-			</div>
-		</div>
-
-		<div class="deposit-info">
-			<div class="info-item">
-				<span class="label">{{ $t(`rechargeDetails['订单号']`) }}</span>
-				<span class="value">
-					{{ depositOrderDetail.orderNo }}
-					<SvgIcon @click="common.getInstance().copy(depositOrderDetail.orderNo)" class="icon" iconName="common/copy" />
+				<!-- U到账金额处理 -->
+				<span v-else-if="item.key == 'arriveAmount' && route.query.tradeWayType === 'crypto_currency_withdraw'" class="value">
+					<span>{{ common.getInstance().formatFloat(depositOrderDetail[item.key]) }}</span>
+					<span>USDT</span>
 				</span>
-			</div>
-			<div class="info-item">
-				<span class="label">{{ $t(`rechargeDetails['申请时间']`) }}</span>
-				<span class="value">{{ common.getInstance().dayFormat2(depositOrderDetail.createdTime) }}</span>
-			</div>
-			<div class="info-item">
-				<span class="label">{{ $t(`rechargeDetails['充值方式']`) }}</span>
-				<span class="value">{{ depositOrderDetail.depositWithdrawWay }}</span>
+				<!-- 平台币转换金额处理 -->
+				<span v-else-if="item.key == 'transferAmount'" class="value">
+					<span>{{ common.getInstance().formatFloat(depositOrderDetail[item.key]) }}</span>
+					<span>{{ UserStore.userInfo.platCurrencyName }}</span>
+				</span>
+				<span v-else class="value">{{ depositOrderDetail[item.key] }}</span>
 			</div>
 		</div>
 
-		<div class="progress">
-			<div class="header">
-				<SvgIcon class="icon" iconName="wallet/line" />
-				<span>{{ $t(`recharge['支付方式']`) }}</span>
-			</div>
-			<div class="steps">
-				<div class="step">
-					<div class="circle">
-						<div class="header">
-							<div class="step_icon">
-								<span v-if="!route.query.orderNo">1</span>
-								<SvgIcon v-else iconName="wallet/deal_success" />
-							</div>
-						</div>
-						<div class="line" :class="{ highlight: depositOrderDetail.customerStatus }"></div>
-					</div>
-					<div class="content">
-						<div class="title">{{ $t(`rechargeDetails['创建充值订单']`) }}</div>
-						<div class="description">
-							<p class="text">{{ common.getInstance().dayFormat2(depositOrderDetail.createdTime) }}</p>
-						</div>
-					</div>
-				</div>
-				<div class="step">
-					<div class="circle">
-						<div class="header">
-							<div class="step_icon">
-								<span v-if="depositOrderDetail.customerStatus == 0">2</span>
-								<SvgIcon v-else iconName="wallet/deal_success" />
-							</div>
-						</div>
-						<div class="line" :class="{ highlight: depositOrderDetail.customerStatus != 0 }"></div>
-					</div>
-					<div class="content">
-						<div class="title">{{ $t(`rechargeDetails['第三方商户处理中']`) }}</div>
-						<div class="description">
-							<p class="text">{{ $t(`rechargeDetails['此过程可能需要1小时，更新于']`, { value: common.getInstance().dayFormat2(depositOrderDetail.updatedTime) }) }}</p>
-							<template v-if="depositOrderDetail.customerStatus == '0'">
-								<p v-if="!depositOrderDetail.cashFlowFileList || depositOrderDetail.cashFlowFileList.length == '0'">
-									<span class="a" @click="isModalVisible = true">{{ $t(`rechargeDetails['提供转账凭证']`) }}</span>
-								</p>
-								<p class="text">
-									<i18n-t keypath="rechargeDetails['超时']" :tag="'p'">
-										<template v-slot:value>
-											<span class="text_2"> {{ formattedTime }} </span>
-										</template>
-									</i18n-t>
-								</p>
-							</template>
-						</div>
-					</div>
-				</div>
-				<div class="step">
-					<div class="circle">
-						<div class="header">
-							<div class="step_icon">
-								<span v-if="depositOrderDetail.customerStatus == '0'">3</span>
-								<SvgIcon v-else-if="depositOrderDetail.customerStatus == '1'" iconName="wallet/deal_success" />
-								<SvgIcon v-else-if="depositOrderDetail.customerStatus == '2'" iconName="wallet/deal_error" />
-							</div>
-						</div>
-					</div>
-					<div class="content">
-						<div class="title">{{ $t(`rechargeDetails['交易完成/失败']`) }}</div>
-					</div>
-				</div>
+		<!-- 银行卡提现 -->
+		<div v-if="route.query.tradeWayType === 'bank_card_withdraw'" class="deposit-info">
+			<div class="info-item" v-if="item in BankCardWithdrawalList">
+				<span class="label">{{ $t(`rechargeDetails['${item.label}']`) }}</span>
+				<span class="value">{{ depositOrderDetail.tradeCurrencyAmount }}</span>
 			</div>
 		</div>
 
-		<div class="proof_list" v-if="depositOrderDetail.voucherFlag === 1">
-			<VantLazyImg v-for="(item, index) in depositOrderDetail.cashFlowFileList" :key="index" class="proof_item" :src="item" />
+		<!-- 电子钱包提现 -->
+		<div v-if="route.query.tradeWayType === 'electronic_wallet_withdraw'" class="deposit-info">
+			<div class="info-item" v-if="item in EWalletList">
+				<span class="label">{{ $t(`rechargeDetails['${item.label}']`) }}</span>
+				<span class="value">{{ depositOrderDetail[item.key] }}</span>
+			</div>
 		</div>
+
+		<!-- 只有银行卡 电子钱包 存款才显示进度 -->
+		<template v-if="route.query.tradeWayType === 'bank_card_recharge' || route.query.tradeWayType === 'electronic_wallet_recharge'">
+			<div class="progress">
+				<div class="header">
+					<SvgIcon class="icon" iconName="wallet/line" />
+					<span>{{ $t(`recharge['支付方式']`) }}</span>
+				</div>
+				<div class="steps">
+					<div class="step">
+						<div class="circle">
+							<div class="header">
+								<div class="step_icon">
+									<span v-if="!route.query.orderNo">1</span>
+									<SvgIcon v-else iconName="wallet/deal_success" />
+								</div>
+							</div>
+							<div class="line" :class="{ highlight: depositOrderDetail.customerStatus }"></div>
+						</div>
+						<div class="content">
+							<div class="title">{{ $t(`rechargeDetails['创建充值订单']`) }}</div>
+							<div class="description">
+								<p class="text">{{ common.getInstance().dayFormat2(depositOrderDetail.createdTime) }}</p>
+							</div>
+						</div>
+					</div>
+					<div class="step">
+						<div class="circle">
+							<div class="header">
+								<div class="step_icon">
+									<span v-if="depositOrderDetail.customerStatus == 0">2</span>
+									<SvgIcon v-else iconName="wallet/deal_success" />
+								</div>
+							</div>
+							<div class="line" :class="{ highlight: depositOrderDetail.customerStatus != 0 }"></div>
+						</div>
+						<div class="content">
+							<div class="title">{{ $t(`rechargeDetails['第三方商户处理中']`) }}</div>
+							<div class="description">
+								<p class="text">{{ $t(`rechargeDetails['此过程可能需要1小时，更新于']`, { value: common.getInstance().dayFormat2(depositOrderDetail.updatedTime) }) }}</p>
+								<template v-if="depositOrderDetail.customerStatus == '0'">
+									<p v-if="!depositOrderDetail.cashFlowFileList || depositOrderDetail.cashFlowFileList.length == '0'">
+										<span class="a" @click="isModalVisible = true">{{ $t(`rechargeDetails['提供转账凭证']`) }}</span>
+									</p>
+									<p class="text">
+										<i18n-t keypath="rechargeDetails['超时']" :tag="'p'">
+											<template v-slot:value>
+												<span class="text_2"> {{ formattedTime }} </span>
+											</template>
+										</i18n-t>
+									</p>
+								</template>
+							</div>
+						</div>
+					</div>
+					<div class="step">
+						<div class="circle">
+							<div class="header">
+								<div class="step_icon">
+									<span v-if="depositOrderDetail.customerStatus == '0'">3</span>
+									<SvgIcon v-else-if="depositOrderDetail.customerStatus == '1'" iconName="wallet/deal_success" />
+									<SvgIcon v-else-if="depositOrderDetail.customerStatus == '2'" iconName="wallet/deal_error" />
+								</div>
+							</div>
+						</div>
+						<div class="content">
+							<div class="title">{{ $t(`rechargeDetails['交易完成/失败']`) }}</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="proof_list" v-if="depositOrderDetail.voucherFlag === 1">
+				<VantLazyImg v-for="(item, index) in depositOrderDetail.cashFlowFileList" :key="index" class="proof_item" :src="item" />
+			</div>
+		</template>
 	</div>
-	<div class="footer">
-		<template v-if="depositOrderDetail.customerStatus == '0'">
-			<template v-if="depositOrderDetail.voucherFlag == 0">
-				<div class="cancel_btn" @click="onCancelDepositOrder">{{ $t(`rechargeDetails['取消充值']`) }}</div>
-				<div class="confirm_btn" @click="router.back()">{{ $t(`rechargeDetails['继续充值']`) }}</div>
+	<!-- 只有银行卡 电子钱包 存款才显示底部 -->
+	<template v-if="route.query.tradeWayType === 'bank_card_recharge' || route.query.tradeWayType === 'electronic_wallet_recharge'">
+		<div class="footer">
+			<template v-if="depositOrderDetail.customerStatus == '0'">
+				<template v-if="depositOrderDetail.voucherFlag == 0">
+					<div class="cancel_btn" @click="onCancelDepositOrder">{{ $t(`rechargeDetails['取消充值']`) }}</div>
+					<div class="confirm_btn" @click="router.back()">{{ $t(`rechargeDetails['继续充值']`) }}</div>
+				</template>
+				<template v-else-if="depositOrderDetail.voucherFlag == 1">
+					<div class="cancel_btn" @click="common.getSiteCustomerChannel">{{ $t(`rechargeDetails['联系客服']`) }}</div>
+					<div v-if="depositOrderDetail.urgeOrder == 0" class="confirm_btn" @click="onUrgeOrder">{{ $t(`rechargeDetails['我要催单']`) }}</div>
+				</template>
 			</template>
-			<template v-else-if="depositOrderDetail.voucherFlag == 1">
+			<template v-else>
 				<div class="cancel_btn" @click="common.getSiteCustomerChannel">{{ $t(`rechargeDetails['联系客服']`) }}</div>
-				<div v-if="depositOrderDetail.urgeOrder == 0" class="confirm_btn" @click="onUrgeOrder">{{ $t(`rechargeDetails['我要催单']`) }}</div>
 			</template>
-		</template>
-		<template v-else>
-			<div class="cancel_btn" @click="common.getSiteCustomerChannel">{{ $t(`rechargeDetails['联系客服']`) }}</div>
-		</template>
-	</div>
+		</div>
+	</template>
 
 	<!--上传凭证弹窗 -->
 	<Model v-model:modelValue="isModalVisible">
@@ -228,6 +253,7 @@ const route = useRoute();
 const router = useRouter();
 const UserStore = useUserStore();
 interface depositOrderDetailRootObject {
+	arriveAmount: string;
 	orderNo: string;
 	depositWithdrawWay: string;
 	depositWithdrawTypeCode: string;
@@ -259,10 +285,395 @@ const fileList = ref([]); // 组件库上传文件
 const cashFlowFileList = ref([] as any); // 服务器上传文件
 const cashFlowRemark = ref(""); // 留言
 
+const fromFieldsList = {
+	// 银行卡存款
+	bank_card_recharge: [
+		[
+			{
+				label: "状态",
+				key: "customerStatus",
+			},
+			{
+				label: "充值金额",
+				key: "applyAmount",
+			},
+			{
+				label: "手续费",
+				key: "feeAmount",
+			},
+			{
+				label: "到账金额",
+				key: "tradeCurrencyAmount",
+			},
+		],
+		[
+			{
+				label: "订单号",
+				key: "orderNo",
+			},
+			{
+				label: "申请时间",
+				key: "createdTime",
+			},
+			{
+				label: "充值方式",
+				key: "depositWithdrawWay",
+			},
+		],
+	],
+	// 电子钱包存款
+	electronic_wallet_recharge: [
+		[
+			{
+				label: "状态",
+				key: "customerStatus",
+			},
+			{
+				label: "充值金额",
+				key: "applyAmount",
+			},
+			{
+				label: "手续费",
+				key: "feeAmount",
+			},
+			{
+				label: "到账金额",
+				key: "tradeCurrencyAmount",
+			},
+		],
+		[
+			{
+				label: "订单号",
+				key: "orderNo",
+			},
+			{
+				label: "申请时间",
+				key: "createdTime",
+			},
+			{
+				label: "充值方式",
+				key: "depositWithdrawWay",
+			},
+		],
+	],
+	// 虚拟币存款
+	crypto_currency_recharge: [
+		[
+			{
+				label: "状态",
+				key: "customerStatus",
+			},
+			{
+				label: "到账时间",
+				key: "updatedTime",
+			},
+		],
+		[
+			{
+				label: "订单号",
+				key: "orderNo",
+			},
+			{
+				label: "存款方式",
+				key: "tradeWayTypeText",
+			},
+			{
+				label: "到账金额",
+				key: "applyAmount",
+			},
+			{
+				label: "手续费",
+				key: "feeAmount",
+			},
+			{
+				label: "汇率",
+				key: "exchangeRate",
+			},
+			{
+				label: "实际到账",
+				key: "arriveAmount",
+			},
+		],
+	],
+	// 上级转入
+	superior_transfer: [
+		[
+			{
+				label: "状态",
+				key: "customerStatus",
+			},
+			{
+				label: "转入时间",
+				key: "updatedTime",
+			},
+		],
+		[
+			{
+				label: "订单号",
+				key: "orderNo",
+			},
+			{
+				label: "存款方式",
+				key: "tradeWayTypeText",
+			},
+			{
+				label: "上级代理",
+				key: "superAgentAccount",
+			},
+		],
+	],
+	// 上级转入
+	manual_up: [
+		[
+			{
+				label: "状态",
+				key: "customerStatus",
+			},
+			{
+				label: "转入时间",
+				key: "到账时间",
+			},
+		],
+		[
+			{
+				label: "订单号",
+				key: "orderNo",
+			},
+			{
+				label: "存款方式",
+				key: "tradeWayTypeText",
+			},
+		],
+	],
+	// 银行卡取款
+	bank_card_withdraw: [
+		[
+			{
+				label: "状态",
+				key: "customerStatus",
+			},
+			{
+				label: "申请时间",
+				key: "cratedTime",
+			},
+			{
+				label: "到账时间",
+				key: "updatedTime",
+			},
+		],
+		[
+			{
+				label: "订单号",
+				key: "orderNo",
+			},
+			{
+				label: "手续费",
+				key: "feeAmount",
+			},
+			{
+				label: "到账金额",
+				key: "arriveAmount",
+			},
+			{
+				label: "提款方式",
+				key: "tradeWayTypeText",
+			},
+		],
+		[
+			{
+				label: "银行名称",
+				key: "bankName",
+			},
+			{
+				label: "银行代码",
+				key: "bankCode",
+			},
+			{
+				label: "银行卡号",
+				key: "bankCard",
+			},
+		],
+	],
+	// 电子钱包取款
+	electronic_wallet_withdraw: [
+		[
+			{
+				label: "状态",
+				key: "customerStatus",
+			},
+			{
+				label: "申请时间",
+				key: "cratedTime",
+			},
+			{
+				label: "到账时间",
+				key: "updatedTime",
+			},
+		],
+		[
+			{
+				label: "订单号",
+				key: "orderNo",
+			},
+			{
+				label: "手续费",
+				key: "feeAmount",
+			},
+			{
+				label: "到账金额",
+				key: "arriveAmount",
+			},
+			{
+				label: "提款方式",
+				key: "tradeWayTypeText",
+			},
+		],
+	],
+	// 加密货币取款
+	crypto_currency_withdraw: [
+		[
+			{
+				label: "状态",
+				key: "customerStatus",
+			},
+			{
+				label: "申请时间",
+				key: "cratedTime",
+			},
+			{
+				label: "到账时间",
+				key: "updatedTime",
+			},
+		],
+		[
+			{
+				label: "订单号",
+				key: "orderNo",
+			},
+			{
+				label: "手续费",
+				key: "feeAmount",
+			},
+			{
+				label: "汇率",
+				key: "exchangeRate",
+			},
+			{
+				label: "到账金额",
+				key: "arriveAmount",
+			},
+			{
+				label: "提款方式",
+				key: "tradeWayTypeText",
+			},
+		],
+		[
+			{
+				label: "地址",
+				key: "addressNo",
+			},
+		],
+	],
+	// 人工减额
+	manual_down: [
+		[
+			{
+				label: "状态",
+				key: "customerStatus",
+			},
+			{
+				label: "到账时间",
+				key: "updatedTime",
+			},
+		],
+		[
+			{
+				label: "订单号",
+				key: "orderNo",
+			},
+			{
+				label: "提款方式",
+				key: "tradeWayTypeText",
+			},
+		],
+	],
+	// 转换平台币
+	platform_transfer: [
+		[
+			{
+				label: "转换时间",
+				key: "updatedTime",
+			},
+		],
+		[
+			{
+				label: "订单号",
+				key: "orderNo",
+			},
+			{
+				label: "平台币转换金额",
+				key: "transferAmount",
+			},
+			{
+				label: "汇率",
+				key: "transferRate",
+			},
+		],
+	],
+};
+
+// 银行卡取款动态表单，单独判断
+const BankCardWithdrawalList = [
+	{
+		label: "姓名",
+		key: "userName",
+	},
+	{
+		label: "省",
+		key: "provinceName",
+	},
+	{
+		label: "城市",
+		key: "cityName",
+	},
+	{
+		label: "详细地址",
+		key: "detailAddress",
+	},
+	{
+		label: "邮箱地址",
+		key: "userEmail",
+	},
+	{
+		label: "手机号",
+		key: "userPhone",
+	},
+];
+
+const EWalletList = [
+	{
+		label: "姓名",
+		key: "userName",
+	},
+	{
+		label: "账号",
+		key: "userAccount",
+	},
+	{
+		label: "手机号",
+		key: "userPhone",
+	},
+];
+
 onMounted(() => {
-	getDepositOrderDetail();
-	console.log("开始推送数据");
-	pubsub.subscribe("/wallet/rechargeSuccessFail", rechargeSuccessFail);
+	console.log("route", route.query);
+	if (route.query.tradeWayType === "bank_card_recharge" || route.query.tradeWayType === "electronic_wallet_recharge") {
+		getDepositOrderDetail();
+		console.log("开始推送数据");
+		pubsub.subscribe("/wallet/rechargeSuccessFail", rechargeSuccessFail);
+	} else {
+		tradeRecordDetail();
+	}
 });
 
 // 收到订单推送订阅
@@ -275,7 +686,7 @@ const rechargeSuccessFail = (data) => {
 	}
 };
 
-// 获取订单详情
+// 获取存款订单详情
 const getDepositOrderDetail = async () => {
 	const params = {
 		orderNo: route.query.orderNo,
@@ -284,6 +695,35 @@ const getDepositOrderDetail = async () => {
 	if (res.code === common.getInstance().ResCode.SUCCESS) {
 		depositOrderDetail.value = res.data;
 		startCountdown();
+	}
+};
+
+// 获取存款订单详情
+const tradeRecordDetail = async () => {
+	const params = { tradeType: route.query.tradeType, tradeWayType: route.query.tradeWayType, orderNo: route.query.orderNo };
+	const res = await walletApi.tradeRecordDetail(params).catch((err) => err);
+	if (res.code === common.getInstance().ResCode.SUCCESS) {
+		// 银行卡 电子钱包 虚拟货币 取款
+		if (
+			route.query.tradeWayType === "bank_card_withdraw" ||
+			route.query.tradeWayType === "electronic_wallet_withdraw" ||
+			route.query.tradeWayType === "crypto_currency_withdraw" ||
+			route.query.tradeWayType === "crypto_currency_recharge"
+		) {
+			depositOrderDetail.value = res.data.withdrawOrderDetailVO;
+		}
+		// 人工加额
+		if (route.query.tradeWayType === "manual_up" || route.query.tradeWayType === "manual_down") {
+			depositOrderDetail.value = res.data.manualUpDownDetailVO;
+		}
+		// 上级转入转出
+		if (route.query.tradeWayType === "superior_transfer") {
+			depositOrderDetail.value = res.data.superTransferDetailVO;
+		}
+		// 平台币转换
+		if (route.query.tradeWayType === "platform_transfer") {
+			depositOrderDetail.value = res.data.platformTransferDetailVO;
+		}
 	}
 };
 
@@ -332,6 +772,49 @@ const onCancelDepositOrder = async () => {
 	const res = await walletApi.cancelDepositOrder(params).catch((err) => err);
 	if (res.code === common.getInstance().ResCode.SUCCESS) {
 		router.back();
+	}
+};
+
+// 获取页面title
+const navTitle = computed(() => {
+	if (
+		route.query.tradeWayType === "bank_card_recharge" ||
+		route.query.tradeWayType === "electronic_wallet_recharge" ||
+		route.query.tradeWayType === "crypto_currency_recharge" ||
+		route.query.tradeWayType === "manual_up" ||
+		route.query.tradeWayType === "superior_transfer"
+	) {
+		return "存款详情";
+	} else if (
+		route.query.tradeWayType === "manual_down" ||
+		route.query.tradeWayType === "bank_card_withdraw" ||
+		route.query.tradeWayType === "electronic_wallet_withdraw" ||
+		route.query.tradeWayType === "crypto_currency_withdraw"
+	) {
+		return "提款详情";
+	} else if (route.query.tradeWayType === "platform_transfer") {
+		return "平台币转换详情";
+	}
+});
+
+//  判断加减符号
+const getPlusMinusSign = () => {
+	if (
+		route.query.tradeWayType === "bank_card_recharge" ||
+		route.query.tradeWayType === "electronic_wallet_recharge" ||
+		route.query.tradeWayType === "crypto_currency_recharge" ||
+		route.query.tradeWayType === "manual_up" ||
+		route.query.tradeWayType === "superior_transfer" ||
+		route.query.tradeWayType === "platform_transfer"
+	) {
+		return "+";
+	} else if (
+		route.query.tradeWayType === "manual_down" ||
+		route.query.tradeWayType === "bank_card_withdraw" ||
+		route.query.tradeWayType === "electronic_wallet_withdraw" ||
+		route.query.tradeWayType === "crypto_currency_withdraw"
+	) {
+		return "-";
 	}
 };
 
@@ -718,13 +1201,19 @@ onUnmounted(() => {
 }
 
 .success {
-	color: themed("Wam-P1") !important;
+	@include themeify {
+		color: themed("Wam-P1") !important;
+	}
 }
 .error {
-	color: themed("Theme") !important;
+	@include themeify {
+		color: themed("Hint") !important;
+	}
 }
 .hint {
-	color: themed("Hint") !important;
+	@include themeify {
+		color: themed("F2") !important;
+	}
 }
 
 // 弹窗样式
