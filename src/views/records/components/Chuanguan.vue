@@ -35,8 +35,9 @@
 		<div class="match-details" v-for="(match, index) in item.orderMultipleBetList" :key="index">
 			<div class="match-info">
 				<span>{{ match.eventInfo }}</span>
-				<span class="info-vs">
-					{{ item.teamInfo }}
+<!--        <span class="text-hidden">{{ match.teamInfo }}</span>-->
+				<span class="text-hidden">
+					{{ match.teamInfo }}
 					<!--					<span class="info-nation">team1</span>-->
 					<!--					<span>VS</span>-->
 					<!--					<span class="info-nation">team2</span>-->
@@ -81,5 +82,11 @@ function _copy(orderId) {
 
 .PendingSettlement {
 	color: var(--T3-P, #7d8086);
+}
+
+.text-hidden{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 </style>
