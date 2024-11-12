@@ -68,14 +68,7 @@
 				<div class="group mb_32">
 					<div class="color_T1" :class="currentWelfareCenterRewardType == 'all' ? 'active' : ''" @click="currentWelfareCenterRewardType = 'all'">全部</div>
 					<div v-for="item in downBoxList?.trade_type" class="color_T1" @click="currentWelfareCenterRewardType = item.code" :class="currentWelfareCenterRewardType == item.code ? 'active' : ''">
-						<div
-							v-for="item in downBoxList?.welfareCenterRewardType"
-							class="color_T1"
-							@click="currentWelfareCenterRewardType = item.code"
-							:class="currentWelfareCenterRewardType == item.code ? 'active' : ''"
-						>
-							{{ item.value }}
-						</div>
+						{{ item.value }}
 					</div>
 				</div>
 			</div>

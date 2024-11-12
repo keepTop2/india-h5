@@ -1,5 +1,5 @@
 <template>
-	<VantNavBar :title="$t(`VantNavBar['存款详情']`)" @onClickLeft="onClickLeft" />
+	<VantNavBar :title="$t(`VantNavBar['${navTitle}']`)" @onClickLeft="onClickLeft" />
 	<div class="deposit-details">
 		<div class="status-bar">
 			<!-- 虚拟货币单独判断 -->
@@ -22,7 +22,6 @@
 		<div class="deposit-info" v-for="fromFields in fromFieldsList[route.query.tradeWayType]">
 			<div class="info-item" v-for="item in fromFields">
 				<span class="label">{{ $t(`rechargeDetails['${item.label}']`) }}</span>
-				<!-- <span>{{ item.key }}</span> -->
 				<!-- 状态处理 -->
 				<span v-if="item.key == 'customerStatus'" class="value" :class="getClass">{{ getStatusLabel() }}</span>
 				<!-- 时间处理 -->
@@ -41,6 +40,11 @@
 				<span v-else-if="item.key == 'arriveAmount' && route.query.tradeWayType === 'crypto_currency_withdraw'" class="value">
 					<span>{{ common.getInstance().formatFloat(depositOrderDetail[item.key]) }}</span>
 					<span>USDT</span>
+				</span>
+				<!-- 平台币转换金额处理 -->
+				<span v-else-if="item.key == 'transferAmount'" class="value">
+					<span>{{ common.getInstance().formatFloat(depositOrderDetail[item.key]) }}</span>
+					<span>{{ UserStore.userInfo.platCurrencyName }}</span>
 				</span>
 				<span v-else class="value">{{ depositOrderDetail[item.key] }}</span>
 			</div>
@@ -249,6 +253,7 @@ const route = useRoute();
 const router = useRouter();
 const UserStore = useUserStore();
 interface depositOrderDetailRootObject {
+	arriveAmount: string;
 	orderNo: string;
 	depositWithdrawWay: string;
 	depositWithdrawTypeCode: string;
@@ -770,9 +775,31 @@ const onCancelDepositOrder = async () => {
 	}
 };
 
+// 获取页面title
+const navTitle = computed(() => {
+	if (
+		route.query.tradeWayType === "bank_card_recharge" ||
+		route.query.tradeWayType === "electronic_wallet_recharge" ||
+		route.query.tradeWayType === "crypto_currency_recharge" ||
+		route.query.tradeWayType === "manual_up" ||
+		route.query.tradeWayType === "superior_transfer"
+	) {
+		return "存款详情";
+	} else if (
+		route.query.tradeWayType === "manual_down" ||
+		route.query.tradeWayType === "bank_card_withdraw" ||
+		route.query.tradeWayType === "electronic_wallet_withdraw" ||
+		route.query.tradeWayType === "crypto_currency_withdraw"
+	) {
+		return "提款详情";
+	} else if (route.query.tradeWayType === "platform_transfer") {
+		return "平台币转换详情";
+	}
+});
+
+//  判断加减符号
 const getPlusMinusSign = () => {
 	if (
-		!route.query.tradeWayType ||
 		route.query.tradeWayType === "bank_card_recharge" ||
 		route.query.tradeWayType === "electronic_wallet_recharge" ||
 		route.query.tradeWayType === "crypto_currency_recharge" ||

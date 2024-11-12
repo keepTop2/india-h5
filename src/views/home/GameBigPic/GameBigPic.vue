@@ -3,7 +3,7 @@
 		<!-- <SvgIcon v-if="useCollectGamesStore().getCollectGamesList?.some((game) => game.id === gameInfoList.id)" iconName="home/event_collect" @click.stop="onClickCollect(gameInfoList)" />
 		<SvgIcon v-else @click.stop="onClickCollect(gameInfoList)" iconName="home/event_collect_no" /> -->
 
-		<VantLazyImg :src="gameInfoList.iconFileUrl" alt="" @click="Common.goToGame(gameInfoList.gameInfoList[0])" />
+		<VantLazyImg :src="gameInfoList.gameInfoList[0].iconFileUrl" alt="" @click="Common.goToGame(gameInfoList.gameInfoList[0])" />
 	</div>
 </template>
 <script lang="ts" setup>

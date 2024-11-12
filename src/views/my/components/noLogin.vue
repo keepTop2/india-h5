@@ -22,7 +22,7 @@
 				<SvgIcon class="icon" iconName="my/lang" />
 				<div class="label">{{ $t('my["语言"]') }}</div>
 				<div class="value">{{ store.langName }}</div>
-				<div class="arrow"><SvgIcon iconName="common/arrow" /></div>
+				<div class="arrow"><SvgIcon iconName="common/arrow" size="24px" /></div>
 			</div>
 			<div class="cell">
 				<SvgIcon iconName="my/theme" class="icon" />
@@ -206,6 +206,13 @@ const toPath = (path) => {
 				height: 46px;
 			}
 		}
+	}
+}
+.arrow {
+	width: 24px;
+	height: 24px;
+	@include themeify {
+		color: themed("T1");
 	}
 }
 </style>

@@ -50,11 +50,11 @@
 					</div>
 				</div>
 				<!-- 帮助中心 -->
-				<div class="menu van-haptics-feedback">
+				<div class="menu van-haptics-feedback" @click="toPath('/helpCenter')">
 					<div class="icon">
 						<img :src="helpCenter" />
 					</div>
-					<div class="label" @click="toPath('/helpCenter')">{{ $t(`menuPopup["帮助中心"]`) }}</div>
+					<div class="label">{{ $t(`menuPopup["帮助中心"]`) }}</div>
 				</div>
 				<div
 					class="menu van-haptics-feedback"
