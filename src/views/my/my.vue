@@ -222,7 +222,7 @@ const balanceOperationList = [
 	{
 		name: $.t("my['投注记录']"),
 		icon: balance_operation_tz,
-		path: "",
+		path: "/wallet/records",
 	},
 ];
 
