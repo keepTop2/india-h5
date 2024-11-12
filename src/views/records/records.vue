@@ -152,7 +152,7 @@ const getList = (type) => {
 	const data = {
 		...pageVo,
 		venueType: +state.activeList2,
-		orderclass: state.activeList == "all" ? [] : [+state.activeList],
+		orderClassifyList: state.activeList == "all" ? [] : [+state.activeList],
 		betStartTime: dateRangeSelectDemoState.startTime,
 		betEndTime: dateRangeSelectDemoState.endTime,
 	};

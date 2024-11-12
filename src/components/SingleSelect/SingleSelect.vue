@@ -35,6 +35,7 @@
 				v-bind="$attrs"
 				@confirm="onConfirm"
 				@change="onChange"
+        @cancel="isShow = false"
 				@click-option="onClickOption"
 			>
 				<template #option="item">

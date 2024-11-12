@@ -14,8 +14,8 @@
 						{{ state.acitveName }}
 					</div>
 					<div v-else>
-						<div>{{ state.startTimeSlotText }}</div>
-						<div>{{ state.endTimeSlotText }}</div>
+						<div>{{ dayjs(state.startTimeSlotText, "YYYY/MM/DD").format("YYYY-MM-DD") }}</div>
+						<div>{{ dayjs(state.endTimeSlotText, "YYYY/MM/DD").format("YYYY-MM-DD") }}</div>
 					</div>
 					<SvgIcon size="3.2" iconName="common/arrowDown" />
 				</div>
@@ -79,13 +79,13 @@
 						</div>
 						<div class="dateRangeSelect_columnstop">
 							<div :class="{ dateRangeSelect_active: state.activeType == 1 }" class="dateRangeSelect_timebox" @click="onStartOrEnd(1)">
-								{{ state.startTimeText }}
+								{{ dayjs(state.startTimeText, "YYYY/MM/DD").format("YYYY-MM-DD") }}
 							</div>
 							<div class="dateRangeSelect_text1">
 								{{ $t(`components['DateRangeSelect']['至']`) }}
 							</div>
 							<div :class="{ dateRangeSelect_active: state.activeType == 2 }" class="dateRangeSelect_timebox" @click="onStartOrEnd(2)">
-								{{ state.endTimeText }}
+								{{ dayjs(state.endTimeText, "YYYY/MM/DD").format("YYYY-MM-DD") }}
 							</div>
 						</div>
 					</div>
@@ -160,7 +160,7 @@ const props = withDefaults(
 		// columns: [{}, {}, {}] as Array<any>,
 
 		confirmButtonText: "确认",
-		cancelButtonText: "X",
+		cancelButtonText: "×",
 		toolbarPosition: "top",
 
 		showToolbar: true,
@@ -253,7 +253,7 @@ const startTime: ModelRef<number, number> = defineModel("startTimeU", {
 		return value as number;
 	},
 	set(value) {
-		state.startTimeSlotText = dayjs(value).tz("America/New_York").format("YYYY/MM/DD");
+		state.startTimeSlotText = state.startTimeText;
 		return value as number;
 	},
 	default: 0,
@@ -269,7 +269,7 @@ const endTime: ModelRef<number, number> = defineModel("endTimeU", {
 		return value as number;
 	},
 	set(value) {
-		state.endTimeSlotText = dayjs(value).tz("America/New_York").format("YYYY/MM/DD");
+		state.endTimeSlotText = state.endTimeText;
 		return value as number;
 	},
 	default: 0,
@@ -349,15 +349,15 @@ const onOneConfirm = ({ selectedValues, selectedOptions, selectedIndexes }) => {
 		initStartTimeAndEndTimer();
 		emit("onConfirmDate");
 	} else {
-		state.minDate = dayjs().tz("America/New_York").subtract(90, "day").toDate();
-		state.maxDate = dayjs().tz("America/New_York").toDate();
+		state.minDate = dayjs().subtract(90, "day").toDate();
+		state.maxDate = dayjs().toDate();
 		//赋值开始时间给日期时间选择器组件
 		state.dateTimeList = timestampToList(startTime.value);
 		state.startTimeText = state.dateTimeList.join("/");
-		state.endTimeText = dayjs(endTime.value).tz("America/New_York").format("YYYY/MM/DD");
+		state.endTimeText = dayjs(endTime.value).format("YYYY/MM/DD");
 		//外部插槽展示日期
 		state.startTimeSlotText = state.dateTimeList.join("/");
-		state.endTimeSlotText = dayjs(endTime.value).tz("America/New_York").format("YYYY/MM/DD");
+		state.endTimeSlotText = dayjs(endTime.value).format("YYYY/MM/DD");
 		state.activeType = 1;
 		state.twoShow = true;
 	}
@@ -384,11 +384,11 @@ const selectionTimeHandler = (selectedOptions: any) => {
 const setDatePickerData = () => {
 	nextTick(() => {
 		state.activeType = 1;
-		state.dateTimeList = timestampToList(timeShortcutOptionsMap.get(<TimeShortcutOptionsEnum>checkedType.value)?.startTime());
+		if (checkedType.value != "999") {
+			state.dateTimeList = timestampToList(timeShortcutOptionsMap.get(<TimeShortcutOptionsEnum>checkedType.value)?.startTime());
+		}
 		state.startTimeText = state.dateTimeList.join("/");
-		state.endTimeText = dayjs(timeShortcutOptionsMap.get(<TimeShortcutOptionsEnum>checkedType.value)?.endTime())
-			.tz("America/New_York")
-			.format("YYYY/MM/DD");
+		state.endTimeText = dayjs(timeShortcutOptionsMap.get(<TimeShortcutOptionsEnum>checkedType.value)?.endTime()).format("YYYY/MM/DD");
 	});
 };
 
@@ -423,8 +423,8 @@ const onOneClosed = () => {
 const onTwoConfirm = async ({ selectedValues, selectedOptions, selectedIndexes }) => {
 	state.acitveName = cacheShortcutOptions.value.text;
 	state.activeList = [checkedType.value];
-	initStartTimeAndEndTimer(cacheShortcutOptions.value.value);
-
+	// initStartTimeAndEndTimer(cacheShortcutOptions.value.value);
+	initStartTimeAndEndTimerByText();
 	// const dateStr = state.dateTimeList.join("-");
 	// if (state.activeType == 1) {
 	// 	startTime.value = dayjs.tz(dateStr, "America/New_York").valueOf();
@@ -473,10 +473,14 @@ const onStartOrEnd = (type: number) => {
  * @description 初始化开始时间和结束时间
  */
 const initStartTimeAndEndTimer = (options: TimeShortcutOptionsEnum = activeValue.value as TimeShortcutOptionsEnum) => {
-	// console.log(timeShortcutOptionsMap.get(<TimeShortcutOptionsEnum>options)?.startTime(), "开始时间timeShortcutOptionsMap.get(<TimeShortcutOptionsEnum>options)?.startTime()");
-
 	startTime.value = timeShortcutOptionsMap.get(<TimeShortcutOptionsEnum>options)?.startTime() as number;
 	endTime.value = timeShortcutOptionsMap.get(<TimeShortcutOptionsEnum>options)?.endTime() as number;
+};
+
+// 根据state.startTimeText 和 state.endTimeText 初始化开始时间和结束时间
+const initStartTimeAndEndTimerByText = () => {
+	startTime.value = dayjs(state.startTimeText, "YYYY/MM/DD").startOf("day").valueOf();
+	endTime.value = dayjs(state.endTimeText, "YYYY/MM/DD").endOf("day").valueOf();
 };
 
 /**
@@ -486,7 +490,7 @@ const initStartTimeAndEndTimer = (options: TimeShortcutOptionsEnum = activeValue
 const timestampToList = (timestamp: number) => {
 	console.log(timestamp, "timestampToList");
 
-	const dateStr = dayjs(timestamp).tz("America/New_York").format("YYYY/MM/DD");
+	const dateStr = dayjs(timestamp).format("YYYY/MM/DD");
 	const list = dateStr.split("/");
 	return list;
 };
@@ -696,7 +700,7 @@ const listToTimestamp = (list: Array<string>, type) => {
 	padding: 9px 24px 9px 14px;
 	border-radius: 12px;
 	border: 1px solid;
-	font-size: 22px;
+	font-size: 26px;
 	line-height: 30px;
 	@include themeify {
 		border-color: themed("Line");
@@ -721,5 +725,9 @@ const listToTimestamp = (list: Array<string>, type) => {
 
 :deep(.van-picker__confirm) {
 	color: #fff !important;
+}
+
+:deep(.van-picker__cancel) {
+	font-size: 52px;
 }
 </style>
