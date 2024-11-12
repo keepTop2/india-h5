@@ -502,10 +502,10 @@ const listToTimestamp = (list: Array<string>, type) => {
 	const dateStr = list.join("-");
 	//从结束时间点到开始时间则给 结束时间赋值时间戳 开始时间时间戳赋值给时间组件 否则相反
 	if (type == 1) {
-		endTime.value = dayjs.tz(dateStr, "America/New_York").endOf("day").valueOf();
+		endTime.value = dayjs(dateStr).endOf("day").valueOf();
 		state.dateTimeList = timestampToList(startTime.value);
 	} else {
-		startTime.value = dayjs.tz(dateStr, "America/New_York").startOf("day").valueOf();
+		startTime.value = dayjs(dateStr).startOf("day").valueOf();
 		state.dateTimeList = timestampToList(endTime.value);
 	}
 };
