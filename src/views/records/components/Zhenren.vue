@@ -25,13 +25,13 @@
 				<span class="label">{{ $t('records["投注时间"]') }}：</span>
 				<span>{{ new Date(item.betTime).toLocaleString() }}</span>
 			</div>
-      <div class="line"></div>
+			<div class="line"></div>
 			<div class="bet-item">
-				<span class="label">{{ $t(`records["投注内容"]`) }}</span>
+				<span class="label">{{ $t(`records["投注内容"]`) }}：</span>
 				<span class="value">{{ item.betContentText }}</span>
 			</div>
 			<div class="bet-item">
-				<span class="label">{{ $t(`records["结果"]`) }}</span>
+				<span class="label">{{ $t(`records["结果"]`) }}：</span>
 				<span class="value">{{ item.resultList }}</span>
 			</div>
 			<div class="bet-item">
@@ -40,7 +40,8 @@
 			</div>
 			<div class="bet-item">
 				<span class="label">{{ $t(`records["输赢金额"]`) }}：</span>
-				<span class="value" :class="item.winLossAmount >= 0 ? 'negative' : 'is'">{{ item.winLossAmount.toFixed(2) }}</span>
+				<span v-if="item.orderClassify === 1" class="value" :class="item.winLossAmount >= 0 ? 'win' : 'is'">{{ item.winLossAmount.toFixed(2) }}</span>
+				<span v-else class="value">-</span>
 			</div>
 		</div>
 	</div>

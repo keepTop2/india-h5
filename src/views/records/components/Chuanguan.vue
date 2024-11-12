@@ -31,7 +31,8 @@
 			</div>
 			<div class="bet-figure">
 				<span class="label">{{ $t('records["输赢金额"]') }}：</span>
-				<span :class="item?.winLossAmount >= 0 ? 'win' : 'loseColor'">{{ item?.winLossAmount?.toFixed(2) || "0.00" }}</span>
+				<span v-if="item.orderClassify === 1" :class="item?.winLossAmount >= 0 ? 'win' : 'loseColor'">{{ item?.winLossAmount?.toFixed(2) || "0.00" }}</span>
+				<span v-else class="value">-</span>
 			</div>
 		</div>
 
@@ -95,7 +96,7 @@ function _copy(orderId) {
 	white-space: nowrap;
 }
 
-.ml10{
-  margin-left: 10px;
+.ml10 {
+	margin-left: 10px;
 }
 </style>

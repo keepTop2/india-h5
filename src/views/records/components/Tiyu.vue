@@ -37,7 +37,8 @@
 			</div>
 			<div class="bet-item">
 				<span class="label">{{ $t('records["输赢金额"]') }}：</span>
-				<span class="value" :class="item.winLossAmount >= 0 ? 'win' : 'is'">{{ item.winLossAmount.toFixed(2) }}</span>
+				<span v-if="item.orderClassify === 1" class="value" :class="item.winLossAmount >= 0 ? 'win' : 'is'">{{ item.winLossAmount.toFixed(2) }}</span>
+				<span v-else class="value">-</span>
 			</div>
 		</div>
 	</div>
