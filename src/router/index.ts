@@ -10,6 +10,7 @@ import { VipRouter } from "/@/router/modules/vip";
 import { activityRoutes } from "/@/router/modules/activity";
 import { SecurityCenterRouter } from "/@/router/modules/securityCenter";
 import { ErrorRouter } from "/@/router/modules/error";
+import { LotteryRouter } from "/@/router/modules/lotteery";
 // import { useUserStore } from "../store/modules/user";
 /**
  * @description idx大小判断路由左切动画还是右切动画
@@ -183,6 +184,8 @@ const routes = [
 	activityRoutes,
 	// 错误路由
 	ErrorRouter,
+	// 彩票
+	...LotteryRouter,
 	// 客服中心
 	{
 		path: "/customerService",
