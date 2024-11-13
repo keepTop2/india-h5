@@ -95,5 +95,62 @@ const pageTitle = route.meta?.title as string;
 			}
 		}
 	}
+	:deep(.lottery-result) {
+		.result-header {
+			width: 100%;
+			height: 66px;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			background: linear-gradient(to right, #353a3e, #2c2d2e);
+			padding: 0 24px;
+			font-size: 24px;
+			box-sizing: border-box;
+			border-radius: 20px 20px 0 0;
+			@include themeify {
+				color: themed("TB");
+			}
+		}
+		.result-content {
+			padding: 0 24px;
+			@include themeify {
+				background-color: themed("BG3");
+			}
+			&-item {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				width: 100%;
+				padding: 20px 0 24px 0;
+				gap: 20px;
+				@include themeify {
+					border-bottom: 1px solid themed(Line);
+				}
+
+				.issueNum {
+					font-size: 24px;
+					@include themeify {
+						color: themed("T3");
+					}
+				}
+				.winnNum {
+					flex: 1;
+					display: flex;
+					flex-wrap: wrap;
+					justify-content: end;
+					gap: 8px;
+					.ball {
+						width: 38px;
+						height: 38px;
+						line-height: 38px;
+						font-size: 18px;
+					}
+				}
+			}
+			&-item:last-child {
+				border-bottom: none;
+			}
+		}
+	}
 }
 </style>
