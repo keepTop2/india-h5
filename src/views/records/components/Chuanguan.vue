@@ -20,7 +20,10 @@
 			<div class="line"></div>
 			<div class="bet-amount">
 				<span class="label">{{ $t('records["投注内容"]') }}：</span>
-				<span>{{ item?.betContent }}</span>
+				<div>
+					<span>{{ item?.betContent }}</span>
+					<span class="ml10">{{ item?.odds }}</span>
+				</div>
 			</div>
 			<div class="bet-amount">
 				<span class="label">{{ $t('records["投注金额"]') }}：</span>
@@ -28,14 +31,15 @@
 			</div>
 			<div class="bet-figure">
 				<span class="label">{{ $t('records["输赢金额"]') }}：</span>
-				<span :class="item?.winLossAmount >= 0 ? 'win' : 'lose'">{{ item?.winLossAmount?.toFixed(2) || "0.00" }}</span>
+				<span v-if="item.orderClassify === 1" :class="item?.winLossAmount >= 0 ? 'win' : 'loseColor'">{{ item?.winLossAmount?.toFixed(2) || "0.00" }}</span>
+				<span v-else class="value">-</span>
 			</div>
 		</div>
 
 		<div class="match-details" v-for="(match, index) in item.orderMultipleBetList" :key="index">
 			<div class="match-info">
 				<span>{{ match.eventInfo }}</span>
-<!--        <span class="text-hidden">{{ match.teamInfo }}</span>-->
+				<!--        <span class="text-hidden">{{ match.teamInfo }}</span>-->
 				<span class="text-hidden">
 					{{ match.teamInfo }}
 					<!--					<span class="info-nation">team1</span>-->
@@ -45,12 +49,14 @@
 				<span class="fs_24 color_T1">{{ match.betContent }}</span>
 			</div>
 			<div class="match-result">
-				<span class="fs_36 mr_24 fw_400" :class="{ win: match.winlossStatus === 1, lose: match.winlossStatus === 0, color_T3: [0, 1].includes(match.winlossStatus) }">{{ match.result }}</span>
+				<span class="fs_36 mr_24 fw_400" :class="{ winColor: match.winlossStatus === 1, loseColor: match.winlossStatus === 0, color_T3: [0, 1].includes(match.winlossStatus) }">{{
+					match.result
+				}}</span>
 				<span class="fs_26">@{{ match.odds }}</span>
 			</div>
 			<div class="match-status">
-				<span v-if="match.winlossStatusText" :class="match.winlossStatus == 1 ? 'win' : match.winlossStatus == 0 ? 'win' : 'lose'">{{ match.winlossStatusText }}</span>
-        <span v-else class="Settled">取消</span>
+				<span v-if="match.winlossStatusText" :class="match.winlossStatus == 1 ? 'winColor' : match.winlossStatus == 0 ? 'winColor' : 'loseColor'">{{ match.winlossStatusText }}</span>
+				<span v-else class="Settled">取消</span>
 			</div>
 		</div>
 	</div>
@@ -84,9 +90,13 @@ function _copy(orderId) {
 	color: var(--T3-P, #7d8086);
 }
 
-.text-hidden{
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.text-hidden {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.ml10 {
+	margin-left: 10px;
 }
 </style>

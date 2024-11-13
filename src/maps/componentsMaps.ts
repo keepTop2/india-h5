@@ -14,32 +14,32 @@ export const timeShortcutOptionsMap = new Map<TimeShortcutOptionsEnum, TimeShort
 		TimeShortcutOptionsEnum.d1,
 		{
 			code: TimeShortcutOptionsEnum.d1,
-			startTime: (): number => dayjs().tz("America/New_York").startOf("day").valueOf(),
-			endTime: (): number => dayjs().tz("America/New_York").endOf("day").valueOf(),
+			startTime: (): number => dayjs().startOf("day").valueOf(),
+			endTime: (): number => dayjs().endOf("day").valueOf(),
 		},
 	],
 	[
 		TimeShortcutOptionsEnum.d2,
 		{
 			code: TimeShortcutOptionsEnum.d2,
-			startTime: (): number => dayjs().tz("America/New_York").subtract(1, "day").startOf("day").valueOf(),
-			endTime: (): number => dayjs().tz("America/New_York").subtract(1, "day").endOf("day").valueOf(),
+			startTime: (): number => dayjs().subtract(1, "day").startOf("day").valueOf(),
+			endTime: (): number => dayjs().subtract(1, "day").endOf("day").valueOf(),
 		},
 	],
 	[
 		TimeShortcutOptionsEnum.d3,
 		{
 			code: TimeShortcutOptionsEnum.d3,
-			startTime: (): number => dayjs().tz("America/New_York").subtract(7, "day").valueOf(),
-			endTime: (): number => dayjs().tz("America/New_York").valueOf(),
+			startTime: (): number => dayjs().subtract(7, "day").valueOf(),
+			endTime: (): number => dayjs().valueOf(),
 		},
 	],
 	[
 		TimeShortcutOptionsEnum.d4,
 		{
 			code: TimeShortcutOptionsEnum.d4,
-			startTime: (): number => dayjs().tz("America/New_York").subtract(30, "day").valueOf(),
-			endTime: (): number => dayjs().tz("America/New_York").valueOf(),
+			startTime: (): number => dayjs().subtract(30, "day").valueOf(),
+			endTime: (): number => dayjs().valueOf(),
 		},
 	],
 ]);

@@ -57,14 +57,16 @@
 			</div>
 			<div class="BettingRecord_List">
 				<van-pull-refresh v-if="hasData" v-model="loading" @refresh="reload">
-					<div v-if="state.activeList2 !== '1'" class="stats-container color_T1 bg_BG3">
+					<div v-if="!['1', '7'].includes(state.activeList2)" class="stats-container color_T1 bg_BG3">
 						<div class="stat-item">
 							<span class="label">{{ $t('records["投注金额"]') }}：</span>
-							<span class="value">{{ orderRecordsData.totalVO?.betAmount || "0.00" }}</span>
+							<span class="value">{{ (orderRecordsData.totalVO?.betAmount).toFixed(2) || "0.00" }}</span>
 						</div>
 						<div class="stat-item">
 							<span class="label">{{ $t('records["输赢金额"]') }}：</span>
-							<span class="value" :class="orderRecordsData.totalVO?.winLoseAmount >= 0 ? 'win' : 'lose'">{{ orderRecordsData.totalVO?.winLoseAmount || "0.00" }}</span>
+							<span class="value" :class="[orderRecordsData.totalVO?.winLoseAmount > 0 && 'win', orderRecordsData.totalVO?.winLoseAmount < 0 && 'loseColor']">{{
+								(orderRecordsData.totalVO?.winLoseAmount).toFixed(2) || "0.00"
+							}}</span>
 						</div>
 						<div class="stat-item">
 							<span class="label">{{ $t('records["投注笔数"]') }}：</span>
@@ -186,11 +188,6 @@ const getList = (type) => {
 			const eventOrderPage_b = eventOrderPage?.records.length < pageVo.pageSize || !eventOrderPage;
 			const basicOrderPage_b = basicOrderPage?.records.length < pageVo.pageSize || !basicOrderPage;
 			const tableOrderPage_b = tableOrderPage?.records.length < pageVo.pageSize || !tableOrderPage;
-			if (eventOrderPage_b && basicOrderPage_b && tableOrderPage_b && pageVo.pageNumber !== 1) {
-				finished.value = true;
-				loading.value = false;
-				return;
-			}
 
 			if (eventOrderPage) {
 				if (!orderRecordsData.value.eventOrderPage) {
@@ -217,13 +214,19 @@ const getList = (type) => {
 				}
 			}
 
+			if (eventOrderPage_b && basicOrderPage_b && tableOrderPage_b && pageVo.pageNumber !== 1) {
+				finished.value = true;
+				loading.value = false;
+				return;
+			}
 			pageVo.pageNumber++;
-			loading.value = false;
 		})
 		.catch((err) => {
 			console.log(err);
 		})
-		.finally(() => {});
+		.finally(() => {
+			loading.value = false;
+		});
 };
 
 const dateRangeSelectDemoState = reactive({
@@ -356,9 +359,21 @@ const onClickLeft = () => {
 
 :deep(.win) {
 	color: var(--Theme-P, #ff284b) !important;
+	&::before {
+		content: "+";
+	}
+}
+:deep(.winColor) {
+	color: var(--Theme-P, #ff284b) !important;
 }
 
 :deep(.lose) {
+	color: var(--F2-P, #21a8f7) !important;
+	&::before {
+		content: "-";
+	}
+}
+:deep(.loseColor) {
 	color: var(--F2-P, #21a8f7) !important;
 }
 </style>
