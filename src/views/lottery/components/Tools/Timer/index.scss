@@ -1,0 +1,103 @@
+@font-face {
+	font-family: "MTC-7";
+	font-style: normal;
+	font-weight: 400;
+	src: url("./MTC-7-Segment.ttf") format("truetype");
+}
+
+.lottery-time {
+	display: flex;
+	align-items: center;
+	height: 100%;
+	font-size: 38px;
+
+	.time-box {
+		.text {
+			font-family: "MTC-7" !important;
+			@include themeify {
+				color: themed("TB");
+			}
+		}
+	}
+
+	.colon {
+		// margin: 0 2px;
+		@include themeify {
+			color: themed("TB");
+		}
+		line-height: 0.7;
+	}
+}
+
+.lottery-clock-time {
+	height: 28px;
+	display: flex;
+	align-items: end;
+	padding: 6px;
+	border-radius: 4px;
+	@include themeify {
+		background-color: themed("Bg3");
+	}
+
+	column-gap: 2px;
+	> svg {
+		width: 30px;
+		height: 30px;
+		margin-right: 10px;
+	}
+	.lottery-time {
+		font-size: 38px;
+	}
+}
+
+.lottery-time-group {
+	width: 222px;
+	height: 104px;
+	@include themeify {
+		background-color: themed("Bg2");
+	}
+
+	padding: 10px 11px 11px 11px;
+	position: relative;
+	border-radius: 8px;
+	.date-tag {
+		position: absolute;
+		top: 10px;
+		left: 0;
+		font-size: 12px;
+		@include themeify {
+			color: themed("TB");
+		}
+		width: 119px;
+		height: 36px;
+		> svg {
+			position: absolute;
+			left: -4px;
+			right: 0;
+			z-index: 1;
+		}
+		> span {
+			position: absolute;
+			z-index: 2;
+			left: 10px;
+			top: 5px;
+		}
+	}
+	.bet-status {
+		text-align: right;
+		@include themeify {
+			color: themed("F2");
+		}
+
+		font-size: 14px;
+	}
+	.lottery-clock-time {
+		margin-top: 17px;
+		width: 200px;
+		height: 47px;
+
+		.lottery-time {
+			font-size: 48px;
+		}
+	}
+}

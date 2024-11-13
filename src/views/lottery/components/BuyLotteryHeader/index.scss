@@ -1,0 +1,80 @@
+.buy-lottery-header {
+	header {
+		display: flex;
+		width: 100%;
+		align-items: center;
+		gap: 16px;
+		margin-bottom: 32px;
+		img {
+			width: 80px;
+			height: 80px;
+		}
+		.gameName {
+			font-size: 32px;
+			@include themeify {
+				color: themed("TB");
+			}
+		}
+	}
+	.content {
+		display: flex;
+		gap: 16px;
+		flex-direction: column;
+		width: 100%;
+		&-item {
+			display: flex;
+			justify-content: space-between;
+			.label {
+				font-size: 24px;
+				@include themeify {
+					color: themed("T1");
+				}
+			}
+			.value {
+				font-size: 24px;
+				@include themeify {
+					color: themed("TB");
+				}
+				.lottery-time {
+					font-size: 24px !important;
+					span {
+						font-family: normal !important;
+					}
+				}
+			}
+		}
+	}
+	.footer {
+		background: linear-gradient(to right, #495867, #6d7e90);
+		width: 100%;
+		height: 74px;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 18px 24px;
+		border-radius: 12px;
+		left: -24px;
+		box-sizing: border-box;
+		.left {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			img {
+				width: 38px;
+				height: 38px;
+				margin-right: 8px;
+			}
+			.label {
+				font-size: 28px;
+				@include themeify {
+					color: themed("TB");
+				}
+			}
+		}
+		.right .value {
+			@include themeify {
+				color: themed("TB");
+			}
+		}
+	}
+}

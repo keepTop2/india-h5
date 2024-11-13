@@ -59,6 +59,8 @@ export default class GameApi {
 	};
 	//搜索游戏接口
 	static queryGameInfoByName = (data = {}) => {
+		console.log(data, "data=");
+
 		return useAxiosApi(`/app/game_lobby/api/queryGameInfoByName`, {
 			method: "POST",
 			data,
