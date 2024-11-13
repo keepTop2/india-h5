@@ -1,0 +1,207 @@
+.van-popup {
+	padding: 28px 24px;
+	@include themeify {
+		background-color: themed("BG1");
+	}
+	.lottery-bet-form-header {
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		@include themeify {
+			background-color: themed("BG1");
+			border-color: themed("Line");
+		}
+		box-sizing: border-box;
+		.header-left {
+			display: flex;
+			align-items: center;
+			.title-box {
+				display: flex;
+				align-items: center;
+				gap: 12px;
+				.icon {
+					width: 40px;
+					height: 40px;
+				}
+				.title {
+					@include themeify {
+						color: themed("TB");
+					}
+					font-size: 26px;
+					font-weight: 400;
+				}
+			}
+		}
+		.header-right {
+			display: flex;
+			gap: 30px;
+			align-items: center;
+			.amount-info {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+				border-radius: 30px;
+				padding: 12px 18px;
+				@include themeify {
+					background-color: themed("BG3");
+				}
+				.value {
+					@include themeify {
+						color: themed("TB");
+					}
+					font-family: "DIN Alternate";
+					font-size: 24px;
+					font-weight: 700;
+				}
+				.color_Theme {
+					width: 22px;
+					height: 22px;
+				}
+			}
+			.close {
+				width: 40px;
+				height: 40px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				svg {
+					width: 26px;
+					height: 26px;
+				}
+			}
+		}
+	}
+
+	.line {
+		height: 2px;
+		@include themeify {
+			background-color: themed("Line");
+		}
+		margin: 18px 0 20px 0;
+	}
+
+	.bet-content {
+		padding: 16px;
+		@include themeify {
+			background-color: themed("BG3");
+		}
+		display: flex;
+		justify-content: space-between;
+		align-items: start;
+		border-radius: 16px;
+		.content {
+			.lottery-ball {
+				width: 38px;
+				height: 38px;
+				margin-bottom: 10px;
+				.ball {
+					font-size: 18px;
+				}
+			}
+			.title {
+				font-size: 28px;
+				@include themeify {
+					color: themed("TB");
+				}
+			}
+			.desc {
+				font-size: 22px;
+				@include themeify {
+					color: themed("T1");
+				}
+			}
+		}
+		.odds {
+			@include themeify {
+				color: themed("TB");
+			}
+			font-size: 32px;
+		}
+	}
+	.lottery-bet-input {
+		border-radius: 16px;
+		padding: 10px 16px;
+		margin: 10px 0;
+		@include themeify {
+			background-color: themed("BG3");
+		}
+		.input-content {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			border-radius: 8px;
+			box-sizing: border-box;
+			@include themeify {
+				background-color: themed("BG4");
+				height: 69px;
+				padding: 19px 10px;
+			}
+			input {
+				@include themeify {
+					background-color: themed("BG4");
+					color: themed("Theme");
+				}
+				width: 100%;
+				height: 30px;
+				font-family: "PingFang SC";
+				font-size: 28px;
+				font-weight: 500;
+				border: 0;
+				padding: 0;
+				margin: 0;
+				&::placeholder {
+					@include themeify {
+						color: themed("T2-P");
+					}
+					font-family: "PingFang SC";
+					font-size: 22px;
+					font-weight: 400;
+				}
+			}
+			.unit {
+				font-size: 28px;
+				@include themeify {
+					color: themed(T1);
+				}
+			}
+		}
+	}
+	.bet-number-box {
+		// max-height: 381px;
+		padding: 22px 15px;
+		overflow: hidden;
+		transition: all 0.3s;
+		@include themeify {
+			background-color: themed("BG3");
+		}
+		border-radius: 16px;
+		box-sizing: border-box;
+		.keyBoard {
+			max-height: 381px;
+			transition: all 0.15s;
+		}
+		.hideKeyBoard {
+			max-height: 0px;
+			overflow: hidden;
+		}
+		&:has(.hideKeyBoard) {
+			.now-bet {
+				margin-top: 0;
+			}
+		}
+		.now-bet {
+			margin-top: 25px;
+			border-radius: 12px;
+			width: 100%;
+			height: 86px;
+			line-height: 86px;
+			text-align: center;
+			font-size: 30px;
+			@include themeify {
+				background-color: themed("Theme");
+				color: themed("TB");
+			}
+		}
+	}
+}

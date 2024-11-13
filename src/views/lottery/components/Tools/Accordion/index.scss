@@ -1,0 +1,130 @@
+.lottery-accordion {
+	width: 100%;
+	.accordion-header {
+		display: flex;
+		width: 100%;
+		height: 68px;
+		background: var(--Bg6);
+		border-radius: 8px;
+		cursor: pointer;
+		justify-content: space-between;
+		align-items: center;
+		padding: 16px 24px;
+		&:expanded {
+			color: var(--Text_a);
+		}
+		.header-title {
+			font-size: 16px;
+			color: var(--Text1);
+		}
+		.header-icon {
+			height: 100%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			.icon {
+				transform: rotate(-90deg);
+				transition: transform 0.3s ease;
+				&.icon-expanded {
+					transform: rotate(90deg);
+				}
+			}
+		}
+	}
+	.accordion-content {
+		padding: 20px 24px;
+		@include themeify {
+			background-color: themed("BG2");
+		}
+		.gameplay {
+			font-size: 24px;
+			@include themeify {
+				color: themed("T1");
+			}
+			margin-bottom: 16px;
+		}
+		.accordion-content-item-box {
+			margin-bottom: 16px;
+			&:has(.select-ball-icon) {
+				.accordion-content-item {
+					&::after {
+						display: none !important;
+					}
+				}
+			}
+			&.actived {
+				.accordion-content-item {
+					position: relative;
+					&::after {
+						content: "";
+						width: 100%;
+						height: 100%;
+						left: 0;
+						top: 0;
+						position: absolute;
+						border-radius: 12px;
+						@include themeify {
+							border: 1px solid themed("Theme");
+						}
+					}
+
+					.info {
+						@include themeify {
+							color: themed("TB");
+						}
+					}
+				}
+				.select-ball-icon {
+					transform: rotate(-90deg) !important;
+				}
+			}
+			&:last-child {
+				margin-bottom: 0 !important;
+			}
+			.accordion-content-item {
+				width: 100%;
+				min-height: 64px;
+				padding: 16px;
+				font-size: 24px;
+				box-sizing: border-box;
+				&:has(.select-ball-icon) {
+					@include themeify {
+						background-color: themed("BG8");
+					}
+				}
+				@include themeify {
+					background-color: themed("BG4");
+				}
+				border-radius: 12px;
+				transition: background-color 0.15s ease;
+				> div:first-child {
+					display: flex;
+					justify-content: space-between;
+					align-items: center;
+					width: 100%;
+				}
+				.select-ball-icon {
+					transform: rotate(90deg);
+					transition: all 0.3s ease;
+					@include themeify {
+						color: themed("T3");
+					}
+				}
+				.title,
+				.odds {
+					@include themeify {
+						color: themed("TB");
+					}
+				}
+				.info {
+					flex: 1;
+					@include themeify {
+						color: themed("T1");
+					}
+					margin: 0 60px;
+					transition: color 0.15s ease;
+				}
+			}
+		}
+	}
+}

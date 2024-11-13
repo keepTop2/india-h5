@@ -163,6 +163,8 @@ const handleMenuClick = (item) => {
 	show.value = false;
 	if (item.modelCode === "SBA") {
 		router.push({ name: "rollingBallList", params: { sportType: 1 } });
+	} else if (item.modelCode === "ACELT") {
+		router.push({ name: "LotteryHome", query: { gameOneId: item.gameOneClassId } });
 	} else if (item.modelCode === "SIGN_VENUE") {
 		Common.goToGame(item);
 	} else {
