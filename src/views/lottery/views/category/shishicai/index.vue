@@ -23,18 +23,18 @@ const mockData = {
 	icon: "",
 };
 
-const tabActived = ref(1);
+const tabActived = ref(2);
 const tabs = [
 	{ label: "购买彩票", id: 1 },
 	{ label: "开奖结果", id: 2 },
 ];
 
 const BayLottery = defineAsyncComponent(() => import("./components/bayLottery.vue"));
-// const Result = defineAsyncComponent(() => import("./components/result.vue"));
+const Result = defineAsyncComponent(() => import("./components/result.vue"));
 
 const tabComponents = new Map([
 	[1, BayLottery],
-	// [2, Result],
+	[2, Result],
 ]);
 
 const handleTabClick = (id: number) => {
