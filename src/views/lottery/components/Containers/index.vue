@@ -127,13 +127,13 @@ const pageTitle = route.meta?.title as string;
 					border-bottom: 1px solid themed(Line);
 				}
 
-				.issueNum {
+				.issue-num {
 					font-size: 24px;
 					@include themeify {
 						color: themed("T3");
 					}
 				}
-				.winnNum {
+				.win-num {
 					flex: 1;
 					display: flex;
 					flex-wrap: wrap;
@@ -142,9 +142,14 @@ const pageTitle = route.meta?.title as string;
 					.ball {
 						width: 38px;
 						height: 38px;
-						line-height: 38px;
+						display: flex;
+						justify-content: center;
+						align-items: center;
 						font-size: 18px;
 					}
+				}
+				.win-num-dice {
+					gap: 16px;
 				}
 			}
 			&-item:last-child {

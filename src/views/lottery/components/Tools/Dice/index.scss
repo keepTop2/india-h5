@@ -27,16 +27,12 @@
 
 // lottery-dice 样式
 .lottery-dice {
-	width: 30px;
-	height: 30px;
+	width: 35px;
+	height: 35px;
 	background-size: cover;
 	background-repeat: no-repeat;
 	background-position: center;
 	position: relative;
-	cursor: pointer;
-	// transform: scale(1.5);
-	zoom: 1.5;
-
 	.dice {
 		width: 6px;
 		height: 6px;
