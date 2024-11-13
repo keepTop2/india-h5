@@ -39,7 +39,7 @@
 				<div class="log">{{ $t(`transfer['汇率']`) }}：{{ userPlat?.transferRate }}</div>
 			</div>
 
-			<div class="btn" :class="{ contrast: parseFloat(formInput) <= 0 }" @click="conversionHandler">{{ $t(`transfer['一键转换']`) }}</div>
+			<van-button class="btn" :class="{ contrast: parseFloat(formInput) <= 0 || !formInput }" @click="conversionHandler">{{ $t(`transfer['一键转换']`) }}</van-button>
 		</div>
 	</div>
 </template>
@@ -74,7 +74,13 @@ watch(
 		}
 		const res = formInput.value * userPlat.value?.transferRate;
 		if (!isNaN(res)) {
-			toInput.value = res.toFixed(2);
+			// 格式化显示逻辑
+			if (res >= 1000000) {
+				const kValue = (res / 1000).toFixed(2);
+				toInput.value = `${kValue}K`;
+			} else {
+				toInput.value = res.toFixed(2);
+			}
 		} else {
 			toInput.value = "0.00";
 		}
@@ -87,17 +93,33 @@ onMounted(() => {
 });
 
 const numberFixedDigit = (e) => {
-	e.target.value = e.target.value.replace(/[^\d.]/g, "");
-	// e.target.value = e.target.value.replace(/\.{2,}/g, ".");
-	// e.target.value = e.target.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
-	e.target.value = e.target.value.replace(/^(\-)*(\d+)\.(\d\d).*$/, "$1$2.$3"); //只能输入两个小数
-	e.target.value = e.target.value.replace(/^\./g, ""); //首位不能输入“.”
-	if (e.target.value.indexOf(".") < 0 && e.target.value != "") {
-		//如果没有小数点，首位不能为0，如01、02...
-		e.target.value = parseFloat(e.target.value);
+	let value = e.target.value;
+
+	// 原有的数字和小数点限制
+	value = value.replace(/[^\d.]/g, "");
+	value = value.replace(/^(\-)*(\d+)\.(\d\d).*$/, "$1$2.$3"); // 只能输入两个小数
+	value = value.replace(/^\./g, ""); // 首位不能输入"."
+
+	// 限制最大9位整数
+	const parts = value.split(".");
+	if (parts[0].length > 9) {
+		parts[0] = parts[0].slice(0, 9);
+		value = parts.join(".");
 	}
+
+	// 处理首位为0的情况
+	if (value.indexOf(".") < 0 && value != "") {
+		value = parseFloat(value);
+	}
+
+	// 限制不能超过平台币数量
+	if (Number(value) > userPlat.value?.platAvailableAmount) {
+		value = String(userPlat.value?.platAvailableAmount);
+	}
+
+	e.target.value = value;
 	nextTick(() => {
-		formInput.value = e.target.value;
+		formInput.value = value;
 	});
 };
 
@@ -116,7 +138,7 @@ const getUserPlatformBalance = async () => {
 
 // 转换金额
 const conversionHandler = async () => {
-	if (parseFloat(formInput.value) <= 0) {
+	if (parseFloat(formInput.value) <= 0 || formInput.value === "") {
 		showToast("请输入转换金额");
 		return;
 	}
@@ -259,6 +281,7 @@ const conversionHandler = async () => {
 			background-size: contain;
 		}
 		.btn {
+			border: none;
 			margin-top: 20px;
 			box-sizing: border-box;
 			border-radius: 16px;
