@@ -42,6 +42,7 @@ import useLotteryCard from "/@/views/lottery/components/LotteryCard/Index";
 import TabBar from "/@/layout/home/components/tabBar.vue";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import gameApi from "/@/api/venueHome/games";
+import pubsub from "/@/pubSub/pubSub";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
@@ -65,7 +66,10 @@ const handleClick = (data) => {
 
 const { HotLotteryCard, LotteryCard } = useLotteryCard({ onSelect: handleClick });
 
-const onClickLeft = () => {};
+const onClickLeft = () => {
+	// 发布折叠菜单事件
+	pubsub.publish("onCollapseMenu");
+};
 const gameData = ref<any[]>([]);
 const router = useRouter();
 const route = useRoute();

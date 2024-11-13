@@ -6,6 +6,7 @@ import SvgIcon from "/@/components/svgIcon/index.vue";
 import { getIndexInfo } from "/@/views/venueHome/sports/utils/commonFn";
 import BetNumber from "/@/views/venueHome/sports/components/Bet/BetNumber.vue";
 import { i18n } from "/@/i18n/index";
+import { useUserStore } from "/@/store/modules/user";
 import "./index.scss";
 export default () => {
 	const $: any = i18n.global;
@@ -66,6 +67,7 @@ export default () => {
 		props: { minBet: { type: Number, default: 0 }, maxBet: { type: Number, default: 0 } },
 		emits: ["select"],
 		setup(props, { emit }) {
+			const UserStore = useUserStore();
 			return () => (
 				<div onClick={() => emit("select")} class="lottery-bet-input">
 					<div class="input-content" onClick="onBetNumber">
@@ -75,7 +77,7 @@ export default () => {
 							placeholder={`${$.t("sports['限额']")} ${Common.getInstance().formatFloat(props.minBet)} ~ ${Common.getInstance().formatFloat(props.maxBet)}`}
 							readonly
 						/>
-						<div class="unit">USD</div>
+						<div class="unit">{UserStore.userInfo.mainCurrency}</div>
 					</div>
 				</div>
 			);
@@ -110,7 +112,6 @@ export default () => {
 						break;
 					default:
 						state.stake += value;
-						console.log(Number(props.data.maxBet), "value====");
 						if (Number(state.stake) > Number(props.data.maxBet || 0)) {
 							state.stake = props.data.maxBet;
 						}

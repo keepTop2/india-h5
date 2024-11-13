@@ -1,6 +1,6 @@
 <template>
 	<div class="buy-lottery-containers">
-		<VantNavBar :title="pageTitle" />
+		<VantNavBar @onClickLeft="router.back()" :title="pageTitle" />
 		<div class="containers">
 			<BuyLotteryHeader :data="data" />
 
@@ -13,15 +13,16 @@
 </template>
 
 <script lang="ts" setup>
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import useBuyCryptocurrency from "/@/views/lottery/components/BuyLotteryHeader/Index";
 
-const props = defineProps({
+defineProps({
 	data: { type: Object, required: true },
 });
 
 const { BuyLotteryHeader } = useBuyCryptocurrency();
 const route = useRoute();
+const router = useRouter();
 const pageTitle = route.meta?.title as string;
 </script>
 

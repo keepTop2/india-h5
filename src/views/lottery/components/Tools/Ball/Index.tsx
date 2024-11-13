@@ -1,4 +1,5 @@
-import { computed, defineComponent, watch } from "vue";
+import { computed, defineComponent } from "vue";
+import SvgIcon from "/@/components/svgIcon/index.vue";
 import "./index.scss";
 
 export default () => {
@@ -74,11 +75,13 @@ export default () => {
 					<div class="warn">请{props.multiple ? "至少" : ""}选择1个球号</div>
 					<div className="control">
 						{/* 清除全部选中 */}
-						<div className="clear">
-							<span onClick={() => emit("clear")}>清除全部</span>
+						<div onClick={() => emit("clear")} className="clear">
+							<SvgIcon iconName="lottery/clear" />
+							<span>清除全部</span>
 						</div>
 						{/* 快速选择区域 */}
 						<div className="other">
+							<SvgIcon iconName="lottery/ksxz" />
 							<span>快速选择</span>
 						</div>
 					</div>

@@ -1,10 +1,24 @@
+import { defineComponent, reactive, PropType, ref } from "vue";
 import { useUserStore } from "/@/store/modules/user"; // 引入用户信息 store
 import Common from "/@/utils/common";
 import useTimer from "/@/views/lottery/components/Tools/Timer";
-import { defineComponent } from "vue";
 import SvgIcon from "/@/components/svgIcon/index.vue";
 import "./index.scss";
-export default ({ onSelect }) => {
+
+// 定义数据类型
+interface CardData {
+	icon?: string;
+	iconH5?: string;
+	gameName: string;
+	gameDesc: string;
+	seconds: number;
+	maxWin: number;
+	playMethod?: {
+		odds: number;
+	};
+}
+
+export default ({ onSelect }: { onSelect: (data: CardData) => void }) => {
 	// 获取用户信息 store
 	const {
 		userInfo: { currencySymbol },
@@ -33,7 +47,7 @@ export default ({ onSelect }) => {
 		},
 	});
 
-	// 定义卡片内容组件，可以根据需要传入 props 以便更灵活的显示不同内容
+	// 定义卡片内容组件
 	const Content = defineComponent({
 		props: {
 			icon: { type: String },
@@ -41,6 +55,7 @@ export default ({ onSelect }) => {
 			gameName: { type: String, required: true },
 			gameDesc: { type: String, required: true },
 		},
+		emits: ["select"],
 		setup(props, { slots }) {
 			return () => (
 				<div class="card-content">
@@ -54,7 +69,7 @@ export default ({ onSelect }) => {
 							<div class="title-box">
 								<div class="type-name-box">
 									{/* 国旗 */}
-									{slots?.nationalIcon?.()}
+									{slots.nationalIcon?.()}
 									<span class="type-name">{props.gameName || "-"}</span>
 								</div>
 								<span class="title">{props.gameDesc || "-"}</span>
@@ -67,7 +82,7 @@ export default ({ onSelect }) => {
 						{/* 最近获奖 */}
 						{slots.maxWin?.()}
 						<div class="more">
-							<SvgIcon onClick={() => onSelect(props)} size="5" iconName="lottery/arrow" />
+							<SvgIcon onClick={() => onSelect(props as any)} size="5" iconName="lottery/arrow" />
 						</div>
 					</div>
 				</div>
@@ -96,13 +111,15 @@ export default ({ onSelect }) => {
 			);
 		},
 	});
+
+	// 定义热门彩票卡片组件
 	const HotLotteryCard = defineComponent({
 		name: "HotLotteryCard",
-		emits: ["select"],
 		props: {
-			data: { type: Object, required: true },
+			data: { type: Object as PropType<CardData>, required: true },
 		},
-		setup(props, { emit }) {
+		emits: ["select"],
+		setup(props) {
 			return () => (
 				<div class="lottery-card hot-lottery-card">
 					{/* 卡片头部 */}
@@ -117,10 +134,11 @@ export default ({ onSelect }) => {
 		},
 	});
 
+	// 定义普通彩票卡片组件
 	const LotteryCard = defineComponent({
 		name: "LotteryCard",
 		props: {
-			data: { type: Object, required: true },
+			data: { type: Object as PropType<CardData>, required: true },
 		},
 		emits: ["select"],
 		setup(props) {
@@ -130,8 +148,11 @@ export default ({ onSelect }) => {
 					{/* 卡片内容 */}
 					<Content {...props.data}>
 						{{
-							nationalIcon: () => <img src={props.data?.icon || "/@/assets/zh-CN/default/lottery/national.png"} alt="Header Image" />,
+							// 国旗图标
+							nationalIcon: () => <img src={props.data.icon || "/@/assets/zh-CN/default/lottery/national.png"} alt="Header Image" />,
+							// 时间
 							timer: () => <ClockTime />,
+							// 最高奖
 							maxWin: () => <Footer {...props.data} />,
 						}}
 					</Content>

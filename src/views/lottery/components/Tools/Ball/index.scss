@@ -42,9 +42,16 @@
 		justify-content: space-between;
 		align-items: center;
 		margin-bottom: 16px;
+
 		.clear,
 		.other {
-			cursor: pointer;
+			display: flex;
+			align-items: center;
+			svg {
+				width: 30px;
+				height: 30px;
+				margin-right: 3px;
+			}
 		}
 	}
 	.balls-box {
