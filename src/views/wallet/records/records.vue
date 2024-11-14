@@ -35,7 +35,7 @@
 							<span class="title">{{ item.tradeWayTypeText }}</span>
 						</div>
 						<div class="right">
-							<span class="value">+{{ Common.getInstance().formatFloat(Common.getInstance().thousands(item.tradeAmount)) }}</span>
+							<span class="value">+{{ Common.getInstance().formatFloat(Common.thousands(item.tradeAmount)) }}</span>
 							<span>&nbsp;</span>
 							<span class="value">{{ UserStore.userInfo.mainCurrency }}</span>
 						</div>
@@ -55,7 +55,7 @@
 						</div>
 					</div>
 				</div>
-				<Nodata v-if="recordsList.length < 1"></Nodata>
+				<Nodata v-if="recordsList.length == 0"></Nodata>
 			</van-list>
 		</div>
 		<van-action-sheet v-model:show="showSheet" @cancel="onCancelSheet">
@@ -115,7 +115,6 @@ import router from "/@/router";
 import { walletApi } from "/@/api/wallet";
 import datePicker from "./datePicker.vue";
 import { useUserStore } from "/@/store/modules/user";
-import CountdownTimer from "./CountdownTimer.vue";
 import Common from "/@/utils/common";
 import type1 from "./image/type1.png";
 import type2 from "./image/type2.png";
@@ -123,8 +122,6 @@ import type3 from "./image/type3.png";
 import type4 from "./image/type4.png";
 import type5 from "./image/type5.png";
 import dayjs from "dayjs";
-import { showToast } from "vant";
-import Records from "../../records/records.vue";
 const UserStore = useUserStore();
 const activeTab = ref(1);
 const tabs: any = ref([]);
