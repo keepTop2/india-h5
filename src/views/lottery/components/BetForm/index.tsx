@@ -21,6 +21,18 @@ export default () => {
 		state.showPopup = false;
 	};
 
+	const Order = defineComponent({
+		name: "Order",
+		setup() {
+			return () => (
+				<div class="shopping-cart-icon" onClick={() => openBet()}>
+					<div class="badge">1</div>
+					<SvgIcon iconName="venueHome/sports/svg/sport_checklist" size="6.15384" />
+				</div>
+			);
+		},
+	});
+
 	const Header = defineComponent({
 		name: "Header",
 		props: {
@@ -169,6 +181,7 @@ export default () => {
 
 	return {
 		BetForm,
+		Order,
 		openBet,
 		closeBet,
 	};
