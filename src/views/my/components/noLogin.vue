@@ -185,7 +185,7 @@ const toPath = (path) => {
 			}
 			.value {
 				@include themeify {
-					color: themed("TB1");
+					color: themed("T1");
 				}
 				font-family: "PingFang SC";
 				font-size: 24px;
