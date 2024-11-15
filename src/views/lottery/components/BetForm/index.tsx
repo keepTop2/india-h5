@@ -1,7 +1,8 @@
 import "./index.scss";
 
-import { Popup } from "vant";
 import { reactive } from "vue";
+
+import { Popup } from "vant";
 import SvgIcon from "/@/components/svgIcon/index.vue";
 import { i18n } from "/@/i18n/index";
 import { useSportsBetInfoStore } from "/@/store/modules/sports/sportsBetInfo";
@@ -96,15 +97,16 @@ export default () => {
 		emits: ["before-close", "submit"],
 		setup(props, { slots, emit }) {
 			const showKeyBoard = ref(true);
+
 			const onkeyPress = (value) => {
 				switch (value) {
 					// 最大
 					case "{max}":
-						state.stake = props.data.maxBet;
+						// state.stake = props.data.maxBet;
 						break;
 					// 最小
 					case "{min}":
-						state.stake = props.data.minBet;
+						// state.stake = props.data.minBet;
 						break;
 					// 删除
 					case "{bksp}":
@@ -116,14 +118,17 @@ export default () => {
 						break;
 					default:
 						state.stake += value;
-						if (Number(state.stake) > Number(props.data.maxBet || 0)) {
-							state.stake = props.data.maxBet;
-						}
-						if (Number(state.stake) < Number(props.data.minBet) || 0) {
-							state.stake = props.data.minBet;
-						}
+
+					// 控制最大最小数值
+					// if (Number(state.stake) > Number(props.data.maxBet || 0)) {
+					// 	state.stake = props.data.maxBet;
+					// }
+					// if (Number(state.stake) < Number(props.data.minBet) || 0) {
+					// 	state.stake = props.data.minBet;
+					// }
 				}
 			};
+
 			return () => (
 				<Popup
 					round
@@ -132,6 +137,7 @@ export default () => {
 					show={state.showPopup}
 					before-close={() => {
 						emit("before-close");
+						state.stake = "";
 						return true;
 					}}
 					onUpdate:show={(val) => (state.showPopup = val)}

@@ -48,7 +48,7 @@ const useLoginGameStore = defineStore("LoginGameStore", () => {
 		}
 
 		const submitData = { venueCode, gameCode };
-		const res = await gameApi.loginGame(submitData, { showLoading: false });
+		const res = await gameApi.gameLogin(submitData, { showLoading: false });
 		merchantInfo.value = res.data || {};
 	};
 

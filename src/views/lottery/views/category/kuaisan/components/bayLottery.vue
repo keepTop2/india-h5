@@ -52,7 +52,7 @@
 			</div>
 		</div>
 
-		<BetForm @before-close="closeBetBefore" @submit="handleSubmit" :value="currentGameplayItem" :actived="formActived" :currentOddsListItem="currentOddsListItem">
+		<BetForm ref="betFormRef" @before-close="closeBetBefore" @submit="handleSubmit" :value="currentGameplayItem" :actived="formActived" :currentOddsListItem="currentOddsListItem">
 			<template #betContent>
 				<div v-if="!isSelectBall">
 					<div class="title">{{ currentGameplayItem.gamePlayName }}</div>
@@ -99,5 +99,6 @@ const closeBetBefore = () => {
 			}
 		});
 	});
+	currentOddsListItem.value = {};
 };
 </script>
