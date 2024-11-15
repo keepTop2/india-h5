@@ -1,13 +1,15 @@
+import "./index.scss";
+
 import { Popup } from "vant";
 import { reactive } from "vue";
-import Common from "/@/utils/common";
-import { useSportsBetInfoStore } from "/@/store/modules/sports/sportsBetInfo";
 import SvgIcon from "/@/components/svgIcon/index.vue";
-import { getIndexInfo } from "/@/views/venueHome/sports/utils/commonFn";
-import BetNumber from "/@/views/venueHome/sports/components/Bet/BetNumber.vue";
 import { i18n } from "/@/i18n/index";
+import { useSportsBetInfoStore } from "/@/store/modules/sports/sportsBetInfo";
 import { useUserStore } from "/@/store/modules/user";
-import "./index.scss";
+import Common from "/@/utils/common";
+import BetNumber from "/@/views/venueHome/sports/components/Bet/BetNumber.vue";
+import { getIndexInfo } from "/@/views/venueHome/sports/utils/commonFn";
+
 export default () => {
 	const $: any = i18n.global;
 	const state = reactive({
@@ -70,7 +72,7 @@ export default () => {
 			const UserStore = useUserStore();
 			return () => (
 				<div onClick={() => emit("select")} class="lottery-bet-input">
-					<div class="input-content" onClick="onBetNumber">
+					<div class="input-content">
 						<input
 							v-model={state.stake}
 							type="number"
@@ -87,7 +89,9 @@ export default () => {
 	const BetForm = defineComponent({
 		name: "BetForm",
 		props: {
-			data: { type: Object, required: true },
+			actived: { type: Boolean, default: false }, // 控制显示投注输入框
+			value: { type: Object, default: () => ({}) },
+			currentOddsListItem: { type: Object, default: () => ({}) },
 		},
 		emits: ["before-close", "submit"],
 		setup(props, { slots, emit }) {
@@ -143,7 +147,7 @@ export default () => {
 						{/* 投注内容插槽 */}
 						<div class="content">{slots?.betContent?.()}</div>
 						{/* 赔率 */}
-						<div class="odds">{props.data?.playMethod?.odds}x</div>
+						<div class="odds">{props.currentOddsListItem.itemOdds}x</div>
 					</div>
 					<BetInput
 						onSelect={() => {

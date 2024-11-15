@@ -1,6 +1,7 @@
-import { ref, defineComponent } from "vue";
-import SvgIcon from "/@/components/svgIcon/index.vue"; // 引入 SvgIcon 组件用于显示图标
 import "./index.scss";
+
+import { defineComponent } from "vue";
+import SvgIcon from "/@/components/svgIcon/index.vue"; // 引入 SvgIcon 组件用于显示图标
 
 const AccordionItem = defineComponent({
 	name: "AccordionItem",
@@ -17,7 +18,7 @@ const AccordionItem = defineComponent({
 		},
 		odds: {
 			// 赔率
-			type: Number,
+			type: String,
 			default: 0,
 		},
 		actived: {
