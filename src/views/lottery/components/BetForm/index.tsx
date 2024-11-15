@@ -1,14 +1,14 @@
 import "./index.scss";
 
+import BetNumber from "/@/views/venueHome/sports/components/Bet/BetNumber.vue";
+import Common from "/@/utils/common";
 import { Popup } from "vant";
-import { reactive } from "vue";
 import SvgIcon from "/@/components/svgIcon/index.vue";
+import { getIndexInfo } from "/@/views/venueHome/sports/utils/commonFn";
 import { i18n } from "/@/i18n/index";
+import { reactive } from "vue";
 import { useSportsBetInfoStore } from "/@/store/modules/sports/sportsBetInfo";
 import { useUserStore } from "/@/store/modules/user";
-import Common from "/@/utils/common";
-import BetNumber from "/@/views/venueHome/sports/components/Bet/BetNumber.vue";
-import { getIndexInfo } from "/@/views/venueHome/sports/utils/commonFn";
 
 export default () => {
 	const $: any = i18n.global;
@@ -26,6 +26,18 @@ export default () => {
 		state.showPopup = false;
 		clearForm();
 	};
+
+	const Order = defineComponent({
+		name: "Order",
+		setup() {
+			return () => (
+				<div class="shopping-cart-icon" onClick={() => openBet()}>
+					<div class="badge">1</div>
+					<SvgIcon iconName="venueHome/sports/svg/sport_checklist" size="6.15384" />
+				</div>
+			);
+		},
+	});
 
 	const Header = defineComponent({
 		name: "Header",
@@ -189,6 +201,7 @@ export default () => {
 	return {
 		BetForm,
 		clearForm,
+		Order,
 		openBet,
 		closeBet,
 	};

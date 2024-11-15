@@ -3,6 +3,10 @@
 		<Swiper :modules="modules" class="mySwiper" slidesPerView="auto">
 			<swiper-slide v-for="(item, index) in gameList?.gameInfoList" :key="index" class="mr_20">
 				<div class="card" @click="Common.goToGame(item)">
+					<div class="new-badge">
+						<SvgIcon iconName="venueHome/gameArena/new_game" v-if="item.cornerLabels == 1" />
+						<SvgIcon iconName="venueHome/gameArena/hot_game" v-if="item.cornerLabels == 2" />
+					</div>
 					<div class="collect">
 						<VantLazyImg v-if="item.collect" @click="onClickCollect(item, false)" :src="collectImg" alt="" width="100%" />
 						<VantLazyImg v-else @click="onClickCollect(item, true)" :src="noCollectImg" alt="" width="100%" />
@@ -75,5 +79,17 @@ const onClickCollect = async (item, collect) => {
 	width: 100%;
 	height: 100%;
 	object-fit: cover;
+}
+.card {
+	position: relative;
+}
+.new-badge {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	svg {
+		width: 80px !important;
+		height: 65px !important;
+	}
 }
 </style>

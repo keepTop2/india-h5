@@ -52,18 +52,20 @@
 			</div>
 		</div>
 
-		<BetForm @before-close="closeBetBefore" @submit="handleSubmit" :data="gameInfo">
-			<template #betContent>
+		<BetForm @submit="handleSubmit" :data="gameInfo">
+			<template v-if="gameInfo" #betContent>
 				<div v-if="!isSelectBall">
-					<div class="title">{{ gameInfo.gamePlayName }}</div>
+					<div class="title">{{ gameInfo?.gamePlayName }}</div>
 					<div class="desc">{{ gameInfo.playMethod.title }}</div>
 				</div>
 				<div v-else>
 					<Ball v-for="item in balls" :key="item" :ball-number="item" :type="3" />
-					<div class="desc">{{ gameInfo.gamePlayName }}</div>
+					<div class="desc">{{ gameInfo?.gamePlayName }}</div>
 				</div>
 			</template>
 		</BetForm>
+
+		<Order v-if="gameInfo" />
 	</div>
 </template>
 
@@ -80,7 +82,7 @@ const $: any = i18n.global;
 // 使用各自的组件
 const { Accordion, AccordionItem } = useAccordion();
 const { SelectBallGroup, Ball } = useBall();
-const { openBet, BetForm } = useBetForm();
+const { openBet, closeBet, BetForm, Order } = useBetForm();
 
 // 游戏玩法配置数据
 const gamePlayConfig = ref(playsConfig());
@@ -131,18 +133,19 @@ const clearAccordionStatus = (status: boolean, index: number) => {
 	});
 };
 
-const closeBetBefore = () => {
+const clearSelectStatus = () => {
 	gamePlayConfig.value.forEach((v) => {
 		v.playMethods.forEach((w) => {
-			if (w.type !== "selectBall") {
-				w.actived = false;
-			}
+			w.actived = false;
 		});
 	});
 };
 
 const handleSubmit = (data) => {
 	console.log(data);
+	gameInfo.value = null;
+	clearSelectStatus();
+	closeBet();
 };
 </script>
 
