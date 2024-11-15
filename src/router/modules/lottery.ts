@@ -23,6 +23,12 @@ export const LotteryRouter = [
 		meta: { name: "Shishicai", title: "快三" },
 		component: () => import("/@/views/lottery/views/category/kuaisan/index.vue"),
 	},
+	{
+		path: "/lottery/lucky28",
+		name: "Lucky28",
+		meta: { name: "Lucky28", title: "幸运28" },
+		component: () => import("/@/views/lottery/views/category/lucky28/index.vue"),
+	},
 	// {
 	// 	path: "/lottery/lucky28",
 	// 	name: "Lucky28",
