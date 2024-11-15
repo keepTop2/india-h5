@@ -2,7 +2,7 @@
 	<div class="buy-lottery-containers">
 		<VantNavBar @onClickLeft="router.back()" :title="pageTitle" />
 		<div class="containers">
-			<BuyLotteryHeader :data="data" />
+			<BuyLotteryHeader :data="data" :timer-end-callback="timerEndCallback" />
 
 			<slot />
 		</div>
@@ -16,8 +16,9 @@
 import { useRoute, useRouter } from "vue-router";
 import useBuyCryptocurrency from "/@/views/lottery/components/BuyLotteryHeader/Index";
 
-defineProps({
+const props = defineProps({
 	data: { type: Object, required: true },
+	timerEndCallback: { type: Function, default: Function.prototype },
 });
 
 const { BuyLotteryHeader } = useBuyCryptocurrency();

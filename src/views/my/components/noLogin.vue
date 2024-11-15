@@ -21,7 +21,8 @@
 			<div class="cell" @click="languageShow = true">
 				<SvgIcon class="icon" iconName="my/lang" />
 				<div class="label">{{ $t('my["语言"]') }}</div>
-				<div class="value">{{ store.langName }}</div>
+
+				<div class="value">{{ store.getlangInfo.name }}</div>
 				<div class="arrow"><SvgIcon iconName="common/arrow" size="24px" /></div>
 			</div>
 			<div class="cell">
