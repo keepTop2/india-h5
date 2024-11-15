@@ -37,26 +37,34 @@ declare module '@vue/runtime-core' {
     SvgIcon: typeof import('./../src/components/svgIcon/index.vue')['default']
     Tabs: typeof import('./../src/components/Tabs/Tabs.vue')['default']
     VanActionSheet: typeof import('vant/es')['ActionSheet']
+<<<<<<< HEAD
     VanCellGroup: typeof import('vant/es')['CellGroup']
     VanDatePicker: typeof import("vant/es")["DatePicker"]
     VanField: typeof import('vant/es')['Field']
     VanIndexAnchor: typeof import("vant/es")["IndexAnchor"]
     VanIndexBar: typeof import("vant/es")["IndexBar"]
+=======
+    VanDatePicker: typeof import('vant/es')['DatePicker']
+>>>>>>> e8995eefbfdf2ca27821b24845abf51bb03797c0
     VanList: typeof import('vant/es')['List']
     VanNavBar: typeof import('vant/es')['NavBar']
     VanNoticeBar: typeof import('vant/es')['NoticeBar']
     VanPicker: typeof import('vant/es')['Picker']
+<<<<<<< HEAD
     VanPopover: typeof import("vant/es")["Popover"]
+=======
+>>>>>>> e8995eefbfdf2ca27821b24845abf51bb03797c0
     VanPopup: typeof import('vant/es')['Popup']
-    VanPullRefresh: typeof import("vant/es")["PullRefresh"]
-    VanTab: typeof import('vant/es')['Tab']
-    VanTabs: typeof import('vant/es')['Tabs']
+    VanPullRefresh: typeof import('vant/es')['PullRefresh']
     VantLazyImg: typeof import('./../src/components/vant/VantLazyImg.vue')['default']
     VantList: typeof import('./../src/components/vant/VantList.vue')['default']
     VantListW: typeof import('./../src/components/vant/VantListW.vue')['default']
     VantNavBar: typeof import('./../src/components/vant/VantNavBar.vue')['default']
     VantPicker: typeof import('./../src/components/vant/VantPicker.vue')['default']
     VantTabs: typeof import('./../src/components/vant/VantTabs.vue')['default']
+<<<<<<< HEAD
     VanUploader: typeof import('vant/es')['Uploader']
+=======
+>>>>>>> e8995eefbfdf2ca27821b24845abf51bb03797c0
   }
 }

@@ -55,6 +55,7 @@
 					@on-confirm-date="reload"
 				/>
 			</div>
+			<div class="placeholder"></div>
 			<div class="BettingRecord_List">
 				<van-pull-refresh v-if="hasData" v-model="loading" @refresh="reload">
 					<div v-if="!['1', '7'].includes(state.activeList2)" class="stats-container color_T1 bg_BG3">
@@ -264,7 +265,7 @@ const getDownBox = () => {
 
 const onClickLeft = () => {
 	// 发布事件
-	pubsub.publish("onCollapseMenu");
+	// pubsub.publish("onCollapseMenu");
 };
 </script>
 
@@ -292,6 +293,13 @@ const onClickLeft = () => {
 			display: flex;
 			gap: 12px;
 			padding: 24px;
+			position: fixed;
+			top: 88px;
+			z-index: 999;
+			background: themed("BG1");
+		}
+		.placeholder {
+			height: 130px;
 		}
 		.BettingRecord_List {
 			padding: 0 24px;
