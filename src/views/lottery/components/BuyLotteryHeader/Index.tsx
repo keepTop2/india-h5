@@ -1,6 +1,8 @@
 import "./index.scss";
 
 import { defineComponent } from "vue";
+import { useUserStore } from "/@/store/modules/user";
+import Common from "/@/utils/common";
 import useTimer from "/@/views/lottery/components/Tools/Timer";
 
 export default () => {
@@ -12,8 +14,13 @@ export default () => {
 		},
 		setup(props) {
 			const propsData = computed(() => props.data);
-
+			const route = useRoute();
 			const { Timer } = useTimer(propsData, props.timerEndCallback);
+			const maxWin = +(route.query.maxWin || 0);
+			const {
+				getUserInfo: { mainCurrency },
+			} = useUserStore();
+
 			return () => (
 				<div class="buy-lottery-header">
 					<header>
@@ -38,7 +45,9 @@ export default () => {
 								<img src="/@/assets/zh-CN/default/lottery/caijin.png" alt="" /> <span class="label">最近获奖</span>
 							</div>
 							<div class="right">
-								<span class="value">{props.data.maxWin}</span>
+								<span>
+									{Common.thousands(maxWin)} {mainCurrency}
+								</span>
 							</div>
 						</div>
 					</div>

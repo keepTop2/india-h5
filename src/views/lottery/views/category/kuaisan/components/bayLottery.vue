@@ -52,7 +52,7 @@
 			</div>
 		</div>
 
-		<BetForm ref="betFormRef" @before-close="closeBetBefore" @submit="handleSubmit" :value="currentGameplayItem" :actived="formActived" :currentOddsListItem="currentOddsListItem">
+		<BetForm ref="betFormRef" @submit="handleSubmit" :value="currentGameplayItem" :actived="formActived" :currentOddsListItem="currentOddsListItem" :lotteryDetail="lotteryDetail">
 			<template #betContent>
 				<div v-if="!isSelectBall">
 					<div class="title">{{ currentGameplayItem.gamePlayName }}</div>
@@ -60,7 +60,7 @@
 				</div>
 				<div v-else>
 					<Ball v-for="item in balls" :key="item" :ball-number="item" :type="3" />
-					<div class="desc">{{ gameInfo.gamePlayName }}</div>
+					<div class="desc">{{ currentGameplayItem.gamePlayName }}</div>
 				</div>
 			</template>
 		</BetForm>
@@ -75,7 +75,8 @@ import useBall from "/@/views/lottery/components/Tools/Ball/Index";
 import { useAccordion as useAccordionHook } from "/@/views/lottery/hooks/useAccordion";
 import { useBet, type Props } from "/@/views/lottery/hooks/useBet";
 import { useGameplayList } from "/@/views/lottery/hooks/useGameplayList";
-import { SELECT_BALL } from "/@/views/lottery/constant/index";
+// import { SELECT_BALL } from "/@/views/lottery/constant/index";
+// import { type OddsListItem } from "/@/views/lottery/types/index";
 
 const props = defineProps({
 	lotteryDetail: { type: Object, default: () => ({}) },
@@ -84,21 +85,20 @@ const props = defineProps({
 // 使用各自的组件
 const { Accordion, AccordionItem } = useAccordion();
 const { Ball, SelectBallGroup } = useBall();
-const { BetForm, openBet } = useBetForm();
+const { BetForm, openBet, closeBet } = useBetForm();
 
 // hooks
 const { mergedGameplayList } = useGameplayList(gameplayList);
 const { formActived, balls, isSelectBall, clearAccordionStatus, handleSelectBalls, handleExpanded, currentGameplayItem, currentOddsListItem } = useAccordionHook(mergedGameplayList);
-const { betFormRef, handleSubmit } = useBet(currentGameplayItem, currentOddsListItem, props as Props);
+const { betFormRef, handleSubmit } = useBet(currentGameplayItem, currentOddsListItem, props as Props, balls, closeBet);
 
-const closeBetBefore = () => {
-	mergedGameplayList.value.forEach((v) => {
-		v.oddsList.forEach((w) => {
-			if (w.type !== SELECT_BALL) {
-				w.actived = false;
-			}
-		});
-	});
-	currentOddsListItem.value = {};
-};
+// const closeBetBefore = () => {
+// 	mergedGameplayList.value.forEach((v) => {
+// 		v.oddsList.forEach((w) => {
+// 			if (w.type !== SELECT_BALL) {
+// 				w.actived = false;
+// 			}
+// 		});
+// 	});
+// };
 </script>

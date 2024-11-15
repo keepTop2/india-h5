@@ -1,8 +1,7 @@
 import "./index.scss";
 
-import { reactive } from "vue";
-
 import { Popup } from "vant";
+import { reactive } from "vue";
 import SvgIcon from "/@/components/svgIcon/index.vue";
 import { i18n } from "/@/i18n/index";
 import { useSportsBetInfoStore } from "/@/store/modules/sports/sportsBetInfo";
@@ -20,8 +19,12 @@ export default () => {
 	const openBet = () => {
 		state.showPopup = true;
 	};
+	const clearForm = () => {
+		state.stake = "";
+	};
 	const closeBet = () => {
 		state.showPopup = false;
+		clearForm();
 	};
 
 	const Header = defineComponent({
@@ -29,6 +32,9 @@ export default () => {
 		props: {
 			icon: { type: String },
 			title: { type: String },
+			currentOddsListItem: { type: Object, default: () => ({}) },
+			currentGameplayItem: { type: Object, default: () => ({}) },
+			lotteryDetail: { type: Object, default: () => ({}) },
 		},
 		emits: ["close", "getGetBalanceAfter"],
 		setup(props, { slots, emit }) {
@@ -46,8 +52,8 @@ export default () => {
 							slots.title()
 						) : (
 							<div class="title-box">
-								<img class="icon" src={props.icon || "https://ctopalistat3.zengchenglm.com/pc/images/db_DB5FC2cea4e2f859029cdbda33fffda6ea1f2.png"} alt="" />
-								<span class="title">时时彩</span>
+								<img class="icon" src={props.lotteryDetail.iconPc} alt="" />
+								<span class="title">{props.lotteryDetail.gameName}</span>
 							</div>
 						)}
 					</div>
@@ -91,8 +97,9 @@ export default () => {
 		name: "BetForm",
 		props: {
 			actived: { type: Boolean, default: false }, // 控制显示投注输入框
-			value: { type: Object, default: () => ({}) },
+			currentGameplayItem: { type: Object, default: () => ({}) },
 			currentOddsListItem: { type: Object, default: () => ({}) },
+			lotteryDetail: { type: Object, default: () => ({}) },
 		},
 		emits: ["before-close", "submit"],
 		setup(props, { slots, emit }) {
@@ -143,6 +150,8 @@ export default () => {
 					onUpdate:show={(val) => (state.showPopup = val)}
 				>
 					<Header
+						currentGameplayItem={props.currentGameplayItem}
+						lotteryDetail={props.lotteryDetail}
 						onClose={() => {
 							emit("before-close");
 							closeBet();
@@ -179,6 +188,7 @@ export default () => {
 
 	return {
 		BetForm,
+		clearForm,
 		openBet,
 		closeBet,
 	};

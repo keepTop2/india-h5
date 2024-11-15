@@ -2,13 +2,13 @@ import { showToast } from "vant";
 import { ref, Ref } from "vue";
 import { useRouter } from "vue-router";
 import { lotteryApi } from "/@/api/lottery";
+import { myApi } from "/@/api/my";
 import { useUserStore } from "/@/store/modules/user";
 import { SUCCESS_CODE } from "/@/utils/useAxiosLottery";
 import { DEFAULT_LANG, langMaps, SELECT_BALL } from "/@/views/lottery/constant/index";
 import { useLoginGame } from "/@/views/lottery/stores/loginGameStore";
 import { type LotteryDetail, type MergedGameplayItem, type OddsListItem } from "/@/views/lottery/types/index";
 import { addZero } from "/@/views/lottery/utils/formatNumber";
-import { getIndexInfo } from "/@/views/venueHome/sports/utils/commonFn";
 export interface Props {
 	lotteryDetail: LotteryDetail;
 }
@@ -20,7 +20,9 @@ export function useBet(
 
 	props: Props,
 
-	balls: Ref<number[]>
+	balls: Ref<number[]>,
+
+	closeBet = Function.prototype
 ) {
 	const betFormRef = ref(); // 提交表单的处理方法
 	const userStore = useUserStore();
@@ -111,8 +113,9 @@ export function useBet(
 			return;
 		}
 
-		getIndexInfo({}, { showLoading: false }); // 拉一下用户信息更新一下余额，后面可以考虑做成 ws 推送
-		betFormRef.value.clearForm(); // 成功才清空文本框
+		myApi.getIndexInfo({}, { showLoading: false }); // 拉一下用户信息更新一下余额，后面可以考虑做成 ws 推送
+		closeBet();
+		console.log("closeBet", closeBet);
 	}
 
 	return {

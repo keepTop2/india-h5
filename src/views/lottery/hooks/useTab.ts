@@ -11,7 +11,7 @@ export function useTab(BayLottery: Component, Result: Component) {
 		{ id: 1, label: "购买彩票", component: BayLottery },
 		{ id: 2, label: "开奖结果", component: Result },
 	];
-	const tabsActived = ref(1);
+	const tabsActived = ref(0);
 	const handleTabChange = (index: number) => {
 		tabsActived.value = index;
 	};

@@ -1,4 +1,5 @@
 import { Ref, ref } from "vue";
+import { SELECT_BALL } from "/@/views/lottery/constant/index";
 import { type GameplayItem, type MergedGameplayItem, type MergedGameplayList, type OddsListItem } from "/@/views/lottery/types/index";
 
 type Balls = number[];
@@ -25,6 +26,7 @@ export function useAccordion(mergedGameplayList: Ref<MergedGameplayList>) {
 
 	// 选择球组的处理方法
 	const handleSelectBalls = ({ list }: BallParams, oddsListItem: OddsListItem, gameplayItem: GameplayItem, openBet = Function.prototype) => {
+		console.log("handleSelectBalls");
 		console.log("list", list);
 		console.log("oddsListItem", oddsListItem);
 		console.log("gameplayItem", gameplayItem);
@@ -48,6 +50,7 @@ export function useAccordion(mergedGameplayList: Ref<MergedGameplayList>) {
 
 	// k10 选择球
 	const handleSelectBallsK10 = (childData: any, parentData: any) => {
+		console.log("handleSelectBallsK10");
 		if (currentK10OddsList.value.includes(childData.optionCode)) {
 			balls.value = [];
 			currentK10OddsList.value = [];
@@ -69,21 +72,26 @@ export function useAccordion(mergedGameplayList: Ref<MergedGameplayList>) {
 	 * @param childData 当前子项数据
 	 * @param data 父数据
 	 */
-	const handleExpanded = (status: boolean, childData: any, data: any, openBet = Function.prototype) => {
+	const handleExpanded = (status: boolean, oddsListItem: OddsListItem, gameplayItem: GameplayItem, openBet = Function.prototype) => {
+		console.log("handleExpanded");
+		console.log("status", status);
+		console.log("oddsListItem", oddsListItem);
+		console.log("gameplayItem", gameplayItem);
+		console.log("openBet", openBet);
 		mergedGameplayList.value.forEach((v) => {
 			v.oddsList.forEach((w) => (w.actived = false));
 		});
-		childData.actived = status;
-		currentOddsListItem.value = childData;
+		oddsListItem.actived = status;
+		currentOddsListItem.value = oddsListItem;
 		balls.value = [];
 		currentK10OddsList.value = [];
 		// 排除选择球玩法
-		if (childData.type !== "selectBall") {
+		if (oddsListItem.type !== "selectBall") {
 			formActived.value = status;
-			currentGameplayItem.value = status ? { ...data, oddsList: { ...childData } } : null;
+			currentGameplayItem.value = gameplayItem as MergedGameplayItem;
 			status && openBet();
 		}
-		isSelectBall.value = status ? childData.type === "selectBall" : false;
+		isSelectBall.value = status ? oddsListItem.type === SELECT_BALL : false;
 	};
 
 	return {

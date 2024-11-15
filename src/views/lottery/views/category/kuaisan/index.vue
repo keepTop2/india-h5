@@ -9,7 +9,7 @@
 		</div>
 
 		<!-- 内容部分 -->
-		<component :is="renderComponent" :lottery-detail="lotteryDetail" />
+		<component :is="renderComponent" :lottery-detail="renderLotteryDetail" />
 	</Containers>
 </template>
 
