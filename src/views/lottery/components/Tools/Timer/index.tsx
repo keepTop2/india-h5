@@ -1,9 +1,12 @@
-import { ref, reactive, defineComponent, onMounted, onBeforeUnmount, watch } from "vue";
-import SvgIcon from "/@/components/svgIcon/index.vue";
 import "./index.scss";
 
+import { defineComponent, onBeforeUnmount, onMounted, reactive, ref, watch } from "vue";
+
+import SvgIcon from "/@/components/svgIcon/index.vue";
+import { BEGIN_PAGE_DATA_INTERVAL } from "/@/views/lottery/constant/index";
+
 // 定义定时器组件
-export default (props: any) => {
+export default (props?: any, callback = Function.prototype) => {
 	const state = reactive({
 		time: props?.value?.seconds || 0, // 当前剩余时间（秒）
 		hours: 0, // 小时
@@ -11,6 +14,15 @@ export default (props: any) => {
 		seconds: 0, // 秒
 		isRunning: false, // 定时器是否正在运行
 	});
+
+	const isAllowed = computed(() => {
+		return [state.hours, state.minutes, state.seconds].some((v) => v > 0);
+	});
+
+	watch(
+		() => isAllowed.value,
+		(newValue) => !newValue && setTimeout(callback, BEGIN_PAGE_DATA_INTERVAL)
+	);
 
 	// animationFrameId 用来存储动画帧的 ID，方便取消定时
 	const animationFrameId = ref<number | null>(null);
@@ -82,6 +94,7 @@ export default (props: any) => {
 			height: { default: "100%", type: String }, // 设置定时器的高度
 			class: { type: String, default: "" }, // 可自定义的 class 样式
 			showDesc: { type: Boolean },
+			data: { type: Object, default: () => ({}) },
 		},
 		setup(_props) {
 			// 组件挂载时初始化显示，并根据 immediate 设置是否立即启动定时器
@@ -129,6 +142,7 @@ export default (props: any) => {
 	const ClockTime = defineComponent({
 		props: {
 			size: { type: Number, default: 12 }, // 设置图标的大小
+			data: { type: Object, default: () => ({}) },
 		},
 		name: "ClockTime",
 		setup(props) {
@@ -138,7 +152,7 @@ export default (props: any) => {
 					{/* <img class="clock-icon" src="/@/assets/zh-CN/default/lottery/alarm_clock.svg" alt="" /> */}
 					<SvgIcon size={4} iconName="lottery/alarm_clock" />
 					{/* 显示 Timer 组件 */}
-					<Timer {...state} />
+					<Timer {...state} data={props.data} />
 				</div>
 			);
 		},
@@ -147,6 +161,9 @@ export default (props: any) => {
 	// 定义 TimeGroup 组件，包含日期标签和状态
 	const TimeGroup = defineComponent({
 		name: "TimeGroup",
+		props: {
+			data: { type: Object, default: () => ({}) },
+		},
 		setup(_, { attrs }) {
 			return () => (
 				<div className="lottery-time-group">
@@ -162,7 +179,7 @@ export default (props: any) => {
 					</div>
 
 					{/* 显示 ClockTime 组件 */}
-					<ClockTime size="26px" />
+					<ClockTime size="26px" data={props.data} />
 				</div>
 			);
 		},
