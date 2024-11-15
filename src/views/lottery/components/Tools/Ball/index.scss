@@ -66,6 +66,7 @@
 			&.actived {
 				@include themeify {
 					background-color: themed("Theme") !important;
+					background-image: none !important;
 					color: themed("TB");
 				}
 			}
