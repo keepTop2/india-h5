@@ -605,54 +605,7 @@ class Common {
 			venueCode: gameinfo.venueCode,
 			gameCode: gameinfo.gameCode,
 		};
-		GameApi.gameLogin(params).then((res: any) => {
-			if (res.code === ResCode.SUCCESS) {
-				const { source, userAccount, type } = res.data;
-				const state = {
-					source: "",
-					userAccount: "",
-					type: "",
-				};
-				switch (type) {
-					case "url": {
-						state.source = source;
-						state.userAccount = userAccount;
-						state.type = type;
-						break;
-					}
-					case "html": {
-						// 将HTML编码的文本字符串转换为Blob对象
-						const blob: any = new Blob([source], { type: "text/html" });
-						// 将Blob对象作为iframe的源
-						state.source = URL.createObjectURL(blob);
-						// window.open(state.source, "_blank");
-						// window.open(state.source, "_self");
-						state.userAccount = userAccount;
-						state.type = type;
-						break;
-					}
-					case "token": {
-						const params = {
-							session_id: source,
-							lang: "zh-CN",
-							login_id: userAccount,
-						};
-						const url = this.getUrl();
-						state.source = url + `/api/cash/auth?${qs.stringify(params)}`;
-						state.userAccount = userAccount;
-						state.type = type;
-						break;
-					}
-					default:
-						break;
-				}
-				console.log(state);
-
-				router.push({ path: "/gamePage", query: { ...state } });
-			} else {
-				showToast(res.message);
-			}
-		});
+		router.push({ path: "/gamePage", query: { ...params } });
 	}
 	static convertMilliseconds(ms: number) {
 		const seconds = Math.floor(ms / 1000);
