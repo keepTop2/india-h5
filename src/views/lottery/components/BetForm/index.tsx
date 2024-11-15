@@ -1,13 +1,15 @@
-import { Popup } from "vant";
-import { reactive } from "vue";
+import "./index.scss";
+
+import BetNumber from "/@/views/venueHome/sports/components/Bet/BetNumber.vue";
 import Common from "/@/utils/common";
-import { useSportsBetInfoStore } from "/@/store/modules/sports/sportsBetInfo";
+import { Popup } from "vant";
 import SvgIcon from "/@/components/svgIcon/index.vue";
 import { getIndexInfo } from "/@/views/venueHome/sports/utils/commonFn";
-import BetNumber from "/@/views/venueHome/sports/components/Bet/BetNumber.vue";
 import { i18n } from "/@/i18n/index";
+import { reactive } from "vue";
+import { useSportsBetInfoStore } from "/@/store/modules/sports/sportsBetInfo";
 import { useUserStore } from "/@/store/modules/user";
-import "./index.scss";
+
 export default () => {
 	const $: any = i18n.global;
 	const state = reactive({
@@ -17,8 +19,12 @@ export default () => {
 	const openBet = () => {
 		state.showPopup = true;
 	};
+	const clearForm = () => {
+		state.stake = "";
+	};
 	const closeBet = () => {
 		state.showPopup = false;
+		clearForm();
 	};
 
 	const Order = defineComponent({
@@ -38,6 +44,9 @@ export default () => {
 		props: {
 			icon: { type: String },
 			title: { type: String },
+			currentOddsListItem: { type: Object, default: () => ({}) },
+			currentGameplayItem: { type: Object, default: () => ({}) },
+			lotteryDetail: { type: Object, default: () => ({}) },
 		},
 		emits: ["close", "getGetBalanceAfter"],
 		setup(props, { slots, emit }) {
@@ -55,8 +64,8 @@ export default () => {
 							slots.title()
 						) : (
 							<div class="title-box">
-								<img class="icon" src={props.icon || "https://ctopalistat3.zengchenglm.com/pc/images/db_DB5FC2cea4e2f859029cdbda33fffda6ea1f2.png"} alt="" />
-								<span class="title">时时彩</span>
+								<img class="icon" src={props.lotteryDetail.iconPc} alt="" />
+								<span class="title">{props.lotteryDetail.gameName}</span>
 							</div>
 						)}
 					</div>
@@ -82,7 +91,7 @@ export default () => {
 			const UserStore = useUserStore();
 			return () => (
 				<div onClick={() => emit("select")} class="lottery-bet-input">
-					<div class="input-content" onClick="onBetNumber">
+					<div class="input-content">
 						<input
 							v-model={state.stake}
 							type="number"
@@ -99,20 +108,24 @@ export default () => {
 	const BetForm = defineComponent({
 		name: "BetForm",
 		props: {
-			data: { type: Object, required: true },
+			actived: { type: Boolean, default: false }, // 控制显示投注输入框
+			currentGameplayItem: { type: Object, default: () => ({}) },
+			currentOddsListItem: { type: Object, default: () => ({}) },
+			lotteryDetail: { type: Object, default: () => ({}) },
 		},
 		emits: ["before-close", "submit"],
 		setup(props, { slots, emit }) {
 			const showKeyBoard = ref(true);
+
 			const onkeyPress = (value) => {
 				switch (value) {
 					// 最大
 					case "{max}":
-						state.stake = props.data.maxBet;
+						// state.stake = props.data.maxBet;
 						break;
 					// 最小
 					case "{min}":
-						state.stake = props.data.minBet;
+						// state.stake = props.data.minBet;
 						break;
 					// 删除
 					case "{bksp}":
@@ -124,14 +137,17 @@ export default () => {
 						break;
 					default:
 						state.stake += value;
-						if (Number(state.stake) > Number(props.data.maxBet || 0)) {
-							state.stake = props.data.maxBet;
-						}
-						if (Number(state.stake) < Number(props.data.minBet) || 0) {
-							state.stake = props.data.minBet;
-						}
+
+					// 控制最大最小数值
+					// if (Number(state.stake) > Number(props.data.maxBet || 0)) {
+					// 	state.stake = props.data.maxBet;
+					// }
+					// if (Number(state.stake) < Number(props.data.minBet) || 0) {
+					// 	state.stake = props.data.minBet;
+					// }
 				}
 			};
+
 			return () => (
 				<Popup
 					round
@@ -140,11 +156,14 @@ export default () => {
 					show={state.showPopup}
 					before-close={() => {
 						emit("before-close");
+						state.stake = "";
 						return true;
 					}}
 					onUpdate:show={(val) => (state.showPopup = val)}
 				>
 					<Header
+						currentGameplayItem={props.currentGameplayItem}
+						lotteryDetail={props.lotteryDetail}
 						onClose={() => {
 							emit("before-close");
 							closeBet();
@@ -155,7 +174,7 @@ export default () => {
 						{/* 投注内容插槽 */}
 						<div class="content">{slots?.betContent?.()}</div>
 						{/* 赔率 */}
-						<div class="odds">{props.data?.playMethod?.odds}x</div>
+						<div class="odds">{props.currentOddsListItem.itemOdds}x</div>
 					</div>
 					<BetInput
 						onSelect={() => {
@@ -181,6 +200,7 @@ export default () => {
 
 	return {
 		BetForm,
+		clearForm,
 		Order,
 		openBet,
 		closeBet,
