@@ -456,7 +456,7 @@ class Common {
 	/**
 	 *  @describe 金额三位数分割逗号
 	 */
-	public thousands(num): string {
+	static thousands(num): string {
 		if (num || num == 0) {
 			const str = String(num);
 			const reg = str.indexOf(".") > -1 ? /(\d)(?=(\d{3})+\.)/g : /(\d)(?=(?:\d{3})+$)/g;
