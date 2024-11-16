@@ -48,12 +48,13 @@ export default class GameApi {
 		});
 	};
 	// /app/game_lobby/api/queryGameInfoByOneClassId
-	static queryGameInfoByOneClassId = (data = {}) => {
+	static queryGameInfoByOneClassId = (data = {}, headers = {}) => {
 		return useAxiosApi(`/app/game_lobby/api/queryGameInfoByOneClassId`, {
 			method: "POST",
 			data,
 			headers: {
 				showLoading: true,
+				...headers,
 			},
 		});
 	};

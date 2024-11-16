@@ -51,9 +51,10 @@ export default () => {
 		emits: ["close", "getGetBalanceAfter"],
 		setup(props, { slots, emit }) {
 			const sportsBetInfo = useSportsBetInfoStore();
+			const UserStore = useUserStore();
 			const handleGetBalance = async () => {
 				// 刷新余额后的回调
-				await getIndexInfo();
+				await UserStore.setIndexInfo();
 				emit("getGetBalanceAfter");
 			};
 			return () => (
@@ -121,11 +122,11 @@ export default () => {
 				switch (value) {
 					// 最大
 					case "{max}":
-						// state.stake = props.data.maxBet;
+						state.stake = props.currentOddsListItem.maxBet;
 						break;
 					// 最小
 					case "{min}":
-						// state.stake = props.data.minBet;
+						state.stake = props.currentOddsListItem.minBet;
 						break;
 					// 删除
 					case "{bksp}":
@@ -138,13 +139,13 @@ export default () => {
 					default:
 						state.stake += value;
 
-					// 控制最大最小数值
-					// if (Number(state.stake) > Number(props.data.maxBet || 0)) {
-					// 	state.stake = props.data.maxBet;
-					// }
-					// if (Number(state.stake) < Number(props.data.minBet) || 0) {
-					// 	state.stake = props.data.minBet;
-					// }
+						// 控制最大最小数值
+						if (Number(state.stake) > Number(props.currentOddsListItem.maxBet || 0)) {
+							state.stake = props.currentOddsListItem.maxBet;
+						}
+						if (Number(state.stake) < Number(props.currentOddsListItem.minBet) || 0) {
+							// state.stake = props.currentOddsListItem.minBet;
+						}
 				}
 			};
 
@@ -177,6 +178,8 @@ export default () => {
 						<div class="odds">{props.currentOddsListItem.itemOdds}x</div>
 					</div>
 					<BetInput
+						minBet={props.currentOddsListItem.minBet}
+						maxBet={props.currentOddsListItem.maxBet}
 						onSelect={() => {
 							showKeyBoard.value = true;
 						}}
