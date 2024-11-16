@@ -33,62 +33,8 @@
 					{{ activityData?.status == 30047 ? "您已申请" : "立即申请" }}
 				</button>
 			</div>
-
-			<div class="activity-details">
-				<div class="detail_icon">
-					<img src="../image/detail_icon.png" alt="" />
-				</div>
-				<div class="details-header">
-					<div class="details-header-title-left">
-						<img src="../image/details-header-title-left.png" alt="" />
-					</div>
-					活动条件
-					<div class="details-header-title-right">
-						<img src="../image/details-header-title-right.png" alt="" />
-					</div>
-				</div>
-				<div class="detail-content">
-					<div class="detail-row">
-						<p class="label">
-							<span>活动对象</span>
-						</p>
-						<p class="value">{{ activityData?.userTypeText }}</p>
-					</div>
-					<div class="detail-row">
-						<p class="label">
-							<span>活动时间</span>
-						</p>
-						<p class="value" v-if="activityData?.activityDeadline == 0">
-							{{ dayjs(activityData?.activityStartTime).format("YYYY-MM-DD HH:mm:ss") }}~{{ dayjs(activityData?.activityEndTime).format("YYYY-MM-DD HH:mm:ss") }}
-						</p>
-						<p class="value" v-if="activityData.activityDeadline == 1">长期活动</p>
-					</div>
-					<div class="detail-row">
-						<p class="label">
-							<span>活动描述</span>
-						</p>
-						<p class="value">{{ activityData?.activityDescI18nCode }}</p>
-					</div>
-				</div>
-				<div class="detail-footer"></div>
-			</div>
-
-			<div class="activity-details">
-				<div class="details-header">
-					<div class="details-header-title-left">
-						<img src="../image/details-header-title-left.png" alt="" />
-					</div>
-					活动规则
-					<div class="details-header-title-right">
-						v
-						<img src="../image/details-header-title-right.png" alt="" />
-					</div>
-				</div>
-				<div class="detail-content">
-					<div v-html="activityData?.activityRuleI18nCode" class="htmlDesc"></div>
-				</div>
-				<div class="detail-footer"></div>
-			</div>
+			<activityContent :activityData="activityData"></activityContent>
+			<activityRules :rules="activityInfo?.activityRuleI18nCode"></activityRules>
 		</div>
 		<activityDialog v-model="showDialog" title="温馨提示" :confirm="confirmDialog">
 			{{ dialogInfo.message }}
@@ -104,6 +50,8 @@ import { activityApi } from "/@/api/activity";
 import activityDialog from "../components/Dialog.vue";
 import dayjs from "dayjs";
 import { useUserStore } from "/@/store/modules/user";
+import activityRules from "../components/activityRules.vue";
+import activityContent from "../components/activityContent.vue";
 const userStore = useUserStore();
 import { showToast } from "vant";
 const router = useRouter();
@@ -132,7 +80,7 @@ const apply = () => {
 	} else if (activityData.value.status === 10000 && new Date().getTime() >= activityData.value.activityStartTime) {
 		activityApi.toActivity({ id: activityInfo.id }).then((res: any) => {
 			if (res.code === 10000) {
-				if (res.data.status !== 10000) {
+				if (String(res.data.status).slice(0, 2) !== "13" || res.data.status !== 10000) {
 					dialogInfo.value = res.data;
 					showDialog.value = true;
 				} else {
