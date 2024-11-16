@@ -18,7 +18,7 @@ interface CardData {
 	};
 }
 
-export default ({ onSelect }: { onSelect: (data: CardData) => void }) => {
+export default (data?: any) => {
 	// 获取用户信息 store
 	const {
 		userInfo: { currencySymbol },
@@ -82,7 +82,13 @@ export default ({ onSelect }: { onSelect: (data: CardData) => void }) => {
 						{/* 最近获奖 */}
 						{slots.maxWin?.()}
 						<div class="more">
-							<SvgIcon onClick={() => onSelect(props as any)} size="5" iconName="lottery/arrow" />
+							<SvgIcon
+								onClick={() => {
+									data?.onSelect?.(props as any);
+								}}
+								size="5"
+								iconName="lottery/arrow"
+							/>
 						</div>
 					</div>
 				</div>

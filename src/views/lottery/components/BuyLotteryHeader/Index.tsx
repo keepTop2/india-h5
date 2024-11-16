@@ -45,7 +45,7 @@ export default () => {
 								<img src="/@/assets/zh-CN/default/lottery/caijin.png" alt="" /> <span class="label">最近获奖</span>
 							</div>
 							<div class="right">
-								<span>
+								<span class="value">
 									{Common.thousands(maxWin)} {mainCurrency}
 								</span>
 							</div>
