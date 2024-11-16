@@ -34,7 +34,7 @@ declare module '@vue/runtime-core' {
     SetLangPop: typeof import('./../src/components/setLangPop/index.vue')['default']
     SingleSelect: typeof import('./../src/components/SingleSelect/SingleSelect.vue')['default']
     Spin: typeof import('./../src/components/Spin/Spin.vue')['default']
-    SvgIcon: typeof import('./../src/components/SvgIcon/index.vue')['default']
+    SvgIcon: typeof import('./../src/components/svgIcon/index.vue')['default']
     Tabs: typeof import('./../src/components/Tabs/Tabs.vue')['default']
     VanActionSheet: typeof import('vant/es')['ActionSheet']
     VanCellGroup: typeof import('vant/es')['CellGroup']
