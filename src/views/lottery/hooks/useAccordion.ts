@@ -49,8 +49,8 @@ export function useAccordion(mergedGameplayList: Ref<MergedGameplayList>) {
 	// };
 
 	// k10 选择球
-	const handleSelectBallsK10 = (childData: any, parentData: any) => {
-		console.log("handleSelectBallsK10");
+	const handleSelectBallsK10 = (childData: any, parentData: any, openBet = Function.prototype) => {
+		console.log("handleSelectBallsK10", childData, parentData);
 		if (currentK10OddsList.value.includes(childData.optionCode)) {
 			balls.value = [];
 			currentK10OddsList.value = [];
@@ -63,6 +63,10 @@ export function useAccordion(mergedGameplayList: Ref<MergedGameplayList>) {
 			...parentData,
 			...childData,
 		};
+		if (balls.value.length > 0) {
+			openBet();
+			currentGameplayItem.value = { ...parentData, ...childData };
+		}
 		console.log("currentOddsListItem.value", currentOddsListItem.value);
 	};
 
@@ -86,7 +90,7 @@ export function useAccordion(mergedGameplayList: Ref<MergedGameplayList>) {
 		balls.value = [];
 		currentK10OddsList.value = [];
 		// 排除选择球玩法
-		if (oddsListItem.type !== "selectBall") {
+		if (oddsListItem.type !== "selectBall" && oddsListItem.type !== "selectBallLine") {
 			formActived.value = status;
 			currentGameplayItem.value = gameplayItem as MergedGameplayItem;
 			status && openBet();
