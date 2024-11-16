@@ -35,6 +35,18 @@ export const LotteryRouter = [
 		meta: { name: "ElevenChooseFive", title: "11选5" },
 		component: () => import("/@/views/lottery/views/category/elevenChooseFive/index.vue"),
 	},
+	{
+		path: "/lottery/pk10",
+		name: "PK10",
+		meta: { name: "PK10", title: "PK10" },
+		component: () => import("/@/views/lottery/views/category/pk10/index.vue"),
+	},
+	{
+		path: "/lottery/ssq",
+		name: "SSQ",
+		meta: { name: "SSQ", title: "双色球" },
+		component: () => import("/@/views/lottery/views/category/ssq/index.vue"),
+	},
 	// {
 	// 	path: "/lottery/lucky28",
 	// 	name: "Lucky28",
