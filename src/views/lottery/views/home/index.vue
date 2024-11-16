@@ -51,11 +51,12 @@ import "swiper/css/navigation";
 import { debounce } from "lodash";
 import { Pagination, Navigation, Autoplay } from "swiper/modules";
 import { stringify } from "qs";
+import { useUserStore } from "/@/store/modules/user";
 const modules = ref([Autoplay, Pagination, Navigation]); //swiper配置项
 
 const maps: { [key: string]: string } = {
 	K3: "/lottery/kuaisan", // 快三
-	SSQ: "/lottery/unionLotto",
+	SSQ: "/lottery/ssq",
 	PK10: "/lottery/pk10",
 	_28: "/lottery/lucky28", // 幸运 28
 	SSC: "/lottery/shishicai",
@@ -64,7 +65,10 @@ const maps: { [key: string]: string } = {
 };
 
 const handleClick = (game) => {
-	console.log(game, "game====");
+	// 判断登陆状态
+	if (!useUserStore().token) {
+		return router.push("/login");
+	}
 
 	const { gameCategoryCode, venueCode, gameCode } = game;
 	const { maxWin = 0 } = game.data;

@@ -49,7 +49,7 @@ export function useAccordion(mergedGameplayList: Ref<MergedGameplayList>) {
 	// };
 
 	// k10 选择球
-	const handleSelectBallsK10 = (childData: any, parentData: any, openBet = Function.prototype) => {
+	const handleSelectBallsK10 = (childData: any, parentData: any, openBet = Function.prototype, gameplayItem) => {
 		console.log("handleSelectBallsK10", childData, parentData);
 		if (currentK10OddsList.value.includes(childData.optionCode)) {
 			balls.value = [];
@@ -64,8 +64,9 @@ export function useAccordion(mergedGameplayList: Ref<MergedGameplayList>) {
 			...childData,
 		};
 		if (balls.value.length > 0) {
+			const { maxLimit = 0, minLimit = 0 } = gameplayItem;
 			openBet();
-			currentGameplayItem.value = { ...parentData, ...childData };
+			currentGameplayItem.value = { ...parentData, ...childData, maxLimit, minLimit };
 		}
 		console.log("currentOddsListItem.value", currentOddsListItem.value);
 	};
@@ -85,15 +86,25 @@ export function useAccordion(mergedGameplayList: Ref<MergedGameplayList>) {
 		mergedGameplayList.value.forEach((v) => {
 			v.oddsList.forEach((w) => (w.actived = false));
 		});
+		const { maxLimit = 0, minLimit = 0 } = gameplayItem;
 		oddsListItem.actived = status;
-		currentOddsListItem.value = oddsListItem;
+		if (status) {
+			currentOddsListItem.value = { ...oddsListItem, maxLimit, minLimit };
+		} else {
+			currentOddsListItem.value = {} as OddsListItem;
+		}
+
 		balls.value = [];
 		currentK10OddsList.value = [];
 		// 排除选择球玩法
 		if (oddsListItem.type !== "selectBall" && oddsListItem.type !== "selectBallLine") {
 			formActived.value = status;
-			currentGameplayItem.value = gameplayItem as MergedGameplayItem;
-			status && openBet();
+			if (status) {
+				currentGameplayItem.value = gameplayItem as MergedGameplayItem;
+				openBet();
+			} else {
+				currentGameplayItem.value = {} as MergedGameplayItem;
+			}
 		}
 		isSelectBall.value = status ? oddsListItem.type === SELECT_BALL : false;
 	};
