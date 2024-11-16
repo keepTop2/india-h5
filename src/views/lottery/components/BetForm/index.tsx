@@ -16,7 +16,10 @@ export default () => {
 		showPopup: false,
 		stake: "",
 	});
-	const openBet = () => {
+	const openBet = async () => {
+		await useUserStore().setIndexInfo();
+		// 更新余额
+		getIndexInfo();
 		state.showPopup = true;
 	};
 	const clearForm = () => {
@@ -52,9 +55,12 @@ export default () => {
 		setup(props, { slots, emit }) {
 			const sportsBetInfo = useSportsBetInfoStore();
 			const UserStore = useUserStore();
+			const rotate = ref(0);
 			const handleGetBalance = async () => {
+				rotate.value += 360;
 				// 刷新余额后的回调
 				await UserStore.setIndexInfo();
+
 				emit("getGetBalanceAfter");
 			};
 			return () => (
@@ -73,7 +79,7 @@ export default () => {
 					<div class="header-right">
 						<div class="amount-info" onClick={handleGetBalance}>
 							<span class="value">{Common.getInstance().formatAmount(Number(sportsBetInfo.balance))}</span>
-							<SvgIcon class="color_Theme" iconName="venueHome/sports/svg/sports_refresh" />
+							<SvgIcon class="color_Theme" style={{ transform: `rotate(${rotate.value}deg)` }} iconName="venueHome/sports/svg/sports_refresh" />
 						</div>
 						<div class="close">
 							<SvgIcon iconName="venueHome/sports/svg/close" onClick={() => emit("close")} />
@@ -86,7 +92,7 @@ export default () => {
 
 	const BetInput = defineComponent({
 		name: "BetInput",
-		props: { minBet: { type: Number, default: 0 }, maxBet: { type: Number, default: 0 } },
+		props: { minLimit: { type: Number, default: 0 }, maxLimit: { type: Number, default: 0 } },
 		emits: ["select"],
 		setup(props, { emit }) {
 			const UserStore = useUserStore();
@@ -96,7 +102,7 @@ export default () => {
 						<input
 							v-model={state.stake}
 							type="number"
-							placeholder={`${$.t("sports['限额']")} ${Common.getInstance().formatFloat(props.minBet)} ~ ${Common.getInstance().formatFloat(props.maxBet)}`}
+							placeholder={`${$.t("sports['限额']")} ${Common.getInstance().formatFloat(props.minLimit)} ~ ${Common.getInstance().formatFloat(props.maxLimit)}`}
 							readonly
 						/>
 						<div class="unit">{UserStore.userInfo.mainCurrency}</div>
@@ -122,15 +128,17 @@ export default () => {
 				switch (value) {
 					// 最大
 					case "{max}":
-						state.stake = props.currentOddsListItem.maxBet;
+						state.stake = props.currentOddsListItem.maxLimit;
 						break;
 					// 最小
 					case "{min}":
-						state.stake = props.currentOddsListItem.minBet;
+						state.stake = props.currentOddsListItem.minLimit;
 						break;
 					// 删除
 					case "{bksp}":
-						state.stake = state.stake.slice(0, state.stake.length - 1);
+						console.log(state.stake, "state.stake");
+						const stake = state.stake + "";
+						state.stake = stake.slice(0, stake.length - 1);
 						break;
 					// 隐藏键盘
 					case "{close}":
@@ -140,11 +148,11 @@ export default () => {
 						state.stake += value;
 
 						// 控制最大最小数值
-						if (Number(state.stake) > Number(props.currentOddsListItem.maxBet || 0)) {
-							state.stake = props.currentOddsListItem.maxBet;
+						if (Number(state.stake) > Number(props.currentOddsListItem.maxLimit || 0)) {
+							state.stake = props.currentOddsListItem.maxLimit;
 						}
-						if (Number(state.stake) < Number(props.currentOddsListItem.minBet) || 0) {
-							// state.stake = props.currentOddsListItem.minBet;
+						if (Number(state.stake) < Number(props.currentOddsListItem.minLimit) || 0) {
+							// state.stake = props.currentOddsListItem.minLimit;
 						}
 				}
 			};
@@ -178,8 +186,8 @@ export default () => {
 						<div class="odds">{props.currentOddsListItem.itemOdds}x</div>
 					</div>
 					<BetInput
-						minBet={props.currentOddsListItem.minBet}
-						maxBet={props.currentOddsListItem.maxBet}
+						minLimit={props.currentOddsListItem.minLimit}
+						maxLimit={props.currentOddsListItem.maxLimit}
 						onSelect={() => {
 							showKeyBoard.value = true;
 						}}

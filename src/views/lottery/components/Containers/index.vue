@@ -94,9 +94,9 @@ const pageTitle = route.meta?.title as string;
 					color: themed("T1");
 				}
 			}
-			.selectBallLine{
-				padding:0;
-				padding-top:20px;
+			.selectBallLine {
+				padding: 0;
+				padding-top: 20px;
 				@include themeify {
 					background-color: themed("BG3");
 				}
@@ -137,6 +137,11 @@ const pageTitle = route.meta?.title as string;
 
 				.issue-num {
 					font-size: 24px;
+					display: flex;
+					flex-wrap: wrap;
+					gap: 8px;
+					// flex: 1;
+					justify-content: flex-end;
 					@include themeify {
 						color: themed("T3");
 					}

@@ -69,7 +69,7 @@
 
 <script setup lang="ts">
 import { gameplayList } from "./playsConfig";
-import useBetForm from "/@/views/lottery/components/BetForm/Index";
+import useBetForm from "/@/views/lottery/components/BetForm/index";
 import useAccordion from "/@/views/lottery/components/Tools/Accordion/Index";
 import useBall from "/@/views/lottery/components/Tools/Ball/Index";
 import { useAccordion as useAccordionHook } from "/@/views/lottery/hooks/useAccordion";
