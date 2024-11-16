@@ -55,23 +55,24 @@
 			&.actived {
 				.accordion-content-item {
 					position: relative;
-					&::after {
-						content: "";
-						width: 100%;
-						height: 100%;
-						left: 0;
-						top: 0;
-						position: absolute;
-						border-radius: 12px;
-						@include themeify {
-							border: 1px solid themed("Theme");
-						}
-					}
+					
 
 					.info {
 						@include themeify {
 							color: themed("TB");
 						}
+					}
+				}
+				>.accordion-content-item::after {
+					content: "";
+					width: 100%;
+					height: 100%;
+					left: 0;
+					top: 0;
+					position: absolute;
+					border-radius: 12px;
+					@include themeify {
+						border: 1px solid themed("Theme");
 					}
 				}
 				.select-ball-icon {

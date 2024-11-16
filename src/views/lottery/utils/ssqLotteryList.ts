@@ -29,6 +29,7 @@ export const ssqLotteryList = (staticList: LotteryPlayGroup[], dynamicList: Lott
 					return {
 						...rest,
 						...staticOdds,
+						...(staticOdds.type !== "selectBallLine" ? oddsList[0] : {}),
 						oddsList: specialPlay.oddsList.map((odds: LotteryOption) => ({
 							...odds,
 							actived: false,

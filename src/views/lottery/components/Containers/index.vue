@@ -94,6 +94,13 @@ const pageTitle = route.meta?.title as string;
 					color: themed("T1");
 				}
 			}
+			.selectBallLine{
+				padding:0;
+				padding-top:20px;
+				@include themeify {
+					background-color: themed("BG3");
+				}
+			}
 		}
 	}
 	:deep(.lottery-result) {
