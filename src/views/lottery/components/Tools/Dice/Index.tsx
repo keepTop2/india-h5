@@ -29,18 +29,18 @@ export default () => {
 				emit("select"); // 通过事件向父组件传递选择的信息
 			};
 
-			// 根据骰子的类型来动态计算骰子的背景图
-			const pointsSvg = computed(() => `/@/assets/zh-CN/default/lottery/dice_${props.type === 2 ? "red" : "blue"}.svg`);
+			// // 根据骰子的类型来动态计算骰子的背景图
+			// const pointsSvg = computed(() => `/@/assets/zh-CN/default/lottery/dice_${props.type === 2 ? "red" : "blue"}.svg`);
 
-			// 根据传入的点数动态生成点数数组
-			const pointsArr = computed(() => new Array(props.points).fill(0).map((_, index) => index + 1));
+			// // 根据传入的点数动态生成点数数组
+			// const pointsArr = computed(() => new Array(props.points).fill(0).map((_, index) => index + 1));
 
 			return () => (
-				<div style={{ "background-image": `url(/@/assets/zh-CN/default/lottery/dice_bg.svg)` }} onClick={handleClick} class={`lottery-dice${props.actived ? " actived" : ""}`}>
+				<div style={{ "background-image": `url(/@/assets/zh-CN/default/lottery/point${props.points}.png)` }} onClick={handleClick} class={`lottery-dice${props.actived ? " actived" : ""}`}>
 					{/* 渲染点数对应的骰子点 */}
-					{pointsArr.value.map(() => (
+					{/* {pointsArr.value.map(() => (
 						<span class={`dice dice-${props.points}`} style={{ "background-image": `url(/@/assets/zh-CN/default/lottery/dice_${props.type === 1 ? "black" : "red"}.svg)` }} />
-					))}
+					))} */}
 				</div>
 			);
 		},

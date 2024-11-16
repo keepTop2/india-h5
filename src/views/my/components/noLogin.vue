@@ -21,7 +21,8 @@
 			<div class="cell" @click="languageShow = true">
 				<SvgIcon class="icon" iconName="my/lang" />
 				<div class="label">{{ $t('my["语言"]') }}</div>
-				<div class="value">{{ store.langName }}</div>
+
+				<div class="value">{{ store.getlangInfo.name }}</div>
 				<div class="arrow"><SvgIcon iconName="common/arrow" size="24px" /></div>
 			</div>
 			<div class="cell">
@@ -185,7 +186,7 @@ const toPath = (path) => {
 			}
 			.value {
 				@include themeify {
-					color: themed("TB1");
+					color: themed("T1");
 				}
 				font-family: "PingFang SC";
 				font-size: 24px;
