@@ -87,9 +87,9 @@ const gameData = ref<any[]>([]);
 const router = useRouter();
 const route = useRoute();
 // 根据分类 ID 查询游戏信息
-const requestGames = debounce(async () => {
+const requestGames = debounce(async (isInit = true) => {
 	const gameOneId = route.query.gameOneId as string;
-	const { data } = await gameApi.queryGameInfoByOneClassId({ gameOneId }, { showLoading: false });
+	const { data } = await gameApi.queryGameInfoByOneClassId({ gameOneId }, { showLoading: isInit });
 	gameData.value = data.map((item: any) => ({
 		...item,
 		_key: item.label == 1 ? "1" : item.label == 2 ? "2" : item.id,
@@ -112,7 +112,7 @@ const hotGames = computed(() => {
 
 // 初始化 WebSocket，监听数据更新
 const { close } = useWebSocket({
-	callback: requestGames,
+	callback: () => requestGames(false),
 	fallbackFn: () => {},
 });
 
