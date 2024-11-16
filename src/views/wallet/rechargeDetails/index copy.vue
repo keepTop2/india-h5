@@ -711,7 +711,7 @@ const tradeRecordDetail = async () => {
 		) {
 			depositOrderDetail.value = res.data.withdrawOrderDetailVO;
 		}
-		// 人工加减额
+		// 人工加额
 		if (route.query.tradeWayType === "manual_up" || route.query.tradeWayType === "manual_down") {
 			depositOrderDetail.value = res.data.manualUpDownDetailVO;
 		}
