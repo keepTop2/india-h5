@@ -22,7 +22,6 @@ import { useRoute } from "vue-router";
 const route = useRoute();
 const BayLottery = defineAsyncComponent(() => import("./components/bayLottery.vue"));
 const Result = defineAsyncComponent(() => import("./components/result.vue"));
-const route = useRoute();
 // 标签栏的配置数据
 const { tabs, tabsActived, handleTabChange } = useTab(BayLottery, Result);
 const { lotteryDetail, beginPageData } = usePageInit(); // 这个 hook 是重点。主要就是 onMounted onBeforeUnmount watch 里面需要做的事情
