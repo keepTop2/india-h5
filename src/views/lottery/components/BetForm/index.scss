@@ -57,6 +57,7 @@
 				.color_Theme {
 					width: 22px;
 					height: 22px;
+					transition: transform 1s ease-in-out;
 				}
 			}
 			.close {
@@ -203,5 +204,40 @@
 				color: themed("TB");
 			}
 		}
+	}
+}
+.shopping-cart-icon {
+	position: fixed;
+	bottom: 152px;
+	right: 24px;
+	width: 100px;
+	height: 100px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 50px;
+	z-index: 10;
+	@include themeify {
+		background-color: themed("Theme");
+	}
+
+	.badge {
+		position: absolute;
+		top: 0;
+		right: 0;
+		width: 32px;
+		height: 32px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 16px;
+		@include themeify {
+			background-color: themed("TB1");
+			color: themed("Theme");
+		}
+		font-family: "DIN Alternate";
+		font-size: 24px;
+		font-weight: 700;
+		box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 	}
 }

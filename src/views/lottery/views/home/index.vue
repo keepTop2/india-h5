@@ -19,15 +19,15 @@
 				<p class="module-card-title">热门推荐</p>
 				<Swiper :modules="modules" class="mySwiper" slidesPerView="auto">
 					<swiper-slide v-for="(item, index) in hotGames" :key="index" class="mr_20">
-						<HotLotteryCard :data="item.data" />
+						<HotLotteryCard @click="handleClick(item)" :key="item.data.currentTime" :data="item.data" />
 					</swiper-slide>
 				</Swiper>
 			</div>
 			<!-- 其他彩种 -->
-			<div class="module-card" :key="item._key" v-for="item in gameData.filter((game) => game._key !== 1)">
+			<div class="module-card" :key="item._key" v-for="item in gameData.filter((game) => game._key !== '1')">
 				<p class="module-card-title">{{ item.name }}</p>
 				<div class="module-item-box">
-					<LotteryCard :data="game.data" :key="game.id" v-for="game in item.gameInfoList" />
+					<LotteryCard @click="handleClick(game)" :key="game.data.currentTime" :data="game.data" v-for="game in item.gameInfoList" />
 				</div>
 			</div>
 		</div>
@@ -43,28 +43,45 @@ import TabBar from "/@/layout/home/components/tabBar.vue";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import gameApi from "/@/api/venueHome/games";
 import pubsub from "/@/pubSub/pubSub";
+import { showToast } from "vant";
+import { useWebSocket } from "/@/views/lottery/hooks/useWebSocket";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
+import { debounce } from "lodash";
 import { Pagination, Navigation, Autoplay } from "swiper/modules";
+import { stringify } from "qs";
+import { useUserStore } from "/@/store/modules/user";
 const modules = ref([Autoplay, Pagination, Navigation]); //swiper配置项
 
-// 模拟数据，用于显示在页面头部
-const mockData = {
-	iconPc: "https://ctopalistat3.zengchenglm.com/pc/images/db_DB5FC2cea4e2f859029cdbda33fffda6ea1f2.png",
-	gameName: "时时彩",
-	gameDesc: "五分钟一期",
-	seconds: 100,
-	betStatusName: "投注中",
-	issueNum: "20230812-084",
-	maxWin: 5403.23,
+const maps: { [key: string]: string } = {
+	K3: "/lottery/kuaisan", // 快三
+	SSQ: "/lottery/ssq",
+	PK10: "/lottery/pk10",
+	_28: "/lottery/lucky28", // 幸运 28
+	SSC: "/lottery/shishicai",
+	SYXW: "/lottery/elevenChooseFive", // 11 选 5
+	_3D: "/lottery/3D",
 };
 
-const handleClick = (data) => {
-	router.push("/lottery/shishicai");
+const handleClick = (game) => {
+	// 判断登陆状态
+	if (!useUserStore().token) {
+		return router.push("/login");
+	}
+
+	const { gameCategoryCode, venueCode, gameCode } = game;
+	const { maxWin = 0 } = game.data;
+	const searchParams = { venueCode, gameCode, maxWin };
+	const targetView = maps[gameCategoryCode];
+	if (targetView) {
+		router.push(`${targetView}?${stringify(searchParams)}`);
+	} else {
+		showToast("Error: Path Not Found!");
+	}
 };
 
-const { HotLotteryCard, LotteryCard } = useLotteryCard({ onSelect: handleClick });
+const { HotLotteryCard, LotteryCard } = useLotteryCard();
 
 const onClickLeft = () => {
 	// 发布折叠菜单事件
@@ -73,35 +90,37 @@ const onClickLeft = () => {
 const gameData = ref<any[]>([]);
 const router = useRouter();
 const route = useRoute();
-const requestGames = async () => {
-	const gameOneId = route.query.gameOneId;
-	await gameApi
-		.queryGameInfoByOneClassId({ gameOneId })
-		.then((res) => {
-			gameData.value = res.data.map((item: any) => {
-				return {
-					...item,
-					_key: item.label == 1 ? 1 : item.label == 2 ? 2 : item.id,
-					name: item.label == 1 ? "热门推荐" : item.label == 2 ? "新游戏" : item.name,
-					gameInfoList: item.gameInfoList?.map((game) => ({ ...game, data: { ...game.data, seconds: Math.floor((game.data.lotteryDate - game.data.lotteryTime) / 1000) } })),
-				};
-			});
-			console.log(gameData.value, "gameData.value");
-		})
-		.finally(() => {})
-		.catch((err) => {
-			err;
-		});
-};
+// 根据分类 ID 查询游戏信息
+const requestGames = debounce(async (isInit = true) => {
+	const gameOneId = route.query.gameOneId as string;
+	const { data } = await gameApi.queryGameInfoByOneClassId({ gameOneId }, { showLoading: isInit });
+	gameData.value = data.map((item: any) => ({
+		...item,
+		_key: item.label == 1 ? "1" : item.label == 2 ? "2" : item.id,
+		name: item.label == 1 ? "热门推荐" : item.label == 2 ? "新游戏" : item.name,
+		gameInfoList: item.gameInfoList?.map((game: any) => ({
+			...game,
+			data: { ...game.data, seconds: Math.floor((game.data.lotteryDate - game.data.currentTime) / 1000) },
+		})),
+	}));
+}, 200);
 
 const hotGames = computed(() => {
 	const games = gameData.value
-		.filter((game) => game._key === 1)
+		.filter((game) => game._key === "1")
 		?.map((game) => game.gameInfoList)
 		.flatMap((game) => game);
 
 	return games;
 });
+
+// 初始化 WebSocket，监听数据更新
+const { close } = useWebSocket({
+	callback: () => requestGames(false),
+	fallbackFn: () => {},
+});
+
+onUnmounted(() => close());
 
 onMounted(() => {
 	requestGames();

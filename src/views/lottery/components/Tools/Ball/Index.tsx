@@ -37,17 +37,23 @@ export default () => {
 				type: String,
 				default: "",
 			},
+			startIndex: {
+				// 球的起始序号。例如时时彩是从 1 开始的，幸运 28 是从 0 开始的
+				type: Number,
+				default: 1,
+			},
 		},
 		// 自定义事件：选择球、清除全部选中
 		emits: ["select", "clear"],
 
 		setup(props, { emit }) {
-			const { renderBallNum, maxLeng, type = 1, multiple = true } = props;
+			const { renderBallNum, maxLeng, type = 1, multiple = true, startIndex = 1 } = props;
 
 			// 处理球的选择逻辑
-			const handleSelect = (ballNum: number) => {
+			const handleSelect = (ballNum: number, isRandom = false) => {
+				console.log("ballNum", ballNum);
 				if (!multiple) {
-					emit("select", { value: ballNum, list: props.value.includes(ballNum) ? [] : [ballNum] });
+					emit("select", { value: ballNum, list: props.value.includes(ballNum) && !isRandom ? [] : [ballNum] });
 					return;
 				}
 				// 如果球号已经选中，移除该球号
@@ -69,6 +75,14 @@ export default () => {
 			// 生成球的数量列表
 			const balls = computed(() => new Array(renderBallNum).fill(0));
 
+			// 快速选择
+			const handleRandomBall = () => {
+				const index = Math.floor(Math.random() * balls.value.length);
+				const renderNumber = startIndex === 0 ? index : index + 1;
+
+				handleSelect(renderNumber, true);
+			};
+
 			return () => (
 				<div class={`select-ball-group ${props.class}`}>
 					{/* 提示信息 */}
@@ -82,21 +96,24 @@ export default () => {
 						{/* 快速选择区域 */}
 						<div className="other">
 							<SvgIcon iconName="lottery/ksxz" />
-							<span>快速选择</span>
+							<span onClick={handleRandomBall}>快速选择</span>
 						</div>
 					</div>
 
 					{/* 显示球的区域 */}
 					<div className="balls-box">
-						{balls.value.map((_, index) => (
-							<Ball
-								key={index}
-								onSelect={() => handleSelect(index + 1)} // 绑定选择球的事件
-								actived={props.value.includes(index + 1)} // 判断球是否被选中
-								type={type} // 设置球的类型
-								ballNumber={index + 1} // 当前球的编号
-							/>
-						))}
+						{balls.value.map((_, index) => {
+							const renderNumber = startIndex === 0 ? index : index + 1;
+							return (
+								<Ball
+									key={index}
+									onSelect={() => handleSelect(renderNumber)} // 绑定选择球的事件
+									actived={props.value.includes(renderNumber)} // 判断球是否被选中
+									type={type} // 设置球的类型
+									ballNumber={renderNumber} // 当前球的编号
+								/>
+							);
+						})}
 					</div>
 				</div>
 			);

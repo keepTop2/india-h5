@@ -2,7 +2,7 @@
 	<div class="buy-lottery-containers">
 		<VantNavBar @onClickLeft="router.back()" :title="pageTitle" />
 		<div class="containers">
-			<BuyLotteryHeader :data="data" />
+			<BuyLotteryHeader :data="data" :timer-end-callback="timerEndCallback" />
 
 			<slot />
 		</div>
@@ -16,8 +16,9 @@
 import { useRoute, useRouter } from "vue-router";
 import useBuyCryptocurrency from "/@/views/lottery/components/BuyLotteryHeader/Index";
 
-defineProps({
+const props = defineProps({
 	data: { type: Object, required: true },
+	timerEndCallback: { type: Function, default: Function.prototype },
 });
 
 const { BuyLotteryHeader } = useBuyCryptocurrency();
@@ -93,6 +94,13 @@ const pageTitle = route.meta?.title as string;
 					color: themed("T1");
 				}
 			}
+			.selectBallLine {
+				padding: 0;
+				padding-top: 20px;
+				@include themeify {
+					background-color: themed("BG3");
+				}
+			}
 		}
 	}
 	:deep(.lottery-result) {
@@ -127,13 +135,18 @@ const pageTitle = route.meta?.title as string;
 					border-bottom: 1px solid themed(Line);
 				}
 
-				.issueNum {
+				.issue-num {
 					font-size: 24px;
+					display: flex;
+					flex-wrap: wrap;
+					gap: 8px;
+					// flex: 1;
+					justify-content: flex-end;
 					@include themeify {
 						color: themed("T3");
 					}
 				}
-				.winnNum {
+				.win-num {
 					flex: 1;
 					display: flex;
 					flex-wrap: wrap;
@@ -142,9 +155,14 @@ const pageTitle = route.meta?.title as string;
 					.ball {
 						width: 38px;
 						height: 38px;
-						line-height: 38px;
+						display: flex;
+						justify-content: center;
+						align-items: center;
 						font-size: 18px;
 					}
+				}
+				.win-num-dice {
+					gap: 16px;
 				}
 			}
 			&-item:last-child {
