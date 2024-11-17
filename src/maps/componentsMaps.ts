@@ -30,7 +30,7 @@ export const timeShortcutOptionsMap = new Map<TimeShortcutOptionsEnum, TimeShort
 		TimeShortcutOptionsEnum.d3,
 		{
 			code: TimeShortcutOptionsEnum.d3,
-			startTime: (): number => dayjs().subtract(7, "day").valueOf(),
+			startTime: (): number => dayjs().subtract(6, "day").valueOf(),
 			endTime: (): number => dayjs().valueOf(),
 		},
 	],
@@ -38,7 +38,7 @@ export const timeShortcutOptionsMap = new Map<TimeShortcutOptionsEnum, TimeShort
 		TimeShortcutOptionsEnum.d4,
 		{
 			code: TimeShortcutOptionsEnum.d4,
-			startTime: (): number => dayjs().subtract(30, "day").valueOf(),
+			startTime: (): number => dayjs().subtract(29, "day").valueOf(),
 			endTime: (): number => dayjs().valueOf(),
 		},
 	],
