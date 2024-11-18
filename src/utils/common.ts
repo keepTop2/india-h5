@@ -13,6 +13,7 @@ import mitt from "mitt";
 import qs from "qs";
 import router from "../router";
 import { useUserStore } from "../store/modules/user";
+import { useThemesStore } from "../store/modules/themes";
 dayjs.extend(utc);
 dayjs.extend(tz);
 dayjs.locale("en");
@@ -704,6 +705,13 @@ class Common {
 			// 将脚本添加到文档中
 			document.head.appendChild(script);
 		});
+	}
+
+	static getThemeImg(path: string) {
+		const themesStore = useThemesStore();
+		console.log(themesStore.themeName);
+
+		return new URL(`../assets/theme/${themesStore.themeName}/${path}`, import.meta.url).href;
 	}
 
 	// 联系客服
