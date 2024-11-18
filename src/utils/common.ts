@@ -5,15 +5,13 @@ import tz from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
 import { showToast } from "vant";
 import { Decimal } from "decimal.js";
-// 引入复制插件
-import useClipboard from "vue-clipboard3";
-import GameApi from "/@/api/venueHome/games";
 import commonApi from "/@/api/common";
 import mitt from "mitt";
-import qs from "qs";
 import router from "../router";
 import { useUserStore } from "../store/modules/user";
 import { useThemesStore } from "../store/modules/themes";
+import { i18n } from "/@/i18n/index";
+const $: any = i18n.global;
 dayjs.extend(utc);
 dayjs.extend(tz);
 dayjs.locale("en");
@@ -31,14 +29,6 @@ class Common {
 		}
 		return Common.instance;
 	}
-
-	static buryMap = {
-		web: "0",
-		tuite: "1",
-		youtube: "2",
-		facebook: "3",
-		donate: "4",
-	};
 
 	// 4-11位字母+数字组成，首位必须是字母
 	public static accountRG = /^[a-zA-Z][a-zA-Z0-9]{3,10}$/;
@@ -59,18 +49,6 @@ class Common {
 	public ResCode = ResCode;
 
 	/**
-	 * @description 账号类型字典
-	 * 1:试玩账号(随便逛逛)
-	 * 2:正式账号
-	 */
-	public AccountType = {
-		//试玩账号
-		demoAccount: 0,
-		//正式账号
-		userAccount: 2,
-	};
-
-	/**
 	 * @description 场馆状态或游戏状态
 	 * open:开启
 	 * maintain:维护
@@ -89,31 +67,6 @@ class Common {
 	public emitter = mitt();
 	//事件字典
 	public SubMap = SubMap;
-
-	/**
-	 * @description 获取终端设备
-	 * @returns number
-	 */
-	public getDevice = (): string => {
-		const agent: string = navigator.userAgent.toLowerCase();
-		let device: string = "";
-		if (/windows/.test(agent)) {
-			device = "windows_pc";
-		} else if (/iphone|ipod/.test(agent) && /mobile/.test(agent)) {
-			device = "iphone";
-		} else if (/ipad/.test(agent) && /mobile/.test(agent)) {
-			device = "ipad";
-		} else if (/android/.test(agent) && /mobile/.test(agent)) {
-			device = "android";
-		} else if (/linux/.test(agent)) {
-			device = "linux_pc";
-		} else if (/mac/.test(agent)) {
-			device = "mac";
-		} else {
-			device = "other";
-		}
-		return device;
-	};
 
 	/**
 	 * @description 保留n位小数 截断
@@ -172,50 +125,6 @@ class Common {
 		}
 
 		return formattedNumber;
-	}
-
-	/**
-	 * @param name
-	 * @returns boolean
-	 * @description 判断是否有效真实姓名
-	 */
-	public isActualName(name: string): boolean {
-		const isHavaPeriod = name.indexOf("。");
-		if (isHavaPeriod != -1) {
-			return false;
-		}
-
-		const pointIndexOf = name.indexOf(".");
-		// const pointLastindexOf = name.lastIndexOf("·")
-		if (pointIndexOf == 0) {
-			return false;
-		}
-		//替换.
-		name = name.replace(".", "");
-		name = name.replace("·", "");
-		// console.log(name)
-		//正则
-		const pattern = /^[\u4e00-\u9fa5a-zA-Z.]+$/;
-		if (!pattern.test(name)) {
-			return false;
-		}
-		return true;
-	}
-
-	/**
-	 * @param name
-	 * @returns boolean
-	 * @description 判断是否有效真实别名
-	 */
-	public isAlias(name: string): boolean {
-		console.log(name);
-		//正则
-		const pattern = /^[\u4e00-\u9fa5a-zA-Z0-9]+$/;
-		if (!pattern.test(name)) {
-			console.log(12323);
-			return false;
-		}
-		return true;
 	}
 
 	/**
@@ -502,36 +411,32 @@ class Common {
 	 * @description 复制
 	 * @param value
 	 */
-	public async copy(value: string | number): Promise<void> {
-		const { toClipboard } = useClipboard();
-		try {
-			//复制
-			await toClipboard(String(value));
-			showToast("复制成功");
-		} catch (e) {
-			//复制失败
-			// console.log("error", e);
-			showToast("复制失败");
-		}
-	}
-
-	/**
-	 * @param {*} paramsName 参数字段
-	 * @returns
-	 * @description 获取浏览器地址栏参数
-	 */
-	public getQueryVariable(paramsName) {
-		const url = window.location.href; // 获取url中"?"符后的字串
-		const theRequest = {};
-		if (url.indexOf("?") != -1) {
-			const index = url.indexOf("?");
-			const str = url.substr(index + 1);
-			const strs = str.split("&");
-			for (let i = 0; i < strs.length; i++) {
-				theRequest[strs[i].split("=")[0]] = unescape(strs[i].split("=")[1]);
+	public copy(text) {
+		return new Promise((resolve, reject) => {
+			if (!text) {
+				return;
 			}
-		}
-		return theRequest[paramsName];
+			const textArea = document.createElement("textarea");
+			textArea.value = text;
+			textArea.style.position = "absolute"; // 防止页面跳动
+			textArea.style.opacity = "0"; // 隐藏文本区域
+			document.body.appendChild(textArea);
+			// 使用 requestAnimationFrame 进行复制操作
+			requestAnimationFrame(() => {
+				textArea.select();
+				textArea.setSelectionRange(0, textArea.value.length); // 对于移动设备
+				try {
+					document.execCommand("copy");
+					document.body.removeChild(textArea); // 移除文本区域
+					showToast($.t(`common["复制成功"]`));
+					// resolve("复制成功");
+				} catch (err) {
+					document.body.removeChild(textArea); // 失败时移除文本区域
+					showToast($.t(`common["复制失败"]`));
+					// reject("复制失败");
+				}
+			});
+		});
 	}
 
 	/**
