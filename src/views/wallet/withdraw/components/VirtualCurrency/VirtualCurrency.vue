@@ -108,7 +108,7 @@ const isFieldVisible = (code) => {
 // 发送验证码
 const onCaptcha = async () => {
 	let params = {} as any;
-	params = { phone: UserStore.getUserInfo.areaCode, areaCode: UserStore.getUserInfo.phone };
+	params = { phone: UserStore.getUserInfo.phone, areaCode: UserStore.getUserInfo.areaCode };
 	const res = await bindApi.sendSms(params).catch();
 	if (res.code === common.getInstance().ResCode.SUCCESS) {
 		captchaButton.value?.startCountdown();

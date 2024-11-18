@@ -35,13 +35,20 @@
 							<span class="title">{{ item.tradeWayTypeText }}</span>
 						</div>
 						<div class="right">
-							<span class="value">+{{ Common.getInstance().formatFloat(Common.thousands(item.tradeAmount)) }}</span>
+							<span class="value">
+								<!-- 存款 转换 -->
+								<span v-if="item.tradeType == '1' || item.tradeType == '3'">+</span>
+								<!-- 取款 -->
+								<span v-if="item.tradeType == '2'">-</span>
+								<!-- 金融 -->
+								<span>{{ Common.thousands(Common.getInstance().formatAmount(Common.getInstance().formatFloat(item.tradeAmount))) }}</span>
+							</span>
 							<span>&nbsp;</span>
 							<span class="value">{{ UserStore.userInfo.mainCurrency }}</span>
 						</div>
 					</div>
 					<div class="cell mt_12 pb_16 border">
-						<div class="left text">{{ item.tradeTime }}</div>
+						<div class="left text">{{ Common.getInstance().dayFormat2(item.tradeTime) }}</div>
 						<div class="right text" :class="tradeStatus[item.tradeStatus]">{{ item.tradeStatusText }}</div>
 					</div>
 					<div class="footer_cell mt_16">
@@ -121,6 +128,7 @@ import type2 from "./image/type2.png";
 import type3 from "./image/type3.png";
 import type4 from "./image/type4.png";
 import type5 from "./image/type5.png";
+import type6 from "./image/type6.png";
 import dayjs from "dayjs";
 const UserStore = useUserStore();
 const activeTab = ref(1);
@@ -141,18 +149,22 @@ const pageData: any = ref({});
 const finished = ref(false);
 const recordsList: any = ref([]);
 
+// 图标映射对象
+const typeMap = {
+	bank_card_recharge: type1,
+	bank_card_withdraw: type1,
+	electronic_wallet_recharge: type2,
+	electronic_wallet_withdraw: type2,
+	crypto_currency_recharge: type3,
+	crypto_currency_withdraw: type3,
+	superior_transfer: type4,
+	manual_up: type5,
+	manual_down: type5,
+	platform_transfer: type6,
+};
+
 const getTypeIcon = (item) => {
-	if (item.tradeWayType === "bank_card_recharge" || item.tradeWayType === "bank_card_withdraw") {
-		return type1;
-	} else if (item.tradeWayType === "electronic_wallet_recharge" || item.tradeWayType === "electronic_wallet_withdraw") {
-		return type2;
-	} else if (item.tradeWayType === "crypto_currency_recharge" || item.tradeWayType === "crypto_currency_withdraw") {
-		return type3;
-	} else if (item.tradeWayType === "superior_transfer") {
-		return type4;
-	} else if (item.tradeWayType === "manual_up" || item.tradeWayType === "manual_down") {
-		return type5;
-	}
+	return typeMap[item.tradeWayType] || null; // 默认返回 null 或根据需要返回其他值
 };
 
 const cloneSelect = reactive({
@@ -185,24 +197,6 @@ const changeDate = (item, index) => {
 		return index === 1 || index === 2 ? String(Number(item)) : item;
 	});
 };
-const dateNumLabel = [
-	// {
-	// 	label: "今日",
-	// 	value: 1,
-	// },
-	// {
-	// 	label: "近7天",
-	// 	value: 7,
-	// },
-	// {
-	// 	label: "近30天",
-	// 	value: 30,
-	// },
-	// {
-	// 	label: "近90天",
-	// 	value: 90,
-	// },
-];
 const tradeStatus = {
 	0: "F2",
 	1: "Wam",
@@ -244,16 +238,16 @@ const getList = () => {
 };
 // 删除筛选条件，
 const deleteTab = (item, index) => {
+	console.log("item", item);
 	tabs.value.splice(index, 1);
 	resetParams();
-	if (item.type == "activity_receive_status") {
+	if (item.type == "deposit_withdraw_customer_status") {
 		currentActivityReceiveStatus.value = "all";
 		cloneSelect.tradeStatus = "all";
 		getList();
 	}
-	if (item.type == "welfare_center_reward_type") {
+	if (item.type == "trade_type") {
 		currentWelfareCenterRewardType.value = "all";
-
 		cloneSelect.tradeType = "all";
 		getList();
 	}
@@ -261,8 +255,10 @@ const deleteTab = (item, index) => {
 const changeTab = (item) => {
 	if (item === "all") {
 		tabs.value = [];
-		cloneSelect.tradeType = "";
-		cloneSelect.tradeStatus = "";
+		currentActivityReceiveStatus.value = "all";
+		cloneSelect.tradeStatus = "all";
+		currentWelfareCenterRewardType.value = "all";
+		cloneSelect.tradeType = "all";
 		resetParams();
 		getList();
 	}
@@ -278,12 +274,11 @@ const changeDateBtn = (value) => {
 // 确认条件筛选框
 const confirmSheet = () => {
 	tabs.value = [];
-
-	if (currentActivityReceiveStatus.value !== "all") {
-		tabs.value.push(downBoxList.value.trade_type.find((item) => item.code == currentActivityReceiveStatus.value));
-	}
 	if (currentWelfareCenterRewardType.value !== "all") {
-		tabs.value.push(downBoxList.value.deposit_withdraw_customer_status.find((item) => item.code == currentWelfareCenterRewardType.value));
+		tabs.value.push(downBoxList.value.trade_type.find((item) => item.code == currentWelfareCenterRewardType.value));
+	}
+	if (currentActivityReceiveStatus.value !== "all") {
+		tabs.value.push(downBoxList.value.deposit_withdraw_customer_status.find((item) => item.code == currentActivityReceiveStatus.value));
 	}
 	cloneSelect.tradeType = currentWelfareCenterRewardType.value;
 	cloneSelect.tradeStatus = currentActivityReceiveStatus.value;
