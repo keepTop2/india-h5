@@ -141,7 +141,7 @@ export default (props?: any, callback = Function.prototype) => {
 	// 定义 ClockTime 组件，包含图标和定时器
 	const ClockTime = defineComponent({
 		props: {
-			size: { type: Number, default: 12 }, // 设置图标的大小
+			size: { type: String, default: "12px" }, // 设置图标的大小
 			data: { type: Object, default: () => ({}) },
 		},
 		name: "ClockTime",
@@ -171,7 +171,7 @@ export default (props?: any, callback = Function.prototype) => {
 						<div className="date-tag">
 							<span>{attrs.issueNum}</span>
 							{/* 显示日期标签 */}
-							<SvgIcon name="sports-date_tag" width="119px" height="36px" />
+							<SvgIcon iconName="sports-date_tag" width="119px" height="36px" />
 						</div>
 						<div className="bet-status">
 							<span>投注中</span>
