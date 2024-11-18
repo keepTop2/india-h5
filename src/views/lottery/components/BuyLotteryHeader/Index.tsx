@@ -4,7 +4,7 @@ import { defineComponent } from "vue";
 import { useUserStore } from "/@/store/modules/user";
 import Common from "/@/utils/common";
 import useTimer from "/@/views/lottery/components/Tools/Timer";
-
+import CaijinIcon from "/@/assets/zh-CN/default/lottery/caijin.png";
 export default () => {
 	const BuyLotteryHeader = defineComponent({
 		name: "BuyLotteryHeader",
@@ -42,7 +42,7 @@ export default () => {
 
 						<div class="footer">
 							<div class="left">
-								<img src="/@/assets/zh-CN/default/lottery/caijin.png" alt="" /> <span class="label">最近获奖</span>
+								<img src={CaijinIcon} alt="" /> <span class="label">最近获奖</span>
 							</div>
 							<div class="right">
 								<span class="value">

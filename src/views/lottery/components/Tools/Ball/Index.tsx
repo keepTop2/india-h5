@@ -152,13 +152,14 @@ export default () => {
 			};
 
 			const bgTypeMap = new Map([
-				[1, "blueBall"], // 蓝球
-				[2, "redBall"], // 红球
-				[3, "defBall"], //默认球
+				[1, new URL("/src/assets/zh-CN/default/lottery/blueBall.svg", import.meta.url).href], // 蓝球
+				[2, new URL("/src/assets/zh-CN/default/lottery/redBall.svg", import.meta.url).href], // 红球
+				[3, new URL("/src/assets/zh-CN/default/lottery/defBall.svg", import.meta.url).href], //默认球
 			]);
 
+			console.log("bgTypeMap==========ball", bgTypeMap.get(props.type));
 			// 根据球的类型选择不同的 SVG 图标
-			const ballSvg = computed(() => `/@/assets/zh-CN/default/lottery/${bgTypeMap.get(props.type)}.svg`);
+			const ballSvg = computed(() => bgTypeMap.get(props.type));
 
 			// 渲染球组件
 			return () => (
