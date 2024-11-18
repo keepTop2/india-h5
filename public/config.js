@@ -6,6 +6,11 @@ window.PLATFROM_CONFIG = {
 	// 体育打包编译后请求域名地址(运维专用)
 	productionSportUrl: "https://apistaging.wx7777.com",
 
+	//彩票编译后的请求地址 (运维专用)
+	productionLotteryBaseUrl: "",
+	//彩票编译后的ws请求地址 (运维专用)
+	productionLotteryWsUrl: "",
+
 	// developmentBaseURL: "http://192.168.30.117:9999", // 尔顿本地地址
 	// developmentBaseURL: "https://gw.playesoversea.store", // 开发环境
 	// developmentWsURL: "wss://gw.playesoversea.store/ws", // 开发环境
