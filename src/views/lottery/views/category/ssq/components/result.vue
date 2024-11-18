@@ -7,10 +7,10 @@
 		<div class="result-content">
 			<van-list v-model:loading="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
 				<div class="result-content-item" v-for="item in tableData" :key="item.id">
-					<div class="issueNum">{{ item.issueNum }}</div>
-					<div class="winnNum">
+					<div class="issue-num">{{ item.issueNum }}</div>
+					<div class="win-num">
 						<!-- {/* 前六个球为红球 */} -->
-						<Ball size="38" :type="2" :ball-number="Number(ball)" v-for="(ball, index) in item.lotteryNum.split(' ').slice(0,6)" :key="ball" />
+						<Ball size="38" :type="2" :ball-number="Number(ball)" v-for="(ball, index) in item.lotteryNum.split(' ').slice(0, 6)" :key="ball" />
 						<!-- {/* 最后一个球为蓝球 */} -->
 						<Ball size="38" :type="1" :ball-number="Number(ball)" v-for="ball in item.lotteryNum.split(' ').slice(6)" :key="ball" />
 					</div>
@@ -66,18 +66,17 @@ function getSubmitData() {
 	const submitData = { operatorId, gameCode, lotteryTimeSort: 0, page, size, lang };
 	return submitData;
 }
-
 </script>
 <style lang="scss" scoped>
 .issueNum {
 	@include themeify {
 		color: themed("T3");
-		font-size:24px;
+		font-size: 24px;
 	}
-}	
+}
 .winnNum {
 	display: flex;
 	flex-wrap: wrap;
-	gap:8px;
+	gap: 8px;
 }
 </style>

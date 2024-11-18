@@ -42,7 +42,7 @@
 										v-for="(subOddsItem, subIndex) in oddsListItem.oddsList"
 										:key="subOddsItem.id"
 										:actived="false"
-										@select="(status) => handleSelectBallsK10(subOddsItem, oddsListItem,openBet)"
+										@select="(status) => handleSelectBallsK10(subOddsItem, oddsListItem, openBet)"
 										:title="subOddsItem.optionName"
 										:info="subOddsItem.desc"
 										:odds="subOddsItem.itemOdds"
@@ -55,7 +55,7 @@
 									<SelectBallGroup
 										@clear="() => (balls = [])"
 										:type="3"
-										@select="(data) => handleSelectBalls(data, oddsListItem, gameplayItem,openBet)"
+										@select="(data) => handleSelectBalls(data, oddsListItem, gameplayItem, openBet)"
 										:multiple="false"
 										:renderBallNum="(oddsListItem.ballNum as number)"
 										:maxLeng="1"
@@ -86,7 +86,7 @@
 
 <script setup lang="ts">
 import { gameplayList } from "./playsConfig";
-import useBetForm from "/@/views/lottery/components/BetForm/Index";
+import useBetForm from "/@/views/lottery/components/BetForm/index";
 import useAccordion from "/@/views/lottery/components/Tools/Accordion/Index";
 import useBall from "/@/views/lottery/components/Tools/Ball/Index";
 import { useAccordion as useAccordionHook } from "/@/views/lottery/hooks/useAccordion";
@@ -106,7 +106,8 @@ const { BetForm, openBet, closeBet } = useBetForm();
 
 // hooks
 const { mergedGameplayList } = useGameplayList(gameplayList);
-const { formActived, balls, isSelectBall, clearAccordionStatus, handleSelectBalls, handleExpanded, currentGameplayItem, currentOddsListItem, currentK10OddsList, handleSelectBallsK10 } = useAccordionHook(mergedGameplayList);
+const { formActived, balls, isSelectBall, clearAccordionStatus, handleSelectBalls, handleExpanded, currentGameplayItem, currentOddsListItem, currentK10OddsList, handleSelectBallsK10 } =
+	useAccordionHook(mergedGameplayList);
 const { betFormRef, handleSubmit } = useBet(currentGameplayItem, currentOddsListItem, props as Props, balls, closeBet);
 
 // const closeBetBefore = () => {
