@@ -4,12 +4,12 @@
 		<div class="tabs">
 			<ul>
 				<li :class="['color_Text_a', { active: tab.value == currentTab }]" v-for="tab in tabs" :key="tab.name" @click="selectTab(tab.value)">
-					<img v-if="tab.value === currentTab" :src="getImg(tab.value - 1)" alt="" />
+					<img v-if="tab.value === currentTab" :src="Common.getThemeImg('spin_tab_bg' + tab.value + '.png')" alt="" />
 					<a>{{ tab.name }}</a>
 				</li>
 			</ul>
 		</div>
-		<div class="lottery">
+		<div class="lottery" :style="{ background: `url(${Common.getThemeImg('spin_content_bg.png')})  no-repeat  `, backgroundSize: '100% 100%' }">
 			<Spin
 				@start-spinning-callback="spinStart"
 				@end-spinning-callback="spinEnd"
@@ -21,34 +21,21 @@
 				ref="SpinRef"
 			/>
 
-			<div class="vipLevel color_TB fw_600" :class="'vip' + currentTab * 1">{{ activityData?.vipRankConfig?.[currentTab - 1]?.minVipGradeName }}级或以上</div>
+			<div class="vipLevel color_TB1 fw_600" :class="'vip' + currentTab * 1">{{ activityData?.vipRankConfig?.[currentTab - 1]?.minVipGradeName }}级或以上</div>
 		</div>
-		<div class="remaining_times_bg">{{ $t('home["剩余抽奖次数"]') }}：{{ activityData?.balanceCount || 0 }}</div>
+		<div class="remaining_times_bg" :style="{ background: `url(${Common.getThemeImg('remaining_times_bg.png')})  no-repeat  `, backgroundSize: '100% 100%' }">
+			{{ $t('home["剩余抽奖次数"]') }}：{{ activityData?.balanceCount || 0 }}
+		</div>
 		<div class="container">
-			<div class="box bonus_bg">
+			<div class="box bonus_bg" :style="{ background: `url(${Common.getThemeImg('spin_bonus_bg.png')})  no-repeat  `, backgroundSize: '100% 100%' }">
 				<div class="title fs_30 color_TB">转盘奖金总计</div>
 				<div class="amount fs_32 color_Theme">{{ activityData?.totalAmount || 0 }}</div>
 			</div>
-			<div class="box record_bg">
+			<div class="box record_bg" :style="{ background: `url(${Common.getThemeImg('spin_record_btn_bg.png')})  no-repeat  `, backgroundSize: '100% 100%' }">
 				<div class="reward color_TB fs_30" @click="handleShowRecord">我的抽奖记录<SvgIcon iconName="common/arrow" /></div>
 			</div>
 		</div>
-
-		<div class="activity-details">
-			<div class="details-header">
-				<div class="details-header-title-left">
-					<img src="../../image/details-header-title-left.png" alt="" />
-				</div>
-				<span class="color_TB">活动规则</span>
-				<div class="details-header-title-right">
-					<img src="../../image/details-header-title-right.png" alt="" />
-				</div>
-			</div>
-			<div class="detail-content">
-				<div v-html="activityData?.activityRuleI18nCode" class="color_TB htmlDesc"></div>
-			</div>
-			<div class="detail-footer"></div>
-		</div>
+		<activityRules :rules="activityData?.activityRuleI18nCode"></activityRules>
 	</div>
 
 	<!-- 抽奖记录 -->
@@ -120,7 +107,9 @@ import Spin from "/@/components/Spin/Spin.vue";
 import { activityApi } from "/@/api/activity";
 import activityDialog from "../../components/Dialog.vue";
 import { useUserStore } from "/@/store/modules/user";
+import activityRules from "../../components/activityRules.vue";
 import dayjs from "dayjs";
+import Common from "/@/utils/common";
 const showResult = ref(false);
 const showResult3 = ref(false);
 const showNoMorebalanceCount = ref(false);
@@ -166,7 +155,7 @@ onMounted(() => {
  * @param {string} val - 当前选中的标签值
  * @returns {string} 图片URL
  */
-const getImg = (val: string) => {
+const getImg = (val: any) => {
 	return new URL(`./images/tab_bg${Number(val) + 1}.png`, import.meta.url).href;
 };
 
@@ -213,7 +202,7 @@ const StartVerification = () => {
 		return (showDialog.value = true);
 	} else {
 		activityApi.toSpinActivity().then((res: any) => {
-			if (res.data.status === 10000) {
+			if (String(res.data.status).slice(0, 2) == "13" || res.data.status == 10000) {
 				SpinRef.value?.handleStartSpin();
 				spinStart();
 			} else {
@@ -268,9 +257,6 @@ const querySpinWheelOrderRecord = () => {
 <style scoped lang="scss">
 .lottery {
 	display: flex;
-	background: url("./images/content_bg.png") no-repeat;
-	background-size: cover;
-	background-position: center;
 	overflow: hidden;
 	flex-direction: column;
 	align-items: center;
@@ -327,12 +313,10 @@ const querySpinWheelOrderRecord = () => {
 	margin-top: 24px;
 }
 .bonus_bg {
-	background: url("./images/bonus_bg.png");
 	background-size: 100% 100%;
 	width: 100%;
 }
 .record_bg {
-	background: url("./images/record_btn_bg.png");
 	background-size: 100% 100%;
 	width: 100%;
 }
@@ -367,8 +351,6 @@ const querySpinWheelOrderRecord = () => {
 	padding-top: 40px;
 
 	.remaining_times_bg {
-		background: url("./images/remaining_times_bg.png") no-repeat;
-		background-size: 100% 100%;
 		width: 100%;
 		height: 102px;
 		padding-top: 35px;
@@ -376,7 +358,7 @@ const querySpinWheelOrderRecord = () => {
 		box-sizing: border-box;
 		font-size: 30px;
 		@include themeify {
-			color: themed("TB1");
+			color: themed("TB");
 		}
 	}
 }
@@ -388,10 +370,8 @@ const querySpinWheelOrderRecord = () => {
 		display: flex;
 		align-items: center;
 		height: 74px;
-		border-radius: 25px 25px 0 0;
-		@include themeify {
-			background: themed("spinTab");
-		}
+		border-radius: 24px 24px 0px 0px;
+		background: linear-gradient(90deg, #a0b9b9 0%, #536a6a 100%);
 	}
 
 	li {

@@ -4,7 +4,7 @@
 
 		<div class="activityMain">
 			<div class="activityImg">
-				<VantLazyImg :src="redBagInfo?.headPicturePcI18nCode" class="main-image" />
+				<VantLazyImg :src="redBagInfo?.headPictureI18nCodeFileUrl" class="main-image" />
 				<div class="shadow"></div>
 			</div>
 			<div class="content">
@@ -75,21 +75,7 @@
 					</div>
 					<div class="detail-footer"></div>
 				</div>
-				<div class="activity-details">
-					<div class="details-header">
-						<div class="details-header-title-left">
-							<img src="../../image/details-header-title-left.png" alt="" />
-						</div>
-						<span>活动规则</span>
-						<div class="details-header-title-right">
-							<img src="../../image/details-header-title-right.png" alt="" />
-						</div>
-					</div>
-					<div class="detail-content">
-						<div v-html="redBagInfo.ruleDesc" class="htmlDesc"></div>
-					</div>
-					<div class="detail-footer"></div>
-				</div>
+				<activityRules :rules="redBagInfo.ruleDesc"></activityRules>
 			</div>
 		</div>
 		<RED_BAG_RAIN_Dialog v-model="shwoDialog" title="温馨提示" :confirm="confirmDialog" class="redBagRainResult">
@@ -108,6 +94,7 @@ import { useActivityStore } from "/@/store/modules/activity";
 import Common from "/@/utils/common";
 import { useCountdown } from "/@/hooks/countdown";
 import RED_BAG_RAIN_Dialog from "./RED_BAG_RAIN_Dialog/index.vue";
+import activityRules from "../../components/activityRules.vue";
 const { countdown, startCountdown, stopCountdown } = useCountdown();
 const activityStore = useActivityStore();
 const router = useRouter();
@@ -153,7 +140,7 @@ const getRedBagInfo = async () => {
 const getActivityReward = async () => {
 	if (redBagInfo.value.clientStatus == 1) {
 		await activityApi.redBagParticipate({ redbagSessionId: redBagInfo.value.redbagSessionId }).then((res: any) => {
-			if (res.data.status === 10000) {
+			if (String(res.data.status).slice(0, 2) == "13" || res.data.status == 10000) {
 				activityStore.setIsShowRedBagRain(true);
 				router.push("/");
 			} else {
@@ -430,17 +417,17 @@ const confirmDialog = () => {
 
 					.type2 {
 						@include themeify {
-							background-color: themed("Theme");
+							background-color: themed("Wam-P1");
 						}
 					}
 					.status2 {
 						@include themeify {
-							color: themed("Theme");
+							color: themed("Wam-P1");
 						}
 					}
 					.status1 {
 						@include themeify {
-							color: themed("Hint");
+							color: themed("F2");
 						}
 					}
 				}

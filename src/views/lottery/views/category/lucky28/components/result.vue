@@ -7,8 +7,8 @@
 		<div class="result-content">
 			<van-list v-model:loading="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
 				<div class="result-content-item" v-for="item in tableData" :key="item.id">
-					<div class="issueNum">{{ item.issueNum }}</div>
-					<div class="winnNum">
+					<div class="issue-num">{{ item.issueNum }}</div>
+					<div class="win-num">
 						<Ball size="30px" :type="3" :ball-number="ball" v-for="ball in formatLotteryNum(item.lotteryNum)" :key="ball" />
 					</div>
 				</div>
