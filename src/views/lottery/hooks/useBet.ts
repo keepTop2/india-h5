@@ -40,7 +40,6 @@ export function useBet(
 
 		// 2. 校验余额是否足够
 		if (stake > totalBalance) {
-			console.log(2);
 			return { message: "余额不足", isPassed: false };
 		}
 
@@ -48,13 +47,13 @@ export function useBet(
 		const { maxLimit = 0, minLimit = 0 } = currentGameplayItem.value;
 		if (stake < minLimit) {
 			console.log(3);
-			return { message: `投注金额不能小于${minLimit}`, isPassed: false };
+			return { message: `投注金额不能小于${minLimit} ${userStore.userInfo.mainCurrency}`, isPassed: false };
 		}
 
 		// 4. 校验是否大于 maxLimit
 		if (stake > maxLimit) {
 			console.log(4);
-			return { message: `投注金额不能大于${maxLimit}`, isPassed: false };
+			return { message: `投注金额不能大于${maxLimit} ${userStore.userInfo.mainCurrency}`, isPassed: false };
 		}
 
 		return { message: "", isPassed: true };
@@ -84,7 +83,7 @@ export function useBet(
 			nums = String(balls.value[0]);
 
 			// 这里 11 选 5 要特殊一点，下注的时候，例如 4 号球要提交 "04" 而不是 "4"
-			if (currentGameplayItem.value.categoryCode === "SYXW") {
+			if (currentGameplayItem.value.categoryCode === "SYXW" || currentGameplayItem.value.categoryCode === "SSQ") {
 				nums = addZero(+nums);
 			}
 		}

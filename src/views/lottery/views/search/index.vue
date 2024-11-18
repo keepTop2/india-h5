@@ -34,11 +34,9 @@ import useLotteryCard from "/@/views/lottery/components/LotteryCard/Index";
 import { i18n } from "/@/i18n";
 const $: any = i18n.global;
 
-const route = useRoute();
 const router = useRouter();
 const gameData = ref();
 const searchRef = ref();
-const { gameOneId } = route.query;
 const searchValue = ref();
 
 // 页面加载后执行
@@ -69,7 +67,7 @@ const handleClick = (data) => {
 	router.push("/lottery/shishicai");
 };
 
-const { HotLotteryCard, LotteryCard } = useLotteryCard({ onSelect: handleClick });
+const { LotteryCard } = useLotteryCard({ onSelect: handleClick });
 /**
  * 返回上一页
  * 当点击左上角图标时触发

@@ -51,11 +51,12 @@ import "swiper/css/navigation";
 import { debounce } from "lodash";
 import { Pagination, Navigation, Autoplay } from "swiper/modules";
 import { stringify } from "qs";
+import { useUserStore } from "/@/store/modules/user";
 const modules = ref([Autoplay, Pagination, Navigation]); //swiper配置项
 
 const maps: { [key: string]: string } = {
 	K3: "/lottery/kuaisan", // 快三
-	SSQ: "/lottery/unionLotto",
+	SSQ: "/lottery/ssq",
 	PK10: "/lottery/pk10",
 	_28: "/lottery/lucky28", // 幸运 28
 	SSC: "/lottery/shishicai",
@@ -64,7 +65,10 @@ const maps: { [key: string]: string } = {
 };
 
 const handleClick = (game) => {
-	console.log(game, "game====");
+	// 判断登陆状态
+	if (!useUserStore().token) {
+		return router.push("/login");
+	}
 
 	const { gameCategoryCode, venueCode, gameCode } = game;
 	const { maxWin = 0 } = game.data;
@@ -87,9 +91,9 @@ const gameData = ref<any[]>([]);
 const router = useRouter();
 const route = useRoute();
 // 根据分类 ID 查询游戏信息
-const requestGames = debounce(async () => {
+const requestGames = debounce(async (isInit = true) => {
 	const gameOneId = route.query.gameOneId as string;
-	const { data } = await gameApi.queryGameInfoByOneClassId({ gameOneId }, { showLoading: false });
+	const { data } = await gameApi.queryGameInfoByOneClassId({ gameOneId }, { showLoading: isInit });
 	gameData.value = data.map((item: any) => ({
 		...item,
 		_key: item.label == 1 ? "1" : item.label == 2 ? "2" : item.id,
@@ -112,7 +116,7 @@ const hotGames = computed(() => {
 
 // 初始化 WebSocket，监听数据更新
 const { close } = useWebSocket({
-	callback: requestGames,
+	callback: () => requestGames(false),
 	fallbackFn: () => {},
 });
 

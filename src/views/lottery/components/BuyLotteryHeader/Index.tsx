@@ -30,11 +30,11 @@ export default () => {
 
 					<div class="content">
 						<div class="content-item">
-							<div class="label">当期期号</div>
+							<div class="label">当期期号:</div>
 							<div class="value">{props.data.issueNum}</div>
 						</div>
 						<div class="content-item">
-							<div class="label">下一期开奖</div>
+							<div class="label">下一期开奖:</div>
 							<div class="value">
 								<Timer showDesc={true} data={props.data} />
 							</div>
@@ -46,7 +46,7 @@ export default () => {
 							</div>
 							<div class="right">
 								<span class="value">
-									{Common.thousands(maxWin)} {mainCurrency}
+									{Common.thousands(maxWin)} {mainCurrency || "USD"}
 								</span>
 							</div>
 						</div>

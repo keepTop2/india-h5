@@ -109,7 +109,7 @@ export default (data?: any) => {
 					</div>
 					<div class="right">
 						<span>
-							{currencySymbol}&nbsp;
+							{currencySymbol || "$"}&nbsp;
 							{Common.thousands(props.maxWin)}
 						</span>
 					</div>

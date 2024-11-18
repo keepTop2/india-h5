@@ -47,6 +47,12 @@ export const LotteryRouter = [
 		meta: { name: "SSQ", title: "双色球" },
 		component: () => import("/@/views/lottery/views/category/ssq/index.vue"),
 	},
+	{
+		path: "/lottery/3D",
+		name: "3D",
+		meta: { name: "3D", title: "3D" },
+		component: () => import("/@/views/lottery/views/category/3D/index.vue"),
+	},
 	// {
 	// 	path: "/lottery/lucky28",
 	// 	name: "Lucky28",
