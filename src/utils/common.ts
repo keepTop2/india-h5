@@ -149,13 +149,14 @@ class Common {
 	/**
 	 * @description 若超出指定位数，千位用K表示，默认超出10位数，最小支持5位
 	 */
-	public formatAmount(number: number, digits: number = 10): string {
+	public formatAmount(number: number | string | null | undefined, digits: number = 10) {
+		if (!number) return;
 		// 限制最小位数为 5
 		const minDigits = 5;
 		const thresholdDigits = Math.max(digits, minDigits);
 		const threshold = Math.pow(10, thresholdDigits - 1);
 
-		const absNumber = Math.abs(number);
+		const absNumber = Math.abs(Number(number));
 		let formattedNumber: string;
 
 		if (absNumber >= threshold) {
@@ -166,32 +167,12 @@ class Common {
 		}
 
 		// 处理负数情况
-		if (number < 0) {
+		if (Number(number) < 0) {
 			formattedNumber = "-" + formattedNumber;
 		}
 
 		return formattedNumber;
 	}
-
-	/**
-	 * @description 若超出10位数，千位用K表示
-	 */
-	// public formatAmount(number) {
-	// 	const absNumber = Math.abs(number);
-	// 	const threshold = 10000000;
-	// 	let formattedNumber = "" as number | string;
-	// 	if (absNumber >= threshold) {
-	// 		const quotient = Math.floor(this.div(absNumber, 1000));
-	// 		formattedNumber = `${quotient}K`;
-	// 	} else {
-	// 		formattedNumber = this.formatFloat(Number(absNumber));
-	// 	}
-	// 	// 处理负数情况
-	// 	if (number < 0) {
-	// 		formattedNumber = "-" + formattedNumber;
-	// 	}
-	// 	return formattedNumber;
-	// }
 
 	/**
 	 * @param name
@@ -410,6 +391,25 @@ class Common {
 				return value.slice(0, 2) + hiddenChars + value.slice(-2);
 			} else {
 				return value; // 如果长度不足4位，返回原值
+			}
+		}
+		return "";
+	}
+
+	/**
+	 * @description 转换电子钱包地址
+	 */
+	public EWalletHiding(value: string) {
+		if (value) {
+			const length = value.length;
+			if (length > 6) {
+				const hiddenChars = " **** **** ";
+				return value.slice(0, 3) + hiddenChars + value.slice(-3);
+			} else if (length <= 6) {
+				const hiddenChars = " ** ";
+				return value.slice(0, 2) + hiddenChars + value.slice(-2);
+			} else {
+				return value; // 如果长度不足3位，返回原值
 			}
 		}
 		return "";
