@@ -1,7 +1,8 @@
 import { computed, defineComponent } from "vue";
 import SvgIcon from "/@/components/svgIcon/index.vue";
 import "./index.scss";
-
+import { i18n } from "/@/i18n/index";
+const $: any = i18n.global;
 export default () => {
 	// 定义 SelectBallGroup 组件，用于显示多个球的选择
 	const SelectBallGroup = defineComponent({
@@ -86,17 +87,17 @@ export default () => {
 			return () => (
 				<div class={`select-ball-group ${props.class}`}>
 					{/* 提示信息 */}
-					<div class="warn">请{props.multiple ? "至少" : ""}选择1个球号</div>
+					<div class="warn">{$.t(`lottery['请选择1个球号']`)}</div>
 					<div className="control">
 						{/* 清除全部选中 */}
 						<div onClick={() => emit("clear")} className="clear">
 							<SvgIcon iconName="lottery/clear" />
-							<span>清除全部</span>
+							<span>{$.t(`lottery['清除全部']`)}</span>
 						</div>
 						{/* 快速选择区域 */}
 						<div className="other">
 							<SvgIcon iconName="lottery/ksxz" />
-							<span onClick={handleRandomBall}>快速选择</span>
+							<span onClick={handleRandomBall}>{$.t(`lottery['快速选择']`)}</span>
 						</div>
 					</div>
 
