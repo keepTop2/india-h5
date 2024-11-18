@@ -439,6 +439,7 @@ const onTwoConfirm = async ({ selectedValues, selectedOptions, selectedIndexes }
 			showToast("开始时间不可大于结束时间");
 			return;
 		}
+		state.endTimeSlotText = dayjs(endTime.value).format("YYYY/MM/DD");
 		emit("onConfirmDate");
 		state.twoShow = false;
 	}, 10);
