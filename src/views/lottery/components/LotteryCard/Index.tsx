@@ -4,7 +4,8 @@ import Common from "/@/utils/common";
 import useTimer from "/@/views/lottery/components/Tools/Timer";
 import SvgIcon from "/@/components/svgIcon/index.vue";
 import NationalIcon from "/@/assets/zh-CN/default/lottery/national.png";
-
+import { i18n } from "/@/i18n/index";
+const $: any = i18n.global;
 import "./index.scss";
 
 // 定义数据类型
@@ -107,7 +108,7 @@ export default (data?: any) => {
 			return () => (
 				<div class="card-footer">
 					<div class="left">
-						<span>最高奖</span>
+						<span>{$.t(`lottery['最高奖']`)}</span>
 					</div>
 					<div class="right">
 						<span>
