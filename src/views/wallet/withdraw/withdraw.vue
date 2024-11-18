@@ -61,6 +61,7 @@
 					<input
 						v-model="state.amount"
 						type="number"
+						@input="($event.target as HTMLInputElement).value = ($event.target as HTMLInputElement).value.replace(/^0+(\d)|[^\d]+/g, '$1')"
 						:placeholder="`${withdrawWayConfig.withdrawMinAmount ?? 0} ${UserStore.userInfo.mainCurrency} ~ ${withdrawWayConfig.withdrawMaxAmount ?? 0} ${UserStore.userInfo.mainCurrency} `"
 					/>
 					<div class="operate_content">
@@ -178,7 +179,7 @@ const $: any = i18n.global;
 const componentsMapsName = {
 	bank_card: bankCard,
 	electronic_wallet: EWallet,
-	crypto_currency: VirtualCurrency, // 修复: 应该是 'usdt_trc20' 而不是 'rechargeTypeCode'
+	crypto_currency: VirtualCurrency,
 };
 
 interface withdrawWayDataRootObject {
