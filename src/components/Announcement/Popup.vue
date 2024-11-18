@@ -29,33 +29,39 @@ const visible = defineModel({ type: Boolean, default: true });
 <style scoped lang="scss">
 .announcement-container {
 	//width: 100%;
-	background: var(--BG1-N, #222324);
 	border-radius: 24px;
 	padding: 24px;
 	text-align: center;
 	font-family: "PingFang SC";
-
+	@include themeify {
+		background-color: themed("BG1");
+	}
 	.title {
-		color: var(--TB-N, #fff);
 		font-size: 30px;
 		position: relative;
-
+		@include themeify {
+			color: themed("TB");
+		}
 		.close {
 			position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
+			top: 50%;
+			transform: translateY(-50%);
 			right: 24px;
 		}
 	}
 
 	.line {
 		height: 1px;
-		background: var(--Line-N, #343434);
+		@include themeify {
+			background: themed("Line");
+		}
 		margin: 24px 0;
 	}
 
 	.content {
-		color: var(--T1-N, #999ba0);
+		@include themeify {
+			color: themed("T1");
+		}
 		font-family: "PingFang SC";
 		font-size: 26px;
 		font-style: normal;
