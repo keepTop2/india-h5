@@ -27,7 +27,7 @@
 /**
  * @description 游戏搜索页
  */
-import { useRoute, useRouter } from "vue-router";
+import { useRouter } from "vue-router";
 import noData from "/@/assets/zh-CN/default/image.png";
 import GameApi from "/@/api/venueHome/games";
 import useLotteryCard from "/@/views/lottery/components/LotteryCard/Index";
@@ -35,6 +35,7 @@ import { i18n } from "/@/i18n";
 import { useUserStore } from "/@/store/modules/user";
 import { stringify } from "qs";
 import { showToast } from "vant";
+import { ref, onMounted } from "vue";
 const $: any = i18n.global;
 
 const router = useRouter();
