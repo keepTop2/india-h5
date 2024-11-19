@@ -7,7 +7,7 @@
 					<input v-model="searchValue" @keydown.enter="handleSearch" ref="searchRef" style="width: 100%" :placeholder="$t(`game['输入游戏名称']`)" type="search" class="color_T2" />
 				</template>
 				<template v-slot:right>
-					<div @click="handleSearch" class="searchBtn">搜索</div>
+					<div @click="handleSearch" class="searchBtn">{{ $t(`lottery['搜索']`) }}</div>
 				</template>
 			</VantNavBar>
 		</div>
@@ -58,7 +58,6 @@ const handleSearch = () => {
 			pageSize: -1,
 		}).then((res) => {
 			if (res.ok) {
-				console.log("搜索游戏", res);
 				gameData.value = res.data.records;
 			}
 		});

@@ -15,8 +15,8 @@
 
 		<div class="containers">
 			<!-- 热门推荐 -->
-			<div class="module-card">
-				<p class="module-card-title">热门推荐</p>
+			<div class="module-card" v-if="hotGames.length">
+				<p class="module-card-title">{{ $t(`lottery['热门推荐']`) }}</p>
 				<Swiper :modules="modules" class="mySwiper" slidesPerView="auto">
 					<swiper-slide v-for="(item, index) in hotGames" :key="index" class="mr_20">
 						<HotLotteryCard @click="handleClick(item)" :key="item.data.currentTime" :data="item.data" />
@@ -52,6 +52,8 @@ import { debounce } from "lodash";
 import { Pagination, Navigation, Autoplay } from "swiper/modules";
 import { stringify } from "qs";
 import { useUserStore } from "/@/store/modules/user";
+import { i18n } from "/@/i18n/index";
+const $: any = i18n.global;
 const modules = ref([Autoplay, Pagination, Navigation]); //swiper配置项
 
 const maps: { [key: string]: string } = {
@@ -72,7 +74,7 @@ const handleClick = (game) => {
 
 	const { gameCategoryCode, venueCode, gameCode } = game;
 	const { maxWin = 0 } = game.data;
-	const searchParams = { venueCode, gameCode, maxWin };
+	const searchParams = { venueCode, gameCode, maxWin, lotteryIcon: game.data.iconH5 };
 	const targetView = maps[gameCategoryCode];
 	if (targetView) {
 		router.push(`${targetView}?${stringify(searchParams)}`);
@@ -97,11 +99,13 @@ const requestGames = debounce(async (isInit = true) => {
 	gameData.value = data.map((item: any) => ({
 		...item,
 		_key: item.label == 1 ? "1" : item.label == 2 ? "2" : item.id,
-		name: item.label == 1 ? "热门推荐" : item.label == 2 ? "新游戏" : item.name,
-		gameInfoList: item.gameInfoList?.map((game: any) => ({
-			...game,
-			data: { ...game.data, seconds: Math.floor((game.data.lotteryDate - game.data.currentTime) / 1000) },
-		})),
+		name: item.label == 1 ? $.t(`lottery['热门推荐']`) : item.label == 2 ? $.t(`lottery['新游戏']`) : item.name,
+		gameInfoList: item.gameInfoList
+			.filter((game) => game.data)
+			?.map((game: any) => ({
+				...game,
+				data: { ...game.data, seconds: Math.floor((game.data.lotteryDate - game.data.currentTime) / 1000) },
+			})),
 	}));
 }, 200);
 
