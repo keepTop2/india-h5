@@ -11,14 +11,14 @@
 				<div>
 					<h3 class="color_TB fs_36 fw_400">{{ $t('betting["比赛奖池"]') }}</h3>
 					<span class="money color_Hint fw_700 fs_64 flex">
-						{{ userInfo.platCurrencySymbol }}
-						{{ totalRewardsAmount }}
+						{{ currentData?.currencySymbol }}
+
+						{{ Common.amountConversion(totalRewardsAmount) }}
 					</span>
 				</div>
 				<img class="topimg" :src="topimg" alt="" />
 				<SvgIcon class="hint" @click="ruleShow = true" iconName="common/hint" />
 			</div>
-
 			<!-- 倒计时和上届冠军信息 -->
 			<div class="top2 flex">
 				<!-- 倒计时 -->
@@ -39,18 +39,17 @@
 							<h3 class="userName color_TB fw_600 fs_24">{{ currentData.previous?.userAccount }}</h3>
 							<span class="color_TB fs_22 fw_400">{{ $t('betting["奖金"]') }}</span>
 							<span class="color_TB fs_20 flex fw_700">
-								<img class="size_20" :src="icon" alt="" /><span class="color_Wam-P1"> {{ currentData.previous?.currencySymbol }}{{ currentData.previous?.awardAmount }}</span
+								<img class="size_20" :src="icon" alt="" /><span class="color_Wam-P1"> {{ currentData?.currencySymbol }}{{ Common.amountConversion(currentData.previous?.awardAmount) }}</span
 								><span></span> ({{ currentData.previous?.activityAmountPer }}%)
 							</span>
 						</div>
 					</div>
 				</div>
 			</div>
-
 			<!-- 用户信息 -->
 			<div class="userInfo" v-if="!participation">
 				<div class="userInfo_Top">
-					<img :src="userIcon" class="userIcon" alt="" />
+					<VantLazyImg :src="useUserStore().userInfo?.avatarFileUrl" class="userIcon" alt="" />
 					<span class="userName color_TB fw_600 fs_24">{{ currentData.user?.userAccount }}</span>
 				</div>
 				<div class="userInfo_Bottom">
@@ -59,15 +58,16 @@
 						<p class="color_Hint fs30 fw_400 lh_40">{{ isStart ? (currentData.user?.ranking > 100 ? "100+" : currentData.user?.ranking || 0) : "--" }}</p>
 					</div>
 					<div class="rightLine"></div>
+					{{}}
 					<div class="userInfo_Bottom_right" style="text-align: center">
 						<h3 class="userName color_T3 fs_24 fw_500 lh_38">{{ $t('betting["投注金额"]') }}</h3>
 						<span class="fw_500 color_green-00-ff-47 fs_24"
-							><span>{{ isStart ? currentData?.currencySymbol + "" + currentData.user?.betAmount : "--" }}</span></span
+							><span>{{ isStart ? useUserStore().getUserInfo.currencySymbol + "" + currentData.user?.betAmount : "--" }}</span></span
 						>
 					</div>
 				</div>
 				<p class="color_T3 fs_20">
-					距离上榜还需 <span class="color_TB">{{ currentData.user?.lackBetAmount }}</span> {{ $t('betting["投注金额"]') }}
+					距离上榜还需 <span class="color_TB">{{ useUserStore().getUserInfo.currencySymbol }} {{ currentData.user?.lackBetAmount }}</span> {{ $t('betting["投注金额"]') }}
 				</p>
 			</div>
 
@@ -111,8 +111,8 @@
 								</span>
 							</div>
 							<div class="color_T1">{{ item.userAccount }}</div>
-							<div class="color_TB">{{ item.betAmount }}{{ item.currencySymbol }}</div>
-							<div class="color_TB">{{ item.awardAmount }}{{ userInfo.platCurrencySymbol }}</div>
+							<div class="color_TB">{{ item.betCurrencySymbol }} {{ item.betAmount }}</div>
+							<div class="color_TB">{{ userInfo.platCurrencySymbol }} {{ Common.amountConversion(item.awardAmount) }}</div>
 						</div>
 					</div>
 				</div>
