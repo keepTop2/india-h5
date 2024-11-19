@@ -4,7 +4,7 @@
 		<div class="wrapper">
 			<div class="input_box">
 				<div class="content">
-					<div class="title">输入密码</div>
+					<div class="title">{{ $t(`wallet['输入密码']`) }}</div>
 					<ul class="input_list">
 						<li v-for="(item, index) in state.numList" :key="index" :class="getClass(item)" @click="onEnter">
 							<div v-if="item.cursor" class="cursor"></div>
@@ -15,7 +15,7 @@
 					<!-- 隐藏的真实输入框 -->
 					<input ref="passwordInput" type="password" inputmode="numeric" maxlength="6" v-model="modelValue" @input="onInput" style="opacity: 0; position: absolute; top: -9999px" />
 					<div class="des">
-						<span @click="goto">忘记密码？</span>
+						<span @click="goto">{{ $t(`wallet['忘记密码']`) }}</span>
 					</div>
 				</div>
 			</div>
