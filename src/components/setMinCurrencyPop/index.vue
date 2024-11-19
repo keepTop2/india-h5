@@ -5,18 +5,14 @@
 				<div @click="cancel">
 					<svg-icon iconName="common/close" size="30px"></svg-icon>
 				</div>
-				<div class="color_TB fs_32">语言切换</div>
+				<div class="color_TB fs_32">选择主货币</div>
 				<div></div>
 			</div>
-
 			<div class="langList">
 				<div v-for="item in filterSearch" class="langItem flex" :class="currentActiveLang === item.code ? ' active' : ''" @click="setActive(item)">
-					<div class="flex">
-						<img :src="item.iconFileUrl" alt="" />
-						{{ item.name }}
-					</div>
+					<div class="flex">{{ item.currencyName }}/{{ item.currencyCode }}</div>
 					<div>
-						<svg-icon :iconName="currentActiveLang === item.code ? 'common/circle_theme' : 'common/circle'" size="30px"></svg-icon>
+						<svg-icon :iconName="currency.currencyCode === item.currencyCode ? 'common/circle_theme' : 'common/circle'" size="30px"></svg-icon>
 					</div>
 				</div>
 			</div>
@@ -27,11 +23,19 @@
 <script setup lang="ts">
 import CommonApi from "/@/api/common";
 import { useUserStore } from "/@/store/modules/user";
+import common from "/@/utils/common";
 const userStore = useUserStore();
 const langList: any = ref([]);
 const props = defineProps({
 	modelValue: Boolean,
+	currency: String,
 });
+const state = reactive({
+	currencyList: [],
+	value: "",
+	dataLoaded: false,
+});
+
 const show = ref(false);
 const currentActiveLang = ref(userStore.getlangInfo.code);
 const currentLangInfo: any = ref({});
@@ -47,27 +51,39 @@ watch(
 		}
 	}
 );
-const emit = defineEmits(["update:modelValue"]);
+const emit = defineEmits(["update:modelValue", "setmainCurrency"]);
 const cancel = () => {
 	emit("update:modelValue", false);
 	show.value = false;
 };
-const searchValue = ref("");
 
-const filterSearch = computed(() => {
-	if (!searchValue.value) return userStore.getlangList;
-	return userStore.getlangList.filter((item: any) => item.name.toLocaleLowerCase().includes(searchValue.value.toLocaleLowerCase())).map((item: any) => item);
+onMounted(() => {
+	getCurrencyList();
 });
-const setActive = async (value) => {
-	currentLangInfo.value = value;
-	currentActiveLang.value = value.code;
-	await userStore.setlangInfo(currentLangInfo.value);
-	location.reload();
-	cancel();
+const searchValue = ref("");
+const getCurrencyList = async () => {
+	const res = await CommonApi.getCurrencyList().catch((err) => err);
+	if (res.code == common.getInstance().ResCode.SUCCESS) {
+		state.currencyList = res.data;
+		state.dataLoaded = true;
+	}
 };
-const confirm = async () => {
-	await userStore.setlangInfo(currentLangInfo.value);
-	location.reload();
+const filterSearch = computed(() => {
+	// 获取输入框中的搜索值，并将其转换为小写
+	const searchValue = state.value.toLowerCase();
+	// 过滤 currencyList 数组，返回包含搜索值的对象
+	return state.currencyList.filter((item) => {
+		// 检查 item 的 code 属性是否包含搜索值（忽略大小写）
+		// 或者 item 的 value 属性是否包含搜索值（忽略大小写）
+		return (
+			item.currencyCode?.toLowerCase().includes(searchValue) || // 如果 code 中包含搜索值，返回 true
+			item.currencyNameI18?.toLowerCase().includes(searchValue) // 或者如果 value 中包含搜索值，返回 true
+		);
+	});
+});
+
+const setActive = async (value) => {
+	emit("setmainCurrency", value);
 	cancel();
 };
 </script>

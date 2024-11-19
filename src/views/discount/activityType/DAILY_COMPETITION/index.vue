@@ -5,14 +5,14 @@
 		<div class="content">
 			<!-- 标签页 -->
 			<!-- <Tabs class="plr" v-model="tabsActiveKey" :list="tabList" /> -->
-			<NavBar class="discount_navbar" v-model:active="tabsActiveKey" :tab-list="tabList" @on-change-nav-bar="onChangeNavBar" />
+			<NavBar class="discount_navbar" v-model:active="tabsActiveKey" :tab-list="tabList" @on-change-nav-bar="onChangeNavBar" v-if="tabList.length > 1" />
 			<!-- 顶部奖池信息 -->
 			<div class="top mt_70">
 				<div>
 					<h3 class="color_TB fs_36 fw_400">{{ $t('betting["比赛奖池"]') }}</h3>
 					<span class="money color_Hint fw_700 fs_64 flex">
 						{{ userInfo.platCurrencySymbol }}
-						{{ PrizePool }}
+						{{ totalRewardsAmount }}
 					</span>
 				</div>
 				<img class="topimg" :src="topimg" alt="" />
@@ -22,12 +22,14 @@
 			<!-- 倒计时和上届冠军信息 -->
 			<div class="top2 flex">
 				<!-- 倒计时 -->
-				<div class="countDown br_8">
-					<h3 class="color_TB fw_400 fs_30 mb_12">{{ $t('betting["剩余时间"]') }}</h3>
-					<countDown v-model="countDownTime" />
+				<div class="countDown br_8" :style="{ width: !isStart || !currentData.previous ? '100%' : '' }">
+					<div style="margin: 0 auto" :style="{ width: !isStart || !currentData.previous ? '50%' : '' }">
+						<h3 class="color_TB fw_400 fs_30 mb_12">{{ $t('betting["剩余时间"]') }}</h3>
+						<countDown v-model="countDownTime" />
+					</div>
 				</div>
 				<!-- 上届冠军信息 -->
-				<div class="championInfo bg_BG3 br_8">
+				<div class="championInfo bg_BG3 br_8" v-if="isStart && currentData.previous">
 					<img class="jiao" :src="jiao" alt="" />
 					<h3 class="title fw_500 flex fs_24 color_Hint"><img class="size_24" :src="winner" alt="" />{{ $t('betting["上届冠军"]') }}</h3>
 					<div class="line_home"></div>
@@ -37,7 +39,7 @@
 							<h3 class="userName color_TB fw_600 fs_24">{{ currentData.previous?.userAccount }}</h3>
 							<span class="color_TB fs_22 fw_400">{{ $t('betting["奖金"]') }}</span>
 							<span class="color_TB fs_20 flex fw_700">
-								<img class="size_20" :src="icon" alt="" /><span class="color_Wam-P1">{{ currentData.previous?.awardAmount }}</span
+								<img class="size_20" :src="icon" alt="" /><span class="color_Wam-P1"> {{ currentData.previous?.currencySymbol }}{{ currentData.previous?.awardAmount }}</span
 								><span></span> ({{ currentData.previous?.activityAmountPer }}%)
 							</span>
 						</div>
@@ -49,22 +51,23 @@
 			<div class="userInfo" v-if="!participation">
 				<div class="userInfo_Top">
 					<img :src="userIcon" class="userIcon" alt="" />
-					<span class="userName color_TB fw_600 fs_24">用户昵称</span>
+					<span class="userName color_TB fw_600 fs_24">{{ currentData.user?.userAccount }}</span>
 				</div>
 				<div class="userInfo_Bottom">
 					<div class="userInfo_Bottom_left">
 						<p class="color_T3 fs_24 fw_400 lh_34">{{ $t('betting["我的位置"]') }}</p>
-
-						<p class="color_Hint fs30 fw_400 lh_40">{{ currentData.user?.ranking > 100 ? "100+" : currentData.user?.ranking || 0 }}</p>
+						<p class="color_Hint fs30 fw_400 lh_40">{{ isStart ? (currentData.user?.ranking > 100 ? "100+" : currentData.user?.ranking || 0) : "--" }}</p>
 					</div>
 					<div class="rightLine"></div>
 					<div class="userInfo_Bottom_right" style="text-align: center">
 						<h3 class="userName color_T3 fs_24 fw_500 lh_38">{{ $t('betting["投注金额"]') }}</h3>
-						<span class="fw_500 color_green-00-ff-47 fs_24">${{ currentData.user?.betAmount }}</span>
+						<span class="fw_500 color_green-00-ff-47 fs_24"
+							><span>{{ isStart ? currentData?.currencySymbol + "" + currentData.user?.betAmount : "--" }}</span></span
+						>
 					</div>
 				</div>
 				<p class="color_T3 fs_20">
-					距离上榜还需 <span class="color_TB">${{ currentData.user?.lackBetAmount }}</span> {{ $t('betting["投注金额"]') }}
+					距离上榜还需 <span class="color_TB">{{ currentData.user?.lackBetAmount }}</span> {{ $t('betting["投注金额"]') }}
 				</p>
 			</div>
 
@@ -77,7 +80,7 @@
 			<!-- 投注表格 -->
 			<div class="BettingTable mt_24">
 				<!-- 日期和历史按钮 -->
-				<div class="color_T1 flex fs_24 date" @click="showPicker = true">
+				<div class="color_T1 flex fs_24 date" @click="showPicker = true" v-if="isStart">
 					<div>
 						<button class="bg_Theme color_TB fs_24 fw_400" v-if="JSON.stringify(defaultDate) == JSON.stringify(Common.getLast30Days().defaultIndex)">{{ $t('betting["今天"]') }}</button>
 						{{ defaultDate[0] + "/" + defaultDate[1] + "/" + defaultDate[2] }}
@@ -113,6 +116,7 @@
 						</div>
 					</div>
 				</div>
+				<Nodata v-if="!isStart && tableData.length < 1"></Nodata>
 			</div>
 
 			<!-- 规则说明对话框 -->
@@ -185,13 +189,13 @@ const tableData: any = ref([]);
 const tabsActiveKey = ref(0);
 const currentVenueCode = ref(null);
 const currentData: any = ref({});
-const PrizePool = ref(0);
+const totalRewardsAmount = ref(0);
 const PrizePoolTimer: any = ref(null);
 const countDownTimer: any = ref(null);
 const countDownTime = ref(0);
 // 标签页列表
 const tabList: any = ref([]);
-
+const isStart = ref(false);
 // 返回上一页
 const onClickLeft = () => {
 	router.go(-1);
@@ -201,7 +205,6 @@ const queryActivityDailyContestVenueCode = async () => {
 	await activityApi.queryActivityDailyContestVenueCode().then((res) => {
 		currentVenueCode.value = res.data.list[0].id;
 		title.value = res.data.activityNameI18nCode;
-		console.log(title);
 
 		tabList.value = res.data.list.map((item, index) => {
 			return {
@@ -212,16 +215,19 @@ const queryActivityDailyContestVenueCode = async () => {
 		});
 	});
 };
-const queryActivityDailyContest = () => {
+const queryActivityDailyContest = async () => {
 	const params = {
 		id: currentVenueCode.value,
 		day: currentDay.value,
 	};
-	activityApi.queryActivityDailyContest(params).then((res) => {
+	await activityApi.queryActivityDailyContest(params).then((res) => {
 		currentData.value = res.data || [];
+		totalRewardsAmount.value = res.data.totalRewardsAmount;
+		isStart.value = currentData.value.type;
 	});
+	if (!currentData.value.type) return;
 	activityApi.queryActivityDailyPrizePool(params).then((res) => {
-		PrizePool.value = res.data;
+		totalRewardsAmount.value = res.data;
 	});
 	activityApi.queryActivityDailyRecord(params).then((res) => {
 		tableData.value = res.data.list;
@@ -236,7 +242,7 @@ const initPrizePool = () => {
 			day: currentDay.value,
 		};
 		await activityApi.queryActivityDailyPrizePool(params).then((res) => {
-			PrizePool.value = res.data;
+			totalRewardsAmount.value = res.data;
 		});
 		await activityApi.queryActivityDailyRecord(params).then((res) => {
 			tableData.value = res.data.list;

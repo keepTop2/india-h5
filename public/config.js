@@ -16,6 +16,8 @@ window.PLATFROM_CONFIG = {
 	// developmentWsURL: "wss://gw.playesoversea.store/ws", // 开发环境
 
 	developmentBaseURL: "https://backend.bwsh.store", // 测试环境
+	developmentWsURL: "wss://gw.playesoversea.store/ws", // 开发环境
+
 	developmentWsURL: "wss://backend.bwsh.store/ws", // 测试环境
 
 	developmentLotteryBaseURL: "https://test-cpapi.jx203.com/third/rest/third/u", // 【彩票】开发环境
