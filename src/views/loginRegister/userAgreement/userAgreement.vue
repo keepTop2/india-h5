@@ -2,21 +2,21 @@
 	<div class="protocol-container">
 		<VantNavBar :title="$t(`VantNavBar['用户协议']`)" @onClickLeft="router.back()" />
 		<div class="container">
-			<div class="text" v-html="AgreementContent?.agreement"></div>
+			<div class="text" v-html="AgreementContent?.valueDetail"></div>
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
-import { loginApi } from "/@/api/loginRegister";
+import { TutorialApi } from "/@/api/helpCenter";
 import router from "/@/router";
 const AgreementContent: any = ref({});
 onMounted(() => {
 	getAgreement();
 });
 const getAgreement = () => {
-	loginApi.getAgreement({ code: 9 }).then((res) => {
-		AgreementContent.value = res.data.help_center_option.find((item) => item.code == 9);
+	TutorialApi.getHelpCenterConfigList().then((res) => {
+		AgreementContent.value = res.data.find((item) => item.code == 9);
 	});
 };
 </script>

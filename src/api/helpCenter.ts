@@ -23,4 +23,14 @@ export class TutorialApi {
 			},
 		});
 	};
+
+	static getHelpCenterConfigList = (data = {}, headers = {}) => {
+		return useAxiosApi(`/app/app-helpCenter/api/getHelpCenterConfigList`, {
+			method: "POST",
+			data,
+			headers: {
+				showLoading: true,
+			},
+		});
+	};
 }

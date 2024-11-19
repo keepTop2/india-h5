@@ -249,7 +249,7 @@ const initPrizePool = () => {
 		});
 		clearTimeout(PrizePoolTimer.value);
 		initPrizePool();
-	}, 3000);
+	}, 300000);
 };
 
 const onChangeNavBar = async (value) => {
