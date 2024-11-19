@@ -50,13 +50,5 @@ export const WalletSubRouter = {
 				title: "充值详情",
 			},
 		},
-		{
-			path: "/wallet/rechargeOrder",
-			name: "rechargeOrder",
-			component: () => import("/@/views/wallet/rechargeOrder/rechargeOrder.vue"),
-			meta: {
-				title: "充值订单",
-			},
-		},
 	],
 };
