@@ -4,8 +4,8 @@
 			<template #default>
 				<div class="header">
 					<div class="icon"><SvgIcon class="close_icon" iconName="common/close" @click="showAreaCode = false" /></div>
-					<div class="title">选择银行名称</div>
-					<div class="right_text" @click="showAreaCode = false">确定</div>
+					<div class="title">{{ $t(`wallet['选择银行名称']`) }}</div>
+					<div class="right_text" @click="showAreaCode = false">{{ $t(`wallet['确定']`) }}</div>
 				</div>
 				<div class="search_input">
 					<div class="icon"><SvgIcon iconName="common/search_input_icon" @click="showAreaCode = false" /></div>
@@ -30,7 +30,7 @@
 						</van-index-anchor>
 					</van-index-bar>
 				</template>
-				<div v-else class="no_data">未搜索到相关区号</div>
+				<div v-else class="no_data">{{ $t(`wallet['未搜索到相关区号']`) }}</div>
 			</template>
 		</van-action-sheet>
 	</div>

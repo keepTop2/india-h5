@@ -330,7 +330,7 @@ class Common {
 	public USDTAddressHiding(value: string) {
 		if (value) {
 			const hiddenChars = " **** **** ";
-			const visibleChars = value.slice(0, 6) + hiddenChars + value.slice(-6);
+			const visibleChars = value.slice(0, 4) + hiddenChars + value.slice(-4);
 			return visibleChars;
 		}
 	}

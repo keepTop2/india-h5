@@ -4,7 +4,8 @@ import { defineComponent, onBeforeUnmount, onMounted, reactive, ref, watch } fro
 
 import SvgIcon from "/@/components/svgIcon/index.vue";
 import { BEGIN_PAGE_DATA_INTERVAL } from "/@/views/lottery/constant/index";
-
+import { i18n } from "/@/i18n/index";
+const $: any = i18n.global;
 // 定义定时器组件
 export default (props?: any, callback = Function.prototype) => {
 	const state = reactive({
@@ -174,7 +175,7 @@ export default (props?: any, callback = Function.prototype) => {
 							<SvgIcon iconName="sports-date_tag" width="119px" height="36px" />
 						</div>
 						<div className="bet-status">
-							<span>投注中</span>
+							<span>{isAllowed.value ? $.t(`lottery['投注中']`) : $.t(`lottery['封盘中']`)}</span>
 						</div>
 					</div>
 
