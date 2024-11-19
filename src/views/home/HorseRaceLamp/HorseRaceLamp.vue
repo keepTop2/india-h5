@@ -1,7 +1,7 @@
 <template>
 	<div class="horseRaceLamp">
 		<SvgIcon class="bg" iconName="home/HorseRaceLampBg" />
-		<van-notice-bar scrollable :text="horseRaceLampList[targetIndex]?.messageContentI18nCode" @replay="handleReplay" />
+		<van-notice-bar scrollable :text="horseRaceLampList[targetIndex]?.noticeTitleI18nCode + ':' + horseRaceLampList[targetIndex]?.messageContentI18nCode" @replay="handleReplay" />
 	</div>
 </template>
 

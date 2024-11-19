@@ -59,7 +59,7 @@
 					<span class="text">{{ $t('register["两次输入密码不一致"]') }}</span>
 				</div>
 				<div class="label"><span class="required">*</span>主货币</div>
-				<FormInput v-model="state.mainCurrency" :placeholder="$t(`register['选择主货币']`)" readonly :errorBorder="mainCurrencyRG ? true : false" @click="goTomainCurrency">
+				<FormInput v-model="currencyText" :placeholder="$t(`register['选择主货币']`)" readonly :errorBorder="mainCurrencyRG ? true : false" @click="setShowMinCurrency">
 					<template v-slot:left>
 						<SvgIcon class="pr_14" iconName="loginOrRegister/currency" @click="state.userAccount = ''" size="32px" />
 					</template>
@@ -116,6 +116,7 @@
 
 		<div id="captcha-element" ref="captchaBtn"></div>
 		<Hcaptcha ref="refhcaptcha" :onSubmit="onSubmit" v-model="isOnloadScript" v-if="HcaptchaMounted" />
+		<setMinCurrencyPop v-model="showMinCurrency" :currency="state.mainCurrency" @setmainCurrency="setmainCurrency"></setMinCurrencyPop>
 	</div>
 </template>
 
@@ -123,6 +124,7 @@
 import NavBar from "/@/layout/loginRegister/components/navBar.vue";
 import { registerApi, verifyCodeApi } from "/@/api/loginRegister";
 import HeaderBG from "/@/views/loginRegister/components/headerBG.vue";
+import setMinCurrencyPop from "/@/components/setMinCurrencyPop/index.vue";
 import { showToast } from "vant";
 import { useRoute, useRouter } from "vue-router";
 import { i18n } from "/@/i18n/index";
@@ -144,6 +146,7 @@ const marketingPromotion = ref(true); // 营销促销信息 默认勾选
 const captchaBtn = ref(null);
 const showInviteCode = ref(false);
 const isOnloadScript = ref(false);
+const showMinCurrency = ref(false);
 let state = reactive({
 	userAccount: "", // 邮箱或者手机号
 	password: "", // 密码
@@ -151,7 +154,13 @@ let state = reactive({
 	mainCurrency: "", // 货币
 	inviteCode: "", // 推荐码
 });
-
+const currencyText = computed(() => {
+	if (state.mainCurrency) {
+		return state.mainCurrency?.currencyName + "/" + state.mainCurrency?.currencyCode;
+	} else {
+		return;
+	}
+});
 // 账号正则
 const isAccountValid = computed(() => {
 	return common.accountRG.test(state.userAccount);
@@ -228,7 +237,7 @@ onMounted(() => {
 // 注册
 const onSubmit = async () => {
 	const certifyId = refhcaptcha.value.certifyId;
-	const res = await registerApi.userRegister({ ...state, certifyId, mainCurrency: route.query.value }).catch((err) => err);
+	const res = await registerApi.userRegister({ ...state, certifyId, mainCurrency: state.mainCurrency.currencyCode }).catch((err) => err);
 	if (res.code == common.getInstance().ResCode.SUCCESS) {
 		store.setInfo(res.data);
 		store.initUserInfo();
@@ -244,6 +253,13 @@ const goTomainCurrency = () => {
 
 const toggleInviteCode = () => {
 	showInviteCode.value = !showInviteCode.value;
+};
+
+const setShowMinCurrency = () => {
+	showMinCurrency.value = true;
+};
+const setmainCurrency = (value) => {
+	state.mainCurrency = value;
 };
 </script>
 
