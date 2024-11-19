@@ -41,7 +41,7 @@
 								<!-- 取款 -->
 								<span v-if="item.tradeType == '2'">-</span>
 								<!-- 金融 -->
-								<span>{{ Common.thousands(Common.getInstance().formatAmount(Common.getInstance().formatFloat(item.tradeAmount))) }}</span>
+								<span>{{ Common.thousands(Common.getInstance().formatAmount(Common.getInstance().formatFloat(item.tradeAmount), 7)) }}</span>
 							</span>
 							<span>&nbsp;</span>
 							<span class="value">{{ UserStore.userInfo.mainCurrency }}</span>
@@ -238,14 +238,13 @@ const getList = () => {
 };
 // 删除筛选条件，
 const deleteTab = (item, index) => {
-	console.log("item", item);
 	tabs.value.splice(index, 1);
 	resetParams();
-	if (item.type == "deposit_withdraw_customer_status") {
-		currentActivityReceiveStatus.value = "all";
-		cloneSelect.tradeStatus = "all";
-		getList();
-	}
+	// if (item.type == "deposit_withdraw_customer_status") {
+	// 	currentActivityReceiveStatus.value = "all";
+	// 	cloneSelect.tradeStatus = "all";
+	// 	getList();
+	// }
 	if (item.type == "trade_type") {
 		currentWelfareCenterRewardType.value = "all";
 		cloneSelect.tradeType = "all";
@@ -277,9 +276,9 @@ const confirmSheet = () => {
 	if (currentWelfareCenterRewardType.value !== "all") {
 		tabs.value.push(downBoxList.value.trade_type.find((item) => item.code == currentWelfareCenterRewardType.value));
 	}
-	if (currentActivityReceiveStatus.value !== "all") {
-		tabs.value.push(downBoxList.value.deposit_withdraw_customer_status.find((item) => item.code == currentActivityReceiveStatus.value));
-	}
+	// if (currentActivityReceiveStatus.value !== "all") {
+	// 	tabs.value.push(downBoxList.value.deposit_withdraw_customer_status.find((item) => item.code == currentActivityReceiveStatus.value));
+	// }
 	cloneSelect.tradeType = currentWelfareCenterRewardType.value;
 	cloneSelect.tradeStatus = currentActivityReceiveStatus.value;
 	showSheet.value = false;

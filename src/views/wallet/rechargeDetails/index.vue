@@ -5,7 +5,7 @@
 			<!-- 动态显示金额 -->
 			<span class="value" v-if="displayedAmount">
 				<!-- 显示正负号和格式化后的金额 -->
-				{{ getPlusMinusSign() }}{{ common.thousands(common.getInstance().formatAmount(Number(common.getInstance().formatFloat(displayedAmount)))) }}
+				{{ getPlusMinusSign() }}{{ common.thousands(common.getInstance().formatAmount(Number(common.getInstance().formatFloat(displayedAmount)), 7)) }}
 			</span>
 			<span class="label ml_12">{{ mainCurrency }}</span>
 		</div>
@@ -35,7 +35,7 @@
 					</template>
 					<!-- 金额处理 -->
 					<template v-else-if="amountKeys.includes(item.key)">
-						{{ common.thousands(common.getInstance().formatAmount(Number(common.getInstance().formatFloat(depositOrderDetail[item.key as keyof typeof depositOrderDetail])))) }}
+						{{ common.thousands(common.getInstance().formatAmount(Number(common.getInstance().formatFloat(depositOrderDetail[item.key as keyof typeof depositOrderDetail])), 7)) }}
 						<span>{{ getCurrencyLabel(item.key) }}</span>
 					</template>
 					<!-- 脱敏处理 -->
@@ -55,7 +55,18 @@
 			<template v-for="item in BankCardWithdrawalList">
 				<div class="info-item" v-if="depositOrderDetail[item.key]">
 					<span class="label">{{ $t(`rechargeDetails['${item.label}']`) }}</span>
-					<span class="value">{{ depositOrderDetail[item.key] }}</span>
+					<span class="value">
+						<!-- 脱敏处理 -->
+						<template v-if="item.key in maskKeys">
+							<!-- 手机号拼接区号 -->
+							<span v-if="item.key === 'userPhone'">{{ "+" + depositOrderDetail.areaCode }}</span>
+							<span>{{ maskFunctions[item.key as MaskFieldKey](depositOrderDetail[item.key as keyof typeof depositOrderDetail]) }}</span>
+						</template>
+						<!-- 默认展示 -->
+						<template v-else>
+							{{ depositOrderDetail[item.key as keyof typeof depositOrderDetail] }}
+						</template>
+					</span>
 				</div>
 			</template>
 		</div>
@@ -65,7 +76,18 @@
 			<template v-for="item in EWalletList">
 				<div class="info-item" v-if="depositOrderDetail[item.key]">
 					<span class="label">{{ $t(`rechargeDetails['${item.label}']`) }}</span>
-					<span class="value">{{ depositOrderDetail[item.key] }}</span>
+					<span class="value">
+						<!-- 脱敏处理 -->
+						<template v-if="item.key in maskKeys">
+							<!-- 手机号拼接区号 -->
+							<span v-if="item.key === 'userPhone'">{{ "+" + depositOrderDetail.areaCode }}</span>
+							<span>{{ maskFunctions[item.key as MaskFieldKey](depositOrderDetail[item.key as keyof typeof depositOrderDetail]) }}</span>
+						</template>
+						<!-- 默认展示 -->
+						<template v-else>
+							{{ depositOrderDetail[item.key as keyof typeof depositOrderDetail] }}
+						</template>
+					</span>
 				</div>
 			</template>
 		</div>
@@ -251,8 +273,6 @@ import Model from "../components/model.vue";
 import uploader_icon from "/@/assets/zh-CN/default/my/feedback/uploader_icon.png";
 import uploader_close from "/@/assets/zh-CN/default/my/feedback/uploader_close.png";
 import UrgeOrder_success from "/@/assets/zh-CN/default/wallet/UrgeOrder_success.png";
-import activitySocketService from "/@/utils/activitySocketService";
-const websocketService = activitySocketService.getInstance();
 const route = useRoute();
 const router = useRouter();
 const UserStore = useUserStore();
@@ -280,6 +300,7 @@ interface depositOrderDetailRootObject {
 	thirdPayUrl?: any;
 	urgeOrder: number;
 	transferAmount: number;
+	areaCode?: string;
 }
 
 const depositOrderDetail = ref({} as depositOrderDetailRootObject); // 订单接口详情
@@ -381,11 +402,11 @@ const fromFieldsList = {
 			},
 			{
 				label: "存款方式",
-				key: "tradeWayTypeText",
+				key: "depositWithdrawWay",
 			},
 			{
 				label: "到账金额",
-				key: "applyAmount",
+				key: "tradeCurrencyAmount",
 			},
 			{
 				label: "手续费",
@@ -397,7 +418,7 @@ const fromFieldsList = {
 			},
 			{
 				label: "实际到账",
-				key: "arriveAmount",
+				key: "applyAmount",
 			},
 		],
 	],
@@ -437,7 +458,7 @@ const fromFieldsList = {
 			},
 			{
 				label: "转入时间",
-				key: "到账时间",
+				key: "updatedTime",
 			},
 		],
 		[
@@ -785,16 +806,22 @@ const maskFunctions: Record<MaskFieldKey, (value: any) => string> = {
 
 // 根据字段动态获取货币单位
 const getCurrencyLabel = (key: string) => {
-	if (route.query.tradeWayType === "crypto_currency_withdraw" && key === "arriveAmount") {
+	if ((route.query.tradeWayType === "crypto_currency_withdraw" && key === "arriveAmount") || (route.query.tradeWayType === "crypto_currency_recharge" && key === "tradeCurrencyAmount")) {
 		return "USDT";
 	}
 	return route.query.tradeWayType === "platform_transfer" ? UserStore.userInfo.platCurrencyName : UserStore.userInfo.mainCurrency;
 };
 
 onMounted(() => {
-	if (route.query.tradeWayType === "bank_card_recharge" || route.query.tradeWayType === "electronic_wallet_recharge") {
+	const { query } = route;
+	// 定义支持的充值类型
+	const depositTypes = ["bank_card_recharge", "electronic_wallet_recharge"];
+	const allRechargeTypes = [...depositTypes, "crypto_currency_recharge"];
+	if (allRechargeTypes.includes(query.tradeWayType as string)) {
 		getDepositOrderDetail();
-		pubsub.subscribe("/wallet/rechargeSuccessFail", rechargeSuccessFail);
+		if (depositTypes.includes(query.tradeWayType as string)) {
+			pubsub.subscribe("/wallet/rechargeSuccessFail", rechargeSuccessFail);
+		}
 	} else {
 		tradeRecordDetail();
 	}
