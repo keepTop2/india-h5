@@ -9,7 +9,7 @@
 
 		<div v-else class="account_info">
 			<div class="userIcon">
-				<img :src="userIcon" alt="" />
+				<VantLazyImg :src="store.userInfo?.avatarFileUrl" alt="" />
 			</div>
 			<div class="user">
 				<div class="userName">{{ store.userInfo.userAccount }}</div>
@@ -100,9 +100,13 @@ const onCollapse = () => {
 		justify-content: space-between;
 		padding-right: 24px;
 		.userIcon {
+			border-radius: 50%;
 			img {
-				width: 64.729px;
-				padding-left: 20px;
+				border-radius: 50%;
+				width: 68px;
+				height: 68px;
+				margin-left: 18px;
+				object-fit: cover;
 			}
 		}
 		.user {
