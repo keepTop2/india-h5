@@ -201,7 +201,7 @@ export default () => {
 							}}
 							class="now-bet"
 						>
-							立即投注
+							{$.t(`lottery['立即投注']`)}
 						</div>
 					</div>
 				</Popup>
