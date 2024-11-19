@@ -122,7 +122,7 @@ const tabData = [
 	{
 		icon: wallet,
 		active_icon: wallet_active,
-		label: $.t('layout["存款"]'),
+		label: $.t('layout["钱包"]'),
 		path: "/recharge",
 	},
 	{

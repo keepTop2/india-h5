@@ -629,18 +629,6 @@ class Common {
 			router.push({ path: "/customerService", query: { url: res.data.channelAddr } });
 		}
 	}
-
-	static amountConversion(amount) {
-		const addThousandSeparator = (value: string | number) => {
-			return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-		};
-		if (amount >= 1_000_000) {
-			const formatted = (amount / 1_000).toFixed(0); // 转为千(k)显示
-			return `${addThousandSeparator(formatted)}k`;
-		}
-
-		return addThousandSeparator(amount.toString());
-	}
 }
 
 export default Common;
