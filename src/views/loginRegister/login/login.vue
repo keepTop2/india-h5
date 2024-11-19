@@ -17,7 +17,7 @@
 				<!-- <div class="error_text">
 					<span v-if="!isAccountValid && state.userAccount !== ''" class="text">{{ $t('register["请输入4-11位字母+数字组成，首位必须是字母"]') }}</span>
 				</div> -->
-				<div class="label"><span class="required">*</span>密码</div>
+				<div class="label"><span class="required">*</span>{{ $t(`login['密码']`) }}</div>
 				<FormInput class="mt_20" v-model="state.password" :type="eyeShow ? 'password' : 'text'" :maxlength="16" :placeholder="$t(`login['登录密码']`)">
 					<template v-slot:left>
 						<SvgIcon class="pr_14" iconName="loginOrRegister/password" @click="state.userAccount = ''" size="32px" />

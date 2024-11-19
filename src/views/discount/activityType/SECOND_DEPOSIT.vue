@@ -116,7 +116,7 @@ const apply = () => {
 	} else if (activityData.value.status === 10000 && new Date().getTime() >= activityData.value.activityStartTime) {
 		activityApi.toActivity({ id: activityInfo.id }).then((res: any) => {
 			if (res.code === 10000) {
-				if (String(res.data.status).slice(0, 2) !== "13" || res.data.status !== 10000) {
+				if (String(res.data.status).slice(0, 2) !== "13" && res.data.status !== 10000) {
 					dialogInfo.value = res.data;
 					showDialog.value = true;
 				} else {
