@@ -96,6 +96,7 @@ import { useCountdown } from "/@/hooks/countdown";
 import RED_BAG_RAIN_Dialog from "./RED_BAG_RAIN_Dialog/index.vue";
 import activityRules from "../../components/activityRules.vue";
 const { countdown, startCountdown, stopCountdown } = useCountdown();
+import { redbagRainSingleton } from "/@/hooks/useRedbagRain";
 const activityStore = useActivityStore();
 const router = useRouter();
 const redBagInfo: any = ref({});
@@ -141,8 +142,7 @@ const getActivityReward = async () => {
 	if (redBagInfo.value.clientStatus == 1) {
 		await activityApi.redBagParticipate({ redbagSessionId: redBagInfo.value.redbagSessionId }).then((res: any) => {
 			if (String(res.data.status).slice(0, 2) == "13" || res.data.status == 10000) {
-				activityStore.setIsShowRedBagRain(true);
-				router.push("/");
+				redbagRainSingleton.showRedbagRain();
 			} else {
 				dialogInfo.value = res.data;
 				shwoDialog.value = true;
