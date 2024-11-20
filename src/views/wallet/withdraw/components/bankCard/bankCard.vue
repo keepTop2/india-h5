@@ -275,6 +275,7 @@ defineExpose({
 @import "../common.scss"; // 引入公共样式
 
 .cell_option {
+	width: 100%;
 	display: flex;
 	align-items: center;
 	gap: 16px;

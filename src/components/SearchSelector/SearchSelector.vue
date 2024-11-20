@@ -19,6 +19,9 @@
 				<ul>
 					<li v-for="(item, index) in filteredAreaCodeList" :key="index" :class="{ cell_item: true, cell_item_active: selectedItem === item }" @click="onChoose(item)">
 						<slot name="cell" :item="item"></slot>
+						<span class="icon">
+							<svg-icon :iconName="selectedItem === item ? 'common/circle_theme' : 'common/circle'" size="30px"></svg-icon>
+						</span>
 					</li>
 				</ul>
 			</template>
@@ -205,10 +208,17 @@ watch(
 }
 
 .cell_item {
+	width: 100%;
+	min-height: 76px;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	padding: 16px 48px 20px;
+	padding: 10px 48px;
+	box-sizing: border-box;
+}
+
+.cell_item .icon {
+	margin: 0px 10px;
 }
 
 .cell_item_active {
