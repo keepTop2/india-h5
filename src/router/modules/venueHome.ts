@@ -85,7 +85,7 @@ export const VenueHome = {
 		{
 			path: "/venueHome/sports/event/detail/:eventId/:leagueId/:sportType",
 			name: "sportsEventDetail",
-			meta: { title: "联赛详情" },
+			meta: { title: "联赛详情", hideTabBar: true },
 			component: () => import("/@/views/venueHome/sports/views/eventDetail/eventDetail.vue"),
 		},
 		// {
