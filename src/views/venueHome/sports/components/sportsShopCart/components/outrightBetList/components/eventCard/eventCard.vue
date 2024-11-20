@@ -33,6 +33,8 @@
 import shopCartChampionPubSub from "/@/views/venueHome/sports/hooks/shopCartChampionPubSub";
 import { SportsRootObject } from "../../../../utils/interface";
 import { useSportsBetChampionStore } from "/@/store/modules/sports/sportsBetChampionData";
+import { i18n } from "/@/i18n/index";
+const $: any = i18n.global;
 const sportsBetChampion = useSportsBetChampionStore();
 const props = withDefaults(
 	defineProps<{
@@ -47,11 +49,11 @@ const props = withDefaults(
 const getEventsStatusText = (item) => {
 	// 判断赛事状态 与 盘口状态
 	if (item.oddsStatus !== "running") {
-		return "盘口已关闭";
+		return $.t(`sports["盘口已关闭"]`);
 	}
 
 	if (sportsBetChampion.championBetData.length > 1) {
-		return "不支持串关";
+		return $.t(`sports["不支持串关"]`);
 	}
 };
 

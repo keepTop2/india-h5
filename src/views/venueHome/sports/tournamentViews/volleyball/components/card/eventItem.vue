@@ -75,8 +75,8 @@
 								{{ event?.volleyballInfo?.homeGameScore[index] }}-{{ event?.volleyballInfo?.awayGameScore[index] }}
 							</div>
 						</div>
-						<span class="ml_8">5局3胜</span>
-						<span class="ml_4" v-if="SportsCommonFn.isStartMatch(event.globalShowTime)">总分</span>
+						<span class="ml_8">{{ $.t(`sports['5局3胜']`) }}</span>
+						<span class="ml_4" v-if="SportsCommonFn.isStartMatch(event.globalShowTime)">{{ $.t(`sports['总分']`) }}</span>
 						<span class="ml_2 theme" v-if="SportsCommonFn.isStartMatch(event.globalShowTime)"
 							>{{ event?.volleyballInfo?.homeGameScore.flat().reduce((a, b) => a + b, 0) }}-{{ event?.volleyballInfo?.awayGameScore.flat().reduce((a, b) => a + b, 0) }}</span
 						>
