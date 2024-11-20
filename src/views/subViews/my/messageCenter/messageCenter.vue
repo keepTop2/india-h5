@@ -105,6 +105,7 @@
 		<BottomHandle v-if="state.noticeList.length" @readAll="readAll" @delAll="delAll" />
 	</div>
 </template>
+
 <script setup lang="ts">
 import { useRouter } from "vue-router";
 import BottomHandle from "/@/views/subViews/my/messageCenter/components/BottomHandle.vue";
@@ -287,7 +288,7 @@ const toDetail = async (item) => {
 
 			.van-tab {
 				@include themeify {
-					color: themed("TB");
+					color: themed("T1"); 
 					background-color: themed("BG3");
 				}
 
@@ -346,7 +347,8 @@ const toDetail = async (item) => {
 				font-weight: 400;
 
 				@include themeify {
-					background-color: themed("Theme") !important;
+					background-color: themed("Theme") !important;	
+					color: themed("TB"); 
 				}
 			}
 
