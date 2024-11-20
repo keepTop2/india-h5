@@ -36,7 +36,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import Carousel from "/@/components/Carousel/Carousel.vue";
 import useLotteryCard from "/@/views/lottery/components/LotteryCard/Index";
 import TabBar from "/@/layout/home/components/tabBar.vue";
@@ -53,6 +53,7 @@ import { Pagination, Navigation, Autoplay } from "swiper/modules";
 import { stringify } from "qs";
 import { useUserStore } from "/@/store/modules/user";
 import { i18n } from "/@/i18n/index";
+import { ref, computed, onUnmounted, onMounted } from "vue";
 const $: any = i18n.global;
 const modules = ref([Autoplay, Pagination, Navigation]); //swiper配置项
 
