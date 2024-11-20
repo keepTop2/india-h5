@@ -3,7 +3,7 @@
 		<div class="form">
 			<!-- 邮箱 -->
 			<div v-show="state.type == 'email'">
-				<div class="label"><span class="required">*</span>电子邮箱</div>
+				<div class="label"><span class="required">*</span>{{ $t(`forgetPassword['电子邮箱']`) }}</div>
 				<FormInput v-model="state.email" type="text" :placeholder="$t(`forgetPassword['请输入电子邮箱']`)" :errorBorder="!isEmailValid && state.email !== '' ? true : false">
 					<template v-slot:left>
 						<SvgIcon class="pr_14" iconName="loginOrRegister/email" size="32px" />
@@ -19,7 +19,7 @@
 
 			<!-- 手机号码 -->
 			<div v-show="state.type == 'phone'">
-				<div class="label"><span class="required">*</span>手机号</div>
+				<div class="label"><span class="required">*</span>{{ $t(`forgetPassword['手机号']`) }}</div>
 				<div class="phone" :class="{ 'form-input-error': !isPhoneValid && state.phone !== '' ? true : false }">
 					<div class="area_code" @click="showAreaCode = true">
 						<SvgIcon class="pr_14 pl_24" iconName="loginOrRegister/phone" size="32px" />

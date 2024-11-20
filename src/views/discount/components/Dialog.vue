@@ -10,16 +10,16 @@
 			</div>
 			<div class="dialog-footer2" v-if="goToLogin">
 				<button class="common_btn" @click="toRegister">
-					<slot name="footer"> 去注册 </slot>
+					<slot name="footer"> {{ $t(`discount['去注册']`) }}</slot>
 				</button>
 				<button class="common_btn" @click="toLogin">
-					<slot name="footer"> 去登录 </slot>
+					<slot name="footer"> {{ $t(`discount['去登录']`) }} </slot>
 				</button>
 			</div>
 			<div class="dialog-footer" v-else>
 				<footer>
 					<button class="common_btn" @click="confirm">
-						<slot name="footer"> 确认 </slot>
+						<slot name="footer"> {{ $t(`discount['确认']`) }} </slot>
 					</button>
 				</footer>
 			</div>

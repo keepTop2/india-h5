@@ -8,13 +8,15 @@
 			<activityRules :rules="activityInfo?.activityRuleI18nCode"></activityRules>
 		</div>
 		<div class="applyBtn" @click="apply" v-if="activityData?.participationMode == 0">
-			<div class="" :class="activityData?.activityCondition ? 'active' : ''">{{ activityData?.status == 30047 ? "您已申请" : "立即申请" }}</div>
+			<div class="" :class="activityData?.activityCondition ? 'active' : ''">{{ activityData?.status == 30047 ? $t(`discount['您已申请']`) : $t(`discount['立即申请']`) }}</div>
 		</div>
-		<activityDialog v-model="showDialog" title="温馨提示" :confirm="confirmDialog">
+		<activityDialog v-model="showDialog" :title="$t(`discount['温馨提示']`)" :confirm="confirmDialog">
 			{{ dialogInfo.message }}
-			<template v-slot:footer v-if="dialogInfo.status === 30049"> 去存款 </template>
+			<template v-slot:footer v-if="dialogInfo.status === 30049"> {{ $t(`discount['去存款']`) }} </template>
 		</activityDialog>
-		<activityDialog v-model="showDialog2" title="温馨提示" :confirm="confirmDialog" :goToLogin="true"> 您的账号暂未登录无法参与活动， 如已有账号请登录，如还未有账号 请前往注册 </activityDialog>
+		<activityDialog v-model="showDialog2" :title="$t(`discount['温馨提示']`)" :confirm="confirmDialog" :goToLogin="true">
+			{{ $t(`discount['您的账号暂未登录无法参与活动，如已有账号请登录，如还未有账号请前往注册']`) }}
+		</activityDialog>
 	</div>
 </template>
 
@@ -58,7 +60,7 @@ const apply = () => {
 					dialogInfo.value = res.data;
 					showDialog.value = true;
 				} else {
-					showToast("申请成功");
+					showToast(res.data.message);
 					getConfigDetail();
 				}
 			} else {

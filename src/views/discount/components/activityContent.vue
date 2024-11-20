@@ -7,7 +7,7 @@
 			<div class="details-header-title-left">
 				<img :src="Common.getThemeImg('details-header-title-left.png')" alt="" />
 			</div>
-			活动条件
+			{{ $t(`discount['活动条件']`) }}
 			<div class="details-header-title-right">
 				<img :src="Common.getThemeImg('details-header-title-right.png')" alt="" />
 			</div>
@@ -15,22 +15,22 @@
 		<div class="detail-content" :style="{ background: `url(${Common.getThemeImg('activity_detail_content.png')})`, backgroundSize: '100% 100%' }">
 			<div class="detail-row">
 				<p class="label">
-					<span>活动对象</span>
+					<span> {{ $t(`discount['活动对象']`) }}</span>
 				</p>
 				<p class="value">{{ activityData?.userTypeText }}</p>
 			</div>
 			<div class="detail-row">
 				<p class="label">
-					<span>活动时间</span>
+					<span>{{ $t(`discount['活动时间']`) }}</span>
 				</p>
 				<p class="value" v-if="activityData?.activityDeadline == 0">
 					{{ dayjs(activityData?.activityStartTime).format("YYYY-MM-DD HH:mm:ss") }}~{{ dayjs(activityData?.activityEndTime).format("YYYY-MM-DD HH:mm:ss") }}
 				</p>
-				<p class="value" v-if="activityData.activityDeadline == 1">长期活动</p>
+				<p class="value" v-if="activityData.activityDeadline == 1">{{ $t(`discount['长期活动']`) }}</p>
 			</div>
 			<div class="detail-row">
 				<p class="label">
-					<span>活动描述</span>
+					<span>{{ $t(`discount['活动描述']`) }}</span>
 				</p>
 				<p class="value">{{ activityData?.activityDescI18nCode }}</p>
 			</div>

@@ -1,7 +1,7 @@
 <template>
 	<div class="content">
 		<div class="from">
-			<div class="label"><span class="required">*</span>新密码</div>
+			<div class="label"><span class="required">*</span>{{ $t(`forgetPassword['新密码']`) }}</div>
 			<FormInput
 				v-model="state.newPassword"
 				:type="eyeShow ? 'password' : 'text'"
@@ -22,7 +22,7 @@
 			<div class="error_text" v-if="!isPasswordValid && state.newPassword !== ''">
 				<span class="text">{{ $t('register["密码为8-16位"]') }}</span>
 			</div>
-			<div class="label"><span class="required">*</span>确认新密码</div>
+			<div class="label"><span class="required">*</span>{{ $t(`forgetPassword['确认新密码']`) }}</div>
 			<FormInput
 				v-model="state.confirmPassword"
 				:type="eyeShow ? 'password' : 'text'"

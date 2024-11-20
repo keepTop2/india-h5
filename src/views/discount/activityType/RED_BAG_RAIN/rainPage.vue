@@ -16,22 +16,22 @@
 		<!-- 结算弹窗 -->
 		<RED_BAG_RAIN_Dialog v-model="showRedBagRainResult" :title="dialogTitle" :confirm="confirmDialog" class="redBagRainResult">
 			<div v-if="settlement.redbagCount > 0">
-				<div class="Text2">本轮共抢到{{ settlement.redbagCount }}个红包</div>
-				<div class="result mt_20">共计 {{ settlement.amount }}{{ useUserStore().getUserInfo.platCurrencyName }}</div>
+				<div class="Text2">{{ $t(`discount['本轮共抢到1个红包']`, { value: settlement.redbagCount }) }}</div>
+				<div class="result mt_20">{{ $t(`discount['共计']`) }}{{ settlement.amount }}{{ useUserStore().getUserInfo.platCurrencyName }}</div>
 			</div>
 			<div v-if="settlement.redbagCount < 1">
-				<div class="mt_20 mb_20">没有戳中有奖红包</div>
+				<div class="mt_20 mb_20">{{ $t(`discount['没有戳中有奖红包']`) }}</div>
 				<div class="flex-center">
 					<img src="./image/pityIcon.png" alt="" />
 				</div>
 			</div>
 		</RED_BAG_RAIN_Dialog>
 
-		<RED_BAG_RAIN_Dialog v-model="shwoDialog" title="温馨提示" :confirm="confirmDialog" class="redBagRainResult">
+		<RED_BAG_RAIN_Dialog v-model="shwoDialog" :title="$t(`discount['温馨提示']`)" :confirm="confirmDialog" class="redBagRainResult">
 			<div class="mt_20 mb_20">
 				{{ dialogInfo.message }}
 			</div>
-			<template v-slot:footer v-if="[30045, 30053].includes(dialogInfo.status)"> 去绑定 </template>
+			<template v-slot:footer v-if="[30045, 30053].includes(dialogInfo.status)"> {{ $t(`discount['去绑定']`) }} </template>
 		</RED_BAG_RAIN_Dialog>
 	</div>
 </template>
@@ -49,6 +49,8 @@ import { useUserStore } from "/@/store/modules/user";
 import router from "/@/router";
 import readyGo from "./image/readyGo.png";
 import { redbagRainSingleton } from "/@/hooks/useRedbagRain";
+import { i18n } from "/@/i18n/index";
+const $: any = i18n.global;
 const props = defineProps({
 	modelValue: Boolean,
 	redBagInfo: {} as any,
@@ -64,7 +66,7 @@ const isPaused = ref(false);
 const setp: any = ref(1);
 const showRedBagRainResult = ref(false);
 const shwoDialog = ref(false);
-const dialogTitle = ref("温馨提示");
+const dialogTitle = ref($.t(`discount['温馨提示']`));
 const dialogInfo: any = ref({});
 const settlement: any = ref({});
 let ctx: CanvasRenderingContext2D | null = null;
@@ -183,7 +185,7 @@ function animate(): void {
 // 绘制倒计时
 function drawCountdown() {
 	if (ctx && canvas.value) {
-		const countdownText = "倒计时: ";
+		const countdownText = $.t(`discount['倒计时']`) + ": ";
 		const countdownValue = countdown.value.toString();
 
 		// 设置倒计时文本的样式和大小
@@ -307,9 +309,9 @@ onMounted(async () => {
 		if (data.code === 10000) {
 			settlement.value = data.data;
 			if (data.data.redbagCount > 0) {
-				dialogTitle.value = "恭喜你";
+				dialogTitle.value = $.t(`discount['恭喜你']`);
 			} else {
-				dialogTitle.value = "很遗憾";
+				dialogTitle.value = $.t(`discount['很遗憾']`);
 			}
 			showRedBagRainResult.value = true;
 		}

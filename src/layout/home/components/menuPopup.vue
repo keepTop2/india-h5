@@ -185,7 +185,7 @@ const queryLobbyLabelList = async () => {
 };
 const queryLobbyLabelActivitySwitch = () => {
 	activityApi.queryLobbyLabelActivitySwitch({ activityTemplate: "DAILY_COMPETITION" }).then((res: any) => {
-		activityTemplate.value = res.data.activityTemplate;
+		activityTemplate.value = res.data?.activityTemplate;
 	});
 };
 const goToarena = () => {};

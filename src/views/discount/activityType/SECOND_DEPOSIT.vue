@@ -4,18 +4,18 @@
 		<VantLazyImg :src="activityData?.headPicturePcI18nCode" class="main-image" />
 		<div class="content">
 			<div class="bonus-card" v-if="activityData?.participationMode == 0">
-				<div class="bonus-header">红利赠送</div>
+				<div class="bonus-header">{{ $t(`discount['红利赠送']`) }}</div>
 				<div class="bonus-content">
 					<div class="bonus-row1">
 						<div class="bonus-row">
-							<span class="text">存款金额</span>
+							<span class="text">{{ $t(`discount['存款金额']`) }}</span>
 							<span class="Amount"
 								>{{ activityData?.depositAmount || "0.00" }} <span>{{ activityData?.depositCurrencyCode }}</span></span
 							>
 						</div>
 						<div class="bonus-row1-line"></div>
 						<div class="bonus-row">
-							<span class="text">需打流水</span>
+							<span class="text">{{ $t(`discount['需打流水']`) }}</span>
 							<span class="Amount"
 								>{{ activityData?.runningWater || "0.00" }} <span>{{ activityData?.runningWaterCurrencyCode }}</span>
 							</span>
@@ -23,61 +23,26 @@
 					</div>
 					<div class="bonus-row-line"></div>
 					<div class="bonus-row2">
-						<span>可得金额:</span>
+						<span>{{ $t(`discount['可得金额']`) }}:</span>
 						<span class="Amount highlight"
 							>{{ activityData?.activityAmount || "0.00" }} <span>{{ activityData?.activityAmountCurrencyCode }}</span></span
 						>
 					</div>
 				</div>
-				<button class="apply-button" @click="apply" :class="activityData?.activityCondition ? 'active' : ''">{{ activityData?.status == 30047 ? "您已申请" : "立即申请" }}</button>
+				<button class="apply-button" @click="apply" :class="activityData?.activityCondition ? 'active' : ''">
+					{{ activityData?.status == 30047 ? $t(`discount['您已申请']`) : $t(`discount['立即申请']`) }}
+				</button>
 			</div>
-
-			<!-- <div class="activity-details">
-				<div class="detail_icon">
-					<img src="../image/detail_icon.png" alt="" />
-				</div>
-				<div class="details-header">
-					<div class="details-header-title-left">
-						<img src="../image/details-header-title-left.png" alt="" />
-					</div>
-					活动条件
-					<div class="details-header-title-right">
-						<img src="../image/details-header-title-right.png" alt="" />
-					</div>
-				</div>
-				<div class="detail-content">
-					<div class="detail-row">
-						<p class="label">
-							<span>活动对象</span>
-						</p>
-						<p class="value">{{ activityData?.userTypeText }}</p>
-					</div>
-					<div class="detail-row">
-						<p class="label">
-							<span>活动时间</span>
-						</p>
-						<p class="value" v-if="activityData.activityDeadline == 0">
-							{{ dayjs(activityData?.activityStartTime).format("YYYY-MM-DD HH:mm:ss") }}~{{ dayjs(activityData?.activityEndTime).format("YYYY-MM-DD HH:mm:ss") }}
-						</p>
-						<p class="value" v-if="activityData.activityDeadline == 1">长期活动</p>
-					</div>
-					<div class="detail-row">
-						<p class="label">
-							<span>活动描述</span>
-						</p>
-						<p class="value">{{ activityData?.activityDescI18nCode }}</p>
-					</div>
-				</div>
-				<div class="detail-footer"></div>
-			</div> -->
 			<activityContent :activityData="activityData"></activityContent>
 			<activityRules :rules="activityInfo?.activityRuleI18nCode"></activityRules>
 		</div>
-		<activityDialog v-model="showDialog" title="温馨提示" :confirm="confirmDialog">
+		<activityDialog v-model="showDialog" :title="$t(`discount['温馨提示']`)" :confirm="confirmDialog">
 			{{ dialogInfo.message }}
-			<template v-slot:footer v-if="dialogInfo.status === 30049"> 去存款 </template>
+			<template v-slot:footer v-if="dialogInfo.status === 30049"> {{ $t(`discount['去存款']`) }} </template>
 		</activityDialog>
-		<activityDialog v-model="showDialog2" title="温馨提示" :confirm="confirmDialog" :goToLogin="true"> 您的账号暂未登录无法参与活动， 如已有账号请登录，如还未有账号 请前往注册 </activityDialog>
+		<activityDialog v-model="showDialog2" :title="$t(`discount['温馨提示']`)" :confirm="confirmDialog" :goToLogin="true">
+			{{ $t(`discount['您的账号暂未登录无法参与活动，如已有账号请登录，如还未有账号请前往注册']`) }}
+		</activityDialog>
 	</div>
 </template>
 
@@ -120,7 +85,7 @@ const apply = () => {
 					dialogInfo.value = res.data;
 					showDialog.value = true;
 				} else {
-					showToast("申请成功");
+					showToast(res.data.message);
 					getConfigDetail();
 				}
 			} else {

@@ -4,7 +4,7 @@
 			<div class="details-header-title-left">
 				<img :src="Common.getThemeImg('details-header-title-left.png')" alt="" />
 			</div>
-			<span class="color_TB">活动规则</span>
+			<span class="color_TB">{{ $t(`discount['活动规则']`) }}</span>
 			<div class="details-header-title-right">
 				<img :src="Common.getThemeImg('details-header-title-right.png')" alt="" />
 			</div>

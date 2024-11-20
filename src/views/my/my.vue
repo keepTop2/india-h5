@@ -22,14 +22,15 @@
 				<span class="vip_level">{{ state.userVipInfo.vipGradeName }}</span>
 				<div class="vip_info" v-if="state.userVipInfo.vipGradeCode !== state.userVipInfo.vipGradeUp">
 					<span class="vip_experience"
-						>升级所需经验: <span class="color_Warn">{{ state.userVipInfo.vipGradeCode === state.userVipInfo.vipGradeUp ? state.userVipInfo.currentVipExp : state.userVipInfo.currentExp }}</span> /
+						>{{ $t(`my['升级所需经验']`) }}:
+						<span class="color_Warn">{{ state.userVipInfo.vipGradeCode === state.userVipInfo.vipGradeUp ? state.userVipInfo.currentVipExp : state.userVipInfo.currentExp }}</span> /
 						<span>{{ state.userVipInfo.currentVipExp }}</span></span
 					>
 					<SvgIcon class="arrow" iconName="my/arrow" />
 				</div>
 				<!-- VIP进度条 -->
 				<Progress class="vip_progress" :userVipInfo="state.userVipInfo" v-if="state.userVipInfo.vipGradeCode !== state.userVipInfo.vipGradeUp" />
-				<div v-else-if="state.userVipInfo.vipGradeCode" class="vip_info2">恭喜！您已达到最高等级</div>
+				<div v-else-if="state.userVipInfo.vipGradeCode" class="vip_info2">{{ $t(`my['恭喜！您已达到最高等级']`) }}</div>
 			</div>
 
 			<div class="my-content">
@@ -37,7 +38,7 @@
 				<div class="medal">
 					<div class="medal_header" @click="toPath('/medalCollection')">
 						<VantLazyImg class="line" :src="line" />
-						<div class="label">勋章</div>
+						<div class="label">{{ $t(`my['勋章']`) }}</div>
 						<div class="badge" v-if="state.medalQuantity > 0">{{ state.medalQuantity }}</div>
 						<SvgIcon class="arrow" iconName="common/arrow" />
 					</div>
@@ -56,7 +57,7 @@
 				<div class="balance_operation">
 					<div class="balance_header">
 						<VantLazyImg class="line" :src="line" />
-						<div class="label">总余额</div>
+						<div class="label">{{ $t(`my['总余额']`) }}</div>
 						<div class="value">{{ store.getUserInfo.totalBalance }} {{ store.getUserInfo.mainCurrency }}</div>
 					</div>
 					<div class="balance_content">
@@ -70,7 +71,7 @@
 				<div class="group">
 					<div class="cell van-haptics-feedback" @click="router.push('/welfareCenter')">
 						<SvgIcon class="icon" iconName="my/lang" />
-						<div class="label">福利中心</div>
+						<div class="label">{{ $t(`my['福利中心']`) }}</div>
 					</div>
 					<div class="cell van-haptics-feedback" v-for="(item, index) in menuData.group1" :key="index" @click="onClickCell(item)">
 						<SvgIcon class="icon" :iconName="item.icon" />
@@ -102,7 +103,7 @@
 				</div>
 
 				<!-- 退出按钮 -->
-				<div class="login_out_btn" @click="loginOut">登出</div>
+				<div class="login_out_btn" @click="loginOut">{{ $t(`my['登出']`) }}</div>
 			</div>
 		</template>
 
@@ -112,13 +113,13 @@
 		<!-- 退出弹窗 -->
 		<van-popup v-model:show="loginOutShow" position="bottom">
 			<header>
-				<span class="label">登出</span>
+				<span class="label">{{ $t(`my['登出']`) }}</span>
 				<SvgIcon class="close_icon" iconName="common/close" @click="loginOutShow = false" />
 			</header>
-			<div class="content">您确定要退出登录吗?</div>
+			<div class="content">{{ $t(`my['您确定要退出登录吗?']`) }}</div>
 			<div class="btns">
-				<div class="btn1" @click="loginOutShow = false">取消</div>
-				<div class="btn2" @click="onLoginOut">登出</div>
+				<div class="btn1" @click="loginOutShow = false">{{ $t(`my['取消']`) }}</div>
+				<div class="btn2" @click="onLoginOut">{{ $t(`my['登出']`) }}</div>
 			</div>
 		</van-popup>
 

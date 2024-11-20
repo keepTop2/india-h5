@@ -1,6 +1,6 @@
 <template>
 	<div class="activityWrapper">
-		<VantNavBar :title="redBagInfo?.activityNameI18nCode || '红包雨'" @onClickLeft="onClickLeft" />
+		<VantNavBar :title="redBagInfo?.activityNameI18nCode || $t(`discount['红包雨']`)" @onClickLeft="onClickLeft" />
 
 		<div class="activityMain">
 			<div class="activityImg">
@@ -10,14 +10,16 @@
 			<div class="content">
 				<div class="pr_20 pl_20">
 					<div class="bonus-card">
-						<div class="bonus-header">红包雨</div>
+						<div class="bonus-header">{{ $t(`discount['红包雨']`) }}</div>
 						<div class="bonus-content">
-							<div class="bonus-row1 color_Theme">{{ redBagInfo.clientStatus == 1 ? "距离本场红包雨结束" : redBagInfo.clientStatus == 2 ? "本期红包雨已结束" : "距离下一场红包雨还有" }}</div>
+							<div class="bonus-row1 color_Theme">
+								{{ redBagInfo.clientStatus == 1 ? $t(`discount['距离本场红包雨结束']`) : redBagInfo.clientStatus == 2 ? $t(`discount['本期红包雨已结束']`) : $t(`discount['距离下一场红包雨还有']`) }}
+							</div>
 							<div class="countdown" :class="redBagInfo.clientStatus == 2 ? 'isOver' : ''">
 								<span class="">{{ Common.convertMilliseconds(countdown * 1000) }}</span>
 							</div>
 						</div>
-						<button class="apply-button" @click="getActivityReward" :class="redBagInfo.clientStatus == 1 ? 'active' : ''">抢</button>
+						<button class="apply-button" @click="getActivityReward" :class="redBagInfo.clientStatus == 1 ? 'active' : ''">{{ $t(`discount['抢']`) }}</button>
 					</div>
 				</div>
 				<div class="activity-details">
@@ -25,7 +27,7 @@
 						<div class="details-header-title-left">
 							<img src="../../image/details-header-title-left.png" alt="" />
 						</div>
-						红包雨场次
+						{{ $t(`discount['红包雨场次']`) }}
 						<div class="details-header-title-right">
 							<img src="../../image/details-header-title-right.png" alt="" />
 						</div>
@@ -40,7 +42,7 @@
 										<img src="./image/sessionCricle1.png" alt="" v-if="item.status == 1" />
 										<img src="./image/sessionCricle2.png" alt="" v-if="item.status == 2" />
 									</div>
-									<div :class="'status' + item.status">{{ item.status == 0 ? "未开始" : item.status == 1 ? "进行中" : "已结束" }}</div>
+									<div :class="'status' + item.status">{{ item.status == 0 ? $t(`discount['未开始']`) : item.status == 1 ? $t(`discount['进行中']`) : $t(`discount['已结束']`) }}</div>
 									<span class="side" :class="'type' + item.status"></span>
 								</div>
 							</div>
@@ -54,7 +56,7 @@
 						<div class="details-header-title-left">
 							<img src="../../image/details-header-title-left.png" alt="" />
 						</div>
-						<span>中奖名单</span>
+						<span>{{ $t(`discount['中奖名单']`) }}</span>
 						<div class="details-header-title-right">
 							<img src="../../image/details-header-title-right.png" alt="" />
 						</div>
@@ -62,9 +64,9 @@
 					<div class="detail-content">
 						<div class="winnerListTable">
 							<div class="winnerListHeader">
-								<div>会员账号</div>
-								<div>获得红包</div>
-								<div>时间</div>
+								<div>{{ $t(`discount['会员账号']`) }}</div>
+								<div>{{ $t(`discount['获得红包']`) }}</div>
+								<div>{{ $t(`discount['时间']`) }}</div>
 							</div>
 							<div class="winnerListBody" v-for="(item, index) in redBagInfo.winnerList" :key="index">
 								<div>{{ item.userAccount }}</div>
@@ -78,7 +80,7 @@
 				<activityRules :rules="redBagInfo.ruleDesc"></activityRules>
 			</div>
 		</div>
-		<RED_BAG_RAIN_Dialog v-model="shwoDialog" title="温馨提示" :confirm="confirmDialog" class="redBagRainResult">
+		<RED_BAG_RAIN_Dialog v-model="shwoDialog" :title="$t(`discount['温馨提示']`)" :confirm="confirmDialog" class="redBagRainResult">
 			<div class="mt_20 mb_20">
 				{{ dialogInfo.message }}
 			</div>

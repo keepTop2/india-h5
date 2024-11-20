@@ -1,5 +1,5 @@
 <template>
-	<VantNavBar :title="activityData?.activityNameI18nCode || '幸运转盘'" @onClickLeft="router.back()" />
+	<VantNavBar :title="activityData?.activityNameI18nCode || $t(`discount['幸运转盘']`)" @onClickLeft="router.back()" />
 	<div class="content">
 		<div class="tabs">
 			<ul>
@@ -21,18 +21,18 @@
 				ref="SpinRef"
 			/>
 
-			<div class="vipLevel color_TB1 fw_600" :class="'vip' + currentTab * 1">{{ activityData?.vipRankConfig?.[currentTab - 1]?.minVipGradeName }}级或以上</div>
+			<div class="vipLevel color_TB1 fw_600" :class="'vip' + currentTab * 1">{{ activityData?.vipRankConfig?.[currentTab - 1]?.minVipGradeName }}{{ $t(`discount['级或以上']`) }}</div>
 		</div>
 		<div class="remaining_times_bg" :style="{ background: `url(${Common.getThemeImg('remaining_times_bg.png')})  no-repeat  `, backgroundSize: '100% 100%' }">
 			{{ $t('home["剩余抽奖次数"]') }}：{{ activityData?.balanceCount || 0 }}
 		</div>
 		<div class="container">
 			<div class="box bonus_bg" :style="{ background: `url(${Common.getThemeImg('spin_bonus_bg.png')})  no-repeat  `, backgroundSize: '100% 100%' }">
-				<div class="title fs_30 color_TB">转盘奖金总计</div>
+				<div class="title fs_30 color_TB">{{ $t(`discount['转盘奖金总计']`) }}</div>
 				<div class="amount fs_32 color_Theme">{{ activityData?.totalAmount || 0 }}</div>
 			</div>
 			<div class="box record_bg" :style="{ background: `url(${Common.getThemeImg('spin_record_btn_bg.png')})  no-repeat  `, backgroundSize: '100% 100%' }">
-				<div class="reward color_TB fs_30" @click="handleShowRecord">我的抽奖记录<SvgIcon iconName="common/arrow" /></div>
+				<div class="reward color_TB fs_30" @click="handleShowRecord">{{ $t(`discount['我的抽奖记录']`) }}<SvgIcon iconName="common/arrow" /></div>
 			</div>
 		</div>
 		<activityRules :rules="activityData?.activityRuleI18nCode"></activityRules>
@@ -41,13 +41,13 @@
 	<!-- 抽奖记录 -->
 	<div class="dialog" v-if="showRecord">
 		<div class="dialog-wrapper">
-			<div class="header">抽奖记录</div>
+			<div class="header">{{ $t(`discount['抽奖记录']`) }}</div>
 			<div class="dialogTableBody" v-if="recordList.length > 0">
 				<div class="dialogTableHeader">
-					<span>转盘</span>
-					<span>奖品名称</span>
-					<span>奖品价值</span>
-					<span>中奖时间</span>
+					<span>{{ $t(`discount['转盘']`) }}</span>
+					<span>{{ $t(`discount['奖品名称']`) }}</span>
+					<span>{{ $t(`discount['奖品价值']`) }}</span>
+					<span>{{ $t(`discount['中奖时间']`) }}</span>
 				</div>
 				<div v-for="(item, index) in recordList" :key="index" class="dialogTableItem">
 					<span>{{ item.rewardRankText }}</span>
@@ -65,7 +65,7 @@
 		</div>
 	</div>
 
-	<activityDialog v-model="showDialog" title="温馨提示" :confirm="confirmDialog" :goToLogin="dialogInfo.toLogin">
+	<activityDialog v-model="showDialog" :title="$t(`discount['温馨提示']`)" :confirm="confirmDialog" :goToLogin="dialogInfo.toLogin">
 		{{ dialogInfo.message }}
 	</activityDialog>
 
@@ -75,11 +75,11 @@
 			<div class="resultImg">
 				<img :src="reward?.prizePictureUrl" alt="" />
 			</div>
-			<div class="dialog-title color_Hint">恭喜您获得</div>
+			<div class="dialog-title color_Hint">{{ $t(`discount['恭喜您获得']`) }}</div>
 			<div class="dialog-amount">{{ useUserStore().getUserInfo.platCurrencySymbol }}{{ reward?.prizeAmount }}</div>
 			<div @click="playAgain" class="button">
-				<div>再抽一次</div>
-				<span class="remaining_times_btn">剩余次数:{{ activityData?.balanceCount }}</span>
+				<div>{{ $t(`discount['再抽一次']`) }}</div>
+				<span class="remaining_times_btn"> {{ $t(`discount['剩余次数']`) }} :{{ activityData?.balanceCount }}</span>
 			</div>
 		</div>
 		<div class="close" @click="showResult = false">
@@ -90,9 +90,9 @@
 	<!-- 抽奖次数不足 -->
 	<div class="dialog fade-in" v-if="showNoMorebalanceCount">
 		<div class="dialog-content2">
-			<div class="dialog-title color_TB fs_32">温馨提示</div>
-			<div class="dialog-text color_T1 mb_21">您的抽奖次数不足</div>
-			<Button @click="goToRecharge">去领取</Button>
+			<div class="dialog-title color_TB fs_32">{{ $t(`discount['温馨提示']`) }}</div>
+			<div class="dialog-text color_T1 mb_21">{{ $t(`discount['您的抽奖次数不足']`) }}</div>
+			<Button @click="goToRecharge">{{ $t(`discount['去领取']`) }}</Button>
 		</div>
 		<div class="close" @click="showNoMorebalanceCount = false">
 			<img src="./images/close.png" alt="" />
@@ -110,6 +110,8 @@ import { useUserStore } from "/@/store/modules/user";
 import activityRules from "../../components/activityRules.vue";
 import dayjs from "dayjs";
 import Common from "/@/utils/common";
+import { i18n } from "/@/i18n/index";
+const $: any = i18n.global;
 const showResult = ref(false);
 const showResult3 = ref(false);
 const showNoMorebalanceCount = ref(false);
@@ -126,15 +128,15 @@ const router = useRouter();
 // 标签列表
 const tabs = ref([
 	{
-		name: "青铜",
+		name: $.t(`discount['青铜']`),
 		value: 1,
 	},
 	{
-		name: "白银",
+		name: $.t(`discount['白银']`),
 		value: 2,
 	},
 	{
-		name: "黄金及以上",
+		name: $.t(`discount['黄金及以上']`),
 		value: 3,
 	},
 ]);
@@ -194,11 +196,11 @@ const goToRecharge = () => {
 };
 const StartVerification = () => {
 	if (!useUserStore().token) {
-		dialogInfo.value.message = `您的账号暂未登录无法参与活动，如已有账号请登录，如还未有账号请前往注册`;
+		dialogInfo.value.message = $.t(`discount['您的账号暂未登录无法参与活动，如已有账号请登录，如还未有账号请前往注册']`);
 		dialogInfo.value.toLogin = true;
 		return (showDialog.value = true);
 	} else if (!activityData.value.enable) {
-		dialogInfo.value.message = `活动未开启`;
+		dialogInfo.value.message = $.t(`discount['活动未开启']`);
 		return (showDialog.value = true);
 	} else {
 		activityApi.toSpinActivity().then((res: any) => {
@@ -241,7 +243,7 @@ const spinStart = async () => {
 const handleShowRecord = () => {
 	const userStore = useUserStore();
 	if (!userStore.token) {
-		dialogInfo.value.message = `您的账号暂未登录无法参与活动，如已有账号请登录，如还未有账号请前往注册`;
+		dialogInfo.value.message = $.t(`discount['您的账号暂未登录无法参与活动，如已有账号请登录，如还未有账号请前往注册']`);
 		return (showDialog.value = true);
 	}
 	showRecord.value = true;

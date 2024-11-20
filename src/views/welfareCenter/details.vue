@@ -1,7 +1,7 @@
 <template>
 	<!-- 活动 -->
 	<div>
-		<VantNavBar :title="'福利中心'" @onClickLeft="router.back()" />
+		<VantNavBar :title="$t(`welfareCenter['福利中心']`)" @onClickLeft="router.back()" />
 	</div>
 	<div class="content">
 		<div class="amount mb_28">
@@ -9,21 +9,21 @@
 		</div>
 		<div class="card">
 			<div class="cell flex">
-				<div class="color_T1">状态</div>
+				<div class="color_T1">{{ $t(`welfareCenter['状态']`) }}</div>
 				<div :class="'status' + detailsInfo?.receiveStatus">{{ detailsInfo?.receiveStatusText }}</div>
 			</div>
 			<div class="cell flex">
-				<div class="color_T1">福利类型</div>
+				<div class="color_T1">{{ $t(`welfareCenter['福利类型']`) }}</div>
 				<div class="color_TB">{{ detailsInfo?.welfareCenterRewardTypeText }}</div>
 			</div>
 		</div>
 		<div class="card">
 			<div class="cell flex">
-				<div class="color_T1">发放时间</div>
+				<div class="color_T1">{{ $t(`welfareCenter['发放时间']`) }}</div>
 				<div class="color_TB">{{ dayjs(detailsInfo?.pfTime).format("YYYY-MM-DD HH:mm:ss") }}</div>
 			</div>
 			<div class="cell flex">
-				<div class="color_T1">订单号</div>
+				<div class="color_T1">{{ $t(`welfareCenter['订单号']`) }}</div>
 				<div class="color_TB orderNo ellipsis">
 					<span>{{ detailsInfo?.orderNo }}</span>
 				</div>
@@ -31,8 +31,10 @@
 			</div>
 		</div>
 
-		<Button class="mt_42 mb_42" @click="clickReceive" v-if="detailsInfo?.receiveStatus == 0">立即领取</Button>
-		<div class="text-center fs_24 color_T1">如需帮助，请 <span class="color_Theme" @click="Common.getSiteCustomerChannel">联系客服</span></div>
+		<Button class="mt_42 mb_42" @click="clickReceive" v-if="detailsInfo?.receiveStatus == 0">{{ $t(`welfareCenter['立即领取']`) }}</Button>
+		<div class="text-center fs_24 color_T1">
+			{{ $t(`welfareCenter['如需帮助，请']`) }} <span class="color_Theme" @click="Common.getSiteCustomerChannel">{{ $t(`welfareCenter['联系客服']`) }}</span>
+		</div>
 	</div>
 </template>
 
@@ -44,6 +46,8 @@ import { useClipboard } from "@vueuse/core";
 
 import dayjs from "dayjs";
 import Common from "/@/utils/common";
+import { i18n } from "/@/i18n/index";
+const $: any = i18n.global;
 const detailsInfo: any = ref({});
 
 const source = ref(detailsInfo.value.orderNo);
@@ -72,7 +76,7 @@ const clickReceive = (item) => {
 		.clickReceive(params)
 		.then((res: any) => {
 			if (res.code === 10000) {
-				showToast("领取成功");
+				showToast($.t(`welfareCenter['领取成功']`));
 			}
 		})
 		.finally(() => {

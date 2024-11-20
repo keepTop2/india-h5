@@ -1,10 +1,10 @@
 <template>
 	<div class="wrapper">
-		<VantNavBar title="任务" @onClickLeft="router.back()" />
+		<VantNavBar :title="$t(`discount['任务']`)" @onClickLeft="router.back()" />
 		<VantLazyImg :src="image" class="main-image" />
 		<div class="content">
 			<div class="rewardbg">
-				<div class="color_TB fs_28">累计奖励:</div>
+				<div class="color_TB fs_28">{{ $t(`discount['累计奖励']`) }}:</div>
 				<div class="color_Hint">{{ detailData?.platCurrencySymbol }} {{ detailData?.totalAmount }}</div>
 			</div>
 
@@ -25,7 +25,7 @@
 						</div>
 						<div class="fs_18 color_TB bottom">
 							<span
-								>奖励：<span class="color_Hint"> {{ item.platCurrencySymbol }} {{ item.rewardAmount }}</span></span
+								>{{ $t(`discount['奖励']`) }}：<span class="color_Hint"> {{ item.platCurrencySymbol }} {{ item.rewardAmount }}</span></span
 							>
 							<span
 								><span class="color_Theme">{{ item.achieveAmount }}</span
@@ -53,7 +53,7 @@
 						</div>
 						<div class="fs_18 color_TB bottom">
 							<span
-								>奖励：<span class="color_Hint"> {{ item.platCurrencySymbol }} {{ item.rewardAmount }}</span></span
+								>{{ $t(`discount['奖励']`) }}：<span class="color_Hint"> {{ item.platCurrencySymbol }} {{ item.rewardAmount }}</span></span
 							>
 							<span
 								><span class="color_Theme">{{ item.achieveAmount }}</span
@@ -71,7 +71,7 @@
 			</div>
 			<div v-if="currentTab == 2">
 				<div class="daojishiBg fs_24">
-					<span class="color_TB">剩余时间：</span><span class="color_Theme">{{ Common.convertMilliseconds(countdown * 1000) }}</span>
+					<span class="color_TB">{{ $t(`discount['剩余时间']`) }}：</span><span class="color_Theme">{{ Common.convertMilliseconds(countdown * 1000) }}</span>
 				</div>
 				<div v-for="item in detailData?.noviceTask" class="card" :class="item.subTaskType">
 					<div>
@@ -82,7 +82,7 @@
 						<div class="fs_18 color_TB htmlDesc ellipsis" v-html="item.taskDescriptionI18nCode"></div>
 						<div class="fs_18 color_TB bottom">
 							<span
-								>奖励：<span class="color_Hint"> {{ item.platCurrencySymbol }} {{ item.rewardAmount }}</span></span
+								>{{ $t(`discount['奖励']`) }}：<span class="color_Hint"> {{ item.platCurrencySymbol }} {{ item.rewardAmount }}</span></span
 							>
 						</div>
 					</div>
@@ -95,11 +95,11 @@
 				</div>
 			</div>
 		</div>
-		<activityDialog v-model="showDialog" title="温馨提示" :confirm="confirmDialog">
-			<div>恭喜你获得</div>
+		<activityDialog v-model="showDialog" :title="$t(`discount['温馨提示']`)" :confirm="confirmDialog">
+			<div>{{ $t(`discount['恭喜你获得']`) }}</div>
 			<div class="result">{{ dialogInfo.platCurrencySymbol }} {{ dialogInfo.rewardAmount }}</div>
 		</activityDialog>
-		<activityDialog v-model="showRule" title="任务说明" :confirm="confirmDialog" :dialog2="true">
+		<activityDialog v-model="showRule" :title="$t(`discount['任务说明']`)" :confirm="confirmDialog" :dialog2="true">
 			<div v-html="rule" class="RuleDialog htmlDesc"></div>
 		</activityDialog>
 	</div>
@@ -113,6 +113,8 @@ import image from "./image/image.png";
 import Common from "/@/utils/common";
 import { useCountdown } from "/@/hooks/countdown";
 import { useUserStore } from "/@/store/modules/user";
+import { i18n } from "/@/i18n/index";
+const $: any = i18n.global;
 const { countdown, startCountdown, stopCountdown } = useCountdown();
 const router = useRouter();
 const showDialog = ref(false);
@@ -122,18 +124,18 @@ const dialogInfo: any = ref({});
 const detailData: any = ref({});
 const currentTab = ref(0);
 const taskStatus = {
-	3: "去完成",
-	0: "去领取",
-	1: "已领取",
-	2: "已过期",
+	3: $.t(`discount['去完成']`),
+	0: $.t(`discount['去领取']`),
+	1: $.t(`discount['已领取']`),
+	2: $.t(`discount['已过期']`),
 };
 const tasktype = ref([
 	{
-		label: "每日任务",
+		label: $.t(`discount['每日任务']`),
 		value: 0,
 	},
 	{
-		label: "每周任务",
+		label: $.t(`discount['每周任务']`),
 		value: 1,
 	},
 ]);
@@ -154,15 +156,15 @@ const getTaskDetail = () => {
 			startCountdown(detailData.value?.noviceTask[0].expireTime);
 			tasktype.value = [
 				{
-					label: "每日任务",
+					label: $.t(`discount['每日任务']`),
 					value: 0,
 				},
 				{
-					label: "每周任务",
+					label: $.t(`discount['每周任务']`),
 					value: 1,
 				},
 				{
-					label: "新手任务",
+					label: $.t(`discount['新手任务']`),
 					value: 2,
 				},
 			];

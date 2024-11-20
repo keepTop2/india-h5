@@ -1,7 +1,7 @@
 <template>
 	<div class="forgetPassword-container">
 		<NavBar @onPreviousStep="onPreviousStep" />
-		<div class="title">{{ state.computedIndex !== 2 ? "忘记密码" : "设置新密码" }}</div>
+		<div class="title">{{ state.computedIndex !== 2 ? $t(`forgetPassword['忘记密码']`) : $t(`forgetPassword['设置新密码']`) }}</div>
 		<component :is="componentMaps[state.computedIndex]" :data="state.params" @onStep="onStep" />
 	</div>
 </template>
