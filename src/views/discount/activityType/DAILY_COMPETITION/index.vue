@@ -66,13 +66,14 @@
 					</div>
 				</div>
 				<p class="color_T3 fs_20" v-if="currentData.user?.userStatus == 3">
-					距离上榜还需 <span class="color_TB1">{{ useUserStore().getUserInfo.currencySymbol }} {{ currentData.user?.lackBetAmount }}</span> {{ $t('betting["投注金额"]') }}
+					{{ $t('betting["距离上榜还需"]') }} <span class="color_TB1">{{ useUserStore().getUserInfo.currencySymbol }} {{ currentData.user?.lackBetAmount }}</span> {{ $t('betting["投注金额"]') }}
 				</p>
 				<p class="color_T3 fs_20" v-if="currentData.user?.userStatus == 2">
-					距离上一名还需 <span class="color_TB1">{{ useUserStore().getUserInfo.currencySymbol }} {{ currentData.user?.lackBetAmount }}</span> {{ $t('betting["投注金额"]') }}
+					{{ $t('betting["距离上一名还需"]') }} <span class="color_TB1">{{ useUserStore().getUserInfo.currencySymbol }} {{ currentData.user?.lackBetAmount }}</span> {{ $t('betting["投注金额"]') }}
 				</p>
 				<p class="color_T3 fs_20" v-if="currentData.user?.userStatus == 1">
-					第二名还需 <span class="color_TB1">{{ useUserStore().getUserInfo.currencySymbol }} {{ currentData.user?.lackBetAmount }}</span> {{ $t('betting["投注金额"]') }}超于您
+					{{ $t('betting["第二名还需"]') }} <span class="color_TB1">{{ useUserStore().getUserInfo.currencySymbol }} {{ currentData.user?.lackBetAmount }}</span> {{ $t('betting["投注金额"]')
+					}}{{ $t('betting["超于您"]') }}
 				</p>
 			</div>
 
@@ -124,11 +125,11 @@
 
 				<Nodata v-if="!isStart && tableData.length < 1"></Nodata>
 			</div>
-			<div class="color_T1 text-center mt_24">数据每5分钟更新</div>
+			<div class="color_T1 text-center mt_24">{{ $t('betting["数据每5分钟更新"]') }}</div>
 			<!-- 规则说明对话框 -->
 			<Dialog class="dialog" :visible="ruleShow" @close="ruleShow = false">
 				<template #title>
-					<div class="title fs_30 color_TB">规则说明</div>
+					<div class="title fs_30 color_TB">{{ $t('betting["规则说明"]') }}</div>
 				</template>
 				<div class="color_T1">
 					<div v-html="currentData.activityRule" class="htmlDesc"></div>
@@ -136,7 +137,7 @@
 				<!-- <RulePage /> -->
 			</Dialog>
 			<van-popup v-model:show="showPicker" round position="bottom">
-				<datePicker :columns="Common.getLast30Days().columns" :defaultDate="defaultDate" @confirmPicker="confirmPicker" @cancelPicker="cancelPicker" title="自定义时间" />
+				<datePicker :columns="Common.getLast30Days().columns" :defaultDate="defaultDate" @confirmPicker="confirmPicker" @cancelPicker="cancelPicker" :title="$t(`betting['自定义时间']`)" />
 				<!-- <van-picker title="标题" :columns="Common.getLast30Days().columns" @confirm="confirmPicker" v-model="Common.getLast30Days().defaultIndex" cancel-button-text="X" /> -->
 			</van-popup>
 		</div>
@@ -164,6 +165,8 @@ import topimg from "./images/topimg.png";
 import { activityApi } from "/@/api/activity";
 import NavBar from "../../components/Navbar.vue";
 import Common from "/@/utils/common";
+import { i18n } from "/@/i18n/index";
+const $: any = i18n.global;
 const router = useRouter();
 
 // 控制规则说明对话框显示
@@ -184,10 +187,10 @@ const defaultDate = ref(Common.getLast30Days().defaultIndex);
 // 表格数据和列定义
 const title = ref("");
 const columns = [
-	{ field: "name", label: "排行" },
-	{ field: "userAccount", label: "玩家" },
-	{ field: "betAmount", label: "投注金额" },
-	{ field: "awardAmount", label: "奖金" },
+	{ field: "name", label: $.t(`betting['排行']`) },
+	{ field: "userAccount", label: $.t(`betting['玩家']`) },
+	{ field: "betAmount", label: $.t(`betting['投注金额']`) },
+	{ field: "awardAmount", label: $.t(`betting['奖金']`) },
 ];
 
 const tableData: any = ref([]);

@@ -8,7 +8,7 @@
 				<slot></slot>
 			</div>
 			<div class="dialog-footer">
-				<div class="common_btn" @click="close">关闭</div>
+				<div class="common_btn" @click="close">{{ $t(`discount['关闭']`) }}</div>
 			</div>
 		</div>
 		<div class="dialog fade-in" v-else>
@@ -20,7 +20,7 @@
 				<slot></slot>
 			</div>
 			<div class="dialog-footer">
-				<button class="common_btn" @click="confirm">关闭</button>
+				<button class="common_btn" @click="confirm">{{ $t(`discount['关闭']`) }}</button>
 			</div>
 		</div>
 	</div>

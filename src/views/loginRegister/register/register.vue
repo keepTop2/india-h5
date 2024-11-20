@@ -4,7 +4,7 @@
 		<div class="register-from">
 			<div class="title">{{ $t('register["注册"]') }}</div>
 			<div class="from">
-				<div class="label"><span class="required">*</span>账号</div>
+				<div class="label"><span class="required">*</span>{{ $t(`register['账号']`) }}</div>
 				<FormInput v-model="state.userAccount" type="text" :placeholder="$t(`register['输入账号']`)" :errorBorder="!isAccountValid && state.userAccount !== '' ? true : false" :maxlength="11">
 					<template v-slot:left>
 						<SvgIcon class="pr_14" iconName="loginOrRegister/userAccount" @click="state.userAccount = ''" size="32px" />
@@ -16,7 +16,7 @@
 				<div class="error_text" v-if="!isAccountValid && state.userAccount !== ''">
 					<span class="text">{{ $t('register["4-11位，字母、数字组成 ，首位必须是字母"]') }}</span>
 				</div>
-				<div class="label"><span class="required">*</span>登录密码</div>
+				<div class="label"><span class="required">*</span>{{ $t(`register['登录密码']`) }}</div>
 				<FormInput
 					v-model="state.password"
 					:type="eyeShow ? 'password' : 'text'"
@@ -37,7 +37,7 @@
 				<div class="error_text" v-if="!isPasswordValid && state.password !== ''">
 					<span class="text">{{ $t('register["密码为8-16位"]') }}</span>
 				</div>
-				<div class="label"><span class="required">*</span>确认密码</div>
+				<div class="label"><span class="required">*</span>{{ $t('register["确认密码"]') }}</div>
 				<FormInput
 					v-model="state.confirmPassword"
 					:type="eyeShow2 ? 'password' : 'text'"
@@ -58,7 +58,7 @@
 				<div class="error_text" v-if="!isConfirmPasswordValid">
 					<span class="text">{{ $t('register["两次输入密码不一致"]') }}</span>
 				</div>
-				<div class="label"><span class="required">*</span>主货币</div>
+				<div class="label"><span class="required">*</span>{{ $t('register["主货币"]') }}</div>
 				<FormInput v-model="currencyText" :placeholder="$t(`register['选择主货币']`)" readonly :errorBorder="mainCurrencyRG ? true : false" @click="setShowMinCurrency">
 					<template v-slot:left>
 						<SvgIcon class="pr_14" iconName="loginOrRegister/currency" @click="state.userAccount = ''" size="32px" />

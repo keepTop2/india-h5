@@ -5,7 +5,7 @@
 		<div class="login-form">
 			<div class="title">{{ $t('login["登录"]') }}</div>
 			<form class="form" autocomplete="off">
-				<div class="label"><span class="required">*</span>账号</div>
+				<div class="label"><span class="required">*</span>{{ $t(`login['账号']`) }}</div>
 				<FormInput v-model="state.userAccount" type="text" :placeholder="$t(`login['账户名']`)" :maxlength="11">
 					<template v-slot:left>
 						<SvgIcon class="pr_14" iconName="loginOrRegister/userAccount" @click="state.userAccount = ''" size="32px" />

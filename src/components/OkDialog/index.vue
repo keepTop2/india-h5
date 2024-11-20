@@ -8,7 +8,7 @@
 				</div>
 			</div>
 			<div class="dialog-footer">
-				<div class="color_T1" @click="close">取消</div>
+				<div class="color_T1" @click="close">{{ $t(`common['取消']`) }}</div>
 				<div class="color_Theme" @click="confirm">{{ confirmText }}</div>
 			</div>
 		</div>
@@ -19,15 +19,17 @@
 import { ref, onMounted } from "vue";
 import { defineProps, defineEmits } from "vue";
 const emit = defineEmits(["update:modelValue", "confirm"]);
+import { i18n } from "/@/i18n/index";
+const $: any = i18n.global;
 const props = defineProps({
 	modelValue: Boolean,
 	title: {
 		type: String,
-		default: "温馨提示",
+		default: $.t(`common['温馨提示']`),
 	},
 	confirmText: {
 		type: String,
-		default: "确定",
+		default: $.t(`common['确定']`),
 	},
 	confirm: {
 		type: Function,

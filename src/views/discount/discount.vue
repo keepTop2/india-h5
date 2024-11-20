@@ -1,7 +1,7 @@
 <template>
 	<!-- 活动 -->
 	<div>
-		<VantNavBar title="优惠活动" :leftArrow="false" />
+		<VantNavBar :title="$t(`discount['优惠活动']`)" :leftArrow="false" />
 		<div class="discount_container">
 			<!-- <Banner class="home_banner mb_35" /> -->
 			<NavBar class="mt_32 mb_24 discount_navbar" v-model:active="active" :tab-list="state.tabList" @on-change-nav-bar="onChangeNavBar" />
@@ -13,7 +13,7 @@
 					<div class="text_container">
 						<div class="date">
 							<div class="deadline" v-if="item.activityDeadline == 0">{{ Common.getInstance().dayFormat1(item.activityStartTime) }} 至 {{ Common.getInstance().dayFormat1(item.activityEndTime) }}</div>
-							<div class="deadline" v-if="item.activityDeadline == 1">长期活动</div>
+							<div class="deadline" v-if="item.activityDeadline == 1">{{ $t(`discount['长期活动']`) }}</div>
 							<div class="activity_name">{{ item.activityNameI18nCode }}</div>
 						</div>
 						<div class="mt_40 button">{{ "查看详情" }}</div>
@@ -24,7 +24,9 @@
 				<Nodata></Nodata>
 			</div>
 		</div>
-		<activityDialog v-model="showDialog" title="温馨提示" :confirm="confirmDialog" :goToLogin="true"> 您的账号暂未登录无法参与活动， 如已有账号请登录，如还未有账号 请前往注册 </activityDialog>
+		<activityDialog v-model="showDialog" title="温馨提示" :confirm="confirmDialog" :goToLogin="true">
+			{{ $t(`discount['您的账号暂未登录无法参与活动，如已有账号请登录，如还未有账号请前往注册']`) }}
+		</activityDialog>
 	</div>
 </template>
 
@@ -80,7 +82,7 @@ const getActivityTab = async () => {
 		});
 		state.tabList.unshift({
 			code: 0,
-			value: "全部",
+			value: $.t(`discount['全部']`),
 			labelId: 0,
 		});
 	}
@@ -107,7 +109,7 @@ const activityPageList = async () => {
 const onToDeatils = (item) => {
 	const needLoginList = ["RED_BAG_RAIN", "DAILY_COMPETITION"];
 	if (item.activityTemplate == "DAILY_COMPETITION" && !item.enable) {
-		return showToast("活动未开启");
+		return showToast($.t(`discount['活动未开启']`));
 	}
 	if (needLoginList.includes(item.activityTemplate)) {
 		if (!userStore.token) {
