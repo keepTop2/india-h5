@@ -1,7 +1,7 @@
 <template>
 	<div v-if="modelValue" class="common-dialog" :style="{ zIndex: currentZIndex }">
 		<div class="dialog fade-in">
-			<div class="fs_32 color_TB title">{{ title }}</div>
+			<div class="fs_32 color_TB title">{{ title ? title : $t(`common['温馨提示']`) }}</div>
 			<div class="content fs_30">
 				<div class="p_20">
 					<slot></slot>
@@ -9,7 +9,7 @@
 			</div>
 			<div class="dialog-footer">
 				<div class="color_T1" @click="close">{{ $t(`common['取消']`) }}</div>
-				<div class="color_Theme" @click="confirm">{{ confirmText }}</div>
+				<div class="color_Theme" @click="confirm">{{ confirmText ? confirmText : $t(`common['确定']`) }}</div>
 			</div>
 		</div>
 	</div>
@@ -19,17 +19,14 @@
 import { ref, onMounted } from "vue";
 import { defineProps, defineEmits } from "vue";
 const emit = defineEmits(["update:modelValue", "confirm"]);
-import { i18n } from "/@/i18n/index";
-const $: any = i18n.global;
+
 const props = defineProps({
 	modelValue: Boolean,
 	title: {
 		type: String,
-		default: $.t(`common['温馨提示']`),
 	},
 	confirmText: {
 		type: String,
-		default: $.t(`common['确定']`),
 	},
 	confirm: {
 		type: Function,
