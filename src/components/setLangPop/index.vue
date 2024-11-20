@@ -6,24 +6,18 @@
 					<svg-icon iconName="common/close" size="30px"></svg-icon>
 				</div>
 				<div class="color_TB fs_32">语言切换</div>
-				<div @click="confirm">确定</div>
+				<div></div>
 			</div>
-			<div class="search">
-				<SearchInput placeholder="搜索" v-model="searchValue">
-					<!-- 前插槽：左侧图标 -->
-					<template #prefix>
-						<svg-icon :iconName="searchValue ? 'common/search' : 'common/searchd'" size="32px"></svg-icon>
-					</template>
-					<!-- 后插槽：右侧图标 -->
-					<template #suffix>
-						<svg-icon iconName="common/close" size="32px"></svg-icon>
-					</template>
-				</SearchInput>
-			</div>
+
 			<div class="langList">
-				<div v-for="item in filterSearch" class="langItem" :class="currentActiveLang === item.code ? ' active' : ''" @click="setActive(item)">
-					<div><img :src="item.iconFileUrl" alt="" /></div>
-					<div>{{ item.name }}</div>
+				<div v-for="item in filterSearch" class="langItem flex" :class="currentActiveLang === item.code ? ' active' : ''" @click="setActive(item)">
+					<div class="flex">
+						<img :src="item.iconFileUrl" alt="" />
+						{{ item.name }}
+					</div>
+					<div>
+						<svg-icon :iconName="currentActiveLang === item.code ? 'common/circle_theme' : 'common/circle'" size="30px"></svg-icon>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -41,10 +35,7 @@ const props = defineProps({
 const show = ref(false);
 const currentActiveLang = ref(userStore.getlangInfo.code);
 const currentLangInfo: any = ref({});
-const setActive = (value) => {
-	currentLangInfo.value = value;
-	currentActiveLang.value = value.code;
-};
+
 watch(
 	() => props.modelValue,
 	() => {
@@ -62,23 +53,18 @@ const cancel = () => {
 	show.value = false;
 };
 const searchValue = ref("");
-// onMounted(() => {
-// 	getLangDownBox();
-// });
-// const getLangDownBox = async () => {
-// 	// 调用通用业务下拉框接口，并捕获任何可能的错误
-// 	const res = await CommonApi.getLangDownBox().catch((err) => err);
-// 	// 如果响应的状态码为成功状态码
-// 	if (res.code == 10000) {
-// 		langList.value = res.data;
-// 	}
-// };
 
 const filterSearch = computed(() => {
 	if (!searchValue.value) return userStore.getlangList;
 	return userStore.getlangList.filter((item: any) => item.name.toLocaleLowerCase().includes(searchValue.value.toLocaleLowerCase())).map((item: any) => item);
 });
-
+const setActive = async (value) => {
+	currentLangInfo.value = value;
+	currentActiveLang.value = value.code;
+	await userStore.setlangInfo(currentLangInfo.value);
+	location.reload();
+	cancel();
+};
 const confirm = async () => {
 	await userStore.setlangInfo(currentLangInfo.value);
 	location.reload();

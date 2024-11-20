@@ -31,7 +31,7 @@
 				<!-- 提示图标 -->
 				<div class="tooltip">
 					<van-popover v-model:show="showPopover" theme="dark" :show-arrow="false" placement="bottom-end">
-						<div class="p_10 popup">
+						<div class="p_10 popup fs_20">
 							{{
 								$t('medalCollection["宝箱奖励流水倍数为8倍"]', {
 									num: state.medalRewardRespVOS.find((item: any) => item.openStatus !== 1).typingMultiple,

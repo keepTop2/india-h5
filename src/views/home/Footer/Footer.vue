@@ -3,11 +3,21 @@
 	<div class="duty">
 		<VantLazyImg :src="duty" class="dutyImg" />
 	</div>
-	<p class="dutyMsg color_T1">{{ $t('home["负责任游戏描述"]') }}</p>
+	<p class="dutyMsg color_T1" v-html="data"></p>
 </template>
 
 <script setup lang="ts">
 import duty from "/@/views/home/static/images/duty.png";
+import { TutorialApi } from "/@/api/helpCenter";
+const data = ref("");
+const getData = () => {
+	TutorialApi.getHelpCenterConfigList().then((res) => {
+		data.value = res.data?.find((item) => item.code == 8)?.valueDetail;
+	});
+};
+onMounted(() => {
+	getData();
+});
 </script>
 
 <style scoped lang="scss">

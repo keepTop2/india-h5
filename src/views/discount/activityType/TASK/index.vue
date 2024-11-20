@@ -16,7 +16,7 @@
 			<div v-if="currentTab == 0">
 				<div v-for="item in detailData?.dailyTask" class="card">
 					<div>
-						<VantLazyImg :src="item.taskPictureI18nCode" alt="" />
+						<VantLazyImg :src="item.taskPictureI18nCodeFileUrl" alt="" />
 					</div>
 					<div>
 						<div class="fs_24 color_TB fw_500">{{ item.taskNameI18nCode }}</div>
@@ -44,7 +44,7 @@
 			<div v-if="currentTab == 1">
 				<div v-for="item in detailData?.weeklyTask" class="card">
 					<div>
-						<VantLazyImg :src="item.taskPictureI18nCode" alt="" />
+						<VantLazyImg :src="item.taskPictureI18nCodeFileUrl" alt="" />
 					</div>
 					<div>
 						<div class="fs_24 color_TB fw_500">{{ item.taskNameI18nCode }}</div>
@@ -75,7 +75,7 @@
 				</div>
 				<div v-for="item in detailData?.noviceTask" class="card" :class="item.subTaskType">
 					<div>
-						<VantLazyImg :src="item.taskPictureI18nCode" alt="" />
+						<VantLazyImg :src="item.taskPictureI18nCodeFileUrl" alt="" />
 					</div>
 					<div>
 						<div class="fs_24 color_TB fw_500">{{ item.taskNameI18nCode }}</div>
@@ -220,6 +220,10 @@ const calculatePercentage = (part, whole) => {
 	}
 	.content {
 		padding: 0 24px;
+		margin-top: -180px;
+		box-sizing: border-box;
+		position: absolute;
+		width: 100%;
 		.rewardbg {
 			height: 174px;
 			background: url("./image/rewardbg.png") no-repeat;
@@ -237,6 +241,7 @@ const calculatePercentage = (part, whole) => {
 			gap: 20px;
 			justify-content: space-around;
 			line-height: 72px;
+
 			@include themeify {
 				color: themed("TB");
 			}
@@ -279,6 +284,7 @@ const calculatePercentage = (part, whole) => {
 		border-radius: 24px 24px 0px 0px;
 		padding: 24px 24px;
 		margin-top: -1px;
+		margin-top: 100px;
 		@include themeify {
 			background: themed("BG1");
 		}
@@ -357,7 +363,7 @@ const calculatePercentage = (part, whole) => {
 				background: linear-gradient(270deg, #afafb3 0%, #87878b 100%);
 			}
 			.btnType3 {
-				background: linear-gradient(270deg, #ebb360 0%, #eb7933 100%);
+				background: linear-gradient(270deg, #3fb8ff 0%, #1283e0 100%);
 			}
 			.daojishiBg {
 				height: 45px;

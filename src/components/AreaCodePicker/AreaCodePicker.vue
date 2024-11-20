@@ -21,10 +21,10 @@
 								<div class="label">
 									<img :src="i.icon" class="icon" />
 									<span>{{ i.countryCode }}</span>
-									<span>{{ i.countryName }}</span>
+									<span>{{ i.countryName }}(+{{ i.areaCode }} )</span>
 								</div>
 								<div class="value">
-									<span>(+{{ i.areaCode }} )</span>
+									<svg-icon :iconName="i.areaCode == stateAreaCode ? 'common/circle_theme' : 'common/circle'" size="30px"></svg-icon>
 								</div>
 							</div>
 						</van-index-anchor>
@@ -220,6 +220,7 @@ const selectAreaCodeIndex = (index: number | string) => {
 		display: flex;
 		align-items: center;
 		gap: 16px;
+		flex: 1;
 		.icon {
 			width: 32px;
 			height: 32px;
@@ -232,6 +233,9 @@ const selectAreaCodeIndex = (index: number | string) => {
 	}
 
 	.value {
+		display: flex;
+		align-items: center;
+		margin: 0px 10px;
 		@include themeify {
 			color: themed("T1");
 		}

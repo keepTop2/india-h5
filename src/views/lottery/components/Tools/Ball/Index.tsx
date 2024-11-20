@@ -1,7 +1,8 @@
 import { computed, defineComponent } from "vue";
 import SvgIcon from "/@/components/svgIcon/index.vue";
 import "./index.scss";
-
+import { i18n } from "/@/i18n/index";
+const $: any = i18n.global;
 export default () => {
 	// 定义 SelectBallGroup 组件，用于显示多个球的选择
 	const SelectBallGroup = defineComponent({
@@ -37,17 +38,23 @@ export default () => {
 				type: String,
 				default: "",
 			},
+			startIndex: {
+				// 球的起始序号。例如时时彩是从 1 开始的，幸运 28 是从 0 开始的
+				type: Number,
+				default: 1,
+			},
 		},
 		// 自定义事件：选择球、清除全部选中
 		emits: ["select", "clear"],
 
 		setup(props, { emit }) {
-			const { renderBallNum, maxLeng, type = 1, multiple = true } = props;
+			const { renderBallNum, maxLeng, type = 1, multiple = true, startIndex = 1 } = props;
 
 			// 处理球的选择逻辑
-			const handleSelect = (ballNum: number) => {
+			const handleSelect = (ballNum: number, isRandom = false) => {
+				console.log("ballNum", ballNum);
 				if (!multiple) {
-					emit("select", { value: ballNum, list: props.value.includes(ballNum) ? [] : [ballNum] });
+					emit("select", { value: ballNum, list: props.value.includes(ballNum) && !isRandom ? [] : [ballNum] });
 					return;
 				}
 				// 如果球号已经选中，移除该球号
@@ -69,34 +76,45 @@ export default () => {
 			// 生成球的数量列表
 			const balls = computed(() => new Array(renderBallNum).fill(0));
 
+			// 快速选择
+			const handleRandomBall = () => {
+				const index = Math.floor(Math.random() * balls.value.length);
+				const renderNumber = startIndex === 0 ? index : index + 1;
+
+				handleSelect(renderNumber, true);
+			};
+
 			return () => (
 				<div class={`select-ball-group ${props.class}`}>
 					{/* 提示信息 */}
-					<div class="warn">请{props.multiple ? "至少" : ""}选择1个球号</div>
+					<div class="warn">{$.t(`lottery['请选择1个球号']`)}</div>
 					<div className="control">
 						{/* 清除全部选中 */}
 						<div onClick={() => emit("clear")} className="clear">
 							<SvgIcon iconName="lottery/clear" />
-							<span>清除全部</span>
+							<span>{$.t(`lottery['清除全部']`)}</span>
 						</div>
 						{/* 快速选择区域 */}
 						<div className="other">
 							<SvgIcon iconName="lottery/ksxz" />
-							<span>快速选择</span>
+							<span onClick={handleRandomBall}>{$.t(`lottery['快速选择']`)}</span>
 						</div>
 					</div>
 
 					{/* 显示球的区域 */}
 					<div className="balls-box">
-						{balls.value.map((_, index) => (
-							<Ball
-								key={index}
-								onSelect={() => handleSelect(index + 1)} // 绑定选择球的事件
-								actived={props.value.includes(index + 1)} // 判断球是否被选中
-								type={type} // 设置球的类型
-								ballNumber={index + 1} // 当前球的编号
-							/>
-						))}
+						{balls.value.map((_, index) => {
+							const renderNumber = startIndex === 0 ? index : index + 1;
+							return (
+								<Ball
+									key={index}
+									onSelect={() => handleSelect(renderNumber)} // 绑定选择球的事件
+									actived={props.value.includes(renderNumber)} // 判断球是否被选中
+									type={type} // 设置球的类型
+									ballNumber={renderNumber} // 当前球的编号
+								/>
+							);
+						})}
 					</div>
 				</div>
 			);
@@ -135,13 +153,14 @@ export default () => {
 			};
 
 			const bgTypeMap = new Map([
-				[1, "blueBall"], // 蓝球
-				[2, "redBall"], // 红球
-				[3, "defBall"], //默认球
+				[1, new URL("/src/assets/zh-CN/default/lottery/blueBall.svg", import.meta.url).href], // 蓝球
+				[2, new URL("/src/assets/zh-CN/default/lottery/redBall.svg", import.meta.url).href], // 红球
+				[3, new URL("/src/assets/zh-CN/default/lottery/defBall.svg", import.meta.url).href], //默认球
 			]);
 
+			console.log("bgTypeMap==========ball", bgTypeMap.get(props.type));
 			// 根据球的类型选择不同的 SVG 图标
-			const ballSvg = computed(() => `/@/assets/zh-CN/default/lottery/${bgTypeMap.get(props.type)}.svg`);
+			const ballSvg = computed(() => bgTypeMap.get(props.type));
 
 			// 渲染球组件
 			return () => (

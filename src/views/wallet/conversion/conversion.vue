@@ -139,7 +139,7 @@ const getUserPlatformBalance = async () => {
 // 转换金额
 const conversionHandler = async () => {
 	if (parseFloat(formInput.value) <= 0 || formInput.value === "") {
-		showToast("请输入转换金额");
+		// showToast("请输入转换金额");
 		return;
 	}
 

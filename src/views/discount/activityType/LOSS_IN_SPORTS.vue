@@ -4,60 +4,8 @@
 		<VantLazyImg :src="activityData?.headPicturePcI18nCode" class="main-image" />
 
 		<div class="content">
-			<div class="activity-details">
-				<div class="detail_icon">
-					<img src="../image/detail_icon.png" alt="" />
-				</div>
-				<div class="details-header">
-					<div class="details-header-title-left">
-						<img src="../image/details-header-title-left.png" alt="" />
-					</div>
-					活动条件
-					<div class="details-header-title-right">
-						<img src="../image/details-header-title-right.png" alt="" />
-					</div>
-				</div>
-				<div class="detail-content">
-					<div class="detail-row">
-						<p class="label">
-							<span>活动对象</span>
-						</p>
-						<p class="value">{{ activityData?.userTypeText }}</p>
-					</div>
-					<div class="detail-row">
-						<p class="label">
-							<span>活动时间</span>
-						</p>
-						<p class="value" v-if="activityData.activityDeadline == 0">
-							{{ dayjs(activityData?.activityStartTime).format("YYYY-MM-DD HH:mm:ss") }}~{{ dayjs(activityData?.activityEndTime).format("YYYY-MM-DD HH:mm:ss") }}
-						</p>
-						<p class="value" v-if="activityData.activityDeadline == 1">长期活动</p>
-					</div>
-					<div class="detail-row">
-						<p class="label">
-							<span>活动描述</span>
-						</p>
-						<p class="value">{{ activityData?.activityDescI18nCode }}</p>
-					</div>
-				</div>
-				<div class="detail-footer"></div>
-			</div>
-
-			<div class="activity-details">
-				<div class="details-header">
-					<div class="details-header-title-left">
-						<img src="../image/details-header-title-left.png" alt="" />
-					</div>
-					<span>活动规则</span>
-					<div class="details-header-title-right">
-						<img src="../image/details-header-title-right.png" alt="" />
-					</div>
-				</div>
-				<div class="detail-content">
-					<div v-html="activityInfo?.activityRuleI18nCode" class="htmlDesc"></div>
-				</div>
-				<div class="detail-footer"></div>
-			</div>
+			<activityContent :activityData="activityData"></activityContent>
+			<activityRules :rules="activityInfo?.activityRuleI18nCode"></activityRules>
 		</div>
 		<div class="applyBtn" @click="apply" v-if="activityData?.participationMode == 0">
 			<div class="" :class="activityData?.activityCondition ? 'active' : ''">{{ activityData?.status == 30047 ? "您已申请" : "立即申请" }}</div>
@@ -77,6 +25,8 @@ import activityDialog from "../components/Dialog.vue";
 import dayjs from "dayjs";
 import { showToast } from "vant";
 import { useUserStore } from "/@/store/modules/user";
+import activityRules from "../components/activityRules.vue";
+import activityContent from "../components/activityContent.vue";
 const userStore = useUserStore();
 const router = useRouter();
 const route = useRoute();
@@ -104,7 +54,7 @@ const apply = () => {
 	} else if (activityData.value.status === 10000 && new Date().getTime() >= activityData.value.activityStartTime) {
 		activityApi.toActivity({ id: activityInfo.id }).then((res: any) => {
 			if (res.code === 10000) {
-				if (res.data.status !== 10000) {
+				if (String(res.data.status).slice(0, 2) !== "13" && res.data.status !== 10000) {
 					dialogInfo.value = res.data;
 					showDialog.value = true;
 				} else {
@@ -361,6 +311,7 @@ const confirmDialog = () => {
 		border-radius: 12px 12px 0 0;
 		@include themeify {
 			background: themed("BG2");
+			color: #fff;
 		}
 		div {
 			width: 561px;

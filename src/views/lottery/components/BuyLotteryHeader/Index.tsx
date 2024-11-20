@@ -4,7 +4,9 @@ import { defineComponent } from "vue";
 import { useUserStore } from "/@/store/modules/user";
 import Common from "/@/utils/common";
 import useTimer from "/@/views/lottery/components/Tools/Timer";
-
+import CaijinIcon from "/@/assets/zh-CN/default/lottery/caijin.png";
+import { i18n } from "/@/i18n/index";
+const $: any = i18n.global;
 export default () => {
 	const BuyLotteryHeader = defineComponent({
 		name: "BuyLotteryHeader",
@@ -30,11 +32,11 @@ export default () => {
 
 					<div class="content">
 						<div class="content-item">
-							<div class="label">当期期号</div>
+							<div class="label">{$.t(`lottery['当期期号']`)}:</div>
 							<div class="value">{props.data.issueNum}</div>
 						</div>
 						<div class="content-item">
-							<div class="label">下一期开奖</div>
+							<div class="label">{$.t(`lottery['下一期开奖']`)}:</div>
 							<div class="value">
 								<Timer showDesc={true} data={props.data} />
 							</div>
@@ -42,11 +44,11 @@ export default () => {
 
 						<div class="footer">
 							<div class="left">
-								<img src="/@/assets/zh-CN/default/lottery/caijin.png" alt="" /> <span class="label">最近获奖</span>
+								<img src={CaijinIcon} alt="" /> <span class="label">{$.t(`lottery['最近获奖']`)}</span>
 							</div>
 							<div class="right">
-								<span>
-									{Common.thousands(maxWin)} {mainCurrency}
+								<span class="value">
+									{Common.thousands(maxWin)} {mainCurrency || "USD"}
 								</span>
 							</div>
 						</div>

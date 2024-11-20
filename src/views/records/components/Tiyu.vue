@@ -1,5 +1,5 @@
 <template>
-	<div class="bet-detail">
+	<div class="bet-detail bet-detail2">
 		<div class="header">
 			<div class="match-info">
 				<!-- <img src="path/to/flag.png" alt="flag" class="flag" /> -->
@@ -39,6 +39,30 @@
 				<span class="label">{{ $t('records["输赢金额"]') }}：</span>
 				<span v-if="item.orderClassify === 1" class="value" :class="item.winLossAmount >= 0 ? 'win' : 'is'">{{ item.winLossAmount.toFixed(2) }}</span>
 				<span v-else class="value">-</span>
+			</div>
+		</div>
+
+		<div class="match-details" v-for="(match, index) in item.orderMultipleBetList" :key="index">
+			<div class="match-info">
+				<span>{{ match.eventInfo }}</span>
+				<!--        <span class="text-hidden">{{ match.teamInfo }}</span>-->
+				<span class="text-hidden">
+					{{ match.teamInfo }}
+					<!--					<span class="info-nation">team1</span>-->
+					<!--					<span>VS</span>-->
+					<!--					<span class="info-nation">team2</span>-->
+				</span>
+				<span class="fs_24 color_T1">{{ match.betContent }}</span>
+			</div>
+			<div class="match-result">
+				<span class="fs_36 mr_24 fw_400" :class="{ winColor: match.winlossStatus === 1, loseColor: match.winlossStatus === 0, color_T3: [0, 1].includes(match.winlossStatus) }">{{
+					match.result
+				}}</span>
+				<span class="fs_26">@{{ match.odds }}</span>
+			</div>
+			<div class="match-status">
+				<span v-if="match.winlossStatusText" :class="match.winlossStatus == 1 ? 'winColor' : match.winlossStatus == 0 ? 'winColor' : 'loseColor'">{{ match.winlossStatusText }}</span>
+				<span v-else class="Settled">取消</span>
 			</div>
 		</div>
 	</div>

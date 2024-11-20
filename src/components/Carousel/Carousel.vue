@@ -60,19 +60,8 @@ const props = defineProps({
 		default: "icon", // 默认图标key
 	},
 	gameList: {
-		type: Array<Game>,
-		default: [
-				// 默认值
-				{
-					icon: "", // 默认图标
-				},
-				{
-					icon: "", // 默认图标
-				},
-				{
-					icon: "", // 默认图标
-				},
-		],
+		type: Array<any>,
+		default: [],
 	},
 	slidesPerView: {
 		type: Number,

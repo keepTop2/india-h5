@@ -19,7 +19,7 @@
 					<div v-if="withdrawWayConfig.lastWithdrawInfoVO.userAccount && lastWithdrawInfoShow && !state.userAccount" class="last_info">
 						<div class="last_cell" @mousedown="onGetLastWithdrawInfo">
 							<SvgIcon class="icon" iconName="wallet/history_Icon" />
-							<div class="value">{{ common.getInstance().bankCardHiding(withdrawWayConfig.lastWithdrawInfoVO.userAccount) }}</div>
+							<div class="value">{{ common.getInstance().EWalletHiding(withdrawWayConfig.lastWithdrawInfoVO.userAccount) }}</div>
 						</div>
 					</div>
 				</template>
@@ -182,7 +182,7 @@ const groupByFirstLetter = (countries) => {
 // 发送验证码
 const onCaptcha = async () => {
 	let params = {} as any;
-	params = { phone: UserStore.getUserInfo.areaCode, areaCode: UserStore.getUserInfo.phone };
+	params = { phone: UserStore.getUserInfo.phone, areaCode: UserStore.getUserInfo.areaCode };
 	const res = await bindApi.sendSms(params).catch();
 	if (res.code === common.getInstance().ResCode.SUCCESS) {
 		captchaButton.value?.startCountdown();

@@ -66,7 +66,7 @@ const startRedbagRain = () => {
 	activityApi
 		.redBagParticipate({ redbagSessionId: activityData.value.redbagSessionId })
 		.then((res: any) => {
-			if (res.data?.status !== 10000) {
+			if (String(res.data.status).slice(0, 2) !== "13" && res.data.status !== 10000) {
 				dialogInfo.value = res.data;
 				shwoDialog.value = true;
 			} else {

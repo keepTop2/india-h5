@@ -7,14 +7,14 @@
 	<div class="wrapper p_24">
 		<div class="flex">
 			<div class="mb_15 allTab color_T1">
-				<div class="tab" @click="changeTab('all')" :class="tabs.length == 0 ? 'active' : ''">全部</div>
+				<div class="tab" @click="changeTab('all')" :class="tabs.length == 0 ? 'active' : ''">{{ $t('walletRecords["全部"]') }}</div>
 			</div>
 			<div class="tabs mb_20">
 				<span v-for="(item, index) in tabs" class="tab color_T1 active" :class="activeTab === item ? 'active' : ''" :key="index">
 					{{ item.value }} <SvgIcon class="arrow ml_20 color_Theme" iconName="common/close_theme" size="24px" @click="deleteTab(item, index)" />
 				</span>
 			</div>
-			<div class="mb_15 filterBtn color_T1 fs_28" @click="showSheet = true">筛选<SvgIcon class="arrow ml_5" iconName="common/arrowDown" size="24px" /></div>
+			<div class="mb_15 filterBtn color_T1 fs_28" @click="showSheet = true">{{ $t('walletRecords["筛选"]') }}<SvgIcon class="arrow ml_5" iconName="common/arrowDown" size="24px" /></div>
 		</div>
 		<div class="content">
 			<div>
@@ -22,7 +22,7 @@
 					{{
 						Array.isArray(downBoxList.trade_date_num) && downBoxList.trade_date_num.length > 0 && cloneSelect.activeDate !== null
 							? downBoxList.trade_date_num[cloneSelect.activeDate].value
-							: cloneSelect.dateRange[0] + " 至 " + cloneSelect.dateRange[1]
+							: cloneSelect.dateRange[0] + `${$t('walletRecords["至"]')}` + cloneSelect.dateRange[1]
 					}}
 					<SvgIcon class="arrow ml_5" iconName="common/arrowDown" size="24px" />
 				</div>
@@ -35,18 +35,25 @@
 							<span class="title">{{ item.tradeWayTypeText }}</span>
 						</div>
 						<div class="right">
-							<span class="value">+{{ Common.getInstance().formatFloat(Common.thousands(item.tradeAmount)) }}</span>
+							<span class="value">
+								<!-- 存款 转换 -->
+								<span v-if="item.tradeType == '1' || item.tradeType == '3'">+</span>
+								<!-- 取款 -->
+								<span v-if="item.tradeType == '2'">-</span>
+								<!-- 金融 -->
+								<span>{{ Common.thousands(Common.getInstance().formatAmount(Common.getInstance().formatFloat(item.tradeAmount), 7)) }}</span>
+							</span>
 							<span>&nbsp;</span>
 							<span class="value">{{ UserStore.userInfo.mainCurrency }}</span>
 						</div>
 					</div>
 					<div class="cell mt_12 pb_16 border">
-						<div class="left text">{{ item.tradeTime }}</div>
+						<div class="left text">{{ Common.getInstance().dayFormat2(item.tradeTime) }}</div>
 						<div class="right text" :class="tradeStatus[item.tradeStatus]">{{ item.tradeStatusText }}</div>
 					</div>
 					<div class="footer_cell mt_16">
 						<div class="left text">
-							<span>订单号：</span>
+							<span>{{ $t('walletRecords["订单号"]') }}</span>
 							<span>{{ item.orderNo }}</span>
 							<SvgIcon class="icon ml_4" @click.stop="Common.getInstance().copy(item.orderNo)" iconName="common/copy2" />
 						</div>
@@ -61,21 +68,21 @@
 		<van-action-sheet v-model:show="showSheet" @cancel="onCancelSheet">
 			<div class="flex title">
 				<div @click="onCancelSheet"><SvgIcon class="arrow" iconName="common/close" size="32px" /></div>
-				<div class="color_TB" @click="confirmSheet">确定</div>
+				<div class="color_TB" @click="confirmSheet">{{ $t('walletRecords["确定"]') }}</div>
 			</div>
 			<div class="mt_16 mb_16">
-				<div class="color_TB fs_32 mt_16 mb_16">类型筛选</div>
+				<div class="color_TB fs_32 mt_16 mb_16">{{ $t('walletRecords["类型筛选"]') }}</div>
 				<div class="group mb_32">
-					<div class="color_T1" :class="currentWelfareCenterRewardType == 'all' ? 'active' : ''" @click="currentWelfareCenterRewardType = 'all'">全部</div>
+					<div class="color_T1" :class="currentWelfareCenterRewardType == 'all' ? 'active' : ''" @click="currentWelfareCenterRewardType = 'all'">{{ $t('walletRecords["全部"]') }}</div>
 					<div v-for="item in downBoxList?.trade_type" class="color_T1" @click="currentWelfareCenterRewardType = item.code" :class="currentWelfareCenterRewardType == item.code ? 'active' : ''">
 						{{ item.value }}
 					</div>
 				</div>
 			</div>
 			<div class="mt_16 mb_16">
-				<div class="color_TB fs_32 mt_16 mb_16">状态筛选</div>
+				<div class="color_TB fs_32 mt_16 mb_16">{{ $t('walletRecords["状态筛选"]') }}</div>
 				<div class="group mb_32">
-					<div class="color_T1" :class="currentActivityReceiveStatus == 'all' ? 'active' : ''" @click="currentActivityReceiveStatus = 'all'">全部</div>
+					<div class="color_T1" :class="currentActivityReceiveStatus == 'all' ? 'active' : ''" @click="currentActivityReceiveStatus = 'all'">{{ $t('walletRecords["全部"]') }}</div>
 					<div
 						v-for="item in downBoxList?.deposit_withdraw_customer_status"
 						class="color_T1"
@@ -90,21 +97,21 @@
 		<van-action-sheet v-model:show="showDate" round position="bottom" @cancel="onCancelPicker">
 			<div class="flex dateTitle">
 				<div @click="onCancelPicker"><SvgIcon class="arrow" iconName="common/close" size="32px" /></div>
-				<div class="color_TB" @click="confirmPicker">确定</div>
+				<div class="color_TB" @click="confirmPicker">{{ $t('walletRecords["确定"]') }}</div>
 			</div>
-			<div class="color_TB fs_32 mb_16 mt_24">选择时间</div>
+			<div class="color_TB fs_32 mb_16 mt_24">{{ $t('walletRecords["选择时间"]') }}</div>
 			<div class="dateTabs">
 				<div v-for="(item, index) in downBoxList?.trade_date_num" class="tab" @click="changeDate(item, index)" :class="activeDate === index ? 'active' : ''">
 					{{ item.value }}
 				</div>
 			</div>
-			<div class="color_TB fs_32 mb_16 mt_32">筛选时间</div>
+			<div class="color_TB fs_32 mb_16 mt_32">{{ $t('walletRecords["筛选时间"]') }}</div>
 			<div class="flex timeBtn">
 				<span :class="activeDateBtn == 0 ? 'active' : ''" @click="changeDateBtn(0)">{{ cloneSelect.dateRange[0] }}</span>
 				至
 				<span :class="activeDateBtn == 1 ? 'active' : ''" @click="changeDateBtn(1)"> {{ cloneSelect.dateRange[1] }}</span>
 			</div>
-			<div class="color_Hint fs_20 text-center mt_20 mb_20">当前系统支持查询最近90日的记录</div>
+			<div class="color_Hint fs_20 text-center mt_20 mb_20">{{ $t('walletRecords["当前系统支持查询最近90日的记录"]') }}</div>
 			<datePicker :columns="columns" ref="datePickerRef" @onChange="onChangeDate"></datePicker>
 		</van-action-sheet>
 	</div>
@@ -121,6 +128,7 @@ import type2 from "./image/type2.png";
 import type3 from "./image/type3.png";
 import type4 from "./image/type4.png";
 import type5 from "./image/type5.png";
+import type6 from "./image/type6.png";
 import dayjs from "dayjs";
 const UserStore = useUserStore();
 const activeTab = ref(1);
@@ -141,18 +149,22 @@ const pageData: any = ref({});
 const finished = ref(false);
 const recordsList: any = ref([]);
 
+// 图标映射对象
+const typeMap = {
+	bank_card_recharge: type1,
+	bank_card_withdraw: type1,
+	electronic_wallet_recharge: type2,
+	electronic_wallet_withdraw: type2,
+	crypto_currency_recharge: type3,
+	crypto_currency_withdraw: type3,
+	superior_transfer: type4,
+	manual_up: type5,
+	manual_down: type5,
+	platform_transfer: type6,
+};
+
 const getTypeIcon = (item) => {
-	if (item.tradeWayType === "bank_card_recharge" || item.tradeWayType === "bank_card_withdraw") {
-		return type1;
-	} else if (item.tradeWayType === "electronic_wallet_recharge" || item.tradeWayType === "electronic_wallet_withdraw") {
-		return type2;
-	} else if (item.tradeWayType === "crypto_currency_recharge" || item.tradeWayType === "crypto_currency_withdraw") {
-		return type3;
-	} else if (item.tradeWayType === "superior_transfer") {
-		return type4;
-	} else if (item.tradeWayType === "manual_up" || item.tradeWayType === "manual_down") {
-		return type5;
-	}
+	return typeMap[item.tradeWayType] || null; // 默认返回 null 或根据需要返回其他值
 };
 
 const cloneSelect = reactive({
@@ -185,24 +197,6 @@ const changeDate = (item, index) => {
 		return index === 1 || index === 2 ? String(Number(item)) : item;
 	});
 };
-const dateNumLabel = [
-	// {
-	// 	label: "今日",
-	// 	value: 1,
-	// },
-	// {
-	// 	label: "近7天",
-	// 	value: 7,
-	// },
-	// {
-	// 	label: "近30天",
-	// 	value: 30,
-	// },
-	// {
-	// 	label: "近90天",
-	// 	value: 90,
-	// },
-];
 const tradeStatus = {
 	0: "F2",
 	1: "Wam",
@@ -246,14 +240,13 @@ const getList = () => {
 const deleteTab = (item, index) => {
 	tabs.value.splice(index, 1);
 	resetParams();
-	if (item.type == "activity_receive_status") {
-		currentActivityReceiveStatus.value = "all";
-		cloneSelect.tradeStatus = "all";
-		getList();
-	}
-	if (item.type == "welfare_center_reward_type") {
+	// if (item.type == "deposit_withdraw_customer_status") {
+	// 	currentActivityReceiveStatus.value = "all";
+	// 	cloneSelect.tradeStatus = "all";
+	// 	getList();
+	// }
+	if (item.type == "trade_type") {
 		currentWelfareCenterRewardType.value = "all";
-
 		cloneSelect.tradeType = "all";
 		getList();
 	}
@@ -261,8 +254,10 @@ const deleteTab = (item, index) => {
 const changeTab = (item) => {
 	if (item === "all") {
 		tabs.value = [];
-		cloneSelect.tradeType = "";
-		cloneSelect.tradeStatus = "";
+		currentActivityReceiveStatus.value = "all";
+		cloneSelect.tradeStatus = "all";
+		currentWelfareCenterRewardType.value = "all";
+		cloneSelect.tradeType = "all";
 		resetParams();
 		getList();
 	}
@@ -278,13 +273,12 @@ const changeDateBtn = (value) => {
 // 确认条件筛选框
 const confirmSheet = () => {
 	tabs.value = [];
-
-	if (currentActivityReceiveStatus.value !== "all") {
-		tabs.value.push(downBoxList.value.trade_type.find((item) => item.code == currentActivityReceiveStatus.value));
-	}
 	if (currentWelfareCenterRewardType.value !== "all") {
-		tabs.value.push(downBoxList.value.deposit_withdraw_customer_status.find((item) => item.code == currentWelfareCenterRewardType.value));
+		tabs.value.push(downBoxList.value.trade_type.find((item) => item.code == currentWelfareCenterRewardType.value));
 	}
+	// if (currentActivityReceiveStatus.value !== "all") {
+	// 	tabs.value.push(downBoxList.value.deposit_withdraw_customer_status.find((item) => item.code == currentActivityReceiveStatus.value));
+	// }
 	cloneSelect.tradeType = currentWelfareCenterRewardType.value;
 	cloneSelect.tradeStatus = currentActivityReceiveStatus.value;
 	showSheet.value = false;

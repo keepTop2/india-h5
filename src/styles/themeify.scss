@@ -13,10 +13,10 @@
 			@each $color-name, $color in $theme-map {
 				// 生成对应的类名和样式
 				.bg_#{$color-name} {
-					background: $color;
+					background: $color !important;
 				}
 				.color_#{$color-name} {
-					color: $color;
+					color: $color !important;
 				}
 			}
 		}

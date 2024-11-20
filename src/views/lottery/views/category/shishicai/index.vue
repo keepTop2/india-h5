@@ -1,44 +1,37 @@
 <template>
-	<Container :data="mockData">
+	<Containers :data="renderLotteryDetail" :timer-end-callback="beginPageData">
+		<!-- 标签栏 -->
 		<div class="tabs">
-			<div @click="handleTabClick(item.id)" class="tabs-item" :class="{ actived: tabActived === item.id }" v-for="item in tabs" :key="item.id">{{ item.label }}</div>
+			<!-- 循环渲染每个标签，基于当前选中的标签动态添加类名 -->
+			<div :class="['tabs-item', tabsActived === index ? 'actived' : '']" @click="handleTabChange(index)" v-for="(item, index) in tabs" :key="item.id">
+				{{ item.label }}
+			</div>
 		</div>
 
 		<!-- 内容部分 -->
-		<component :is="tabComponents.get(tabActived)" />
-	</Container>
+		<component :is="renderComponent" :lottery-detail="renderLotteryDetail" />
+	</Containers>
 </template>
+
 <script lang="ts" setup>
-import { defineAsyncComponent } from "vue";
-import Container from "/@/views/lottery/components/Containers/index.vue";
-// 模拟数据，用于显示在页面头部
-const mockData = {
-	iconH5: "https://ctopalistat3.zengchenglm.com/pc/images/db_DB5FC2cea4e2f859029cdbda33fffda6ea1f2.png",
-	gameName: "时时彩",
-	gameDesc: "五分钟一期",
-	seconds: 100,
-	betStatusName: "投注中",
-	issueNum: "20230812-084",
-	maxWin: 5403.23,
-	icon: "",
-};
-
-const tabActived = ref(2);
-const tabs = [
-	{ label: "购买彩票", id: 1 },
-	{ label: "开奖结果", id: 2 },
-];
-
+import { computed, defineAsyncComponent } from "vue";
+import Containers from "/@/views/lottery/components/Containers/index.vue";
+import { usePageInit } from "/@/views/lottery/hooks/usePageInit";
+import { useTab } from "/@/views/lottery/hooks/useTab";
+import { useRoute } from "vue-router";
+const route = useRoute();
 const BayLottery = defineAsyncComponent(() => import("./components/bayLottery.vue"));
 const Result = defineAsyncComponent(() => import("./components/result.vue"));
 
-const tabComponents = new Map([
-	[1, BayLottery],
-	[2, Result],
-]);
+// 标签栏的配置数据
+const { tabs, tabsActived, handleTabChange } = useTab(BayLottery, Result);
+const { lotteryDetail, beginPageData } = usePageInit(); // 这个 hook 是重点。主要就是 onMounted onBeforeUnmount watch 里面需要做的事情
+const renderLotteryDetail = computed(() => {
+	return { ...lotteryDetail.value, maxWin: route.query.maxWin || 0, iconPc: route.query.lotteryIcon };
+});
 
-const handleTabClick = (id: number) => {
-	tabActived.value = id;
-};
+const renderComponent = computed(() => {
+	const item = tabs[tabsActived.value || 0];
+	return item.component;
+});
 </script>
-<style></style>

@@ -75,7 +75,7 @@
 					{{ state.dateTimeList }} -->
 					<div class="customTime columnsContainer">
 						<div class="title">
-							{{ $t(`components['DateRangeSelect']['筛选时间']`) }}
+							{{ $t(`components['DateRangeSelect']['自定义']`) }}
 						</div>
 						<div class="dateRangeSelect_columnstop">
 							<div :class="{ dateRangeSelect_active: state.activeType == 1 }" class="dateRangeSelect_timebox" @click="onStartOrEnd(1)">
@@ -439,6 +439,7 @@ const onTwoConfirm = async ({ selectedValues, selectedOptions, selectedIndexes }
 			showToast("开始时间不可大于结束时间");
 			return;
 		}
+		state.endTimeSlotText = dayjs(endTime.value).format("YYYY/MM/DD");
 		emit("onConfirmDate");
 		state.twoShow = false;
 	}, 10);

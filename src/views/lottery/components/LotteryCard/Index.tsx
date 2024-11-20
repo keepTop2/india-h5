@@ -1,8 +1,11 @@
-import { defineComponent, reactive, PropType, ref } from "vue";
+import { defineComponent, PropType } from "vue";
 import { useUserStore } from "/@/store/modules/user"; // 引入用户信息 store
 import Common from "/@/utils/common";
 import useTimer from "/@/views/lottery/components/Tools/Timer";
 import SvgIcon from "/@/components/svgIcon/index.vue";
+import NationalIcon from "/@/assets/zh-CN/default/lottery/national.png";
+import { i18n } from "/@/i18n/index";
+const $: any = i18n.global;
 import "./index.scss";
 
 // 定义数据类型
@@ -18,7 +21,7 @@ interface CardData {
 	};
 }
 
-export default ({ onSelect }: { onSelect: (data: CardData) => void }) => {
+export default (data?: any) => {
 	// 获取用户信息 store
 	const {
 		userInfo: { currencySymbol },
@@ -36,7 +39,7 @@ export default ({ onSelect }: { onSelect: (data: CardData) => void }) => {
 				<div class="hot-card-header">
 					{/* 左侧图片 */}
 					<div class="left">
-						<img src={props.icon || "/@/assets/zh-CN/default/lottery/national.png"} alt="Header Image" />
+						<img src={props.icon || NationalIcon} alt="Header Image" />
 					</div>
 					{/* 右侧倒计时 */}
 					<div class="right">
@@ -82,7 +85,13 @@ export default ({ onSelect }: { onSelect: (data: CardData) => void }) => {
 						{/* 最近获奖 */}
 						{slots.maxWin?.()}
 						<div class="more">
-							<SvgIcon onClick={() => onSelect(props as any)} size="5" iconName="lottery/arrow" />
+							<SvgIcon
+								onClick={() => {
+									data?.onSelect?.(props as any);
+								}}
+								size="5"
+								iconName="lottery/arrow"
+							/>
 						</div>
 					</div>
 				</div>
@@ -99,11 +108,11 @@ export default ({ onSelect }: { onSelect: (data: CardData) => void }) => {
 			return () => (
 				<div class="card-footer">
 					<div class="left">
-						<span>最高奖</span>
+						<span>{$.t(`lottery['最高奖']`)}</span>
 					</div>
 					<div class="right">
 						<span>
-							{currencySymbol}&nbsp;
+							{currencySymbol || "$"}&nbsp;
 							{Common.thousands(props.maxWin)}
 						</span>
 					</div>
@@ -149,7 +158,7 @@ export default ({ onSelect }: { onSelect: (data: CardData) => void }) => {
 					<Content {...props.data}>
 						{{
 							// 国旗图标
-							nationalIcon: () => <img src={props.data.icon || "/@/assets/zh-CN/default/lottery/national.png"} alt="Header Image" />,
+							nationalIcon: () => <img src={props.data.icon || NationalIcon} alt="Header Image" />,
 							// 时间
 							timer: () => <ClockTime />,
 							// 最高奖

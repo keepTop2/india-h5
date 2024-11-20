@@ -17,8 +17,7 @@
 				<span class="label">{{ $t('records["投注时间"]') }}：</span>
 				<span>{{ new Date(item.betTime).toLocaleString() }}</span>
 			</div>
-			<div class="line"></div>
-			<div class="bet-amount">
+			<div v-if="item?.betContent" class="bet-amount">
 				<span class="label">{{ $t('records["投注内容"]') }}：</span>
 				<div>
 					<span>{{ item?.betContent }}</span>
@@ -35,6 +34,7 @@
 				<span v-else class="value">-</span>
 			</div>
 		</div>
+		<div class="line"></div>
 
 		<div class="match-details" v-for="(match, index) in item.orderMultipleBetList" :key="index">
 			<div class="match-info">

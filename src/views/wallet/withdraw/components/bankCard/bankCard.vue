@@ -219,7 +219,7 @@ const groupByFirstLetter = (countries) => {
 // 发送验证码
 const onCaptcha = async () => {
 	let params = {} as any;
-	params = { phone: UserStore.getUserInfo.areaCode, areaCode: UserStore.getUserInfo.phone };
+	params = { phone: UserStore.getUserInfo.phone, areaCode: UserStore.getUserInfo.areaCode };
 	const res = await bindApi.sendSms(params).catch();
 	if (res.code === common.getInstance().ResCode.SUCCESS) {
 		captchaButton.value?.startCountdown();
@@ -275,6 +275,7 @@ defineExpose({
 @import "../common.scss"; // 引入公共样式
 
 .cell_option {
+	width: 100%;
 	display: flex;
 	align-items: center;
 	gap: 16px;
