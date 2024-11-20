@@ -5,14 +5,21 @@
 	</div>
 
 	<div class="wrapper p_24">
-		<div class="tabs mb_20">
+		<div class="tabs mb_20" v-if="useRoute().query?.classId">
 			<span v-for="(item, index) in dataList" class="tab color_T1" :class="activeTab === index ? 'active' : ''" @click="changeTab(index)"> {{ item.name }} </span>
 		</div>
-		<div class="content">
+		<div class="content" v-if="useRoute().query?.classId">
 			<div class="card mb_24" v-for="item in dataList[activeTab]?.subset">
 				<div class="title color_TB">{{ item.name }}</div>
 				<div class="text color_T1">
 					<div class="value" v-html="item.value"></div>
+				</div>
+			</div>
+		</div>
+		<div class="content" v-else>
+			<div class="card mb_24" v-for="item in dataList">
+				<div class="text color_T1">
+					<div class="value" v-html="item?.valueDetail"></div>
 				</div>
 			</div>
 		</div>
@@ -33,9 +40,16 @@ onMounted(() => {
 });
 const getList = () => {
 	const params = useRoute().query;
-	TutorialApi.showTutorialTurnLayer(params).then((res) => {
-		dataList.value = res.data;
-	});
+	if (params.code) {
+		TutorialApi.getHelpCenterConfigList().then((res) => {
+			dataList.value = [res.data.find((item) => item.code == params.code)];
+			console.log(dataList.value);
+		});
+	} else {
+		TutorialApi.showTutorialTurnLayer(params).then((res) => {
+			dataList.value = res.data;
+		});
+	}
 };
 </script>
 

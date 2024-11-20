@@ -7,13 +7,13 @@
 				</div>
 				<img class="CountdownImg" src="./image/redbagRainCountdown.png" alt="" @click="handleClickCountdown" />
 				<div class="countdown" @click="handleClickCountdown">
-					<p v-if="countdown > 0">倒计时</p>
-					<p>{{ countdown > 0 ? Common.convertMilliseconds(countdown * 1000) : "进行中" }}</p>
+					<p v-if="countdown > 0">{{ $t(`discount['倒计时']`) }}</p>
+					<p>{{ countdown > 0 ? Common.convertMilliseconds(countdown * 1000) : $t(`discount['进行中']`) }}</p>
 				</div>
 			</div>
 		</div>
 	</div>
-	<RED_BAG_RAIN_Dialog v-model="shwoDialog" title="温馨提示" :confirm="confirmDialog" class="redBagRainResult">
+	<RED_BAG_RAIN_Dialog v-model="shwoDialog" :title="$t(`discount['温馨提示']`)" :confirm="confirmDialog" class="redBagRainResult">
 		<div class="mt_20 mb_20">
 			{{ dialogInfo.message }}
 		</div>

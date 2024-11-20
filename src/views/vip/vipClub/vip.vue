@@ -30,8 +30,12 @@
 				>
 				<van-popover v-model:show="showPopover" theme="dark" :show-arrow="false">
 					<div class="p_10 popup">
-						体育/电竞场馆投注 1 {{ useUserStore().getUserInfo.platCurrencyName }} = {{ state.userVipInfo.sportExe }} 积分，其他场馆投注 1 {{ useUserStore().getUserInfo.platCurrencyName }} = 1 积分，
-						所有投注 均按当前汇率兑换为{{ useUserStore().getUserInfo.platCurrencyName }}结算
+						{{
+							$t(`vip['体育/电竞场馆投注 1 WTC = 2 积分，其他场馆投注 1 WTC = 1 积分，所有投注 均按当前汇率兑换为WTC结算']`, {
+								value1: useUserStore().getUserInfo.platCurrencyName,
+								value2: state.userVipInfo.sportExe,
+							})
+						}}
 					</div>
 					<template #reference>
 						<SvgIcon class="warning_icon" iconName="vip/warning" />
@@ -40,7 +44,7 @@
 			</div>
 			<!-- VIP进度条 -->
 			<Progress class="vip_progress" :userVipInfo="state.userVipInfo" :percentageShow="true" v-if="state.userVipInfo.vipGradeCode !== state.userVipInfo.vipGradeUp" />
-			<div v-else class="vip_level_progress2">恭喜！您已达到最高等级</div>
+			<div v-else class="vip_level_progress2">{{ $t(`vip['恭喜！您已达到最高等级']`) }}</div>
 		</div>
 
 		<div class="notify">
@@ -48,7 +52,7 @@
 			<span class="text">{{ $t(`vip["通过VIP升级获得专属定制化服务"]`) }}</span>
 
 			<van-popover v-model:show="showPopover2" theme="dark" :show-arrow="false">
-				<div class="p_10 popup">VIP专属客服可以给你提供帮助，欢迎随时联系我们</div>
+				<div class="p_10 popup">{{ $t(`vip['VIP专属客服可以给你提供帮助，欢迎随时联系我们']`) }}</div>
 				<template #reference>
 					<SvgIcon class="warning_icon" iconName="vip/warning" />
 				</template>
@@ -80,7 +84,7 @@
 						<span> {{ levelData[state.vipRank - 1]?.minVipGradeName }} - {{ levelData[state.vipRank - 1]?.maxVipGradeName }}</span>
 					</div>
 					<van-popover v-model:show="showPopover3" theme="dark" :show-arrow="false">
-						<div class="p_10 popup">包含之前等级的所有福利</div>
+						<div class="p_10 popup">{{ $t(`vip['包含之前等级的所有福利']`) }}</div>
 						<template #reference>
 							<SvgIcon class="warning_icon" iconName="vip/warning" />
 						</template>
@@ -104,14 +108,14 @@
 
 							<van-popover v-model:show="showPopover4" theme="dark" :show-arrow="false" v-if="item.weekSportFlag">
 								<div class="p_10 popup">
-									<p>·7天体育赌注：</p>
+									<p>·{{ $t(`vip['7天体育赌注']`) }}：</p>
 									<p v-for="i in state.userVipInfo.vipBenefit.find((item) => item.vipRankCode == state.vipRank).vipWeekSportVOS">
-										&nbsp;&nbsp;-投注{{ useUserStore().getUserInfo.platCurrencySymbol }} {{ i.weekSportMin }}
-										{{ i.weekSportMax > 0 ? `至 ${useUserStore().getUserInfo.platCurrencySymbol} ${i.weekSportMax}` : "或以上" }} = {{ useUserStore().getUserInfo.platCurrencySymbol }}
+										&nbsp;&nbsp;-{{ $t(`vip['投注']`) }}{{ useUserStore().getUserInfo.platCurrencySymbol }} {{ i.weekSportMin }}
+										{{ i.weekSportMax > 0 ? `至 ${useUserStore().getUserInfo.platCurrencySymbol} ${i.weekSportMax}` : $t(`vip['或以上']`) }} = {{ useUserStore().getUserInfo.platCurrencySymbol }}
 										{{ i.weekSportBonus }}
 									</p>
-									<p>&nbsp;&nbsp;-流水统计时间：周六00:00时～周五 23:59时（7天）</p>
-									<p>· 礼金发放时间：每周六</p>
+									<p>&nbsp;&nbsp;-{{ $t(`vip['流水统计时间：周六00:00时～周五 23:59时（7天）']`) }}</p>
+									<p>· {{ $t(`vip['礼金发放时间：每周六']`) }}</p>
 								</div>
 								<template #reference>
 									<SvgIcon class="warning_icon" iconName="vip/warning" />
