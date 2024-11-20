@@ -1,20 +1,20 @@
 <template>
 	<!-- 活动 -->
 	<div>
-		<VantNavBar :title="'福利中心'" @onClickLeft="router.back()" />
+		<VantNavBar :title="$t(`welfareCenter['福利中心']`)" @onClickLeft="router.back()" />
 	</div>
 
 	<div class="wrapper p_24">
 		<div class="flex">
 			<div class="mb_15 allTab color_T1">
-				<div class="tab" @click="changeTab('all')" :class="tabs.length == 0 ? 'active' : ''">全部</div>
+				<div class="tab" @click="changeTab('all')" :class="tabs.length == 0 ? 'active' : ''">{{ $t(`welfareCenter['全部']`) }}</div>
 			</div>
 			<div class="tabs mb_20">
 				<span v-for="(item, index) in tabs" class="tab color_T1 active" :class="activeTab === item ? 'active' : ''" :key="index">
 					{{ item.value }} <SvgIcon class="arrow ml_20 color_Theme" iconName="common/close_theme" size="24px" @click="deleteTab(item, index)" />
 				</span>
 			</div>
-			<div class="mb_15 filterBtn color_T1 fs_28" @click="showSheet = true">筛选<SvgIcon class="arrow ml_5" iconName="common/arrowDown" size="24px" /></div>
+			<div class="mb_15 filterBtn color_T1 fs_28" @click="showSheet = true">{{ $t(`welfareCenter['筛选']`) }}<SvgIcon class="arrow ml_5" iconName="common/arrowDown" size="24px" /></div>
 		</div>
 		<div class="content">
 			<div>
@@ -23,7 +23,7 @@
 					}}<SvgIcon class="arrow ml_5" iconName="common/arrowDown" size="24px" />
 				</div>
 				<div class="header color_TB mb_16 mt_16 fs_26 flex-start">
-					笔数：
+					{{ $t(`welfareCenter['笔数']`) }}：
 					<span>{{ pageData?.totalSize || 0.0 }}</span>
 					<img src="./image/line.png" alt="" class="line" />
 					<span>{{ pageData?.mainCurrencyTotal || 0.0 }} {{ pageData?.mainCurrency }}</span>
@@ -31,8 +31,8 @@
 					<span>{{ pageData?.platCurrencyTotal || 0.0 }} {{ pageData?.platCurrencyCode }}</span>
 				</div>
 				<div class="oneClickReceive color_TB flex mb_16 mt_16 fs_26">
-					有{{ pageData?.waitReceiveTotal }}个待领取福利
-					<div class="btn" @click="oneClickReceive" :class="pageData?.waitReceiveTotal ? '' : 'disabled'">一键领取</div>
+					{{ $t(`welfareCenter['有1个待领取福利']`, { value: pageData?.waitReceiveTotal }) }}
+					<div class="btn" @click="oneClickReceive" :class="pageData?.waitReceiveTotal ? '' : 'disabled'">{{ $t(`welfareCenter['一键领取']`) }}</div>
 				</div>
 			</div>
 			<van-list @load="getList" :immediate-check="false" :finished="finished">
@@ -50,7 +50,7 @@
 						<div class="color_TB fs_28">{{ item.amount }} {{ item.currencyCode }}</div>
 						<div class="color_Theme fs_20" v-if="item.receiveStatus == 0 && item.isPermanentValidity == 0" style="display: flex">
 							<CountdownTimer :endTime="new Date(new Date().getTime() + item.expiryTimeRemaining)"> </CountdownTimer>
-							<div class="color_T3" style="flex: 1">后过期</div>
+							<div class="color_T3" style="flex: 1">{{ $t(`welfareCenter['后过期']`) }}</div>
 						</div>
 						<!-- <div v-else="item.receiveStatus == 0" class="color_TB">长期有效</div> -->
 						<div class="btn fs_24" v-if="item.receiveStatus == 0" @click.stop="clickReceive(item)">{{ receiveStatus[item.receiveStatus] }}</div>
@@ -64,12 +64,12 @@
 		<van-action-sheet v-model:show="showSheet" @cancel="onCancelSheet">
 			<div class="flex title">
 				<div @click="onCancelSheet"><SvgIcon class="arrow" iconName="common/close" size="32px" /></div>
-				<div class="color_TB" @click="confirmSheet">确定</div>
+				<div class="color_TB" @click="confirmSheet">{{ $t(`welfareCenter['确定']`) }}</div>
 			</div>
 			<div class="mt_16 mb_16">
-				<div class="color_TB fs_32 mt_16 mb_16">类型筛选</div>
+				<div class="color_TB fs_32 mt_16 mb_16">{{ $t(`welfareCenter['类型筛选']`) }}</div>
 				<div class="group mb_32">
-					<div class="color_T1" :class="currentWelfareCenterRewardType == 'all' ? 'active' : ''" @click="currentWelfareCenterRewardType = 'all'">全部</div>
+					<div class="color_T1" :class="currentWelfareCenterRewardType == 'all' ? 'active' : ''" @click="currentWelfareCenterRewardType = 'all'">{{ $t(`welfareCenter['全部']`) }}</div>
 					<div
 						v-for="item in downBoxList?.welfareCenterRewardType"
 						class="color_T1"
@@ -81,9 +81,9 @@
 				</div>
 			</div>
 			<div class="mt_16 mb_16">
-				<div class="color_TB fs_32 mt_16 mb_16">状态筛选</div>
+				<div class="color_TB fs_32 mt_16 mb_16">{{ $t(`welfareCenter['状态筛选']`) }}</div>
 				<div class="group mb_32">
-					<div class="color_T1" :class="currentActivityReceiveStatus == 'all' ? 'active' : ''" @click="currentActivityReceiveStatus = 'all'">全部</div>
+					<div class="color_T1" :class="currentActivityReceiveStatus == 'all' ? 'active' : ''" @click="currentActivityReceiveStatus = 'all'">{{ $t(`welfareCenter['全部']`) }}</div>
 					<div v-for="item in downBoxList?.activityReceiveStatus" class="color_T1" @click="currentActivityReceiveStatus = item.code" :class="currentActivityReceiveStatus == item.code ? 'active' : ''">
 						{{ item.value }}
 					</div>
@@ -93,21 +93,21 @@
 		<van-action-sheet v-model:show="showDate" round position="bottom" @cancel="onCancelPicker">
 			<div class="flex dateTitle">
 				<div @click="onCancelPicker"><SvgIcon class="arrow" iconName="common/close" size="32px" /></div>
-				<div class="color_TB" @click="confirmPicker">确定</div>
+				<div class="color_TB" @click="confirmPicker">{{ $t(`welfareCenter['确定']`) }}</div>
 			</div>
-			<div class="color_TB fs_32 mb_16 mt_24">选择时间</div>
+			<div class="color_TB fs_32 mb_16 mt_24">{{ $t(`welfareCenter['选择时间']`) }}</div>
 			<div class="dateTabs">
 				<div v-for="(item, index) in dateNumLabel" class="tab" @click="changeDate(item, index)" :class="activeDate === index ? 'active' : ''">
 					{{ item.label }}
 				</div>
 			</div>
-			<div class="color_TB fs_32 mb_16 mt_32">筛选时间</div>
+			<div class="color_TB fs_32 mb_16 mt_32">{{ $t(`welfareCenter['筛选时间']`) }}</div>
 			<div class="flex timeBtn">
 				<span :class="activeDateBtn == 0 ? 'active' : ''" @click="changeDateBtn(0)">{{ cloneSelect.dateRange[0] }}</span>
-				至
+				{{ $t(`welfareCenter['至']`) }}
 				<span :class="activeDateBtn == 1 ? 'active' : ''" @click="changeDateBtn(1)"> {{ cloneSelect.dateRange[1] }}</span>
 			</div>
-			<div class="color_Hint fs_20 text-center mt_20 mb_20">当前系统支持查询最近90日的记录</div>
+			<div class="color_Hint fs_20 text-center mt_20 mb_20">{{ $t(`welfareCenter['当前系统支持查询最近90日的记录']`) }}</div>
 			<datePicker :columns="columns" ref="datePickerRef" @onChange="onChangeDate"></datePicker>
 		</van-action-sheet>
 	</div>
@@ -128,6 +128,8 @@ import type5 from "./image/type5.png";
 import type6 from "./image/type6.png";
 import dayjs from "dayjs";
 import { showToast } from "vant";
+import { i18n } from "/@/i18n/index";
+const $: any = i18n.global;
 const activeTab = ref(1);
 const tabs: any = ref([]);
 const currentWelfareCenterRewardType = ref("all");
@@ -178,26 +180,26 @@ const changeDate = (item, index) => {
 };
 const dateNumLabel = [
 	{
-		label: "今日",
+		label: $.t(`welfareCenter['今日']`),
 		value: 1,
 	},
 	{
-		label: "近7天",
+		label: $.t(`welfareCenter['近7天']`),
 		value: 7,
 	},
 	{
-		label: "近30天",
+		label: $.t(`welfareCenter['近30天']`),
 		value: 30,
 	},
 	{
-		label: "近90天",
+		label: $.t(`welfareCenter['近90天']`),
 		value: 90,
 	},
 ];
 const receiveStatus = {
-	0: "领取",
-	1: "已领取",
-	2: "已过期",
+	0: $.t(`welfareCenter['领取']`),
+	1: $.t(`welfareCenter['已领取']`),
+	2: $.t(`welfareCenter['已过期']`),
 };
 onMounted(() => {
 	getList();
@@ -214,7 +216,7 @@ const oneClickReceive = () => {
 		.oneClickReceive()
 		.then((res: any) => {
 			if (res.code === 10000) {
-				showToast("领取成功");
+				showToast($.t(`welfareCenter['领取成功']`));
 			}
 		})
 		.finally(() => {
@@ -231,7 +233,7 @@ const clickReceive = (item) => {
 		.clickReceive(params)
 		.then((res: any) => {
 			if (res.code === 10000) {
-				showToast("领取成功");
+				showToast($.t(`welfareCenter['领取成功']`));
 			}
 		})
 		.finally(() => {

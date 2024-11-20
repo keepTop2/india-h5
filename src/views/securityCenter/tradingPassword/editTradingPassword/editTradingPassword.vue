@@ -74,7 +74,7 @@
 			</div>
 		</form>
 	</div>
-	<ok-dialog v-model="showDialog" confirmText="去绑定" :confirm="confirm"> 您暂未绑定验证方式，请先绑定电子邮箱或手机号 </ok-dialog>
+	<ok-dialog v-model="showDialog" :confirmText="$t(`editTradingPassword['去绑定']`)" :confirm="confirm"> {{ $t('editTradingPassword["您暂未绑定验证方式，请先绑定电子邮箱或手机号"]') }} </ok-dialog>
 </template>
 
 <script setup lang="ts">

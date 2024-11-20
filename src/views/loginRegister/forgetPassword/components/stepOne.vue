@@ -1,7 +1,7 @@
 <template>
 	<div class="content">
 		<div class="from">
-			<div class="label"><span class="required">*</span>账号</div>
+			<div class="label"><span class="required">*</span>{{ $t(`forgetPassword['账号']`) }}</div>
 			<FormInput v-model="state.userAccount" type="text" :placeholder="$t(`forgetPassword['账户名']`)" :maxlength="11">
 				<template v-slot:left>
 					<SvgIcon class="pr_14" iconName="loginOrRegister/userAccount" size="32px" />

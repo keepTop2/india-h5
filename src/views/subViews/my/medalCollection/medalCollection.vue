@@ -124,6 +124,8 @@ import { useThemesStore } from "/@/store/modules/themes";
 import { useRouter } from "vue-router";
 import { useUserStore } from "/@/store/modules/user";
 import { showToast } from "vant";
+import { i18n } from "/@/i18n/index";
+const $: any = i18n.global;
 const router = useRouter();
 const themesStore = useThemesStore();
 const theme = computed(() => themesStore.themeName);
@@ -223,8 +225,13 @@ const onOpenMedalReward = async (item) => {
 
 		if (res.code == common.getInstance().ResCode.SUCCESS) {
 			// 成功领取后更新用户的勋章信息
-
-			showToast(`恭喜您获得${res.data.unlockMedalNum}个勋章，解锁宝箱，奖励 ${useUserStore().getUserInfo.platCurrencySymbol} ${res.data.rewardAmount} ，已发送到您的账户`);
+			showToast(
+				$.t(`medalCollection['恭喜您获得1个勋章，解锁宝箱，奖励 $ 1 ，已发送到您的账户']`, {
+					value1: res.data.unlockMedalNum,
+					value2: useUserStore().getUserInfo.platCurrencySymbol,
+					value3: res.data.rewardAmount,
+				})
+			);
 
 			await getUserMedalInfo();
 		}
