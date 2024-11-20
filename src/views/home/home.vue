@@ -1,7 +1,7 @@
 <template>
 	<div class="Home_Page bg_BG1">
 		<!-- 轮播图 -->
-		<Banner class="Home_Banner" />
+		<Banner class="Home_Banner" :bannerList="bannerList" />
 
 		<!-- 跑马灯 -->
 		<HorseRaceLamp />
@@ -99,6 +99,7 @@ import { useActivityStore } from "/@/store/modules/activity";
 import { computed, onActivated, onDeactivated, ref, watch } from "vue";
 import HorseRaceLamp from "/@/views/home/HorseRaceLamp/HorseRaceLamp.vue";
 import { useCollectGamesStore } from "/@/store/modules/collectGames";
+import { bannerApi } from "/@/api/bannerApi";
 const router = useRouter();
 const UserStore = useUserStore();
 const sportsInfoStore = useSportsInfoStore();
@@ -110,6 +111,7 @@ const hotGames = ref<GameInfoList[]>([]);
 const lobbyTopGame = ref<LobbyTopGame[]>();
 const PaymentVendorList = ref([]);
 const PartnerList = ref([]);
+const bannerList: any = ref([]);
 // 红包倒计时
 const showCountdown = ref(false);
 // 红包开始信息
@@ -148,7 +150,7 @@ onMounted(() => {
 	initSport();
 	// 初始化活动ws连接
 	initializeWebSocket();
-
+	getBannerList();
 	if (UserStore.token) {
 		UserStore.setIndexInfo();
 	}
@@ -330,10 +332,21 @@ const initializeWebSocket = async () => {
 		showCountdown.value = false;
 	});
 };
-// const destroyWS = () => {
-// 	pubsub.unsubscribe("/activity/redBagRain", () => {});
-// 	pubsub.unsubscribe("/activity/redBagRain/end", () => {});
-// };
+const getBannerList = () => {
+	if (useUserStore().token) {
+		bannerApi
+			.queryBannerList({
+				gameOneClassId: 0,
+			})
+			.then((res) => {
+				bannerList.value = res.data;
+			});
+	} else {
+		bannerApi.queryUnBannerList({}).then((res) => {
+			bannerList.value = [res.data];
+		});
+	}
+};
 </script>
 
 <style lang="scss" scoped>

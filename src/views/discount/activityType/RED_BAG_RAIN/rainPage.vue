@@ -294,7 +294,7 @@ const initReadyTime = () => {
 				addNewRedBag();
 			}
 		}, 150);
-		startCountdown(activityData.value.dropTime);
+		startCountdown(activityData.value.dropTime + 1);
 		clearTimeout(timer);
 	}, 3000);
 };

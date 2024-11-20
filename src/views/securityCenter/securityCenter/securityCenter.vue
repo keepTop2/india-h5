@@ -4,7 +4,6 @@
 	<div class="group">
 		<div class="cell" :class="{ 'van-haptics-feedback': !item.edit }" v-for="(item, index) in menuList" :key="index" @click.stop="onClickCell(item)">
 			<div class="label">{{ item.name }}</div>
-			<div v-if="item.edit" class="color_T1">{{ item.editText }}</div>
 			<div v-if="item.edit" class="value van-haptics-feedback" @click.stop="toPath(item.editPath)">{{ item.value }}</div>
 			<div v-else class="arrow">
 				<SvgIcon iconName="common/arrow" size="24px" />
@@ -151,7 +150,7 @@ const onClickLeft = () => {
 			font-weight: 400;
 		}
 		.value {
-			min-width: 160px;
+			min-width: 100px;
 			height: 50px;
 			display: flex;
 			align-items: center;

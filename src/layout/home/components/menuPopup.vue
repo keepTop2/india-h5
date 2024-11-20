@@ -306,7 +306,7 @@ onMounted(() => {
 		.menu_list {
 			display: grid;
 			gap: 8px;
-			padding: 40px 0px;
+			padding: 10px 0px;
 			.menu {
 				width: 100%;
 				height: 80px;
@@ -330,7 +330,7 @@ onMounted(() => {
 					}
 				}
 				.label {
-					margin-left: 16px;
+					margin-left: 24px;
 					@include themeify {
 						color: themed("TB");
 					}
@@ -398,6 +398,14 @@ onMounted(() => {
 					height: 80px;
 					padding-left: 60px;
 					border-radius: 0;
+				}
+				.menu {
+					@include themeify {
+						background: themed("BG1");
+					}
+					.label {
+						color: themed("T3");
+					}
 				}
 			}
 

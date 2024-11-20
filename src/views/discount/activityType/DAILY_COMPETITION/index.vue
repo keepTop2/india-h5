@@ -37,7 +37,7 @@
 						<img :src="userIcon" alt="" />
 						<div>
 							<h3 class="userName color_TB fw_600 fs_24">{{ currentData.previous?.userAccount }}</h3>
-							<span class="color_TB fs_22 fw_400">{{ $t('betting["奖金"]') }}</span>
+							<span class="color_TB1 fs_22 fw_400">{{ $t('betting["奖金"]') }}</span>
 							<span class="color_TB fs_20 flex fw_700">
 								<img class="size_20" :src="icon" alt="" /><span class="color_Wam-P1"> {{ currentData?.currencySymbol }}{{ Common.amountConversion(currentData.previous?.awardAmount) }}</span
 								><span></span> ({{ currentData.previous?.activityAmountPer }}%)
@@ -58,7 +58,6 @@
 						<p class="color_Hint fs30 fw_400 lh_40">{{ isStart ? (currentData.user?.ranking > 100 ? "100+" : currentData.user?.ranking || 0) : "--" }}</p>
 					</div>
 					<div class="rightLine"></div>
-					{{}}
 					<div class="userInfo_Bottom_right" style="text-align: center">
 						<h3 class="userName color_T3 fs_24 fw_500 lh_38">{{ $t('betting["投注金额"]') }}</h3>
 						<span class="fw_500 color_green-00-ff-47 fs_24"
@@ -66,8 +65,14 @@
 						>
 					</div>
 				</div>
-				<p class="color_T3 fs_20">
-					距离上榜还需 <span class="color_TB">{{ useUserStore().getUserInfo.currencySymbol }} {{ currentData.user?.lackBetAmount }}</span> {{ $t('betting["投注金额"]') }}
+				<p class="color_T3 fs_20" v-if="currentData.user?.userStatus == 3">
+					距离上榜还需 <span class="color_TB1">{{ useUserStore().getUserInfo.currencySymbol }} {{ currentData.user?.lackBetAmount }}</span> {{ $t('betting["投注金额"]') }}
+				</p>
+				<p class="color_T3 fs_20" v-if="currentData.user?.userStatus == 2">
+					距离上一名还需 <span class="color_TB1">{{ useUserStore().getUserInfo.currencySymbol }} {{ currentData.user?.lackBetAmount }}</span> {{ $t('betting["投注金额"]') }}
+				</p>
+				<p class="color_T3 fs_20" v-if="currentData.user?.userStatus == 1">
+					第二名还需 <span class="color_TB1">{{ useUserStore().getUserInfo.currencySymbol }} {{ currentData.user?.lackBetAmount }}</span> {{ $t('betting["投注金额"]') }}超于您
 				</p>
 			</div>
 
@@ -82,7 +87,7 @@
 				<!-- 日期和历史按钮 -->
 				<div class="color_T1 flex fs_24 date" @click="showPicker = true" v-if="isStart">
 					<div>
-						<button class="bg_Theme color_TB fs_24 fw_400" v-if="JSON.stringify(defaultDate) == JSON.stringify(Common.getLast30Days().defaultIndex)">{{ $t('betting["今天"]') }}</button>
+						<button class="bg_Theme fs_24 fw_400 color_TB1" v-if="JSON.stringify(defaultDate) == JSON.stringify(Common.getLast30Days().defaultIndex)">{{ $t('betting["今天"]') }}</button>
 						{{ defaultDate[0] + "/" + defaultDate[1] + "/" + defaultDate[2] }}
 					</div>
 					<SvgIcon @click="dialogShow = true" class="history size_32" iconName="common/history" />
@@ -110,15 +115,16 @@
 									{{ index + 1 }}
 								</span>
 							</div>
-							<div class="color_T1">{{ item.userAccount }}</div>
+							<div :class="item.specialShow ? 'color_TB1' : 'color_T1'">{{ item.userAccount }}</div>
 							<div class="color_TB">{{ item.betCurrencySymbol }} {{ item.betAmount }}</div>
 							<div class="color_TB">{{ userInfo.platCurrencySymbol }} {{ Common.amountConversion(item.awardAmount) }}</div>
 						</div>
 					</div>
 				</div>
+
 				<Nodata v-if="!isStart && tableData.length < 1"></Nodata>
 			</div>
-
+			<div class="color_T1 text-center mt_24">数据每5分钟更新</div>
 			<!-- 规则说明对话框 -->
 			<Dialog class="dialog" :visible="ruleShow" @close="ruleShow = false">
 				<template #title>
@@ -321,6 +327,22 @@ onBeforeUnmount(() => {
 		.active {
 			background: url("./images/table_active_bg.png") no-repeat;
 			background-size: 100% 100%;
+			.colorT1 {
+				@include themeify {
+					color: themed("TB1");
+				}
+			}
+			div {
+				@include themeify {
+					color: themed("TB1");
+				}
+
+				span {
+					@include themeify {
+						color: themed("TB1");
+					}
+				}
+			}
 		}
 	}
 }
