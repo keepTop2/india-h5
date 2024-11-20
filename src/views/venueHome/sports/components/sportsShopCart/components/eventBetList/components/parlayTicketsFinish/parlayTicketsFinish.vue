@@ -38,7 +38,7 @@
 
 			<div class="bet-details" v-for="(item, index) in props.data.currentCombos" :key="index">
 				<div class="bet-cell">
-					<span class="label">{{ SportsCommonFn.comboTypeNameMaps[item.comboType] }}</span>
+					<span class="label">{{ $.t(`sports['${SportsCommonFn.comboTypeNameMaps[item.comboType]}']`) }}</span>
 					<div>
 						<span class="label">{{ common.getInstance().formatFloat(item.stake) }}</span>
 						<span class="text">x{{ item.betCount }}</span>
