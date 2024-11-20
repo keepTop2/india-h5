@@ -106,7 +106,7 @@
 			display: flex;
 			align-items: center;
 			flex-direction: row;
-			justify-content: space-evenly;
+			justify-content: space-between;
 			@include themeify {
 				background: themed("BG4");
 				span {

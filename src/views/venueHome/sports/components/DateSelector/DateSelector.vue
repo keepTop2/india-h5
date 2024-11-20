@@ -4,7 +4,7 @@
 			<div class="date">{{ item.label }}</div>
 			<div class="date">{{ weekEnum[item.week] }}</div>
 		</div>
-		<div v-show="other" :class="['date_item', modelValue == '' && 'active']" :key="0" @click="changeDate('')">其他</div>
+		<div v-show="other" :class="['date_item', modelValue == '' && 'active']" :key="0" @click="changeDate('')">{{ $.t[`sports['其他']`] }}</div>
 	</div>
 </template>
 

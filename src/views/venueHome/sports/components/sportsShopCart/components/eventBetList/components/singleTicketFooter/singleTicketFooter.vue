@@ -34,7 +34,8 @@ import shopCartPubSub from "/@/views/venueHome/sports/hooks/shopCartPubSub";
 import { useSportsBetEventStore } from "/@/store/modules/sports/sportsBetData";
 import { useSportsBetInfoStore } from "/@/store/modules/sports/sportsBetInfo";
 import sportsApi from "/@/api/venueHome/sports";
-
+import { i18n } from "/@/i18n/index";
+const $: any = i18n.global;
 const sportsBetEvent = useSportsBetEventStore();
 const sportsBetInfo = useSportsBetInfoStore();
 const betNumberShow = computed(() => shopCartPubSub.getBetNumberShow());
@@ -50,15 +51,15 @@ const onBet = () => {
 		return;
 	}
 	if (stake.value == "") {
-		showToast("请输入投注金额");
+		showToast($.t(`sports['请输入投注金额']`));
 		return;
 	}
 	if (stake.value < sportsBetInfo.singleTicketInfo.minBet) {
-		showToast("投注金额未达到最低限额");
+		showToast($.t(`sports['投注金额未达到最低限额']`));
 		return;
 	}
 	if (stake.value > sportsBetInfo.balance) {
-		showToast("余额不足，请先充值");
+		showToast($.t(`sports['余额不足，请先充值']`));
 		return;
 	}
 	// 单关投注

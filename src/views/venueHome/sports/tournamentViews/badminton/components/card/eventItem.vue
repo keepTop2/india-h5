@@ -70,9 +70,9 @@
 								{{ event.badmintonInfo.homeGameScore[index] }}-{{ event.badmintonInfo.awayGameScore[index] }}
 							</div>
 						</div>
-						<span class="ml_8">{{ event.gameSession == 3 ? "3局2胜" : "5局3胜" }}</span>
+						<span class="ml_8">{{ event.gameSession == 3 ? $.t(`sports["3局2胜"]`) : $.t(`sports["5局3胜"]`) }}</span>
 						<template v-if="SportsCommonFn.isStartMatch(event.globalShowTime)">
-							<span class="ml_4">总分</span>
+							<span class="ml_4">{{ $.t(`sports["总分"]`) }}</span>
 							<span class="ml_2 theme">{{ event.badmintonInfo.homeGameScore.flat().reduce((a, b) => a + b, 0) }}-{{ event.badmintonInfo.awayGameScore.flat().reduce((a, b) => a + b, 0) }}</span>
 							<span class="theme">({{ event.badmintonInfo.homeGameScore.flat().reduce((a, b) => a + b, 0) + event.badmintonInfo.awayGameScore.flat().reduce((a, b) => a + b, 0) }})</span>
 						</template>
