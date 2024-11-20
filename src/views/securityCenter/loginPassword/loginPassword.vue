@@ -9,7 +9,7 @@
 				v-model="state.oldPassword"
 				:type="eyeShow ? 'password' : 'text'"
 				:maxlength="16"
-				:placeholder="$t(`loginPassword['旧密码']`)"
+				:placeholder="$t(`loginPassword['请输入旧密码']`)"
 				:errorBorder="!isOldPasswordValid && state.oldPassword !== '' ? true : false"
 			>
 				<template v-slot:right>
@@ -28,7 +28,7 @@
 				v-model="state.newPassword"
 				:type="eyeShow1 ? 'password' : 'text'"
 				:maxlength="16"
-				:placeholder="$t(`loginPassword['新密码']`)"
+				:placeholder="$t(`loginPassword['请输入新密码']`)"
 				:errorBorder="!isPasswordValid && state.newPassword !== '' ? true : false"
 			>
 				<template v-slot:right>
@@ -47,7 +47,7 @@
 				v-model="state.confirmPassword"
 				:type="eyeShow2 ? 'password' : 'text'"
 				:maxlength="16"
-				:placeholder="$t(`loginPassword['确认密码']`)"
+				:placeholder="$t(`loginPassword['请输入新密码']`)"
 				:errorBorder="!isConfirmPasswordValid ? true : false"
 			>
 				<template v-slot:right>

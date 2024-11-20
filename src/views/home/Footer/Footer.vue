@@ -12,7 +12,7 @@ import { TutorialApi } from "/@/api/helpCenter";
 const data = ref("");
 const getData = () => {
 	TutorialApi.getHelpCenterConfigList().then((res) => {
-		data.value = res.data.find((item) => item.code == 8)?.valueDetail;
+		data.value = res.data?.find((item) => item.code == 8)?.valueDetail;
 	});
 };
 onMounted(() => {

@@ -12,13 +12,14 @@
 				:is-open="index == currentOpenIndex ? true : false"
 				:hasOneOpen="hasOneOpen"
 				:index="index"
+				@updateOpen="updateOpen"
 				:class="index == currentOpenIndex ? 'isOpen' : ''"
 			>
 				<template #header>
 					<div class="content_header flex">
 						<VantLazyImg :src="item.icon"></VantLazyImg>
 						<span class="ellipsis" style="text-align: left; flex: 1"> {{ item.name }}</span>
-						<span><SvgIcon :iconName="index == currentOpenIndex ? 'common/arrowUp' : 'common/arrowDown'" alt="" size="30px" /></span>
+						<span v-if="item.subset"><SvgIcon :iconName="index == currentOpenIndex ? 'common/arrowUp' : 'common/arrowDown'" alt="" size="30px" /></span>
 					</div>
 				</template>
 				<template #content>
@@ -62,6 +63,19 @@ const showTutorialPreLayer = () => {
 	TutorialApi.showTutorialPreLayer().then((res) => {
 		dataList.value = res.data;
 	});
+};
+const updateOpen = (index) => {
+	if (!dataList.value[index].id) {
+		router.push({
+			path: "/helpCenter/details",
+			query: {
+				code: dataList.value[index].code,
+				className: dataList.value[index].name,
+			},
+		});
+	} else {
+		currentOpenIndex.value = index;
+	}
 };
 </script>
 
