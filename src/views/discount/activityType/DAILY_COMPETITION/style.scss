@@ -115,6 +115,7 @@
 						height: 1px;
 						width: 221px;
 						float: right;
+						margin-right: 8px;
 						background-color: themed("TB");
 					}
 					.jiao {
@@ -215,11 +216,11 @@
 					justify-content: space-around;
 					text-align: center;
 					align-items: center;
-					border-bottom: 1px solid themed("Line");
+					border-bottom: 1px solid themed("T2");
 					.rightLine {
 						height: 80%;
 						width: 1px;
-						background-color: themed("Line");
+						background-color: themed("T2");
 					}
 					.userInfo_Bottom_left {
 						width: 200px;

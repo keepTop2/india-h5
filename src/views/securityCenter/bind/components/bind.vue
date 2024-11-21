@@ -2,7 +2,7 @@
 	<form class="form">
 		<!-- 邮箱 -->
 		<div v-if="route.params.type == 'email'">
-			<span class="title">{{ $t('bindPhone["邮箱账号"]') }}</span>
+			<span class="title">{{ route.query.revise ? $t('bindPhone["新电子邮箱账号"]') : $t('bindPhone["电子邮箱账号"]') }}</span>
 			<FormInput v-model="state.email" type="text" :placeholder="$t(`forgetPassword['请输入电子邮箱']`)" :errorBorder="!isEmailValid && state.email !== '' ? true : false">
 				<template v-slot:right>
 					<SvgIcon v-if="state.email" class="clearIcon" iconName="loginOrRegister/clear" @click="state.email = ''" />
@@ -15,7 +15,7 @@
 
 		<!-- 手机号码 -->
 		<div v-if="route.params.type == 'phone'">
-			<span class="title">{{ $t('bindPhone["手机号"]') }}</span>
+			<span class="title">{{ route.query.revise ? $t('bindPhone["新手机号"]') : $t('bindPhone["手机号"]') }}</span>
 			<div class="phone" :class="{ 'form-input-error': !isPhoneValid && state.phone !== '' ? true : false }">
 				<div class="area_code" @click="showAreaCode = true">
 					<span>+{{ state.areaCode }}</span
@@ -33,7 +33,7 @@
 		</div>
 
 		<span class="title">{{ $t('bindPhone["验证码"]') }}</span>
-		<FormInput v-model="state.verifyCode" type="text" :placeholder="$t(`common['验证码']`)" :maxlength="6">
+		<FormInput v-model="state.verifyCode" type="text" :maxlength="6">
 			<template v-slot:right>
 				<CaptchaButton ref="captchaButton" :disabled="captchaDisabled" @onCaptcha="onCaptcha" />
 			</template>
@@ -180,8 +180,7 @@ const selectAreaCode = (item, i) => {
 <style scoped lang="scss">
 .form {
 	padding: 40px 55px;
-
-	.title {
+	1 .title {
 		@include themeify {
 			color: themed("T1");
 		}

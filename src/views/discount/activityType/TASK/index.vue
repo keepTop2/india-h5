@@ -4,8 +4,8 @@
 		<VantLazyImg :src="image" class="main-image" />
 		<div class="content">
 			<div class="rewardbg">
-				<div class="color_TB fs_28">{{ $t(`discount['累计奖励']`) }}:</div>
-				<div class="color_Hint">{{ detailData?.platCurrencySymbol }} {{ detailData?.totalAmount }}</div>
+				<div class="color_TB1 fs_28">{{ $t(`discount['累计奖励']`) }}:</div>
+				<div class="color_Hint fs_21">{{ detailData?.platCurrencySymbol }} {{ detailData?.totalAmount }}</div>
 			</div>
 
 			<div class="tabs">
@@ -19,11 +19,11 @@
 						<VantLazyImg :src="item.taskPictureI18nCodeFileUrl" alt="" />
 					</div>
 					<div>
-						<div class="fs_24 color_TB fw_500">{{ item.taskNameI18nCode }}</div>
+						<div class="fs_24 color_TB1 fw_500">{{ item.taskNameI18nCode }}</div>
 						<div class="progress">
 							<div class="value" :style="{ width: calculatePercentage(item.achieveAmount, item.minBetAmount) + '%' }"></div>
 						</div>
-						<div class="fs_18 color_TB bottom">
+						<div class="fs_18 color_TB1 bottom">
 							<span
 								>{{ $t(`discount['奖励']`) }}：<span class="color_Hint"> {{ item.platCurrencySymbol }} {{ item.rewardAmount }}</span></span
 							>
@@ -47,11 +47,11 @@
 						<VantLazyImg :src="item.taskPictureI18nCodeFileUrl" alt="" />
 					</div>
 					<div>
-						<div class="fs_24 color_TB fw_500">{{ item.taskNameI18nCode }}</div>
+						<div class="fs_24 color_TB1 fw_500">{{ item.taskNameI18nCode }}</div>
 						<div class="progress">
 							<div class="value" :style="{ width: calculatePercentage(item.achieveAmount, item.minBetAmount) + '%' }"></div>
 						</div>
-						<div class="fs_18 color_TB bottom">
+						<div class="fs_18 color_TB1 bottom">
 							<span
 								>{{ $t(`discount['奖励']`) }}：<span class="color_Hint"> {{ item.platCurrencySymbol }} {{ item.rewardAmount }}</span></span
 							>
@@ -78,9 +78,9 @@
 						<VantLazyImg :src="item.taskPictureI18nCodeFileUrl" alt="" />
 					</div>
 					<div>
-						<div class="fs_24 color_TB fw_500">{{ item.taskNameI18nCode }}</div>
+						<div class="fs_24 color_TB1 fw_500">{{ item.taskNameI18nCode }}</div>
 						<div class="fs_18 color_TB htmlDesc ellipsis" v-html="item.taskDescriptionI18nCode"></div>
-						<div class="fs_18 color_TB bottom">
+						<div class="fs_18 color_TB1 bottom">
 							<span
 								>{{ $t(`discount['奖励']`) }}：<span class="color_Hint"> {{ item.platCurrencySymbol }} {{ item.rewardAmount }}</span></span
 							>
@@ -245,7 +245,7 @@ const calculatePercentage = (part, whole) => {
 			line-height: 72px;
 
 			@include themeify {
-				color: themed("TB");
+				color: themed("T1");
 			}
 			.tab {
 				flex: 1;
@@ -264,13 +264,14 @@ const calculatePercentage = (part, whole) => {
 				@include themeify {
 					border-radius: 24px 24px 0px 0px;
 					background: themed("Theme");
+					color: themed("TB1");
 				}
 			}
 			.tab.active::after {
 				content: ""; /* 必须设置内容为 "" */
 				position: absolute; /* 绝对定位 */
 				left: 50%; /* 水平居中 */
-				bottom: -12px; /* 距离容器底部 */
+				bottom: -8px; /* 距离容器底部 */
 				transform: translateX(-50%); /* 水平居中 */
 				width: 0;
 				height: 0;
@@ -346,12 +347,12 @@ const calculatePercentage = (part, whole) => {
 			.btnType {
 				width: 120px;
 				padding: 10px;
-				height: 42px;
+				height: 44px;
 				line-height: 42px;
 				text-align: center;
 				font-size: 20px;
 				@include themeify {
-					color: themed("TB");
+					color: themed("TB1");
 				}
 				border-radius: 6px 6px 5px 5px;
 			}
@@ -385,7 +386,7 @@ const calculatePercentage = (part, whole) => {
 			background-size: 100% 100%;
 		}
 		.card.email {
-			background: url("./image/cardBg3.png") no-repeat;
+			background: url("./image/cardBg5.png") no-repeat;
 			background-size: 100% 100%;
 		}
 		.card.phone {

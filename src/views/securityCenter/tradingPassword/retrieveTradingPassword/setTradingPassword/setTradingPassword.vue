@@ -2,13 +2,7 @@
 	<form class="form">
 		<!-- 新交易密码 -->
 		<span class="title">{{ $t('setTradingPassword["交易密码"]') }}</span>
-		<FormInput
-			v-model="state.newPassword"
-			:type="eyeShow ? 'password' : 'text'"
-			:maxlength="16"
-			:placeholder="$t(`setTradingPassword['交易密码']`)"
-			:errorBorder="!isPasswordValid && state.newPassword !== ''"
-		>
+		<FormInput v-model="state.newPassword" :type="eyeShow ? 'password' : 'text'" :maxlength="16" :errorBorder="!isPasswordValid && state.newPassword !== ''">
 			<template v-slot:right>
 				<div class="right">
 					<SvgIcon v-if="state.newPassword" class="clearIcon mr_20" iconName="loginOrRegister/clear" @click="state.newPassword = ''" size="30px" />
@@ -22,13 +16,7 @@
 
 		<!--  确认新交易密码 -->
 		<span class="title">{{ $t('setTradingPassword["确认交易密码"]') }}</span>
-		<FormInput
-			v-model="state.confirmPassword"
-			:type="eyeShow2 ? 'password' : 'text'"
-			:maxlength="16"
-			:placeholder="$t(`setTradingPassword['确认交易密码']`)"
-			:errorBorder="!isConfirmPasswordValid && state.confirmPassword !== ''"
-		>
+		<FormInput v-model="state.confirmPassword" :type="eyeShow2 ? 'password' : 'text'" :maxlength="16" :errorBorder="!isConfirmPasswordValid && state.confirmPassword !== ''">
 			<template v-slot:right>
 				<div class="right">
 					<SvgIcon v-if="state.confirmPassword" class="clearIcon mr_20" iconName="loginOrRegister/clear" @click="state.confirmPassword = ''" size="30px" />
@@ -59,9 +47,9 @@
 		</div>
 
 		<span class="title">{{ $t('bindPhone["验证码"]') }}</span>
-		<FormInput v-model="state.verifyCode" type="text" :placeholder="$t(`common['验证码']`)">
+		<FormInput v-model="state.verifyCode" type="text">
 			<template v-slot:right>
-				<CaptchaButton ref="captchaButton" :disabled="captchaDisabled" @onCaptcha="onCaptcha" />
+				<CaptchaButton ref="captchaButton" :disabled="captchaDisabled || !isConfirmPasswordValid || !isPasswordValid" @onCaptcha="onCaptcha" />
 			</template>
 		</FormInput>
 

@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="navBar_conatiner">
-			<VantTabs v-model="value" :swipeThreshold="3" @clickTab="onChangeNavBar" shrink>
+			<VantTabs v-model="value" :swipeThreshold="3" @clickTab="onChangeNavBar" shrink :class="halfTab ? 'halfTab' : ''">
 				<template #van-tab>
 					<van-tab v-for="(item, index) in tabList" :key="index" :title="item.value" :name="item.code" />
 				</template>
@@ -19,6 +19,7 @@ const props = withDefaults(
 	defineProps<{
 		tabList?: Array<any>;
 		active?: string | number;
+		halfTab?: Boolean;
 	}>(),
 	{
 		tabList: () => [],
@@ -57,7 +58,9 @@ const onChangeNavBar = () => {
 		background: themed("BG1");
 	}
 }
-
+:deep(.halfTab .van-tab) {
+	width: 50%;
+}
 :deep(.van-tab) {
 	@include themeify {
 		color: themed("T1");

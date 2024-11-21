@@ -21,7 +21,7 @@
 				ref="SpinRef"
 			/>
 
-			<div class="vipLevel color_TB1 fw_600" :class="'vip' + currentTab * 1">{{ activityData?.vipRankConfig?.[currentTab - 1]?.minVipGradeName }}{{ $t(`discount['级或以上']`) }}</div>
+			<div class="vipLevel color_TB1 fw_400" :class="'vip' + currentTab * 1">{{ activityData?.vipRankConfig?.[currentTab - 1]?.minVipGradeName }}{{ $t(`discount['级或以上']`) }}</div>
 		</div>
 		<div class="remaining_times_bg" :style="{ background: `url(${Common.getThemeImg('remaining_times_bg.png')})  no-repeat  `, backgroundSize: '100% 100%' }">
 			{{ $t('home["剩余抽奖次数"]') }}：{{ activityData?.balanceCount || 0 }}

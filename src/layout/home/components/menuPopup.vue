@@ -255,9 +255,8 @@ onMounted(() => {
 		width: 100%;
 		margin: 0 0 20px;
 		@include themeify {
-			background: themed("T1");
+			background: themed("Line");
 		}
-		transform: scale(1, 0.2);
 	}
 
 	.menu_content {

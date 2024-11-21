@@ -148,6 +148,7 @@ const onClickRight = () => {
 :deep(.van-nav-bar__title) {
 	color: unset;
 	font-size: 32px;
+	font-weight: 600;
 }
 
 :deep(.van-nav-bar__left) {

@@ -78,6 +78,8 @@ const close = () => {
 .close {
 	width: 48px;
 	height: 48px;
+	position: absolute;
+	right: 18px;
 }
 
 .dialog-content {
@@ -96,9 +98,10 @@ const close = () => {
 	@include themeify {
 		border-bottom: 1px solid themed("Line");
 	}
-	justify-content: space-between;
+	justify-content: center;
 	align-items: center;
 	margin-bottom: 10px;
+	position: relative;
 	height: 82px;
 }
 @keyframes fade-in {

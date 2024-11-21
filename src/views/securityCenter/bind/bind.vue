@@ -20,7 +20,7 @@ const navBarTitle = computed(() => {
 	if (type === "phone") {
 		return isEdit ? $.t("VantNavBar['修改手机号']") : $.t("VantNavBar['绑定手机号']");
 	} else if (type === "email") {
-		return isEdit ? $.t("VantNavBar['修改邮箱']") : $.t("VantNavBar['绑定邮箱']");
+		return isEdit ? $.t("VantNavBar['修改电子邮箱']") : $.t("VantNavBar['绑定电子邮箱']");
 	}
 	return "";
 });

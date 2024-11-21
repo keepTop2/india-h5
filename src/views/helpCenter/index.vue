@@ -1,7 +1,7 @@
 <template>
 	<!-- 活动 -->
 	<div>
-		<VantNavBar :title="$t(`home['帮助中心']`)" @onClickLeft="router.back()" />
+		<VantNavBar :title="$t(`common['帮助中心']`)" @onClickLeft="router.back()" />
 	</div>
 
 	<div class="wrapper p_24">
