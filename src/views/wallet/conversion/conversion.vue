@@ -1,6 +1,6 @@
 <template>
 	<div class="content">
-		<VantNavBar title="平台币转换" @on-click-left="onClickLeft" :leftArrow="true" />
+		<VantNavBar :title="$t('transfer[平台币转换]')" @on-click-left="onClickLeft" :leftArrow="true" />
 		<div class="price_box">
 			<div class="top">
 				<div class="title">

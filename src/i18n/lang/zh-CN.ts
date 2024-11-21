@@ -864,6 +864,7 @@ export const lang = {
 		汇率: "汇率",
 		一键转换: "一键转换",
 		转换成功: "转换成功",
+		平台币转换: "平台币转换",
 	},
 	lottery,
 	welfareCenter: {
