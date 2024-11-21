@@ -180,7 +180,7 @@ const selectAreaCode = (item, i) => {
 <style scoped lang="scss">
 .form {
 	padding: 40px 55px;
-	1 .title {
+	.title {
 		@include themeify {
 			color: themed("T1");
 		}
