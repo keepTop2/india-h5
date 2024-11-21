@@ -56,7 +56,7 @@
 			</div>
 			<div class="match-status">
 				<span v-if="match.winlossStatusText" :class="match.winlossStatus == 1 ? 'winColor' : match.winlossStatus == 0 ? 'winColor' : 'loseColor'">{{ match.winlossStatusText }}</span>
-				<span v-else class="Settled">取消</span>
+				<span v-else class="Settled">{{ $t('records["取消"]') }}</span>
 			</div>
 		</div>
 	</div>

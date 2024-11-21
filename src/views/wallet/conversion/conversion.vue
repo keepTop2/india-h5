@@ -49,7 +49,8 @@ import { showToast } from "vant";
 import { walletApi } from "/@/api/wallet";
 import Common from "/@/utils/common";
 import router from "/@/router";
-
+import { i18n } from "/@/i18n";
+const $: any = i18n.global;
 interface userinfoType {
 	userAccount: string;
 	siteCode: string;
@@ -154,7 +155,7 @@ const conversionHandler = async () => {
 
 	await getUserPlatformBalance();
 
-	showToast("转换成功");
+	showToast($.t("transfer['转换成功']"));
 };
 </script>
 

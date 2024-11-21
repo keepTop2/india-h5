@@ -24,7 +24,7 @@
 										{{ item.messageContentI18nCode }}
 									</div>
 									<div v-if="showToggleButton[index]" class="unfold" @click.stop="toggleText(index)">
-										{{ isCollapsed[index] ? "展开" : "收起" }}
+										{{ isCollapsed[index] ? $t("my['收起']") : $t("my['展开']") }}
 										<van-icon name="arrow-up" class="icon" :class="isCollapsed[index] && 'icon-collapsed'" />
 									</div>
 								</div>
@@ -58,7 +58,7 @@
 										{{ item.messageContentI18nCode }}
 									</div>
 									<div v-if="showToggleButton[index]" class="unfold" @click.stop="toggleText(index)">
-										{{ isCollapsed[index] ? "展开" : "收起" }}
+										{{ isCollapsed[index] ? $t("my['收起']") : $t("my['展开']") }}
 										<van-icon name="arrow-up" class="icon" :class="isCollapsed[index] && 'icon-collapsed'" />
 									</div>
 								</div>
@@ -113,6 +113,8 @@ import NoData from "/@/views/subViews/my/messageCenter/components/noData.vue";
 import messageApi from "/@/api/message";
 import { Message } from "./type";
 import { showToast } from "vant";
+import { i18n } from "/@/i18n";
+const $: any = i18n.global;
 
 const state = reactive({
 	list: [] as any,
@@ -215,7 +217,7 @@ const msgDelete = async (row) => {
 		1
 	);
 	// refresh();
-	showToast("删除成功");
+	showToast($.t("my['删除成功']"));
 };
 
 // 刷新
@@ -288,7 +290,7 @@ const toDetail = async (item) => {
 
 			.van-tab {
 				@include themeify {
-					color: themed("T1"); 
+					color: themed("T1");
 					background-color: themed("BG3");
 				}
 
@@ -347,8 +349,8 @@ const toDetail = async (item) => {
 				font-weight: 400;
 
 				@include themeify {
-					background-color: themed("Theme") !important;	
-					color: themed("TB"); 
+					background-color: themed("Theme") !important;
+					color: themed("TB");
 				}
 			}
 

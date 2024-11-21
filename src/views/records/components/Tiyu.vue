@@ -24,8 +24,8 @@
 			</div>
 		</div>
 		<div class="bet-info">
-			<div class="bet-item">
-				<span class="label">{{ $t('records["投注内容"]') }}：</span>
+			<div v-if="item.eventInfo !== $t('records.串关')" class="bet-item">
+				<span class="label">{{ $t("records.投注内容") }}：</span>
 				<span class="value">
 					<!-- <span class="item-nation">ColorasddColorasdd</span> -->
 					{{ item.betContent }} {{ item.odds }}
@@ -62,7 +62,7 @@
 			</div>
 			<div class="match-status">
 				<span v-if="match.winlossStatusText" :class="match.winlossStatus == 1 ? 'winColor' : match.winlossStatus == 0 ? 'winColor' : 'loseColor'">{{ match.winlossStatusText }}</span>
-				<span v-else class="Settled">取消</span>
+				<span v-else class="Settled">{{ $t('records["取消"]') }}</span>
 			</div>
 		</div>
 	</div>
