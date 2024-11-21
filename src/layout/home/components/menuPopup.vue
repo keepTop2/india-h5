@@ -255,9 +255,8 @@ onMounted(() => {
 		width: 100%;
 		margin: 0 0 20px;
 		@include themeify {
-			background: themed("T1");
+			background: themed("Line");
 		}
-		transform: scale(1, 0.2);
 	}
 
 	.menu_content {
@@ -313,7 +312,7 @@ onMounted(() => {
 				border-radius: 8px;
 				display: flex;
 				align-items: center;
-				padding: 20px 40px;
+				padding: 20px 26px;
 				flex-wrap: wrap;
 				box-sizing: border-box;
 				@include themeify {

@@ -5,13 +5,7 @@
 		<form class="form">
 			<!-- 原交易密码 -->
 			<span class="title">{{ $t('editTradingPassword["原交易密码"]') }}</span>
-			<FormInput
-				v-model="state.oldPassword"
-				:type="eyeShow ? 'password' : 'text'"
-				:maxlength="6"
-				:placeholder="$t(`editTradingPassword['原交易密码']`)"
-				:errorBorder="!isOldPasswordValid && state.oldPassword !== ''"
-			>
+			<FormInput v-model="state.oldPassword" :type="eyeShow ? 'password' : 'text'" :maxlength="6" :errorBorder="!isOldPasswordValid && state.oldPassword !== ''">
 				<template v-slot:right>
 					<div class="right">
 						<SvgIcon v-if="state.oldPassword" class="clearIcon" iconName="loginOrRegister/clear" @click="state.oldPassword = ''" />
@@ -25,13 +19,7 @@
 
 			<!-- 新交易密码 -->
 			<span class="title">{{ $t('editTradingPassword["新交易密码"]') }}</span>
-			<FormInput
-				v-model="state.newPassword"
-				:type="eyeShow2 ? 'password' : 'text'"
-				:maxlength="6"
-				:placeholder="$t(`editTradingPassword['新交易密码']`)"
-				:errorBorder="(!isNewPasswordValid || isSameAsOldPassword) && state.newPassword !== ''"
-			>
+			<FormInput v-model="state.newPassword" :type="eyeShow2 ? 'password' : 'text'" :maxlength="6" :errorBorder="(!isNewPasswordValid || isSameAsOldPassword) && state.newPassword !== ''">
 				<template v-slot:right>
 					<div class="right">
 						<SvgIcon v-if="state.newPassword" class="clearIcon" iconName="loginOrRegister/clear" @click="state.newPassword = ''" />
@@ -46,13 +34,7 @@
 
 			<!-- 确认交易密码 -->
 			<span class="title">{{ $t('editTradingPassword["确认交易密码"]') }}</span>
-			<FormInput
-				v-model="state.confirmPassword"
-				:type="eyeShow3 ? 'password' : 'text'"
-				:maxlength="6"
-				:placeholder="$t(`editTradingPassword['确认交易密码']`)"
-				:errorBorder="!isConfirmPasswordValid && state.confirmPassword !== ''"
-			>
+			<FormInput v-model="state.confirmPassword" :type="eyeShow3 ? 'password' : 'text'" :maxlength="6" :errorBorder="!isConfirmPasswordValid && state.confirmPassword !== ''">
 				<template v-slot:right>
 					<div class="right">
 						<SvgIcon v-if="state.confirmPassword" class="clearIcon" iconName="loginOrRegister/clear" @click="state.confirmPassword = ''" />
@@ -218,7 +200,7 @@ const confirm = () => {
 
 		span {
 			@include themeify {
-				color: themed("Theme");
+				color: themed("F2");
 			}
 		}
 	}

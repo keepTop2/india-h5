@@ -50,7 +50,7 @@ const menuList = ref([
 		editText: "",
 	},
 	{
-		name: $.t("securityCenter['邮箱']"),
+		name: $.t("securityCenter['电子邮箱']"),
 		value: $.t("securityCenter['修改']"),
 		path: "/bind/email",
 		editPath: "/editContactDetails/email",
@@ -99,7 +99,7 @@ const toPath = (path) => {
 };
 
 const onClickLeft = () => {
-	router.go(-1);
+	router.push("/my");
 };
 </script>
 

@@ -1,7 +1,7 @@
 <template>
 	<!-- 活动 -->
 	<div>
-		<VantNavBar :title="$t(`home['帮助中心']`)" @onClickLeft="router.back()" />
+		<VantNavBar :title="$t(`common['帮助中心']`)" @onClickLeft="router.back()" />
 	</div>
 
 	<div class="wrapper p_24">
@@ -17,7 +17,11 @@
 			>
 				<template #header>
 					<div class="content_header flex">
-						<VantLazyImg :src="item.icon"></VantLazyImg>
+						<VantLazyImg src="/@/assets/theme/common/helpcenter1.svg" v-if="item.code == 1"></VantLazyImg>
+						<VantLazyImg src="/@/assets/theme/common/helpcenter2.svg" v-else-if="item.code == 3"></VantLazyImg>
+						<VantLazyImg src="/@/assets/theme/common/helpcenter3.svg" v-else-if="item.code == 4"></VantLazyImg>
+						<VantLazyImg src="/@/assets/theme/common/helpcenter4.svg" v-else-if="item.code == 5"></VantLazyImg>
+						<VantLazyImg :src="item.icon" v-else></VantLazyImg>
 						<span class="ellipsis" style="text-align: left; flex: 1"> {{ item.name }}</span>
 						<span v-if="item.subset"><SvgIcon :iconName="index == currentOpenIndex ? 'common/arrowUp' : 'common/arrowDown'" alt="" size="30px" /></span>
 					</div>

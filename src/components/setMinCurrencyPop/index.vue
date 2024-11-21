@@ -8,6 +8,19 @@
 				<div class="color_TB fs_32">{{ $t(`common['选择主货币']`) }}</div>
 				<div></div>
 			</div>
+
+			<div class="search">
+				<SearchInput placeholder="搜索" v-model="searchValue">
+					<!-- 前插槽：左侧图标 -->
+					<template #prefix>
+						<svg-icon :iconName="searchValue ? 'common/search' : 'common/searchd'" size="32px"></svg-icon>
+					</template>
+					<!-- 后插槽：右侧图标 -->
+					<template #suffix>
+						<svg-icon iconName="common/close" size="32px"></svg-icon>
+					</template>
+				</SearchInput>
+			</div>
 			<div class="langList">
 				<div v-for="item in filterSearch" class="langItem flex" :class="currentActiveLang === item.code ? ' active' : ''" @click="setActive(item)">
 					<div class="flex">{{ item.currencyNameI18 }}/{{ item.currencyCode }}</div>
@@ -15,6 +28,7 @@
 						<svg-icon :iconName="currency.currencyCode === item.currencyCode ? 'common/circle_theme' : 'common/circle'" size="30px"></svg-icon>
 					</div>
 				</div>
+				<div v-if="searchValue && filterSearch.length < 1" class="mt_67 text-center">{{ $t(`common['暂不支持此货币']`) }}</div>
 			</div>
 		</div>
 	</van-action-sheet>
@@ -69,15 +83,11 @@ const getCurrencyList = async () => {
 	}
 };
 const filterSearch: any = computed(() => {
-	// 获取输入框中的搜索值，并将其转换为小写
-	const searchValue = state.value.toLowerCase();
-	// 过滤 currencyList 数组，返回包含搜索值的对象
+	const value = searchValue.value.toLowerCase();
 	return state.currencyList.filter((item: any) => {
-		// 检查 item 的 code 属性是否包含搜索值（忽略大小写）
-		// 或者 item 的 value 属性是否包含搜索值（忽略大小写）
 		return (
-			item.currencyCode?.toLowerCase().includes(searchValue) || // 如果 code 中包含搜索值，返回 true
-			item.currencyNameI18?.toLowerCase().includes(searchValue) // 或者如果 value 中包含搜索值，返回 true
+			item.currencyCode?.toLowerCase().includes(value) || // 如果 code 中包含搜索值，返回 true
+			item.currencyNameI18?.toLowerCase().includes(value) // 或者如果 value 中包含搜索值，返回 true
 		);
 	});
 });

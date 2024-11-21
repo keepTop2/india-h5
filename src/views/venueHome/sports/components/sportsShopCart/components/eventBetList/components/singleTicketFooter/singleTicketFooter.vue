@@ -189,11 +189,14 @@ const onkeyPress = (value) => {
 			padding: 0px 10px;
 			border-radius: 8px;
 			@include themeify {
-				background-color: themed("Theme");
+				border: 1px solid themed("Theme");
 			}
 			box-sizing: border-box;
 			.label {
 				text-align: center;
+				@include themeify {
+					color: themed("Theme");
+				}
 			}
 		}
 	}

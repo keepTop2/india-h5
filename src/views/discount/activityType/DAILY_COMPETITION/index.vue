@@ -4,12 +4,14 @@
 		<VantNavBar :title="title" @onClickLeft="onClickLeft" />
 		<div class="content">
 			<!-- 标签页 -->
-			<!-- <Tabs class="plr" v-model="tabsActiveKey" :list="tabList" /> -->
-			<NavBar class="discount_navbar" v-model:active="tabsActiveKey" :tab-list="tabList" @on-change-nav-bar="onChangeNavBar" v-if="tabList.length > 1" />
+			<!-- <NavBar class="discount_navbar" v-model:active="tabsActiveKey" :tab-list="tabList.slice(0, 2)" @on-change-nav-bar="onChangeNavBar" :halfTab="true" /> -->
+			<NavBar class="discount_navbar" v-model:active="tabsActiveKey" :tab-list="tabList" @on-change-nav-bar="onChangeNavBar" v-if="tabList.length == 2" :halfTab="true" />
+			<NavBar class="discount_navbar" v-model:active="tabsActiveKey" :tab-list="tabList" @on-change-nav-bar="onChangeNavBar" v-else />
 			<!-- 顶部奖池信息 -->
 			<div class="top mt_70">
 				<div>
-					<h3 class="color_TB fs_36 fw_400">{{ $t('betting["比赛奖池"]') }}</h3>
+					<h3 class="color_TB1 fs_36 fw_400">{{ $t('betting["比赛奖池"]') }}</h3>
+					<div class="line_home"></div>
 					<span class="money color_Hint fw_700 fs_64 flex">
 						{{ currentData?.currencySymbol }}
 
@@ -29,7 +31,7 @@
 					</div>
 				</div>
 				<!-- 上届冠军信息 -->
-				<div class="championInfo bg_BG3 br_8" v-if="isStart && currentData.previous">
+				<div class="championInfo br_8" v-if="isStart && currentData.previous">
 					<img class="jiao" :src="jiao" alt="" />
 					<h3 class="title fw_500 flex fs_24 color_Hint"><img class="size_24" :src="winner" alt="" />{{ $t('betting["上届冠军"]') }}</h3>
 					<div class="line_home"></div>
@@ -39,8 +41,8 @@
 							<h3 class="userName color_TB fw_600 fs_24">{{ currentData.previous?.userAccount }}</h3>
 							<span class="color_TB1 fs_22 fw_400">{{ $t('betting["奖金"]') }}</span>
 							<span class="color_TB fs_20 flex fw_700">
-								<img class="size_20" :src="icon" alt="" /><span class="color_Wam-P1"> {{ currentData?.currencySymbol }}{{ Common.amountConversion(currentData.previous?.awardAmount) }}</span
-								><span></span> ({{ currentData.previous?.activityAmountPer }}%)
+								<span class="color_Wam-P1"> {{ currentData?.currencySymbol }}{{ Common.amountConversion(currentData.previous?.awardAmount) }}</span
+								><span></span><span v-if="currentData.previous?.activityAmountPer"> ({{ currentData.previous?.activityAmountPer }}%)</span>
 							</span>
 						</div>
 					</div>
@@ -50,12 +52,12 @@
 			<div class="userInfo" v-if="!participation">
 				<div class="userInfo_Top">
 					<VantLazyImg :src="useUserStore().userInfo?.avatarFileUrl" class="userIcon" alt="" />
-					<span class="userName color_TB fw_600 fs_24">{{ currentData.user?.userAccount }}</span>
+					<span class="userName color_TB1 fw_600 fs_24">{{ currentData.user?.userAccount }}</span>
 				</div>
 				<div class="userInfo_Bottom">
 					<div class="userInfo_Bottom_left">
 						<p class="color_T3 fs_24 fw_400 lh_34">{{ $t('betting["我的位置"]') }}</p>
-						<p class="color_Hint fs30 fw_400 lh_40">{{ isStart ? (currentData.user?.ranking > 100 ? "100+" : currentData.user?.ranking || 0) : "--" }}</p>
+						<p class="color_Hint fs_24 fw_400 lh_40">{{ isStart ? (currentData.user?.ranking > 100 ? "100+" : currentData.user?.ranking || 0) : "--" }}</p>
 					</div>
 					<div class="rightLine"></div>
 					<div class="userInfo_Bottom_right" style="text-align: center">
@@ -125,7 +127,7 @@
 
 				<Nodata v-if="!isStart && tableData.length < 1"></Nodata>
 			</div>
-			<div class="color_T1 text-center mt_24">{{ $t('betting["数据每5分钟更新"]') }}</div>
+			<div class="color_T1 text-center mt_24 fs_20">{{ $t('betting["数据每5分钟更新"]') }}</div>
 			<!-- 规则说明对话框 -->
 			<Dialog class="dialog" :visible="ruleShow" @close="ruleShow = false">
 				<template #title>
@@ -239,7 +241,7 @@ const queryActivityDailyContest = async () => {
 		totalRewardsAmount.value = res.data;
 	});
 	activityApi.queryActivityDailyRecord(params).then((res) => {
-		tableData.value = res.data.list;
+		tableData.value = res.data?.list;
 	});
 	initPrizePool();
 };
@@ -254,7 +256,7 @@ const initPrizePool = () => {
 			totalRewardsAmount.value = res.data;
 		});
 		await activityApi.queryActivityDailyRecord(params).then((res) => {
-			tableData.value = res.data.list;
+			tableData.value = res.data?.list;
 		});
 		clearTimeout(PrizePoolTimer.value);
 		initPrizePool();
@@ -305,6 +307,7 @@ onBeforeUnmount(() => {
 <style lang="scss" scoped>
 @import "./style.scss";
 .table {
+	font-size: 24px;
 	.header {
 		display: flex;
 		justify-content: space-around;
@@ -347,6 +350,20 @@ onBeforeUnmount(() => {
 				}
 			}
 		}
+	}
+}
+:deep(.discount_navbar) {
+	.van-tab__text {
+		font-size: 30px;
+	}
+}
+.line_home {
+	height: 0.5px;
+	width: 221px;
+	margin-right: 8px;
+	transform: scale(1, 0.3);
+	@include themeify {
+		background-color: themed("TB1");
 	}
 }
 </style>

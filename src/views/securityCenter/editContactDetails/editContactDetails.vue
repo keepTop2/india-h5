@@ -1,20 +1,20 @@
 <template>
 	<div>
-		<VantNavBar :title="route.params.type === 'phone' ? $t(`VantNavBar['修改手机号']`) : $t(`VantNavBar['修改邮箱']`)" @onClickLeft="onClickLeft" />
+		<VantNavBar :title="route.params.type === 'phone' ? $t(`VantNavBar['修改手机号']`) : $t(`VantNavBar['修改电子邮箱']`)" @onClickLeft="onClickLeft" />
 
 		<form class="form">
 			<!-- 邮箱 -->
 			<div v-if="route.params.type == 'email'">
-				<span class="label">{{ $t('editContactDetails["邮箱验证"]') }}</span>
+				<span class="label">{{ $t('editContactDetails["原电子邮箱账号"]') }}</span>
 				<p>
-					{{ $t('editContactDetails["验证码将发送至邮箱账号："]') }}<span>{{ userInfo.email }}</span>
+					{{ $t('editContactDetails["验证码将发送至邮箱账号："]') }}<span>{{ Common.maskEmail(userInfo.email as string) }}</span>
 				</p>
 				<p>{{ $t('editContactDetails["有效时间："]') }}</p>
 			</div>
 
 			<!-- 手机号码 -->
 			<div v-if="route.params.type == 'phone'">
-				<span class="title">{{ $t('editContactDetails["手机号验证"]') }}</span>
+				<span class="title color_TB">{{ $t('editContactDetails["原手机号"]') }}</span>
 				<p>
 					{{ $t('editContactDetails["验证码将发送至手机号："]') }}<span v-if="userInfo.areaCode">+{{ userInfo.areaCode }} </span> <span>{{ Common.maskString(userInfo.phone as string) }}</span>
 				</p>
@@ -22,7 +22,7 @@
 			</div>
 
 			<span class="title">{{ $t('bindPhone["验证码"]') }}</span>
-			<FormInput v-model="state.verifyCode" type="text" :placeholder="$t(`common['验证码']`)" :maxlength="6">
+			<FormInput v-model="state.verifyCode" type="text" :maxlength="6">
 				<template v-slot:right>
 					<CaptchaButton ref="captchaButton" :disabled="captchaDisabled" @onCaptcha="onCaptcha" />
 				</template>
@@ -156,7 +156,6 @@ const onClickLeft = () => {
 	}
 
 	.title {
-		margin-top: 36px;
 		@include themeify {
 			color: themed("T1");
 		}

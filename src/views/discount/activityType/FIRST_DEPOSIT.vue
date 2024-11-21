@@ -81,15 +81,9 @@ const apply = () => {
 		return;
 	} else if (activityData.value.status === 10000 && new Date().getTime() >= activityData.value.activityStartTime) {
 		activityApi.toActivity({ id: activityInfo.id }).then((res: any) => {
-			if (res.code === 10000) {
-				if (String(res.data.status).slice(0, 2) !== "13" && res.data.status !== 10000) {
-					dialogInfo.value = res.data;
-					showDialog.value = true;
-				} else {
-					showToast(res.data.message);
-					getConfigDetail();
-				}
-			}
+			dialogInfo.value = res.data;
+			showDialog.value = true;
+			getConfigDetail();
 		});
 	}
 };
@@ -109,6 +103,7 @@ const confirmDialog = () => {
 	background-attachment: fixed;
 	/* 背景图像固定 */
 	box-sizing: border-box;
+
 	@include themeify {
 		color: themed("TB");
 	}
@@ -173,6 +168,7 @@ const confirmDialog = () => {
 		.bonus-content {
 			color: black;
 			padding: 15px 45px;
+
 			.bonus-row1 {
 				display: flex;
 				margin: 40px 0 20px;
@@ -180,6 +176,7 @@ const confirmDialog = () => {
 
 				@include themeify {
 					border-bottom: 1px solid themed("T3");
+					font-family: "DIN Black" !important;
 				}
 			}
 			.bonus-row {
@@ -188,6 +185,7 @@ const confirmDialog = () => {
 				flex-direction: column;
 				align-items: center;
 				margin-bottom: 10px;
+
 				.text {
 					font-size: 26px;
 					margin-bottom: 5px;
@@ -201,7 +199,7 @@ const confirmDialog = () => {
 			}
 			.Amount {
 				font-size: 38px;
-
+				font-family: "DIN Alternate";
 				font-weight: 900;
 				@include themeify {
 					color: themed("T4");

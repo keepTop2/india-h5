@@ -43,7 +43,7 @@
 							<div class="color_T1 fs_26">{{ item.welfareCenterRewardTypeText }}</div>
 						</div>
 						<div class="">
-							<div class="color_T2 fs_24">{{ dayjs(item.pfTime).format("YYYY-MM-DD HH:mm:ss") }}</div>
+							<div class="color_T2 fs_24">{{ dayjs(item?.receiveStatus == 2 ? item?.pfEndTime : item?.pfTime).format("YYYY-MM-DD HH:mm:ss") }}</div>
 						</div>
 					</div>
 					<div class="right">

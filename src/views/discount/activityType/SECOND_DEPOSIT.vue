@@ -10,14 +10,14 @@
 						<div class="bonus-row">
 							<span class="text">{{ $t(`discount['存款金额']`) }}</span>
 							<span class="Amount"
-								>{{ activityData?.depositAmount || "0.00" }} <span>{{ activityData?.depositCurrencyCode }}</span></span
+								>{{ activityData?.depositAmount || "0.00" }}<span>{{ activityData?.depositCurrencyCode }}</span></span
 							>
 						</div>
 						<div class="bonus-row1-line"></div>
 						<div class="bonus-row">
 							<span class="text">{{ $t(`discount['需打流水']`) }}</span>
 							<span class="Amount"
-								>{{ activityData?.runningWater || "0.00" }} <span>{{ activityData?.runningWaterCurrencyCode }}</span>
+								>{{ activityData?.runningWater || "0.00" }}<span>{{ activityData?.runningWaterCurrencyCode }}</span>
 							</span>
 						</div>
 					</div>
@@ -80,17 +80,9 @@ const apply = () => {
 		return;
 	} else if (activityData.value.status === 10000 && new Date().getTime() >= activityData.value.activityStartTime) {
 		activityApi.toActivity({ id: activityInfo.id }).then((res: any) => {
-			if (res.code === 10000) {
-				if (String(res.data.status).slice(0, 2) !== "13" && res.data.status !== 10000) {
-					dialogInfo.value = res.data;
-					showDialog.value = true;
-				} else {
-					showToast(res.data.message);
-					getConfigDetail();
-				}
-			} else {
-				showToast(res.message);
-			}
+			dialogInfo.value = res.data;
+			showDialog.value = true;
+			getConfigDetail();
 		});
 	}
 };
@@ -201,7 +193,7 @@ const confirmDialog = () => {
 			}
 			.Amount {
 				font-size: 38px;
-
+				font-family: "DIN Alternate";
 				font-weight: 900;
 				@include themeify {
 					color: themed("T4");

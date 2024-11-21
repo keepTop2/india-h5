@@ -9,7 +9,7 @@
 			</div> -->
 			<VantNavBar @onClickLeft="onClickLeft">
 				<template v-slot:title>
-					<input v-model="searchValue" @keydown.enter="handleSearch" ref="searchRef" style="width: 100%" :placeholder="$t(`game['输入游戏名称']`)" type="search" class="color_T2" />
+					<input v-model="searchValue" @keydown.enter="handleSearch" ref="searchRef" style="width: 100%" :placeholder="$t(`game['输入游戏名称']`)" type="search" class="color_T2 search" />
 				</template>
 				<template v-slot:right>
 					<div @click="handleSearch" class="searchBtn">搜索</div>
@@ -88,6 +88,9 @@ const onClickLeft = () => {
 		border-radius: 10px;
 		background: #ff284b;
 		line-height: 56px;
+		@include themeify {
+			color: themed("TB1");
+		}
 	}
 	@include themeify {
 		input {
@@ -109,7 +112,9 @@ const onClickLeft = () => {
 }
 .no_data_container {
 	text-align: center;
-
+	height: calc(100vh - 148px);
+	display: flex;
+	align-items: center;
 	img {
 		width: 300px;
 		margin: 0 auto;
@@ -122,5 +127,9 @@ const onClickLeft = () => {
 		flex-wrap: wrap;
 		gap: 16px;
 	}
+}
+.search::placeholder {
+	font-weight: 400;
+	font-size: 28px;
 }
 </style>
