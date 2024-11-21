@@ -8,7 +8,7 @@
 				</div>
 				<div class="bet_slip_cell_input" :class="{ input_active: inputActive == item.comboType }" @click="focusInput(item)">
 					<div class="input">
-						<span v-if="betValueState[item.comboType]">{{ betValueState[item.comboType] }}</span>
+						<span class="bet-number" v-if="betValueState[item.comboType]">{{ betValueState[item.comboType] }}</span>
 						<span v-else class="placeholder">{{ $t('sports["限额"]') }}{{ `${common.getInstance().formatFloat(item.minBet)} ~ ${common.getInstance().formatFloat(item.maxBet)}` }}</span>
 					</div>
 				</div>
@@ -97,7 +97,6 @@ const focusInput = (item) => {
 
 	@include themeify {
 		background-color: themed("BG2");
-		color: themed("Theme");
 	}
 	font-family: "PingFang SC";
 	font-size: 28px;
@@ -105,6 +104,11 @@ const focusInput = (item) => {
 	border: 0;
 	padding: 0;
 	margin: 0;
+	.bet-number {
+		@include themeify {
+			color: themed("TB");
+		}
+	}
 	.placeholder {
 		display: flex;
 		align-items: center;
