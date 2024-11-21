@@ -19,8 +19,12 @@
 		</div>
 		<div class="card">
 			<div class="cell flex">
-				<div class="color_T1">{{ $t(`welfareCenter['发放时间']`) }}</div>
-				<div class="color_TB">{{ dayjs(detailsInfo?.pfTime).format("YYYY-MM-DD HH:mm:ss") }}</div>
+				<div class="color_T1">
+					{{ $t(`welfareCenter['发放时间']`) }}
+
+					{{ detailsInfo?.receiveStatus == 1 ? $t(`welfareCenter['领取时间']`) : detailsInfo?.receiveStatus == 2 ? $t(`welfareCenter['过期时间']`) : $t(`welfareCenter['发放时间']`) }}
+				</div>
+				<div class="color_TB">{{ dayjs(detailsInfo?.receiveStatus == 2 ? detailsInfo?.pfEndTime : detailsInfo?.pfTime).format("YYYY-MM-DD HH:mm:ss") }}</div>
 			</div>
 			<div class="cell flex">
 				<div class="color_T1">{{ $t(`welfareCenter['订单号']`) }}</div>

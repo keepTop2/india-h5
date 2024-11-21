@@ -43,7 +43,7 @@
 					:type="eyeShow2 ? 'password' : 'text'"
 					:maxlength="16"
 					:placeholder="$t(`register['确认登录密码']`)"
-					:errorBorder="!isConfirmPasswordValid ? true : false"
+					:errorBorder="!isConfirmPasswordValid && state.confirmPassword ? true : false"
 				>
 					<template v-slot:left>
 						<SvgIcon class="pr_14" iconName="loginOrRegister/password" @click="state.userAccount = ''" size="32px" />
@@ -55,7 +55,7 @@
 						</div>
 					</template>
 				</FormInput>
-				<div class="error_text" v-if="!isConfirmPasswordValid">
+				<div class="error_text" v-if="!isConfirmPasswordValid && state.confirmPassword">
 					<span class="text">{{ $t('register["两次输入密码不一致"]') }}</span>
 				</div>
 				<div class="label"><span class="required">*</span>{{ $t('register["主货币"]') }}</div>

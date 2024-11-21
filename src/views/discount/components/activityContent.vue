@@ -73,6 +73,7 @@ const props = defineProps({
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		font-size: 30px;
 		img {
 			height: 6px;
 			margin: 0 56px;

@@ -1,6 +1,7 @@
 <template>
 	<div class="spin">
 		<!-- 灯光 -->
+		<img class="spin-img-border" :src="spinBorder" alt="" />
 		<div :style="{ '--spinOverRotate': spinRotate }" :class="['spin-wrap', { rotate: spinning && !spinOver, result: spinOver }]">
 			<img class="spin-img" :src="spinBG" alt="" />
 			<div class="currency">
@@ -27,6 +28,7 @@ import { ref, nextTick } from "vue";
 import crypto_point from "./img/crypto_point.png";
 import crypto_btn from "./img/crypto_btn.png";
 import spinBG from "./img/spin_bg.png";
+import spinBorder from "./img/spinBorder.png";
 const spinning = ref(false);
 const spinOver = ref(false);
 const spinRotate = ref("0deg");
@@ -160,6 +162,13 @@ defineExpose({
 	padding-top: 60px;
 
 	height: max-content;
+	.spin-img-border {
+		width: 681px;
+		height: 681px;
+		position: absolute;
+		top: 42px;
+		left: -20px;
+	}
 	.spin-wrap {
 		/* transform-origin: center; */
 		width: 100%;
