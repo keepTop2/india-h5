@@ -4,13 +4,14 @@
 		<VantNavBar :title="title" @onClickLeft="onClickLeft" />
 		<div class="content">
 			<!-- 标签页 -->
-			<NavBar class="discount_navbar" v-model:active="tabsActiveKey" :tab-list="tabList.slice(0, 2)" @on-change-nav-bar="onChangeNavBar" :halfTab="true" />
-			<!-- <NavBar class="discount_navbar" v-model:active="tabsActiveKey" :tab-list="tabList" @on-change-nav-bar="onChangeNavBar" v-if="tabList.length == 2" :halfTab="true" />
-			<NavBar class="discount_navbar" v-model:active="tabsActiveKey" :tab-list="tabList" @on-change-nav-bar="onChangeNavBar" v-else /> -->
+			<!-- <NavBar class="discount_navbar" v-model:active="tabsActiveKey" :tab-list="tabList.slice(0, 2)" @on-change-nav-bar="onChangeNavBar" :halfTab="true" /> -->
+			<NavBar class="discount_navbar" v-model:active="tabsActiveKey" :tab-list="tabList" @on-change-nav-bar="onChangeNavBar" v-if="tabList.length == 2" :halfTab="true" />
+			<NavBar class="discount_navbar" v-model:active="tabsActiveKey" :tab-list="tabList" @on-change-nav-bar="onChangeNavBar" v-else />
 			<!-- 顶部奖池信息 -->
 			<div class="top mt_70">
 				<div>
 					<h3 class="color_TB1 fs_36 fw_400">{{ $t('betting["比赛奖池"]') }}</h3>
+					<div class="line_home"></div>
 					<span class="money color_Hint fw_700 fs_64 flex">
 						{{ currentData?.currencySymbol }}
 
@@ -30,7 +31,7 @@
 					</div>
 				</div>
 				<!-- 上届冠军信息 -->
-				<div class="championInfo bg_BG3 br_8" v-if="isStart && currentData.previous">
+				<div class="championInfo br_8" v-if="isStart && currentData.previous">
 					<img class="jiao" :src="jiao" alt="" />
 					<h3 class="title fw_500 flex fs_24 color_Hint"><img class="size_24" :src="winner" alt="" />{{ $t('betting["上届冠军"]') }}</h3>
 					<div class="line_home"></div>
@@ -126,7 +127,7 @@
 
 				<Nodata v-if="!isStart && tableData.length < 1"></Nodata>
 			</div>
-			<div class="color_T1 text-center mt_24">{{ $t('betting["数据每5分钟更新"]') }}</div>
+			<div class="color_T1 text-center mt_24 fs_20">{{ $t('betting["数据每5分钟更新"]') }}</div>
 			<!-- 规则说明对话框 -->
 			<Dialog class="dialog" :visible="ruleShow" @close="ruleShow = false">
 				<template #title>
@@ -240,7 +241,7 @@ const queryActivityDailyContest = async () => {
 		totalRewardsAmount.value = res.data;
 	});
 	activityApi.queryActivityDailyRecord(params).then((res) => {
-		tableData.value = res.data.list;
+		tableData.value = res.data?.list;
 	});
 	initPrizePool();
 };
@@ -255,7 +256,7 @@ const initPrizePool = () => {
 			totalRewardsAmount.value = res.data;
 		});
 		await activityApi.queryActivityDailyRecord(params).then((res) => {
-			tableData.value = res.data.list;
+			tableData.value = res.data?.list;
 		});
 		clearTimeout(PrizePoolTimer.value);
 		initPrizePool();
@@ -349,6 +350,20 @@ onBeforeUnmount(() => {
 				}
 			}
 		}
+	}
+}
+:deep(.discount_navbar) {
+	.van-tab__text {
+		font-size: 30px;
+	}
+}
+.line_home {
+	height: 0.5px;
+	width: 221px;
+	margin-right: 8px;
+	transform: scale(1, 0.3);
+	@include themeify {
+		background-color: themed("TB1");
 	}
 }
 </style>

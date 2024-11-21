@@ -3,10 +3,10 @@
 		<div class="GameArena bg_BG1">
 			<!-- 顶部搜索栏 -->
 			<div class="navBar bg_BG1">
-				<SvgIcon class="collapse_icon mt_14" iconName="common/collapse_icon_on" @click="onClickLeft" size="40px" />
+				<SvgIcon class="mt_14" iconName="common/collapse_icon" @click="onClickLeft" size="40px" />
 				<div class="nav_bar_input bg_BG3">
 					<SvgIcon iconName="venueHome/gameArena/search" />
-					<input @focus="router.push('/game/arena/search')" :placeholder="$t(`game['输入游戏名称']`)" type="text" class="color_T2" />
+					<input @focus="router.push('/game/arena/search')" :placeholder="$t(`game['输入游戏名称']`)" type="text" class="color_T2 search" />
 				</div>
 			</div>
 			<div>
@@ -161,5 +161,8 @@ const showMoreList = (title, label) => {
 			height: 44px;
 		}
 	}
+}
+.search::placeholder {
+	font-size: 28px;
 }
 </style>

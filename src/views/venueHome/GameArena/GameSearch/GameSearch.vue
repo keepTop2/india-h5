@@ -88,6 +88,9 @@ const onClickLeft = () => {
 		border-radius: 10px;
 		background: #ff284b;
 		line-height: 56px;
+		@include themeify {
+			color: themed("TB1");
+		}
 	}
 	@include themeify {
 		input {
