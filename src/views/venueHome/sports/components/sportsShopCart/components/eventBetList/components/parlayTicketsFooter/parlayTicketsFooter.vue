@@ -241,7 +241,8 @@ const closePopup = () => {
 
 			.disabled_container {
 				@include themeify {
-					background-color: themed("T3");
+					background-color: themed("BG1");
+					color: themed("T2");
 				}
 			}
 		}
@@ -256,7 +257,8 @@ const closePopup = () => {
 			padding: 0px 10px;
 			border-radius: 8px;
 			@include themeify {
-				background-color: themed("Theme");
+				border: 1px solid themed("Theme");
+				color: themed("Theme");
 			}
 			box-sizing: border-box;
 			.label {

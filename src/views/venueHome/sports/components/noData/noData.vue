@@ -2,13 +2,15 @@
 	<div class="noData-content">
 		<div class="content">
 			<VantLazyImg class="noData-icon" :src="noData" />
-			<div class="label">暂无赛事</div>
+			<div class="label">{{ $.t(`sports['暂无赛事']`) }}</div>
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
 import noData from "/@/assets/zh-CN/default/venueHome/sports/noData.png";
+import { i18n } from "/@/i18n/index";
+const $: any = i18n.global;
 </script>
 
 <style scoped lang="scss">

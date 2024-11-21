@@ -165,6 +165,12 @@
 		background-image: url("./images/bg.png");
 		background-size: contain;
 		position: relative;
+		&:has(.showDropDown) {
+			background-image: initial;
+			@include themeify {
+				background-color: themed(BG1);
+			}
+		}
 		.navBar {
 			width: 100vw;
 			height: 100px;
@@ -174,6 +180,7 @@
 			box-sizing: border-box;
 			justify-content: space-between;
 			margin-bottom: 15px;
+
 			.teamList {
 				display: flex;
 				flex-direction: row;
@@ -223,6 +230,11 @@
 				svg {
 					width: 40px;
 					// height: 40px;
+				}
+				.collection {
+					@include themeify {
+						color: themed("Theme");
+					}
 				}
 			}
 			.line {
@@ -330,7 +342,7 @@
 			display: flex;
 			align-items: center;
 			padding: 8px 12px;
-			border-radius: 16px 16px 0px 0px;
+			border-radius: 16px;
 			@include themeify {
 				background: themed("--JBS-CARD");
 				box-shadow: 0px 1px 4px 0px themed("--JBS-CARD--shadow");
@@ -379,6 +391,11 @@
 			padding: 20px 24px;
 			.selection_item {
 				margin-bottom: 20px;
+				&.is-active {
+					.tournament-header {
+						border-radius: 16px 16px 0px 0px !important;
+					}
+				}
 			}
 			ul {
 				padding: 8px 12px;
@@ -388,6 +405,11 @@
 					flex-wrap: wrap; /* 允许元素换行 */
 					// justify-content: space-between; /* 项目之间的间隔 */
 					gap: 7px;
+					&:last-child {
+						.li_tag {
+							margin-bottom: 0 !important;
+						}
+					}
 				}
 				.li_tag {
 					height: 120px;

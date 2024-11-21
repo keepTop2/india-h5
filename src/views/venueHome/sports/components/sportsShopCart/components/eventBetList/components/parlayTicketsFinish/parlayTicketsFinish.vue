@@ -38,7 +38,7 @@
 
 			<div class="bet-details" v-for="(item, index) in props.data.currentCombos" :key="index">
 				<div class="bet-cell">
-					<span class="label">{{ SportsCommonFn.comboTypeNameMaps[item.comboType] }}</span>
+					<span class="label">{{ $.t(`sports['${SportsCommonFn.comboTypeNameMaps[item.comboType]}']`) }}</span>
 					<div>
 						<span class="label">{{ common.getInstance().formatFloat(item.stake) }}</span>
 						<span class="text">x{{ item.betCount }}</span>
@@ -229,7 +229,7 @@ const onSecondBet = () => {
 
 				.label {
 					@include themeify {
-						color: themed("TB");
+						color: themed("T1");
 					}
 
 					font-size: 26px;
@@ -238,7 +238,7 @@ const onSecondBet = () => {
 
 				.value {
 					@include themeify {
-						color: themed("Theme");
+						color: themed("TB");
 					}
 
 					font-size: 22px;

@@ -72,7 +72,7 @@ input {
 	height: 30px;
 	@include themeify {
 		background-color: themed("BG3");
-		color: themed("Theme");
+		color: themed("TB");
 	}
 	font-family: "PingFang SC";
 	font-size: 28px;

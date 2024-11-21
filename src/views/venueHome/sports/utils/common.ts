@@ -19,6 +19,7 @@ interface DateData {
 
 /**
  * @description 体育公用方法类 -- 根据体育球类字典筛选sportType
+ * 这块的多语言转换已经在调用的地方转换！！！
  */
 class SportsCommonFn {
 	public static comboTypeNameMaps = {
@@ -453,19 +454,19 @@ class SportsCommonFn {
 			}
 			if (this.isStartMatch(globalShowTime)) {
 				if (currentSet == 1) {
-					return "第一盘";
+					return $.t("sports['第一盘']");
 				}
 				if (currentSet == 2) {
-					return "第二盘";
+					return $.t("sports['第二盘']");
 				}
 				if (currentSet == 3) {
-					return "第三盘";
+					return $.t("sports['第三盘']");
 				}
 				if (currentSet == 4) {
-					return "第四盘";
+					return $.t("sports['第四盘']");
 				}
 				if (currentSet == 5) {
-					return "第五盘";
+					return $.t("sports['第五盘']");
 				}
 			}
 			return convertUtcToUtc5AndFormatMD(globalShowTime);
@@ -483,19 +484,19 @@ class SportsCommonFn {
 			}
 			if (this.isStartMatch(globalShowTime)) {
 				if (latestLivePeriod == 1) {
-					return "第一局";
+					return $.t("sports['第一局']");
 				}
 				if (latestLivePeriod == 2) {
-					return "第二局";
+					return $.t("sports['第二局']");
 				}
 				if (latestLivePeriod == 3) {
-					return "第三局";
+					return $.t("sports['第三局']");
 				}
 				if (latestLivePeriod == 4) {
-					return "第四局";
+					return $.t("sports['第四局']");
 				}
 				if (latestLivePeriod == 5) {
-					return "第五局";
+					return $.t("sports['第五局']");
 				}
 			}
 			return convertUtcToUtc5AndFormatMD(globalShowTime);
@@ -530,34 +531,34 @@ class SportsCommonFn {
 			}
 			if (this.isStartMatch(globalShowTime)) {
 				if (currentInning == 1) {
-					return "第一局";
+					return $.t("sports['第一局']");
 				}
 				if (currentInning == 2) {
-					return "第二局";
+					return $.t("sports['第二局']");
 				}
 				if (currentInning == 3) {
-					return "第三局";
+					return $.t("sports['第三局']");
 				}
 				if (currentInning == 4) {
-					return "第四局";
+					return $.t("sports['第四局']");
 				}
 				if (currentInning == 5) {
-					return "第五局";
+					return $.t("sports['第五局']");
 				}
 				if (currentInning == 6) {
-					return "第六局";
+					return $.t("sports['第六局']");
 				}
 				if (currentInning == 7) {
-					return "第七局";
+					return $.t("sports['第七局']");
 				}
 				if (currentInning == 8) {
-					return "第八局";
+					return $.t("sports['第八局']");
 				}
 				if (currentInning == 9) {
-					return "第九局";
+					return $.t("sports['第九局']");
 				}
 				if (currentInning > 9) {
-					return "延长赛";
+					return $.t("sports['延长赛']");
 				}
 			}
 			return convertUtcToUtc5AndFormatMD(globalShowTime);
@@ -575,19 +576,19 @@ class SportsCommonFn {
 			}
 			if (this.isStartMatch(globalShowTime)) {
 				if (currentSet == 1) {
-					return "第一局";
+					return $.t("sports['第一局']");
 				}
 				if (currentSet == 2) {
-					return "第二局";
+					return $.t("sports['第二局']");
 				}
 				if (currentSet == 3) {
-					return "第三局";
+					return $.t("sports['第三局']");
 				}
 				if (currentSet == 4) {
-					return "第四局";
+					return $.t("sports['第四局']");
 				}
 				if (currentSet == 5) {
-					return "第五局";
+					return $.t("sports['第五局']");
 				}
 			}
 			return convertUtcToUtc5AndFormatMD(globalShowTime);

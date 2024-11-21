@@ -60,7 +60,8 @@
 									<!-- <SvgIcon class="color_T3" iconName="venueHome/sports/svg/sport_start" size="6" /> -->
 									<SvgIcon v-if="isAttention" iconName="venueHome/sports/svg/collection2" size="6" />
 									<SvgIcon v-else iconName="venueHome/sports/svg/collection" size="6" />
-									{{ (isAttention && $t('sports["已关注"]')) || $t('sports["关注"]') }}
+									<span v-if="isAttention" class="collection">{{ $t('sports["已关注"]') }}</span>
+									<span v-else>{{ $t('sports["关注"]') }}</span>
 								</li>
 							</ul>
 							<ul v-if="!isEventRunning && eventsList">
@@ -160,10 +161,10 @@
 				</div>
 			</div>
 			<!-- 盘口内容 -->
-			<div :class="['content', 'bg_BG1']" v-show="eventsList">
-				<div class="tabBox bg_BG1" :class="{ 'fixed-tab': isFixed }">
+			<div :class="['content']" v-show="eventsList">
+				<div class="tabBox" :class="{ 'fixed-tab': isFixed }">
 					<div class="tabs">
-						<ul class="tab bg_BG1">
+						<ul class="tab">
 							<li @click="changeTab('all')" key="all" :class="{ selected: activeTab == 'all' }">{{ $t('sports["所有投注"]') }}</li>
 							<!-- <li v-for="(i, index) in markets" :key="i.betTypeName" @click="changeTab(i.betTypeName)" :class="{ selected: activeTab == i.betTypeName }">{{ i.betTypeName }}</li> -->
 						</ul>

@@ -73,9 +73,9 @@
 							{{ event.tennisInfo.homeGameScore[index] }}-{{ event.tennisInfo.awayGameScore[index] }}
 						</div>
 					</div>
-					<span class="ml_8">{{ event.gameSession == 3 ? "3盘2胜" : "5盘3胜" }}</span>
+					<span class="ml_8">{{ event.gameSession == 3 ? $.t(`sports["3局2胜"]`) : $.t(`sports["5局3胜"]`) }}</span>
 					<template v-if="SportsCommonFn.isStartMatch(event.globalShowTime)">
-						<span class="ml_4">总局数</span>
+						<span class="ml_4">{{ $.t(`sports["总局数"]`) }}</span>
 						<span class="ml_2 theme">{{ event.tennisInfo.homeGameScore.flat().reduce((a, b) => a + b, 0) }}-{{ event.tennisInfo.awayGameScore.flat().reduce((a, b) => a + b, 0) }}</span>
 						<span class="theme">({{ event.tennisInfo.homeGameScore.flat().reduce((a, b) => a + b, 0) + event.tennisInfo.awayGameScore.flat().reduce((a, b) => a + b, 0) }})</span>
 					</template>
