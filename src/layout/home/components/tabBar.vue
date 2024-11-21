@@ -14,7 +14,7 @@
 				</div>
 				<!-- 显示图标 -->
 				<div class="icon">
-					<img :src="getHighlightStatus(item)" />
+					<img :src="Common.getThemeImg('layout/' + (item.path === route.path ? item.name + '_active' : item.name) + '.png')" />
 				</div>
 				<!-- 显示标签 -->
 				<span class="label" :class="getHighlightClass(item)">
@@ -26,7 +26,7 @@
 			<div v-else class="content" :class="{ active: item.path === route.path, [theme]: true }">
 				<!-- 显示首页的图标 -->
 				<div class="home-icon">
-					<img :src="item.path !== route.path ? item.icon : item.active_icon" />
+					<img :src="item.path !== route.path ? home : home_active" />
 				</div>
 				<!-- 显示首页的标签 -->
 				<span class="label" :class="{ label_active: item.path === route.path }">
@@ -56,6 +56,7 @@ import { useThemesStore } from "/@/store/modules/themes";
 import { useRoute, useRouter } from "vue-router";
 import { i18n } from "/@/i18n/index";
 import { useUserStore } from "/@/store/modules/user";
+import Common from "/@/utils/common";
 const themesStore = useThemesStore();
 const route = useRoute();
 const router = useRouter();
@@ -102,32 +103,27 @@ const toPath = (item) => {
 
 const tabData = [
 	{
-		icon: discount,
-		active_icon: discount_active,
+		name: "discount",
 		label: $.t('layout["优惠"]'),
 		path: "/discount",
 	},
 	{
-		icon: records,
-		active_icon: records_active,
+		name: "records",
 		label: $.t('layout["记录"]'),
 		path: "/records",
 	},
 	{
-		icon: home,
-		active_icon: home_active,
+		name: "home",
 		label: $.t('layout["首页"]'),
 		path: "/",
 	},
 	{
-		icon: wallet,
-		active_icon: wallet_active,
+		name: "wallet",
 		label: $.t('layout["存款"]'),
 		path: "/recharge",
 	},
 	{
-		icon: my,
-		active_icon: my_active,
+		name: "my",
 		label: $.t('layout["我的"]'),
 		path: "/my",
 	},
@@ -178,6 +174,7 @@ const tabData = [
 			top: 0px;
 			width: 50px;
 			height: 3px;
+			border: none;
 		}
 
 		.icon {

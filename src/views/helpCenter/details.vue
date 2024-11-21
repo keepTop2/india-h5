@@ -17,9 +17,22 @@
 			</div>
 		</div>
 		<div class="content" v-else>
-			<div class="card mb_24" v-for="item in dataList">
+			<div class="card mb_24" v-if="dataList[0]?.code == 5">
+				<div class="text color_T1 fs_26">
+					<div class="value">
+						{{ $t(`helpCenter['全年365天，OKsport为您提供7x24小时咨询服务。您可通过下面的联系方式快捷的反馈给我们，我们会及时回复您的咨询。']`, { value: $t(`common['appName']`) }) }}
+						<p class="mt_24">
+							{{ $t(`helpCenter['投诉建议邮箱']`) }}: <span class="color_F2">{{ dataList[0]?.valueDetail }}</span>
+						</p>
+						<p class="mt_8">
+							{{ $t(`helpCenter['客服邮箱']`) }}: <span class="color_F2">{{ dataList[0]?.valueDetailExtend }}</span>
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class="card mb_24" v-else>
 				<div class="text color_T1">
-					<div class="value" v-html="item?.valueDetail"></div>
+					<div class="value" v-html="dataList[0]?.valueDetail"></div>
 				</div>
 			</div>
 		</div>

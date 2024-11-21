@@ -87,7 +87,7 @@ export const useUserStore = defineStore("User", {
 			this.langList = data;
 		},
 		async setlangInfo(data) {
-			console.log(123123);
+		
 
 			this.langInfo = data;
 			await i18nSetLang(data.code);

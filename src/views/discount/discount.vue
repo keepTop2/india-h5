@@ -207,7 +207,7 @@ const getActivity = async (): Promise<void> => {
 						font-family: "PingFang SC";
 						font-size: 30px;
 						font-style: normal;
-						font-weight: 500;
+						font-weight: 400;
 						line-height: 40px; /* 133.333% */
 					}
 				}

@@ -296,12 +296,13 @@ const confirmDialog = () => {
 
 .activity-details {
 	border-radius: 10px;
-	padding: 15px;
+	padding: 12px 15px;
 	margin-bottom: 20px;
 	background: url("../../image/detail_bg.png");
 	background-size: 100%;
 	position: relative;
 	box-sizing: border-box;
+	margin-bottom: 0;
 	.detail_icon {
 		position: absolute;
 		right: 62px;

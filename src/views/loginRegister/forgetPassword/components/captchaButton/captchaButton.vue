@@ -1,7 +1,7 @@
 <template>
 	<div :class="buttonClass" @click="onCaptcha">
 		<span v-if="!isCountingDown">
-			<span v-if="!text">{{ $t('common["发送"]') }}</span>
+			<span v-if="!text">{{ isFirst ? $t('common["发送"]') : $t('common["重新发送"]') }}</span>
 			<span v-else>{{ text }}</span>
 		</span>
 		<span v-else>{{ countdown }}S</span>
@@ -13,7 +13,7 @@ import { withDefaults, computed } from "vue";
 import { useCountdown } from "/@/hooks/countdown";
 
 const emit = defineEmits(["onCaptcha"]);
-
+const isFirst = ref(true);
 // 使用 ref 来存储组件状态
 const props = withDefaults(
 	defineProps<{
@@ -45,6 +45,7 @@ const buttonClass = computed(() => {
 // 处理验证码点击事件
 const onCaptcha = async () => {
 	if (props.disabled || isCountingDown.value) return;
+	isFirst.value = false;
 	emit("onCaptcha");
 };
 

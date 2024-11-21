@@ -3,13 +3,8 @@
 		<div class="title">{{ route.params.type === "email" ? $t('forgetPassword["邮箱验证"]') : $t('forgetPassword["手机号验证"]') }}</div>
 		<div class="change" @click="onChange">{{ $t('forgetPassword["其他方式"]') }}</div>
 		<div class="form">
-			<FormInput
-				v-model="state.password"
-				:type="eyeShow ? 'password' : 'text'"
-				:maxlength="16"
-				:placeholder="$t(`login['登录密码']`)"
-				:errorBorder="!isPasswordValid && state.password !== '' ? true : false"
-			>
+			<div class="color_T1 fs_28 mb_16">{{ $t('login["登录密码"]') }}</div>
+			<FormInput v-model="state.password" :type="eyeShow ? 'password' : 'text'" :maxlength="16" :errorBorder="!isPasswordValid && state.password !== '' ? true : false">
 				<template v-slot:right>
 					<div class="right">
 						<SvgIcon v-if="state.password" class="clearIcon" iconName="loginOrRegister/clear" @click="state.password = ''" />
