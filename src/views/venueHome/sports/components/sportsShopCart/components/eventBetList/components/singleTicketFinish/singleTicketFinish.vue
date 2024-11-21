@@ -203,7 +203,7 @@ const clearCart = () => {
 
 				.label {
 					@include themeify {
-						color: themed("TB");
+						color: themed("T1");
 					}
 
 					font-size: 24px;
@@ -212,7 +212,7 @@ const clearCart = () => {
 
 				.value {
 					@include themeify {
-						color: themed("Theme");
+						color: themed("TB");
 					}
 
 					font-size: 24px;

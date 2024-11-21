@@ -3,8 +3,8 @@
 		<div class="header-title">
 			<img v-if="props.betStatus == 0" :src="success_icon" />
 			<img v-if="props.betStatus == 1" :src="close_icon" />
-			<span v-if="props.betStatus == 0">{{ $t('sports["投注成功"]') }}</span>
-			<span v-if="props.betStatus == 1">{{ $t('sports["投注失败"]') }}</span>
+			<span class="success" v-if="props.betStatus == 0">{{ $t('sports["投注成功"]') }}</span>
+			<span class="error" v-if="props.betStatus == 1">{{ $t('sports["投注失败"]') }}</span>
 		</div>
 		<div class="header-right">
 			<SvgIcon iconName="venueHome/sports/svg/close" size="3.466667" @click="clearCart" />
@@ -56,12 +56,20 @@ const clearCart = () => {
 		}
 		span {
 			margin-left: 20px;
-			@include themeify {
-				color: themed("Theme");
-			}
+
 			font-family: "PingFang SC";
 			font-size: 32px;
 			font-weight: 500;
+			&.success {
+				@include themeify {
+					color: themed("Wam-P1");
+				}
+			}
+			&.error {
+				@include themeify {
+					color: themed("Hint-P");
+				}
+			}
 		}
 	}
 
