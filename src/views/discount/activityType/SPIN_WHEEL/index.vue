@@ -328,6 +328,10 @@ const querySpinWheelOrderRecord = () => {
 
 .amount {
 	color: #ff6347;
+	@include themeify {
+		color: themed("Theme");
+	}
+	font-family: "DIN Alternate";
 }
 
 .user {
@@ -339,9 +343,10 @@ const querySpinWheelOrderRecord = () => {
 	font-size: 26px;
 	display: flex;
 	align-items: center;
+
 	svg {
-		width: 36px;
-		height: 36px;
+		width: 24px;
+		height: 24px;
 	}
 }
 
@@ -395,8 +400,14 @@ const querySpinWheelOrderRecord = () => {
 		justify-content: center;
 		img {
 			position: absolute;
-			width: 100%;
-			height: 100%;
+			width: calc(100% + 2px);
+			height: calc(100% + 2px);
+			top: -1px;
+			left: -1px;
+		}
+		img:last-child {
+			right: -1px;
+			left: 0;
 		}
 		a {
 			position: absolute;

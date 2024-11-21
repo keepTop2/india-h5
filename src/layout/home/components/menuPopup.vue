@@ -312,7 +312,7 @@ onMounted(() => {
 				border-radius: 8px;
 				display: flex;
 				align-items: center;
-				padding: 20px 40px;
+				padding: 20px 26px;
 				flex-wrap: wrap;
 				box-sizing: border-box;
 				@include themeify {

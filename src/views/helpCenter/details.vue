@@ -20,7 +20,8 @@
 			<div class="card mb_24" v-if="dataList[0]?.code == 5">
 				<div class="text color_T1 fs_26">
 					<div class="value">
-						{{ $t(`helpCenter['全年365天，OKsport为您提供7x24小时咨询服务。您可通过下面的联系方式快捷的反馈给我们，我们会及时回复您的咨询。']`, { value: $t(`common['appName']`) }) }}
+						{{ $t(`helpCenter['全年365天']`) }}， <span class="color_Hint">{{ $t(`common['appName']`) }}</span>
+						{{ $t(`helpCenter['为您提供7x24小时咨询服务。您可通过下面的联系方式快捷的反馈给我们，我们会及时回复您的咨询。']`) }}
 						<p class="mt_24">
 							{{ $t(`helpCenter['投诉建议邮箱']`) }}: <span class="color_F2">{{ dataList[0]?.valueDetail }}</span>
 						</p>
